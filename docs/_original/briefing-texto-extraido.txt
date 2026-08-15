@@ -1,0 +1,2527 @@
+
+ 
+ 
+ 
+ 
+ Document
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Briefing - Site Institucional - Renke
+
+ 
+
+ 
+
+ Brainstorm
+
+ Brainstorm — Site Institucional Renke
+Decisões-chave tomadas
+Site único com nome "Renke" (não "Grupo RNK"), com seções para cada unidade
+Studio domina a home → fala com clínicas primeiro. Academy e Tools são camadas de profundidade
+Caminho híbrido de comunicação: "Faturamento previsível" como gancho de atenção; "RevOps" como conceito educativo pra quem quer entender o framework
+Tom de voz: Direto, confiante, sem buzzwords. Técnico sobre o negócio do médico, nunca sobre marketing
+Termo morto: "Arquitetura de receita" (médico pensou que éramos arquitetos)
+Termo-âncora interno: Imprevisibilidade de receita (bom como diagnóstico, não como headline)
+Conceito-âncora externo: "Faturamento previsível" (oposto da dor, é o estado desejado)
+🔴 Objetivo #1 de comunicação do site:
+Fazer o visitante entender em 5 segundos que a Renke NÃO é agência de marketing.
+
+Mostrando o que fazemos que agência NUNCA faz: processo comercial, treinamento de equipe, CRM toda semana, recuperação de orçamento, medir paciente na cadeira (não lead).
+
+Frase-eixo: "Agência para no clique. A Renke começa onde a agência para."
+
+Possibilidade de headline com SEO + posicionamento (lapidar depois):
+⭐ "Não somos agência de marketing para clínicas. Cuidamos de tudo que faz o paciente chegar, fechar e voltar." ← favorita
+"Não somos uma agência de marketing para clínicas. Somos o que vem depois dela."
+"Agência de marketing para clínicas? Não. A gente começa onde elas param."
+"Agência cuida do anúncio. RevOps cuida do faturamento inteiro."
+
+Formato: Headline negativa ("não somos") + complemento imediato do que somos. Pega SEO ("agência de marketing para clínicas") e diferencia ao mesmo tempo.
+
+Visual-chave pro site:
+Agência → Anúncio → Lead → ❌ (aqui ela para)
+Renke → Anúncio → Lead → Atendimento → Agendamento → Comparecimento → Venda → Retorno → 💰
+
+🔴 Filtro obrigatório de copy (aplicar a tudo neste documento):
+"Se eu ler isso pro dono da clínica no WhatsApp, ele entende de primeira ou pede pra explicar?" Se pedir pra explicar, reescreve.
+
+Estrutura do Grupo
+Renke Studio (protagonista) → Serviços premium de RevOps para clínicas de alto padrão. Onde metodologias são criadas, testadas e validadas.
+
+Renke Academy → Empacota o conhecimento do Studio em educação para agências.
+
+Renke Tools → CRM unificado que operacionaliza a tese de RevOps (Renke CRM, Renke Connect, Renke Pulse AI).
+
+O público-alvo (Studio)
+Donos e gestores de clínicas de alto padrão que faturam acima de R$300k/mês e já resolveram o problema de lotar agenda. A maioria já passou por agências anteriores e se frustrou. Não sabem que têm um problema de RevOps. Sabem que o faturamento não tem previ.
+
+Premissa: Faturamento mínimo absoluto R$100k/mês. Ideal: R$300k+. Abaixo disso, o investimento não faz sentido e o produto não foi construído para esse perfil.
+
+A dor real (traduzida pro médico)
+Eixo central (a dor que a Renke resolve):
+"Invisto em marketing, não sei o que volta, e decido no escuro."
+
+O médico não sabe quanto custa um paciente novo. Paga R$5-15k/mês de marketing, recebe relatório de cliques, mas não consegue ligar isso ao paciente na cadeira. A agência entrega "leads", a clínica não converte, e ninguém sabe de quem é a culpa.
+Promessa central:
+Faturamento previsível com clareza de onde vem cada real.
+Diferencial central:
+Não somos agência. Conectamos tudo que a agência não conecta.
+
+Agravantes emocionais (podem aparecer no copy, mas não são o eixo):
+"Faturo bem, mas não sobra nada pra mim." → agravante de margem
+"Trabalho mais do que deveria pra manter isso funcionando." → agravante de tempo
+"Minha agenda tá cheia, mas meu bolso não reflete." → agravante de eficiência
+"Quero ter liberdade, não virar escravo da clínica." → agravante aspiracional
+
+Esses são reais mas secundários. O eixo é: clareza + controle + previsibilidade do negócio.
+Diagnóstico (o que causa a dor):
+Dados soltos: Sua agência mede uma coisa, seu comercial outra, sua recepção outra. Ninguém olha pro mesmo número.
+Equipes desconectadas: Marketing traz lead, comercial não fecha, e ninguém sabe de quem é a responsabilidade.
+Decisão no escuro: Sem dado confiável e sem time alinhado, toda decisão vira aposta.
+
+Fragmentação → Desconexão → Imprevisibilidade.
+Fechamento do diagnóstico:
+"O problema não é o marketing. É tudo que acontece depois dele. Dados soltos, equipes desconectadas, faturamento imprevisível. Agência nenhuma resolve isso, porque isso não é um problema de marketing. É um problema de negócio."
+Frase-âncora do site:
+"Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. Mas e com o seu negócio?"Candidatas a headline:
+"Você sabe exatamente quanto volta do seu investimento em marketing?" ← validada na LP
+"Sua clínica é referência clínica. Falta ser referência em negócio."
+"Você domina o procedimento. A gente domina o que vem antes e depois dele."
+"A diferença entre uma agenda cheia e uma clínica lucrativa é sistema."
+"Sua clínica fatura bem. Mas quanto disso você controla?"
+Posicionamento atualizado:
+"Faturamento previsível com clareza de onde vem cada real. Sem depender de agência que entrega relatório de clique."
+Momento real do médico por produto:
+Produto
+O que ele sente
+
+Start
+"Faturo bem, mas tô no escuro. Não sei o que funciona. Minha equipe atende no improviso."
+
+Full
+"Além de não saber o que funciona na captação, meus pacientes somem depois da primeira consulta."
+
+Run
+"Já organizei tudo, mas preciso de alguém garantindo que não volta a bagunçar."
+
+Core
+"Já entendi que o problema não é só agência. Quero um time que conecte tudo."
+
+Scale
+"Tá rodando bem. Quero depender menos de anúncio e fazer pacientes antigos voltarem."
+
+Frase-chave pro site (derivada do ICP):
+"Já trocou de agência 3 vezes e o resultado foi o mesmo? O problema nunca foi a agência. Era o que faltava entre ela e você."Diagnóstico (3 camadas simplificadas)
+Dados soltos: Sua agência mede uma coisa, seu comercial outra, sua recepção outra. Ninguém olha pro mesmo número. Resultado: você não confia em nenhum.
+Equipes desconectadas: Marketing traz lead, comercial não fecha, e ninguém sabe de quem é a responsabilidade. Cada área opera no seu mundo.
+Decisão no escuro: Sem dado confiável e sem time alinhado, toda decisão vira aposta. E crescimento por aposta não se sustenta.
+
+Fragmentação → Desconexão → Imprevisibilidade.
+Fechamento do diagnóstico:
+"O problema não é o marketing. É tudo que acontece depois dele. Dados soltos, equipes desconectadas, faturamento imprevisível. Agência nenhuma resolve isso, porque isso não é um problema de marketing. É um problema de negócio."
+
+What / How / Why (versão pro médico)
+What:
+"Ajudamos clínicas de alto padrão a saberem exatamente de onde vem cada paciente, por que ele fecha (ou não), e como fazer o faturamento crescer todo mês. Não por sorte, por sistema."
+
+How:
+"Um método testado em dezenas de clínicas, que conecta toda a jornada do paciente: do primeiro anúncio até o retorno. Tecnologia, processo e inteligência de dados, implementados por um time que só faz isso, pra saúde, todo dia."
+
+Why:
+"Porque a clínica do lado já está se profissionalizando. E quem continuar decidindo no escuro, com dados espalhados e equipe desalinhada, vai perder paciente pra quem tem estrutura. A Renke existe pra você nunca ser essa clínica."
+
+Protocolo Revena (como comunicar)
+O que é o Protocolo Revena?
+É o serviço completo da Renke. A gente assume a operação de faturamento da sua clínica: do anúncio que atrai o paciente até o processo que faz ele voltar.
+
+Na prática, o que fazemos?
+
+Conectamos seu marketing ao seu comercial (pra lead virar paciente de verdade)
+→ Renke CRM com pipeline integrado + automações que entregam o lead qualificado direto pro comercial com contexto (de onde veio, o que viu, qual procedimento buscou). Sem depender de planilha ou WhatsApp solto.
+
+Organizamos seus dados num lugar só (pra você confiar no que está vendo)
+→ Renke CRM como painel central + Renke Connect integrando as ferramentas que a clínica já usa (agenda, sistema médico, plataforma de ads). Tudo desaguando num lugar só.
+
+Criamos processos claros pro seu time seguir (pra não depender de uma pessoa)
+→ Metodologia Revena com playbooks de atendimento, scripts, regras de passagem entre etapas, e automações que guiam o time (lembretes, tarefas automáticas, alertas de lead parado). O processo roda com ou sem a pessoa que o criou.
+
+Analisamos seus números todo mês e dizemos o que fazer (pra você decidir com dado, não com feeling)
+→ Renke Pulse AI + dashboards com os indicadores que importam (custo por paciente, taxa de conversão por etapa, ticket médio, retorno). Time Renke analisa, interpreta com contexto da clínica, e entrega recomendação de ação, não só número.
+
+O que NÃO é:
+Não é agência que entrega post e some
+Não é consultor que entrega PDF e diz "boa sorte"
+Não é mais uma ferramenta que você contrata e ninguém usa
+
+O que É:
+Um time dedicado que responde pelo seu resultado de receita. Todo mês. Com dado na mesa.
+
+Protocolo Revena na Home
+Não detalhar produtos na home. Usar lógica de escada de maturidade:
+"Estruturamos sua operação do zero e operamos junto com você no longo prazo."CTA → "Fale com a gente" (a Renke recomenda o protocolo certo na venda consultiva).
+
+Protocolo Revena: Páginas Individuais
+Cada protocolo terá sua própria página (/revena-start, /revena-full, /revena-run, /revena-core, /revena-scale) com copy dedicada e independente. Cada página precisa funcionar sozinha, sem o visitante ter lido nenhuma outra antes.
+Regra: toda página de produto precisa responder, por si só:
+O que é isso?
+Pra quem é?
+O que resolve na prática?
+O que eu recebo?
+Por que confiar?
+
+Como funciona a implementação (Start e Full):
+1. Entendemos sua operação (30 dias)
+Mapeamos tudo: de onde vêm seus pacientes, como são atendidos, onde se perdem. Você recebe um diagnóstico visual completo da sua operação. A gente não opera sem diagnosticar. Assim como você não entra em cirurgia sem exames.
+
+2. Implementamos o sistema (30 dias)
+CRM configurado, automações rodando, rastreamento conectado, equipe treinada. Tudo funcionando como uma coisa só.
+
+3. Acompanhamos de perto (30 dias)
+Garantimos que sua equipe está usando, os dados estão entrando limpos, e ajustamos o que precisar.
+
+4. Operação contínua (opcional)
+A partir daí, você escolhe o nível de parceria: desde gestão do CRM até operação completa com marketing integrado.
+Revena Start (página individual):
+Diretrizes de comunicação (não é copy final):
+Precisa se apresentar como produto completo de estruturação comercial, sem depender do contexto dos outros
+Ângulo: "sua clínica atrai pacientes mas perde no processo. O Start organiza do lead até a venda."
+Comunicar: rastreamento, processo comercial claro, automações, dados confiáveis, equipe treinada
+Tom: prático, concreto, resultado em 90 dias
+Diferencial: "A gente não opera sem diagnosticar. Primeiro entendemos, depois implementamos."
+Revena Full (página individual):
+Diretrizes de comunicação (não é copy final):
+Precisa se sustentar sozinho: é a estruturação completa da jornada inteira do paciente
+Ângulo: "do primeiro contato ao retorno. Comercial + operação + relacionamento."
+Comunicar: tudo do processo comercial + acompanhamento pós-tratamento, réguas de cuidado, integração com agenda, processo que faz paciente voltar
+Tom: abrangente, sofisticado, pra clínica que já tem equipe estruturada
+Diferencial: "O paciente se sente cuidado do começo ao fim. Isso vira retenção e indicação."
+
+Pra quem: Clínicas que já têm alguém no comercial E alguém cuidando do pós-venda (concierge, coordenadora, secretária dedicada). Se você tem essa estrutura mas ela opera no improviso, o Full organiza.
+Add-on disponível: Gestão de Carteira (ativação inteligente de pacientes antigos, exige 3+ meses de dados acumulados).
+Revena Run (página individual):
+Diretrizes de comunicação (não é copy final):
+Precisa se sustentar sozinho: é a gestão contínua da operação comercial implementada
+Ângulo: "você investiu pra organizar. A gente garante que não volta a bagunçar."
+Comunicar: manutenção semanal, dados limpos, equipe aderindo, alguém de olho sem você precisar pensar
+Tom: prático, de continuidade, tranquilizador
+Diferencial: "Tecnologia sem manutenção degrada. O Run é quem mantém sua operação viva."
+NÃO é marketing, NÃO é conteúdo, NÃO é campanha
+Ciclo semanal: raio-x → manutenção → vendas (orçamentos parados) → manutenção
+Gatilho pro Core: "se sua agência ignora os dados que a operação gera"
+
+Quando o Run não basta (gatilho pro Core):
+"Se sua agência de marketing ignora os dados que a operação gera e otimiza só pelo gerenciador de anúncios, o Run mantém a casa em ordem mas não resolve o buraco. Pro marketing usar a inteligência que sua operação gera, você precisa do Core."
+Revena Core (página individual):
+Diretrizes de comunicação (não é copy final):
+Precisa se sustentar sozinho: é a operação completa de marketing + comercial + dados integrados
+Ângulo: "marketing, comercial e dados funcionando como uma coisa só. Um time completo operando junto, toda semana, com um objetivo só: seu faturamento crescer com previsibilidade."
+Comunicar: anúncios otimizados pelo paciente na cadeira (não pelo clique), relatórios semanais claros, recuperação de orçamentos parados, custo por paciente por canal/procedimento
+Tom: robusto, confiante, de parceria estratégica
+Diferencial: "A agência otimiza pelo clique. A Renke otimiza pelo paciente na cadeira."
+Jornada do projeto: Estruturação (45d) → Laboratório (90d) → Performance (180d) → Ongoing (360d+)
+Cadência semanal: raio-x → qualidade dos leads → meta → fechamento/projeção
+NÃO referenciar Core como "evolução do Run" na página. Precisa funcionar pra quem nunca ouviu falar de Run.
+Revena Scale (página individual):
+Diretrizes de comunicação (não é copy final):
+Precisa se sustentar sozinho: é a operação mais completa da Renke (marketing + comercial + dados + conteúdo orgânico + gestão de base)
+Ângulo: "crescer por todos os lados: atrair pacientes novos, converter melhor, E fazer os antigos voltarem. Sem depender de uma fonte só."
+Comunicar: tudo do Core + conteúdo que constrói autoridade digital + reativação inteligente de pacientes antigos
+Tom: aspiracional, completo, pra clínica que quer dominar todas as frentes
+Diferencial: "Menos dependência de anúncio pago, mais receita dos pacientes que já confiam em você."
+Dois diferenciais exclusivos: (1) profissional de conteúdo dentro da rotina clínica criando material que faz o perfil crescer organicamente; (2) ativação mensal da base com segmentação cada vez mais inteligente
+NÃO comunicar como "Core + extras". É um produto completo. O visitante pode nunca ter ouvido falar de Core.
+Réguas inteligentes traduzidas: "comunicações automáticas de cuidado no momento certo: lembrete de retorno, orientação pré-cirurgia, confirmação de procedimento. Tudo personalizado, sem a equipe precisar lembrar."
+
+Termos do Core que NÃO vão pro site:
+
+Não usar
+Usar
+
+Circuito fechado de RevOps
+Marketing e comercial se alimentando um do outro
+
+Acionáveis reais para o negócio
+Recomendações claras do que fazer
+
+Controlar as alavancas de crescimento
+Saber onde investir mais e onde parar
+
+Inteligência de performance
+Entender o que realmente funciona
+
+Omnichannel
+Em todos os canais que fazem sentido
+
+CPL, ROAS, CPAg
+Usar só em relatório, não em comunicação de venda
+
+Ativos de conversão
+Anúncios e páginas que fazem o paciente agendar
+
+Backlog de públicos vencedores
+Banco de audiências que já deram resultado
+
+Nota: A cadeia de dependência técnica (tracking → CRM → aderência → dados → inteligência → decisão) é genial pra Academy. Pro site da clínica, a versão é: "Cada etapa alimenta a próxima. Por isso exigimos que a base esteja construída antes de operar. Sem isso, seria mais uma agência otimizando no escuro."
+Os 4 pilares (traduzidos):
+Controle → "Você vê tudo que acontece: de onde veio o paciente, em que etapa ele está, o que falta pra fechar."
+Automação → "O que era manual, vira automático: confirmação, lembrete, follow-up, pesquisa de satisfação. No momento certo, sem depender de alguém lembrar."
+Processo → "Seu time sabe exatamente o que fazer em cada etapa. Se alguém sai, o processo fica."
+Gestão comercial → "O paciente se sente cuidado do começo ao fim. Isso vira retenção e indicação."
+Frases-chave para o site (extraídas do produto):
+"Você tem metade da solução, e a outra metade está drenando verba todos os dias." → seção "Já tem agência? Leia isso."
+"Nossa tecnologia rastreia cada conversão, do clique até o paciente na cadeira. Nenhuma agência faz isso." → sobre Renke Connect
+"A Renke não funciona sozinha. E a gente prefere assim. Seu envolvimento é parte do resultado." → posicionamento premium
+"A gente não opera sem diagnosticar. Assim como você não entra em cirurgia sem exames." → analogia com o médico
+O que é documentação interna (não vai pro site):
+ICP detalhado com faixas de faturamento e critérios
+Lógica de jornadas de contratação (Start → Core, Full → Scale)
+Política de CRM e pré-requisitos técnicos
+Taxa de re-integração (R$3k por rotatividade)
+Aspectos jurídicos e limitação de responsabilidade
+Arquitetura de produtos (diagrama)
+North Star Metrics internas
+Precificação detalhada
+
+Tabela Antes / Depois
+Antes
+Depois
+
+Fatura bem um mês, mal no outro
+Faturamento previsível mês a mês
+
+Cada ferramenta mostra um número diferente
+Uma visão só de tudo que acontece na clínica
+
+Marketing de um lado, comercial do outro
+Marketing e comercial funcionando juntos
+
+Decisão no feeling
+Decisão com dado real
+
+Agência que executa tarefa
+Parceiro que responde por receita
+
+Faturamento alto mas lucro baixo
+Clareza de margem por procedimento e canal
+
+Candidatas a headline (clínicas)
+"Sua clínica é referência clínica. Falta ser referência em negócio."
+"A diferença entre uma agenda cheia e uma clínica lucrativa é sistema."
+"Você domina o procedimento. A gente domina o que vem antes e depois dele."
+"Pare de pagar por marketing. Comece a investir em receita previsível."
+
+Seção "Por que a Renke e não mais uma agência?"
+O argumento central:
+"Você já tentou agência de marketing. Funcionou um tempo e parou. Já tentou CRM. Ninguém usou direito. Já tentou trocar de equipe. O problema voltou. Porque nenhuma dessas coisas resolve sozinha. O problema está na desconexão entre elas."
+Por que a agência falha com esse perfil (argumentos pro site):
+"Agência entrega lead, não paciente."
+Ela comemora 200 leads no relatório. Você olha o banco e o dinheiro não mudou. Porque 200 leads que não viram paciente é custo, não resultado.
+
+"Agência não vê o que acontece depois do clique."
+Se sua secretária demorou 4 horas pra responder, se o script tá ruim, se o orçamento ficou parado 2 semanas: a agência nem sabe. E o dinheiro se perde aí, não no anúncio.
+
+"Agência otimiza pelo número dela, não pelo seu."
+Ela mede CPL (custo por lead). Você precisa saber custo por paciente na cadeira. São números completamente diferentes. E nenhuma agência te dá o segundo.
+
+"CRM sozinho vira gaveta digital."
+Você já contratou implementação de CRM. A equipe usou 2 meses e parou. Porque não tinha processo junto, não tinha alguém cuidando, não tinha ninguém analisando. Ferramenta sem operação é desperdício.
+Frase-chave:
+"O problema nunca foi a agência ser ruim. É que agência resolve um terço do problema. Os outros dois terços, ninguém estava olhando."
+Medo a ser eliminado no site:
+"Se eu contrato a Renke, estou contratando mais uma agência que vai me frustrar?" → O site precisa matar esse medo mostrando exatamente onde as agências anteriores pararam e onde a Renke continua.
+O que a Renke faz diferente (versão emocional):
+"A gente entende de clínica, não só de marketing."
+Conhecemos o modelo de negócio, a rotina, os procedimentos. Não somos uma agência genérica adaptando template.
+
+"Tecnologia é infraestrutura, não é extra."
+Integramos, automatizamos e conectamos tudo. Você não precisa contratar mais ninguém.
+
+"Seus dados viram decisão, não relatório."
+Coletamos, unificamos e analisamos. Todo mês você sabe o que fazer.
+
+"Segurança de verdade, não de discurso."
+Dados de paciente são sensíveis. A gente trata com o rigor que isso exige.
+
+Diferenciais (hierarquia pro site)
+Só fazemos saúde. Há X anos. → exclusividade gera confiança
+Método testado em 140+ clínicas. → prova social numérica
+Entendemos a jornada inteira do paciente, não só o anúncio. → do primeiro contato até o retorno, 12 meses depois
+Tecnologia própria integrada ao serviço. → não é Frankenstein de ferramentas genéricas
+Time treinado no método, não generalistas. → "Todo mundo aqui só faz isso. Não atendemos clínica num mês e e-commerce no outro."
+
+Régua de tom por público
+Pra clínica: direto + orientado ao resultado financeiro e operacional da clínica. Sem termos de marketing.
+Pra agência (Academy): direto + técnico + framework. Pode usar o vocabulário do mercado sem medo.
+Institucional (sobre a Renke): confiante, conciso, com provas. Mostrar, não dizer.
+
+Glossário de tradução (CEO → Médico)
+O que o CEO escreve
+O que o médico entende
+
+Controle das alavancas de crescimento
+Saber o que está funcionando e o que está travando seu faturamento
+
+Maturidade de negócio
+Uma clínica que funciona sem depender só de você
+
+Alavancas não conversam entre si
+Marketing traz gente, mas o comercial não fecha. Ou fecha, mas o paciente não volta
+
+Dados fragmentados
+Cada ferramenta mostra um número diferente e ninguém sabe qual é o real
+
+Metodologia proprietária
+Um método nosso, testado em X clínicas, que já gerou Y em resultado
+
+Tecnologia embarcada no serviço
+A tecnologia já vem dentro, você não precisa contratar mais nada
+
+Interpretação de dados com contexto
+A gente não entrega relatório, entrega decisão
+
+Ecossistema integrado
+Tudo conectado: do anúncio ao retorno do paciente
+
+Crescimento desordenado
+Faturando mais, mas lucrando igual (ou menos)
+
+Tracionar exponencialmente
+Dobrar a aposta no que está dando certo
+
+Termos proibidos na comunicação pra clínicas
+Alavancas de geração de receita
+Revenue Operations as a Service (ROaaS)
+Arquitetura de receita
+Inteligência analítica aplicada mensalmente
+Maestro que transforma ruído em sinfonia
+Transformação digital
+Soluções inovadoras
+Comoditizando
+SLAs
+Fonte única de verdade
+Martech
+
+Crença nova (versão comunicável)
+"Sua clínica não tem um problema de marketing. Tem um problema de conexão. Quando marketing, comercial e operação não conversam entre si, cada real investido vale menos do que deveria. A solução não é trocar de agência. É conectar tudo: dados, pessoas e processos num sistema só. Isso se chama RevOps, e é o que transforma faturamento imprevisível em faturamento sob controle."
+
+Concorrência real
+Não é outra assessoria de RevOps. A concorrência é a inércia e a atenção disputada com agências tradicionais. O desafio não é ser melhor que um concorrente. É criar a categoria na cabeça do cliente.
+
+Para o site, isso significa: o inimigo é o "vou resolver depois" e o "minha secretária dá conta." A comunicação precisa criar urgência sem ser apelativa. Melhor forma: mostrar o custo da inação com números. "Cada mês sem processo estruturado são X pacientes que chegaram e ninguém respondeu a tempo."
+
+Próximos insumos necessários
+Cases com números reais (antes/depois de clientes)
+Estrutura de páginas do site (sitemap)
+
+Renke Tools (seção "em breve" no site)
+Eixo de comunicação:
+"A tecnologia que operacionaliza a tese. Construída por quem atende clínicas todo dia, não por devs que nunca viram um paciente."
+Produtos:
+Renke CRM (em desenvolvimento)
+"O CRM que a gente queria que existisse. Construído pra saúde, com a lógica de quem implementa CRM há 4 anos."
+
+Renke Connect (já ativo, incluso no Start/Full)
+"Rastreamento proprietário que já roda em todos os clientes do Studio. Sabe de onde veio cada paciente, de verdade."
+Esse já existe e pode ter mais destaque no site (não precisa ser "em breve")
+
+Renke Pulse AI (em desenvolvimento)
+Mencionar só se tiver algo concreto pra mostrar
+Tom: tecnológico mas acessível. Não vender tech por tech. Vender o resultado que a tecnologia viabiliza.
+Como aparece no site:
+Seção curta com teaser dos produtos + "em breve" + possível formulário de interesse/waitlist. Renke Connect pode ter uma mini-seção própria já que está ativo.
+
+Framework de alta performance pro site (SEO + Copy + Conversão)
+SEO: o que o site precisa pra ranquear
+Arquitetura técnica:
+Velocidade < 2.5s (Core Web Vitals: LCP, FID, CLS)
+Mobile-first (Google indexa pela versão mobile)
+SSL (HTTPS), sitemap XML, robots.txt
+Schema markup (Organization, LocalBusiness, FAQ, BreadcrumbList)
+URLs limpas e hierárquicas (/studio/revena-start)
+
+Estrutura de conteúdo:
+Uma H1 por página (com keyword principal)
+Hierarquia H1 > H2 > H3
+Parágrafos curtos (3-4 linhas max)
+Internal linking forte entre páginas
+Cada página responde UMA intenção de busca
+
+Keywords mapeadas pra Renke:
+"agência de marketing para clínicas" (usamos na headline negativa)
+"marketing para dentistas" / "marketing para médicos"
+"revops para clínicas"
+"CRM para clínicas"
+"gestão comercial para clínicas"
+
+E-E-A-T (o que prova expertise):
+Equipe visível (CEO, time)
+Cases com números reais
+Logos de clientes + depoimentos
+Conteúdo autoral com perspectiva própria
+Certificação GPTW
+
+Preparação pra AI Overviews (2026):
+Respostas diretas em formato pergunta/resposta (FAQ)
+Definições claras ("O que é RevOps? É...")
+Dados citáveis (números específicos)
+Conteúdo de experiência real que IA não replica
+
+Copy: o que o site precisa pra converter
+Acima da dobra (primeiros 5 segundos):
+Headline: O QUE faz + PRA QUEM + DIFERENCIAL
+Subheadline reforçando a promessa
+1 CTA claro e visível
+Prova social rápida (números ou logos)
+
+Estrutura narrativa de cada página:
+Promessa → Dor/Inimigo → Mecanismo → Prova → CTA
+
+Princípios de conversão:
+1 objetivo por página
+CTA repetido a cada 2-3 scrolls
+Objection handling antes do CTA final
+Urgência real ("1 nova clínica/mês")
+Social proof próximo ao CTA
+
+Copywriting 2026:
+Frases curtas, parágrafos de 1-2 linhas
+Linguagem do público, não interna
+Benefício antes de feature
+Contraste Antes/Depois
+Pattern interrupt a cada scroll (texto → número → imagem → depoimento → pergunta)
+
+Confiança e redução de fricção:
+Logos acima da dobra
+Números concretos (R$42M rastreado, 11.8x ROAS, 140+ clínicas)
+Fotos reais (não stock)
+Vídeo curto (1-2min)
+Formulário simples (nome + WhatsApp)
+
+Checklist resumo:
+Velocidade < 2.5s, mobile-first, hosting bom
+H1 com keyword, meta descriptions únicas, schema
+Conteúdo que responde intenção de busca com prova de expertise
+1 CTA por página, prova social, objection handling
+Cases reais, números, equipe visível
+Blog pra SEO de longo prazo (educar sobre RevOps, atrair tráfego orgânico)
+
+Mapeamento de keywords por página
+Home
+"agência de marketing médico" (1.000-2.500/mês, alta concorrência) → usado na headline negativa
+"marketing para clínicas" (1.000-2.500/mês, alta)
+"marketing odontológico" (500-1.000/mês, média)
+"marketing para dentistas" (500-1.000/mês, média)
+Studio / Protocolo Revena
+"CRM para clínicas" (300-500/mês, média)
+"captação de pacientes" (500-1.000/mês, média)
+"gestão comercial para clínicas" (100-300/mês, baixa)
+"como aumentar faturamento da clínica" (300-500/mês, média)
+"revops para clínicas" (< 100/mês, baixa → território virgem, oportunidade de criar categoria)
+Páginas de produto (Start, Full, Core, Scale)
+"implementação de CRM para clínicas" (< 100/mês, baixa, long tail valiosa)
+"tráfego pago para clínicas" (300-500/mês, média)
+"assessoria de marketing para médicos" (100-300/mês, média)
+"consultoria marketing odontológico" (100-300/mês, média)
+"automação comercial clínica" (< 100/mês, baixa)
+Academy
+"como montar uma agência de marketing" (500-1.000/mês, alta)
+"escalar agência de marketing" (100-300/mês, média)
+"mentoria para donos de agência" (100-300/mês, média)
+"como implementar CRM" (300-500/mês, média)
+"rastreamento de conversão WhatsApp" (100-300/mês, baixa)
+Tools
+"CRM para área da saúde" (100-300/mês, média)
+"software para clínicas" (500-1.000/mês, alta)
+Blog (SEO de longo prazo, território virgem)
+"o que é revops" (100-300/mês, baixa → educar mercado)
+"como medir ROI de marketing médico" (100-300/mês, baixa)
+"quanto custa captar um paciente" (100-300/mês, baixa)
+"por que trocar de agência não funciona" (< 100/mês, baixa → narrativa proprietária)
+"taxa de conversão clínica" (< 100/mês, baixa)
+Estratégia SEO:
+Alto volume + alta concorrência (home): captura tráfego de quem busca agência, diferencia logo
+Volume médio + concorrência média (páginas produto): ranqueiam mais fácil com conteúdo específico
+Baixo volume + zero concorrência (blog + categoria nova): território virgem. Quem escrever primeiro, domina. É aqui que a Renke cria a categoria "RevOps para clínicas" no Google brasileiro.
+
+Sitemap completo do site Renke
+renke.com.br/
+│
+├── Home (protagonista: Studio fala com clínicas)
+│ ├── Headline + posicionamento ("Não somos agência...")
+│ ├── Dor + diagnóstico (escada emocional)
+│ ├── Visual jornada (agência para no lead, Renke vai até o retorno)
+│ ├── Prova social (números, logos, depoimentos)
+│ ├── Escada de maturidade (menção aos protocolos sem cardápio)
+│ ├── Seção "Por que a Renke e não mais uma agência?"
+│ ├── Metáfora do corpo (veias/coração)
+│ ├── Academy (teaser pra agências)
+│ ├── Tools (teaser "em breve")
+│ └── CTA → Fale com a gente
+│
+├── /studio (Pra Clínicas)
+│ ├── Visão geral do Studio
+│ ├── /studio/revena-start
+│ ├── /studio/revena-full
+│ ├── /studio/revena-run
+│ ├── /studio/revena-core
+│ ├── /studio/revena-scale
+│ ├── /studio/treine-sua-equipe (Agendamento10x)
+│ ├── /studio/site-institucional
+│ └── /studio/identidade-visual
+│
+├── /academy (Pra Agências)
+│ ├── Visão geral da Academy
+│ ├── /academy/protocolo-renke (flagship)
+│ ├── /academy/formacao-performa
+│ ├── /academy/treinamento-crm
+│ ├── /academy/rastreamento-avancado
+│ ├── /academy/cultura-pro
+│ ├── /academy/clickup-on-track
+│ └── /academy/crm-sheets
+│
+├── /tools (Em breve)
+│ ├── Renke CRM (teaser + waitlist)
+│ ├── Renke Connect (já ativo, pode ter mais conteúdo)
+│ └── Renke Pulse AI (teaser se houver algo concreto)
+│
+├── /sobre
+│ ├── Quem somos (história, tese, time)
+│ ├── Narrativa "jogo antigo vs. jogo novo"
+│ ├── Números e certificações (GPTW, 140+ clínicas, R$42M)
+│ └── Cultura e valores
+│
+├── /cases
+│ ├── Cases com números reais (antes/depois)
+│ └── Filtro por especialidade ou produto
+│
+├── /blog
+│ ├── Categoria: RevOps pra clínicas (educar mercado)
+│ ├── Categoria: Marketing médico/odontológico
+│ ├── Categoria: Gestão de agências (atrai público Academy)
+│ └── Categoria: Tecnologia e dados
+│
+├── /contato
+│ ├── Formulário simples (nome + WhatsApp + tipo de negócio)
+│ └── WhatsApp direto
+│
+├── /carreiras (Faça parte)
+│ └── Vagas abertas + cultura
+│
+└── Rodapé
+ ├── Links principais
+ ├── Redes sociais
+ ├── Certificações
+ └── Dados institucionaisNotas sobre a arquitetura:
+1. Home como filtro de público:
+O primeiro scroll fala com clínicas (90% do tráfego esperado). Academy e Tools aparecem como seções menores na home, com links pras respectivas páginas.
+
+2. Cada página de produto é independente:
+Funciona sozinha, sem o visitante precisar ter lido outra antes. Responde: o que é, pra quem é, o que resolve, o que recebo, por que confiar.
+
+3. Blog como motor de SEO:
+Alimenta tráfego orgânico de longo prazo. Foco em termos de baixa concorrência que educam o mercado sobre RevOps e gestão de clínicas.
+
+4. /cases como prova social dedicada:
+Não esconder cases dentro de outras páginas. Uma seção dedicada com resultados reais ranqueia pra termos como "resultado marketing clínica" e reforça E-E-A-T.
+
+5. Navegação principal (menu):
+Pra Clínicas (Studio) | Pra Agências (Academy) | Tools | Sobre | Cases | Blog | Contato
+
+6. CTAs por página:
+Home → "Fale com a gente"
+Studio/Produtos → "Agendar diagnóstico" ou "Conversar com a equipe"
+Academy → "Conhecer o produto" (link pra LP de venda)
+Cases → "Quero resultado assim" (CTA pra contato)
+Blog → "Quer isso pra sua clínica?" (CTA contextual no final dos posts)
+
+Renke Academy (consolidado)
+Eixo de comunicação:
+"Tudo que a Renke faz no dia a dia, empacotado pra você aplicar na sua agência. A gente não parou de atender cliente pra virar mentor. A gente atende 30 clínicas todo mês e ensina como faz."
+Dois públicos distintos:
+Agências/gestores (100% dos produtos Academy): querem método, subir ticket, parar de ser executor
+Nota: Agendamento10x
+Sai da Academy e vai pro Studio, na seção "Pra clínicas → Treine sua equipe." Público diferente (CRC/secretária de clínica), linguagem diferente, jornada de compra diferente (vem do Revena ou indicação).
+Tom de voz Academy:
+Técnico sem ser acadêmico
+De igual pra igual (dono falando com dono, gestor falando com gestor)
+Provocativo ("o mercado te ensinou errado", "escalar é cavar sua cova")
+Prova pelo bastidor (cases internos, gravações reais, templates usados de verdade)
+Pode usar jargão de marketing sem medo (CRM, ROAS, pipeline, funil)
+Tese central da Academy:
+Crença limitante do ICP: "Preciso escalar e ter dezenas de clientes" / "Agência é uma prisão"
+Crença nova: "Escalar é cavar sua cova. Poucos clientes + ticket alto = escala vertical sem caos" / "Agência não é mal negócio, é negócio mal operado"
+Mecanismo: Poucos clientes + Entrega sofisticada + Precificação value based = Escala sem caos
+Inimigo: O caos operacional
+Frase-âncora: "Você não abriu uma agência para ter uma vida pior do que tinha antes dela."
+Hierarquia dos produtos na página Academy:
+Protocolo Renke (R$7k) → flagship, sistema operacional completo da agência
+Formação Performa (R$2.997) + Treinamento de CRM (R$1.997) + Rastreamento Avançado (R$1.997) → trilha técnica
+Cultura Pro (R$697) + ClickUp On Track (TBD) → complementos operacionais
+CRM Sheets (R$997) → ferramenta/tool
+Diretrizes de comunicação por produto (não é copy final):
+Protocolo Renke:
+Ângulo: "O sistema operacional inteiro de uma agência lucrativa, aberto pra você modelar"
+Tom: provocativo, de libertação ("saia da prisão que você mesmo construiu")
+Diferencial: "100% dos bastidores da Renke. Documentos, processos, rotinas, reuniões reais."
+
+Formação Performa:
+Ângulo: "De gestor executor pra arquiteto de performance"
+Tom: técnico-estratégico, pra quem já opera mas opera de forma reativa
+Diferencial: "Não é curso de botão. É sistema de pensamento estratégico."
+
+Treinamento de CRM:
+Ângulo: "Uma nova linha de receita pra sua agência: implementação de CRM como serviço de alto valor (R$5k-R$40k)"
+Tom: prático, metodológico, com prova de resultado dos alunos
+Diferencial: "Método testado em 200+ projetos reais. Alunos vendendo na primeira semana."
+
+Rastreamento Avançado:
+Ângulo: "Prove ROI real de WhatsApp e formulários sem depender de software terceiro"
+Tom: técnico, prático, plug & play
+Diferencial: "Recebe tudo pronto. Não precisa programar. Instala, configura e entrega."
+
+Cultura Pro:
+Ângulo: "Cultura organizacional pra agências, ensinada por quem tem certificação GPTW"
+Tom: vulnerável (erros da Renke) + prático (o que funciona)
+Diferencial: "Não é RH corporativo. É o método de quem já errou e acertou dentro de uma agência."
+Cross-sell estruturado (interno, não comunicar no site):
+CRM Sheets ↔ Treinamento de CRM ↔ Rastreamento Avançado (dentro de um, oferece os outros dois)
+O que NÃO comunicar no site:
+Precificação detalhada dos order bumps
+Lógica interna de cross-sell
+Estrutura de parcelamento
+
+Narrativa institucional (direção "jogo antigo vs. jogo novo")
+Estrutura narrativa inspirada em referência (Society/Tay Dantas), adaptada pro universo Renke:
+
+Agências de marketing pra clínicas vão morrer. E algumas clínicas junto. Pra muito além do óbvio: agências são desconectadas do resultado financeiro real da clínica. Mas o problema é mais profundo. O mercado de saúde premium jhojejoga de 2 maneiras. O jogo antigo: onde clínicas contratam agência pro tráfego, agência pro conteúdo, implementam um CRM que ninguém usa, e decidem tudo no feeling. Cada peça solta, nenhuma conversa com a outra, e o dono da clínica trabalhando cada vez mais sem ver o dinheiro voltar. A maioria ainda joga oess jogo antigo. Troca de agência todo ano achando que o problema é a agência.
+Mas as clínicas que estão crescendo com consistência , dominando suas regiões, lotando agenda E lucrando de verdade, já estão nno ovo jogo.: operam com RevOps. Marketing, comercial e operação como um sistema só. Dados integrados. Decisões baseadas no que funciona de verdade. Faturamento previsível.
+A Renke é quem leva clínicas pra esse novo jogo. Com metodologia validada em +10 clínicas (Studio), tecnologia própria que operacionaliza tudo (Tools), e formação pra quem quer aprender a jogar (esse jogo (Academy).
+Foi assim com [case 1]. Foi assim com [case 2]. Vai ser assim com qualquer clínica esperta o bastante pra parar de trocar de agência e começar a construir um sistema de verdade"
+D que funciona (salvar pro site):
+A metáfora do corpo humano (veias/coração) → melhor recurso de comunicação pra clínicas
+A tabela comparativa (convencional vs. Revena)
+Os 4 quadros de perguntas que o médico não sabe responder
+A escassez real (1 clínica por mês)
+Os números de prova (30 clínicas, R$42M rastreado, 11.8x ROAS)
+As etapas do protocolo simplificadas
+A estrutura narrativa (Promessa → Inimigo → Tese → Mecanismo → Vantagens → CTA)
+Tom do CEO: provocativo + técnico. Tom pro site: provocativo + concreto.
+A provocação tá boa. O que muda é que precisa pousar em exemplos concretos da rotina da clínica, não em frameworks.
+
+Regra: Toda vez que algo conceitual aparecer, a versão pro site precisa ter um "na prática, isso significa..." logo em seguida.
+O que não passa no filtro (da LP do CEO):
+Frase
+Sugestão
+
+"Silos de informação"
+"Cada área opera com seus números, sem enxergar o todo"
+
+"Imaturidade de negócio"
+"Uma lacuna que muitos médicos já estão percebendo"
+
+"Sofisticar jornadas de aquisição e retenção"
+"Profissionalizar como atraem e mantêm pacientes"
+
+"Inteligência analítica que permita tomadas de decisão à altura"
+"Dados claros que te deixam decidir com segurança"
+
+"Gestor de tráfego Junior"
+Tirar (pode ofender agência que o lead ainda tem)
+
+"Circulação de dados"
+Só funciona DENTRO da metáfora do corpo. Isolado, é abstrato.
+
+Produtos digitais (fora do Protocolo Revena)
+Site Institucional
+Diretrizes de comunicação (não é copy final):
+Ângulo: "Seu serviço é premium. Seu site precisa comunicar isso antes de você abrir a boca."
+Comunicar: design exclusivo, arquitetura pensada antes do visual, autonomia pós-entrega, responsivo, SEO
+Tom: direto, prático, de execução
+Diferencial: "A arquitetura é pensada antes do design. O conteúdo é orientado antes de ser diagramado."
+NÃO falar de WordPress/Elementor na comunicação de venda (é como, não o quê)
+Mostrar cases visuais com força (antes/depois)
+Não é exclusivo pra clínicas (qualquer negócio que precise de presença digital profissional)
+Identidade Visual
+Diretrizes de comunicação (não é copy final):
+Ângulo: "Sua marca precisa comunicar o mesmo nível de excelência que você entrega na cadeira."
+Comunicar: processo com profundidade (imersão, pesquisa, persona, defesa criativa), entrega completa (MIV, aplicações, vídeo)
+Tom: sofisticado, autoral, confiante
+Diferencial: "Não entregamos opções pra você escolher. Entregamos uma marca fundamentada e defendida."
+Filosofia slowdesign como posicionamento
+Mostrar: vídeo de apresentação + cases visuais
+Relação dos dois com o ecossistema:
+Ficam numa seção "Produtos digitais" ou como serviços complementares. Não misturar com Protocolo Revena na comunicação. O link natural: "muitos clientes que chegam pelo Revena percebem que precisam disso também."
+
+ 
+
+ Copy - Home
+
+ Copy - Home
+Estrutura visual da home com copy + indicações de layout. Cada seção é um bloco independente. O designer usa isso como guia de montagem.[Logo]
+Home
+Para Clínicas
+Para Agências
+Outras Soluções
+Tecnologia
+Conteúdos
+Contato
+Faça Parte
+
+Protocolo Revena Start
+Renke Academy
+Protocolo Renke
+Formação Performa
+Treinamento CRM
+Rastreamento Avançado
+Cultura Pro
+Site Institucional
+Renke Connect
+(em breve)
+Renke CRM
+(em breve)
+
+Protocolo Revena Full
+
+Identidade Visual
+
+Protocolo Revena Core
+
+Protocolo Revena Scale
+
+Protocolo Revena Run
+
+Treinamento para secretárias
+
+SEÇÃO 1: HERO
+Isso não é marketing 
+para clínicas. É RevOps
+
+Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
+[Gif]
+O que a Renke faz; pilares
+Referência: 
+ 
+ 
+ 
+https://docs.google.com/presentation/d/1bCJM1HB2sq-15Wrqq1z5OLAlHH_a-x8nwBO4NuUUQGY/edit?usp=sharing
+
+~30 clínicas
+Método validado há 4 anos
+R$42M em faturamento gerado
+
+Descubra se faz sentido para sua clínica → 
+
+Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado, tudo rastreado.
+
+Doutores que confiam na Renke
+[FOTOS DE CLIENTES] 5-6 logos em linha com moderada sobreposição e um tooltip ao passar o mouse por cima com o nome e a especialidade
+[IMG]
+
+SEÇÃO 2: O QUE FAZEMOS
+
+O que fazemos
+
+Renke Studio
+O que a Renke faz?
+
+A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde e estética.
+[IMG]
+[Vídeo Instagram]
+
+Para Clínicas
+Protocolo Revena
+
+Vamos além do tráfego pago
+Conectamos marketing ao comercial para lead virar paciente de verdade, não só um número em relatório.
+
+[Gif do Renke CRM]
+[IMG]
+Implementamos um CRM que funciona de verdade
+Processo, jornadas, scripts, time treinado e usando a ferramenta de verdade. Tudo num lugar só pra você confiar no que está vendo.
+
+Automatizamos o seu atendimento
+A parte chata, mas que toma tempo. Toda automatizada. Confirmação, lembrete, follow-up, NPS, avalição do Google, anamnese... Tudo roda sozinho, sem depender de uma pessoa. Seu time foca no que move ponteiro.
+
+[IMG]
+Dizemos o que fazer todo mês
+Custo por agendamento. Taxa de comparecimento. Faturamento por canal. Decisão com dado, não com feeling. Tomadas de decisões com a maturidade que um negócio de verdade precisa.
+
+Construímos seu posicionamento antes de gastar um real
+Estudamos seus concorrentes a fundo: o que comunicam, onde investem, quais brechas deixam abertas. Depois, construímos uma tese de diferenciação exclusiva pra sua clínica. Você não entra no mercado genérico. Você entra sabendo por que é a escolha óbvia.
+
+Estruturamos sua operação do zero e operamos juntos no longo prazo.
+Qual é o momento da sua clínica?
+
+REVENA START
+REVENA FULL
+REVENA CORE
+REVENA SCALE
+REVENA RUN
+
+"Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados."
+"Tenho dificuldade de estruturar e gerir a jornada completa do meu paciente"
+"Já entendi que o problema não é só tráfego. Quero um time estratégico que conecte tudo."
+"Tenho resultado, mas não metrifico e não sei como crescer e extrair mais do digital."
+"Comercial e dados estruturados, mas preciso de alguém pré gerir meu time e meus números."
+
+Organizamos seu processo comercial do zero em 90 dias.
+Estruturamos do comercial ao pós-venda. Paciente acompanhado do começo ao fim.
+Marketing + comercial + dados operados toda semana por um time dedicado.
+Tudo do Core + conteúdo orgânico + reativação da sua base de pacientes.
+Mantemos sua operação comercial funcionando sem você precisar pensar nisso.
+
+Saiba mais →
+Saiba mais →
+Saiba mais →
+Saiba mais →
+Saiba mais →
+
+A Renke recomenda o protocolo certo para o momento da sua clínica. Fale com a equipe →
+SEÇÃO 3: FRASE-ÂNCORA + PERGUNTAS
+
+Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. Mas e com o seu negócio?
+
+Quanto custa um paciente novo pra sua clínica? De verdade, não o que a agência diz.
+Dos leads que chegam, quantos sentam na sua cadeira do consultório?
+
+Se sua secretária sai amanhã, o processo continua?
+Você sabe qual canal trouxe seus melhores pacientes este mês?
+
+No mês que o resultado não foi bom, você encontra o motivo baseado em dados e com facilidade?
+E no mês que o resultado foi bom, você consegue atribuir o porquê para replicar?
+
+Você sabe o que seus concorrentes estão comunicando agora e qual espaço estão deixando aberto pra você?
+
+SEÇÃO 4: RESULTADOS
+
+Resultados
+
+O que muda quando a operação tem estrutura.
+
+Dermatologia
+Otorrino
+Cirurgia plástica
+Nutrologia
+Tricologia
+
+Taxa de agendamento baixa
+Comercial 1 sem tempo para fazer follow-up e resgates
+Raramente vendia para leads do tráfego
+Pacientes sumiam depois do 1º protocolo
+Não mensurava quais leads eram do tráfego e quais do orgânico
+
+7% → 19% em 90 dias
+Processo automatizado e 29% de recuperação de leads
+Digital responsável por 38% da receita
+24% reativados no trimestre
+Painel unificado em 60 dias com tudo rastreado
+
+Descubra se faz sentido para sua clínica →
+SEÇÃO 6: ACADEMY + TOOLS
+
+Para Agências
+Renke Academy
+[IMG]
+
+Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você modelar. Método, processos e ferramentas.
+→ Conhecer a Renke Academy
+
+Tecnologia
+Renke Tools
+[Imagem]
+
+Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso método produtizado em softwares.
+→ Conhecer a Renke Tools
+
+SEÇÃO 7: SOBRE
+
+Sobre
+Sobre a Renke
+
+A Renke é a primeira assessoria de Revenue Operations para clínicas médicas e odontológicas de alto padrão do mundo. Não somos agência de marketing. Não somos consultoria de gestão. Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
+ 
+Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema de marketing. É um problema de negócio.
+
+Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena, metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos especialistas que fazem isso, para saúde, todo santo dia.
+
+Saiba Mais
+
+SEÇÃO 8: FORMULÁRIO
+
+Antes de trocar de agência de novo, 
+descubra o que é RevOps.
+
+O problema da maioria das clínicas não é o canal de marketing. É que ninguém conecta o anúncio ao paciente na cadeira. Isso tem nome: falta de RevOps. Preencha o formulário e veja se faz sentido para sua clínica.
+Campos:
+☐ Nome
+☐ WhatsApp
+☐ Especialidade
+☐ Faturamento mensal
+
+[BOTÃO] Quero saber se faz sentido
+
+SEÇÃO 9: RODAPÉ
+Fundo escuro, 4 colunas
+
+[Logo]
+Não é marketing. É RevOps.
+Links
+Home
+Para Clínicas
+Para Agências
+Tecnologia
+Conteúdos
+Faça Parte
+Siga-nos
+Instagram
+LinkedIn
+YouTube
+Contato
+[Endereço]
+[Telefone]
+[Email]
+
+© 2026 Renke Studio. Todos os direitos reservados.
+Você não controla o que não enxerga.
+Notas SEO:
+H1: "Não é marketing para clínicas. É RevOps." (criativo, pro humano, introduz o conceito. Pega a palavra chave "marketing para clínicas)
+Meta title (pro Google): "Renke | Não somos agência de marketing para clínicas. Somos RevOps."
+Meta description: "Marketing, comercial e operação conectados. +140 clínicas, Método validado, R$42M gerado. Protocolo Revena."
+Keyword capturada na H1: "agência de marketing para clínicas" (1.000-2.500/mês)
+Schema: Organization + FAQ (4 perguntas)
+
+ 
+
+ Notas para o Designer - Home
+
+ Notas para o Designer - Home
+Direcionamento visual por seção. A copy final está na página "Private (https://app.clickup.com/36711476/docs/130b1m-208951/130b1m-1138451)".
+1. HERO
+H1 com "marketing para clínicas" riscado visualmente (strikethrough) e "É RevOps:" em destaque (bold ou cor de marca)
+Sub em banner/callout de fundo (destaque amarelo ou cor secundária)
+Números em linha, separados por ponto central, tipografia menor
+CTA: botão primário escuro
+Logos de clientes: opacidade reduzida, em linha
+Abaixo dos logos: mockup de dashboard (desktop ou tablet) com dados de performance (borrados se necessário por confidencialidade). Alternativa: motion 3-5s mostrando fluxo do dado (anúncio → CRM → agendamento → venda)
+Legenda em itálico abaixo do visual: "Você não controla o que não enxerga."
+2. O QUE FAZEMOS
+4 pilares como cards com ícone + título + descrição curta
+Ícones sugeridos: link/conexão, database, raio/automação, gráfico de barras
+H3 centralizado entre pilares e protocolos (funciona como divisor visual)
+5 protocolos em cards menores com nome de produto (label em destaque), descrição curta e "Saiba mais" como link
+CTA como texto + link (não botão), tom mais leve
+3. FRASE-ÂNCORA + PERGUNTAS
+Fundo escuro (contraste com o restante, funciona como pattern interrupt no scroll)
+Frase-âncora centralizada, tipografia diferenciada (serif ou display, maior)
+Perguntas em 4 cards/blocos distribuídos em grid 2x2
+4. RESULTADOS
+Tabela pode virar cards individuais (especialidade + problema + número em destaque grande)
+Números da coluna "Resultado" em tamanho grande / cor primária
+Depoimentos: 2 cards lado a lado, foto real + fala em itálico + nome + especialidade + cidade
+CTA: mesmo botão do hero (repetição intencional)
+⚠️ Números são placeholder, serão substituídos por dados reais
+5. CTA FINAL
+Fundo escuro, tudo centralizado
+H2 como statement forte (tipografia grande)
+CTA: botão de destaque (cor primária, contraste com fundo escuro)
+Transmitir escassez e exclusividade
+6. ACADEMY + TOOLS
+Lado a lado (grid 2 colunas)
+Cada bloco com título + texto curto + link
+Visual secundário/mais leve que as seções principais
+7. SOBRE
+Texto corrido, largura máxima ~700px
+Fundo neutro/alternado do restante
+"Assessoria de Revenue Operations" em negrito como destaque visual
+8. FORMULÁRIO
+Layout 2 colunas: texto/headline à esquerda, formulário à direita
+Formulário em card com fundo levemente diferente
+Campos: Nome · WhatsApp · Especialidade · Faturamento mensal
+Botão: "Quero saber se faz sentido"
+Poucos campos, sem fricção
+DIRECIONAMENTO GERAL
+Paleta: fugir do clichê healthcare (branco + teal). Preferir tons quentes/neutros que transmitam premium e confiança
+Tipografia: moderna, limpa (sans-serif pro corpo, pode usar serif/display pontualmente na frase-âncora)
+Espaçamento generoso entre seções
+Alternar fundos claros e escuros pra criar ritmo no scroll
+Fotos reais (não stock genérico)
+Mobile-first, mas pensado pra desktop primeiro no briefing
+
+ 
+
+ Copy - Para Clínicas
+
+ 
+ 
+
+ Copy - Revena Start
+
+ Copy - Revena Start | Rascunho Visual
+Página independente: /revena-start. O designer usa isso como guia de montagem.SEÇÃO 1: HERO
+Sua clínica atrai pacientes. 
+Mas perde no processo.
+
+O Revena Start organiza todo o processo de vendas da sua clínica do zero, em 90 dias: do primeiro contato até o paciente fechar. Saber de onde veio cada paciente, processo claro pro time, automações e dados confiáveis.
+
+Fale com a equipe e descubra se o Start faz sentido para sua clínica →
+[imagem]
+
+SEÇÃO 2: PRA QUEM É
+
+Para quem é
+Você se reconhece aqui?
+
+Fatura acima de R$300k/mês, mas está no escuro. Não sabe o que funciona.
+Sua equipe atende no improviso, sem roteiro, sem processo.
+Já contratou agência, recebeu contatos, mas não sabe quantos viraram paciente.
+Cada ferramenta mostra um número diferente e ninguém sabe qual é o real.
+Tem pelo menos 1 pessoa dedicada ao atendimento comercial (recepcionista ou secretária).
+
+SEÇÃO 3: O QUE RESOLVE NA PRÁTICA
+
+Nossa solução
+O que o Revena Start faz pela sua clínica
+
+[Gif]
+Screenshot do CRM com dados entrando / print de rastreamento de origem
+Conecta marketing ao comercial
+Cada paciente interessado chega no sistema com contexto (de onde veio, o que viu, qual procedimento buscou). Tecnologia própria que identifica de onde veio cada paciente, de verdade. Sem depender de planilha ou WhatsApp solto.
+
+Organiza seus dados num lugar só
+Painel central com tudo que acontece na clínica. Você confia no que está vendo porque os dados são limpos e vêm de uma fonte unificada.
+[Gif]
+Painel de dados
+
+[IMAGEM]
+Fluxograma visual de processo / print do mapa de operações
+[IMG]
+Cria processos claros pro seu time
+Roteiros de atendimento por etapa, regras claras de quando e como avançar cada paciente. O processo roda com ou sem a pessoa que o criou.
+
+Automatiza o que é chato e toma tempo, mas é importante
+Confirmação, lembrete, follow-up, pesquisa de satisfação, alerta de paciente parado. Tudo dispara sozinho, no momento certo.
+[Gif]
+Mensagem de confirmação de consulta no whatsapp da clínica
+
+[IMAGEM]
+Print de orçamento sendo resgatado / processo de follow-up
+Resgata orçamentos que esfriaram
+Paciente pediu orçamento e sumiu? Não fica esquecido. Temos processo dedicado pra recuperar.
+
+Entrega dados que viram decisão
+Custo por paciente, quantos avançam em cada etapa, quais canais convertem de verdade. Não é relatório, é recomendação do que fazer.
+[Imagem]
+Print de uma mensagem de relatório que enviamos nos grupos
+
+SEÇÃO 4: COMO FUNCIONA
+
+Como funciona
+A gente não opera sem diagnosticar.
+Assim como você não entra em procedimentos sem exames.
+
+ETAPA 1
+10 dias
+ETAPA 2
+30 dias
+ETAPA 3
+30 dias
+ETAPA 4
+30 dias
+ETAPA 5
+Opcional
+
+Onboarding
+Coleta de acessos, briefing e reunião de kick-off.
+Diagnóstico
+Mapeamos a jornada inteira dos pacientes: de onde vêm, como são atendidos, onde se perdem.
+Implementação
+Sistema configurado, automações rodando, rastreamento conectado, equipe treinada.
+Acompanhamento
+Checagem semanal: seu time tá usando certo? Ajustes finos e suporte proativo.
+Operação contínua
+Acompanhamento conforme o momento da sua clínica.
+
+Um time dedicado que responde pelo resultado de receita, e não por quantidade de lead. Todo mês. Com dados na mesa.
+
+SEÇÃO 6: RESULTADOS
+
+Resultados
+O que muda na sua clínica em 90 dias.
+Antes
+Depois do Revena Start
+
+Não sabe de onde vem cada paciente
+Cada contato chega rastreado com origem real
+
+Secretária atende no improviso
+Processo claro que roda com ou sem a pessoa
+
+Paciente pede orçamento e some
+Processo de follow-up e de resgate que recupera quem esfriou
+
+Cada ferramenta mostra um número diferente
+Uma fonte só de dados, limpa e confiável
+
+Decisão no feeling
+Decisão com dado real: custo por paciente, canal que funciona, etapa que trava
+
+Alguém da equipe sai e o processo vai junto
+Documentado, treinável, replicável
+
+SEÇÃO 7: CTA FINAL
+Fundo escuro, centralizado
+
+Limitado a 1 nova clínica por mês.
+Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.
+
+Converse com a equipe. Em 90 dias, sua operação pode estar rodando. →
+
+Notas SEO
+Meta title: "Protocolo Revena Start | Estruturação comercial para clínicas em 90 dias"
+Meta description: "Do lead ao paciente na cadeira. CRM, processo, automações e dados implementados em 90 dias. Para clínicas de alto padrão."
+Keywords: "CRM para clínicas", "captação de pacientes", "gestão comercial para clínicas"
+
+ 
+
+ Copy - Revena Full
+
+ Copy - Revena Full
+Página independente: /revena-full. A leitura abaixo simula o scroll da página, com copy já posicionada dentro do layout.
+
+SEÇÃO 1 · HERO
+
+Do primeiro contato ao retorno. A jornada inteira do paciente, conectada.
+
+O Revena Full estrutura o comercial e o pós-venda da sua clínica. Cada paciente se sente cuidado do começo ao fim. Isso faz pacientes voltarem e indicarem.
+
+Fale com a equipe e descubra se o Full faz sentido para sua clínica →
+
+[IMG]
+
+Usar preferencialmente o vídeo de referência citado na copy, sem texto na tela. Se não usar vídeo, manter visual nessa proporção vertical.
+
+SEÇÃO 2 · PRA QUEM É
+
+Para quem é
+
+Você se reconhece aqui?
+
+Fatura acima de R$300k/mês, mas além de não saber o que funciona na captação, seus pacientes somem depois da primeira consulta.
+Tem pelo menos mais de 5 planilhas que o time precisa ficar preenchendo, sem contar os sistemas
+Tem alguém no comercial e alguém cuidando do pós-venda (concierge, coordenadora, secretária dedicada), mas opera no improviso.
+Paciente fecha o procedimento e raramente volta. Você não tem processo de retenção.
+Quer que o paciente se sinta acompanhado, mas não tem estrutura pra isso rodar sem você pensar.
+
+SEÇÃO 3 · O QUE RESOLVE NA PRÁTICA
+
+Nossa solução
+
+Tudo do Revena Start + a jornada completa do paciente
+
+Processo comercial completo
+Do primeiro contato até o fechamento. Sistema de gestão, automações, rastreamento de origem, formulário pré-consulta com anamnese digital, equipe treinada.
+[imagem]
+
+[imagem]
+Acompanhamento pós-venda
+Comunicações automáticas de cuidado no momento certo: lembrete de retorno, orientação pré-procedimento, confirmação. Tudo personalizado, sem a equipe precisar lembrar.
+
+Integração com agenda
+O sistema conversa com a agenda da clínica. Menos pacientes que não aparecem, mais retorno.
+[imagem]
+
+[imagem]
+Processo que faz paciente voltar
+Não é campanha de reconquista. É cuidado sistemático que faz pacientes voltarem.
+
+SEÇÃO 4 · COMO FUNCIONA
+
+Como funciona
+Etapas do projeto
+ETAPA 1
+10 dias
+ETAPA 2
+30 dias
+ETAPA 3
+30 dias
+ETAPA 4
+30 dias
+ETAPA 5
+Opcional
+
+Onboarding
+Coleta de acessos, briefing e reunião de kick-off.
+Diagnóstico
+Organização do acervo documental e gerencial. Mapeamos a jornada: captação, atendimento, procedimento e pós. Identificamos o que precisa ser automatizado, documentamos regras de negócio, criamos fluxogramas visuais e definimos quem faz o quê em cada etapa. 
+Implementação
+Vamos para a tecnologia. Implementamos o CRM do jeito certo. Processo de acompanhamento de tratamentos; Processo de relacionamento com a base de pacientes; Comunicações automáticas da concierge; Integração com sistema de agenda; geração automática de contrato e termos LGPD
+Acompanhamento
+Checagem semanal: seu time tá usando? E está usando certo? Suporte proativo via WhatsApp, ajustes finos, reuniões, garantimos que a equipe realmente use e que os dados estão entrando limpos.
+Operação contínua
+Acompanhamento conforme o momento da clínica. Mantém rodando no longo prazo sob nossos cuidados profissionais.
+
+SEÇÃO 5 · DIFERENCIAL
+O Full é o único produto que entrega os 4 pilares na íntegra
+
+[ícone]
+[ícone]
+[ícone]
+[ícone]
+
+Controle 
+Automação 
+Processo 
+Experiência
+
+O paciente se sente cuidado do começo ao fim. Isso faz ele voltar e indicar.
+
+SEÇÃO 6 · RESULTADOS
+[IMG]
+SEÇÃO 7 · CTA FINAL
+Fundo escuro, centralizado
+ 
+Limitado a 1 nova clínica por mês.
+Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.
+
+Converse com a equipe. Em 90 dias, sua operação pode estar rodando. →
+
+Notas SEO
+Campo
+Texto
+
+Meta title
+Protocolo Revena Full | Jornada completa do paciente para clínicas
+
+Meta description
+Do primeiro contato ao retorno. Comercial + pós-venda conectados. Para clínicas que já têm equipe e querem retenção real.
+
+Keywords
+retenção de pacientes, pós-venda clínica, jornada do paciente
+
+ 
+
+ Copy - Revena Core
+
+ Copy - Revena Core
+Página independente: /revena-core. Funciona sozinha. NÃO referenciar como “evolução do Run”. A leitura abaixo simula o scroll da página, com copy já posicionada dentro do layout.
+
+SEÇÃO 1 · HERO
+
+Toda semana um time olha para os números da sua clínica e diz exatamente o que fazer.
+
+O Revena Core assume marketing, comercial e dados da sua clínica. Tudo conectado, toda semana analisado, todo mês otimizado.
+Fale com a equipe e descubra se o Revena Core faz sentido para sua clínica →
+
+[Imagem ou Gif]
+Se tiver captura real de relatório, dashboard ou reunião de acompanhamento, usar aqui.
+
+SEÇÃO 2 · PRA QUEM É
+
+Para quem é
+
+Você se reconhece aqui?
+Sua clínica fatura acima de R$300k/mês e já entendeu que o problema não é só a agência. Quer um time que conecte tudo.
+Tem dados, tem marketing, tem comercial, mas cada área opera no seu mundo e de maneira independente.
+Quer clareza d que tá funcionando, o que precisa mudar, e o que fazer.
+Já tem o Start ou Full implementado (pré-requisito).
+
+SEÇÃO 3 · O QUE RESOLVE NA PRÁTICA
+
+Nossa solução
+
+O que o Revena Core faz pela sua clínica, toda semana
+
+Marketing que funciona de verdade
+
+✔ Anúncios e páginas criados pela Renke, otimizados pelo paciente que fecha, não pelo clique
+✔ Estratégia de canais baseada em dados reais de quem avançou no funil
+✔ Roteiros produzidos em cima de anatomias validadas
+[Imagem ou Gif]
+Vamos fazer um bem bolado com prints de anúncios que já fizemos e LPs.
+
+[Imagem ou Gif]
+Dashboard com dados reais e blur no nome do cliente
+
+Gestão comercial com método
+✔ O dado de quem fechou volta pro marketing. O marketing melhora com base em quem realmente virou paciente
+✔ Recuperação de orçamentos parados com processo, não com spam
+✔ Alguém olhando toda semana pro seu processo comercial e dizendo o que ajustar
+
+Tecnologia própria rodando
+✔ Rastreamento de onde veio cada paciente, de verdade
+✔ Confirmações, lembretes e follow-ups disparando sozinhos
+✔ Tudo integrado num sistema só
+[Gif]
+Automação rodando e whatsapp recebendo mensagem automática
+
+[Imagem]
+Print de uma mensagem de relatório enviada no grupo do cliente
+
+Dados que viram decisão
+✔Painéis com os números que importam: custo por paciente, por canal, por procedimento
+✔Relatório de marketing toda semana com análise e recomendação
+✔Relatório comercial toda semana com o que fazer
+✔Você sabe onde investir mais e onde parar. Cada real tem destino claro.
+
+SEÇÃO 4 · ANÁLISE DE MERCADO E POSICIONAMENTO
+
+Diferencial estratégico
+
+Antes de gastar um real, a gente te mostra o jogo.
+
+Seus concorrentes estão investindo em anúncios agora. Você sabe no quê? Sabe como se comunicam? Sabe qual brecha estão deixando aberta pra você ocupar?
+
+A gente estuda isso a fundo. Depois, constrói um posicionamento exclusivo pra sua clínica: o que te torna a escolha óbvia na sua região e na sua especialidade.
+
+Não é template. É construção estratégica individual. Cada clínica tem a sua.
+[IMAGEM]
+Print do documento de análise de concorrentes ou do mapa de posicionamento de um cliente (com blur)
+
+SEÇÃO 5 · JORNADA DO PROJETO
+
+Como funciona
+Etapas do Revena Core
+ETAPA 1
+45 dias
+ETAPA 2
+90 dias
+ETAPA 3
+180 dias
+ETAPA 4
+Em 12 meses
+
+Estruturação
+Dossiê completo da clínica, estudo de concorrência, estratégia de posicionamento, rastreamento configurado, sistema de gestão comercial implementado, painéis de dados montados, metas definidas.
+Laboratório
+Testamos canais, criativos, abordagens. Validamos o que funciona pra sua clínica especificamente. Performance medida de ponta a ponta: do primeiro contato até o paciente fechar.
+Performance
+Aumentamos a aposta no que tá dando certo. Cortamos o que não funciona. Abrimos novos canais se fizer sentido.
+Operação Contínua
+Previsibilidade alcançada. Otimização constante com o time que já conhece sua clínica por dentro.
+
+Cada etapa alimenta a próxima. Por isso exigimos que a base esteja construída antes de operar. Sem isso, seria mais uma agência otimizando no escuro e tentando milagre com tráfego pago do passado.
+
+SEÇÃO 5 · CADÊNCIA SEMANAL
+
+O que acontece toda semana na sua clínica
+A Renke não manda relatório mensal e some. Toda semana, 3 camadas de análise se cruzam:
+Ritmo: como os números estão vs. a meta
+Qualidade dos contatos: quem tá chegando tá avançando no funil? Se não, por quê?
+Fechamento e projeção: quanto já fechou, quanto vai fechar, o que precisa mudar
+Você recebe: relatório de marketing + relatório comercial toda semana. Check-in mensal com o gestor. Alinhamentos com sua própria equipe. Suporte via WhatsApp em horário comercial.
+
+[Imagem]
+Relatório enviado para o cliente
+
+SEÇÃO 7 · RESULTADOS
+
+@Eduarda Tuorto aqui vamos repetir alguma seção de outra página?
+Acho que podemos colocar a mesma seção de depoimentos de clientes em todas as páginas
+
+SEÇÃO 8 · CTA FINAL
+ 
+Limitado a 1 nova clínica por mês.
+Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.
+
+Converse com a equipe. 
+
+SEO
+Campo
+Texto
+
+Meta title
+Protocolo Revena Core | Marketing + comercial + dados integrados para clínicas
+
+Meta description
+Um time operando marketing, comercial e dados da sua clínica toda semana. Custo por paciente real, não custo por clique.
+
+Keywords
+tráfego pago para clínicas, assessoria de marketing para médicos, marketing para clínicas
+
+ 
+
+ Copy - Revena Scale
+
+ Copy - Revena Scale
+Página independente: /revena-scale. Funciona sozinha. NÃO comunicar como “Core + extras”. A leitura abaixo simula o scroll da página, com copy já posicionada dentro do layout.
+
+SEÇÃO 1 · HERO
+
+Crescer por todos os lados: pacientes novos e os antigos voltando.
+
+O Revena Scale é a operação mensal mais completa da Renke. Captação, conversão, conteúdo que cresce seu perfil e comunicações automáticas de cuidado. Menos dependência de tráfego pago, mais receita de quem já confia em você.
+
+Fale com a equipe e descubra se o Scale faz sentido para sua clínica →
+
+[Imagem ou GIF]
+Se tiver print real de perfil crescendo, campanha de base ou operação integrada, usar aqui.
+
+SEÇÃO 2 · PRA QUEM É
+
+Para quem é
+
+Você se reconhece aqui?
+Sua clínica fatura acima de R$300k/mês e já tá rodando bem. Quer depender menos de anúncio e fazer pacientes antigos voltarem.
+Tem marketing interno mas sabe que pode performar mais.
+Sabe que tem uma base de pacientes valiosa, mas não faz nada com ela.
+Quer construir autoridade digital, não só comprar atenção.
+Busca crescimento sustentável: todas as frentes operando juntas.
+Já tem o Start ou Full implementado (pré-requisito).
+
+SEÇÃO 3 · O QUE RESOLVE NA PRÁTICA
+
+Nossa Solução
+
+O que o Scale faz pela sua clínica. Toda semana. Todo mês.
+
+Tudo do Core
+Marketing + comercial + dados integrados, operando toda semana. Relatórios semanais, recuperação de orçamentos, anúncios otimizados por quem realmente virou paciente.
+[imagem]
+
+[imagem]
+Conteúdo que constrói autoridade
+Um profissional de conteúdo dedicado que cria material que faz seu perfil crescer organicamente. É alguém dentro do seu dia a dia, produzindo conteúdo que atrai pacientes sem pagar por cada visualização.
+
+Ativação estruturada de pacientes antigos
+Pacientes que sumiram voltam a agendar. Conforme os meses passam e os dados se acumulam, as campanhas ficam cada vez mais inteligentes: segmentação por comportamento, histórico, perfil e momento do paciente.
+[imagem]
+
+[imagem]
+Comunicações automáticas de cuidado (réguas inteligentes)
+Geração de contratos, cobrança de exames, orientações pré e pós-procedimento, confirmações e lembretes de retorno. Tudo personalizado e automático, baseado no momento real de cada paciente. 
+
+SEÇÃO 4 · ANÁLISE DE MERCADO E POSICIONAMENTO
+
+Diferencial estratégico
+
+Antes de gastar um real, a gente te mostra o jogo.
+
+Seus concorrentes estão investindo em anúncios agora. Você sabe no quê? Sabe como se comunicam? Sabe qual brecha estão deixando aberta pra você ocupar?
+
+A gente estuda isso a fundo. Depois, constrói um posicionamento exclusivo pra sua clínica: o que te torna a escolha óbvia na sua região e na sua especialidade.
+
+Não é template. É construção estratégica individual. Cada clínica tem a sua.
+[IMAGEM]
+Print do documento de análise de concorrentes ou do mapa de posicionamento (com blur)
+
+SEÇÃO 5 · DIFERENCIAL
+
+Menos dependência de anúncio pago, mais receita dos pacientes que já confiam em você.
+
+SEÇÃO 5 · JORNADA DO PROJETO
+Como funciona
+Etapas do Revena Scale
+ETAPA 1
+45 dias
+ETAPA 2
+90 dias
+ETAPA 3
+180 dias
+ETAPA 4
+A partir de 12 meses
+
+Estruturação
+Tudo do Core + otimização dos perfis digitais, estratégia de conteúdo orgânico, exportação e segmentação da base com criação do calendário de ativações.
+Laboratório
+Testamos canais, criativos e abordagens. Validamos o que funciona. Otimizamos conteúdos orgânicos em paralelo. Performance medida de ponta a ponta.
+Performance
+Dobramos a aposta no que tá dando certo. Abrimos novos canais. Ampliamos presença digital.
+Operação Contínua
+Previsibilidade alcançada. Inovação constante pra não estagnar.
+
+Cada etapa alimenta a próxima. Sem a base construída, seria mais uma agência otimizando no escuro.
+
+SEÇÃO 6 · O QUE VOCÊ RECEBE TODA SEMANA E TODO MÊS
+
+O que acontece toda semana e todo mês na sua clínica
+Olhar de marketing semanal com análise e recomendações
+Acionáveis comerciais semanais com o que fazer para buscar a meta
+Relatório de conteúdo mensal (o que mais funcionou no perfil e que vai ser replicado)
+Check-in mensal com o gestor da clínica
+Alinhamentos quinzenais com a equipe comercial
+Suporte via WhatsApp em horário comercial
+Alertas proativos quando algo merece atenção imediata
+[imagem ou vídeo]
+Podemos fazer um mockup visual com uma imagem de checkin mensal com o cliente e um print de um relatório enviado no grupo
+
+SEÇÃO 7 · RESULTADOS
+[IMG]
+
+SEÇÃO 8 · CTA FINAL
+ 
+Limitado a 1 nova clínica por mês.
+Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.
+
+Converse com a equipe. 
+
+SEO
+Campo
+Texto
+
+Meta title
+Protocolo Revena Scale | Captação + conteúdo + reativação para clínicas
+
+Meta description
+A operação completa: marketing, comercial, conteúdo orgânico e ativação de base. Para clínicas que querem crescer sem depender só de anúncio.
+
+Keywords
+marketing orgânico para clínicas, retenção de pacientes, crescimento sustentável clínica
+
+ 
+
+ Copy - Revena Run
+
+ Copy - Revena Run
+Página independente: /revena-run. Funciona sozinha. NÃO é marketing, NÃO é conteúdo, NÃO é campanha. A leitura abaixo simula o scroll da página, com copy já posicionada dentro do layout.
+
+SEÇÃO 1 · HERO
+
+Você investiu para organizar. A gente garante que não volta a bagunçar.
+
+O Revena Run é a manutenção mensal da operação de atendimento da sua clínica. Toda semana, alguém checa se seu time tá seguindo o processo, se os dados estão certos e se nada quebrou. Refinamentos e otimizações nas jornadas são feitas sob medida. Você cuida do paciente. A gente cuida do seu negócio.
+
+Fale com a equipe e descubra se o Run faz sentido para sua clínica →
+
+[Imagem ou GIF]
+
+SEÇÃO 2 · PRA QUEM É
+
+Para quem é
+
+Você se reconhece aqui?
+Já tem marketing e não quer trocar. Só precisa de alguém cuidando do processo comercial.
+Montou tudo direitinho, mas sem alguém de olho, a equipe relaxa e volta pro improviso.
+Já viu os dados ficarem sujos e o processo parar porque ninguém estava monitorando.
+Quer manter tudo funcionando sem ser você quem cobra a equipe todo dia.
+Já passou pelo Start ou Full da Renke (pré-requisito).
+
+SEÇÃO 3 · O QUE RESOLVE NA PRÁTICA
+
+Nossa Solução
+O que o Revena Run faz pela sua clínica
+
+Direção estruturada
+Toda semana, olhamos pra dentro da sua operação. O time tá usando o processo? Os dados estão entrando certo? Alguma coisa travou? Corrigimos antes de virar problema.
+[Imagem ou Gif]
+
+[Print de alerta ou mensagem proativa no grupo]
+
+Acionável claro do que precisa de atenção
+Pacientes esquecidos, informações faltando, tarefas que ninguém fez. A gente identifica e te diz exatamente o que corrigir.
+
+Recuperação de orçamentos parados
+Paciente pediu orçamento e sumiu? Não fica esquecido. Acionamos seu time com processo pra trazer de volta.
+[Imagem ou Gif]
+
+[Print de automação ou ajuste sendo feito]
+
+Ajustes contínuos
+Conforme sua clínica evolui, ajustamos o que precisa. Confirmações, lembretes, follow-ups: tudo continua rodando certinho.
+
+SEÇÃO 4 · DIFERENCIAL
+
+Sua cabeça fica no resultado do paciente. A nossa fica na experiência digital dele e na sua operação. Tecnologia sem manutenção degrada. O Run é quem mantém sua operação viva.
+
+SEÇÃO 5 · O QUE VOCÊ RECEBE TODA SEMANA E TODO MÊS
+
+O que acontece toda semana e todo mês na sua clínica
+Toda semana: relatório com o que tá funcionando e o que precisa de atenção
+Todo mês: reunião com a equipe pra alinhar melhorias e próximos passos
+No dia a dia: suporte via WhatsApp (horário comercial) pra dúvidas rápidas
+Quando necessário: alerta imediato se algo merece sua atenção
+
+Quem cuida disso: Uma equipe enxuta e focada só em manter sua operação saudável. Sem excesso, sem complexidade.
+[Imagem]
+Mockup de reunião mensal ou print de mensagem de suporte proativo no WhatsApp.
+
+SEÇÃO 6 · QUANDO O RUN NÃO BASTA
+
+Se seu marketing não usa os dados que sua operação gera (e continua otimizando só pra entregar leads), o Run mantém a casa em ordem, mas o marketing continua no escuro.
+
+Para que o marketing use a inteligência que sua operação já tem, conheça o Revena Core →
+
+SEÇÃO 7 · CTA FINAL
+
+Sua operação já está montada. Só precisa de alguém mantendo.
+Sem template. Sem terceirização. Alguém de verdade olhando pros seus números toda semana.
+
+Converse com a equipe →
+
+SEO
+Campo
+Texto
+
+Meta title
+Protocolo Revena Run | Manutenção da operação comercial para clínicas
+
+Meta description
+Manutenção semanal, dados limpos, equipe aderindo. Alguém garantindo que sua operação não volta a bagunçar.
+
+Keywords
+gestão de CRM para clínicas, manutenção CRM, operação comercial clínica
+
+ 
+
+ Copy - Treinamento para Secretárias
+
+ @Eduarda Tuorto vamos descontinuar esse produto tá? Muito obsoleto e tô sem agenda para regravá-lo :// 
+Poooxa, acho um produto MUITO interessante para clínicas
+
+Copy - Treinamento para Secretárias (Agendamento 10x)
+Página independente: /treine-sua-equipe. Público: dono da clínica que quer profissionalizar o atendimento. Funciona sozinha. A leitura abaixo simula o scroll da página, com copy já posicionada dentro do layout.
+
+SEÇÃO 1 · HERO
+
+Sua secretária atende bem. Mas poderia agendar muito mais.
+
+O Agendamento 10x é o treinamento que transforma sua equipe de atendimento em uma máquina de agendamento. Scripts, processo claro, rotinas diárias e jogo de cintura pra cada tipo de paciente. Tudo baseado no que funciona em +140 clínicas.
+
+Quero treinar minha equipe →
+
+[Imagem]
+Foto de secretária/CRC atendendo ou print de conversa bem conduzida no WhatsApp.
+
+SEÇÃO 2 · PRA QUEM É
+
+Para quem é
+
+Você se reconhece aqui?
+Pacientes entram em contato, mas muitos não agendam. E você não sabe por quê.
+Sua secretária ou recepcionista faz tudo: atende, agenda, cobra, organiza. Mas sem método.
+Quando alguém sai da equipe, o processo vai embora junto.
+Pacientes que pedem orçamento somem e ninguém faz follow-up.
+Você sente que está perdendo dinheiro no atendimento, mas não sabe medir.
+
+SEÇÃO 3 · O QUE SUA EQUIPE VAI APRENDER
+
+Nossa Solução
+
+Do primeiro contato ao pós-venda, com processo
+
+Jornada completa em 8 etapas
+1. Contato inicial
+2. Coleta de informações
+3. Encantamento
+4. Esclarecimentos
+5. Agendamento
+6. Consulta
+7. Fechamento
+8. Pós-venda
+
+[Imagem]
+Print de roteiro de atendimento ou script real (borrado se necessário).
+
+Roteiros prontos pra cada etapa
+Não é texto decorado. É estrutura com argumentos que sua equipe adapta pra cada situação. Cada etapa tem seu roteiro específico.
+
+Rotinas diárias organizadas
+Checklist do que fazer todo dia: responder contatos novos, fazer lembretes, follow-up de quem não respondeu, resgatar quem faltou, conferir dados atualizados.
+
+[Imagem]
+Diagrama de separação de funções (CRC vs Secretária).
+
+Separação clara de funções
+Quem cuida do comercial (agendar, resgatar, converter) e quem cuida da recepção (receber, organizar, cobrar). Sem confusão de papéis.
+
+SEÇÃO 4 · O QUE MUDA NA PRÁTICA
+
+O que muda na prática
+Antes e depois do treinamento
+
+Antes
+Depois
+
+Equipe responde quando dá
+Prioridade máxima pra contatos novos
+
+Paciente pergunta preço e some
+Conversa conduzida até o agendamento
+
+Orçamento fica parado e ninguém retoma
+Follow-up com processo e timing certo
+
+Quem faltou na consulta é esquecido
+Resgate ativo com roteiro específico
+
+Se a pessoa sai, o método vai junto
+Processo documentado, qualquer novo membro aprende rápido
+
+SEÇÃO 5 · COMO FUNCIONA
+
+Como funciona
+
+TEÓRICO
+PRÁTICO
+MONITORAMENTO
+
+Entendimento das funções, rotinas e erros mais comuns. Sua equipe entende o porquê antes do como.
+Scripts completos, fluxos de atendimento, checklists diários. Tudo pronto pra aplicar no dia seguinte.
+Reunião semanal de alinhamento, conferência de conversas, cliente oculto pra validar aprendizado.
+
+SEÇÃO 6 · DIFERENCIAL
+
+Não é curso genérico de atendimento. É o método que usamos nas clínicas que atendemos todo dia. Testado, ajustado e validado em +140 operações reais.
+
+SEÇÃO 7 · CTA FINAL
+
+Sua equipe está perdendo pacientes todo dia sem perceber.
+Cada contato que não vira agendamento é dinheiro que saiu do seu bolso. O treinamento resolve isso em semanas, não em meses.
+
+Quero treinar minha equipe →
+
+SEO
+Campo
+Texto
+
+Meta title
+Agendamento 10x | Treinamento de atendimento comercial para clínicas
+
+Meta description
+Scripts, processos e rotinas que transformam sua equipe de atendimento em uma máquina de agendamento. Método validado em +140 clínicas.
+
+Keywords
+treinamento secretária clínica, como agendar mais pacientes, script atendimento clínica
+
+ 
+
+ Copy - Para Agências (Renke Academy)
+
+ Copy — Renke Academy
+Página independente: /academy. Público: donos de agência. Tom: direto + técnico + framework. Pode usar vocabulário de marketing sem restrição.
+
+SEÇÃO 1 · HERO
+
+Seus clientes trocam de agência todo ano. O problema não é a entrega. É o modelo.
+
+O mercado joga de 2 maneiras. O jogo antigo está matando agências e frustrando clientes. O jogo novo está criando operações lucrativas com poucos clientes e responsabilidade real pelo resultado. A Renke Academy ensina o jogo novo.
+
+Quero conhecer a Academy →
+[IMG]
+[Foto que esteja relacionada com Academy]
+
+Dois jogos. Você escolhe qual jogar.
+
+O jogo antigo
+O jogo novo
+
+Cliente contrata agência pro tráfego, outra pro conteúdo, alguém implementa um CRM que ninguém usa, e todo mundo decide no feeling. Cada peça solta, nenhuma conversa com a outra. O dono do negócio trabalha cada vez mais sem ver o dinheiro voltar. Troca de agência todo ano achando que o problema é a agência. E a agência? Cobra pouco, entrega muito, perde o cliente mesmo assim, e começa tudo de novo com outro.
+Os negócios que estão crescendo com consistência já operam com RevOps. Marketing, comercial e dados como um sistema só. Faturamento previsível. E as agências que operam esse modelo? Poucos clientes, ticket alto, retenção real, margem de verdade. Funciona em saúde, em serviços, em qualquer negócio onde o cliente investe em marketing e precisa de previsibilidade.
+
+A Renke validou esse modelo em +140 clínicas. Com metodologia própria (Studio), tecnologia que operacionaliza tudo (Tools), e formação para quem quer aplicar esse jogo no nicho que quiser (Academy).
+
+"Se você continua jogando o jogo antigo, está competindo num mercado que está morrendo."
+SEÇÃO 3 · Para quem é
+
+Se você é dono de agência e...
+
+ 
+Teso no modelo "faz tudo para todo mundo" e quer criar um posicionamento real
+Entrega resultado pro cliente mas não consegue provar com dados (e cobra pouco por isso)
+Quer parar de ser executor de tarefa e virar parceiro estratégico do cliente
+Busca um modelo onde poucos clientes + ticket alto = operação lucrativa sem caos
+Quer entender RevOps na prática e oferecer isso como serviço de alto valor
+[IMG]
+[imagem]
+
+Seção 4: O que você acessa
+Tudo que a Renke usa para operar, aberto para você modelar
+
+imagem
+imagem
+
+Metodologia Revena completa
+ O framework que usamos para operar o Studio. Como nos posicionamos, como vendemos, como entregamos, como precificamos, como gerimos. O sistema operacional inteiro, não um resumo.
+Processos reais de operação
+Playbooks, scripts, fluxos de automação, modelos de relatório, rotinas semanais. Não é template genérico. É o que usamos hoje, com 30 clínicas ativas.
+
+imagem
+imagem
+
+Stack técnica documentada
+Ferramentas, configurações de CRM, modelos de rastreamento, lógica de integração. Operação real, não teoria.
+
+Comunidade de operadores
+Acesso a outros donos de agência que estão implementando o mesmo modelo. Troca real entre quem faz.
+
+Seção 5: A tese
+
+[IMG]
+O mercado te ensinou errado
+
+O modelo tradicional de agência: muitos clientes, ticket baixo, equipe grande, margem pequena, cliente que troca de agência todo ano. Escalar assim é cavar sua cova.
+ 
+O modelo Renke: poucos clientes, entrega sofisticada, responsabilidade pelo resultado de receita, precificação por valor, não por hora. Menos clientes, mais lucro, mais controle.
+ 
+"Você não abriu uma agência para ter uma vida pior do que tinha antes dela."
+
+Seção 6: PRODUTOS
+Nossos Cursos
+
+Trilha completa ou módulos independentes
+
+Protocolo Renke
+
+O sistema operacional inteiro de uma operação de RevOps lucrativa. Posicionamento, venda, entrega, precificação, gestão de equipe. 100% dos bastidores abertos para você modelar no seu nicho.
+
+Saiba Mais
+imagem
+
+Formação Performa
+
+De executor reativo para estrategista de performance. Sistema de pensamento, não curso de botão.
+
+Saiba Mais
+imagem
+
+Treinamento de CRM
+
+Uma nova linha de receita para sua agência: implementação de CRM como serviço de alto valor. Método testado em 200+ projetos.
+
+Saiba Mais
+imagem
+
+Rastreamento Avançado
+
+Prove retorno real de WhatsApp e formulários sem depender de software terceiro. Recebe tudo pronto, instala e entrega.
+
+Saiba Mais
+imagem
+
+Cultura Pro
+
+Cultura organizacional para agências, ensinada por quem tem certificação GPTW. Os erros e acertos reais da Renke.
+
+Saiba Mais
+imagem
+
+Seção 7: Final
+A Renke Academy não é para todo mundo.
+ 
+É para quem quer parar de ser agência genérica e construir uma operação com posicionamento, método e margem real.
+
+Notas SEO
+Meta title: "Renke Academy | Como construir uma operação de RevOps lucrativa para agências"
+Meta description: "O modelo de RevOps validado em +140 clínicas, aberto para agências. Método, processos, ferramentas e bastidores reais da Renke."
+Keywords: "revops para agências", "como montar agência de marketing médico", "escalar agência", "mentoria para donos de agência"
+
+ 
+
+ Copy - Protocolo Renke
+
+ Copy - Protocolo Renke
+Página independente. Flagship da Academy (R$7k). Público: donos de agência de qualquer nicho.
+
+Seção Hero
+
+[Logo Renke Academy]
+O sistema operacional inteiro de uma operação de RevOps lucrativa. Aberto para você modelar.
+
+O Protocolo Renke é o flagship da Renke Academy. Tudo que a Renke construiu em 4 anos operando +140 projetos, documentado e transferido para você aplicar no seu nicho. Posicionamento, produtos, processos, ferramentas, venda, entrega, precificação, gestão de equipe. Sem filtro.
+
+QUERO O SISTEMA OPERACIONAL DA RENKE
+[IMG]
+[Imagem]
+
+Seção 2: Para quem é
+Para quem é
+Se você é dono de agência e...
+Tá preso no operacional e não consegue sair
+Cobra pouco, entrega muito, e mesmo assim perde cliente
+Quer parar de escalar com mais gente e começar a escalar com mais valor
+Sente que construiu uma prisão em vez de um negócio
+Quer um modelo com menos loucura e mais lucro
+
+Seção: O que você recebe
+
+O que você recebe
+
+100% dos bastidores da Renke
+
+[IMG]
+[IMG]
+[IMG]
+[Imagem]
+
+Posicionamento
+Modelo comercial
+Operação
+
+Como sair de "agência genérica" e criar um posicionamento que atrai clientes de alto ticket. Como a Renke se diferenciou num mercado comoditizado.
+Como vender projetos de R$20k-R$40k e recorrências de R$6.5k - R$15k/mês. Processo de venda consultiva, precificação por valor, qualificação de clientes.
+Como entregar com poucos clientes e margem alta. Estrutura de squads, rotinas semanais, rituais de gestão, distribuição de contas.
+
+[IMG]
+
+[Imagem]
+[IMG]
+
+[IMG]
+
+[Imagem]
+
+Gestão de Equipe
+Método de Entrega
+Documentos reais
+
+Como montar uma equipe enxuta que opera sem depender de você. Cultura, processos, autonomia.
+O Protocolo Revena traduzido para você aplicar: diagnóstico, implementação, acompanhamento. Como entregar resultado real e reter cliente por anos.
+Templates, playbooks, scripts, modelos de proposta, estruturas de relatório. Tudo que usamos hoje, não versões diluídas.
+
+Seção: A TESE
+"Você não abriu uma agência para ter uma vida pior do que tinha antes dela."
+
+O mercado ensinou que crescer = mais clientes + mais equipe. Isso é uma armadilha. Quanto mais clientes, mais caos, mais rotatividade, menos margem, menos qualidade de vida.
+
+O modelo Renke inverte: poucos clientes + entrega sofisticada + precificação por valor = escala vertical sem caos. Menos clientes, mais lucro, mais controle, mais liberdade.
+
+"Não é mentoria de quem parou de fazer. É o blueprint de quem faz isso todo dia."
+
+Não é sobre o que nós falamos, é sobre o que falam de nós
+
+🗣️ O que as agências dizem
+
+🗣️ O que as clínicas dizem
+
+Seção: CTA FINAL
+O Protocolo Renke não é para todo mundo.
+ 
+É para quem tá pronto para matar o próprio negócio e reconstruir o modelo do zero, mas com inteligência e estrutura. Se quer só "mais dicas de marketing", não é para você. Se quer um sistema operacional completo para transformar sua agência, você está no momento certo.
+ 
+Quero conhecer o Protocolo Renke →
+
+ 
+
+ Copy - Formação Performa
+
+ Copy - Formação Performa
+Página independente. Público: gestores de tráfego e donos de agência que querem sair do modo reativo.
+
+Seção: HERO
+
+[Logo Renke Academy]
+De executor reativo para estrategista de performance
+
+A Formação Performa é um sistema de pensamento estratégico para quem já opera tráfego mas quer parar de apertar botão e começar a pensar como estrategista. 
+
+Quero conhecer a Formação Performa →
+imagem
+
+Seção: PARA QUEM É
+
+Para quem é
+Se você...
+Faz tráfego mas não tem muita segurança nas decisões estratégicas 
+Sabe que poderia entregar mais resultado para o cliente que confiou em você
+Sabe otimizar, mas não tem método para pensar na estratégia por trás do tráfego
+Quer conectar o que faz no gerenciador com o resultado real do cliente
+Gera resultado mas não prova valor para o cliente
+Quer subir de nível: de gestor de tráfego para estrategista de performance
+
+Seção: O QUE VOCÊ APRENDE
+
+O que você recebe
+
+Na Formação Performa você aprende...
+
+[imagem]
+[imagem]
+
+Framework estratégico
+Como pensar antes de executar. Análise de concorrência, definição de canais, estruturação de funis, alocação de verba baseada em dados reais.
+Otimização por resultado, não por métrica de vaidade
+Como parar de olhar para CPL e começar a otimizar por avanço de funil, agendamento e venda.
+
+[imagem]
+[imagem]
+
+Visão consultiva
+Como conversar com o cliente sobre estratégia, não só sobre relatório. Como se posicionar como parceiro, não como executor.
+Integração com comercial
+ Como usar os dados do comercial para melhorar as campanhas. O circuito que separa gestores medianos de estrategistas.
+
+Quero conhecer a Formação Performa →
+Seção: DIFERENCIAL
+
+"Não é curso de botão. É sistema de pensamento estratégico. Quem sai daqui pensa diferente antes de abrir o gerenciador."
+
+Seção: Sobre a Renke
+
+Quem está por trás da Formação
+
+A Formação Performa nasce da operação da Renke Studio. Não é teoria emprestada de livro gringo. É o sistema que roda há 4 anos com clínicas de alto ticket, validado com verba real, resultado real e cliente real cobrando no WhatsApp todo dia.
+
+[Imagem]
+
+Seção: CTA FINAL
+Você vai continuar otimizando CPL enquanto o cliente cancela... ou vai aprender a pensar como estrategista?
+
+A Formação Performa é para quem quer parar de reagir e começar a liderar a estratégia. Framework, visão consultiva, integração com comercial e um sistema de pensamento que muda como você opera.
+
+Quero sair do modo executor →
+
+ 
+
+ Copy - Treinamento de CRM
+
+ Copy - Treinamento de CRM
+Página independente. Público: donos de agência e gestores que querem adicionar implementação de CRM como serviço de alto valor.
+
+Seção: HERO
+
+[Logo Renke Academy]
+Uma nova linha de receita para sua agência: implementação de CRM como serviço de alto valor.
+
+O Treinamento de CRM da Renke Academy ensina como vender e entregar projetos de implementação e gestão de CRM de R$5k a R$40k. Método testado em 200+ projetos reais. Alunos vendendo na primeira semana.
+
+Quero aprender a vender CRM →
+imagem
+
+Seção: PARA QUEM É
+Para quem é
+Se você...
+Até implementa um CRM ou outro mas sem metodologia para replicar com seu time e amadurecer sua entrega
+Quer adicionar um serviço de alto ticket sem precisar de equipe nova
+Já atende clientes de marketing e quer agregar valor com processo comercial
+Quer parar de depender só de recorrência de gestão de tráfego
+Quer aprender a implementar CRM com método, não por tentativa e erro
+
+Seção: O QUE VOCÊ APRENDE
+
+O que você recebe
+
+No Treinamento de CRM você aprende...
+
+[imagem]
+[imagem]
+
+Como vender
+Posicionamento do serviço, precificação, abordagem comercial. Como mostrar valor pro cliente antes de falar preço.
+Como diagnosticar
+Mapeamento da jornada do cliente, identificação de gargalos, recomendação de arquitetura.
+
+[imagem]
+[imagem]
+
+Como implementar
+Configuração completa: funis, etapas, campos, regras, automações, rastreamento e treinamento da equipe do cliente.
+Como manter
+Modelo de recorrência pós-implementação. Gestão de CRM como serviço mensal de R$3k a R$5k.
+
+Seção: COMO FUNCIONA
+
+Módulos práticos passo a passo
+Do diagnóstico à entrega. Cada módulo é um pedaço do projeto real: você assiste, aplica no seu próximo cliente e já cobra por isso.
+Templates de projeto prontos
+Mapa de oeprações, checklist de implementação, roteiro de onboarding, modelo de recorrência. Tudo pronto para usar.
+
+Seção: NÚMEROS
+
+R$5k a R$40k
+por implementação
+R$1k a R$5k/mês
+de recorrência
+Sem equipe nova
+você entrega sozinho
+1ª semana
+alunos já vendendo
+
+Seção: Sobre a Renke
+ 
+Método nascido em operação real
+
+O treinamento é baseado nos 200+ projetos de implementação da Renke Studio. Clínicas, escritórios, negócios de alto ticket. Não é framework importado: é o que funciona no Brasil, com cliente cobrando no WhatsApp.
+[Imagem]
+
+Seção: CTA FINAL
+Sua agência vai continuar vendendo só tráfego a R$1.500/mês... ou vai adicionar projetos de R$5k a R$40k?
+ 
+O Treinamento de CRM te entrega o método completo: como vender, diagnosticar, implementar e manter. Um serviço novo de alto valor que seus clientes já precisam, só não sabem pedir.
+ 
+Quero adicionar CRM ao meu portfólio →
+
+ 
+
+ Copy - Rastreamento Avançado
+
+ Copy - Rastreamento Avançado
+Página independente. Público: gestores de tráfego e agências que precisam provar ROI real de WhatsApp e formulários.
+
+Seção: HERO
+
+[Logo Renke Academy]
+Seu cliente pergunta 'de onde veio esse lead?' Agora você prova.
+
+O Rastreamento Avançado da Renke Academy entrega tudo pronto: scripts, configurações, templates de fluxos e integrações. Você instala, configura e entrega pro cliente em minutos. Cada conversão rastreada do clique ao CRM.
+
+Quero acesso ao Rastreamento Avançado →
+imagem
+
+Seção: PARA QUEM É
+
+Para quem é
+Se você...
+Precisa provar pro cliente que os contatos vieram do anúncio (e não do orgânico)
+Trabalha com campanhas de mensagem e não consegue rastrear de verdade
+Quer diferenciar sua entrega de outras agências que só mostram CPL
+Não quer depender de ferramentas caras para ter rastreamento preciso
+Quer internalizar uma tecnologia para servir como vantagem competitiva 
+
+Seção: O QUE VOCÊ RECEBE
+
+O que você recebe
+
+O que você recebe...
+
+[imagem]
+[imagem]
+
+Rastreamento de WhatsApp
+Botões de WhatsApp em sites e landing pages rastreados com precisão. Origem, campanha e criativo identificados no CRM automaticamente.
+Formulários nativos e de página
+Tudo integrado direto ao CRM com UTMs dinâmicas. Cada lead com origem clara, sem achismo.
+
+[imagem]
+[imagem]
+
+Campanhas de mensagem (Meta)
+Rastreamento de campanhas com objetivo de mensagens. Dados chegando estruturados no CRM com campanha, conjunto e criativo.
+Plug & play
+Não precisa programar. Recebe a lógica pronta, instala e configura seguindo o passo a passo. Entrega pro cliente no mesmo dia.
+
+Seção: COMO FUNCIONA
+
+Como funciona
+
+Recebe a lógica pronta
+Scripts, tags e configurações documentadas passo a passo. Sem precisar de dev ou ferramenta cara.
+Instala e configura
+Segue o tutorial, aplica no site e no CRM do cliente. Funciona com qualquer builder e qualquer CRM.
+Entrega e impressiona
+Seu cliente passa a ver exatamente de onde vem cada contato. Você prova ROI real e justifica o investimento.
+
+Seção: O PROBLEMA
+
+Sem rastreamento
+"De onde veio esse lead?" Ninguém sabe. O cliente acha que é orgânico, você não consegue provar que é do tráfego. Resultado: desconfiança, cancelamento, churn.
+Com o Rastreamento Avançado
+Cada contato chega no CRM com origem, campanha e criativo. O cliente vê o retorno. Você justifica a verba, aumenta ticket e retém com dados.
+
+Seção: Sobre a Renke
+ 
+Direto da operação Renke
+
+O Rastreamento Avançado é extraído da operação real da Renke Studio. O mesmo rastreamento que roda nos nossos projetos, testado com WhatsApp, formulários, campanhas de mensagem e CRMs diferentes. Não é teoria: é o que usamos todo dia para provar resultado. Você recebe pronto, instala e entrega.
+[Imagem]
+
+Seção: CTA FINAL
+Seu cliente vai continuar achando que os leads são orgânicos... ou você vai instalar o rastreamento e provar de onde vem cada contato?
+ 
+O Rastreamento Avançado da Renke entrega tudo pronto: scripts, configurações e integrações. Sem programação, sem ferramenta cara, sem achismo. Instala, entrega e prova ROI real.
+ 
+Quero acesso ao Rastreamento Avançado →
+Sem dependência de software terceiro. Plug & play.
+
+ 
+
+ Copy - Cultura Pro
+
+ Copy — Cultura Pro
+Página independente. Público: donos de agência que querem construir cultura sem virar RH corporativo.
+
+Seção: HERO
+
+[Logo Renke Academy]
+Sua agência cresce, mas a equipe não acompanha. O problema é cultura.
+
+O Cultura Pro é o método da Renke para construir cultura organizacional de verdade numa agência. Não é RH corporativo adaptado. É o que funciona quando você tem 10-20 pessoas e precisa que elas operem sem você no meio. Ensinado por quem errou, acertou e tem GPTW para provar.
+
+Quero construir cultura na minha agência →
+imagem
+
+Seção: PARA QUEM É
+
+Para quem é
+
+Se você...
+Sente que a equipe só funciona quando você tá em cima
+Já perdeu gente boa porque o ambiente não segurou
+Quer que a agência rode mesmo quando você não está
+Não quer copiar modelo corporativo, quer algo que funcione para agência de verdade
+Sabe que precisa de cultura mas não sabe por onde começar sem parecer forçado
+
+Seção: O QUE VOCÊ APRENDE
+
+O que você aprende
+
+No Cultura Pro você aprende...
+
+[imagem]
+[imagem]
+
+Os erros reais da Renke
+O que fizemos errado antes de acertar. Os bastidores sem filtro de quem quase quebrou a cultura antes de construir uma de verdade.
+Rituais que funcionam
+Reuniões, feedbacks, alinhamentos, celebrações. O que manter e o que cortar. Sem burocracia, só o que gera resultado.
+
+[imagem]
+[imagem]
+
+Autonomia sem caos
+Como dar liberdade sem perder controle. Processos que guiam sem sufocar. O equilíbrio que faz a equipe rodar sem depender de você.
+Retenção real
+Como fazer gente boa querer ficar. Não com salário absurdo, mas com ambiente, propósito e crescimento tangível.
+
+Seção: COMO FUNCIONA
+
+Módulos práticos
+Conteúdo direto ao ponto com os bastidores reais da Renke. Cada módulo é um pilar de cultura que você aplica na semana seguinte.
+Frameworks e templates
+Modelos de rituais, scripts de feedback, estrutura de onboarding, playbook de cultura. Tudo pronto para adaptar.
+
+Seção: O PROBLEMA
+
+Sem cultura intencional
+Turnover alto, equipe desmotivada, você apagando incêndio todo dia. Contrata, treina, perde. Repete. A agência cresce em faturamento mas encolhe em energia.
+Com cultura construída
+Equipe que opera sem você em cima. Gente boa que fica. Autonomia com alinhamento. Você para de ser o gargalo e vira o líder que a agência precisa para escalar.
+
+Seção: OS NÚMEROS
+
+GPTW
+Certificação conquistada
+30+ pessoas
+operando com cultura real
+4+ anos
+construindo e iterando
+Baixo turnover
+gente boa que fica
+
+Seção: DIFERENCIAL
+
+"Não é teoria de livro de gestão. É o método de quem já errou e acertou dentro de uma agência. Com certificação GPTW para provar."
+
+Seção: Sobre a Renke
+ 
+Método da Renke, com selo GPTW 
+
+O Cultura Pro nasce dos erros e acertos reais da Renke Studio. Uma agência que cresceu de 5 para 30+ pessoas sem perder a essência. Com certificação GPTW conquistada na prática,você aprende com quem vive cultura todo dia.
+[Imagem]
+
+Seção: CTA FINAL
+Sua agência vai continuar perdendo gente boa e dependendo de você para tudo funcionar... 
+ou você vai construir uma cultura que faz a equipe operar sem você no meio?
+ 
+O Cultura Pro te entrega o método completo: rituais, feedbacks, onboarding, autonomia e retenção. Tudo testado na Renke, com GPTW para provar que funciona.
+ 
+Quero construir cultura de verdade →
+Método validado com certificação GPTW.
+
+ 
+
+ Copy - Contato
+
+ Copy - Contato
+Página independente: /contato. Atende todos os públicos (clínicas, agências, outros). Formulário único com seletor de interesse.
+
+SEÇÃO 1 · HERO + FORMULÁRIO
+
+Vamos conversar?
+
+Preencha o formulário e a gente responde em até 24h.
+
+Canais diretos:
+📧 contato@renkestudio.com.br
+[FORMULÁRIO]
+
+☐ Nome
+☐ E-mail
+☐ WhatsApp
+☐ Qual o seu interesse? (seletor)
+Protocolo Revena (para clínicas)
+Renke Academy (para agências)
+Outro assunto
+☐ Mensagem (opcional)
+
+Enviar →
+
+SEÇÃO 2 · PROVA SOCIAL
+
++140 clínicas atendidas
++650 alunos no Academy
+6 anos de operação
+
+[LOGOS DE CLIENTES E PARCEIROS] Mistura de logos de clínicas + agências parceiras
+
+SEÇÃO 5 · FAQ
+
+Perguntas frequentes
+
+O que a Renke faz?
+Somos uma empresa de Revenue Operations. Conectamos marketing, comercial e dados em um sistema só. Atendemos clínicas (Studio), ensinamos agências (Academy) e desenvolvemos tecnologia própria (Tools).
+
+O Academy é só para agências de saúde?
+Não. O modelo que ensinamos foi validado em saúde, mas se aplica a qualquer agência que queira sair do modelo genérico e criar uma operação de alto valor.
+
+Vocês fazem site e identidade visual para qualquer empresa?
+Sim. Nossos produtos digitais (site institucional e identidade visual) atendem qualquer negócio que precise de presença digital profissional.
+
+Onde ficam?
+Blumenau, SC. Mas operamos 100% remoto com clientes de todo o Brasil.
+
+SEÇÃO 6 · INFORMAÇÕES DE CONTATO
+Renke Studio
+
+Endereço:
+Blumenau, SC
+R. Benjamin Constant, 2364
+Sala Térrea, Escola Agrícola
+CEP 89035-100
+
+E-mail: contato@renkestudio.com.br
+
+CNPJ: 37.079.656/0001-51
+
+Horário de atendimento:
+Segunda a sexta, 08h às 12h | 13h30 às 17h
+Sábados e domingos sem atendimento.
+Redes sociais
+
+Instagram: @renkestudio
+LinkedIn: /renkestudio
+YouTube: /renkestudio
+
+[MAPA]
+Embed do Google Maps — R. Benjamin Constant, 2364, Blumenau SC
+
+ 
+SEO
+Meta title
+Contato | Renke — Revenue Operations, Academy e Soluções Digitais
+
+Meta description
+Entre em contato com a Renke. Atendemos clínicas, agências e empresas. Respondemos em até 24h.
+
+Schema
+FAQ (5 perguntas) + Organization
+
+Campo
+Texto
+
+ 
+
+ Copy - Faça Parte
+
+ Copy - Faça Parte
+Página independente: /faca-parte. Baseada na estrutura atual do site, com copy ajustada pro posicionamento RevOps + fotos atualizadas + novo endereço.
+
+SEÇÃO 1 · HERO
+
+Faça parte do #TEAMRENKE.
+
+A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão no Brasil. Aqui, a gente conecta marketing, comercial e dados em um sistema só. E faz isso com um time enxuto, autônomo e obcecado por resultado.
+
+Se você quer trabalhar com propósito, liberdade e evolução constante: esse é o lugar.
+
+Deixe seu currículo ↓
+[Ícone de Vídeo ou Foto do time]
+⚠️ TROCAR: usar foto atualizada dos colaboradores ativos. A atual está desatualizada.
+
+SEÇÃO 2 · DEPOIMENTOS DO TIME
+
+O sentimento de fazer parte
+Veja o que o time diz
+
+[VÍDEO ou CARROSSEL DE DEPOIMENTOS]
+⚠️ TROCAR: gravar novos depoimentos com colaboradores ativos. Os atuais estão desatualizados.
+
+SEÇÃO 3 · GPTW
+
+Somos GPTW: um ótimo lugar para trabalhar e evoluir.
+
+Receber o selo Great Place to Work é reflexo de um compromisso diário com o bem-estar e o desenvolvimento de cada pessoa do time. Aqui, suas ideias são ouvidas, seu crescimento é levado a sério e o ambiente é leve, criativo e humano.
+
+Não é só um selo. É como a gente opera todo dia.
+[Imagem do selo GPTW ou foto da celebração]
+
+SEÇÃO 4 · CULTURA
+
+#TEAMRENKE
+
+No que acreditamos
+
+Liberdade com autorresponsabilidade. Criatividade com método. Evolução pessoal como parte do trabalho, não como extra.
+
+Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas. Um ambiente que te ajuda a ampliar seu nível de felicidade por meio do trabalho, com pessoas plurais que compartilham uma mesma visão: fazer diferente, com excelência.
+
+Liberdade
+Autorresponsabilidade
+Conexão
+Evolução
+
+Você decide como, quando e de onde trabalhar. Confiamos no seu julgamento.
+Liberdade vem com responsabilidade. A entrega é sua, o compromisso é com o resultado.
+Somos uma tribo. O bem do grupo é inegociável. Colaboração é o padrão, não a exceção.
+Crescer como profissional aqui é tão importante quanto entregar resultado.
+
+SEÇÃO 6 · NOSSA SEDE
+
+Onde a mágica acontece
+
+⚠️ ENDEREÇO MUDOU. Atualizar com novo endereço:
+[NOVO ENDEREÇO AQUI]
+
+Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.
+[FOTOS DA NOVA SEDE]
+⚠️ TROCAR: fotos do novo espaço. A sede anterior não vale mais.
+
+SEÇÃO 7 · FORMULÁRIO
+
+Quer fazer parte?
+
+Mesmo sem vaga aberta, a gente recebe currículos. Se você se identifica com o que leu aqui e quer trabalhar com RevOps, saúde e tecnologia: manda seu currículo.
+[FORMULÁRIO]
+
+☐ Nome
+☐ E-mail
+☐ WhatsApp
+☐ Área de interesse (seletor)
+Marketing / Performance
+CRM / Comercial
+Tecnologia / Automações
+Design / Conteúdo
+Outra
+☐ Link do currículo ou portfólio
+
+Enviar currículo →
+
+SEO
+Campo
+Texto
+
+Meta title
+Faça Parte | Renke — Trabalhe com RevOps, saúde e tecnologia
+
+Meta description
+Venha fazer parte do #TeamRenke. Ambiente GPTW, liberdade, evolução e trabalho com propósito. Envie seu currículo.
+
+Schema
+Organization + JobPosting (quando houver vaga)
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+ 
