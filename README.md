@@ -8,10 +8,13 @@ Repositório do projeto do site institucional da **Renke** (Studio · Academy ·
 
 ## Status
 
-🟡 **Fase 0 — Descoberta e estruturação.**
-O briefing foi analisado e documentado. Ainda não há código de aplicação.
-Há decisões e insumos pendentes que bloqueiam o design — ver
+🟡 **Fase 0/1 — Descoberta concluída, wireframe da home em andamento.**
+O briefing foi analisado e documentado, e a home existe como wireframe estrutural.
+Há decisões e insumos pendentes que bloqueiam o design visual — ver
 [pendências e próximos passos](docs/05-analise/pendencias-e-proximos-passos.md).
+
+👉 **Wireframe da home:** [`wireframe/index.html`](wireframe/index.html)
+(abra no navegador — [instruções](wireframe/README.md))
 
 ## Por onde começar
 
@@ -46,6 +49,8 @@ docs/
 ├── 05-analise/       análise crítica do briefing e pendências
 ├── assets/briefing/  imagens extraídas do briefing
 └── _original/        briefing original (HTML do ClickUp) + texto extraído para busca
+
+wireframe/            wireframe estrutural da home (HTML/CSS/JS puro)
 ```
 
 ## Fonte da verdade
