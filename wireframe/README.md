@@ -84,3 +84,16 @@ Referência completa: [pendências e próximos passos](../docs/05-analise/penden
 - Menu testado em desktop e mobile (abrir, fechar, `Esc`, acordeão)
 - Estados de foco visíveis, `aria-expanded`/`aria-controls` nos gatilhos, skip-link
 - `prefers-reduced-motion` e estilos de impressão contemplados
+
+## Versão de arquivo único
+
+`index.html` depende de `assets/` ao lado — sozinho, abre sem estilo. Para mandar por
+e-mail/WhatsApp ou abrir com duplo-clique sem servidor:
+
+```bash
+node wireframe/build-standalone.mjs
+# → wireframe/wireframe-home-renke.html (~50 KB, autossuficiente)
+```
+
+O gerado não é versionado (`.gitignore`), para não divergir da fonte. Rode de novo depois de
+qualquer alteração no wireframe.
