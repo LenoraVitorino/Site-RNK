@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { seo } from '../data/home';
+
+import Hero from '../components/home/Hero.astro';
+import OQueFazemos from '../components/home/OQueFazemos.astro';
+import FraseAncora from '../components/home/FraseAncora.astro';
+import Resultados from '../components/home/Resultados.astro';
+import CtaFinal from '../components/home/CtaFinal.astro';
+import AcademyTools from '../components/home/AcademyTools.astro';
+import Sobre from '../components/home/Sobre.astro';
+import Formulario from '../components/home/Formulario.astro';
+---
+<Base titulo={seo.titulo} descricao={seo.descricao} wireframe="Wireframe · Home">
+  <Hero />
+  <OQueFazemos />
+  <FraseAncora />
+  <Resultados />
+  <CtaFinal />
+  <AcademyTools />
+  <Sobre />
+  <Formulario />
+</Base>

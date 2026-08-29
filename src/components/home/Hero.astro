@@ -1,0 +1,50 @@
+---
+import { hero } from '../../data/home';
+import Tag from '../wf/Tag.astro';
+import Note from '../wf/Note.astro';
+import Media from '../wf/Media.astro';
+---
+<section class="section section--hero">
+  <Tag texto="SEÇÃO 1 · HERO" />
+  <div class="container">
+    <h1 class="hero__title">
+      Isso não é <s>marketing para clínicas</s>.<br />
+      <strong>É RevOps</strong>
+    </h1>
+
+    <p class="hero__sub callout">
+      Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
+    </p>
+
+    <Media
+      label="[GIF] O que a Renke faz · pilares"
+      hint="ref.: apresentação Google Slides · alternativa: motion 3–5s do fluxo do dado (anúncio → CRM → agendamento → venda)"
+      variante="wide"
+    />
+
+    <ul class="stats">
+      {hero.numeros.map((n) => <li>{n}</li>)}
+    </ul>
+    <Note>⚠️ Conflita com "+140 clínicas" usado na Seção 7 e nas metatags. Decisão D1 pendente.</Note>
+
+    <p><a href="#" class="btn btn--primary">{hero.cta}</a></p>
+
+    <p class="hero__lead">{hero.lead}</p>
+
+    <div class="proof">
+      <p class="proof__title">Doutores que confiam na Renke</p>
+      <ul class="logos">
+        {[1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
+      </ul>
+      <Note>Opacidade reduzida, leve sobreposição, tooltip no hover com nome + especialidade.</Note>
+    </div>
+
+    <Media
+      label="[MOCKUP] Dashboard desktop/tablet com dados de performance"
+      hint="dados borrados por confidencialidade"
+      variante="wide"
+    />
+
+    <p class="hero__caption"><em>{hero.legenda}</em></p>
+  </div>
+</section>

@@ -1,0 +1,199 @@
+---
+import { menu } from '../data/nav';
+---
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="/" class="logo" aria-label="Renke — página inicial">
+      <span class="logo__box">LOGO</span>
+    </a>
+
+    <button
+      type="button" class="nav-toggle" id="navToggle"
+      aria-expanded="false" aria-controls="navPrincipal" aria-label="Abrir menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
+      <ul class="nav__list">
+        {menu.map((item) =>
+          'grupos' in item ? (
+            <li class="nav__item nav__item--has-menu">
+              <button
+                type="button" class="nav__link nav__trigger"
+                aria-expanded="false" aria-controls={item.id}>
+                {item.rotulo} <span class="nav__caret" aria-hidden="true"></span>
+              </button>
+              <div class="megamenu" id={item.id} hidden>
+                <div class="megamenu__inner">
+                  {item.grupos.map((grupo) => (
+                    <>
+                      <p class="megamenu__title">{grupo.titulo}</p>
+                      <ul class="megamenu__list">
+                        {grupo.itens.map((sub) => (
+                          <li>
+                            <a href="#" data-rota={sub.rota}>
+                              {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
+                            </a>
+                            {sub.nota && <span class="wf-inline-note" data-note>{sub.nota}</span>}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ))}
+                </div>
+              </div>
+            </li>
+          ) : (
+            <li class="nav__item">
+              <a
+                href="#" class="nav__link" data-rota={item.rota}
+                aria-current={item.atual ? 'page' : undefined}>
+                {item.rotulo}
+              </a>
+            </li>
+          )
+        )}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay" hidden></div>
+
+<script>
+  /* Desktop: mega-menu no hover e no foco. Mobile: drawer com acordeão. */
+  const DESKTOP = window.matchMedia('(min-width: 900px)');
+
+  const header = document.getElementById('header')!;
+  const navToggle = document.getElementById('navToggle')!;
+  const nav = document.getElementById('navPrincipal')!;
+  const overlay = document.getElementById('navOverlay')!;
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('.nav__trigger'));
+
+  const panelOf = (t: HTMLElement) =>
+    document.getElementById(t.getAttribute('aria-controls') || '');
+
+  function openSubmenu(t: HTMLElement) {
+    const panel = panelOf(t);
+    if (!panel) return;
+    t.setAttribute('aria-expanded', 'true');
+    panel.hidden = false;
+  }
+
+  function closeSubmenu(t: HTMLElement) {
+    const panel = panelOf(t);
+    if (!panel) return;
+    t.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+  }
+
+  const closeAllSubmenus = (except?: HTMLElement) =>
+    triggers.forEach((t) => t !== except && closeSubmenu(t));
+
+  triggers.forEach((trigger) => {
+    const item = trigger.closest('.nav__item') as HTMLElement;
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Desktop: o hover já abre o painel, então o clique nunca fecha — se
+      // alternasse, clicar no item sob o cursor fecharia o menu recém-aberto.
+      // Fechar fica por conta de mouseleave, Escape, clique fora ou outro trigger.
+      if (DESKTOP.matches) {
+        closeAllSubmenus(trigger);
+        openSubmenu(trigger);
+        return;
+      }
+
+      trigger.getAttribute('aria-expanded') === 'true'
+        ? closeSubmenu(trigger)
+        : openSubmenu(trigger);
+    });
+
+    item.addEventListener('mouseenter', () => {
+      if (!DESKTOP.matches) return;
+      closeAllSubmenus(trigger);
+      openSubmenu(trigger);
+    });
+
+    item.addEventListener('mouseleave', () => {
+      if (DESKTOP.matches) closeSubmenu(trigger);
+    });
+
+    item.addEventListener('focusout', (e) => {
+      if (!DESKTOP.matches) return;
+      if (!item.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
+    });
+  });
+
+  function openNav() {
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Fechar menu');
+    nav.classList.add('is-open');
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir menu');
+    nav.classList.remove('is-open');
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    closeAllSubmenus();
+  }
+
+  navToggle.addEventListener('click', () =>
+    nav.classList.contains('is-open') ? closeNav() : openNav()
+  );
+  overlay.addEventListener('click', closeNav);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const aberto = triggers.find((t) => t.getAttribute('aria-expanded') === 'true');
+    if (aberto) {
+      closeSubmenu(aberto);
+      aberto.focus();
+    } else if (nav.classList.contains('is-open')) {
+      closeNav();
+      navToggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!DESKTOP.matches) return;
+    if ((e.target as HTMLElement).closest('.nav__item--has-menu')) return;
+    closeAllSubmenus();
+  });
+
+  // As demais páginas ainda não existem: registra a rota prevista.
+  nav.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest('a[href="#"]');
+    if (!link) return;
+    e.preventDefault();
+    closeAllSubmenus();
+    if (!DESKTOP.matches) closeNav();
+    const rota = link.getAttribute('data-rota');
+    if (rota) console.info(`[wireframe] rota prevista: ${rota} (página ainda não construída)`);
+  });
+
+  const onBreakpoint = () => {
+    closeAllSubmenus();
+    if (DESKTOP.matches) closeNav();
+  };
+  DESKTOP.addEventListener('change', onBreakpoint);
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle('is-stuck', window.scrollY > 8);
+      ticking = false;
+    });
+  }, { passive: true });
+</script>

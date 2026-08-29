@@ -1,0 +1,5 @@
+---
+interface Props { texto: string; onDark?: boolean }
+const { texto, onDark = false } = Astro.props;
+---
+<span class:list={['wf-tag', onDark && 'wf-tag--onDark']} data-note>{texto}</span>

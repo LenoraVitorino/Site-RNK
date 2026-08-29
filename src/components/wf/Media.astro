@@ -1,0 +1,8 @@
+---
+interface Props { label: string; hint?: string; variante?: 'wide' | 'video' }
+const { label, hint, variante } = Astro.props;
+---
+<div class:list={['wf-media', variante && `wf-media--${variante}`]}>
+  <span class="wf-media__label">{label}</span>
+  {hint && <span class="wf-media__hint">{hint}</span>}
+</div>

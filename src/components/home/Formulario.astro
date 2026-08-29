@@ -1,0 +1,44 @@
+---
+import { formulario } from '../../data/home';
+import Tag from '../wf/Tag.astro';
+import Note from '../wf/Note.astro';
+---
+<section class="section section--alt">
+  <Tag texto="SEÇÃO 8 · FORMULÁRIO" />
+  <div class="container">
+    <div class="form-block">
+      <div class="form-block__text">
+        <h2>{formulario.titulo}</h2>
+        <p>{formulario.texto}</p>
+      </div>
+
+      <form class="form-card" novalidate>
+        <Note>⚠️ Destino do formulário não definido (CRM? e-mail? webhook?).</Note>
+
+        <label class="field">
+          <span class="field__label">Nome</span>
+          <input type="text" name="nome" autocomplete="name" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">WhatsApp</span>
+          <input type="tel" name="whatsapp" autocomplete="tel" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Especialidade</span>
+          <input type="text" name="especialidade" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Faturamento mensal</span>
+          <select name="faturamento">
+            {formulario.faixasFaturamento.map((f) => <option>{f}</option>)}
+          </select>
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--block">{formulario.botao}</button>
+      </form>
+    </div>
+  </div>
+</section>

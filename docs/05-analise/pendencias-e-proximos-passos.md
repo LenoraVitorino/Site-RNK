@@ -20,6 +20,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D10 | **Domínio**: `renke.com.br` ou `renkestudio.com.br` | Configuração de DNS, canonical, e-mail |
 | D11 | **Depoimentos como componente global** em todas as páginas — confirmar | Define arquitetura de componentes |
 | D12 | **Telefone / WhatsApp oficial** para rodapé e contato | Rodapé e /contato incompletos |
+| ~~D13~~ | ~~**Stack**~~ → **Astro**, decidido em 29/08/2026 | ✅ resolvido |
 
 ---
 
@@ -96,8 +97,15 @@ O próprio briefing lista em "próximos insumos necessários": **cases com núme
 
 ## 4. Definições técnicas a fechar antes de codar
 
-- [ ] **Stack**: framework, hospedagem, CMS (o briefing pede blog + "autonomia pós-entrega" no
-      produto Site Institucional, o que sugere CMS)
+- [x] ~~**Stack**: framework~~ → **Astro** (decidido em 29/08/2026). Estático por padrão, o que
+      atende o `LCP < 2,5s`; content collections para o blog; roteamento por arquivo espelhando as
+      URLs hierárquicas. Ver [`src/`](../../src/).
+- [ ] **CMS**: ainda em aberto, e agora é bloqueante. O time da Renke vem de WordPress/Elementor;
+      sem um painel (Sanity, Decap, Contentful), publicar post de blog passa a exigir Git.
+      O briefing promete "autonomia pós-entrega" no produto Site Institucional — o site da própria
+      Renke precisa ser coerente com isso.
+- [ ] **Hospedagem**: Netlify, Vercel ou Cloudflare Pages. Todas servem build estático de Astro;
+      a escolha se acopla à do CMS e à de onde os formulários serão processados.
 - [ ] **Destino dos formulários**: integração com o Renke CRM? E-mail? Webhook?
 - [ ] **Rastreamento**: Renke Connect no próprio site (dogfooding), GA4, Meta Pixel, GTM
 - [ ] **LGPD**: banner de cookies, política de privacidade, termos de uso — o briefing enfatiza

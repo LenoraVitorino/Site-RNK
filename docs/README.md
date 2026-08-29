@@ -25,6 +25,7 @@ reorganizado por tema para consulta rápida durante design e desenvolvimento.
 | [Sitemap](02-arquitetura/sitemap.md) | Estrutura de URLs, navegação, CTAs por página |
 | [SEO e keywords](02-arquitetura/seo-e-keywords.md) | Mapa de keywords por página, requisitos técnicos, E-E-A-T |
 | [Padrões de página](02-arquitetura/padroes-de-pagina.md) | Regras que toda página precisa seguir |
+| [Stack](02-arquitetura/stack.md) | Astro: por quê, como rodar, estrutura de pastas |
 
 ### 03 · Copy (por página)
 | Página | Rota | Arquivo |

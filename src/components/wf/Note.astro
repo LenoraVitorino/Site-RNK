@@ -1,0 +1,5 @@
+---
+interface Props { onDark?: boolean }
+const { onDark = false } = Astro.props;
+---
+<p class:list={['wf-note', onDark && 'wf-note--onDark']} data-note><slot /></p>

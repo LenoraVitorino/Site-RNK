@@ -1,0 +1,19 @@
+---
+interface Props { titulo: string }
+const { titulo } = Astro.props;
+---
+<div class="wf-toolbar">
+  <span class="wf-toolbar__label">{titulo}</span>
+  <button type="button" class="wf-toolbar__btn" id="toggleNotes" aria-pressed="true">
+    Ocultar anotações
+  </button>
+</div>
+
+<script>
+  const btn = document.getElementById('toggleNotes');
+  btn?.addEventListener('click', () => {
+    const oculto = document.body.classList.toggle('notes-hidden');
+    btn.textContent = oculto ? 'Mostrar anotações' : 'Ocultar anotações';
+    btn.setAttribute('aria-pressed', String(!oculto));
+  });
+</script>
