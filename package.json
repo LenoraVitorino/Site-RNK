@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "wireframe:standalone": "node wireframe/build-standalone.mjs"
+    "wireframe:standalone": "node wireframe/build-standalone.mjs",
+    "portable": "astro build && node scripts/portable.mjs"
   },
   "devDependencies": {
     "astro": "^5.14.1"

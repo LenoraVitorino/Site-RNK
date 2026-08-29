@@ -25,8 +25,22 @@ Outros comandos:
 ```bash
 npm run build                  # gera dist/
 npm run preview                # serve o build
+npm run portable               # gera dist-portatil/ — abre por duplo-clique, sem servidor
 npm run wireframe:standalone   # arquivo único do wireframe original
 ```
+
+### `npm run portable` — para quem não tem ambiente montado
+
+O build normal usa caminhos absolutos (`/_astro/...`), que só funcionam servidos por HTTP. Aberto
+por duplo-clique (`file://`), a barra inicial aponta para a raiz do disco e a página carrega sem
+estilo.
+
+O `portable` gera uma cópia em `dist-portatil/` com os caminhos reescritos para relativos,
+calculando a profundidade de cada página. Serve para mandar preview a quem não tem Node instalado
+— o CEO, a Eduarda, um cliente.
+
+**Em produção, publique `dist/`**, não `dist-portatil/`: lá os caminhos absolutos estão corretos e
+são os que o servidor espera. Nenhum dos dois é versionado.
 
 ## Estrutura
 
