@@ -3,6 +3,15 @@ import { hero } from '../../data/home';
 import Tag from '../wf/Tag.astro';
 import Note from '../wf/Note.astro';
 import Media from '../wf/Media.astro';
+
+/*
+ * Ordem conforme as notas do designer:
+ * H1 → sub → números → CTA → logos → visual → legenda.
+ * O parágrafo de apoio vem da copy e entra depois do CTA.
+ *
+ * Um único visual no hero: as notas pedem o mockup de dashboard e oferecem o
+ * motion/GIF como alternativa para o MESMO slot, não como um segundo bloco.
+ */
 ---
 <section class="section section--hero">
   <Tag texto="SEÇÃO 1 · HERO" />
@@ -15,12 +24,6 @@ import Media from '../wf/Media.astro';
     <p class="hero__sub callout">
       Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
     </p>
-
-    <Media
-      label="[GIF] O que a Renke faz · pilares"
-      hint="ref.: apresentação Google Slides · alternativa: motion 3–5s do fluxo do dado (anúncio → CRM → agendamento → venda)"
-      variante="wide"
-    />
 
     <ul class="stats">
       {hero.numeros.map((n) => <li>{n}</li>)}
@@ -40,8 +43,8 @@ import Media from '../wf/Media.astro';
     </div>
 
     <Media
-      label="[MOCKUP] Dashboard desktop/tablet com dados de performance"
-      hint="dados borrados por confidencialidade"
+      label="[VISUAL] Mockup de dashboard com dados de performance"
+      hint="desktop ou tablet, dados borrados por confidencialidade · alternativa: motion 3–5s do fluxo do dado (anúncio → CRM → agendamento → venda)"
       variante="wide"
     />
 

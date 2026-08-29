@@ -18,6 +18,12 @@ Copy correspondente em [`03-copy/home.md`](../03-copy/home.md).
   *Alternativa:* motion de 3–5s mostrando o fluxo do dado (anúncio → CRM → agendamento → venda)
 - **Legenda em itálico** abaixo do visual: *"Você não controla o que não enxerga."*
 
+> ℹ️ **Um único visual no hero.** O `[Gif]` que aparece na copy logo após a subheadline e o
+> "mockup de dashboard" destas notas são o **mesmo slot** — as notas oferecem o motion de 3–5s
+> como *alternativa* ao mockup, não como um segundo bloco. Tratá-los como dois visuais empurra o
+> CTA para baixo da dobra, contrariando o princípio de "1 CTA claro e visível" nos primeiros
+> 5 segundos. Ver [padrões de página](../02-arquitetura/padroes-de-pagina.md#acima-da-dobra-primeiros-5-segundos).
+
 ## 2 · O QUE FAZEMOS
 
 - **4 pilares** como cards com ícone + título + descrição curta

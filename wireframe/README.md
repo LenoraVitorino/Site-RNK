@@ -97,3 +97,14 @@ node wireframe/build-standalone.mjs
 
 O gerado não é versionado (`.gitignore`), para não divergir da fonte. Rode de novo depois de
 qualquer alteração no wireframe.
+
+---
+
+## ⚠️ Esta pasta está congelada
+
+A partir de 29/08/2026 o projeto roda em **Astro** (`src/`). Esta pasta permanece como registro do
+wireframe original em HTML puro e **não recebe mais ajustes** — evita manter o mesmo layout em dois
+lugares.
+
+Ajustes de layout entram em `src/styles/wireframe.css` e nos componentes de `src/components/`.
+Ver [`docs/02-arquitetura/stack.md`](../docs/02-arquitetura/stack.md).
