@@ -24,7 +24,7 @@ import Media from '../ui/Media.astro';
 
     <div class="cards cards--pillars">
       {pilares.map((p) => (
-        <article class:list={['card', 'vidro', 'vidro--claro', 'entra', p.excedente && 'card--extra']}>
+        <article class:list={['card', 'vidro', 'entra', p.excedente && 'card--extra']}>
           <span class="card__icon" aria-hidden="true">ícone<br />{p.icone}</span>
           <h4>{p.titulo}</h4>
           <p>{p.texto}</p>
@@ -40,7 +40,7 @@ import Media from '../ui/Media.astro';
 
     <div class="cards cards--protocols">
       {protocolos.map((p) => (
-        <article class="protocol vidro vidro--claro entra">
+        <article class="protocol vidro entra">
           <p class="protocol__label">{p.label}</p>
           <blockquote>"{p.fala}"</blockquote>
           <p>{p.texto}</p>

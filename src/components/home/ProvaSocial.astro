@@ -1,0 +1,17 @@
+---
+/*
+ * Faixa de logos. Saiu do hero para a segunda dobra: no hero disputava
+ * atenção com o CTA, e prova social funciona melhor logo depois do argumento,
+ * quando a pergunta do visitante virou "quem mais confia nisso?".
+ */
+---
+<section class="prova">
+  <div class="container">
+    <p class="prova__titulo">Doutores que confiam na Renke</p>
+  </div>
+  <div class="faixa">
+    <ul class="faixa__trilho logos">
+      {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
+    </ul>
+  </div>
+</section>

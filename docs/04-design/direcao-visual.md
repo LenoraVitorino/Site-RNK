@@ -59,6 +59,35 @@ A rediagramação do hero saiu de princípios de composição, não de cópia. S
 
 ---
 
+## Base escura
+
+O site passou a ser **escuro por inteiro**, não mais alternando claro e escuro.
+
+Três razões:
+
+1. **A marca é preto e amarelo.** Branco não está na paleta; era herança do wireframe.
+2. **O vidro só existe sobre escuro.** Sobre branco não há o que refratar, e o efeito que a
+   referência sustenta virava uma borda cinza sem função.
+3. **O corte era duro.** Com o hero no preto e a seção seguinte no branco, a transição partia a
+   página em duas.
+
+O ritmo do scroll passa a vir de **variação tonal dentro do escuro** — `#0b0d10` → `#14161a` →
+`#1E2329` — mais as manchas amarelas do `fundo-vivo`. É mais sutil que a inversão, e sustenta
+melhor as sete seções.
+
+**Contraste conferido com composição de alfa.** Medir a cor do texto contra o `rgba(255,255,255,.05)`
+do vidro dá resultado falso — aquilo é quase transparente, não uma superfície branca. Compondo o
+vidro sobre o fundo real da seção, todos os pares ficam entre **6,4:1 e 17,6:1**.
+
+O amarelo mudou de papel nos números de resultado: sobre branco precisava de marca-texto, sobre
+escuro é legível como texto direto (9,8:1).
+
+## Header
+
+Fixo, em vidro escuro (`blur(14px) saturate(1.4)` sobre preto a 72%), com a assinatura da Renke.
+Ao rolar, o fundo fecha para 90% e a borda inferior ganha peso — o suficiente para separar do
+conteúdo sem virar uma barra sólida.
+
 ## Diagramação do hero
 
 Antes era tudo empilhado: H1, sub, números, CTA, texto, logos e um visual 16:9 de largura cheia. O
@@ -81,7 +110,12 @@ Outras mudanças:
 
 - **Números viraram chips** de vidro em pílula. Em linha corrida liam como legenda, e são o segundo
   elemento mais importante do bloco.
-- **Faixa de logos em largura cheia**, fora do container, com o rótulo centralizado acima.
+- **Logos saíram do hero** para uma faixa própria na segunda dobra. No hero disputavam atenção com
+  o CTA; depois do argumento, respondem a uma pergunta que o visitante já está fazendo — "quem mais
+  confia nisso?".
+- **Subtítulos em dois níveis**: a promessa em corpo maior (`--fs-xl`), a dor em corpo de leitura
+  (`--fs-base`) e cor secundária. A caixa amarela saiu — no hero escuro ela virava um bloco
+  gritante disputando com o CTA.
 - **Slot 01 passou de 16:9 para 4:3** — numa coluna de ~510px, o 16:9 daria 287px de altura, baixo
   demais para um dashboard ser legível.
 

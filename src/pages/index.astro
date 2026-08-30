@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import { seo } from '../data/home';
 
 import Hero from '../components/home/Hero.astro';
+import ProvaSocial from '../components/home/ProvaSocial.astro';
 import OQueFazemos from '../components/home/OQueFazemos.astro';
 import FraseAncora from '../components/home/FraseAncora.astro';
 import Resultados from '../components/home/Resultados.astro';
@@ -13,6 +14,7 @@ import Formulario from '../components/home/Formulario.astro';
 ---
 <Base titulo={seo.titulo} descricao={seo.descricao}>
   <Hero />
+  <ProvaSocial />
   <OQueFazemos />
   <FraseAncora />
   <Resultados />

@@ -21,15 +21,15 @@
 .botao--bloco { display: flex; width: 100%; }
 
 /* ---- Sólido ---- */
-.botao--solido { background: var(--dark); color: #fff; border-color: var(--dark); }
-.botao--solido:hover { background: var(--marca); color: var(--text); border-color: var(--marca); }
+.botao--solido { background: #fff; color: var(--sobre-marca); border-color: #fff; }
+.botao--solido:hover { background: var(--marca); border-color: var(--marca); }
 
 /* ---- Contorno ---- */
-.botao--contorno { background: transparent; color: var(--text); border-color: var(--dark); }
-.botao--contorno:hover { background: var(--marca); border-color: var(--marca); }
+.botao--contorno { background: transparent; color: var(--text); border-color: var(--line); }
+.botao--contorno:hover { background: var(--marca); color: var(--sobre-marca); border-color: var(--marca); }
 
 /* ---- Claro, sobre fundo escuro ---- */
-.botao--claro { background: var(--marca); color: var(--text); border-color: var(--marca); }
+.botao--claro { background: var(--marca); color: var(--sobre-marca); border-color: var(--marca); }
 .botao--claro:hover { background: #fff; border-color: #fff; }
 
 /* ---- Texto ---- */
@@ -187,7 +187,7 @@
    ============================================================ */
 
 .botao--relevo {
-  color: var(--text);
+  color: var(--sobre-marca);
   background-image: linear-gradient(to top, var(--marca-escura), var(--marca));
   border: 1px solid rgb(0 0 0 / .4);
   border-bottom-width: 2px;

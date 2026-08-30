@@ -4,14 +4,12 @@ import Media from '../ui/Media.astro';
 import Botao from '../ui/Botao.astro';
 
 /*
- * Diagramação em duas colunas: o argumento à esquerda, o visual à direita.
+ * Hero sobre preto. Duas razões: é a cor da marca, e o vidro só existe sobre
+ * superfície escura — sobre branco não há o que refratar.
  *
- * Antes era tudo empilhado — H1, sub, números, CTA, texto, logos e um visual
- * 16:9 de largura cheia. O hero passava de 1.500px e o visual só aparecia
- * depois de rolar. Lado a lado, argumento e prova entram juntos na mesma tela.
- *
- * Os números viraram chips: em linha corrida eles liam como legenda, e são
- * prova social — o segundo elemento mais importante do bloco.
+ * Hierarquia do texto: H1 → subtítulo maior → subtítulo menor → CTA.
+ * O amarelo entra como sublinhado da afirmação e nos chips, nunca como texto
+ * corrido sobre escuro em corpo pequeno.
  */
 ---
 <section class="section section--hero fundo-vivo">
@@ -24,15 +22,15 @@ import Botao from '../ui/Botao.astro';
           <strong>É RevOps</strong>
         </h1>
 
-        <p class="hero__sub callout">
+        <p class="hero__sub">
           Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
         </p>
 
-        <ul class="chips">
-          {hero.numeros.map((n) => <li class="chip vidro vidro--claro">{n}</li>)}
-        </ul>
-
         <p class="hero__lead">{hero.lead}</p>
+
+        <ul class="chips">
+          {hero.numeros.map((n) => <li class="chip vidro">{n}</li>)}
+        </ul>
 
         <div class="hero__acoes">
           <Botao variante="brilho" href="#">{hero.cta}</Botao>
@@ -40,19 +38,12 @@ import Botao from '../ui/Botao.astro';
       </div>
 
       <figure class="hero__visual entra">
-        <Media id="01" />
+        <div class="hero__moldura vidro vidro--realce">
+          <Media id="01" />
+        </div>
         <figcaption class="hero__caption"><em>{hero.legenda}</em></figcaption>
       </figure>
 
-    </div>
-  </div>
-
-  <div class="prova">
-    <p class="proof__title">Doutores que confiam na Renke</p>
-    <div class="faixa">
-      <ul class="faixa__trilho logos">
-        {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
-      </ul>
     </div>
   </div>
 </section>
