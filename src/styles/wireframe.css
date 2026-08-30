@@ -239,25 +239,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   margin-bottom: var(--s-1); color: var(--muted);
 }
 
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: var(--alvo);
-  padding: var(--s-3) var(--s-5);
-  font-family: inherit; font-size: var(--fs-sm); font-weight: var(--peso-titulo);
-  line-height: 1.2; text-decoration: none;
-  color: var(--text); background: transparent;
-  border: 1.5px solid var(--dark); border-radius: var(--radius);
-  cursor: pointer;
-  transition: background-color .15s ease, color .15s ease, transform .15s ease;
-}
-.btn--primary { background: var(--dark); color: #fff; }
-.btn--onDark  { background: #fff; color: var(--dark); border-color: #fff; }
-.btn--block   { display: flex; width: 100%; }
-
-.btn:hover { background: var(--marca); color: var(--text); border-color: var(--marca); }
-.btn--onDark { background: var(--marca); color: var(--text); border-color: var(--marca); }
-.btn--onDark:hover { background: #fff; color: var(--text); border-color: #fff; }
-.btn:active { transform: translateY(1px); }
+/* Botões migraram para o design system — ver src/styles/botao.css */
 
 .link-arrow {
   display: inline-block;

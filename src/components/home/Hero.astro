@@ -3,6 +3,7 @@ import { hero } from '../../data/home';
 import Tag from '../wf/Tag.astro';
 import Note from '../wf/Note.astro';
 import Media from '../wf/Media.astro';
+import Botao from '../ui/Botao.astro';
 
 /*
  * Ordem conforme as notas do designer:
@@ -30,7 +31,7 @@ import Media from '../wf/Media.astro';
     </ul>
     <Note>⚠️ Conflita com "+140 clínicas" usado na Seção 7 e nas metatags. Decisão D1 pendente.</Note>
 
-    <p><a href="#" class="btn btn--primary">{hero.cta}</a></p>
+    <p><Botao variante="brilho" href="#">{hero.cta}</Botao></p>
 
     <p class="hero__lead">{hero.lead}</p>
 

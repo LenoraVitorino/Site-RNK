@@ -10,7 +10,7 @@
   font-family: var(--font);
   font-size: var(--fs-sm); font-weight: var(--peso-titulo);
   line-height: 1.2; text-align: center; text-decoration: none;
-  border: 1.5px solid transparent; border-radius: var(--raio-sutil);
+  border: 1.5px solid transparent; border-radius: var(--raio-botao);
   cursor: pointer;
   transition: background-color var(--dur-rapida) var(--easing),
               color var(--dur-rapida) var(--easing),
@@ -35,6 +35,7 @@
 /* ---- Texto ---- */
 .botao--texto {
   min-height: 0; padding: var(--s-1) 0; background: none; color: inherit;
+  border-radius: var(--raio-sutil);
   text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
 }
 .botao--texto:hover { text-decoration-thickness: 2px; }
@@ -78,7 +79,7 @@
   padding: var(--s-4) var(--s-7);
   font-size: var(--fs-base);
   border: 1px solid transparent;
-  border-radius: var(--raio-pilula);
+  border-radius: var(--raio-botao);
   color: #fff;
   background:
     linear-gradient(var(--brilho-fundo), var(--brilho-fundo)) padding-box,
@@ -190,7 +191,7 @@
   background-image: linear-gradient(to top, var(--marca-escura), var(--marca));
   border: 1px solid rgb(0 0 0 / .4);
   border-bottom-width: 2px;
-  border-radius: var(--raio-medio);
+  border-radius: var(--raio-botao);
   box-shadow: var(--elev-2), inset 0 1px 0 rgb(255 255 255 / .35);
   transition: filter var(--dur-media) var(--easing);
 }
@@ -212,7 +213,7 @@
   color: inherit;
   background: transparent;
   border: 0;
-  border-radius: var(--raio-pilula);
+  border-radius: var(--raio-botao);
   padding: var(--s-4) var(--s-7);
   font-size: var(--fs-base);
   transition: scale var(--dur-media) var(--easing);
@@ -255,7 +256,7 @@
   position: relative;
   display: inline-flex;
   padding: 1.25px;
-  border-radius: var(--raio-medio);
+  border-radius: var(--raio-botao);
   transform-origin: center;
   will-change: transform;
   transition: transform 250ms cubic-bezier(.1, .4, .2, 1),
@@ -268,7 +269,7 @@
 
 .metal__miolo {
   position: absolute; inset: 1px;
-  border-radius: calc(var(--raio-medio) - 1px);
+  border-radius: inherit;
   transition: filter 250ms cubic-bezier(.1, .4, .2, 1);
 }
 .metal:hover .metal__miolo { filter: brightness(1.05); }
@@ -276,7 +277,7 @@
 .metal .botao {
   position: relative; z-index: 1;
   margin: 1px;
-  border: 0; border-radius: calc(var(--raio-medio) - 2px);
+  border: 0; border-radius: inherit;
   font-weight: var(--peso-titulo);
   transition: filter 250ms cubic-bezier(.1, .4, .2, 1), transform 250ms cubic-bezier(.1, .4, .2, 1);
 }

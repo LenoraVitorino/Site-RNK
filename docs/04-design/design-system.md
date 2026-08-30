@@ -59,9 +59,10 @@ Nenhum componente declara margem literal.
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--raio-sutil` | 2px | Cards, campos, botões padrão |
+| `--raio-sutil` | 2px | Cards, campos |
 | `--raio-medio` | 8px | Blocos maiores |
-| `--raio-pilula` | 999px | CTA de brilho |
+| `--raio-pilula` | 999px | Forma de pílula |
+| `--raio-botao` | = pílula | **Todas** as variantes de botão |
 | `--elev-1/2/3` | sombras | Repouso, hover, sobreposição |
 | `--dur-rapida` | 150ms | Hover, foco |
 | `--dur-media` | 300ms | Transições de estado |
@@ -133,6 +134,12 @@ Sem animação. É a variante para CTAs de destaque que aparecem várias vezes.
 
 Tamanhos: `sm` (32px), `md` (44px, padrão) e `lg` (52px).
 
+### Forma
+
+Todas as variantes são **pílula**, governadas por `--raio-botao`. Um token só: mudar ali muda as
+nove de uma vez, sem caçar valor solto por arquivo. A única exceção é `texto`, que não tem
+superfície — só o anel de foco recebe raio.
+
 ### 🔴 As três de conversão não convivem
 
 `brilho`, `metal-ouro` e `vidro` competem pelo mesmo papel. Escolher duas na mesma página dilui as
@@ -175,3 +182,17 @@ import FiltroVidro from '../components/ui/FiltroVidro.astro';
 - **Motion além do CTA** — entrada de seção, hover de card, e o fluxo do dado no hero
 - **Componentes ainda não sistematizados** — card, campo de formulário, chip, navegação. Hoje
   vivem em `wireframe.css`; migram para o design system conforme forem estabilizando
+
+## Migração da home
+
+A home usava uma classe `.btn` própria, anterior ao design system. Foi migrada para o componente
+`Botao` e a classe antiga saiu do `wireframe.css` — assim os dois não divergem quando o sistema
+mudar. Distribuição atual:
+
+| Onde | Variante |
+|---|---|
+| Hero | `brilho` — o CTA principal da página |
+| Resultados | `relevo` — repetição do mesmo CTA |
+| CTA final | `claro` (lg) — sobre fundo escuro |
+| Sobre | `contorno` — ação secundária |
+| Formulário | `relevo` em bloco |

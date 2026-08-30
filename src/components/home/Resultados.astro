@@ -2,6 +2,7 @@
 import { resultados, hero } from '../../data/home';
 import Tag from '../wf/Tag.astro';
 import Note from '../wf/Note.astro';
+import Botao from '../ui/Botao.astro';
 ---
 <section class="section">
   <Tag texto="SEÇÃO 4 · RESULTADOS" />
@@ -33,6 +34,6 @@ import Note from '../wf/Note.astro';
     </div>
     <Note>⚠️ Depoimentos não fornecidos no briefing.</Note>
 
-    <p><a href="#" class="btn btn--primary">{hero.cta}</a></p>
+    <p><Botao variante="relevo" href="#">{hero.cta}</Botao></p>
   </div>
 </section>

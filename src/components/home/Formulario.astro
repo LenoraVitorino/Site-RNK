@@ -2,6 +2,7 @@
 import { formulario } from '../../data/home';
 import Tag from '../wf/Tag.astro';
 import Note from '../wf/Note.astro';
+import Botao from '../ui/Botao.astro';
 ---
 <section class="section section--alt">
   <Tag texto="SEÇÃO 8 · FORMULÁRIO" />
@@ -37,7 +38,7 @@ import Note from '../wf/Note.astro';
           </select>
         </label>
 
-        <button type="submit" class="btn btn--primary btn--block">{formulario.botao}</button>
+        <Botao variante="relevo" type="submit" bloco>{formulario.botao}</Botao>
       </form>
     </div>
   </div>

@@ -1,5 +1,6 @@
 ---
 import Tag from '../wf/Tag.astro';
+import Botao from '../ui/Botao.astro';
 ---
 <section class="section section--dark">
   <Tag texto="SEÇÃO 5 · CTA FINAL" onDark />
@@ -19,6 +20,6 @@ import Tag from '../wf/Tag.astro';
 
     <h2 class="statement">Limitado a 1 nova clínica por mês.</h2>
     <p>Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.</p>
-    <p><a href="#" class="btn btn--onDark">Converse com a equipe →</a></p>
+    <p><Botao variante="claro" tamanho="lg" href="#">Converse com a equipe →</Botao></p>
   </div>
 </section>
