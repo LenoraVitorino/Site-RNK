@@ -2,20 +2,27 @@
 /**
  * Botão do design system.
  *
- * Variantes:
- *   brilho    — CTA de conversão. Borda cônica animada em amarelo sobre preto.
- *               UM por página, no ponto principal de conversão.
- *   solido    — preenchimento escuro. Padrão para CTAs repetidos.
- *   contorno  — secundário, sobre fundo claro.
- *   claro     — sobre fundo escuro.
- *   texto     — terciário, peso de link.
+ * Variantes de conversão (uma por página, no ponto principal):
+ *   brilho      — borda cônica animada em amarelo sobre preto
+ *   metal-ouro  — metálico na rampa do amarelo da marca
+ *   vidro       — vidro líquido; precisa de fundo com textura atrás
+ *
+ * Variantes de uso corrente:
+ *   relevo      — gradiente com relevo, para ações de destaque repetidas
+ *   solido      — preenchimento escuro, padrão
+ *   contorno    — secundária sobre fundo claro
+ *   claro       — sobre fundo escuro
+ *   metal       — metálico neutro
+ *   texto       — terciária, peso de link
  *
  * Ver docs/04-design/design-system.md
  */
 
 interface Props {
-  variante?: 'brilho' | 'solido' | 'contorno' | 'claro' | 'texto';
-  tamanho?: 'md' | 'lg';
+  variante?:
+    | 'brilho' | 'metal-ouro' | 'vidro'
+    | 'relevo' | 'solido' | 'contorno' | 'claro' | 'metal' | 'texto';
+  tamanho?: 'sm' | 'md' | 'lg';
   href?: string;
   type?: 'button' | 'submit';
   bloco?: boolean;
@@ -31,16 +38,30 @@ const {
   class: extra = '',
 } = Astro.props;
 
+const ehMetal = variante === 'metal' || variante === 'metal-ouro';
+
 const classes = [
   'botao',
   `botao--${variante}`,
-  tamanho === 'lg' && 'botao--lg',
+  tamanho !== 'md' && `botao--${tamanho}`,
   bloco && 'botao--bloco',
   extra,
 ].filter(Boolean).join(' ');
 
 const Tag = href ? 'a' : 'button';
 ---
-<Tag class={classes} href={href} type={href ? undefined : type}>
-  <span class="botao__texto"><slot /></span>
-</Tag>
+{ehMetal ? (
+  /* O metálico é feito de três camadas: borda em gradiente, miolo em
+     gradiente e a superfície do botão. Cada uma reage a hover e active. */
+  <span class={`metal ${bloco ? 'metal--bloco' : ''}`} data-tom={variante === 'metal-ouro' ? 'ouro' : 'neutro'}>
+    <span class="metal__miolo" aria-hidden="true"></span>
+    <Tag class={classes} href={href} type={href ? undefined : type}>
+      <span class="botao__texto"><slot /></span>
+    </Tag>
+  </span>
+) : (
+  <Tag class={classes} href={href} type={href ? undefined : type}>
+    {variante === 'vidro' && <span class="botao__vidro" aria-hidden="true"></span>}
+    <span class="botao__texto"><slot /></span>
+  </Tag>
+)}

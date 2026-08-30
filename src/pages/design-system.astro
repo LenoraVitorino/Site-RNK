@@ -6,6 +6,7 @@ import '../styles/tokens.css';
 import '../styles/botao.css';
 import '../styles/design-system.css';
 import Botao from '../components/ui/Botao.astro';
+import FiltroVidro from '../components/ui/FiltroVidro.astro';
 
 const cores = [
   { nome: 'Amarelo Renke', token: '--marca', hex: '#FFD103', papel: 'Primária. Fundo com texto preto, ou acento sobre escuro.' },
@@ -155,6 +156,38 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
       <Botao variante="brilho">Descubra se faz sentido para sua clínica</Botao>
     </div>
 
+    <h3>Metal ouro — CTA de conversão</h3>
+    <p class="ds__intro">
+      Metálico com a rampa no amarelo da marca. Três camadas: borda em gradiente, miolo e
+      superfície. Sem animação contínua — o custo é zero em repouso, e o estado pressionado é
+      CSS puro, sem JavaScript.
+    </p>
+    <div class="ds__demo">
+      <Botao variante="metal-ouro" tamanho="lg">Descubra se faz sentido</Botao>
+      <Botao variante="metal" tamanho="lg">Neutro</Botao>
+    </div>
+
+    <h3>Vidro — precisa de textura atrás</h3>
+    <p class="ds__intro">
+      Distorce o que está por trás. Sobre superfície chapada quase não aparece, então só faz
+      sentido sobre foto ou gradiente. O efeito depende de <code>backdrop-filter</code> com
+      <code>url()</code>, que <strong>só Chrome e Edge suportam</strong> — em Firefox e Safari cai
+      para blur simples, que continua legível.
+    </p>
+    <div class="ds__demo ds__demo--textura">
+      <Botao variante="vidro">Converse com a equipe</Botao>
+    </div>
+
+    <h3>Relevo</h3>
+    <p class="ds__intro">
+      Gradiente com borda inferior mais grossa e anel interno. Sem animação — serve para CTAs de
+      destaque que se repetem ao longo da página.
+    </p>
+    <div class="ds__demo">
+      <Botao variante="relevo">Agendar diagnóstico</Botao>
+      <Botao variante="relevo" tamanho="lg">Grande</Botao>
+    </div>
+
     <h3>Demais variantes</h3>
     <div class="ds__demo">
       <Botao variante="solido">Fale com a equipe</Botao>
@@ -167,6 +200,7 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
 
     <h3>Tamanhos</h3>
     <div class="ds__demo">
+      <Botao variante="solido" tamanho="sm">Pequeno · 32px</Botao>
       <Botao variante="solido" tamanho="md">Médio · 44px</Botao>
       <Botao variante="solido" tamanho="lg">Grande · 52px</Botao>
     </div>
@@ -174,11 +208,16 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
     <div class="ds__aviso ds__aviso--info">
       <h3>Hierarquia de CTA por página</h3>
       <ol>
-        <li><strong>Brilho</strong> — uma vez, no CTA principal</li>
-        <li><strong>Sólido</strong> — repetições a cada 2–3 scrolls</li>
+        <li><strong>Uma</strong> das três de conversão — brilho, metal ouro ou vidro — no CTA principal</li>
+        <li><strong>Relevo</strong> ou <strong>sólido</strong> — repetições a cada 2–3 scrolls</li>
         <li><strong>Contorno</strong> — ação secundária</li>
         <li><strong>Texto</strong> — terciária, tom leve (o "Saiba mais" dos protocolos)</li>
       </ol>
+      <p>
+        As três de conversão não convivem na mesma página: escolher duas dilui as duas. O brilho é
+        o único com animação contínua, então é o que mais pesa; metal e relevo custam zero em
+        repouso.
+      </p>
       <p>
         Sob <code>prefers-reduced-motion</code> o brilho vira sólido com contorno amarelo — mantém
         presença sem movimento.
@@ -213,6 +252,8 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
   </section>
 
 </main>
+
+<FiltroVidro />
 
 <footer class="ds__rodape">
   <p>Renke · design system inicial · <code>docs/04-design/design-system.md</code></p>

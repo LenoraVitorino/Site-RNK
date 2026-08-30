@@ -176,3 +176,142 @@
   }
   .botao--brilho::before, .botao--brilho::after { opacity: 0; }
 }
+
+/* ============================================================
+   Variante "relevo" — gradiente com profundidade
+
+   Portada da referência: gradiente de cima para baixo, borda inferior
+   mais grossa, anel interno claro e brilho no hover. Custo zero de
+   animação — serve para CTAs de destaque que se repetem.
+   ============================================================ */
+
+.botao--relevo {
+  color: var(--text);
+  background-image: linear-gradient(to top, var(--marca-escura), var(--marca));
+  border: 1px solid rgb(0 0 0 / .4);
+  border-bottom-width: 2px;
+  border-radius: var(--raio-medio);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgb(255 255 255 / .35);
+  transition: filter var(--dur-media) var(--easing);
+}
+.botao--relevo:hover { filter: brightness(1.1); }
+.botao--relevo:active { filter: brightness(.9); }
+
+/* ============================================================
+   Variante "vidro" — vidro líquido
+
+   ⚠️ O efeito de distorção depende de backdrop-filter com url(), que só
+   o Chrome/Edge suportam. Em Firefox e Safari o @supports abaixo não
+   casa e o botão fica no fallback: blur simples com translucidez.
+
+   Precisa de textura atrás — sobre superfície chapada quase não aparece.
+   ============================================================ */
+
+.botao--vidro {
+  position: relative;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  padding: var(--s-4) var(--s-7);
+  font-size: var(--fs-base);
+  transition: scale var(--dur-media) var(--easing);
+}
+.botao--vidro:hover { scale: 1.05; }
+
+.botao__vidro {
+  position: absolute; inset: 0; z-index: 0;
+  border-radius: inherit;
+  /* Fallback: funciona em todo lugar */
+  background: rgb(255 255 255 / .12);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 6px rgb(0 0 0 / .03),
+    0 2px 6px rgb(0 0 0 / .08),
+    inset 3px 3px .5px -3px rgb(255 255 255 / .5),
+    inset -3px -3px .5px -3px rgb(255 255 255 / .5),
+    inset 0 0 6px 6px rgb(255 255 255 / .12),
+    0 0 12px rgb(255 255 255 / .15);
+}
+.botao--vidro .botao__texto { position: relative; z-index: 1; }
+
+@supports (backdrop-filter: url(#renke-vidro)) {
+  .botao__vidro { backdrop-filter: url('#renke-vidro'); }
+}
+
+.filtro-vidro { position: absolute; width: 0; height: 0; }
+
+/* ============================================================
+   Variantes metálicas
+
+   Três camadas: borda em gradiente, miolo em gradiente e a superfície.
+   O estado pressionado é CSS puro — a referência usava estado em React,
+   mas :active e :hover dão o mesmo resultado sem JavaScript.
+
+   "ouro" mapeia a rampa no amarelo da marca.
+   ============================================================ */
+
+.metal {
+  position: relative;
+  display: inline-flex;
+  padding: 1.25px;
+  border-radius: var(--raio-medio);
+  transform-origin: center;
+  will-change: transform;
+  transition: transform 250ms cubic-bezier(.1, .4, .2, 1),
+              box-shadow 250ms cubic-bezier(.1, .4, .2, 1);
+  box-shadow: 0 3px 8px rgb(0 0 0 / .08);
+}
+.metal--bloco { display: flex; width: 100%; }
+.metal:hover { box-shadow: 0 4px 12px rgb(0 0 0 / .12); }
+.metal:has(.botao:active) { transform: translateY(2.5px) scale(.99); box-shadow: 0 1px 2px rgb(0 0 0 / .15); }
+
+.metal__miolo {
+  position: absolute; inset: 1px;
+  border-radius: calc(var(--raio-medio) - 1px);
+  transition: filter 250ms cubic-bezier(.1, .4, .2, 1);
+}
+.metal:hover .metal__miolo { filter: brightness(1.05); }
+
+.metal .botao {
+  position: relative; z-index: 1;
+  margin: 1px;
+  border: 0; border-radius: calc(var(--raio-medio) - 2px);
+  font-weight: var(--peso-titulo);
+  transition: filter 250ms cubic-bezier(.1, .4, .2, 1), transform 250ms cubic-bezier(.1, .4, .2, 1);
+}
+.metal:hover .botao { filter: brightness(1.02); }
+.metal .botao:active { transform: scale(.97); }
+
+/* Reflexo que passa no clique */
+.metal .botao::after {
+  content: ''; position: absolute; inset: 0; z-index: 2;
+  border-radius: inherit; pointer-events: none;
+  background: linear-gradient(to right, transparent, rgb(255 255 255 / .8), transparent);
+  opacity: 0; transition: opacity var(--dur-media) var(--easing);
+}
+.metal .botao:active::after { opacity: .2; }
+
+/* Tom neutro */
+.metal[data-tom='neutro'] { background-image: linear-gradient(to bottom, #000, #a0a0a0); }
+.metal[data-tom='neutro'] .metal__miolo { background-image: linear-gradient(to bottom, #fafafa, #3e3e3e 50%, #e5e5e5); }
+.metal[data-tom='neutro'] .botao {
+  background-image: linear-gradient(to bottom, #b9b9b9, #969696);
+  color: #fff; text-shadow: 0 -1px 0 rgb(80 80 80);
+}
+
+/* Tom ouro — a rampa sai do amarelo da marca */
+.metal[data-tom='ouro'] { background-image: linear-gradient(to bottom, #7a6300, #ffe783); }
+.metal[data-tom='ouro'] .metal__miolo { background-image: linear-gradient(to bottom, #fffce0, #7a6300 50%, #fff3b8); }
+.metal[data-tom='ouro'] .botao {
+  background-image: linear-gradient(to bottom, #ffe783, var(--marca-escura));
+  color: var(--text); text-shadow: 0 1px 0 rgb(255 255 255 / .45);
+}
+
+/* ---- Tamanho extra ---- */
+.botao--sm { min-height: 2rem; padding: var(--s-2) var(--s-4); font-size: var(--fs-xs); }
+
+@media (prefers-reduced-motion: reduce) {
+  .botao--vidro:hover { scale: 1; }
+  .metal, .metal__miolo, .metal .botao, .metal .botao::after { transition: none; }
+}

@@ -158,3 +158,13 @@
 @media (prefers-reduced-motion: reduce) {
   .ds *, .ds *::before, .ds *::after { animation: none !important; transition: none !important; }
 }
+
+/* Fundo com textura, para a variante de vidro ter o que distorcer */
+.ds__demo--textura {
+  background:
+    radial-gradient(circle at 20% 30%, var(--marca) 0, transparent 45%),
+    radial-gradient(circle at 80% 70%, #6b5cff 0, transparent 45%),
+    linear-gradient(120deg, var(--dark), var(--dark-soft));
+  border-color: var(--dark);
+  color: #fff;
+}

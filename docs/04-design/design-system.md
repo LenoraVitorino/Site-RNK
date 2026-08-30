@@ -72,7 +72,7 @@ Nenhum componente declara margem literal.
 
 ## Botões
 
-Cinco variantes, uma hierarquia.
+Nove variantes, uma hierarquia. Três disputam o papel de conversão — só uma entra por página.
 
 ### `brilho` — CTA de conversão
 
@@ -88,7 +88,41 @@ Sob `prefers-reduced-motion` vira sólido com contorno amarelo: mantém presenç
 Em navegador sem suporte a `@property` a borda não anima, mas o botão continua legível — preto,
 texto branco, contorno.
 
-### As outras
+### `metal-ouro` — CTA de conversão
+
+Metálico com a rampa no amarelo da marca. Três camadas: borda em gradiente, miolo e superfície,
+cada uma reagindo a hover e clique.
+
+A referência controlava pressionado/hover com estado em React. Aqui é CSS puro — `:active`,
+`:hover` e `:has()` dão o mesmo resultado sem JavaScript, e sem custo de hidratação.
+
+**Sem animação contínua**: custo zero em repouso. Contraste do texto sobre a parte mais escura da
+rampa: 5,8:1, passa em AA.
+
+Existe também `metal` (neutro, cinza). Outros tons se criam repetindo o padrão de três gradientes
+em `botao.css`.
+
+### `vidro` — CTA de conversão, com ressalva
+
+Distorce o que está atrás. **Só faz sentido sobre foto ou gradiente** — em superfície chapada
+quase não aparece.
+
+⚠️ **Duas limitações reais:**
+
+1. O efeito depende de `backdrop-filter: url(#renke-vidro)`, que **só Chrome e Edge suportam**.
+   Firefox e Safari caem no fallback declarado — blur simples com translucidez, que continua
+   legível mas perde a distorção. O `@supports` garante que ninguém veja um botão quebrado.
+2. O contraste do texto **varia com o que está atrás**. Use só sobre áreas escuras o bastante, e
+   confira caso a caso.
+
+Requer `<FiltroVidro />` incluído uma vez na página — o filtro SVG mora nele.
+
+### `relevo` — destaque repetível
+
+Gradiente de baixo para cima, borda inferior mais grossa, anel interno claro e brilho no hover.
+Sem animação. É a variante para CTAs de destaque que aparecem várias vezes.
+
+### As de uso corrente
 
 | Variante | Quando |
 |---|---|
@@ -97,7 +131,16 @@ texto branco, contorno.
 | `claro` | Sobre fundo escuro — amarelo com texto preto |
 | `texto` | Terciária, tom leve. O "Saiba mais" dos cards de protocolo |
 
-Tamanhos: `md` (44px, padrão) e `lg` (52px).
+Tamanhos: `sm` (32px), `md` (44px, padrão) e `lg` (52px).
+
+### 🔴 As três de conversão não convivem
+
+`brilho`, `metal-ouro` e `vidro` competem pelo mesmo papel. Escolher duas na mesma página dilui as
+duas. Uma por página, no ponto principal de conversão — o resto usa `relevo` ou `solido`.
+
+Em custo: `brilho` é o único com animação contínua, então é o que mais pesa. `metal` e `relevo`
+custam zero em repouso. `vidro` custa `backdrop-filter`, que é caro em área grande mas irrelevante
+num botão.
 
 ### Uso
 
@@ -106,8 +149,19 @@ Tamanhos: `md` (44px, padrão) e `lg` (52px).
 import Botao from '../components/ui/Botao.astro';
 ---
 <Botao variante="brilho" href="/contato">Descubra se faz sentido para sua clínica</Botao>
-<Botao variante="solido" tamanho="lg">Fale com a equipe</Botao>
+<Botao variante="metal-ouro" tamanho="lg">Agendar diagnóstico</Botao>
+<Botao variante="relevo">Fale com a equipe</Botao>
 <Botao variante="texto" href="/studio/revena-start">Saiba mais →</Botao>
+```
+
+A variante `vidro` precisa do filtro SVG na página:
+
+```astro
+---
+import FiltroVidro from '../components/ui/FiltroVidro.astro';
+---
+<Botao variante="vidro">Converse com a equipe</Botao>
+<FiltroVidro />
 ```
 
 ---
