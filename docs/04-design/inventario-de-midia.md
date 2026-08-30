@@ -10,25 +10,16 @@ canto da caixa no wireframe, para poder ser citado na conversa ("o slot 03").
 
 | # | Seção | Tipo | Proporção | O que é | Status |
 |---|---|---|---|---|---|
-| **01** | Hero | Animação | `16/9` | Mockup de dashboard com dados de performance | ⏳ pendente |
-| **02** | Hero | Logos | `5/2` | Logos de clientes | ⏳ pendente |
-| **03** | O que fazemos | Vídeo | `4/5` | Vídeo institucional "o que a Renke faz" | ⏳ pendente |
-| **04** | O que fazemos | GIF | `16/10` | Renke CRM em uso | ⏳ pendente |
-| **05** | Resultados | Foto | `1/1` | Depoimentos de clientes | ⏳ pendente |
-| **06** | Academy + Tools | Imagem | `3/2` | Renke Academy | ⏳ pendente |
-| **07** | Academy + Tools | Imagem | `3/2` | Renke Tools | ⏳ pendente |
+| **01** | Hero | Logos | `5/2` | Logos de clientes | ⏳ pendente |
+| **02** | O que fazemos | Vídeo | `4/5` | Vídeo institucional "o que a Renke faz" | ⏳ pendente |
+| **03** | O que fazemos | GIF | `16/10` | Renke CRM em uso | ⏳ pendente |
+| **04** | Resultados | Foto | `1/1` | Depoimentos de clientes | ⏳ pendente |
+| **05** | Academy + Tools | Imagem | `3/2` | Renke Academy | ⏳ pendente |
+| **06** | Academy + Tools | Imagem | `3/2` | Renke Tools | ⏳ pendente |
 
 ## Detalhamento
 
-### 01 · Mockup de dashboard com dados de performance
-
-**Animação** · proporção `16/9` · seção Hero
-
-Desktop ou tablet mostrando os painéis da operação. Alternativa: motion de 3–5s com o fluxo do dado — anúncio → CRM → agendamento → venda.
-
-> **Produção:** Dados do cliente borrados. Se for motion, exportar em .webm e .mp4 com poster.
-
-### 02 · Logos de clientes
+### 01 · Logos de clientes
 
 **Logos** · proporção `5/2` · seção Hero
 
@@ -36,7 +27,7 @@ Desktop ou tablet mostrando os painéis da operação. Alternativa: motion de 3�
 
 > **Produção:** Exigem autorização de uso. Cada um precisa de nome + especialidade para o tooltip.
 
-### 03 · Vídeo institucional "o que a Renke faz"
+### 02 · Vídeo institucional "o que a Renke faz"
 
 **Vídeo** · proporção `4/5` · seção O que fazemos
 
@@ -44,7 +35,7 @@ O vídeo do Instagram que explica a categoria RevOps. 1–2 min.
 
 > **Produção:** Proporção de feed do Instagram. Precisa de legenda embutida — roda sem som.
 
-### 04 · Renke CRM em uso
+### 03 · Renke CRM em uso
 
 **GIF** · proporção `16/10` · seção O que fazemos
 
@@ -52,7 +43,7 @@ Tela do CRM com dados entrando, dentro do card "Implementamos um CRM".
 
 > **Produção:** Loop curto, 3–4s. Nome do cliente borrado.
 
-### 05 · Depoimentos de clientes
+### 04 · Depoimentos de clientes
 
 **Foto** · proporção `1/1` · seção Resultados
 
@@ -60,13 +51,13 @@ Tela do CRM com dados entrando, dentro do card "Implementamos um CRM".
 
 > **Produção:** Foto real, não stock. Exige autorização de imagem.
 
-### 06 · Renke Academy
+### 05 · Renke Academy
 
 **Imagem** · proporção `3/2` · seção Academy + Tools
 
 Imagem que represente a Academy — sala, gravação, ou material do curso.
 
-### 07 · Renke Tools
+### 06 · Renke Tools
 
 **Imagem** · proporção `3/2` · seção Academy + Tools
 
@@ -74,7 +65,7 @@ Imagem dos produtos de tecnologia — CRM, Connect, Pulse AI.
 
 ## Status
 
-7 de 7 slots ainda sem asset definitivo. É a mesma lista que aparece em
+6 de 6 slots ainda sem asset definitivo. É a mesma lista que aparece em
 [pendências](../05-analise/pendencias-e-proximos-passos.md), agora com proporção e enquadramento
 definidos — para a produção não sair no tamanho errado e precisar ser refeita.
 

@@ -1,49 +1,38 @@
 ---
 import { hero } from '../../data/home';
-import Media from '../ui/Media.astro';
 import Botao from '../ui/Botao.astro';
 
 /*
- * Hero sobre preto. Duas razões: é a cor da marca, e o vidro só existe sobre
- * superfície escura — sobre branco não há o que refratar.
+ * Coluna única, centrada. O mockup do dashboard saiu, e com ele a segunda
+ * coluna — um hero em duas colunas com um lado vazio fica torto.
  *
- * Hierarquia do texto: H1 → subtítulo maior → subtítulo menor → CTA.
- * O amarelo entra como sublinhado da afirmação e nos chips, nunca como texto
- * corrido sobre escuro em corpo pequeno.
+ * A legenda "Você não controla o que não enxerga" era do visual. Sobreviveu
+ * porque funciona sozinha, agora como fecho do bloco.
  */
 ---
 <section class="section section--hero">
   <div class="container">
     <div class="hero">
+      <h1 class="hero__title">
+        Isso não é <s>marketing para clínicas</s>.<br />
+        <strong>É RevOps</strong>
+      </h1>
 
-      <div class="hero__texto">
-        <h1 class="hero__title">
-          Isso não é <s>marketing para clínicas</s>.<br />
-          <strong>É RevOps</strong>
-        </h1>
+      <p class="hero__sub">
+        Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
+      </p>
 
-        <p class="hero__sub">
-          Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
-        </p>
+      <p class="hero__lead">{hero.lead}</p>
 
-        <p class="hero__lead">{hero.lead}</p>
+      <ul class="chips">
+        {hero.numeros.map((n) => <li class="chip vidro">{n}</li>)}
+      </ul>
 
-        <ul class="chips">
-          {hero.numeros.map((n) => <li class="chip vidro">{n}</li>)}
-        </ul>
-
-        <div class="hero__acoes">
-          <Botao variante="brilho" href="#">{hero.cta}</Botao>
-        </div>
+      <div class="hero__acoes">
+        <Botao variante="brilho" href="#">{hero.cta}</Botao>
       </div>
 
-      <figure class="hero__visual entra">
-        <div class="hero__moldura vidro vidro--realce">
-          <Media id="01" />
-        </div>
-        <figcaption class="hero__caption"><em>{hero.legenda}</em></figcaption>
-      </figure>
-
+      <p class="hero__caption"><em>{hero.legenda}</em></p>
     </div>
   </div>
 </section>

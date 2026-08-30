@@ -34,7 +34,7 @@ export const pilares = [
     titulo: 'Implementamos um CRM que funciona de verdade',
     texto:
       'Processo, jornadas, scripts, time treinado e usando a ferramenta de verdade. Tudo num lugar só pra você confiar no que está vendo.',
-    media: '04',
+    media: '03',
   },
   {
     icone: 'raio/automação',

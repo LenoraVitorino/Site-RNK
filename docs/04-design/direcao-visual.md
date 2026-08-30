@@ -84,9 +84,17 @@ escuro é legível como texto direto (9,8:1).
 
 ## Header
 
-Fixo, em vidro escuro (`blur(14px) saturate(1.4)` sobre preto a 72%), com a assinatura da Renke.
-Ao rolar, o fundo fecha para 90% e a borda inferior ganha peso — o suficiente para separar do
-conteúdo sem virar uma barra sólida.
+Fixo, em vidro escuro (`blur(14px) saturate(1.4)` sobre preto a 72%), 84px de altura. Ao rolar, o
+fundo fecha para 92% e a borda inferior ganha peso — o suficiente para separar do conteúdo sem
+virar barra sólida.
+
+**Três zonas em grid `1fr auto 1fr`**: assinatura à esquerda, menu no centro, "Fale com a gente"
+à direita. A largura é cheia, com respiro de `clamp(1.5rem, 4vw, 4rem)` nas pontas, para as
+extremidades encostarem nas bordas em vez de ficarem presas ao container de 1160px.
+
+O grid importa: com flexbox, o botão da direita empurrava a lista **90px** para fora do centro —
+o `flex: 1` centraliza no espaço que sobra, não na tela. Com as colunas laterais iguais, o menu
+cai no centro real (medido: 720 de 720 em 1440px, 960 de 960 em 1920px).
 
 ## Diagramação do hero
 
@@ -94,8 +102,12 @@ Antes era tudo empilhado: H1, sub, números, CTA, texto, logos e um visual 16:9 
 hero passava de **1.500px** e o visual só aparecia depois de rolar — argumento e prova nunca
 entravam na mesma tela.
 
-Agora são **duas colunas**: argumento à esquerda, visual à direita. O hero caiu para **950px**, e
-o visual começa em 228px — dentro da primeira tela em qualquer notebook.
+Depois de duas colunas, o mockup do dashboard saiu — e com ele a segunda coluna. Um hero em duas
+colunas com um lado vazio fica torto.
+
+O hero passou a **coluna única centrada**, com largura máxima de 62rem. A legenda
+*"Você não controla o que não enxerga"* era do visual, mas sobreviveu: funciona sozinha, agora
+como fecho do bloco.
 
 | | Antes | Depois |
 |---|---|---|

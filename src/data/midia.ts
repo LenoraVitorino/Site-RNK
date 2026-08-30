@@ -28,18 +28,6 @@ export const slots: Slot[] = [
   {
     id: '01',
     secao: 'Hero',
-    tipo: 'animacao',
-    proporcao: '4 / 3',
-    titulo: 'Mockup de dashboard com dados de performance',
-    descricao:
-      'Desktop ou tablet mostrando os painéis da operação. Alternativa: motion de 3–5s com o ' +
-      'fluxo do dado — anúncio → CRM → agendamento → venda.',
-    producao: 'Dados do cliente borrados. Se for motion, exportar em .webm e .mp4 com poster.',
-    status: 'pendente',
-  },
-  {
-    id: '02',
-    secao: 'Hero',
     tipo: 'logo',
     proporcao: '5 / 2',
     titulo: 'Logos de clientes',
@@ -48,7 +36,7 @@ export const slots: Slot[] = [
     status: 'pendente',
   },
   {
-    id: '03',
+    id: '02',
     secao: 'O que fazemos',
     tipo: 'video',
     proporcao: '4 / 5',
@@ -58,7 +46,7 @@ export const slots: Slot[] = [
     status: 'pendente',
   },
   {
-    id: '04',
+    id: '03',
     secao: 'O que fazemos',
     tipo: 'gif',
     proporcao: '16 / 10',
@@ -68,7 +56,7 @@ export const slots: Slot[] = [
     status: 'pendente',
   },
   {
-    id: '05',
+    id: '04',
     secao: 'Resultados',
     tipo: 'retrato',
     proporcao: '1 / 1',
@@ -78,7 +66,7 @@ export const slots: Slot[] = [
     status: 'pendente',
   },
   {
-    id: '06',
+    id: '05',
     secao: 'Academy + Tools',
     tipo: 'imagem',
     proporcao: '3 / 2',
@@ -87,7 +75,7 @@ export const slots: Slot[] = [
     status: 'pendente',
   },
   {
-    id: '07',
+    id: '06',
     secao: 'Academy + Tools',
     tipo: 'imagem',
     proporcao: '3 / 2',
