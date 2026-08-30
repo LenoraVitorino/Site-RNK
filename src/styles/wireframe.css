@@ -4,78 +4,8 @@
    O objetivo aqui é estrutura, hierarquia e ritmo de scroll.
    ============================================================ */
 
-:root {
-  /* ---- Marca ---------------------------------------------------------
-     Extraída do site atual (renkestudio.com.br, Elementor kit-7).
-     Ver docs/04-design/paleta-de-marca.md
+@import './tokens.css';
 
-     REGRA DE CONTRASTE: o amarelo tem luminância altíssima. Como texto
-     sobre branco dá ~1.5:1 — ilegível. Ele funciona como FUNDO com texto
-     preto (14:1) ou como acento sobre superfície escura (9.8:1). */
-  --marca:        #FFD103;
-  --marca-escura: #B79500;   /* estados sobre fundo claro */
-  --marca-suave:  #FFF4C7;   /* lavagem para blocos amplos */
-
-  /* ---- Neutros — levemente quentes, como pede o briefing ------------- */
-  --bg:        #ffffff;
-  --bg-alt:    #faf9f7;
-  --dark:      #14161a;
-  --dark-soft: #1E2329;      /* carvão do kit atual */
-  --line:      #dedbd6;
-  --line-soft: #ebe8e3;
-  --box:       #efece7;
-  --text:      #1f2226;
-  --muted:     #6f7176;
-  --on-dark:   #f5f4f2;
-  --on-dark-muted: #a2a4a8;
-
-  /* ---- Anotações do wireframe ----------------------------------------
-     Frias de propósito: com o amarelo virando cor de marca, a anotação
-     precisa ler como andaime, não como design. */
-  --note:      #1d4ed8;
-  --note-bg:   #eef3fe;
-  --note-line: #a7c0f5;
-
-  --foco:      #1d4ed8;
-
-  /* ---- Tipografia ----------------------------------------------------
-     Open Sans em dois pesos: 600 para títulos, 400 para texto corrido.
-     Carregada self-hosted (ver Base.astro), sem CDN de terceiro. */
-  --font: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          Helvetica, Arial, sans-serif;
-  --peso-titulo: 600;
-  --peso-corpo:  400;
-
-  /* Escala modular ~1.25. Fluida só onde o tamanho realmente muda de papel. */
-  --fs-xs:   0.75rem;
-  --fs-sm:   0.875rem;
-  --fs-base: 1rem;
-  --fs-md:   1.0625rem;
-  --fs-lg:   clamp(1.125rem, 1.6vw, 1.3rem);
-  --fs-xl:   clamp(1.35rem, 2.6vw, 1.75rem);
-  --fs-2xl:  clamp(1.6rem, 3.6vw, 2.35rem);
-  --fs-3xl:  clamp(2rem, 6vw, 3.5rem);
-
-  --lh-tight: 1.15;
-  --lh-snug:  1.35;
-  --lh-corpo: 1.65;
-
-  --tracking-label: .1em;
-
-  /* ---- Espaçamento — escala de 4px ---------------------------------- */
-  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
-  --s-5: 1.5rem;  --s-6: 2rem;    --s-7: 3rem;    --s-8: 4rem;
-
-  --space: clamp(3.5rem, 8vw, 7rem);
-
-  /* ---- Layout -------------------------------------------------------- */
-  --max:        1160px;
-  --max-narrow: 860px;
-  --max-prose:  700px;
-  --medida:     68ch;   /* linha de leitura confortável */
-  --radius:     2px;
-  --alvo:       44px;   /* alvo mínimo de toque */
-}
 
 *, *::before, *::after { box-sizing: border-box; }
 

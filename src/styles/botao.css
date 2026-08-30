@@ -1,0 +1,178 @@
+/* ============================================================
+   DESIGN SYSTEM — Botão
+   ============================================================ */
+
+.botao {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--s-2);
+  min-height: var(--alvo);
+  padding: var(--s-3) var(--s-5);
+  font-family: var(--font);
+  font-size: var(--fs-sm); font-weight: var(--peso-titulo);
+  line-height: 1.2; text-align: center; text-decoration: none;
+  border: 1.5px solid transparent; border-radius: var(--raio-sutil);
+  cursor: pointer;
+  transition: background-color var(--dur-rapida) var(--easing),
+              color var(--dur-rapida) var(--easing),
+              border-color var(--dur-rapida) var(--easing);
+}
+.botao:active { translate: 0 1px; }
+.botao--lg { min-height: 3.25rem; padding: var(--s-4) var(--s-6); font-size: var(--fs-base); }
+.botao--bloco { display: flex; width: 100%; }
+
+/* ---- Sólido ---- */
+.botao--solido { background: var(--dark); color: #fff; border-color: var(--dark); }
+.botao--solido:hover { background: var(--marca); color: var(--text); border-color: var(--marca); }
+
+/* ---- Contorno ---- */
+.botao--contorno { background: transparent; color: var(--text); border-color: var(--dark); }
+.botao--contorno:hover { background: var(--marca); border-color: var(--marca); }
+
+/* ---- Claro, sobre fundo escuro ---- */
+.botao--claro { background: var(--marca); color: var(--text); border-color: var(--marca); }
+.botao--claro:hover { background: #fff; border-color: #fff; }
+
+/* ---- Texto ---- */
+.botao--texto {
+  min-height: 0; padding: var(--s-1) 0; background: none; color: inherit;
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.botao--texto:hover { text-decoration-thickness: 2px; }
+
+/* ============================================================
+   Variante "brilho" — CTA de conversão
+
+   Borda cônica que gira, pontilhado sutil e brilho interno.
+   Adaptada da referência: o azul deu lugar ao amarelo da marca, a
+   tipografia é a do sistema, e a animação respeita reduced-motion.
+
+   Custo: a animação roda continuamente. Por isso a regra é UM por
+   página — ver o guia.
+   ============================================================ */
+
+@property --angulo {
+  syntax: '<angle>'; initial-value: 0deg; inherits: false;
+}
+@property --angulo-offset {
+  syntax: '<angle>'; initial-value: 0deg; inherits: false;
+}
+@property --brilho-extensao {
+  syntax: '<percentage>'; initial-value: 5%; inherits: false;
+}
+@property --brilho-cor {
+  syntax: '<color>'; initial-value: #fff; inherits: false;
+}
+
+.botao--brilho {
+  --brilho-fundo: #0a0b0d;
+  --brilho-fundo-sutil: #17181b;
+  --brilho-acento: var(--marca);
+  --brilho-acento-suave: #ffe783;
+  --brilho-duracao: 3s;
+  --brilho-sombra: 2px;
+
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  outline-offset: 4px;
+  padding: var(--s-4) var(--s-7);
+  font-size: var(--fs-base);
+  border: 1px solid transparent;
+  border-radius: var(--raio-pilula);
+  color: #fff;
+  background:
+    linear-gradient(var(--brilho-fundo), var(--brilho-fundo)) padding-box,
+    conic-gradient(
+      from calc(var(--angulo) - var(--angulo-offset)),
+      transparent,
+      var(--brilho-acento) var(--brilho-extensao),
+      var(--brilho-cor) calc(var(--brilho-extensao) * 2),
+      var(--brilho-acento) calc(var(--brilho-extensao) * 3),
+      transparent calc(var(--brilho-extensao) * 4)
+    ) border-box;
+  box-shadow: inset 0 0 0 1px var(--brilho-fundo-sutil);
+  transition: --angulo-offset var(--dur-lenta) var(--easing),
+              --brilho-extensao var(--dur-lenta) var(--easing),
+              --brilho-cor var(--dur-lenta) var(--easing);
+}
+
+.botao--brilho::before,
+.botao--brilho::after,
+.botao--brilho .botao__texto::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%; inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+/* Pontilhado */
+.botao--brilho::before {
+  --tamanho: calc(100% - var(--brilho-sombra) * 3);
+  --pos: 2px;
+  width: var(--tamanho); height: var(--tamanho);
+  background: radial-gradient(circle at var(--pos) var(--pos), #fff calc(var(--pos) / 4), transparent 0) padding-box;
+  background-size: calc(var(--pos) * 2) calc(var(--pos) * 2);
+  background-repeat: space;
+  mask-image: conic-gradient(from calc(var(--angulo) + 45deg), #000, transparent 10% 90%, #000);
+  border-radius: inherit;
+  opacity: .4;
+}
+
+/* Reflexo interno */
+.botao--brilho::after {
+  --animacao: brilho-reflexo linear infinite;
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--brilho-acento), transparent);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, #000);
+  opacity: .6;
+}
+
+.botao--brilho .botao__texto { z-index: 1; }
+
+/* Halo que pulsa no hover */
+.botao--brilho .botao__texto::before {
+  --tamanho: calc(100% + 1rem);
+  width: var(--tamanho); height: var(--tamanho);
+  box-shadow: inset 0 -1ex 2rem 4px var(--brilho-acento);
+  opacity: 0;
+  transition: opacity var(--dur-lenta) var(--easing);
+  animation: calc(var(--brilho-duracao) * 1.5) brilho-respiro linear infinite;
+}
+
+.botao--brilho,
+.botao--brilho::before,
+.botao--brilho::after {
+  --animacao: brilho-giro linear infinite;
+  animation: var(--animacao) var(--brilho-duracao),
+             var(--animacao) calc(var(--brilho-duracao) / .4) reverse paused;
+  animation-composition: add;
+}
+
+.botao--brilho:is(:hover, :focus-visible) {
+  --brilho-extensao: 20%;
+  --angulo-offset: 95deg;
+  --brilho-cor: var(--brilho-acento-suave);
+}
+.botao--brilho:is(:hover, :focus-visible),
+.botao--brilho:is(:hover, :focus-visible)::before,
+.botao--brilho:is(:hover, :focus-visible)::after { animation-play-state: running; }
+.botao--brilho:is(:hover, :focus-visible) .botao__texto::before { opacity: 1; }
+
+@keyframes brilho-giro    { to { --angulo: 360deg; } }
+@keyframes brilho-reflexo { to { rotate: 360deg; } }
+@keyframes brilho-respiro { from, to { scale: 1; } 50% { scale: 1.2; } }
+
+/* Sem movimento: vira um sólido com contorno da marca, sem perder presença */
+@media (prefers-reduced-motion: reduce) {
+  .botao--brilho,
+  .botao--brilho::before,
+  .botao--brilho::after,
+  .botao--brilho .botao__texto::before { animation: none; }
+  .botao--brilho {
+    background: var(--brilho-fundo);
+    border-color: var(--marca);
+  }
+  .botao--brilho::before, .botao--brilho::after { opacity: 0; }
+}

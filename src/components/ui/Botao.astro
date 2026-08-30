@@ -1,0 +1,46 @@
+---
+/**
+ * Botão do design system.
+ *
+ * Variantes:
+ *   brilho    — CTA de conversão. Borda cônica animada em amarelo sobre preto.
+ *               UM por página, no ponto principal de conversão.
+ *   solido    — preenchimento escuro. Padrão para CTAs repetidos.
+ *   contorno  — secundário, sobre fundo claro.
+ *   claro     — sobre fundo escuro.
+ *   texto     — terciário, peso de link.
+ *
+ * Ver docs/04-design/design-system.md
+ */
+
+interface Props {
+  variante?: 'brilho' | 'solido' | 'contorno' | 'claro' | 'texto';
+  tamanho?: 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  bloco?: boolean;
+  class?: string;
+}
+
+const {
+  variante = 'solido',
+  tamanho = 'md',
+  href,
+  type = 'button',
+  bloco = false,
+  class: extra = '',
+} = Astro.props;
+
+const classes = [
+  'botao',
+  `botao--${variante}`,
+  tamanho === 'lg' && 'botao--lg',
+  bloco && 'botao--bloco',
+  extra,
+].filter(Boolean).join(' ');
+
+const Tag = href ? 'a' : 'button';
+---
+<Tag class={classes} href={href} type={href ? undefined : type}>
+  <span class="botao__texto"><slot /></span>
+</Tag>
