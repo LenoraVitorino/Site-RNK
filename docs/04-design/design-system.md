@@ -196,3 +196,40 @@ mudar. Distribuição atual:
 | CTA final | `claro` (lg) — sobre fundo escuro |
 | Sobre | `contorno` — ação secundária |
 | Formulário | `relevo` em bloco |
+
+
+---
+
+## Navegação
+
+Header fixo em vidro escuro, 84px de altura, com a assinatura da Renke à esquerda.
+
+### Pílula deslizante
+
+Ao passar o mouse (ou dar foco por teclado) num item, uma pílula translúcida se move até ele.
+Não há um fundo por item aparecendo e sumindo: é **um único elemento** que muda de posição — o
+mesmo princípio do `layoutId` do framer-motion.
+
+Anima apenas `transform` e `width`, então o navegador resolve na composição, sem recalcular layout.
+
+Funciona também no **foco de teclado**, não só no hover — a referência original cobria só o mouse.
+
+### Sobre a referência em React
+
+A referência enviada era React + Tailwind + framer-motion + shadcn. **Não foi instalada.**
+
+| | Custo |
+|---|---|
+| React + ReactDOM | ~45 KB gzip |
+| framer-motion | ~50 KB gzip |
+| **Total** | **~95 KB de JavaScript** |
+
+O site é Astro com zero JS de framework, e é essa escolha que sustenta o `LCP < 2,5s` do briefing.
+Trazer 95 KB para um efeito de menu inverteria a premissa da stack.
+
+O efeito foi portado em **~25 linhas** de CSS e JS nativo, sem dependência nova. O que veio da
+referência: a pílula compartilhada, o `border-radius` de pílula, o fundo translúcido a ~9%, a seta
+que gira, e o painel com cantos arredondados.
+
+O que não veio: os ícones por item de submenu (`lucide-react`) e a coluna de descrição. Nosso
+mega-menu é de navegação, não de vitrine de produto — as descrições vivem nas páginas.

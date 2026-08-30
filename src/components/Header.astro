@@ -19,6 +19,7 @@ import { menu } from '../data/nav';
 
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
       <ul class="nav__list">
+        <span class="nav__indicador" aria-hidden="true"></span>
         {menu.map((item) =>
           'grupos' in item ? (
             <li class="nav__item nav__item--has-menu">
@@ -185,6 +186,35 @@ import { menu } from '../data/nav';
     if (DESKTOP.matches) closeNav();
   };
   DESKTOP.addEventListener('change', onBreakpoint);
+
+  /* Pílula que desliza sob o item em foco ou sob o cursor.
+     É o equivalente ao layoutId do framer-motion: um elemento só que muda
+     de posição, em vez de um fundo por item entrando e saindo. Anima apenas
+     transform e width, então fica na composição e não força layout. */
+  const lista = nav.querySelector<HTMLElement>('.nav__list');
+  const indicador = nav.querySelector<HTMLElement>('.nav__indicador');
+
+  if (lista && indicador && DESKTOP.matches) {
+    const mover = (alvo: HTMLElement) => {
+      const r = alvo.getBoundingClientRect();
+      const base = lista.getBoundingClientRect();
+      indicador.style.setProperty('--x', `${r.left - base.left}px`);
+      indicador.style.setProperty('--w', `${r.width}px`);
+      lista.dataset.ativo = 'sim';
+    };
+    const esconder = () => delete lista.dataset.ativo;
+
+    lista.querySelectorAll<HTMLElement>('.nav__link').forEach((link) => {
+      link.addEventListener('mouseenter', () => DESKTOP.matches && mover(link));
+      link.addEventListener('focus', () => DESKTOP.matches && mover(link));
+    });
+    lista.addEventListener('mouseleave', esconder);
+    lista.addEventListener('focusout', (e) => {
+      if (!lista.contains(e.relatedTarget as Node)) esconder();
+    });
+    // Reposiciona no resize: a pílula guarda pixels, não porcentagem
+    window.addEventListener('resize', esconder, { passive: true });
+  }
 
   let ticking = false;
   window.addEventListener('scroll', () => {
