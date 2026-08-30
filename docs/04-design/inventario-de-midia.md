@@ -33,7 +33,7 @@ canto da caixa no wireframe, para poder ser citado na conversa ("o slot 03").
 
 Reel do @renke.studio que explica a categoria RevOps. 1min42.
 
-> **Produção:** Formato reels (1080×1920). Entra como fachada: pôster local + clique carrega o embed. Ver docs/04-design/inventario-de-midia.md para a nota sobre auto-hospedar o mp4.
+> **Produção:** Formato reels, 720×1280. Auto-hospedado (H.264, CRF 32, 6,6 MB) e com legenda queimada, então comunica mudo. Toca ao entrar na tela e pausa ao sair.
 
 ### 03 · Renke CRM em uso
 

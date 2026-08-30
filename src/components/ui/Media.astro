@@ -10,8 +10,8 @@ interface Props {
 const { id } = Astro.props;
 const slot = porId(id);
 ---
-{slot.embed ? (
-  <Reel embed={slot.embed} proporcao={slot.proporcao} titulo={slot.titulo} />
+{slot.video ? (
+  <Reel video={slot.video} proporcao={slot.proporcao} titulo={slot.titulo} />
 ) : (
   <figure class="slot" style={`--proporcao: ${slot.proporcao}`} data-tipo={slot.tipo}>
     <div class="slot__caixa">

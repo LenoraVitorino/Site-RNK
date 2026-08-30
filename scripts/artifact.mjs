@@ -9,7 +9,7 @@
  * data URI em base64.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -76,12 +76,12 @@ if (atributos) {
 const titulo = titulos[pagina] || pagina;
 const estilos = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
 
-const final = `<title>${titulo}</title>\n${estilos}\n${corpo}\n`;
+let final = `<title>${titulo}</title>\n${estilos}\n${corpo}\n`;
 
 // 3) Imagens locais viram data URI — a página publicada não busca arquivo externo
 let imagens = 0;
 const embutir = (texto) =>
-  texto.replace(/(src|href)="\/((?:marca|imagens|midia)\/[^"]+)"/g, (_m, attr, arquivo) => {
+  texto.replace(/(src|href|poster)="\/((?:marca|imagens|midia)\/[^"]+)"/g, (_m, attr, arquivo) => {
     try {
       const dados = readFileSync(join(dist, arquivo)).toString('base64');
       const ext = arquivo.split('.').pop().toLowerCase();
@@ -95,17 +95,44 @@ const embutir = (texto) =>
     }
   });
 
-// 4) Página única: links de navegação viram âncora inerte
+// 4) Vídeo: a prévia não busca arquivo externo, então ele também precisa virar
+//    data URI. Só um dos formatos entra — em base64 cada byte vira 1,37, e os
+//    dois juntos estouram o limite da página publicada. Vence o menor arquivo,
+//    porque o visualizador é um navegador atual e toca os dois.
+let video = '';
+const fontesVideo = [...final.matchAll(/<source src="\/(midia\/[^"]+)" type="([^"]+)"\s*\/?>/g)];
+if (fontesVideo.length) {
+  const candidatos = fontesVideo
+    .map(([tag, arquivo, tipo]) => {
+      try { return { tag, arquivo, tipo, bytes: statSync(join(dist, arquivo)).size }; }
+      catch { return null; }
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.bytes - b.bytes);
+
+  if (candidatos.length === 0) {
+    console.error('Os <source> de vídeo não apontam para nenhum arquivo em dist/');
+    process.exit(1);
+  }
+  const escolhido = candidatos[0];
+  const dados = readFileSync(join(dist, escolhido.arquivo)).toString('base64');
+  // O type com codecs é bom no site — na prévia o data URI já resolve, e um
+  // codecs errado faria o navegador descartar a fonte sem tentar.
+  const limpo = escolhido.tipo.split(';')[0];
+  const substituto = `<source src="data:${limpo};base64,${dados}" type="${limpo}">`;
+
+  // Todas as fontes saem; entra uma só, no lugar da primeira.
+  final = final.replace(escolhido.tag, substituto);
+  for (const c of candidatos) if (c !== escolhido) final = final.replace(c.tag, '');
+  video = `${escolhido.arquivo} (${(escolhido.bytes / 1048576).toFixed(1)} MB → ` +
+          `${(dados.length / 1048576).toFixed(1)} MB em base64)`;
+}
+
+// 5) Página única: links de navegação viram âncora inerte
 let final2 = embutir(final).replace(/href="\/(?!\/)[^"]*"/g, 'href="#"');
 
-// 5) O iframe do Instagram é bloqueado pela política de conteúdo da prévia.
-//    Marca a moldura para o botão abrir o reel no Instagram em vez de
-//    injetar um iframe que nunca vai carregar.
-const reels = (final2.match(/data-reel /g) || []).length;
-final2 = final2.replace(/data-reel /g, 'data-reel data-reel-externo ');
-
 // 6) Confere que não sobrou referência a arquivo externo
-const externa = /(src|href)="\/(?!\/)/.exec(final2) || /url\(['"]?\/(?!\/)/.exec(final2);
+const externa = /(src|href|poster)="\/(?!\/)/.exec(final2) || /url\(['"]?\/(?!\/)/.exec(final2);
 if (externa) {
   console.error(`Sobrou referência externa: ${externa[0]}`);
   process.exit(1);
@@ -117,4 +144,11 @@ writeFileSync(destino, final2);
 
 console.log(`✓ ${destino}`);
 console.log(`  ${fontes} fonte(s) e ${imagens} imagem(ns) embutidas · ${(final2.length / 1024).toFixed(0)} KB`);
-if (reels) console.log(`  ${reels} reel(s) apontando para o Instagram (iframe bloqueado na prévia)`);
+if (video) console.log(`  vídeo embutido: ${video}`);
+
+// A página publicada tem teto de 16 MB.
+const mb = final2.length / 1048576;
+if (mb > 15) {
+  console.error(`  ⚠ ${mb.toFixed(1)} MB — perto do teto de 16 MB da página publicada`);
+  process.exit(1);
+}

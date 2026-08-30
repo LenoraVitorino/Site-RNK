@@ -20,7 +20,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D10 | **Domínio**: `renke.com.br` ou `renkestudio.com.br` | Configuração de DNS, canonical, e-mail |
 | D11 | **Depoimentos como componente global** em todas as páginas — confirmar | Define arquitetura de componentes |
 | D12 | **Telefone / WhatsApp oficial** para rodapé e contato | Rodapé e /contato incompletos |
-| D14 | **Vídeo institucional: auto-hospedar ou manter o embed do Instagram?** | Peso de terceiro no LCP — ver seção 4 |
+| ~~D14~~ | ~~**Vídeo institucional: auto-hospedar ou manter o embed?**~~ → **auto-hospedado**, em 30/08/2026 | ✅ resolvido |
 | ~~D13~~ | ~~**Stack**~~ → **Astro**, decidido em 29/08/2026 | ✅ resolvido |
 
 ---
@@ -79,7 +79,8 @@ O próprio briefing lista em "próximos insumos necessários": **cases com núme
 - [ ] **Fotos da nova sede** — a sede mudou
 - [x] ~~Vídeo institucional "o que a Renke faz" (1–2 min)~~ → é o reel
       [DXcJsj2FTz0](https://www.instagram.com/reel/DXcJsj2FTz0/) do @renke.studio, 1min42, 1080×1920.
-      Entrou na segunda dobra em 30/08/2026 (slot 02). ⚠️ Ver **D14** abaixo.
+      Auto-hospedado na segunda dobra em 30/08/2026 (slot 02), com play automático ao entrar
+      na tela. Ver **D14** na seção 4.
 - [ ] GIF/motion do hero: fluxo do dado (anúncio → CRM → agendamento → venda), 3–5s
 
 ### Prints de produto (com blur nos dados sensíveis)
@@ -117,16 +118,23 @@ O próprio briefing lista em "próximos insumos necessários": **cases com núme
 - [ ] **Estratégia de redirects** do site atual (há um site em produção — `/faca-parte` é descrita
       como "baseada na estrutura atual do site")
 - [ ] Orçamento de performance: LCP < 2,5s com hero em motion
-- [ ] **D14 · Vídeo institucional: embed ou arquivo próprio?** Hoje o slot 02 usa uma **fachada**:
-      a página carrega só o pôster local (`public/midia/reel-o-que-a-renke-faz.jpg`) e o iframe do
-      Instagram só entra depois do clique. Isso mantém o LCP, mas custa dois cliques para dar play
-      (um na fachada, outro dentro do player do Instagram) e deixa o vídeo dependente de a conta
-      continuar pública.
-      A alternativa é **auto-hospedar**: o arquivo original tem **14,7 MB**, grande demais para o
-      repositório como está — reencodado em `.webm`/`.mp4` a 720p deve cair para 3–5 MB e permitir
-      um `<video>` nativo, com play em um clique e sem terceiro na página. É conteúdo da própria
-      Renke, então não há questão de direitos; é decisão de hospedagem.
-      **Precisa da decisão do time** antes de subir binário de vídeo ao Git.
+- [x] ~~**D14 · Vídeo institucional: embed ou arquivo próprio?**~~ → **arquivo próprio**, em
+      30/08/2026. O embed do Instagram custava dois cliques para dar play, colocava o JS e as
+      fontes deles na página e deixava o vídeo dependente de a conta continuar pública.
+      O arquivo original tinha 14,7 MB — já em 720×1280, que é o que o Instagram serve, então
+      não havia resolução a cortar; o que sobrava era bitrate. Encodes testados:
+
+      | Codec | Ajuste | Tamanho |
+      |---|---|---|
+      | **H.264** | **CRF 32, preset slow** | **6,6 MB** ✅ |
+      | H.264 | CRF 31, veryslow, tune film | 6,8 MB |
+      | VP9 | CRF 40, cpu-used 2 | 9,0 MB |
+      | VP9 | CRF 34, cpu-used 4 | 13,9 MB |
+
+      VP9 saiu maior em todos os ajustes: a imagem é escura, granulada e de celular, e o x264
+      lida melhor com grão. Um segundo formato só se pagaria se fosse menor — então fica só o
+      `.mp4`, que todo navegador atual toca. `preload="none"` mantém o vídeo fora do
+      carregamento inicial, então o `LCP < 2,5s` continua de pé.
 
 ---
 

@@ -23,22 +23,27 @@ export type Slot = {
   producao?: string;
   status: 'pendente' | 'existe';
   /**
-   * Preenchido quando o asset já existe e é um vídeo hospedado fora.
+   * Preenchido quando o asset já existe e é um vídeo próprio.
    * A caixa de slot dá lugar ao player real — ver src/components/ui/Reel.astro.
    */
-  embed?: Embed;
+  video?: Video;
 };
 
-export type Embed = {
-  plataforma: 'instagram';
-  /** Código do reel na URL: instagram.com/reel/<codigo>/ */
-  codigo: string;
-  /** Poster local. Evita depender de URL assinada da CDN, que expira. */
+export type Video = {
+  /**
+   * Arquivos em public/, na ordem de preferência. Auto-hospedados: sem
+   * terceiro no caminho. Hoje só H.264 — a lista existe para um formato
+   * menor entrar na frente sem mexer no componente.
+   */
+  arquivos: { src: string; tipo: string }[];
+  /** Primeiro quadro, servido antes de o vídeo carregar. */
   poster: string;
-  /** Texto do botão de play e do link de fallback. */
-  rotulo: string;
   duracao: string;
   autor: string;
+  /** Publicação original, creditada na legenda. */
+  origem: string;
+  /** Descreve o conteúdo para quem não vê o vídeo. */
+  descricao: string;
 };
 
 export const slots: Slot[] = [
@@ -60,16 +65,21 @@ export const slots: Slot[] = [
     titulo: 'Vídeo institucional "o que a Renke faz"',
     descricao: 'Reel do @renke.studio que explica a categoria RevOps. 1min42.',
     producao:
-      'Formato reels (1080×1920). Entra como fachada: pôster local + clique carrega o embed. ' +
-      'Ver docs/04-design/inventario-de-midia.md para a nota sobre auto-hospedar o mp4.',
+      'Formato reels, 720×1280. Auto-hospedado (H.264, CRF 32, 6,6 MB) e com legenda ' +
+      'queimada, então comunica mudo. Toca ao entrar na tela e pausa ao sair.',
     status: 'existe',
-    embed: {
-      plataforma: 'instagram',
-      codigo: 'DXcJsj2FTz0',
+    video: {
+      arquivos: [
+        { src: '/midia/o-que-a-renke-faz.mp4', tipo: 'video/mp4; codecs="avc1.4D401F, mp4a.40.2"' },
+      ],
       poster: '/midia/reel-o-que-a-renke-faz.jpg',
-      rotulo: 'Assistir ao vídeo',
       duracao: '1min42',
       autor: '@renke.studio',
+      origem: 'https://www.instagram.com/reel/DXcJsj2FTz0/',
+      descricao:
+        'A equipe da Renke trabalhando em automações e CRM, com legendas explicando ' +
+        'por que dados integrados e processos escaláveis decidem a competitividade de ' +
+        'uma clínica.',
     },
   },
   {
