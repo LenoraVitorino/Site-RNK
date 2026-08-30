@@ -12,13 +12,13 @@ const cores = [
   { nome: 'Amarelo Renke', token: '--marca', hex: '#FFD103', papel: 'Primária. Fundo com texto preto, ou acento sobre escuro.' },
   { nome: 'Amarelo escuro', token: '--marca-escura', hex: '#B79500', papel: 'Estados sobre fundo claro.' },
   { nome: 'Amarelo suave', token: '--marca-suave', hex: '#FFF4C7', papel: 'Marca-texto e lavagens amplas.' },
-  { nome: 'Preto', token: '--dark', hex: '#14161A', papel: 'Superfície escura, botão sólido, rodapé.' },
-  { nome: 'Carvão', token: '--dark-soft', hex: '#1E2329', papel: 'Seções escuras. Vem do kit atual.' },
-  { nome: 'Texto', token: '--text', hex: '#1F2226', papel: 'Corpo e títulos sobre claro.' },
-  { nome: 'Secundário', token: '--muted', hex: '#6F7176', papel: 'Apoio, rótulos, legendas.' },
-  { nome: 'Fundo', token: '--bg', hex: '#FFFFFF', papel: 'Superfície padrão.' },
-  { nome: 'Fundo alt', token: '--bg-alt', hex: '#FAF9F7', papel: 'Alternância de seção. Neutro quente.' },
-  { nome: 'Linha', token: '--line', hex: '#DEDBD6', papel: 'Bordas e divisores.' },
+  { nome: 'Preto', token: '--bg', hex: '#000000', papel: 'Superfície padrão. Preto absoluto.' },
+  { nome: 'Preto alt', token: '--bg-alt', hex: '#0A0A0A', papel: 'Alternância de seção — degrau mínimo.' },
+  { nome: 'Carvão', token: '--dark-soft', hex: '#0D0D0D', papel: 'Seções de contraste.' },
+  { nome: 'Texto', token: '--text', hex: '#F5F4F2', papel: 'Corpo e títulos sobre preto.' },
+  { nome: 'Secundário', token: '--muted', hex: '#A2A4A8', papel: 'Apoio, rótulos, legendas.' },
+  { nome: 'Linha', token: '--line', hex: 'rgb(255 255 255 / .10)', papel: 'Bordas e divisores.' },
+  { nome: 'Vidro', token: '--vidro-fundo', hex: 'rgb(255 255 255 / .05)', papel: 'Superfície de cartão.' },
 ];
 
 const escala = [
@@ -75,7 +75,7 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
   <section class="ds__secao">
     <h2>Cor</h2>
     <p class="ds__intro">
-      Preto e amarelo. Nada de teal ou azul de healthcare — o briefing pede exatamente essa fuga.
+      Preto absoluto e amarelo. Sem azul, sem teal, sem terceira cor — a paleta da Renke tem duas.
     </p>
 
     <div class="ds__cores">
@@ -102,12 +102,12 @@ const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', 
           <b>1,5:1 · nunca</b>
         </div>
         <div class="ds__contraste">
-          <span style="color:#1F2226;background:#FFD103">Preto sobre amarelo</span>
-          <b>14:1 · ideal</b>
+          <span style="color:#000;background:#FFD103">Preto sobre amarelo</span>
+          <b>14,6:1 · ideal</b>
         </div>
         <div class="ds__contraste">
-          <span style="color:#FFD103;background:#1E2329">Amarelo sobre carvão</span>
-          <b>9,8:1 · ideal</b>
+          <span style="color:#FFD103;background:#000">Amarelo sobre preto</span>
+          <b>11,9:1 · ideal</b>
         </div>
       </div>
     </div>

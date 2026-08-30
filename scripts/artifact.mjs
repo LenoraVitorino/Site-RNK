@@ -61,7 +61,16 @@ if (!abre) {
   process.exit(1);
 }
 const inicio = abre.index + abre[0].length;
-const corpo = html.slice(inicio, html.lastIndexOf('</body>'));
+let corpo = html.slice(inicio, html.lastIndexOf('</body>'));
+
+// A página publicada descarta o <body> e usa o do host. Se o nosso body
+// carregava atributos — a página do design system usa class="ds" — o CSS
+// escopado neles deixaria de aplicar. Envolve o conteúdo num elemento que
+// herda esses atributos.
+const atributos = abre[0].slice('<body'.length, -1).trim();
+if (atributos) {
+  corpo = `<div ${atributos} data-corpo>\n${corpo}\n</div>`;
+}
 // Título fixo: o <title> da home é a meta tag de SEO, longa demais para
 // nomear a prévia. E o nome precisa ficar estável entre publicações.
 const titulo = titulos[pagina] || pagina;

@@ -26,10 +26,10 @@
      existe sobre superfície escura, e criava um corte duro entre o hero e o
      resto. O ritmo do scroll passa a vir de variação tonal dentro do escuro,
      não de inversão. */
-  --bg:        #0b0d10;      /* superfície padrão */
-  --bg-alt:    #14161a;      /* alternância de seção */
-  --dark:      #14161a;
-  --dark-soft: #1E2329;      /* carvão do kit atual */
+  --bg:        #000000;      /* preto absoluto */
+  --bg-alt:    #0a0a0a;      /* alternância de seção — degrau mínimo */
+  --dark:      #000000;
+  --dark-soft: #0d0d0d;
   --line:      rgb(255 255 255 / .10);
   --line-soft: rgb(255 255 255 / .06);
   --box:       rgb(255 255 255 / .04);
@@ -39,14 +39,9 @@
   --on-dark-muted: #a2a4a8;
   --sobre-marca: #14161a;    /* texto sobre o amarelo */
 
-  /* ---- Anotações do wireframe ----------------------------------------
-     Frias de propósito: com o amarelo virando cor de marca, a anotação
-     precisa ler como andaime, não como design. */
-  --note:      #1d4ed8;
-  --note-bg:   #eef3fe;
-  --note-line: #a7c0f5;
-
-  --foco:      #1d4ed8;
+  /* Foco de teclado no amarelo da marca: sobre preto dá 9,8:1, bem acima
+     do azul que estava aqui, e a paleta não tem azul. */
+  --foco:      var(--marca);
 
   /* ---- Tipografia ----------------------------------------------------
      Open Sans em dois pesos: 600 para títulos, 400 para texto corrido.

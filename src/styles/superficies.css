@@ -37,47 +37,6 @@
 }
 .vidro--claro:hover { background: rgb(0 0 0 / .055); border-color: rgb(0 0 0 / .14); }
 
-/* ---------- Fundo dinâmico ----------
-   Duas manchas de cor que respiram lentamente atrás do conteúdo.
-   Preto e amarelo, sem terceira cor: a paleta não tem uma. */
-
-.fundo-vivo { position: relative; isolation: isolate; overflow: hidden; }
-
-.fundo-vivo::before,
-.fundo-vivo::after {
-  content: ''; position: absolute; z-index: -1;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: .5;
-  will-change: transform;
-}
-.fundo-vivo::before {
-  width: 55vw; height: 55vw; max-width: 720px; max-height: 720px;
-  top: -18%; left: -12%;
-  background: radial-gradient(circle, var(--marca) 0%, transparent 68%);
-  animation: respira-a 22s var(--easing-suave) infinite alternate;
-}
-.fundo-vivo::after {
-  width: 45vw; height: 45vw; max-width: 600px; max-height: 600px;
-  bottom: -22%; right: -10%;
-  background: radial-gradient(circle, var(--marca-escura) 0%, transparent 70%);
-  opacity: .35;
-  animation: respira-b 28s var(--easing-suave) infinite alternate;
-}
-
-@keyframes respira-a {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(6%, 8%, 0) scale(1.15); }
-}
-@keyframes respira-b {
-  from { transform: translate3d(0, 0, 0) scale(1.1); }
-  to   { transform: translate3d(-8%, -6%, 0) scale(1); }
-}
-
-/* Sobre claro as manchas precisam recuar, senão o texto perde contraste */
-.section:not(.section--dark).fundo-vivo::before { opacity: .22; }
-.section:not(.section--dark).fundo-vivo::after  { opacity: .14; }
-
 /* ---------- Faixa que corre ----------
    Marquee com máscara de fade nas laterais, como na referência. */
 
@@ -128,7 +87,6 @@
 
 /* ---------- Sem movimento ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .fundo-vivo::before, .fundo-vivo::after,
   .faixa__trilho { animation: none; }
   .foto img { transition: none; }
   .foto:hover img { transform: none; }
