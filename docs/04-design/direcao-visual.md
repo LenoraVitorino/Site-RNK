@@ -96,6 +96,44 @@ O grid importa: com flexbox, o botão da direita empurrava a lista **90px** para
 o `flex: 1` centraliza no espaço que sobra, não na tela. Com as colunas laterais iguais, o menu
 cai no centro real (medido: 720 de 720 em 1440px, 960 de 960 em 1920px).
 
+## Título em duas tomadas
+
+O H1 conta a frase em dois momentos:
+
+| Tempo | O que acontece |
+|---|---|
+| 0s | "Isso não é marketing para clínicas." aparece inteiro |
+| 0,7s | O risco atravessa "marketing para clínicas" |
+| 2,0s | A tomada 1 sai subindo e desfocando |
+| 2,15s | "Isso é RevOps" entra subindo, com o sublinhado amarelo |
+
+A troca completa a frase: some o **"não"** junto com o que foi riscado, e a negação vira afirmação.
+Não é só um texto substituindo outro — é a mesma sentença se resolvendo.
+
+### Como está feito
+
+**CSS puro, sem JavaScript.** As duas tomadas ocupam a mesma célula de um `inline-grid`, então a
+largura é a da maior e a troca não reflui nada em volta — sem CLS. Animam apenas `opacity`,
+`transform` e `filter`, que o navegador resolve na composição.
+
+**Acessibilidade e SEO.** O `<h1>` leva `aria-label="Isso não é marketing para clínicas. Isso é
+RevOps."` — leitor de tela ouve a frase limpa, sem as duas tomadas se atravessando. As tomadas
+seguem no DOM, o que mantém **"marketing para clínicas"** indexável, que é a keyword de maior
+volume do mapa (1.000–2.500/mês).
+
+**Sem movimento.** Sob `prefers-reduced-motion` as tomadas viram quatro linhas estáticas, com o
+risco já desenhado:
+
+```
+Isso não é
+marketing para clínicas.   ← riscado
+Isso é
+RevOps
+```
+
+O `order` do flex agrupa por tomada. Sem ele o fluxo intercala as linhas e sai
+"Isso não é / Isso é / marketing para clínicas. / RevOps", que não faz sentido.
+
 ## Diagramação do hero
 
 Antes era tudo empilhado: H1, sub, números, CTA, texto, logos e um visual 16:9 de largura cheia. O

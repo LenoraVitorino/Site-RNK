@@ -13,9 +13,21 @@ import Botao from '../ui/Botao.astro';
 <section class="section section--hero">
   <div class="container">
     <div class="hero">
-      <h1 class="hero__title">
-        Isso não é <s>marketing para clínicas</s>.<br />
-        <strong>É RevOps</strong>
+      <!--
+        Duas tomadas empilhadas na mesma célula de grid, então a largura é a
+        da maior e a troca não empurra nada. O aria-label entrega a frase
+        inteira e limpa para leitor de tela; as duas tomadas seguem no DOM,
+        o que mantém "marketing para clínicas" indexável.
+      -->
+      <h1 class="hero__title" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
+        <span class="tomadas">
+          <span class="tomada tomada--sai" aria-hidden="true">Isso não é</span>
+          <span class="tomada tomada--entra" aria-hidden="true">Isso é</span>
+        </span>
+        <span class="tomadas tomadas--eixo">
+          <span class="tomada tomada--sai riscado" aria-hidden="true">marketing para clínicas.</span>
+          <span class="tomada tomada--entra realce" aria-hidden="true">RevOps</span>
+        </span>
       </h1>
 
       <p class="hero__sub">

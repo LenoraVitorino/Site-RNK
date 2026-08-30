@@ -346,8 +346,56 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   font-size: var(--fs-3xl); letter-spacing: -.03em;
   color: #fff; margin-bottom: var(--s-5);
 }
-.hero__title s { color: rgb(255 255 255 / .35); text-decoration-thickness: 3px; }
-.hero__title strong { box-shadow: inset 0 -.1em 0 var(--marca); }
+/* ---- Título em duas tomadas ----
+   1. "Isso não é marketing para clínicas." aparece inteiro
+   2. o risco atravessa "marketing para clínicas"
+   3. a frase troca para "Isso é RevOps"
+
+   As duas tomadas ocupam a mesma célula do grid: a largura é a da maior e a
+   troca não reflui o layout. Só opacity, transform e filter animam. */
+
+.tomadas { display: inline-grid; justify-items: center; }
+.tomadas--eixo { display: grid; }
+
+.tomada {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+
+.riscado { position: relative; color: rgb(255 255 255 / .45); }
+.riscado::after {
+  content: ''; position: absolute; left: -.04em; right: -.04em; top: 55%;
+  height: .06em; background: currentColor;
+  transform: scaleX(0); transform-origin: left center;
+  animation: risca .55s var(--easing) .7s forwards;
+}
+
+.realce { box-shadow: inset 0 -.1em 0 var(--marca); }
+
+.tomada--sai   { animation: tomada-sai   .7s var(--easing) 2s forwards; }
+.tomada--entra { opacity: 0; animation: tomada-entra .7s var(--easing) 2.15s forwards; }
+
+@keyframes risca { to { transform: scaleX(1); } }
+
+@keyframes tomada-sai {
+  to { opacity: 0; transform: translateY(-.22em); filter: blur(6px); }
+}
+@keyframes tomada-entra {
+  from { opacity: 0; transform: translateY(.28em); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+/* Sem movimento: as duas tomadas viram quatro linhas estáticas, com o risco
+   já desenhado. O `order` agrupa por tomada — sem ele o fluxo intercala as
+   linhas e sai "Isso não é Isso é". */
+@media (prefers-reduced-motion: reduce) {
+  .hero__title { display: flex; flex-direction: column; align-items: center; }
+  .tomadas, .tomadas--eixo { display: contents; }
+  .tomada { white-space: normal; opacity: 1; animation: none; transform: none; filter: none; }
+  .tomada--sai   { order: 1; }
+  .tomada--entra { order: 2; }
+  .riscado::after { transform: scaleX(1); animation: none; }
+}
 
 .hero__sub {
   font-size: var(--fs-xl); line-height: var(--lh-snug);
