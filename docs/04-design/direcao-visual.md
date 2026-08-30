@@ -104,17 +104,30 @@ O H1 conta a frase em dois momentos:
 |---|---|
 | 0s | "Isso não é marketing para clínicas." aparece inteiro |
 | 0,7s | O risco atravessa "marketing para clínicas" |
-| 2,0s | A tomada 1 sai subindo e desfocando |
-| 2,15s | "Isso é RevOps" entra subindo, com o sublinhado amarelo |
+| 1,9s | A tomada 1 rola para cima e sai da banda |
+| 2,34s | "Isso é RevOps" rola para dentro, com amortecimento no fim |
 
 A troca completa a frase: some o **"não"** junto com o que foi riscado, e a negação vira afirmação.
 Não é só um texto substituindo outro — é a mesma sentença se resolvendo.
 
 ### Como está feito
 
+**Rolamento, não desfoque.** O texto antigo sobe e sai da banda; o novo entra por baixo, como
+painel de aeroporto. Lê como precisão, que é o tom do RevOps — o desfoque anterior lia como
+hesitação.
+
+**A troca é sequencial, não sobreposta.** Rolando as duas juntas, as duas ficam meio visíveis ao
+mesmo tempo e o texto embaralha. A saída termina em 2,32s e a entrada começa em 2,34s.
+
+Verificado amostrando os transforms quadro a quadro pelo relógio da própria página: em 194
+amostras, **zero quadros** com as duas tomadas dentro da banda.
+
 **CSS puro, sem JavaScript.** As duas tomadas ocupam a mesma célula de um `inline-grid`, então a
-largura é a da maior e a troca não reflui nada em volta — sem CLS. Animam apenas `opacity`,
-`transform` e `filter`, que o navegador resolve na composição.
+largura é a da maior e a troca não reflui nada em volta — sem CLS. Animam apenas `transform` e
+`opacity`, que o navegador resolve na composição.
+
+O `overflow: hidden` recorta o rolamento. A folga vertical é só o necessário para as descidas de
+"g" e "ç" — sobra demais deixa a tomada que sai ainda aparecendo quando a outra entra.
 
 **Acessibilidade e SEO.** O `<h1>` leva `aria-label="Isso não é marketing para clínicas. Isso é
 RevOps."` — leitor de tela ouve a frase limpa, sem as duas tomadas se atravessando. As tomadas

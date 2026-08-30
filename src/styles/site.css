@@ -349,17 +349,26 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 /* ---- Título em duas tomadas ----
    1. "Isso não é marketing para clínicas." aparece inteiro
    2. o risco atravessa "marketing para clínicas"
-   3. a frase troca para "Isso é RevOps"
+   3. a linha rola: a tomada antiga sobe e sai, a nova entra por baixo
 
-   As duas tomadas ocupam a mesma célula do grid: a largura é a da maior e a
-   troca não reflui o layout. Só opacity, transform e filter animam. */
+   As duas tomadas ocupam a mesma célula de um grid, então a largura é a da
+   maior e a troca não reflui nada. O overflow recorta o rolamento, dando a
+   leitura de painel que vira. O padding compensa o recorte das descidas de
+   "g" e "ç". */
 
-.tomadas { display: inline-grid; justify-items: center; }
+.tomadas {
+  display: inline-grid; justify-items: center;
+  overflow: hidden;
+  /* Banda justa: sobra apenas o necessário para as descidas de "g" e "ç".
+     Folga demais deixa a tomada que sai ainda visível quando a outra entra. */
+  padding-block: .1em; margin-block: -.1em;
+}
 .tomadas--eixo { display: grid; }
 
 .tomada {
   grid-area: 1 / 1;
   white-space: nowrap;
+  will-change: transform;
 }
 
 .riscado { position: relative; color: rgb(255 255 255 / .45); }
@@ -367,31 +376,36 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   content: ''; position: absolute; left: -.04em; right: -.04em; top: 55%;
   height: .06em; background: currentColor;
   transform: scaleX(0); transform-origin: left center;
-  animation: risca .55s var(--easing) .7s forwards;
+  animation: risca .5s var(--easing) .6s forwards;
 }
 
 .realce { box-shadow: inset 0 -.1em 0 var(--marca); }
 
-.tomada--sai   { animation: tomada-sai   .7s var(--easing) 2s forwards; }
-.tomada--entra { opacity: 0; animation: tomada-entra .7s var(--easing) 2.15s forwards; }
+/* Sequencial, não sobreposto: a tomada antiga precisa sair inteira antes da
+   nova entrar. Com as duas rolando juntas, as duas ficam meio visíveis ao
+   mesmo tempo e o texto embaralha.
+   Saída rápida; entrada com amortecimento, para o painel assentar. */
+.tomada--sai {
+  animation: rola-sai .42s cubic-bezier(.7, 0, .84, 0) 1.9s forwards;
+}
+.tomada--entra {
+  transform: translateY(115%);
+  animation: rola-entra .6s cubic-bezier(.16, 1, .3, 1) 2.34s forwards;
+}
 
 @keyframes risca { to { transform: scaleX(1); } }
-
-@keyframes tomada-sai {
-  to { opacity: 0; transform: translateY(-.22em); filter: blur(6px); }
+@keyframes rola-sai {
+  to { transform: translateY(-118%); opacity: .2; }
 }
-@keyframes tomada-entra {
-  from { opacity: 0; transform: translateY(.28em); filter: blur(8px); }
-  to   { opacity: 1; transform: none; filter: none; }
-}
+@keyframes rola-entra { to { transform: translateY(0); } }
 
-/* Sem movimento: as duas tomadas viram quatro linhas estáticas, com o risco
-   já desenhado. O `order` agrupa por tomada — sem ele o fluxo intercala as
-   linhas e sai "Isso não é Isso é". */
+/* Sem movimento: as tomadas viram quatro linhas estáticas, com o risco já
+   desenhado. O `order` agrupa por tomada — sem ele o fluxo intercala as
+   linhas e sai "Isso não é / Isso é / marketing para clínicas. / RevOps". */
 @media (prefers-reduced-motion: reduce) {
   .hero__title { display: flex; flex-direction: column; align-items: center; }
   .tomadas, .tomadas--eixo { display: contents; }
-  .tomada { white-space: normal; opacity: 1; animation: none; transform: none; filter: none; }
+  .tomada { white-space: normal; animation: none; transform: none; }
   .tomada--sai   { order: 1; }
   .tomada--entra { order: 2; }
   .riscado::after { transform: scaleX(1); animation: none; }
