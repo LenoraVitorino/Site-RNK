@@ -5,23 +5,38 @@
    ============================================================ */
 
 :root {
+  /* ---- Marca ---------------------------------------------------------
+     Extraída do site atual (renkestudio.com.br, Elementor kit-7).
+     Ver docs/04-design/paleta-de-marca.md
+
+     REGRA DE CONTRASTE: o amarelo tem luminância altíssima. Como texto
+     sobre branco dá ~1.5:1 — ilegível. Ele funciona como FUNDO com texto
+     preto (14:1) ou como acento sobre superfície escura (9.8:1). */
+  --marca:        #FFD103;
+  --marca-escura: #B79500;   /* estados sobre fundo claro */
+  --marca-suave:  #FFF4C7;   /* lavagem para blocos amplos */
+
+  /* ---- Neutros — levemente quentes, como pede o briefing ------------- */
   --bg:        #ffffff;
-  --bg-alt:    #f4f4f5;
-  --dark:      #1c1c1e;
-  --dark-soft: #2c2c2f;
-  --line:      #d4d4d8;
-  --line-soft: #e4e4e7;
-  --box:       #e4e4e7;
-  --text:      #27272a;
-  --muted:     #71717a;
-  --on-dark:   #f4f4f5;
-  --on-dark-muted: #a1a1aa;
+  --bg-alt:    #faf9f7;
+  --dark:      #14161a;
+  --dark-soft: #1E2329;      /* carvão do kit atual */
+  --line:      #dedbd6;
+  --line-soft: #ebe8e3;
+  --box:       #efece7;
+  --text:      #1f2226;
+  --muted:     #6f7176;
+  --on-dark:   #f5f4f2;
+  --on-dark-muted: #a2a4a8;
 
-  --note:      #92400e;
-  --note-bg:   #fefce8;
-  --note-line: #d4b483;
+  /* ---- Anotações do wireframe ----------------------------------------
+     Frias de propósito: com o amarelo virando cor de marca, a anotação
+     precisa ler como andaime, não como design. */
+  --note:      #1d4ed8;
+  --note-bg:   #eef3fe;
+  --note-line: #a7c0f5;
 
-  --foco:      #2563eb;
+  --foco:      #1d4ed8;
 
   /* ---- Tipografia ----------------------------------------------------
      Open Sans em dois pesos: 600 para títulos, 400 para texto corrido.
@@ -123,7 +138,7 @@ strong, b { font-weight: var(--peso-titulo); }
   border-top: 1px dashed var(--line);
 }
 .section--alt  { background: var(--bg-alt); }
-.section--dark { background: var(--dark); color: var(--on-dark); }
+.section--dark { background: var(--dark-soft); color: var(--on-dark); }
 .section--dark h2, .section--dark h3 { color: #fff; }
 .section--hero { padding-top: calc(var(--space) * .7); }
 
@@ -170,6 +185,8 @@ body.notes-hidden [data-note] { display: none !important; }
 body.notes-hidden .wf-placeholder { display: none !important; }
 /* Modo limpo: os itens em disputa (D8, D9) precisam ficar idênticos aos
    demais, senão a apresentação ao cliente ainda denuncia a pendência. */
+body.notes-hidden .slot__num,
+body.notes-hidden .slot__proporcao { display: none; }
 body.notes-hidden .card--extra { border: 1px solid var(--line); }
 body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
@@ -198,7 +215,11 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   background: var(--bg); border-bottom: 1px solid var(--line);
   transition: box-shadow .2s;
 }
-.header.is-stuck { box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+.header.is-stuck { box-shadow: 0 2px 12px rgb(0 0 0 / .07); }
+.header.is-stuck::after {
+  content: ''; position: absolute; inset: auto 0 -1px; height: 2px;
+  background: var(--marca);
+}
 
 .header__inner {
   max-width: var(--max); margin-inline: auto; padding: .75rem 1.25rem;
@@ -303,8 +324,9 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .btn--onDark  { background: #fff; color: var(--dark); border-color: #fff; }
 .btn--block   { display: flex; width: 100%; }
 
-.btn:hover { background: var(--text); color: #fff; border-color: var(--text); }
-.btn--onDark:hover { background: var(--on-dark-muted); color: var(--dark); border-color: var(--on-dark-muted); }
+.btn:hover { background: var(--marca); color: var(--text); border-color: var(--marca); }
+.btn--onDark { background: var(--marca); color: var(--text); border-color: var(--marca); }
+.btn--onDark:hover { background: #fff; color: var(--text); border-color: #fff; }
 .btn:active { transform: translateY(1px); }
 
 .link-arrow {
@@ -315,28 +337,84 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 }
 .link-arrow:hover { text-decoration-thickness: 2px; }
 
-.wf-media {
-  display: grid; place-content: center; gap: .35rem;
-  min-height: 180px; padding: 1.5rem 1rem; margin-block: 1.5rem;
-  text-align: center;
-  background: var(--box); border: 2px dashed var(--line);
+/* ---------- Slots de mídia ----------
+   Cada caixa respeita a proporção real do asset que vai entrar ali, para o
+   layout já refletir o espaço que a imagem ou o vídeo vai ocupar.
+   Inventário em src/data/midia.ts */
+
+.slot { margin: var(--s-5) 0; }
+
+.slot__caixa {
+  position: relative;
+  aspect-ratio: var(--proporcao);
+  display: grid; place-content: center; gap: var(--s-2);
+  padding: var(--s-5); text-align: center;
+  background: var(--box);
+  border: 2px dashed var(--line);
   border-radius: var(--radius);
 }
-.wf-media--wide  { min-height: 240px; }
-.wf-media--video { min-height: 320px; }
-.wf-media__label { font-size: .8125rem; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
-.wf-media__hint  { font-size: .75rem; font-style: italic; color: var(--muted); max-width: 46ch; margin-inline: auto; }
+
+/* Número do slot, para poder ser citado na conversa */
+.slot__num {
+  position: absolute; top: var(--s-2); left: var(--s-2);
+  display: grid; place-items: center;
+  width: 1.75rem; height: 1.75rem;
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  font-variant-numeric: tabular-nums;
+  color: var(--bg); background: var(--muted);
+  border-radius: 50%;
+}
+
+/* Proporção anotada no canto, como cota de desenho técnico */
+.slot__proporcao {
+  position: absolute; bottom: var(--s-2); right: var(--s-3);
+  font-size: var(--fs-xs); font-variant-numeric: tabular-nums;
+  color: var(--muted); opacity: .8;
+}
+
+.slot__tipo {
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  letter-spacing: var(--tracking-label); color: var(--muted);
+}
+.slot__titulo {
+  font-size: var(--fs-sm); font-weight: var(--peso-titulo);
+  color: var(--text); max-width: 34ch; margin-inline: auto;
+}
+
+.slot__legenda {
+  display: grid; gap: var(--s-1);
+  margin-top: var(--s-2); padding-left: var(--s-3);
+  border-left: 2px solid var(--line);
+  font-size: var(--fs-xs); line-height: 1.5; color: var(--muted);
+}
+.slot__producao { font-style: italic; }
+
+/* Vídeo e animação ganham marca própria, para diferenciar de imagem parada */
+.slot[data-tipo='video']    .slot__caixa,
+.slot[data-tipo='animacao'] .slot__caixa,
+.slot[data-tipo='gif']      .slot__caixa { border-style: solid; border-color: var(--muted); }
+
+.slot[data-tipo='video']    .slot__num,
+.slot[data-tipo='animacao'] .slot__num,
+.slot[data-tipo='gif']      .slot__num { background: var(--dark); }
+
+/* Dentro de um card o slot é secundário: sem legenda, mais compacto */
+.card .slot { margin-bottom: 0; }
+.card .slot__caixa { padding: var(--s-3); }
+.card .slot__titulo { display: none; }
 
 /* ---------- Hero ---------- */
 
 .hero__title { font-size: var(--fs-3xl); letter-spacing: -.025em; margin-bottom: var(--s-5); }
 .hero__title s { color: var(--muted); text-decoration-thickness: 3px; }
+.hero__title strong { box-shadow: inset 0 -.12em 0 var(--marca); }
 .hero__title strong { display: inline-block; }
 
 .callout {
   display: block;
   font-size: var(--fs-lg); line-height: var(--lh-snug);
-  background: var(--box); border-left: 4px solid var(--dark);
+  background: var(--marca); color: var(--text);
+  border-left: 4px solid var(--dark);
   padding: var(--s-4) var(--s-5); margin-bottom: var(--s-5);
   max-width: 56ch;
 }
@@ -420,7 +498,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .protocol__label {
   font-size: var(--fs-xs); font-weight: var(--peso-titulo);
   letter-spacing: var(--tracking-label);
-  background: var(--dark); color: #fff; align-self: flex-start;
+  background: var(--marca); color: var(--text); align-self: flex-start;
   padding: var(--s-1) var(--s-2); margin: 0;
 }
 .protocol blockquote {
@@ -442,6 +520,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   text-align: center; text-wrap: balance; max-width: 26ch;
   margin: 0 auto var(--s-7); font-weight: var(--peso-corpo);
 }
+.anchor-phrase strong { color: var(--marca); }
 .anchor-phrase strong { display: block; margin-top: .4rem; }
 
 .questions { display: grid; gap: 1rem; }
@@ -471,6 +550,9 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   font-size: clamp(1.4rem, 2.4vw, 1.85rem); font-weight: var(--peso-titulo);
   margin: var(--s-1) 0; letter-spacing: -.02em; white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  /* O amarelo como texto sobre branco é ilegível — entra como marca-texto */
+  box-shadow: inset 0 -.28em 0 var(--marca-suave);
+  display: inline-block; padding: 0 .1em;
 }
 .result__after  { font-size: .875rem; margin: 0; }
 
@@ -478,9 +560,10 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius);
 }
 .testimonial__photo {
-  display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: .85rem;
+  display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: var(--s-3);
   border-radius: 50%; background: var(--box); border: 1px dashed var(--line);
-  font-size: .5625rem; line-height: 1.2; text-align: center; color: var(--muted);
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo); line-height: 1.2;
+  text-align: center; color: var(--muted); font-variant-numeric: tabular-nums;
 }
 .testimonial__quote { font-size: .9375rem; }
 .testimonial__author { font-size: .8125rem; color: var(--muted); margin: 0; }
@@ -521,6 +604,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .footer {
   position: relative;
   background: var(--dark); color: var(--on-dark);
+  border-top: 3px solid var(--marca);
   padding-block: var(--space) 2rem;
 }
 .footer__grid { display: grid; gap: 2rem; }

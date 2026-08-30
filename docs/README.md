@@ -51,6 +51,8 @@ reorganizado por tema para consulta rápida durante design e desenvolvimento.
 |---|---|
 | [Notas para o designer — Home](04-design/notas-designer-home.md) | Direcionamento visual seção a seção |
 | [Diretrizes visuais gerais](04-design/diretrizes-visuais.md) | Paleta, tipografia, ritmo de scroll, imagens |
+| [Paleta de marca](04-design/paleta-de-marca.md) | Cores oficiais extraídas do site atual e a regra de contraste do amarelo |
+| [Inventário de mídia](04-design/inventario-de-midia.md) | Os 7 slots de imagem, vídeo e animação da home |
 
 ### 05 · Análise
 | Documento | O que responde |

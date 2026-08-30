@@ -11,6 +11,7 @@ const blocos = [
       'modelar. Método, processos e ferramentas.',
     cta: '→ Conhecer a Renke Academy',
     rota: '/academy',
+    slot: '06',
   },
   {
     eyebrow: 'Tecnologia',
@@ -20,6 +21,7 @@ const blocos = [
       'método produtizado em softwares.',
     cta: '→ Conhecer a Renke Tools',
     rota: '/tools',
+    slot: '07',
   },
 ];
 ---
@@ -31,7 +33,7 @@ const blocos = [
         <article class="duo__col">
           <p class="eyebrow">{b.eyebrow}</p>
           <h3>{b.titulo}</h3>
-          <Media label="[IMG]" />
+          <Media id={b.slot} />
           <p>{b.texto}</p>
           <a href="#" class="link-arrow" data-rota={b.rota}>{b.cta}</a>
         </article>

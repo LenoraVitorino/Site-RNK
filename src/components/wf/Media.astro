@@ -1,8 +1,23 @@
 ---
-interface Props { label: string; hint?: string; variante?: 'wide' | 'video' }
-const { label, hint, variante } = Astro.props;
+import { porId, rotuloTipo } from '../../data/midia';
+
+interface Props {
+  /** Id do slot em src/data/midia.ts */
+  id: string;
+}
+
+const { id } = Astro.props;
+const slot = porId(id);
 ---
-<div class:list={['wf-media', variante && `wf-media--${variante}`]}>
-  <span class="wf-media__label">{label}</span>
-  {hint && <span class="wf-media__hint">{hint}</span>}
-</div>
+<figure class="slot" style={`--proporcao: ${slot.proporcao}`} data-tipo={slot.tipo}>
+  <div class="slot__caixa">
+    <span class="slot__num" aria-hidden="true">{slot.id}</span>
+    <span class="slot__tipo">{rotuloTipo[slot.tipo]}</span>
+    <span class="slot__titulo">{slot.titulo}</span>
+    <span class="slot__proporcao" aria-hidden="true">{slot.proporcao.replace(/\s/g, '')}</span>
+  </div>
+  <figcaption class="slot__legenda" data-note>
+    <span class="slot__descricao">{slot.descricao}</span>
+    {slot.producao && <span class="slot__producao">{slot.producao}</span>}
+  </figcaption>
+</figure>

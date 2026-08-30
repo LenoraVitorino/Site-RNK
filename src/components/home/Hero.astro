@@ -39,14 +39,10 @@ import Media from '../wf/Media.astro';
       <ul class="logos">
         {[1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
       </ul>
-      <Note>Opacidade reduzida, leve sobreposição, tooltip no hover com nome + especialidade.</Note>
+      <Note>Slot 02 · opacidade reduzida, leve sobreposição, tooltip com nome + especialidade.</Note>
     </div>
 
-    <Media
-      label="[VISUAL] Mockup de dashboard com dados de performance"
-      hint="desktop ou tablet, dados borrados por confidencialidade · alternativa: motion 3–5s do fluxo do dado (anúncio → CRM → agendamento → venda)"
-      variante="wide"
-    />
+    <Media id="01" />
 
     <p class="hero__caption"><em>{hero.legenda}</em></p>
   </div>

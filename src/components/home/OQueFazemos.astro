@@ -20,7 +20,7 @@ import Media from '../wf/Media.astro';
         </p>
         <Note>⚠️ "do mundo" vs. "no Brasil" (/faca-parte). Decisão D5.</Note>
       </div>
-      <Media label="[VÍDEO] Instagram" variante="video" />
+      <Media id="03" />
     </div>
 
     <p class="eyebrow">Para Clínicas</p>
@@ -32,7 +32,7 @@ import Media from '../wf/Media.astro';
           <span class="card__icon" aria-hidden="true">ícone<br />{p.icone}</span>
           <h4>{p.titulo}</h4>
           <p>{p.texto}</p>
-          {p.media && <span class="card__media">{p.media}</span>}
+          {p.media && <Media id={p.media} />}
         </article>
       ))}
     </div>
