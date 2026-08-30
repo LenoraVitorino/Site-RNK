@@ -345,8 +345,8 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .hero__title {
   /* Maior que o --fs-3xl padrão. O mínimo fica em 2rem: as tomadas usam
      nowrap, e acima disso "marketing para clínicas." estoura em 390px. */
-  font-size: clamp(2rem, 6.5vw, 4.75rem);
-  letter-spacing: -.035em; line-height: 1.08;
+  font-size: clamp(2rem, 7vw, 6rem);
+  letter-spacing: -.04em; line-height: 1.05;
   color: #fff; margin-bottom: var(--s-5);
 }
 /* ---- Título em duas tomadas ----
@@ -417,17 +417,20 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .hero__sub {
   font-size: var(--fs-xl); line-height: var(--lh-snug);
   font-weight: var(--peso-corpo); color: rgb(255 255 255 / .92);
-  max-width: 34ch; margin-bottom: var(--s-4);
+  max-width: 50ch;   /* calibrado para quebrar em 2 linhas no desktop */
+  margin-bottom: var(--s-5);
 }
 
 .hero__lead {
   font-size: var(--fs-base); line-height: var(--lh-corpo);
-  color: var(--on-dark-muted); max-width: 58ch; margin-bottom: var(--s-6);
+  color: var(--on-dark-muted);
+  max-width: 76ch;   /* calibrado para 3 linhas no desktop */
+  margin-bottom: var(--s-6);
 }
 
 .chips {
   list-style: none; display: flex; flex-wrap: wrap; justify-content: center;
-  gap: var(--s-2); margin: 0 0 var(--s-6); padding: 0;
+  gap: var(--s-2); margin: var(--s-7) 0 0; padding: 0;
 }
 .chip {
   padding: var(--s-2) var(--s-4);
@@ -437,7 +440,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   color: #fff;
 }
 
-.hero__acoes { display: flex; flex-wrap: wrap; gap: var(--s-4); justify-content: center; }
+.hero__acoes { display: flex; flex-wrap: wrap; gap: var(--s-4); justify-content: center; margin-top: var(--s-2); }
 
 .hero__caption {
   font-size: var(--fs-sm); color: var(--on-dark-muted);
@@ -473,6 +476,89 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 /* ---------- Split (texto + vídeo) ---------- */
 
 .split { display: grid; gap: 1.5rem; margin-block: 2rem; }
+
+/* ---------- Reel (vídeo vertical em fachada) ----------
+   9:16 num container de 1160px daria uma coluna de mais de 1000px de altura.
+   O reel fica com largura fixa e o texto fica com o resto. */
+
+.reel {
+  margin: var(--s-5) 0;
+  width: 100%; max-width: var(--reel-largura, 320px);
+  margin-inline: auto;
+}
+
+.reel__moldura {
+  position: relative;
+  aspect-ratio: var(--proporcao);
+  overflow: hidden;
+  border-radius: var(--raio-card);
+  border: 1px solid var(--line);
+  background: var(--dark-soft);
+}
+
+.reel__poster {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+/* O botão cobre a moldura inteira: o alvo é o vídeo, não só o ícone */
+.reel__play {
+  position: absolute; inset: 0;
+  display: grid; align-content: end; justify-items: start; gap: var(--s-2);
+  padding: var(--s-5);
+  font: inherit; color: #fff; text-align: left;
+  background: linear-gradient(to top, rgb(0 0 0 / .75), rgb(0 0 0 / .1) 55%, transparent);
+  border: 0; cursor: pointer;
+  transition: background var(--dur-padrao) var(--easing-suave);
+}
+.reel__play:hover { background: linear-gradient(to top, rgb(0 0 0 / .85), rgb(0 0 0 / .25) 55%, rgb(0 0 0 / .1)); }
+.reel__play:focus-visible { outline: 2px solid var(--foco); outline-offset: -4px; }
+
+.reel__icone {
+  display: grid; place-items: center;
+  width: 3.25rem; height: 3.25rem;
+  border-radius: 50%;
+  background: var(--vidro-fundo);
+  backdrop-filter: var(--vidro-blur);
+  border: 1px solid rgb(255 255 255 / .3);
+  transition: transform var(--dur-padrao) var(--easing-suave),
+              background var(--dur-padrao) var(--easing-suave);
+}
+/* Triângulo de play em CSS, para não carregar um ícone só por isso */
+.reel__icone::before {
+  content: '';
+  border-style: solid;
+  border-width: .5rem 0 .5rem .85rem;
+  border-color: transparent transparent transparent #fff;
+  margin-left: .2rem;
+}
+.reel__play:hover .reel__icone { transform: scale(1.08); background: rgb(255 255 255 / .16); }
+
+.reel__rotulo { font-size: var(--fs-sm); font-weight: var(--peso-titulo); }
+
+.reel__frame { width: 100%; height: 100%; border: 0; display: block; }
+
+.reel__legenda {
+  display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3);
+  margin-top: var(--s-3);
+  font-size: var(--fs-xs); color: var(--muted);
+}
+.reel__legenda a { color: inherit; }
+.reel__legenda a:hover { color: var(--text); }
+.reel__duracao { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reel__play,
+  .reel__icone { transition: none; }
+  .reel__play:hover .reel__icone { transform: none; }
+}
+
+/* Só para leitor de tela: complemento do rótulo do botão de play */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
 
 /* ---------- Cards ---------- */
 
@@ -739,6 +825,13 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
   .hero { grid-template-columns: 1.05fr .95fr; gap: var(--s-7); }
   .split { grid-template-columns: 1fr 1fr; align-items: center; }
+  /* Com vídeo vertical o texto fica com a coluna larga */
+  .split--reel { grid-template-columns: 1fr minmax(0, 320px); gap: var(--s-7); }
+  .split--reel .reel { margin-inline: 0; margin-block: 0; }
+  /* O título entra na coluna de texto, para o bloco ler como uma unidade
+     em vez de um parágrafo solto ao lado de um vídeo alto. */
+  .split--reel .split__text h2 { margin-bottom: var(--s-4); }
+  .split--reel .split__text p:last-child { margin-bottom: 0; }
   .cards--pillars { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   /* 5 colunas espremem o texto em ~24 caracteres por linha; abaixo de 1200px
      caem para 3 e quebram em duas fileiras */

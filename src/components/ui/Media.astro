@@ -1,5 +1,6 @@
 ---
 import { porId, rotuloTipo } from '../../data/midia';
+import Reel from './Reel.astro';
 
 interface Props {
   /** Id do slot em src/data/midia.ts */
@@ -9,9 +10,13 @@ interface Props {
 const { id } = Astro.props;
 const slot = porId(id);
 ---
-<figure class="slot" style={`--proporcao: ${slot.proporcao}`} data-tipo={slot.tipo}>
-  <div class="slot__caixa">
-    <span class="slot__tipo">{rotuloTipo[slot.tipo]}</span>
-    <span class="slot__titulo">{slot.titulo}</span>
-  </div>
-</figure>
+{slot.embed ? (
+  <Reel embed={slot.embed} proporcao={slot.proporcao} titulo={slot.titulo} />
+) : (
+  <figure class="slot" style={`--proporcao: ${slot.proporcao}`} data-tipo={slot.tipo}>
+    <div class="slot__caixa">
+      <span class="slot__tipo">{rotuloTipo[slot.tipo]}</span>
+      <span class="slot__titulo">{slot.titulo}</span>
+    </div>
+  </figure>
+)}

@@ -11,7 +11,7 @@ canto da caixa no wireframe, para poder ser citado na conversa ("o slot 03").
 | # | Seção | Tipo | Proporção | O que é | Status |
 |---|---|---|---|---|---|
 | **01** | Hero | Logos | `5/2` | Logos de clientes | ⏳ pendente |
-| **02** | O que fazemos | Vídeo | `4/5` | Vídeo institucional "o que a Renke faz" | ⏳ pendente |
+| **02** | O que fazemos | Vídeo | `9/16` | Vídeo institucional "o que a Renke faz" | ✅ existe |
 | **03** | O que fazemos | GIF | `16/10` | Renke CRM em uso | ⏳ pendente |
 | **04** | Resultados | Foto | `1/1` | Depoimentos de clientes | ⏳ pendente |
 | **05** | Academy + Tools | Imagem | `3/2` | Renke Academy | ⏳ pendente |
@@ -29,11 +29,11 @@ canto da caixa no wireframe, para poder ser citado na conversa ("o slot 03").
 
 ### 02 · Vídeo institucional "o que a Renke faz"
 
-**Vídeo** · proporção `4/5` · seção O que fazemos
+**Vídeo** · proporção `9/16` · seção O que fazemos
 
-O vídeo do Instagram que explica a categoria RevOps. 1–2 min.
+Reel do @renke.studio que explica a categoria RevOps. 1min42.
 
-> **Produção:** Proporção de feed do Instagram. Precisa de legenda embutida — roda sem som.
+> **Produção:** Formato reels (1080×1920). Entra como fachada: pôster local + clique carrega o embed. Ver docs/04-design/inventario-de-midia.md para a nota sobre auto-hospedar o mp4.
 
 ### 03 · Renke CRM em uso
 
@@ -65,7 +65,7 @@ Imagem dos produtos de tecnologia — CRM, Connect, Pulse AI.
 
 ## Status
 
-6 de 6 slots ainda sem asset definitivo. É a mesma lista que aparece em
+5 de 6 slots ainda sem asset definitivo. É a mesma lista que aparece em
 [pendências](../05-analise/pendencias-e-proximos-passos.md), agora com proporção e enquadramento
 definidos — para a produção não sair no tamanho errado e precisar ser refeita.
 

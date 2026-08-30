@@ -20,6 +20,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D10 | **Domínio**: `renke.com.br` ou `renkestudio.com.br` | Configuração de DNS, canonical, e-mail |
 | D11 | **Depoimentos como componente global** em todas as páginas — confirmar | Define arquitetura de componentes |
 | D12 | **Telefone / WhatsApp oficial** para rodapé e contato | Rodapé e /contato incompletos |
+| D14 | **Vídeo institucional: auto-hospedar ou manter o embed do Instagram?** | Peso de terceiro no LCP — ver seção 4 |
 | ~~D13~~ | ~~**Stack**~~ → **Astro**, decidido em 29/08/2026 | ✅ resolvido |
 
 ---
@@ -76,7 +77,9 @@ O próprio briefing lista em "próximos insumos necessários": **cases com núme
 - [ ] **Nova foto do time** (colaboradores ativos) — a atual está desatualizada
 - [ ] **Novos depoimentos em vídeo do time** — os atuais estão desatualizados
 - [ ] **Fotos da nova sede** — a sede mudou
-- [ ] Vídeo institucional "o que a Renke faz" (1–2 min)
+- [x] ~~Vídeo institucional "o que a Renke faz" (1–2 min)~~ → é o reel
+      [DXcJsj2FTz0](https://www.instagram.com/reel/DXcJsj2FTz0/) do @renke.studio, 1min42, 1080×1920.
+      Entrou na segunda dobra em 30/08/2026 (slot 02). ⚠️ Ver **D14** abaixo.
 - [ ] GIF/motion do hero: fluxo do dado (anúncio → CRM → agendamento → venda), 3–5s
 
 ### Prints de produto (com blur nos dados sensíveis)
@@ -114,6 +117,16 @@ O próprio briefing lista em "próximos insumos necessários": **cases com núme
 - [ ] **Estratégia de redirects** do site atual (há um site em produção — `/faca-parte` é descrita
       como "baseada na estrutura atual do site")
 - [ ] Orçamento de performance: LCP < 2,5s com hero em motion
+- [ ] **D14 · Vídeo institucional: embed ou arquivo próprio?** Hoje o slot 02 usa uma **fachada**:
+      a página carrega só o pôster local (`public/midia/reel-o-que-a-renke-faz.jpg`) e o iframe do
+      Instagram só entra depois do clique. Isso mantém o LCP, mas custa dois cliques para dar play
+      (um na fachada, outro dentro do player do Instagram) e deixa o vídeo dependente de a conta
+      continuar pública.
+      A alternativa é **auto-hospedar**: o arquivo original tem **14,7 MB**, grande demais para o
+      repositório como está — reencodado em `.webm`/`.mp4` a 720p deve cair para 3–5 MB e permitir
+      um `<video>` nativo, com play em um clique e sem terceiro na página. É conteúdo da própria
+      Renke, então não há questão de direitos; é decisão de hospedagem.
+      **Precisa da decisão do time** antes de subir binário de vídeo ao Git.
 
 ---
 

@@ -22,6 +22,23 @@ export type Slot = {
   /** Nota de produção: enquadramento, confidencialidade, alternativas. */
   producao?: string;
   status: 'pendente' | 'existe';
+  /**
+   * Preenchido quando o asset já existe e é um vídeo hospedado fora.
+   * A caixa de slot dá lugar ao player real — ver src/components/ui/Reel.astro.
+   */
+  embed?: Embed;
+};
+
+export type Embed = {
+  plataforma: 'instagram';
+  /** Código do reel na URL: instagram.com/reel/<codigo>/ */
+  codigo: string;
+  /** Poster local. Evita depender de URL assinada da CDN, que expira. */
+  poster: string;
+  /** Texto do botão de play e do link de fallback. */
+  rotulo: string;
+  duracao: string;
+  autor: string;
 };
 
 export const slots: Slot[] = [
@@ -39,11 +56,21 @@ export const slots: Slot[] = [
     id: '02',
     secao: 'O que fazemos',
     tipo: 'video',
-    proporcao: '4 / 5',
+    proporcao: '9 / 16',
     titulo: 'Vídeo institucional "o que a Renke faz"',
-    descricao: 'O vídeo do Instagram que explica a categoria RevOps. 1–2 min.',
-    producao: 'Proporção de feed do Instagram. Precisa de legenda embutida — roda sem som.',
-    status: 'pendente',
+    descricao: 'Reel do @renke.studio que explica a categoria RevOps. 1min42.',
+    producao:
+      'Formato reels (1080×1920). Entra como fachada: pôster local + clique carrega o embed. ' +
+      'Ver docs/04-design/inventario-de-midia.md para a nota sobre auto-hospedar o mp4.',
+    status: 'existe',
+    embed: {
+      plataforma: 'instagram',
+      codigo: 'DXcJsj2FTz0',
+      poster: '/midia/reel-o-que-a-renke-faz.jpg',
+      rotulo: 'Assistir ao vídeo',
+      duracao: '1min42',
+      autor: '@renke.studio',
+    },
   },
   {
     id: '03',

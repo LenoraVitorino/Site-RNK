@@ -36,13 +36,15 @@ import Botao from '../ui/Botao.astro';
 
       <p class="hero__lead">{hero.lead}</p>
 
-      <ul class="chips">
-        {hero.numeros.map((n) => <li class="chip vidro">{n}</li>)}
-      </ul>
-
       <div class="hero__acoes">
         <Botao variante="brilho" href="#">{hero.cta}</Botao>
       </div>
+
+      <!-- Provisório: os números seguem abaixo do CTA até definirmos se vão
+           para a lateral ou para a faixa de prova social. -->
+      <ul class="chips">
+        {hero.numeros.map((n) => <li class="chip vidro">{n}</li>)}
+      </ul>
 
       <p class="hero__caption"><em>{hero.legenda}</em></p>
     </div>

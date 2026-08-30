@@ -1,0 +1,61 @@
+---
+/**
+ * Player de reel em fachada (lite embed).
+ *
+ * A página carrega só o pôster local. O iframe do Instagram — que traz junto
+ * o JS e as fontes deles — só entra depois do clique. Isso mantém o
+ * `LCP < 2,5s` que o briefing exige, que um embed de terceiro no carregamento
+ * inicial derrubaria.
+ */
+import type { Embed } from '../../data/midia';
+
+interface Props {
+  embed: Embed;
+  proporcao: string;
+  titulo: string;
+}
+
+const { embed, proporcao, titulo } = Astro.props;
+const url = `https://www.instagram.com/reel/${embed.codigo}/`;
+const src = `https://www.instagram.com/reel/${embed.codigo}/embed/captioned/`;
+---
+<figure class="reel" style={`--proporcao: ${proporcao}`}>
+  <div class="reel__moldura" data-reel data-src={src}>
+    <img
+      class="reel__poster"
+      src={embed.poster}
+      width="1080"
+      height="1920"
+      loading="lazy"
+      decoding="async"
+      alt={`Primeiro quadro do vídeo: ${titulo}`}
+    />
+    <button class="reel__play" type="button" data-reel-play>
+      <span class="reel__icone" aria-hidden="true"></span>
+      <span class="reel__rotulo">{embed.rotulo}</span>
+      <span class="sr-only">— abre o vídeo de {embed.autor}, {embed.duracao}</span>
+    </button>
+  </div>
+  <figcaption class="reel__legenda">
+    <span class="reel__duracao">{embed.duracao}</span>
+    <a href={url} target="_blank" rel="noopener">{embed.autor} no Instagram ↗</a>
+  </figcaption>
+</figure>
+
+<script>
+  // Troca o pôster pelo iframe no primeiro clique. Um por moldura.
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((moldura) => {
+    const botao = moldura.querySelector<HTMLButtonElement>('[data-reel-play]');
+    botao?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = moldura.dataset.src!;
+      iframe.className = 'reel__frame';
+      iframe.title = 'Vídeo institucional da Renke no Instagram';
+      iframe.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.setAttribute('scrolling', 'no');
+      moldura.replaceChildren(iframe);
+      moldura.dataset.tocando = '';
+    });
+  });
+</script>
