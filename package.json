@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "wireframe:standalone": "node wireframe/build-standalone.mjs",
-    "portable": "astro build && node scripts/portable.mjs"
+    "portable": "astro build && node scripts/portable.mjs",
+    "artifact": "astro build && node scripts/artifact.mjs"
   },
   "devDependencies": {
     "astro": "^5.14.1"
