@@ -343,7 +343,10 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 }
 
 .hero__title {
-  font-size: var(--fs-3xl); letter-spacing: -.03em;
+  /* Maior que o --fs-3xl padrão. O mínimo fica em 2rem: as tomadas usam
+     nowrap, e acima disso "marketing para clínicas." estoura em 390px. */
+  font-size: clamp(2rem, 6.5vw, 4.75rem);
+  letter-spacing: -.035em; line-height: 1.08;
   color: #fff; margin-bottom: var(--s-5);
 }
 /* ---- Título em duas tomadas ----
@@ -379,7 +382,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   animation: risca .5s var(--easing) .6s forwards;
 }
 
-.realce { box-shadow: inset 0 -.1em 0 var(--marca); }
+.realce { /* sem sublinhado: o peso do título já carrega a afirmação */ }
 
 /* Sequencial, não sobreposto: a tomada antiga precisa sair inteira antes da
    nova entrar. Com as duas rolando juntas, as duas ficam meio visíveis ao
