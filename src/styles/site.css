@@ -191,6 +191,8 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .nav.is-open { transform: translateX(0); visibility: visible; }
 
 .nav__list { list-style: none; margin: 0; padding: 0; }
+.nav__acao { margin-top: var(--s-5); }
+.nav__acao .botao { width: 100%; }
 .nav__item { border-bottom: 1px solid var(--line-soft); }
 
 .nav__link {
@@ -608,7 +610,9 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
     position: static; width: auto; transform: none; visibility: visible;
     background: none; border: 0; overflow: visible; padding: 0;
   }
+  .nav { display: flex; align-items: center; gap: var(--s-5); }
   .nav__list { position: relative; display: flex; align-items: center; gap: var(--s-1); }
+  .nav__acao { flex: none; }
   .nav__item { border-bottom: 0; position: relative; }
   .nav__link {
     min-height: 0; padding: var(--s-3) var(--s-4);

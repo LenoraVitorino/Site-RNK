@@ -1,9 +1,16 @@
 /**
- * Estrutura do menu principal, conforme a copy da home.
+ * Estrutura do menu principal.
  * Ver docs/02-arquitetura/sitemap.md
  *
- * ⚠️ D7: "Sobre" e "Cases" não constam neste menu, apesar de serem pilares de
- * E-E-A-T declarados no briefing. Decisão pendente.
+ * "Home" saiu: a assinatura no header já leva à raiz, e o item ocupava espaço
+ * sem oferecer destino novo.
+ *
+ * "Conteúdos", "Contato" e "Faça Parte" eram três itens soltos no fim. Viraram:
+ * um grupo "A Renke" (Sobre · Cases · Conteúdos · Faça Parte) e o Contato
+ * promovido a botão, que é o que ele de fato é — a ação de conversão.
+ *
+ * Isso também resolve a D7: "Sobre" e "Cases" estavam fora do menu apesar de
+ * serem os pilares de E-E-A-T declarados no briefing.
  */
 
 export type NavLink = {
@@ -23,8 +30,6 @@ export type NavItem =
   | { rotulo: string; id: string; grupos: NavGrupo[] };
 
 export const menu: NavItem[] = [
-  { rotulo: 'Home', rota: '/', atual: true },
-
   {
     rotulo: 'Para Clínicas',
     id: 'mm-clinicas',
@@ -103,10 +108,30 @@ export const menu: NavItem[] = [
     ],
   },
 
-  { rotulo: 'Conteúdos', rota: '/blog' },
-  { rotulo: 'Contato', rota: '/contato' },
-  { rotulo: 'Faça Parte', rota: '/faca-parte' },
+  {
+    rotulo: 'A Renke',
+    id: 'mm-renke',
+    grupos: [
+      {
+        titulo: 'A empresa',
+        itens: [
+          { rotulo: 'Sobre', rota: '/sobre' },
+          { rotulo: 'Cases', rota: '/cases' },
+        ],
+      },
+      {
+        titulo: 'Mais',
+        itens: [
+          { rotulo: 'Conteúdos', rota: '/blog' },
+          { rotulo: 'Faça Parte', rota: '/faca-parte' },
+        ],
+      },
+    ],
+  },
 ];
+
+/** Ação de conversão no header. Botão, não item de navegação. */
+export const acaoHeader = { rotulo: 'Fale com a gente', rota: '/contato' };
 
 export const rodape = {
   tagline: 'Não é marketing. É RevOps.',

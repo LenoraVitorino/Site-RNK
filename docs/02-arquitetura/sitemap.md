@@ -108,7 +108,30 @@ Decisão precisa ser confirmada — ver [pendências](../05-analise/pendencias-e
 Pra Clínicas (Studio) | Pra Agências (Academy) | Tools | Sobre | Cases | Blog | Contato
 ```
 
-### Menu conforme a copy da home (versão com mega-menu)
+### Menu implementado (30/08/2026)
+
+| Item | Submenu |
+|---|---|
+| **Para Clínicas** | Revena Start · Full · Core · Scale · Run · Treinamento para secretárias |
+| **Para Agências** | Renke Academy · Protocolo Renke · Formação Performa · Treinamento CRM · Rastreamento Avançado · Cultura Pro |
+| **Outras Soluções** | Site Institucional · Identidade Visual |
+| **Tecnologia** | Renke Connect · Renke CRM |
+| **A Renke** | *A empresa:* Sobre · Cases — *Mais:* Conteúdos · Faça Parte |
+| **[Fale com a gente]** | botão, leva a `/contato` |
+
+Três mudanças em relação ao menu da copy:
+
+1. **"Home" saiu.** A assinatura no header já leva à raiz. O item ocupava espaço sem oferecer
+   destino novo.
+2. **"Conteúdos", "Contato" e "Faça Parte" eram três itens soltos no fim.** Viraram um grupo
+   ("A Renke") e um botão. Cinco itens de navegação em vez de oito.
+3. **"Contato" virou botão.** É a ação de conversão, não um destino entre pares — tratá-lo como
+   item de lista escondia o que o site mais quer que aconteça.
+
+Isso resolveu a **D7**: "Sobre" e "Cases" estavam fora do menu apesar de serem os pilares de
+E-E-A-T declarados no briefing. Agora entram, sem inflar a barra.
+
+### Menu original da copy da home (histórico)
 
 O bloco de navegação transcrito na copy da home tem rótulos ligeiramente diferentes:
 

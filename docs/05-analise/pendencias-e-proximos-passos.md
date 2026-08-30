@@ -14,7 +14,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D4 | **H1 da home**: "Isso não é marketing para clínicas. É RevOps" ou a versão favorita do brainstorm | Define o gancho de atenção do site inteiro |
 | D5 | **"Primeira do mundo" ou "primeira do Brasil"** | Risco de contestação pública |
 | D6 | **Renke Connect**: comunicar como ativo ou "em breve"? | Enfraquece ou fortalece o diferencial técnico |
-| D7 | **Menu principal**: inclui Sobre e Cases? | E-E-A-T e navegação de SEO |
+| ~~D7~~ | ~~**Menu principal**: inclui Sobre e Cases?~~ → **sim**, dentro do grupo "A Renke", em 30/08/2026 | ✅ resolvido |
 | D8 | **Quais 4 das 7 perguntas** entram no grid 2×2 da home | Bloqueia o design da Seção 3 |
 | D9 | **4 ou 5 cards** na seção "O que fazemos" da home | Bloqueia o layout da Seção 2 |
 | D10 | **Domínio**: `renke.com.br` ou `renkestudio.com.br` | Configuração de DNS, canonical, e-mail |

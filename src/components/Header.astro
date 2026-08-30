@@ -1,5 +1,6 @@
 ---
-import { menu } from '../data/nav';
+import { menu, acaoHeader } from '../data/nav';
+import Botao from './ui/Botao.astro';
 ---
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
@@ -58,6 +59,10 @@ import { menu } from '../data/nav';
           )
         )}
       </ul>
+
+      <div class="nav__acao">
+        <Botao variante="claro" tamanho="sm" href="#">{acaoHeader.rotulo}</Botao>
+      </div>
     </nav>
   </div>
 </header>
