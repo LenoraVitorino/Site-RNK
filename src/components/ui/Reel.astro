@@ -20,7 +20,7 @@ const url = `https://www.instagram.com/reel/${embed.codigo}/`;
 const src = `https://www.instagram.com/reel/${embed.codigo}/embed/captioned/`;
 ---
 <figure class="reel" style={`--proporcao: ${proporcao}`}>
-  <div class="reel__moldura" data-reel data-src={src}>
+  <div class="reel__moldura" data-reel data-src={src} data-url={url}>
     <img
       class="reel__poster"
       src={embed.poster}
@@ -47,6 +47,13 @@ const src = `https://www.instagram.com/reel/${embed.codigo}/embed/captioned/`;
   document.querySelectorAll<HTMLElement>('[data-reel]').forEach((moldura) => {
     const botao = moldura.querySelector<HTMLButtonElement>('[data-reel-play]');
     botao?.addEventListener('click', () => {
+      // Na prévia publicada o iframe do Instagram é bloqueado pela política de
+      // conteúdo, e um botão que não faz nada é pior que um link. O script do
+      // artifact marca a moldura para abrir o reel no Instagram.
+      if ('reelExterno' in moldura.dataset) {
+        window.open(moldura.dataset.url!, '_blank', 'noopener');
+        return;
+      }
       const iframe = document.createElement('iframe');
       iframe.src = moldura.dataset.src!;
       iframe.className = 'reel__frame';

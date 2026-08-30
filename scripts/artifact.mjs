@@ -19,7 +19,7 @@ const saida = join(raiz, 'dist-artifact');
 
 const pagina = process.argv[2] || 'index';
 const titulos = {
-  index: 'Wireframe da Home Renke',
+  index: 'Home Renke Studio',
   'design-system': 'Design System Renke',
 };
 
@@ -81,11 +81,13 @@ const final = `<title>${titulo}</title>\n${estilos}\n${corpo}\n`;
 // 3) Imagens locais viram data URI — a página publicada não busca arquivo externo
 let imagens = 0;
 const embutir = (texto) =>
-  texto.replace(/(src|href)="\/((?:marca|imagens)\/[^"]+)"/g, (_m, attr, arquivo) => {
+  texto.replace(/(src|href)="\/((?:marca|imagens|midia)\/[^"]+)"/g, (_m, attr, arquivo) => {
     try {
       const dados = readFileSync(join(dist, arquivo)).toString('base64');
       const ext = arquivo.split('.').pop().toLowerCase();
-      const tipo = ext === 'svg' ? 'image/svg+xml' : ext === 'png' ? 'image/png' : `image/${ext}`;
+      // 'image/jpg' não é um tipo válido — o navegador tolera, o validador não.
+      const tipos = { svg: 'image/svg+xml', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+      const tipo = tipos[ext] || `image/${ext}`;
       imagens++;
       return `${attr}="data:${tipo};base64,${dados}"`;
     } catch {
@@ -94,9 +96,15 @@ const embutir = (texto) =>
   });
 
 // 4) Página única: links de navegação viram âncora inerte
-const final2 = embutir(final).replace(/href="\/(?!\/)[^"]*"/g, 'href="#"');
+let final2 = embutir(final).replace(/href="\/(?!\/)[^"]*"/g, 'href="#"');
 
-// 5) Confere que não sobrou referência a arquivo externo
+// 5) O iframe do Instagram é bloqueado pela política de conteúdo da prévia.
+//    Marca a moldura para o botão abrir o reel no Instagram em vez de
+//    injetar um iframe que nunca vai carregar.
+const reels = (final2.match(/data-reel /g) || []).length;
+final2 = final2.replace(/data-reel /g, 'data-reel data-reel-externo ');
+
+// 6) Confere que não sobrou referência a arquivo externo
 const externa = /(src|href)="\/(?!\/)/.exec(final2) || /url\(['"]?\/(?!\/)/.exec(final2);
 if (externa) {
   console.error(`Sobrou referência externa: ${externa[0]}`);
@@ -109,3 +117,4 @@ writeFileSync(destino, final2);
 
 console.log(`✓ ${destino}`);
 console.log(`  ${fontes} fonte(s) e ${imagens} imagem(ns) embutidas · ${(final2.length / 1024).toFixed(0)} KB`);
+if (reels) console.log(`  ${reels} reel(s) apontando para o Instagram (iframe bloqueado na prévia)`);
