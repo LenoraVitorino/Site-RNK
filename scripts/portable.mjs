@@ -30,26 +30,50 @@ if (!existsSync(origem)) {
 rmSync(destino, { recursive: true, force: true });
 cpSync(origem, destino, { recursive: true });
 
-const paginas = globSync('**/*.html', { cwd: destino });
+/** Prefixo relativo para voltar à raiz a partir de um arquivo. */
+const prefixoDe = (arquivo) => {
+  const profundidade = arquivo.split(sep).length - 1;
+  return profundidade === 0 ? '' : '../'.repeat(profundidade);
+};
+
 let total = 0;
 
+// HTML: atributos src e href
+const paginas = globSync('**/*.html', { cwd: destino });
 for (const pagina of paginas) {
   const caminho = join(destino, pagina);
-  // Profundidade da página: index.html → "", studio/x.html → "../"
-  const profundidade = pagina.split(sep).length - 1;
-  const prefixo = profundidade === 0 ? '' : '../'.repeat(profundidade);
+  const prefixo = prefixoDe(pagina);
 
-  let html = readFileSync(caminho, 'utf8');
-
-  html = html.replace(/(src|href)="\/(?!\/)([^"]*)"/g, (_m, attr, resto) => {
-    total++;
-    // Link para a home ("/") vira o próprio index.html
-    if (resto === '') return `${attr}="${prefixo}index.html"`;
-    return `${attr}="${prefixo}${resto}"`;
-  });
+  const html = readFileSync(caminho, 'utf8').replace(
+    /(src|href)="\/(?!\/)([^"]*)"/g,
+    (_m, attr, resto) => {
+      total++;
+      // Link para a home ("/") vira o próprio index.html
+      return `${attr}="${prefixo}${resto === '' ? 'index.html' : resto}"`;
+    }
+  );
 
   writeFileSync(caminho, html);
 }
 
+// CSS: url() — é onde ficam as fontes. Sem isto elas falham em file://
+// e a página cai silenciosamente para a fonte do sistema.
+const estilos = globSync('**/*.css', { cwd: destino });
+for (const estilo of estilos) {
+  const caminho = join(destino, estilo);
+  const prefixo = prefixoDe(estilo);
+
+  const css = readFileSync(caminho, 'utf8').replace(
+    /url\((['"]?)\/(?!\/)([^'")]*)\1\)/g,
+    (_m, aspas, resto) => {
+      total++;
+      return `url(${aspas}${prefixo}${resto}${aspas})`;
+    }
+  );
+
+  writeFileSync(caminho, css);
+}
+
 console.log(`✓ ${destino}`);
-console.log(`  ${paginas.length} página(s), ${total} caminho(s) reescrito(s) para relativo`);
+console.log(`  ${paginas.length} página(s), ${estilos.length} folha(s) de estilo`);
+console.log(`  ${total} caminho(s) reescrito(s) para relativo`);

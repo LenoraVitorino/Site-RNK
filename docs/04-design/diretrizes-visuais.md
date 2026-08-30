@@ -94,3 +94,57 @@ Do [SEO](../02-arquitetura/seo-e-keywords.md):
 - Narrativa institucional: referência **Society / Tay Dantas** (estrutura "jogo antigo vs. jogo novo")
 - Copy final da home hospedada no ClickUp
   ([doc "Private"](https://app.clickup.com/36711476/docs/130b1m-208951/130b1m-1138451))
+
+
+---
+
+# Sistema tipográfico (decidido em 29/08/2026)
+
+**Fonte: Open Sans**, em dois pesos apenas.
+
+| Papel | Peso | Onde |
+|---|---|---|
+| **Títulos** | **600** (semibold) | h1–h4, rótulos, botões, números, `<strong>` |
+| **Texto corrido** | **400** (regular) | parágrafos, listas, campos de formulário |
+
+Nada acima de 600. Antes havia 700 e 800 espalhados pelo CSS, o que criava três níveis de ênfase
+sem critério.
+
+## Carregamento
+
+Self-hosted via `@fontsource/open-sans`, importada em `src/layouts/Base.astro`. **Não usar o CDN do
+Google Fonts:** um terceiro no caminho crítico briga com o `LCP < 2,5s` que o briefing exige.
+Só as variantes usadas entram no bundle — latin 400, 400-italic e 600.
+
+## Escala modular
+
+Razão ~1.25, fluida onde o tamanho muda de papel. Tokens em `src/styles/wireframe.css`:
+
+| Token | Tamanho | Uso |
+|---|---|---|
+| `--fs-xs` | 12px | rótulos, eyebrows, notas |
+| `--fs-sm` | 14px | texto de card, botões, apoio |
+| `--fs-base` | 16px | corpo |
+| `--fs-md` | 17px | lead do hero |
+| `--fs-lg` | 18–21px | h4 |
+| `--fs-xl` | 22–28px | h3, divisores |
+| `--fs-2xl` | 26–38px | h2, frase-âncora |
+| `--fs-3xl` | 32–56px | h1, statement |
+
+Entrelinha: `--lh-tight` 1.15 para títulos, `--lh-snug` 1.35 para subtítulos, `--lh-corpo` 1.65
+para texto corrido.
+
+## Medida de leitura
+
+Texto corrido não passa de `--medida` (68ch), mesmo dentro do container de 1160px. Sem isso, os
+parágrafos das seções largas passavam de 100 caracteres por linha.
+
+## Espaçamento
+
+Escala de 4px (`--s-1` a `--s-8`) substituindo as margens ad-hoc. `--space` continua governando o
+respiro entre seções.
+
+## Alvos de toque
+
+`--alvo: 44px` aplicado a botões, campos de formulário, itens do menu mobile e ao botão hambúrguer.
+No desktop o mega-menu pode ser mais denso, porque o alvo é o cursor.
