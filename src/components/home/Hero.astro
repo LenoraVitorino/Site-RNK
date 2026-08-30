@@ -1,8 +1,8 @@
 ---
 import { hero } from '../../data/home';
-import Tag from '../wf/Tag.astro';
-import Note from '../wf/Note.astro';
-import Media from '../wf/Media.astro';
+import Tag from '../anotacoes/Tag.astro';
+import Note from '../anotacoes/Note.astro';
+import Media from '../anotacoes/Media.astro';
 import Botao from '../ui/Botao.astro';
 
 /*
@@ -14,7 +14,7 @@ import Botao from '../ui/Botao.astro';
  * motion/GIF como alternativa para o MESMO slot, não como um segundo bloco.
  */
 ---
-<section class="section section--hero">
+<section class="section section--hero fundo-vivo">
   <Tag texto="SEÇÃO 1 · HERO" />
   <div class="container">
     <h1 class="hero__title">
@@ -37,9 +37,11 @@ import Botao from '../ui/Botao.astro';
 
     <div class="proof">
       <p class="proof__title">Doutores que confiam na Renke</p>
-      <ul class="logos">
-        {[1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
-      </ul>
+      <div class="faixa">
+        <ul class="faixa__trilho logos">
+          {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
+        </ul>
+      </div>
       <Note>Slot 02 · opacidade reduzida, leve sobreposição, tooltip com nome + especialidade.</Note>
     </div>
 

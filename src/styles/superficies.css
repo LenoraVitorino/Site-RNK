@@ -1,0 +1,136 @@
+/* ============================================================
+   SUPERFÍCIES — vidro, fundos dinâmicos e faixas
+
+   Direção extraída das referências. Ver docs/04-design/direcao-visual.md
+   ============================================================ */
+
+/* ---------- Vidro ----------
+   Só funciona sobre algo: fundo escuro com gradiente, foto ou textura.
+   Sobre superfície chapada o efeito não aparece. */
+
+.vidro {
+  background: var(--vidro-fundo);
+  border: 1px solid var(--vidro-borda);
+  border-radius: var(--raio-card);
+  backdrop-filter: var(--vidro-blur);
+  -webkit-backdrop-filter: var(--vidro-blur);
+  transition: background-color var(--dur-padrao) var(--easing-suave),
+              border-color var(--dur-padrao) var(--easing-suave),
+              transform var(--dur-padrao) var(--easing-suave);
+}
+.vidro:hover {
+  background: var(--vidro-fundo-2);
+  border-color: var(--vidro-borda-2);
+}
+
+/* Realce de luz na borda superior — dá volume sem sombra pesada */
+.vidro--realce { position: relative; overflow: hidden; }
+.vidro--realce::before {
+  content: ''; position: absolute; inset: 0 0 auto; height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .35), transparent);
+}
+
+/* Versão para fundo claro */
+.vidro--claro {
+  background: var(--vidro-claro-fundo);
+  border-color: var(--vidro-claro-borda);
+}
+.vidro--claro:hover { background: rgb(0 0 0 / .055); border-color: rgb(0 0 0 / .14); }
+
+/* ---------- Fundo dinâmico ----------
+   Duas manchas de cor que respiram lentamente atrás do conteúdo.
+   Preto e amarelo, sem terceira cor: a paleta não tem uma. */
+
+.fundo-vivo { position: relative; isolation: isolate; overflow: hidden; }
+
+.fundo-vivo::before,
+.fundo-vivo::after {
+  content: ''; position: absolute; z-index: -1;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .5;
+  will-change: transform;
+}
+.fundo-vivo::before {
+  width: 55vw; height: 55vw; max-width: 720px; max-height: 720px;
+  top: -18%; left: -12%;
+  background: radial-gradient(circle, var(--marca) 0%, transparent 68%);
+  animation: respira-a 22s var(--easing-suave) infinite alternate;
+}
+.fundo-vivo::after {
+  width: 45vw; height: 45vw; max-width: 600px; max-height: 600px;
+  bottom: -22%; right: -10%;
+  background: radial-gradient(circle, var(--marca-escura) 0%, transparent 70%);
+  opacity: .35;
+  animation: respira-b 28s var(--easing-suave) infinite alternate;
+}
+
+@keyframes respira-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(6%, 8%, 0) scale(1.15); }
+}
+@keyframes respira-b {
+  from { transform: translate3d(0, 0, 0) scale(1.1); }
+  to   { transform: translate3d(-8%, -6%, 0) scale(1); }
+}
+
+/* Sobre claro as manchas precisam recuar, senão o texto perde contraste */
+.section:not(.section--dark).fundo-vivo::before { opacity: .22; }
+.section:not(.section--dark).fundo-vivo::after  { opacity: .14; }
+
+/* ---------- Faixa que corre ----------
+   Marquee com máscara de fade nas laterais, como na referência. */
+
+.faixa {
+  overflow: hidden;
+  mask-image: var(--fade-lateral);
+  -webkit-mask-image: var(--fade-lateral);
+}
+.faixa__trilho {
+  display: flex; align-items: center; gap: var(--s-6);
+  width: max-content;
+  animation: corre 38s linear infinite;
+}
+.faixa:hover .faixa__trilho { animation-play-state: paused; }
+@keyframes corre { to { transform: translateX(-50%); } }
+
+/* ---------- Foto ----------
+   Tratamento para humanizar: a foto entra com leve dessaturação e ganha
+   cor no hover, e o amarelo aparece como véu, não como filtro pesado. */
+
+.foto { position: relative; overflow: hidden; border-radius: var(--raio-card); }
+.foto img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.85) contrast(1.05);
+  transition: filter var(--dur-lenta) var(--easing),
+              transform var(--dur-lenta) var(--easing);
+}
+.foto:hover img { filter: saturate(1) contrast(1); transform: scale(1.03); }
+.foto::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgb(0 0 0 / .55));
+  pointer-events: none;
+}
+.foto--marca::after {
+  background:
+    linear-gradient(180deg, transparent 40%, rgb(0 0 0 / .6)),
+    linear-gradient(140deg, rgb(255 209 3 / .18), transparent 55%);
+}
+
+/* ---------- Entrada por scroll ----------
+   Sobe e aparece quando entra na viewport. Sem biblioteca. */
+
+.entra { opacity: 0; transform: translateY(18px); }
+.entra.visivel {
+  opacity: 1; transform: none;
+  transition: opacity .6s var(--easing), transform .6s var(--easing);
+}
+
+/* ---------- Sem movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fundo-vivo::before, .fundo-vivo::after,
+  .faixa__trilho { animation: none; }
+  .foto img { transition: none; }
+  .foto:hover img { transform: none; }
+  .entra { opacity: 1; transform: none; }
+}

@@ -1,8 +1,8 @@
 ---
 import { pilares, protocolos } from '../../data/home';
-import Tag from '../wf/Tag.astro';
-import Note from '../wf/Note.astro';
-import Media from '../wf/Media.astro';
+import Tag from '../anotacoes/Tag.astro';
+import Note from '../anotacoes/Note.astro';
+import Media from '../anotacoes/Media.astro';
 ---
 <section class="section section--alt">
   <Tag texto="SEÇÃO 2 · O QUE FAZEMOS" />
@@ -28,7 +28,7 @@ import Media from '../wf/Media.astro';
 
     <div class="cards cards--pillars">
       {pilares.map((p) => (
-        <article class:list={['card', p.excedente && 'card--extra']}>
+        <article class:list={['card', 'vidro', 'vidro--claro', 'entra', p.excedente && 'card--extra']}>
           <span class="card__icon" aria-hidden="true">ícone<br />{p.icone}</span>
           <h4>{p.titulo}</h4>
           <p>{p.texto}</p>
@@ -49,7 +49,7 @@ import Media from '../wf/Media.astro';
 
     <div class="cards cards--protocols">
       {protocolos.map((p) => (
-        <article class="protocol">
+        <article class="protocol vidro vidro--claro entra">
           <p class="protocol__label">{p.label}</p>
           <blockquote>"{p.fala}"</blockquote>
           <p>{p.texto}</p>

@@ -96,9 +96,33 @@
   --elev-2: 0 2px 10px rgb(0 0 0 / .08);
   --elev-3: 0 12px 32px rgb(0 0 0 / .12);
 
+  /* ---- Superfícies de vidro -------------------------------------------
+     Extraído da referência Framer: a assinatura do efeito é branco a 5%
+     de opacidade com blur baixo, não blur pesado. Blur alto borra o que
+     está atrás e o cartão perde a leitura de "vidro sobre algo". */
+  --vidro-fundo:   rgb(255 255 255 / .05);
+  --vidro-fundo-2: rgb(255 255 255 / .08);   /* hover */
+  --vidro-borda:   rgb(255 255 255 / .12);
+  --vidro-borda-2: rgb(255 255 255 / .22);   /* hover */
+  --vidro-blur:    blur(5px);
+
+  /* Sobre fundo claro o vidro inverte: preto a baixa opacidade */
+  --vidro-claro-fundo: rgb(0 0 0 / .035);
+  --vidro-claro-borda: rgb(0 0 0 / .08);
+
+  /* ---- Raio de card ---------------------------------------------------
+     20px, o valor dominante na referência. Generoso sem virar pílula. */
+  --raio-card: 20px;
+  --raio-card-sm: 15px;
+
   /* ---- Movimento --------------------------------------------------- */
   --dur-rapida: .15s;
   --dur-media:  .3s;
   --dur-lenta:  .8s;
   --easing:     cubic-bezier(.25, 1, .5, 1);
+  --easing-suave: ease;
+  --dur-padrao: .25s;   /* a cadência da referência */
+
+  /* Máscara de fade nas bordas — usada em faixas que correm */
+  --fade-lateral: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }

@@ -4,20 +4,21 @@
 import '@fontsource/open-sans/latin-400.css';
 import '@fontsource/open-sans/latin-400-italic.css';
 import '@fontsource/open-sans/latin-600.css';
-import '../styles/wireframe.css';
+import '../styles/site.css';
 import '../styles/botao.css';
+import '../styles/superficies.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Toolbar from '../components/wf/Toolbar.astro';
+import Toolbar from '../components/anotacoes/Toolbar.astro';
 
 interface Props {
   titulo: string;
   descricao: string;
-  /** Rótulo da barra de wireframe. Sai quando o projeto virar site de verdade. */
-  wireframe?: string;
+  /** Rótulo da barra de anotações. Sai quando as pendências forem resolvidas. */
+  anotacoes?: string;
 }
 
-const { titulo, descricao, wireframe } = Astro.props;
+const { titulo, descricao, anotacoes } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -34,11 +35,32 @@ const { titulo, descricao, wireframe } = Astro.props;
        Ver docs/02-arquitetura/seo-e-keywords.md -->
 </head>
 <body>
-  {wireframe && <Toolbar titulo={wireframe} />}
+  {anotacoes && <Toolbar titulo={anotacoes} />}
   <Header />
   <main id="conteudo">
     <slot />
   </main>
   <Footer />
+
+  <script>
+    /* Revela os blocos conforme entram na viewport. IntersectionObserver
+       em vez de listener de scroll: não roda a cada pixel. */
+    const alvos = document.querySelectorAll('.entra');
+    if (alvos.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const obs = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('visivel');
+            obs.unobserve(e.target);
+          }
+        },
+        { rootMargin: '0px 0px -12% 0px', threshold: 0.05 }
+      );
+      alvos.forEach((a) => obs.observe(a));
+    } else {
+      alvos.forEach((a) => a.classList.add('visivel'));
+    }
+  </script>
 </body>
 </html>

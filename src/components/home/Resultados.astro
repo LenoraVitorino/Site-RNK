@@ -1,7 +1,7 @@
 ---
 import { resultados, hero } from '../../data/home';
-import Tag from '../wf/Tag.astro';
-import Note from '../wf/Note.astro';
+import Tag from '../anotacoes/Tag.astro';
+import Note from '../anotacoes/Note.astro';
 import Botao from '../ui/Botao.astro';
 ---
 <section class="section">
@@ -14,7 +14,7 @@ import Botao from '../ui/Botao.astro';
 
     <div class="cards cards--results">
       {resultados.map((r) => (
-        <article class="result">
+        <article class="result vidro vidro--claro entra">
           <p class="result__specialty">{r.especialidade}</p>
           <p class="result__before">{r.antes}</p>
           <p class="result__number">{r.numero}</p>
@@ -25,7 +25,7 @@ import Botao from '../ui/Botao.astro';
 
     <div class="cards cards--testimonials">
       {[1, 2].map(() => (
-        <article class="testimonial">
+        <article class="testimonial vidro vidro--claro entra">
           <span class="testimonial__photo">05<br />FOTO</span>
           <p class="testimonial__quote"><em>"[depoimento pendente]"</em></p>
           <p class="testimonial__author">Nome · Especialidade · Cidade</p>

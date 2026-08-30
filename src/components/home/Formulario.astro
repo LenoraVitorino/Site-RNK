@@ -1,7 +1,7 @@
 ---
 import { formulario } from '../../data/home';
-import Tag from '../wf/Tag.astro';
-import Note from '../wf/Note.astro';
+import Tag from '../anotacoes/Tag.astro';
+import Note from '../anotacoes/Note.astro';
 import Botao from '../ui/Botao.astro';
 ---
 <section class="section section--alt">
@@ -13,7 +13,7 @@ import Botao from '../ui/Botao.astro';
         <p>{formulario.texto}</p>
       </div>
 
-      <form class="form-card" novalidate>
+      <form class="form-card vidro vidro--claro" novalidate>
         <Note>⚠️ Destino do formulário não definido (CRM? e-mail? webhook?).</Note>
 
         <label class="field">

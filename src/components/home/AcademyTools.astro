@@ -1,6 +1,6 @@
 ---
-import Tag from '../wf/Tag.astro';
-import Media from '../wf/Media.astro';
+import Tag from '../anotacoes/Tag.astro';
+import Media from '../anotacoes/Media.astro';
 
 const blocos = [
   {
@@ -30,7 +30,7 @@ const blocos = [
   <div class="container">
     <div class="duo">
       {blocos.map((b) => (
-        <article class="duo__col">
+        <article class="duo__col vidro vidro--claro entra">
           <p class="eyebrow">{b.eyebrow}</p>
           <h3>{b.titulo}</h3>
           <Media id={b.slot} />
