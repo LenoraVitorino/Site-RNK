@@ -1,52 +1,58 @@
 ---
 import { hero } from '../../data/home';
-import Tag from '../anotacoes/Tag.astro';
-import Note from '../anotacoes/Note.astro';
-import Media from '../anotacoes/Media.astro';
+import Media from '../ui/Media.astro';
 import Botao from '../ui/Botao.astro';
 
 /*
- * Ordem conforme as notas do designer:
- * H1 → sub → números → CTA → logos → visual → legenda.
- * O parágrafo de apoio vem da copy e entra depois do CTA.
+ * Diagramação em duas colunas: o argumento à esquerda, o visual à direita.
  *
- * Um único visual no hero: as notas pedem o mockup de dashboard e oferecem o
- * motion/GIF como alternativa para o MESMO slot, não como um segundo bloco.
+ * Antes era tudo empilhado — H1, sub, números, CTA, texto, logos e um visual
+ * 16:9 de largura cheia. O hero passava de 1.500px e o visual só aparecia
+ * depois de rolar. Lado a lado, argumento e prova entram juntos na mesma tela.
+ *
+ * Os números viraram chips: em linha corrida eles liam como legenda, e são
+ * prova social — o segundo elemento mais importante do bloco.
  */
 ---
 <section class="section section--hero fundo-vivo">
-  <Tag texto="SEÇÃO 1 · HERO" />
   <div class="container">
-    <h1 class="hero__title">
-      Isso não é <s>marketing para clínicas</s>.<br />
-      <strong>É RevOps</strong>
-    </h1>
+    <div class="hero">
 
-    <p class="hero__sub callout">
-      Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
-    </p>
+      <div class="hero__texto">
+        <h1 class="hero__title">
+          Isso não é <s>marketing para clínicas</s>.<br />
+          <strong>É RevOps</strong>
+        </h1>
 
-    <ul class="stats">
-      {hero.numeros.map((n) => <li>{n}</li>)}
-    </ul>
-    <Note>⚠️ Conflita com "+140 clínicas" usado na Seção 7 e nas metatags. Decisão D1 pendente.</Note>
+        <p class="hero__sub callout">
+          Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
+        </p>
 
-    <p><Botao variante="brilho" href="#">{hero.cta}</Botao></p>
-
-    <p class="hero__lead">{hero.lead}</p>
-
-    <div class="proof">
-      <p class="proof__title">Doutores que confiam na Renke</p>
-      <div class="faixa">
-        <ul class="faixa__trilho logos">
-          {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
+        <ul class="chips">
+          {hero.numeros.map((n) => <li class="chip vidro vidro--claro">{n}</li>)}
         </ul>
+
+        <p class="hero__lead">{hero.lead}</p>
+
+        <div class="hero__acoes">
+          <Botao variante="brilho" href="#">{hero.cta}</Botao>
+        </div>
       </div>
-      <Note>Slot 02 · opacidade reduzida, leve sobreposição, tooltip com nome + especialidade.</Note>
+
+      <figure class="hero__visual entra">
+        <Media id="01" />
+        <figcaption class="hero__caption"><em>{hero.legenda}</em></figcaption>
+      </figure>
+
     </div>
+  </div>
 
-    <Media id="01" />
-
-    <p class="hero__caption"><em>{hero.legenda}</em></p>
+  <div class="prova">
+    <p class="proof__title">Doutores que confiam na Renke</p>
+    <div class="faixa">
+      <ul class="faixa__trilho logos">
+        {[1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6].map((n) => <li class="logos__item">LOGO {n}</li>)}
+      </ul>
+    </div>
   </div>
 </section>

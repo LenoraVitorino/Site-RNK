@@ -1,11 +1,8 @@
 ---
 import { pilares, protocolos } from '../../data/home';
-import Tag from '../anotacoes/Tag.astro';
-import Note from '../anotacoes/Note.astro';
-import Media from '../anotacoes/Media.astro';
+import Media from '../ui/Media.astro';
 ---
 <section class="section section--alt">
-  <Tag texto="SEÇÃO 2 · O QUE FAZEMOS" />
   <div class="container">
     <p class="eyebrow">O que fazemos</p>
     <p class="kicker">Renke Studio</p>
@@ -18,7 +15,6 @@ import Media from '../anotacoes/Media.astro';
           mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
           e estética.
         </p>
-        <Note>⚠️ "do mundo" vs. "no Brasil" (/faca-parte). Decisão D5.</Note>
       </div>
       <Media id="03" />
     </div>
@@ -36,11 +32,6 @@ import Media from '../anotacoes/Media.astro';
         </article>
       ))}
     </div>
-
-    <Note>
-      ⚠️ As notas do designer pedem <strong>4 cards</strong>; a copy traz <strong>5 blocos</strong>.
-      O 5º está marcado com borda tracejada. Decisão D9.
-    </Note>
 
     <h3 class="divider-h3">
       Estruturamos sua operação do zero e operamos juntos no longo prazo.<br />

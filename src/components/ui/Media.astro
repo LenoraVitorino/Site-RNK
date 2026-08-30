@@ -11,13 +11,7 @@ const slot = porId(id);
 ---
 <figure class="slot" style={`--proporcao: ${slot.proporcao}`} data-tipo={slot.tipo}>
   <div class="slot__caixa">
-    <span class="slot__num" aria-hidden="true">{slot.id}</span>
     <span class="slot__tipo">{rotuloTipo[slot.tipo]}</span>
     <span class="slot__titulo">{slot.titulo}</span>
-    <span class="slot__proporcao" aria-hidden="true">{slot.proporcao.replace(/\s/g, '')}</span>
   </div>
-  <figcaption class="slot__legenda" data-note>
-    <span class="slot__descricao">{slot.descricao}</span>
-    {slot.producao && <span class="slot__producao">{slot.producao}</span>}
-  </figcaption>
 </figure>

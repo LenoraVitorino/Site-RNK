@@ -29,7 +29,7 @@ export const slots: Slot[] = [
     id: '01',
     secao: 'Hero',
     tipo: 'animacao',
-    proporcao: '16 / 9',
+    proporcao: '4 / 3',
     titulo: 'Mockup de dashboard com dados de performance',
     descricao:
       'Desktop ou tablet mostrando os painéis da operação. Alternativa: motion de 3–5s com o ' +

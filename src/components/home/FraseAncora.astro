@@ -1,10 +1,7 @@
 ---
 import { perguntas } from '../../data/home';
-import Tag from '../anotacoes/Tag.astro';
-import Note from '../anotacoes/Note.astro';
 ---
 <section class="section section--dark fundo-vivo">
-  <Tag texto="SEÇÃO 3 · FRASE-ÂNCORA + PERGUNTAS" onDark />
   <div class="container container--narrow">
     <p class="anchor-phrase">
       Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
@@ -16,10 +13,5 @@ import Note from '../anotacoes/Note.astro';
         <p class:list={['question', 'vidro', 'vidro--realce', 'entra', p.excedente && 'question--overflow']}>{p.texto}</p>
       ))}
     </div>
-
-    <Note onDark>
-      ⚠️ Layout pede grid 2×2 (4 slots); a copy traz 7 perguntas. As 3 excedentes estão com borda
-      tracejada. Decisão D8.
-    </Note>
   </div>
 </section>

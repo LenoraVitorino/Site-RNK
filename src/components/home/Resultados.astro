@@ -1,16 +1,11 @@
 ---
 import { resultados, hero } from '../../data/home';
-import Tag from '../anotacoes/Tag.astro';
-import Note from '../anotacoes/Note.astro';
 import Botao from '../ui/Botao.astro';
 ---
 <section class="section">
-  <Tag texto="SEÇÃO 4 · RESULTADOS" />
   <div class="container">
     <p class="eyebrow">Resultados</p>
     <h2>O que muda quando a operação tem estrutura.</h2>
-
-    <Note>⚠️ Números são placeholder — serão substituídos por dados reais (nota do próprio briefing).</Note>
 
     <div class="cards cards--results">
       {resultados.map((r) => (
@@ -32,7 +27,6 @@ import Botao from '../ui/Botao.astro';
         </article>
       ))}
     </div>
-    <Note>⚠️ Depoimentos não fornecidos no briefing.</Note>
 
     <p><Botao variante="relevo" href="#">{hero.cta}</Botao></p>
   </div>

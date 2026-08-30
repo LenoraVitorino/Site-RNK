@@ -1,10 +1,7 @@
 ---
 import { rodape } from '../data/nav';
-import Tag from './anotacoes/Tag.astro';
-import Note from './anotacoes/Note.astro';
 ---
 <footer class="footer">
-  <Tag texto="SEÇÃO 9 · RODAPÉ" onDark />
   <div class="container">
     <div class="footer__grid">
       <div class="footer__col">
@@ -17,7 +14,6 @@ import Note from './anotacoes/Note.astro';
         <ul>
           {rodape.links.map((l) => <li><a href="#" data-rota={l.rota}>{l.rotulo}</a></li>)}
         </ul>
-        <Note onDark>⚠️ "Sobre" e "Cases" não constam. Decisão D7.</Note>
       </nav>
 
       <div class="footer__col">
@@ -31,7 +27,6 @@ import Note from './anotacoes/Note.astro';
         <p class="footer__title">Contato</p>
         <ul class="footer__contact">
           <li>{rodape.endereco.map((linha, i) => <>{i > 0 && <br />}{linha}</>)}</li>
-          <li><span class="wf-blank" data-note>[Telefone — não informado]</span></li>
           <li>{rodape.email}</li>
         </ul>
       </div>

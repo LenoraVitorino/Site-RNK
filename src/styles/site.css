@@ -19,7 +19,7 @@ body {
   line-height: var(--lh-corpo);
   color: var(--text);
   background: var(--bg);
-  padding-top: 96px; /* header fixo + toolbar */
+  padding-top: 72px; /* header fixo */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -73,7 +73,7 @@ strong, b { font-weight: var(--peso-titulo); }
   color: var(--on-dark);
 }
 .section--dark h2, .section--dark h3 { color: #fff; }
-.section--hero { padding-top: calc(var(--space) * .7); }
+.section--hero { padding-top: var(--s-7); }
 
 /* ---------- Anotações de wireframe ---------- */
 
@@ -144,7 +144,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 /* ---------- Header / Nav ---------- */
 
 .header {
-  position: fixed; top: 32px; left: 0; right: 0; z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   background: var(--bg); border-bottom: 1px solid var(--line);
   transition: box-shadow .2s;
 }
@@ -180,7 +180,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 .nav {
-  position: fixed; inset: 96px 0 0 auto;
+  position: fixed; inset: 72px 0 0 auto;
   width: min(88vw, 340px);
   background: var(--bg); border-left: 1px solid var(--line);
   overflow-y: auto; padding: 1rem 1.25rem 3rem;
@@ -318,12 +318,17 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .card .slot__caixa { padding: var(--s-3); }
 .card .slot__titulo { display: none; }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero ----------
+   Duas colunas no desktop: argumento à esquerda, visual à direita.
+   Empilhado no mobile, com o visual depois do CTA. */
 
-.hero__title { font-size: var(--fs-3xl); letter-spacing: -.025em; margin-bottom: var(--s-5); }
+.hero { display: grid; gap: var(--s-6); align-items: center; }
+
+.hero__title {
+  font-size: var(--fs-3xl); letter-spacing: -.025em; margin-bottom: var(--s-4);
+}
 .hero__title s { color: var(--muted); text-decoration-thickness: 3px; }
 .hero__title strong { box-shadow: inset 0 -.12em 0 var(--marca); }
-.hero__title strong { display: inline-block; }
 
 .callout {
   display: block;
@@ -332,30 +337,38 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   border-left: 4px solid var(--dark);
   padding: var(--s-4) var(--s-5); margin-bottom: var(--s-5);
   border-radius: 0 var(--raio-card-sm) var(--raio-card-sm) 0;
-  max-width: 56ch;
+  max-width: 52ch;
 }
 
-.stats {
-  list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4);
+/* Números como chips: prova social não deve ler como legenda */
+.chips {
+  list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-2);
   margin: 0 0 var(--s-5); padding: 0;
-  font-size: var(--fs-sm); font-weight: var(--peso-titulo); color: var(--text);
+}
+.chip {
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--raio-pilula);
+  font-size: var(--fs-sm); font-weight: var(--peso-titulo);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
-.stats li + li::before { content: "·"; margin-right: 1rem; }
 
-.hero__lead { font-size: var(--fs-md); margin-top: var(--s-5); }
-.hero__caption { font-size: var(--fs-sm); color: var(--muted); text-align: center; }
+.hero__lead { font-size: var(--fs-md); margin-bottom: var(--s-5); }
+.hero__acoes { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center; }
 
-.proof { margin-top: 2.5rem; }
-.proof__title {
-  font-size: var(--fs-xs); font-weight: var(--peso-titulo); letter-spacing: var(--tracking-label);
-  text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-3);
+.hero__visual { margin: 0; }
+.hero__visual .slot { margin: 0; }
+.hero__caption {
+  font-size: var(--fs-sm); color: var(--muted); text-align: center;
+  margin-top: var(--s-3);
 }
+
+/* Chips de logo que correm na faixa */
 .logos { list-style: none; margin: 0; padding: var(--s-2) 0; }
 .logos__item {
   flex: none;
   display: grid; place-items: center;
-  width: 110px; height: 48px;
+  width: 120px; height: 52px;
   border: 1px dashed var(--line); border-radius: var(--raio-card-sm);
   background: var(--vidro-claro-fundo);
   font-size: var(--fs-xs); color: var(--muted); letter-spacing: .06em;
@@ -363,6 +376,14 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   transition: opacity var(--dur-padrao) var(--easing-suave);
 }
 .logos__item:hover { opacity: 1; }
+
+/* Faixa de prova em largura cheia, fora do container */
+.prova { margin-top: var(--s-8); }
+.proof__title {
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo); letter-spacing: var(--tracking-label);
+  text-transform: uppercase; color: var(--muted);
+  text-align: center; margin-bottom: var(--s-3);
+}
 
 /* ---------- Split (texto + vídeo) ---------- */
 
@@ -582,6 +603,7 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
     border-left: 0; border-radius: var(--radius);
   }
 
+  .hero { grid-template-columns: 1.05fr .95fr; gap: var(--s-7); }
   .split { grid-template-columns: 1fr 1fr; align-items: center; }
   .cards--pillars { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   /* 5 colunas espremem o texto em ~24 caracteres por linha; abaixo de 1200px
@@ -594,7 +616,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   .form-block { grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
   .form-card { padding: 2rem; }
   .footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 2.5rem; }
-  .logos__item { width: 128px; height: 54px; }
 }
 
 @media (min-width: 1200px) {

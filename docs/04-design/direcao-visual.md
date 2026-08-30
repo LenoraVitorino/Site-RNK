@@ -51,6 +51,52 @@ cheia, eu extraio o resto** — proporções de grid, densidade e ritmo de seç�
 
 ---
 
+## Referência 3 · Dribbble "Orbital AI Website"
+
+⚠️ **Também bloqueado** — mesmo `202` com corpo vazio. Não vi a peça.
+
+A rediagramação do hero saiu de princípios de composição, não de cópia. Se mandar o print, ajusto.
+
+---
+
+## Diagramação do hero
+
+Antes era tudo empilhado: H1, sub, números, CTA, texto, logos e um visual 16:9 de largura cheia. O
+hero passava de **1.500px** e o visual só aparecia depois de rolar — argumento e prova nunca
+entravam na mesma tela.
+
+Agora são **duas colunas**: argumento à esquerda, visual à direita. O hero caiu para **950px**, e
+o visual começa em 228px — dentro da primeira tela em qualquer notebook.
+
+| | Antes | Depois |
+|---|---|---|
+| Altura do hero | ~1.510px | 950px |
+| Visual aparece em | ~1.000px | 228px |
+| CTA em | 498px | 693px |
+
+O CTA desceu, mas continua acima da dobra em viewport de 900px, e agora divide a tela com a prova
+visual em vez de competir com ela.
+
+Outras mudanças:
+
+- **Números viraram chips** de vidro em pílula. Em linha corrida liam como legenda, e são o segundo
+  elemento mais importante do bloco.
+- **Faixa de logos em largura cheia**, fora do container, com o rótulo centralizado acima.
+- **Slot 01 passou de 16:9 para 4:3** — numa coluna de ~510px, o 16:9 daria 287px de altura, baixo
+  demais para um dashboard ser legível.
+
+## Anotações removidas
+
+As tarjas de seção, os avisos de pendência, a barra superior e as legendas de produção saíram da
+página. Os componentes `Tag`, `Note` e `Toolbar` foram deletados, e `Media` migrou para `ui/`,
+porque slot de mídia é elemento de layout, não anotação.
+
+As pendências continuam registradas em
+[pendências e próximos passos](../05-analise/pendencias-e-proximos-passos.md) — saíram da tela,
+não do projeto.
+
+---
+
 ## O que foi aplicado na home
 
 ### Vidro

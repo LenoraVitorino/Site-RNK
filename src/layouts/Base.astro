@@ -9,16 +9,13 @@ import '../styles/botao.css';
 import '../styles/superficies.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Toolbar from '../components/anotacoes/Toolbar.astro';
 
 interface Props {
   titulo: string;
   descricao: string;
-  /** Rótulo da barra de anotações. Sai quando as pendências forem resolvidas. */
-  anotacoes?: string;
 }
 
-const { titulo, descricao, anotacoes } = Astro.props;
+const { titulo, descricao } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -35,7 +32,6 @@ const { titulo, descricao, anotacoes } = Astro.props;
        Ver docs/02-arquitetura/seo-e-keywords.md -->
 </head>
 <body>
-  {anotacoes && <Toolbar titulo={anotacoes} />}
   <Header />
   <main id="conteudo">
     <slot />
