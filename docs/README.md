@@ -7,6 +7,12 @@ reorganizado por tema para consulta rápida durante design e desenvolvimento.
 > **Regra de ouro do projeto:** o site precisa fazer o visitante entender em **5 segundos**
 > que a Renke **não é agência de marketing**.
 
+## Documento único
+
+[**Estrutura e copy — Site Renke Studio**](dossie-estrutura-e-copy.md) reúne o mapa do site e a
+copy das 15 páginas num arquivo só, para enviar a quem não vai navegar pelo repositório.
+Gerado por `npm run docs:dossie` a partir dos arquivos abaixo — editar lá e rodar de novo.
+
 ## Índice
 
 ### 01 · Estratégia
