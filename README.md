@@ -17,6 +17,19 @@ Run these inside Claude Code:
 
 Type `/impeccable` alone to see all 23 commands. To update the skill later, run `npx impeccable update` from the project root.
 
-The project also includes Vercel's [web-design-guidelines](https://github.com/vercel-labs/agent-skills) skill,
-installed with `npx skills add`. It lives in `.agents/skills/web-design-guidelines/` and is symlinked into
-`.claude/skills/`. Ask Claude to "review my UI" or "check accessibility" to run it against specific files.
+## Other agent skills
+
+Additional skills are installed with [`npx skills add`](https://github.com/vercel-labs/skills) into `.agents/skills/`
+and symlinked into `.claude/skills/` for Claude Code. `skills-lock.json` tracks their sources.
+
+| Source | Skills |
+|---|---|
+| `vercel-labs/agent-skills` | `web-design-guidelines`: review UI against Vercel's Web Interface Guidelines |
+| `anthropics/skills` | `web-artifacts-builder`: multi-component React/Tailwind/shadcn artifacts |
+| `emilkowalski/skills` | `animate`, `animate-expo`, `animation-vocabulary`, `apple-design`, `ask-sonner`, `emil-design-eng`, `find-animation-opportunities`, `improve-animations`, `pick-ui-library`, `prototype`, `review-animations`, `write-swift` |
+
+## Product context
+
+`PRODUCT.md` holds the durable product facts Impeccable uses (audience, purpose, constraints, evidence).
+Update it when services, contact channels, or brand material are confirmed. `.impeccable/live/config.json`
+configures `/impeccable live` for the static HTML pages at the project root and under `pages/`.
