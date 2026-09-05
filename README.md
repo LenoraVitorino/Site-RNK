@@ -16,3 +16,7 @@ Run these inside Claude Code:
 ```
 
 Type `/impeccable` alone to see all 23 commands. To update the skill later, run `npx impeccable update` from the project root.
+
+The project also includes Vercel's [web-design-guidelines](https://github.com/vercel-labs/agent-skills) skill,
+installed with `npx skills add`. It lives in `.agents/skills/web-design-guidelines/` and is symlinked into
+`.claude/skills/`. Ask Claude to "review my UI" or "check accessibility" to run it against specific files.
