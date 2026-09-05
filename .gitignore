@@ -1,0 +1,14 @@
+# Impeccable runtime cache and local overrides
+**/.impeccable/hook.cache.json
+.claude/settings.local.json
+.impeccable/live/server.json
+.impeccable/live/sessions/
+.impeccable/live/previews/
+.impeccable/live/annotations/
+.impeccable/live/artifacts/
+.impeccable/live/cache/
+.impeccable/live/locks/
+
+# Dependencies and OS files
+node_modules/
+.DS_Store
