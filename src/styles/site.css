@@ -671,6 +671,23 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   .reel__toque:hover .reel__icone { transform: none; }
 }
 
+/* ---------- Erro 404 ---------- */
+
+.erro { display: grid; place-items: center; min-height: 52vh; }
+.erro__caixa { max-width: 46rem; text-align: center; }
+.erro__titulo {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -.03em; line-height: 1.1;
+  color: #fff; margin-bottom: var(--s-4);
+}
+.erro__lead {
+  font-size: var(--fs-md); color: var(--muted);
+  max-width: 52ch; margin: 0 auto var(--s-6);
+}
+.erro__acoes {
+  display: flex; flex-wrap: wrap; gap: var(--s-3); justify-content: center;
+}
+
 /* ---------- Cards ---------- */
 
 .cards { display: grid; gap: 1rem; margin-block: 2rem; }

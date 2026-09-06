@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "site-renke",
+  "compatibility_date": "2026-09-06",
+
+  // Só assets: o site é inteiramente pré-renderizado, não há código de Worker
+  // para rodar. Sem "main" e sem "binding" — os dois só fazem sentido com script.
+  "assets": {
+    "directory": "./dist",
+
+    // Casa com o astro.config: trailingSlash 'never' + build.format 'file'.
+    // O padrão ("auto-trailing-slash") também serviria, mas deixaria /pagina/
+    // e /pagina como dois endereços válidos — conteúdo duplicado para o
+    // buscador, num site cuja estratégia depende de SEO.
+    "html_handling": "drop-trailing-slash",
+
+    // Serve o 404.html mais próximo em vez de uma resposta vazia.
+    // ⚠️ A página 404 ainda não existe — ver docs/05-analise.
+    "not_found_handling": "404-page"
+  },
+
+  "observability": { "enabled": true }
+}

@@ -33,6 +33,7 @@ Gerado por `npm run docs:dossie` a partir dos arquivos abaixo — editar lá e r
 | [Padrões de página](02-arquitetura/padroes-de-pagina.md) | Regras que toda página precisa seguir |
 | [Stack](02-arquitetura/stack.md) | Astro: por quê, como rodar, estrutura de pastas |
 | [Preview no túnel](02-arquitetura/preview-no-tunel.md) | Expor o dev server numa URL pública pelo Cloudflare |
+| [Publicação](02-arquitetura/publicacao.md) | Deploy na Cloudflare: config, formas de publicar, domínio |
 
 ### 03 · Copy (por página)
 | Página | Rota | Arquivo |
