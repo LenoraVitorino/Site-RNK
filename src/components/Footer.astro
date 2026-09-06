@@ -1,5 +1,6 @@
 ---
 import { rodape } from '../data/nav';
+import { existe } from '../data/rotas';
 ---
 <footer class="footer">
   <div class="container">
@@ -12,7 +13,15 @@ import { rodape } from '../data/nav';
       <nav class="footer__col" aria-label="Links do rodapé">
         <p class="footer__title">Links</p>
         <ul>
-          {rodape.links.map((l) => <li><a href="#" data-rota={l.rota}>{l.rotulo}</a></li>)}
+          {rodape.links.map((l) => (
+            <li>
+              <a
+                href={existe(l.rota) ? l.rota : '#'}
+                data-rota={l.rota}
+                class:list={[!existe(l.rota) && 'nav--pendente']}
+              >{l.rotulo}</a>
+            </li>
+          ))}
         </ul>
       </nav>
 

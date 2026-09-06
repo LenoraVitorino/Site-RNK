@@ -1,5 +1,6 @@
 ---
 import { menu, acaoHeader } from '../data/nav';
+import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
 ---
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -37,7 +38,7 @@ import Botao from './ui/Botao.astro';
                       <ul class="megamenu__list">
                         {grupo.itens.map((sub) => (
                           <li>
-                            <a href="#" data-rota={sub.rota}>
+                            <a href={existe(sub.rota) ? sub.rota : '#'} data-rota={sub.rota} aria-disabled={existe(sub.rota) ? undefined : 'true'} class:list={[!existe(sub.rota) && 'nav--pendente']}>
                               {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
                             </a>
                           </li>
@@ -51,7 +52,7 @@ import Botao from './ui/Botao.astro';
           ) : (
             <li class="nav__item">
               <a
-                href="#" class="nav__link" data-rota={item.rota}
+                href={existe(item.rota) ? item.rota : '#'} class="nav__link" data-rota={item.rota}
                 aria-current={item.atual ? 'page' : undefined}>
                 {item.rotulo}
               </a>
@@ -61,7 +62,7 @@ import Botao from './ui/Botao.astro';
       </ul>
 
       <div class="nav__acao">
-        <Botao variante="relevo" href="#">{acaoHeader.rotulo}</Botao>
+        <Botao variante="relevo" href={acaoHeader.rota}>{acaoHeader.rotulo}</Botao>
       </div>
     </nav>
   </div>

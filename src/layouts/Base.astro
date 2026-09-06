@@ -30,6 +30,12 @@ const { titulo, descricao } = Astro.props;
   />
   <!-- TODO: schema Organization + FAQ, canonical, OG tags.
        Ver docs/02-arquitetura/seo-e-keywords.md -->
+  <script is:inline>
+    /* Marca que o JS está vivo, antes da primeira pintura. Só então o CSS
+       esconde os blocos com .entra para que possam entrar na tela. Sem JS,
+       eles nascem visíveis — conteúdo não pode depender de script. */
+    document.documentElement.classList.add('js');
+  </script>
 </head>
 <body>
   <Header />

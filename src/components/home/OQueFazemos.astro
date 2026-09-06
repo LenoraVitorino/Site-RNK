@@ -1,6 +1,7 @@
 ---
 import { pilares, protocolos } from '../../data/home';
 import Media from '../ui/Media.astro';
+import { existe } from '../../data/rotas';
 ---
 <section class="section section--alt">
   <div class="container">
@@ -43,14 +44,14 @@ import Media from '../ui/Media.astro';
           <p class="protocol__label">{p.label}</p>
           <blockquote>"{p.fala}"</blockquote>
           <p>{p.texto}</p>
-          <a href="#" class="link-arrow" data-rota={p.rota}>Saiba mais →</a>
+          <a href={existe(p.rota) ? p.rota : '#'} class:list={['link-arrow', !existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais →</a>
         </article>
       ))}
     </div>
 
     <p class="cta-text">
       A Renke recomenda o protocolo certo para o momento da sua clínica.
-      <a href="#" class="link-arrow" data-rota="/contato">Fale com a equipe →</a>
+      <a href="/contato" class="link-arrow">Fale com a equipe →</a>
     </p>
   </div>
 </section>

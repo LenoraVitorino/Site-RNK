@@ -79,7 +79,12 @@
 /* ---------- Entrada por scroll ----------
    Sobe e aparece quando entra na viewport. Sem biblioteca. */
 
-.entra { opacity: 0; transform: translateY(18px); }
+/* O estado de repouso é VISÍVEL. Só quando o JS confirma que está vivo — a
+   classe `js` que o Base.astro põe no <html> antes da primeira pintura — é que
+   o bloco começa escondido para poder entrar. Sem essa guarda, JS quebrado ou
+   bloqueado deixava a página em branco: o conteúdo ficava parado em opacity 0
+   esperando um observer que nunca ia rodar. */
+.js .entra { opacity: 0; transform: translateY(18px); }
 .entra.visivel {
   opacity: 1; transform: none;
   transition: opacity .6s var(--easing), transform .6s var(--easing);
@@ -90,5 +95,5 @@
   .faixa__trilho { animation: none; }
   .foto img { transition: none; }
   .foto:hover img { transform: none; }
-  .entra { opacity: 1; transform: none; }
+  .js .entra { opacity: 1; transform: none; }
 }

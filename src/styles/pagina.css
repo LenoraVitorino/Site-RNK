@@ -1,0 +1,260 @@
+/* ============================================================
+   PÁGINAS INTERNAS
+   Blocos desenhados por src/components/pagina/Blocos.astro.
+   Tokens em tokens.css. A home tem os seus próprios estilos em site.css.
+   ============================================================ */
+
+/* ---------- Herói das internas ----------
+   Sem as duas tomadas da home: aquela animação é o argumento da home, e
+   repetida em 14 páginas viraria maneirismo. Aqui o herói é estático,
+   alinhado à esquerda, e o peso fica no tamanho do título. */
+
+.pg-hero { padding-block: var(--s-8) var(--s-7); }
+
+.pg-hero__titulo {
+  font-size: clamp(1.9rem, 4.6vw, 3.5rem);
+  letter-spacing: -.035em; line-height: 1.08;
+  color: #fff;
+  /* A copy define onde a linha quebra, e cada linha é um span próprio. A
+     medida existe só para segurar títulos longos — não para quebrar os curtos. */
+  max-width: 30ch;
+  margin: 0 0 var(--s-5);
+}
+/* Cada linha do H1 numa linha própria: a copy define a quebra, e ela carrega
+   o sentido — "Sua clínica atrai pacientes. / Mas perde no processo." */
+.pg-hero__linha { display: block; }
+.pg-hero__linha:not(.realce) + .realce { color: var(--marca); }
+
+.pg-hero__sub {
+  font-size: var(--fs-md); line-height: var(--lh-snug);
+  color: rgb(255 255 255 / .82);
+  max-width: 62ch; margin-bottom: var(--s-6);
+}
+.pg-hero__acoes { margin-top: var(--s-5); }
+
+/* ---------- Lista de reconhecimento ("você se reconhece aqui?") ----------
+   Não é lista de recursos: é espelho. Cada item é uma frase que o leitor
+   reconhece na própria operação, então ganha respiro e um marcador discreto. */
+
+.reconhece { list-style: none; margin: var(--s-6) 0 0; padding: 0; display: grid; gap: var(--s-3); }
+
+.reconhece__item {
+  position: relative;
+  padding: var(--s-4) var(--s-5) var(--s-4) calc(var(--s-5) + 1.5rem);
+  border-radius: var(--raio-card-sm);
+  border: 1px solid var(--line);
+  background: rgb(255 255 255 / .02);
+  line-height: var(--lh-corpo);
+}
+.reconhece__item::before {
+  content: ''; position: absolute;
+  left: var(--s-5); top: calc(var(--s-4) + .55em);
+  width: .5rem; height: .5rem; border-radius: 50%;
+  background: var(--marca);
+}
+
+/* Numerada: a marca vira o número da etapa, porque aí a ordem é informação */
+.reconhece--numerada { counter-reset: passo; }
+.reconhece--numerada .reconhece__item { counter-increment: passo; }
+.reconhece--numerada .reconhece__item::before {
+  content: counter(passo);
+  display: grid; place-items: center;
+  left: calc(var(--s-5) - .45rem); top: var(--s-4);
+  width: 1.4rem; height: 1.4rem;
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  font-variant-numeric: tabular-nums;
+  color: var(--bg); background: var(--marca);
+}
+
+/* ---------- Produtos ---------- */
+
+.produtos { display: grid; gap: var(--s-4); margin-top: var(--s-6); }
+
+.produto {
+  display: flex; flex-direction: column; align-items: start; gap: var(--s-3);
+  padding: var(--s-5); border-radius: var(--raio-card);
+}
+.produto__titulo { font-size: var(--fs-lg); color: #fff; margin: 0; }
+.produto__texto { margin: 0; color: var(--muted); }
+/* Empurra o link para a base: com cartões de altura diferente, os links
+   desalinhados fazem a fileira parecer torta. */
+.produto__link { margin-top: auto; padding-top: var(--s-2); }
+
+/* ---------- Blocos "o que resolve na prática" ---------- */
+
+.resolve {
+  display: grid; gap: var(--s-4);
+  margin-top: var(--s-6);
+}
+.resolve__item { position: relative; padding: var(--s-5); border-radius: var(--raio-card); }
+
+/* Numeração só onde a ordem é informação — nunca como enfeite */
+.resolve__n {
+  display: inline-grid; place-items: center;
+  width: 1.9rem; height: 1.9rem; margin-bottom: var(--s-3);
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  font-variant-numeric: tabular-nums;
+  color: var(--marca);
+  border: 1px solid var(--marca);
+  border-radius: 50%;
+}
+.resolve__titulo {
+  font-size: var(--fs-lg); line-height: var(--lh-snug);
+  color: #fff; margin-bottom: var(--s-3);
+}
+.resolve__texto { margin: 0; color: var(--muted); }
+
+.resolve__lista { list-style: none; margin: var(--s-3) 0 0; padding: 0; display: grid; gap: var(--s-2); }
+.resolve__lista li {
+  position: relative; padding-left: 1.5rem;
+  color: var(--muted); line-height: var(--lh-snug);
+}
+/* Marca de "entregue", não bullet genérico: são itens que a clínica recebe */
+.resolve__lista li::before {
+  content: ''; position: absolute;
+  left: 0; top: .42em;
+  width: .45rem; height: .75rem;
+  border-right: 2px solid var(--marca); border-bottom: 2px solid var(--marca);
+  transform: rotate(45deg);
+}
+
+/* ---------- Etapas ----------
+   Lista ordenada de verdade: a ordem é informação, não decoração. */
+
+.etapas__h2 { margin-bottom: var(--s-6); }
+.etapas__linha { display: block; }
+
+.etapas { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); counter-reset: etapa; }
+
+.etapa {
+  display: grid; gap: var(--s-1);
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'n duracao'
+    'n nome'
+    'n descricao';
+  align-items: start;
+  padding: var(--s-5); border-radius: var(--raio-card);
+  column-gap: var(--s-5);
+}
+.etapa__n {
+  grid-area: n;
+  display: grid; place-items: center;
+  width: 2.5rem; height: 2.5rem;
+  font-size: var(--fs-sm); font-weight: var(--peso-titulo);
+  font-variant-numeric: tabular-nums;
+  color: var(--bg); background: var(--marca);
+  border-radius: 50%;
+}
+.etapa__duracao {
+  grid-area: duracao;
+  font-size: var(--fs-xs); letter-spacing: var(--tracking-label);
+  text-transform: uppercase; color: var(--marca);
+}
+.etapa__nome { grid-area: nome; font-size: var(--fs-lg); color: #fff; margin: 0 0 var(--s-1); }
+.etapa__descricao { grid-area: descricao; margin: 0; color: var(--muted); }
+
+.etapas__fechamento {
+  margin-top: var(--s-6); padding-left: var(--s-5);
+  border-left: 2px solid var(--marca);
+  font-size: var(--fs-md); color: var(--text); max-width: var(--medida);
+}
+
+/* ---------- Tabela antes/depois ---------- */
+
+.tabela-rolagem { overflow-x: auto; margin-top: var(--s-6); }
+
+.antes-depois {
+  width: 100%; border-collapse: collapse;
+  text-align: left; min-width: 34rem;
+}
+.antes-depois th {
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+.antes-depois th:last-child { color: var(--marca); }
+.antes-depois td {
+  padding: var(--s-4);
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top; line-height: var(--lh-snug);
+}
+/* O "antes" é o estado que o leitor quer deixar para trás: fica recuado no
+   contraste, e o "depois" carrega o peso. */
+.antes-depois__antes { color: var(--muted); }
+
+/* ---------- Números e pilares ---------- */
+
+.chips--centro { justify-content: center; }
+.numeros__nota {
+  margin: var(--s-5) auto 0; max-width: 54ch;
+  font-size: var(--fs-md); color: var(--text);
+}
+
+/* ---------- FAQ ----------
+   <details> nativo: abre sem JS, é acessível por teclado de fábrica e
+   entra no Ctrl-F do navegador quando aberto. */
+
+.faq { display: grid; gap: var(--s-2); margin-top: var(--s-5); }
+
+.faq__item {
+  border: 1px solid var(--line);
+  border-radius: var(--raio-card-sm);
+  background: rgb(255 255 255 / .02);
+  padding: var(--s-4) var(--s-5);
+}
+.faq__pergunta {
+  font-weight: var(--peso-titulo); color: #fff;
+  cursor: pointer; list-style: none;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+}
+.faq__pergunta::-webkit-details-marker { display: none; }
+.faq__pergunta::after {
+  content: ''; flex: none;
+  width: .6rem; height: .6rem;
+  border-right: 2px solid var(--marca); border-bottom: 2px solid var(--marca);
+  transform: rotate(45deg) translateY(-.15em);
+  transition: transform var(--dur-padrao) var(--easing-suave);
+}
+.faq__item[open] .faq__pergunta::after { transform: rotate(-135deg) translateY(-.15em); }
+.faq__pergunta:focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; border-radius: var(--radius); }
+.faq__resposta { margin: var(--s-3) 0 0; color: var(--muted); max-width: var(--medida); }
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__pergunta::after { transition: none; }
+}
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 768px) {
+  .resolve { grid-template-columns: repeat(2, 1fr); }
+  .produtos { grid-template-columns: repeat(2, 1fr); }
+  .reconhece { gap: var(--s-2); }
+  .etapa {
+    grid-template-columns: auto 10rem 1fr;
+    grid-template-areas:
+      'n duracao nome'
+      'n duracao descricao';
+    align-items: center;
+  }
+  .etapa__descricao { align-self: start; }
+}
+
+@media (min-width: 1024px) {
+  .resolve { grid-template-columns: repeat(3, 1fr); }
+  /* Blocos com lista dentro precisam de largura; três colunas espremem. */
+  .resolve--largo { grid-template-columns: repeat(2, 1fr); }
+  .produtos { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---------- Formulário ----------
+   O destino ainda não foi decidido, então o aviso explica por que o envio não
+   acontece e dá um caminho que funciona hoje. */
+
+.form-card__aviso {
+  margin: var(--s-4) 0 0;
+  font-size: var(--fs-xs); line-height: 1.5; color: var(--muted);
+}
+.form-card__aviso a { color: var(--marca); }

@@ -4,7 +4,7 @@ Documento único com o mapa do site e a copy de todas as páginas escritas até 
 15 páginas, 106 seções.
 
 > **Fonte:** briefing exportado do ClickUp em 15/08/2026, reorganizado em `docs/`.
-> Gerado por `npm run docs:dossie` em 03/09/2026 — editar os arquivos de
+> Gerado por `npm run docs:dossie` em 06/09/2026 — editar os arquivos de
 > `docs/03-copy/` e rodar de novo, em vez de editar este arquivo.
 
 ## Como ler

@@ -817,7 +817,9 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   display: block; font-size: var(--fs-sm); font-weight: var(--peso-titulo);
   margin-bottom: var(--s-2);
 }
-.field input, .field select {
+/* textarea junto: sem ela o campo de mensagem nascia branco, porque o
+   navegador não herda cor nem fundo de <textarea> como herda de <input>. */
+.field input, .field select, .field textarea {
   width: 100%; min-height: var(--alvo);
   padding: var(--s-3); font: inherit; font-size: var(--fs-base);
   color: var(--text);
@@ -825,8 +827,11 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   background: rgb(255 255 255 / .04);
   transition: border-color var(--dur-padrao) var(--easing-suave);
 }
-.field input:hover, .field select:hover { border-color: var(--muted); }
-.field input:focus, .field select:focus { border-color: var(--dark); }
+.field textarea { resize: vertical; min-height: 6rem; }
+/* A seta nativa do select fica preta sobre fundo escuro em alguns navegadores */
+.field select { color-scheme: dark; }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--muted); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--marca); }
 
 /* ---------- Rodapé ---------- */
 
@@ -999,3 +1004,9 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   .nav__indicador { transition: opacity .01s !important; }
   html { scroll-behavior: auto; }
 }
+
+/* Item de menu cujo destino ainda não existe. Continua clicável (o script
+   avisa qual rota é), mas sinaliza que não leva a lugar nenhum — melhor que
+   um link confiante levando a um 404. */
+.nav--pendente { opacity: .45; }
+.nav--pendente::after { content: ' · em breve'; font-size: .8em; font-style: italic; }

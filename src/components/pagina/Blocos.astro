@@ -1,0 +1,272 @@
+---
+/**
+ * Desenha a lista de blocos de uma página interna.
+ *
+ * Um componente só em vez de 14 páginas repetindo marcação: quando o
+ * tratamento de uma seção muda, muda em todas de uma vez.
+ */
+import type { Bloco } from '../../data/paginas/tipos';
+import Botao from '../ui/Botao.astro';
+import Media from '../ui/Media.astro';
+
+interface Props {
+  blocos: Bloco[];
+}
+
+const { blocos } = Astro.props;
+
+const fundoClasse = (f?: 'alt' | 'escuro') =>
+  f === 'alt' ? 'section--alt' : f === 'escuro' ? 'section--dark' : '';
+
+const dev = import.meta.env.DEV;
+---
+{blocos.map((b) => {
+  switch (b.tipo) {
+    case 'hero':
+      return (
+        <section class="section section--hero pg-hero">
+          <div class="container">
+            <h1 class="pg-hero__titulo">
+              {b.titulo.map((linha, i) => (
+                <span class:list={['pg-hero__linha', b.realce === i && 'realce']}>{linha}</span>
+              ))}
+            </h1>
+            {b.sub && <p class="pg-hero__sub">{b.sub}</p>}
+            {b.cta && (
+              <div class="pg-hero__acoes">
+                <Botao variante="brilho" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao>
+              </div>
+            )}
+          </div>
+        </section>
+      );
+
+    case 'lista':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container container--narrow">
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            <h2>{b.h2}</h2>
+            {b.numerada ? (
+              <ol class="reconhece reconhece--numerada">
+                {b.itens.map((i) => <li class="reconhece__item entra">{i}</li>)}
+              </ol>
+            ) : (
+              <ul class="reconhece">
+                {b.itens.map((i) => <li class="reconhece__item entra">{i}</li>)}
+              </ul>
+            )}
+          </div>
+        </section>
+      );
+
+    case 'blocos':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container">
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            <h2>{b.h2}</h2>
+            <div class:list={['resolve', b.largo && 'resolve--largo', b.numerado && 'resolve--numerado']}>
+              {b.itens.map((i, n) => (
+                <article class="resolve__item vidro entra">
+                  {b.numerado && <span class="resolve__n" aria-hidden="true">{n + 1}</span>}
+                  <h3 class="resolve__titulo">{i.titulo}</h3>
+                  {i.texto && <p class="resolve__texto">{i.texto}</p>}
+                  {i.itens && (
+                    <ul class="resolve__lista">
+                      {i.itens.map((li) => <li>{li}</li>)}
+                    </ul>
+                  )}
+                  {i.media && <Media id={i.media} />}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+
+    case 'etapas':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container">
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            <h2 class="etapas__h2">
+              {b.h2.map((l) => <span class="etapas__linha">{l}</span>)}
+            </h2>
+            <ol class="etapas">
+              {b.etapas.map((e) => (
+                <li class="etapa vidro entra">
+                  <span class="etapa__n">{e.n}</span>
+                  <span class="etapa__duracao">{e.duracao}</span>
+                  <h3 class="etapa__nome">{e.nome}</h3>
+                  <p class="etapa__descricao">{e.descricao}</p>
+                </li>
+              ))}
+            </ol>
+            {b.fechamento && <p class="etapas__fechamento">{b.fechamento}</p>}
+          </div>
+        </section>
+      );
+
+    case 'antesDepois':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container">
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            <h2>{b.h2}</h2>
+            {/* Tabela de verdade: são dois estados comparáveis linha a linha,
+                e um leitor de tela precisa da relação entre as colunas. */}
+            <div class="tabela-rolagem">
+              <table class="antes-depois">
+                <thead>
+                  <tr><th scope="col">{b.rotulos[0]}</th><th scope="col">{b.rotulos[1]}</th></tr>
+                </thead>
+                <tbody>
+                  {b.linhas.map(([antes, depois]) => (
+                    <tr><td class="antes-depois__antes">{antes}</td><td>{depois}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      );
+
+    case 'texto':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class:list={['container', 'container--prose', b.centro && 'center']}>
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            {b.h2 && <h2>{b.h2}</h2>}
+            {b.paragrafos.map((p) => <p set:html={p} />)}
+          </div>
+        </section>
+      );
+
+    case 'numeros':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container center">
+            {b.h2 && <h2>{b.h2}</h2>}
+            <ul class="chips chips--centro">
+              {b.itens.map((i) => <li class="chip vidro">{i}</li>)}
+            </ul>
+            {b.nota && <p class="numeros__nota">{b.nota}</p>}
+          </div>
+        </section>
+      );
+
+    case 'produtos':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container">
+            {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
+            <h2>{b.h2}</h2>
+            {b.sub && <p>{b.sub}</p>}
+            <div class="produtos">
+              {b.itens.map((i) => (
+                <article class="produto vidro entra">
+                  <h3 class="produto__titulo">{i.titulo}</h3>
+                  <p class="produto__texto">{i.texto}</p>
+                  <a class="link-arrow produto__link" href={i.rota}>{i.cta} →</a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+
+    case 'faq':
+      return (
+        <section class:list={['section', fundoClasse(b.fundo)]}>
+          <div class="container container--prose">
+            <h2>{b.h2}</h2>
+            <div class="faq">
+              {b.perguntas.map((q, i) => (
+                <details class="faq__item" open={i === 0}>
+                  <summary class="faq__pergunta">{q.p}</summary>
+                  <p class="faq__resposta">{q.r}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+
+    case 'formulario':
+      return (
+        <section class="section">
+          {/* Sem texto ao lado, duas colunas deixariam metade da faixa vazia:
+              aí o formulário fica sozinho e centrado. */}
+          <div class:list={[
+            'container',
+            (b.h2 || b.sub) ? 'form-block' : 'container--prose',
+          ]}>
+            {(b.h2 || b.sub || b.email) && (
+              <div>
+                {b.h2 && <h2>{b.h2}</h2>}
+                {b.sub && <p>{b.sub}</p>}
+                {b.email && (
+                  <p><a class="link-arrow" href={`mailto:${b.email}`}>{b.email}</a></p>
+                )}
+              </div>
+            )}
+            {/*
+              Sem `action`: o destino ainda não foi decidido (CRM? e-mail?
+              webhook?) — ver docs/05-analise. Um formulário que aponta para
+              lugar nenhum não deve fingir que envia, então `disabled` no botão
+              e o aviso abaixo dizem a verdade a quem preencher.
+            */}
+            <form class="form-card vidro">
+              {b.campos.map((c) => (
+                <p class="field">
+                  <label class="field__label" for={c.id}>{c.rotulo}</label>
+                  {c.tipo === 'textarea' ? (
+                    <textarea id={c.id} name={c.id} rows="4" required={c.obrigatorio}></textarea>
+                  ) : c.tipo === 'select' ? (
+                    <select id={c.id} name={c.id} required={c.obrigatorio}>
+                      {c.opcoes?.map((o) => <option>{o}</option>)}
+                    </select>
+                  ) : (
+                    <input
+                      id={c.id}
+                      name={c.id}
+                      type={c.tipo}
+                      autocomplete={c.autocomplete}
+                      required={c.obrigatorio}
+                    />
+                  )}
+                </p>
+              ))}
+              <Botao variante="brilho" type="submit">{b.botao}</Botao>
+              <p class="form-card__aviso">
+                O envio ainda não está ligado. Enquanto isso, escreva para
+                <a href="mailto:contato@renkestudio.com.br"> contato@renkestudio.com.br</a>.
+              </p>
+            </form>
+          </div>
+        </section>
+      );
+
+    case 'ctaFinal':
+      return (
+        <section class="section section--dark">
+          <div class="container container--narrow center">
+            {b.destaque && <h2 class="statement">{b.destaque}</h2>}
+            {b.texto && <p>{b.texto}</p>}
+            <p><Botao variante="claro" tamanho="lg" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao></p>
+          </div>
+        </section>
+      );
+
+    case 'pendencia':
+      // Some da build de produção: é recado para o time, não conteúdo do site.
+      return dev ? (
+        <section class="section">
+          <div class="container">
+            <p class="wf-note">⚠️ Falta copy: {b.o_que}</p>
+          </div>
+        </section>
+      ) : null;
+  }
+})}

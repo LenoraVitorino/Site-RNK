@@ -23,6 +23,7 @@ const blocos = [
     slot: '06',
   },
 ];
+import { existe } from '../../data/rotas';
 ---
 <section class="section section--alt">
   <div class="container">
@@ -33,7 +34,7 @@ const blocos = [
           <h3>{b.titulo}</h3>
           <Media id={b.slot} />
           <p>{b.texto}</p>
-          <a href="#" class="link-arrow" data-rota={b.rota}>{b.cta}</a>
+          <a href={existe(b.rota) ? b.rota : '#'} class:list={['link-arrow', !existe(b.rota) && 'nav--pendente']} data-rota={b.rota}>{b.cta}</a>
         </article>
       ))}
     </div>

@@ -9,7 +9,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | # | Decisão | Impacto se não decidir |
 |---|---|---|
 | D1 | **Números oficiais**: ~30 vs. +140 clínicas · 4 vs. 6 anos | Prova social contraditória em páginas vizinhas |
-| D2 | **Padrão de rotas**: `/studio/revena-start` ou `/revena-start` | Retrabalho + redirects depois de indexado |
+| ~~D2~~ | ~~**Padrão de rotas**~~ → **hierárquico** (`/studio/revena-start`), em 06/09/2026 | ✅ resolvido |
 | D3 | **Agendamento 10x**: descontinuar ou manter? (CEO quer descontinuar, Eduarda discorda) | Página e item de menu em limbo |
 | D4 | **H1 da home**: "Isso não é marketing para clínicas. É RevOps" ou a versão favorita do brainstorm | Define o gancho de atenção do site inteiro |
 | D5 | **"Primeira do mundo" ou "primeira do Brasil"** | Risco de contestação pública |
@@ -22,6 +22,32 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D12 | **Telefone / WhatsApp oficial** para rodapé e contato | Rodapé e /contato incompletos |
 | ~~D14~~ | ~~**Vídeo institucional: auto-hospedar ou manter o embed?**~~ → **auto-hospedado**, em 30/08/2026 | ✅ resolvido |
 | ~~D13~~ | ~~**Stack**~~ → **Astro**, decidido em 29/08/2026 | ✅ resolvido |
+
+---
+
+## 1b. Páginas construídas
+
+13 das 23 rotas do menu já estão no ar, todas com a copy literal de `docs/03-copy/`:
+
+| Rota | Origem da copy |
+|---|---|
+| `/` | home.md |
+| `/studio/revena-start` · `-full` · `-core` · `-scale` · `-run` | os cinco protocolos |
+| `/academy` + as 5 páginas de produto | academy.md e derivadas |
+| `/contato` · `/faca-parte` | contato.md · faca-parte.md |
+| `/404` | sem copy no briefing — escrita para o deploy |
+
+As 10 restantes seguem no menu marcadas **"em breve"**, sem link, porque não têm copy:
+`/studio/site-institucional`, `/studio/identidade-visual`, `/tools/renke-connect`,
+`/tools/renke-crm`, `/sobre`, `/cases`, `/blog`, `/studio`, `/tools` e
+`/studio/treine-sua-equipe`.
+
+> **`/treine-sua-equipe` é o caso diferente:** a copy existe e está completa. A página não foi
+> construída porque o próprio documento manda não construir até a **D3** ser resolvida — o CEO quer
+> descontinuar o produto e a Eduarda discorda. Se a decisão for manter, a página sai em minutos.
+
+O menu deriva o estado de cada link do diretório de páginas (`src/data/rotas.ts`), então uma rota
+nova acende sozinha quando a página entra. Não há link levando a 404.
 
 ---
 
