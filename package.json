@@ -10,7 +10,7 @@
     "preview": "astro preview",
     "wireframe:standalone": "node wireframe/build-standalone.mjs",
     "portable": "astro build && node scripts/portable.mjs",
-    "artifact": "astro build && node scripts/artifact.mjs index && node scripts/artifact.mjs design-system",
+    "artifact": "astro build && node scripts/artifact.mjs site && node scripts/artifact.mjs design-system",
     "docs:midia": "node --experimental-strip-types scripts/inventario-midia.mjs",
     "docs:dossie": "node scripts/dossie.mjs",
     "deploy": "astro build && wrangler deploy",

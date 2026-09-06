@@ -1,107 +1,185 @@
 /**
- * Gera um HTML único e autossuficiente do site, pronto para publicar
- * como página hospedada (Artifact).
+ * Gera um HTML único e autossuficiente, pronto para publicar como página
+ * hospedada (Artifact).
  *
- *   npm run artifact   →  dist-artifact/home.html
+ *   npm run artifact   →  dist-artifact/site.html  (todas as páginas, navegáveis)
+ *                         dist-artifact/design-system.html
  *
- * Por que existe: a página publicada não pode carregar arquivos externos —
- * CSS, JS e fontes precisam estar dentro do próprio HTML. As fontes viram
- * data URI em base64.
+ * Por que existe: a página publicada não pode carregar arquivo externo — CSS,
+ * fontes, imagens e vídeo precisam estar dentro do próprio HTML.
+ *
+ * O modo `site` empacota TODAS as páginas em um arquivo só. Cada <main> vira
+ * uma rota escondida e um roteador de ~30 linhas troca qual aparece, para o
+ * menu funcionar de verdade na prévia. O cabeçalho e o rodapé entram uma vez:
+ * duplicá-los por página repetiria os `id` que o script do menu usa e o menu
+ * pararia de funcionar.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, statSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync, statSync, readdirSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(raiz, 'dist');
 const saida = join(raiz, 'dist-artifact');
 
-const pagina = process.argv[2] || 'index';
+const modo = process.argv[2] || 'site';
 const titulos = {
-  index: 'Home Renke Studio',
+  site: 'Site Renke Studio',
   'design-system': 'Design System Renke',
 };
 
-let html = readFileSync(join(dist, `${pagina}.html`), 'utf8');
+/* ---- Coleta as páginas -------------------------------------------------- */
 
-// 1) CSS: inline de TODAS as folhas que a página referencia, com as fontes
-//    como data URI. Com mais de uma página há mais de um bundle — pegar o
-//    primeiro do diretório embutiria o CSS da página errada.
+const listar = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? listar(join(dir, e.name)) : e.name.endsWith('.html') ? [join(dir, e.name)] : [],
+  );
+
+const rotaDe = (arquivo) =>
+  '/' + relative(dist, arquivo).replace(/\.html$/, '').replace(/^index$/, '');
+
+const paginas = listar(dist)
+  .map((arquivo) => ({ arquivo, rota: rotaDe(arquivo), html: readFileSync(arquivo, 'utf8') }))
+  // O design system é outro artifact: não é página do site.
+  .filter((p) => p.rota !== '/design-system')
+  .sort((a, b) => (a.rota === '/' ? -1 : b.rota === '/' ? 1 : a.rota.localeCompare(b.rota)));
+
+const casca =
+  modo === 'design-system'
+    ? { arquivo: join(dist, 'design-system.html'), rota: '/design-system', html: readFileSync(join(dist, 'design-system.html'), 'utf8') }
+    : paginas.find((p) => p.rota === '/');
+
+if (!casca) {
+  console.error('Não encontrei a página que serve de casca.');
+  process.exit(1);
+}
+
+/* ---- 1) CSS e fontes ---------------------------------------------------- */
+
 let fontes = 0;
-
 const inlineFontes = (css) =>
   css.replace(/url\((['"]?)\/_astro\/([^'")]+\.woff2?)\1\)/g, (_m, _q, arquivo) => {
     const dados = readFileSync(join(dist, '_astro', arquivo)).toString('base64');
-    const tipo = arquivo.endsWith('.woff2') ? 'font/woff2' : 'font/woff';
     fontes++;
-    return `url(data:${tipo};base64,${dados})`;
+    return `url(data:font/${arquivo.endsWith('.woff2') ? 'woff2' : 'woff'};base64,${dados})`;
   });
 
-const links = [...html.matchAll(/<link rel="stylesheet" href="\/_astro\/([^"]+\.css)"\s*\/?>/g)];
-if (links.length === 0) {
-  console.error(`Nenhuma folha de estilo encontrada em ${pagina}.html`);
+// Todas as folhas que qualquer página referencia, sem repetir.
+const folhas = [
+  ...new Set(
+    (modo === 'design-system' ? [casca] : paginas).flatMap((p) =>
+      [...p.html.matchAll(/<link rel="stylesheet" href="\/_astro\/([^"]+\.css)"\s*\/?>/g)].map((m) => m[1]),
+    ),
+  ),
+];
+if (folhas.length === 0) {
+  console.error('Nenhuma folha de estilo encontrada.');
   process.exit(1);
 }
+const estilos =
+  '<style>\n' +
+  inlineFontes(folhas.map((f) => readFileSync(join(dist, '_astro', f), 'utf8')).join('\n')) +
+  '\n</style>';
 
-for (const [tag, arquivo] of links) {
-  html = html.replace(tag, `<style>\n${readFileSync(join(dist, '_astro', arquivo), 'utf8')}\n</style>`);
-}
+/* ---- 2) Corpo ----------------------------------------------------------- */
 
-// A Astro também embute CSS direto no HTML quando o bundle é pequeno, então a
-// substituição roda no documento inteiro — não só nas folhas linkadas.
-html = inlineFontes(html);
+const corpoDe = (html) => {
+  const abre = html.match(/<body[^>]*>/);
+  if (!abre) throw new Error('sem <body>');
+  return {
+    atributos: abre[0].slice('<body'.length, -1).trim(),
+    conteudo: html.slice(abre.index + abre[0].length, html.lastIndexOf('</body>')),
+  };
+};
 
-// 2) Descarta o esqueleto do documento — a página publicada já fornece o dela
-// O <body> pode ter atributos (class, data-*), então casa por regex.
-// Procurar a string literal "<body>" devolvia -1 e vazava o doctype na página.
-const abre = html.match(/<body[^>]*>/);
-if (!abre) {
-  console.error(`Não encontrei a tag <body> em ${pagina}.html`);
-  process.exit(1);
-}
-const inicio = abre.index + abre[0].length;
-let corpo = html.slice(inicio, html.lastIndexOf('</body>'));
+const tituloDe = (html) => (html.match(/<title>([\s\S]*?)<\/title>/) || [, ''])[1].trim();
 
-// A página publicada descarta o <body> e usa o do host. Se o nosso body
-// carregava atributos — a página do design system usa class="ds" — o CSS
-// escopado neles deixaria de aplicar. Envolve o conteúdo num elemento que
-// herda esses atributos.
-const atributos = abre[0].slice('<body'.length, -1).trim();
-if (atributos) {
-  corpo = `<div ${atributos} data-corpo>\n${corpo}\n</div>`;
-}
-// Título fixo: o <title> da home é a meta tag de SEO, longa demais para
-// nomear a prévia. E o nome precisa ficar estável entre publicações.
-const titulo = titulos[pagina] || pagina;
-const estilos = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
+const RE_MAIN = /<main[^>]*>[\s\S]*?<\/main>/;
 
-let final = `<title>${titulo}</title>\n${estilos}\n${corpo}\n`;
+let corpo;
+let rotas = 0;
 
-// 3) Imagens locais viram data URI — a página publicada não busca arquivo externo
-let imagens = 0;
-const embutir = (texto) =>
-  texto.replace(/(src|href|poster)="\/((?:marca|imagens|midia)\/[^"]+)"/g, (_m, attr, arquivo) => {
-    try {
-      const dados = readFileSync(join(dist, arquivo)).toString('base64');
-      const ext = arquivo.split('.').pop().toLowerCase();
-      // 'image/jpg' não é um tipo válido — o navegador tolera, o validador não.
-      const tipos = { svg: 'image/svg+xml', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
-      const tipo = tipos[ext] || `image/${ext}`;
-      imagens++;
-      return `${attr}="data:${tipo};base64,${dados}"`;
-    } catch {
-      return _m;
+if (modo === 'design-system') {
+  corpo = corpoDe(casca.html).conteudo;
+} else {
+  const base = corpoDe(casca.html);
+  // Cada página entra como uma rota; só a primeira nasce visível.
+  const secoes = paginas
+    .map((p) => {
+      const main = (p.html.match(RE_MAIN) || [])[0];
+      if (!main) return '';
+      rotas++;
+      const atributos = [
+        `data-rota="${p.rota}"`,
+        `data-titulo="${tituloDe(p.html).replace(/"/g, '&quot;')}"`,
+        p.rota === '/' ? '' : 'hidden',
+      ]
+        .filter(Boolean)
+        .join(' ');
+      return `<div ${atributos}>${main}</div>`;
+    })
+    .join('\n');
+
+  if (!RE_MAIN.test(base.conteudo)) {
+    console.error('A casca não tem <main> para substituir.');
+    process.exit(1);
+  }
+  corpo = base.conteudo.replace(RE_MAIN, secoes);
+
+  // Roteador. Captura antes do script do menu, que também escuta cliques.
+  corpo += `
+<script>
+(function () {
+  var rotas = document.querySelectorAll('[data-rota][data-titulo]');
+  var porRota = {};
+  rotas.forEach(function (r) { porRota[r.dataset.rota] = r; });
+
+  function ir(rota) {
+    var alvo = porRota[rota];
+    if (!alvo) return false;
+    rotas.forEach(function (r) { r.hidden = r !== alvo; });
+    document.title = alvo.dataset.titulo;
+    location.hash = rota === '/' ? '' : rota;
+    scrollTo({ top: 0, behavior: 'instant' });
+    // Fecha o que estiver aberto no menu depois de navegar.
+    document.querySelectorAll('.megamenu').forEach(function (m) { m.hidden = true; });
+    document.querySelectorAll('.nav__trigger').forEach(function (t) {
+      t.setAttribute('aria-expanded', 'false');
+    });
+    var nav = document.getElementById('navPrincipal');
+    if (nav && nav.classList.contains('is-open')) {
+      document.getElementById('navToggle').click();
     }
-  });
+    return true;
+  }
 
-// 4) Vídeo: a prévia não busca arquivo externo, então ele também precisa virar
-//    data URI. Só um dos formatos entra — em base64 cada byte vira 1,37, e os
-//    dois juntos estouram o limite da página publicada. Vence o menor arquivo,
-//    porque o visualizador é um navegador atual e toca os dois.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="/"]');
+    if (!a || a.target === '_blank') return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (!ir(a.getAttribute('href'))) ir('/404');
+  }, true);
+
+  addEventListener('hashchange', function () { ir(location.hash.slice(1) || '/'); });
+  if (location.hash) ir(location.hash.slice(1));
+})();
+</script>`;
+}
+
+const titulo = titulos[modo] || modo;
+const atributosCorpo = corpoDe(casca.html).atributos;
+let final = `<title>${titulo}</title>\n${estilos}\n${
+  atributosCorpo ? `<div ${atributosCorpo} data-corpo>\n${corpo}\n</div>` : corpo
+}\n`;
+
+/* ---- 3) Vídeo ----------------------------------------------------------- */
+
 let video = '';
 const fontesVideo = [...final.matchAll(/<source src="\/(midia\/[^"]+)" type="([^"]+)"\s*\/?>/g)];
 if (fontesVideo.length) {
+  // Em base64 cada byte vira 1,37 — só o menor formato entra.
   const candidatos = fontesVideo
     .map(([tag, arquivo, tipo]) => {
       try { return { tag, arquivo, tipo, bytes: statSync(join(dist, arquivo)).size }; }
@@ -116,39 +194,54 @@ if (fontesVideo.length) {
   }
   const escolhido = candidatos[0];
   const dados = readFileSync(join(dist, escolhido.arquivo)).toString('base64');
-  // O type com codecs é bom no site — na prévia o data URI já resolve, e um
-  // codecs errado faria o navegador descartar a fonte sem tentar.
   const limpo = escolhido.tipo.split(';')[0];
-  const substituto = `<source src="data:${limpo};base64,${dados}" type="${limpo}">`;
-
-  // Todas as fontes saem; entra uma só, no lugar da primeira.
-  final = final.replace(escolhido.tag, substituto);
+  final = final.replace(escolhido.tag, `<source src="data:${limpo};base64,${dados}" type="${limpo}">`);
   for (const c of candidatos) if (c !== escolhido) final = final.replace(c.tag, '');
-  video = `${escolhido.arquivo} (${(escolhido.bytes / 1048576).toFixed(1)} MB → ` +
-          `${(dados.length / 1048576).toFixed(1)} MB em base64)`;
+  video = `${escolhido.arquivo} (${(escolhido.bytes / 1048576).toFixed(1)} MB → ${(dados.length / 1048576).toFixed(1)} MB)`;
 }
 
-// 5) Página única: links de navegação viram âncora inerte
-let final2 = embutir(final).replace(/href="\/(?!\/)[^"]*"/g, 'href="#"');
+/* ---- 4) Imagens --------------------------------------------------------- */
 
-// 6) Confere que não sobrou referência a arquivo externo
-const externa = /(src|href|poster)="\/(?!\/)/.exec(final2) || /url\(['"]?\/(?!\/)/.exec(final2);
+let imagens = 0;
+final = final.replace(
+  /(src|href|poster)="\/((?:marca|imagens|midia)\/[^"]+)"/g,
+  (m, attr, arquivo) => {
+    try {
+      const dados = readFileSync(join(dist, arquivo)).toString('base64');
+      const ext = arquivo.split('.').pop().toLowerCase();
+      // 'image/jpg' não é tipo válido — o navegador tolera, o validador não.
+      const tipos = { svg: 'image/svg+xml', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+      imagens++;
+      return `${attr}="data:${tipos[ext] || `image/${ext}`};base64,${dados}"`;
+    } catch {
+      return m;
+    }
+  },
+);
+
+/* ---- 5) Confere --------------------------------------------------------- */
+
+// Os href de navegação continuam "/rota" de propósito: é o roteador que os usa.
+const externa =
+  /(src|poster)="\/(?!\/)/.exec(final) ||
+  /href="\/_astro\//.exec(final) ||
+  /url\(['"]?\/(?!\/)/.exec(final);
 if (externa) {
   console.error(`Sobrou referência externa: ${externa[0]}`);
   process.exit(1);
 }
 
 mkdirSync(saida, { recursive: true });
-const destino = join(saida, `${pagina}.html`);
-writeFileSync(destino, final2);
+const destino = join(saida, `${modo}.html`);
+writeFileSync(destino, final);
 
+const mb = final.length / 1048576;
 console.log(`✓ ${destino}`);
-console.log(`  ${fontes} fonte(s) e ${imagens} imagem(ns) embutidas · ${(final2.length / 1024).toFixed(0)} KB`);
-if (video) console.log(`  vídeo embutido: ${video}`);
+console.log(`  ${rotas || 1} página(s) · ${fontes} fonte(s) · ${imagens} imagem(ns) · ${mb.toFixed(1)} MB`);
+if (video) console.log(`  vídeo: ${video}`);
 
 // A página publicada tem teto de 16 MB.
-const mb = final2.length / 1048576;
 if (mb > 15) {
-  console.error(`  ⚠ ${mb.toFixed(1)} MB — perto do teto de 16 MB da página publicada`);
+  console.error(`  ⚠ ${mb.toFixed(1)} MB — perto do teto de 16 MB`);
   process.exit(1);
 }
