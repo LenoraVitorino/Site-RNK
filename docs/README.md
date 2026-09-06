@@ -32,6 +32,7 @@ Gerado por `npm run docs:dossie` a partir dos arquivos abaixo — editar lá e r
 | [SEO e keywords](02-arquitetura/seo-e-keywords.md) | Mapa de keywords por página, requisitos técnicos, E-E-A-T |
 | [Padrões de página](02-arquitetura/padroes-de-pagina.md) | Regras que toda página precisa seguir |
 | [Stack](02-arquitetura/stack.md) | Astro: por quê, como rodar, estrutura de pastas |
+| [Preview no túnel](02-arquitetura/preview-no-tunel.md) | Expor o dev server numa URL pública pelo Cloudflare |
 
 ### 03 · Copy (por página)
 | Página | Rota | Arquivo |
