@@ -44,11 +44,21 @@
   --foco:      var(--marca);
 
   /* ---- Tipografia ----------------------------------------------------
-     Open Sans em dois pesos: 600 para títulos, 400 para texto corrido.
-     Carregada self-hosted (ver Base.astro), sem CDN de terceiro. */
-  --font: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          Helvetica, Arial, sans-serif;
-  --peso-titulo: 600;
+     TESTE (06/09/2026): Helvetica, caixa alta no herói.
+
+     Helvetica é proprietária — não existe versão livre para embutir. A pilha
+     abaixo usa a do sistema: no Mac e no iPhone é a Helvetica de verdade; no
+     Windows cai em Arial, que é clone métrico dela (mesmas larguras, desenho
+     quase igual); no Linux, Liberation Sans, idem. Se o teste for aprovado,
+     o caminho para todo mundo ver a mesma coisa é licenciar a Neue Helvetica
+     ou a Helvetica Now (Monotype) e embutir os arquivos aqui.
+
+     Para voltar à Open Sans: restaurar --font e --peso-titulo: 600, e
+     reativar os imports em Base.astro. */
+  --font: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
+  /* Helvetica não tem 600: no Mac o 600 cai para o Bold (700) ou é
+     sintetizado. Declarar 700 evita o sintético. */
+  --peso-titulo: 700;
   --peso-corpo:  400;
 
   /* Escala modular ~1.25. Fluida só onde o tamanho realmente muda de papel. */

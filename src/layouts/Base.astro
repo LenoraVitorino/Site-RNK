@@ -1,9 +1,11 @@
 ---
 /* Open Sans self-hosted: sem requisição a terceiro no caminho crítico,
-   o que importa para o LCP < 2,5s exigido no briefing. Só os pesos usados. */
-import '@fontsource/open-sans/latin-400.css';
-import '@fontsource/open-sans/latin-400-italic.css';
-import '@fontsource/open-sans/latin-600.css';
+   o que importa para o LCP < 2,5s exigido no briefing. Só os pesos usados.
+   DESLIGADA durante o teste da Helvetica (ver tokens.css) — sem isso os
+   ~30 KB de fonte viajariam sem ninguém usar. Reativar se o teste cair. */
+// import '@fontsource/open-sans/latin-400.css';
+// import '@fontsource/open-sans/latin-400-italic.css';
+// import '@fontsource/open-sans/latin-600.css';
 import '../styles/site.css';
 import '../styles/botao.css';
 import '../styles/superficies.css';

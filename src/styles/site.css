@@ -345,9 +345,17 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .hero__title {
   /* Maior que o --fs-3xl padrão. O mínimo fica em 2rem: as tomadas usam
      nowrap, e acima disso "marketing para clínicas." estoura em 390px. */
-  font-size: clamp(2rem, 7vw, 6rem);
-  letter-spacing: -.04em; line-height: 1.05;
+  font-size: clamp(1.2rem, 6.2vw, 4.75rem);
+  /* Caixa alta: o tracking negativo forte, que assentava a caixa baixa,
+     aqui vira letra colada. Fica quase neutro. A entrelinha NÃO fecha:
+     em português as maiúsculas carregam acento — NÃO, CLÍNICAS — e com
+     line-height 1 o til invade a linha de cima. */
+  text-transform: uppercase;
+  letter-spacing: -.015em; line-height: 1.1;
   color: #fff; margin-bottom: var(--s-5);
+  /* As duas tomadas empilhadas com um vão próprio: em caixa alta, só a
+     entrelinha não separa as linhas no mobile — elas encostam. */
+  display: flex; flex-direction: column; align-items: center; gap: .08em;
 
   /* Roteiro da animação em um lugar só. Antes os tempos estavam espalhados
      pelas regras e ninguém conseguia ler a sequência.
@@ -376,9 +384,16 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   overflow: hidden;
   /* Banda justa: sobra apenas o necessário para as descidas de "g" e "ç".
      Folga demais deixa a tomada que sai ainda visível quando a outra entra. */
-  padding-block: .1em; margin-block: -.1em;
+  padding-block: .14em; margin-block: -.14em;
 }
 .tomadas--eixo { display: grid; }
+
+/* Em caixa alta, "MARKETING PARA CLÍNICAS." não cabe em 6,2vw abaixo de
+   480px: a tomada é nowrap e a banda recorta o que sobra, em silêncio.
+   Um fator menor no mobile faz a linha mais larga caber na tela. */
+@media (max-width: 480px) {
+  .hero__title { font-size: 5.2vw; }
+}
 
 .tomada {
   grid-area: 1 / 1;
