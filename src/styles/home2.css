@@ -302,8 +302,13 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 18px));
 }
+/* Contorno em camadas, não por text-stroke: a fonte desenha as letras com
+   formas sobrepostas e o stroke expõe cada contorno interno. Aqui a base é
+   a letra engordada em amarelo, o "furo" é a letra na cor do fundo por
+   cima — sobra um fio limpo de 1px em volta da forma inteira. */
 .revops { grid-area: 1 / 1; white-space: pre-wrap; }
-.revops--contorno { color: transparent; -webkit-text-stroke: 1px var(--amarelo); }
+.revops--borda { color: var(--amarelo); -webkit-text-stroke: 2px var(--amarelo); paint-order: stroke fill; }
+.revops--furo { color: var(--grafite); }
 .revops--cheio { color: var(--amarelo); clip-path: inset(-.1em calc((1 - var(--cheio)) * 100%) -.15em 0); }
 
 /* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
