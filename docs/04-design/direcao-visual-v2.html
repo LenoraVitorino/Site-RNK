@@ -7,7 +7,7 @@
     --papel:   #F2F2EE;
     --painel:  #E3E3DE;
     --grafite: #1B1B19;
-    --limao:   #EDE93A;
+    --amarelo: #FFE27A;   /* mesmo tom do #FFD103, L 74% em vez de 51% */
     --cinza:   #66665F;
     --fio:     #C9C9C2;
 
@@ -85,7 +85,7 @@
   .fontes { margin-top: 28px; border-top: 1px solid var(--grafite); }
   .fonte { display: grid; grid-template-columns: 1.2fr 1fr 3fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--fio); font-size: 14px; align-items: baseline; }
   .fonte .tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
-  .fonte.rec .tag { background: var(--limao); padding: 3px 8px; display: inline-block; }
+  .fonte.rec .tag { background: var(--amarelo); padding: 3px 8px; display: inline-block; }
 
   /* ---- aplicação: hero mockado ---- */
   .moldura { border: 1px solid var(--grafite); background: var(--papel); }
@@ -102,7 +102,7 @@
   .hero__acoes { display: flex; gap: 12px; align-items: center; }
   .botao { background: var(--grafite); color: var(--papel); padding: 14px 22px; font-weight: 500; font-size: 15px; text-decoration: none; }
   .botao--fio { background: transparent; color: var(--grafite); border: 1px solid var(--grafite); }
-  .hero__painel { background: var(--limao); border-left: 1px solid var(--grafite); display: grid; align-content: space-between; padding: 28px; }
+  .hero__painel { background: var(--amarelo); border-left: 1px solid var(--grafite); display: grid; align-content: space-between; padding: 28px; }
   .hero__painel .grande { font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 600; letter-spacing: -.04em; line-height: .9; }
   .hero__painel .pe { font-size: 13px; display: flex; justify-content: space-between; }
 
@@ -120,6 +120,15 @@
   .dobra2__texto p { max-width: 48ch; }
 
   .nota { font-size: 12px; color: var(--cinza); margin-top: 12px; }
+
+  /* ---- rampa ---- */
+  .rampa__faixa { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--fio); }
+  .rampa__faixa > div { height: 112px; padding: 12px; display: grid; align-content: end; gap: 2px; font-size: 12px; color: var(--grafite); border-right: 1px solid var(--fio); }
+  .rampa__faixa > div:last-child { border-right: 0; }
+  .rampa__faixa em { font-style: normal; color: var(--cinza); }
+  .rampa__rec { outline: 2px solid var(--grafite); outline-offset: -2px; }
+  .rampa__rec em { color: var(--grafite); font-weight: 500; }
+  @media (max-width: 520px) { .rampa__faixa { grid-template-columns: 1fr 1fr; } .rampa__faixa > div { border-bottom: 1px solid var(--fio); } }
 
   /* ---- muda / fica ---- */
   .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -179,7 +188,7 @@
     <div>
       <h2 class="caps">O amarelo fica. Esfria. E deixa de ser botão.</h2>
       <div class="prosa" style="margin-bottom:28px">
-        <p>A referência não abandona o amarelo: usa mais amarelo que a Renke usa hoje. A diferença está em dois lugares. Na <strong>temperatura</strong> — sai o dourado de placa de trânsito, entra um limão que lê como contemporâneo. E no <strong>uso</strong> — em vez de brilhar num botão sobre fundo preto, ele vira painel chapado sobre base clara, com texto grafite por cima.</p>
+        <p>A referência não abandona o amarelo: usa mais amarelo que a Renke usa hoje. A diferença está em dois lugares. Na <strong>temperatura</strong> — sai o dourado saturado de placa, entra o <strong>mesmo tom</strong>, mais claro e mais suave — a marca continua reconhecível de longe, só fala mais baixo. E no <strong>uso</strong> — em vez de brilhar num botão sobre fundo preto, ele vira painel chapado sobre base clara, com texto grafite por cima.</p>
         <p class="mudo">O preto absoluto vira grafite quente. Não é detalhe: preto puro sobre branco puro é o par de maior contraste possível, e cansa. O grafite dá o mesmo peso sem a dureza.</p>
       </div>
 
@@ -192,9 +201,9 @@
         </div>
         <div class="par">
           <span class="rotulo">Marca</span>
-          <div class="amostras"><div class="amostra" style="background:var(--hoje-ouro)"></div><div class="amostra" style="background:var(--limao)"></div></div>
-          <div class="legendas"><span>Ouro<span class="num">#FFD103</span></span><span>Limão<span class="num">#EDE93A</span></span></div>
-          <span class="seta">mesma família, 10° mais frio</span>
+          <div class="amostras"><div class="amostra" style="background:var(--hoje-ouro)"></div><div class="amostra" style="background:var(--amarelo)"></div></div>
+          <div class="legendas"><span>Ouro<span class="num">#FFD103</span></span><span>Suave<span class="num">#FFE27A</span></span></div>
+          <span class="seta">mesmo tom (H 48°), 45% mais claro</span>
         </div>
         <div class="par">
           <span class="rotulo">Texto e painéis escuros</span>
@@ -208,6 +217,18 @@
           <div class="legendas"><span>Vidro<span class="num">branco a 5%</span></span><span>Painel<span class="num">#E3E3DE</span></span></div>
           <span class="seta">vidro e brilho → chapado</span>
         </div>
+      </div>
+
+      <div class="rampa">
+        <p class="rotulo" style="margin:28px 0 10px">A rampa no tom da marca · H 48°</p>
+        <div class="rampa__faixa">
+          <div style="background:#FFD103"><span>#FFD103</span><span class="num">L 51%</span><em>hoje</em></div>
+          <div style="background:#FFDC4D"><span>#FFDC4D</span><span class="num">L 65%</span></div>
+          <div style="background:#FFE27A" class="rampa__rec"><span>#FFE27A</span><span class="num">L 74%</span><em>proposta</em></div>
+          <div style="background:#FFEBA3"><span>#FFEBA3</span><span class="num">L 82%</span><em>superfícies grandes</em></div>
+          <div style="background:#FFF3C7"><span>#FFF3C7</span><span class="num">L 89%</span><em>já é creme</em></div>
+        </div>
+        <p class="nota">O limão da primeira versão (#EDE93A) tinha escapado para H 59° — dez graus rumo ao verde. Esta rampa não sai do tom: só a luminosidade muda. Tudo aqui passa de 11:1 sobre grafite.</p>
       </div>
 
       <div class="papeis" id="papeis">
@@ -227,9 +248,9 @@
           <span class="contraste num" data-fg="#F2F2EE" data-bg="#1B1B19"></span>
         </div>
         <div class="papel">
-          <span class="chip" style="background:var(--limao)"></span><b>Limão</b><span class="num">#EDE93A</span>
-          <span class="uso">A cor da marca. Painéis inteiros, o destaque de uma palavra, o pé de uma seção. Nunca como texto sobre claro.</span>
-          <span class="contraste num" data-fg="#1B1B19" data-bg="#EDE93A"></span>
+          <span class="chip" style="background:var(--amarelo)"></span><b>Amarelo suave</b><span class="num">#FFE27A</span>
+          <span class="uso">A cor da marca, no mesmo tom de sempre. Painéis inteiros, o destaque de uma palavra, o pé de uma seção. Nunca como texto sobre claro.</span>
+          <span class="contraste num" data-fg="#1B1B19" data-bg="#FFE27A"></span>
         </div>
         <div class="papel">
           <span class="chip" style="background:var(--cinza)"></span><b>Cinza-texto</b><span class="num">#66665F</span>
@@ -359,7 +380,7 @@
           <ul class="lista">
             <li><b>Base</b><span>Escura → clara. É a decisão que mais muda a percepção. Tudo o mais deriva dela.</span></li>
             <li><b>Superfície</b><span>Vidro, brilho e halo → painéis chapados e fio de grade.</span></li>
-            <li><b>Amarelo</b><span>Dourado → limão. Sai do botão, vai para o painel.</span></li>
+            <li><b>Amarelo</b><span>Dourado → o mesmo tom, mais suave. Sai do botão, vai para o painel.</span></li>
             <li><b>Tipo</b><span>Open Sans → Instrument Sans. Títulos em caixa alta.</span></li>
             <li><b>Botão</b><span>Pílula brilhante → bloco grafite reto. O contorno chapado vira a secundária.</span></li>
           </ul>
@@ -367,7 +388,7 @@
         <div>
           <p class="rotulo" style="margin-bottom:10px">Fica</p>
           <ul class="lista">
-            <li><b>Amarelo</b><span>Continua sendo a cor da marca. Muda o tom, não a identidade. A sede e a camiseta seguem combinando.</span></li>
+            <li><b>Amarelo</b><span>Continua sendo a cor da marca, no mesmo tom. Muda a intensidade, não a identidade. A sede e a camiseta seguem combinando.</span></li>
             <li><b>Copy</b><span>Toda a copy do briefing, palavra por palavra. Isso é layout.</span></li>
             <li><b>Estrutura</b><span>As 15 páginas, o menu, o sistema de blocos. Só o CSS troca.</span></li>
             <li><b>Regras</b><span>Amarelo nunca como texto sobre claro. Contraste mínimo 4,5:1. Movimento respeita quem pediu menos.</span></li>
@@ -384,10 +405,10 @@
     <div>
       <h2 class="caps">Depois do seu sim</h2>
       <ol class="passos">
-        <li><b>Aprovar paleta e fonte</b><span>Ou apontar o que ajustar. O limão e a base clara são as duas decisões de marca aqui — as outras são consequência.</span></li>
+        <li><b>Aprovar paleta e fonte</b><span>Ou apontar o que ajustar. O amarelo suave e a base clara são as duas decisões de marca aqui — as outras são consequência.</span></li>
         <li><b>Referências</b><span>As que você vai mandar entram antes de eu tocar na home: layout se decide olhando, não descrevendo.</span></li>
         <li><b>Home</b><span>Reconstruo dobra a dobra no novo sistema, com a mesma copy. O sistema de blocos das internas herda depois.</span></li>
-        <li><b>Transição gradual</b><span>O site sai na frente. Sede, uniforme e materiais migram no ritmo de vocês — o limão foi escolhido para conviver com o dourado enquanto isso.</span></li>
+        <li><b>Transição gradual</b><span>O site sai na frente. Sede, uniforme e materiais migram no ritmo de vocês — o tom é o mesmo do dourado, então os dois convivem sem briga enquanto isso.</span></li>
       </ol>
     </div>
   </section>
