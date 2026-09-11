@@ -1,0 +1,32 @@
+/* ============================================================
+   TOKENS V2 — direção visual aprovada em 11/09/2026
+   Ainda NÃO importado por nenhuma página. Entra junto com o layout
+   novo da home, dobra a dobra. Até lá, tokens.css segue mandando.
+   Proposta: docs/04-design/direcao-visual-v2.html
+   ============================================================ */
+
+:root {
+  /* ---- Cor ---- */
+  --papel:   #F2F2EE;   /* fundo de página: claro, levemente quente */
+  --painel:  #E3E3DE;   /* segundo plano: blocos, faixas, fundo do vídeo */
+  --grafite: #1B1B19;   /* texto, fios estruturais, botão principal */
+  --cinza:   #66665F;   /* texto secundário, rótulos (4,9:1 sobre papel) */
+  --fio:     #C9C9C2;   /* linhas de grade: substituem sombra e raio */
+
+  /* O amarelo fica no tom da marca (H 48°) e só sobe de luminosidade.
+     Regra mantida: nunca como texto sobre fundo claro. */
+  --amarelo:       #FFE27A;   /* painéis, destaque de uma palavra — L 74% */
+  --amarelo-claro: #FFEBA3;   /* superfícies grandes de fundo — L 82% */
+  --amarelo-marca: #FFD103;   /* o dourado original: logo, sede, materiais legados */
+
+  /* ---- Tipografia ---- */
+  --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --peso-titulo: 600;   /* títulos, números grandes — em caixa alta onde é tese */
+  --peso-enfase: 500;   /* botões, rótulos, strong */
+  --peso-corpo:  400;
+  --tracking-caps:  -.02em;   /* caixa alta em títulos */
+  --tracking-label:  .12em;   /* rótulos pequenos em caixa alta */
+
+  /* ---- Forma ---- */
+  --raio: 0;   /* chapado: nada de pílula, vidro ou brilho */
+}
