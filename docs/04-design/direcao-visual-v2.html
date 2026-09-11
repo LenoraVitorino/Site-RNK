@@ -1,0 +1,414 @@
+<title>Direção Visual Renke</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+  /* Proposta de direção visual v2 — Renke Studio.
+     Tema único, claro, de propósito: a proposta é justamente sair do preto. */
+  :root {
+    --papel:   #F2F2EE;
+    --painel:  #E3E3DE;
+    --grafite: #1B1B19;
+    --limao:   #EDE93A;
+    --cinza:   #66665F;
+    --fio:     #C9C9C2;
+
+    /* os tokens de hoje, só para o "de → para" */
+    --hoje-preto: #000000;
+    --hoje-ouro:  #FFD103;
+    --hoje-vidro: rgb(255 255 255 / .05);
+
+    --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --medida: 62ch;
+    --gutter: clamp(16px, 4vw, 56px);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--papel); color: var(--grafite);
+    font-family: var(--font); font-size: 16px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { margin: 0; font-weight: 600; line-height: 1.05; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: inherit; }
+
+  .caps { text-transform: uppercase; letter-spacing: -.02em; }
+  .rotulo {
+    font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cinza);
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .pagina { padding-inline: var(--gutter); max-width: 1320px; margin-inline: auto; }
+
+  /* ---- topo ---- */
+  .topo {
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px;
+    padding-block: 28px 40px; border-bottom: 1px solid var(--grafite);
+  }
+  .topo h1 { font-size: clamp(2.6rem, 7vw, 6.5rem); letter-spacing: -.035em; line-height: .95; }
+  .topo .meta { text-align: right; display: grid; gap: 4px; }
+
+  /* ---- seções ---- */
+  .secao { display: grid; grid-template-columns: 2fr 10fr; gap: 24px; padding-block: 56px; border-bottom: 1px solid var(--fio); }
+  .secao > .rotulo { padding-top: 6px; }
+  .secao h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); letter-spacing: -.025em; margin-bottom: 28px; }
+  .prosa { max-width: var(--medida); color: var(--grafite); display: grid; gap: 14px; }
+  .prosa .mudo { color: var(--cinza); }
+
+  /* ---- de → para ---- */
+  .depara { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--fio); border: 1px solid var(--fio); }
+  .par { background: var(--papel); padding: 18px; display: grid; gap: 14px; }
+  .par .amostras { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: 88px; }
+  .amostra { border: 1px solid var(--fio); }
+  .par .legendas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; }
+  .par .legendas .num { color: var(--cinza); display: block; }
+  .par .seta { font-size: 12px; color: var(--cinza); }
+
+  /* ---- papéis + contraste ---- */
+  .papeis { margin-top: 28px; border-top: 1px solid var(--grafite); }
+  .papel { display: grid; grid-template-columns: 56px 1.4fr 1fr 3fr 90px; gap: 16px; align-items: center;
+           padding: 12px 0; border-bottom: 1px solid var(--fio); font-size: 14px; }
+  .papel .chip { height: 40px; border: 1px solid var(--fio); }
+  .papel .contraste { text-align: right; font-weight: 500; }
+  .papel .contraste small { display: block; font-weight: 400; color: var(--cinza); font-size: 11px; }
+
+  /* ---- tipografia ---- */
+  .especime { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; align-items: stretch; }
+  .aa { background: var(--painel); display: grid; place-items: center; min-height: 320px;
+        font-size: clamp(6rem, 16vw, 15rem); font-weight: 600; letter-spacing: -.05em; line-height: 1; }
+  .amostra-tipo { display: grid; gap: 22px; align-content: space-between; padding-block: 8px; }
+  .amostra-tipo .h1 { font-size: clamp(1.7rem, 3.3vw, 2.8rem); font-weight: 600; letter-spacing: -.025em; line-height: 1.02; }
+  .amostra-tipo .h1 s { text-decoration-thickness: .06em; color: var(--cinza); }
+  .amostra-tipo .abc { font-size: 15px; line-height: 1.55; word-break: break-word; }
+  .pesos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--fio); border: 1px solid var(--fio); margin-top: 24px; }
+  .peso { background: var(--papel); padding: 16px; display: grid; gap: 8px; }
+  .peso b { font-size: 28px; line-height: 1; letter-spacing: -.02em; }
+  .fontes { margin-top: 28px; border-top: 1px solid var(--grafite); }
+  .fonte { display: grid; grid-template-columns: 1.2fr 1fr 3fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--fio); font-size: 14px; align-items: baseline; }
+  .fonte .tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+  .fonte.rec .tag { background: var(--limao); padding: 3px 8px; display: inline-block; }
+
+  /* ---- aplicação: hero mockado ---- */
+  .moldura { border: 1px solid var(--grafite); background: var(--papel); }
+  .site-topo { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid var(--grafite); font-size: 13px; }
+  .site-topo .marca { font-weight: 700; letter-spacing: .04em; }
+  .site-topo nav { display: flex; gap: 22px; color: var(--cinza); }
+  .site-topo .cta { background: var(--grafite); color: var(--papel); padding: 9px 16px; font-weight: 500; }
+  .hero { display: grid; grid-template-columns: 7fr 5fr; min-height: 520px; }
+  .hero__copy { padding: 56px 28px 40px; display: grid; align-content: space-between; gap: 32px; }
+  .hero__h1 { font-size: clamp(2rem, 4.1vw, 3.6rem); font-weight: 600; letter-spacing: -.03em; line-height: .98; }
+  .hero__h1 s { text-decoration-thickness: .07em; color: var(--cinza); }
+  .hero__sub { max-width: 46ch; font-size: 18px; line-height: 1.4; }
+  .hero__lead { max-width: var(--medida); color: var(--cinza); }
+  .hero__acoes { display: flex; gap: 12px; align-items: center; }
+  .botao { background: var(--grafite); color: var(--papel); padding: 14px 22px; font-weight: 500; font-size: 15px; text-decoration: none; }
+  .botao--fio { background: transparent; color: var(--grafite); border: 1px solid var(--grafite); }
+  .hero__painel { background: var(--limao); border-left: 1px solid var(--grafite); display: grid; align-content: space-between; padding: 28px; }
+  .hero__painel .grande { font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 600; letter-spacing: -.04em; line-height: .9; }
+  .hero__painel .pe { font-size: 13px; display: flex; justify-content: space-between; }
+
+  .ledger { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--grafite); }
+  .ledger > div { padding: 20px 28px; border-right: 1px solid var(--fio); display: grid; gap: 6px; }
+  .ledger > div:last-child { border-right: 0; }
+  .ledger b { font-size: clamp(1.8rem, 3.6vw, 3rem); font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+  .ledger small { font-size: 12px; color: var(--cinza); }
+
+  .dobra2 { display: grid; grid-template-columns: 5fr 7fr; border-top: 1px solid var(--grafite); }
+  .dobra2__reel { background: var(--painel); border-right: 1px solid var(--grafite); padding: 28px; display: grid; place-items: center; }
+  .reel-caixa { width: min(100%, 220px); aspect-ratio: 9 / 16; border: 1px solid var(--grafite); display: grid; place-items: end start; padding: 12px; font-size: 11px; color: var(--cinza); background: var(--papel); }
+  .dobra2__texto { padding: 28px; display: grid; align-content: center; gap: 16px; }
+  .dobra2__texto h3 { font-size: clamp(1.6rem, 3.2vw, 2.6rem); letter-spacing: -.03em; }
+  .dobra2__texto p { max-width: 48ch; }
+
+  .nota { font-size: 12px; color: var(--cinza); margin-top: 12px; }
+
+  /* ---- muda / fica ---- */
+  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--grafite); }
+  .lista li { padding: 12px 0; border-bottom: 1px solid var(--fio); font-size: 15px; display: grid; grid-template-columns: 110px 1fr; gap: 16px; }
+  .lista li b { font-weight: 500; }
+
+  .passos { counter-reset: p; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--fio); border: 1px solid var(--fio); }
+  .passos li { background: var(--papel); padding: 18px; font-size: 14px; display: grid; gap: 8px; align-content: start; }
+  .passos li::before { counter-increment: p; content: counter(p, decimal-leading-zero); font-size: 12px; color: var(--cinza); letter-spacing: .1em; }
+
+  .rodape { padding-block: 32px 48px; display: flex; justify-content: space-between; font-size: 12px; color: var(--cinza); }
+
+  :focus-visible { outline: 2px solid var(--grafite); outline-offset: 3px; }
+
+  @media (max-width: 900px) {
+    .secao { grid-template-columns: 1fr; gap: 12px; }
+    .depara { grid-template-columns: 1fr 1fr; }
+    .especime { grid-template-columns: 1fr; }
+    .hero { grid-template-columns: 1fr; }
+    .hero__painel { border-left: 0; border-top: 1px solid var(--grafite); }
+    .ledger { grid-template-columns: 1fr 1fr; }
+    .ledger > div:nth-child(2) { border-right: 0; }
+    .dobra2 { grid-template-columns: 1fr; }
+    .dobra2__reel { border-right: 0; border-bottom: 1px solid var(--grafite); }
+    .duas { grid-template-columns: 1fr; }
+    .passos { grid-template-columns: 1fr 1fr; }
+    .papel { grid-template-columns: 40px 1fr 1fr; }
+    .papel .uso { grid-column: 2 / -1; }
+    .fonte { grid-template-columns: 1fr; }
+    .site-topo nav { display: none; }
+  }
+  @media (max-width: 520px) {
+    .depara, .passos, .ledger, .pesos { grid-template-columns: 1fr; }
+    .ledger > div { border-right: 0; border-bottom: 1px solid var(--fio); }
+    .topo { grid-template-columns: 1fr; }
+    .topo .meta { text-align: left; }
+  }
+</style>
+
+<div class="pagina">
+
+  <header class="topo">
+    <div>
+      <p class="rotulo">Renke Studio · site institucional · proposta</p>
+      <h1 class="caps">Direção<br>visual v2</h1>
+    </div>
+    <div class="meta rotulo">
+      <span>11 / 09 / 2026</span>
+      <span>Paleta · tipografia · aplicação no hero</span>
+    </div>
+  </header>
+
+  <!-- ============ 1. PALETA ============ -->
+  <section class="secao">
+    <p class="rotulo">01 · Paleta</p>
+    <div>
+      <h2 class="caps">O amarelo fica. Esfria. E deixa de ser botão.</h2>
+      <div class="prosa" style="margin-bottom:28px">
+        <p>A referência não abandona o amarelo: usa mais amarelo que a Renke usa hoje. A diferença está em dois lugares. Na <strong>temperatura</strong> — sai o dourado de placa de trânsito, entra um limão que lê como contemporâneo. E no <strong>uso</strong> — em vez de brilhar num botão sobre fundo preto, ele vira painel chapado sobre base clara, com texto grafite por cima.</p>
+        <p class="mudo">O preto absoluto vira grafite quente. Não é detalhe: preto puro sobre branco puro é o par de maior contraste possível, e cansa. O grafite dá o mesmo peso sem a dureza.</p>
+      </div>
+
+      <div class="depara">
+        <div class="par">
+          <span class="rotulo">Fundo</span>
+          <div class="amostras"><div class="amostra" style="background:var(--hoje-preto)"></div><div class="amostra" style="background:var(--papel)"></div></div>
+          <div class="legendas"><span>Preto<span class="num">#000000</span></span><span>Papel<span class="num">#F2F2EE</span></span></div>
+          <span class="seta">base escura → base clara</span>
+        </div>
+        <div class="par">
+          <span class="rotulo">Marca</span>
+          <div class="amostras"><div class="amostra" style="background:var(--hoje-ouro)"></div><div class="amostra" style="background:var(--limao)"></div></div>
+          <div class="legendas"><span>Ouro<span class="num">#FFD103</span></span><span>Limão<span class="num">#EDE93A</span></span></div>
+          <span class="seta">mesma família, 10° mais frio</span>
+        </div>
+        <div class="par">
+          <span class="rotulo">Texto e painéis escuros</span>
+          <div class="amostras"><div class="amostra" style="background:var(--hoje-preto)"></div><div class="amostra" style="background:var(--grafite)"></div></div>
+          <div class="legendas"><span>Preto<span class="num">#000000</span></span><span>Grafite<span class="num">#1B1B19</span></span></div>
+          <span class="seta">absoluto → quente</span>
+        </div>
+        <div class="par">
+          <span class="rotulo">Superfície</span>
+          <div class="amostras"><div class="amostra" style="background:#0d0d0d"></div><div class="amostra" style="background:var(--painel)"></div></div>
+          <div class="legendas"><span>Vidro<span class="num">branco a 5%</span></span><span>Painel<span class="num">#E3E3DE</span></span></div>
+          <span class="seta">vidro e brilho → chapado</span>
+        </div>
+      </div>
+
+      <div class="papeis" id="papeis">
+        <div class="papel">
+          <span class="chip" style="background:var(--papel)"></span><b>Papel</b><span class="num">#F2F2EE</span>
+          <span class="uso">Fundo de página. Levemente quente, puxado para o amarelo — cinza neutro leria como sem decisão.</span>
+          <span class="contraste num" data-fg="#1B1B19" data-bg="#F2F2EE"></span>
+        </div>
+        <div class="papel">
+          <span class="chip" style="background:var(--painel)"></span><b>Painel</b><span class="num">#E3E3DE</span>
+          <span class="uso">Segundo plano: blocos, faixas, o fundo do vídeo. Substitui o vidro.</span>
+          <span class="contraste num" data-fg="#1B1B19" data-bg="#E3E3DE"></span>
+        </div>
+        <div class="papel">
+          <span class="chip" style="background:var(--grafite)"></span><b>Grafite</b><span class="num">#1B1B19</span>
+          <span class="uso">Texto, fios estruturais, botão principal, painéis escuros pontuais.</span>
+          <span class="contraste num" data-fg="#F2F2EE" data-bg="#1B1B19"></span>
+        </div>
+        <div class="papel">
+          <span class="chip" style="background:var(--limao)"></span><b>Limão</b><span class="num">#EDE93A</span>
+          <span class="uso">A cor da marca. Painéis inteiros, o destaque de uma palavra, o pé de uma seção. Nunca como texto sobre claro.</span>
+          <span class="contraste num" data-fg="#1B1B19" data-bg="#EDE93A"></span>
+        </div>
+        <div class="papel">
+          <span class="chip" style="background:var(--cinza)"></span><b>Cinza-texto</b><span class="num">#66665F</span>
+          <span class="uso">Texto secundário, rótulos, legendas.</span>
+          <span class="contraste num" data-fg="#66665F" data-bg="#F2F2EE"></span>
+        </div>
+        <div class="papel">
+          <span class="chip" style="background:var(--fio)"></span><b>Fio</b><span class="num">#C9C9C2</span>
+          <span class="uso">Linhas de grade. É o que segura o layout no lugar de sombra e raio de borda.</span>
+          <span class="contraste">—</span>
+        </div>
+      </div>
+      <p class="nota">Contraste calculado nesta página (WCAG). Mínimo para texto corrido: 4,5:1. O amarelo continua com a regra de hoje: <strong>nunca</strong> como texto sobre fundo claro.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. TIPOGRAFIA ============ -->
+  <section class="secao">
+    <p class="rotulo">02 · Tipografia</p>
+    <div>
+      <h2 class="caps">Uma família só. Caixa alta onde o título é a tese.</h2>
+      <div class="prosa" style="margin-bottom:28px">
+        <p>A referência usa a Aeonik. A Helvetica que testamos vai na mesma direção, mas as duas são proprietárias: para todo visitante ver a mesma fonte, é preciso comprar licença e embutir os arquivos. A <strong>Instrument Sans</strong> é da mesma família de gosto — neo-grotesk, contida, sem maneirismo — e é livre. Dá para embutir hoje.</p>
+        <p class="mudo">Caixa alta só nos títulos que carregam a tese: o H1, o nome de uma seção, um número grande. Corpo, subtítulos e botões em caixa baixa. Caixa alta em tudo vira gritaria; em um lugar só, vira voz.</p>
+      </div>
+
+      <div class="especime">
+        <div class="aa">Aa</div>
+        <div class="amostra-tipo">
+          <p class="h1 caps">Isso não é <s>marketing para clínicas.</s><br>É RevOps.</p>
+          <p class="abc">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz<br><span class="num">0123456789</span> R$ % → ãõçéíáâê</p>
+          <p class="abc" style="max-width:var(--medida);color:var(--cinza)">Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado, tudo rastreado.</p>
+        </div>
+      </div>
+
+      <div class="pesos">
+        <div class="peso"><span class="rotulo">Títulos · 600</span><b style="font-weight:600" class="caps">Revenue Operations</b><span style="font-size:13px;color:var(--cinza)">H1, H2, números. Tracking −2%.</span></div>
+        <div class="peso"><span class="rotulo">Ênfase e botões · 500</span><b style="font-weight:500">Revenue Operations</b><span style="font-size:13px;color:var(--cinza)">Botões, rótulos, strong.</span></div>
+        <div class="peso"><span class="rotulo">Corpo · 400</span><b style="font-weight:400">Revenue Operations</b><span style="font-size:13px;color:var(--cinza)">Parágrafos, listas, campos.</span></div>
+      </div>
+
+      <div class="fontes">
+        <div class="fonte rec">
+          <span><span class="tag">Recomendada</span> <b style="margin-left:8px">Instrument Sans</b></span>
+          <span class="num">Livre · Google Fonts · embutível</span>
+          <span>Fica no site como a Open Sans ficava: arquivo próprio, sem terceiro no caminho. Todo mundo vê igual.</span>
+        </div>
+        <div class="fonte">
+          <span><span class="tag" style="color:var(--cinza)">Alternativa</span> <b style="margin-left:8px">Helvetica Neue</b></span>
+          <span class="num">Proprietária · Monotype</span>
+          <span>O teste que está no ar. Sem licença, só quem tem Mac ou iPhone vê Helvetica; o resto vê Arial.</span>
+        </div>
+        <div class="fonte">
+          <span><span class="tag" style="color:var(--cinza)">A da referência</span> <b style="margin-left:8px">Aeonik</b></span>
+          <span class="num">Proprietária · CoType Foundry</span>
+          <span>Se a decisão for "quero exatamente aquilo", é comprar e eu embuto. Instrument Sans é a irmã livre.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. APLICAÇÃO ============ -->
+  <section class="secao">
+    <p class="rotulo">03 · Aplicação</p>
+    <div>
+      <h2 class="caps">O hero da home nessa linguagem</h2>
+      <div class="prosa" style="margin-bottom:28px">
+        <p>Copy literal da home de hoje. O que muda é só o sistema: base clara, grid com fio, o amarelo como painel, botão chapado, números em linha como um extrato — não como chips.</p>
+      </div>
+
+      <div class="moldura">
+        <div class="site-topo">
+          <span class="marca caps">Renke <span style="font-weight:400;color:var(--cinza)">Studio</span></span>
+          <nav><span>Para Clínicas</span><span>Para Agências</span><span>Outras Soluções</span><span>Tecnologia</span><span>A Renke</span></nav>
+          <span class="cta">Fale com a gente</span>
+        </div>
+
+        <div class="hero">
+          <div class="hero__copy">
+            <div>
+              <p class="rotulo" style="margin-bottom:18px">Revenue Operations para clínicas de alto padrão</p>
+              <p class="hero__h1 caps">Isso não é<br><s>marketing para clínicas.</s></p>
+            </div>
+            <div style="display:grid;gap:20px">
+              <p class="hero__sub">Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.</p>
+              <p class="hero__lead">Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado, tudo rastreado.</p>
+              <div class="hero__acoes">
+                <a class="botao" href="#">Descubra se faz sentido para sua clínica →</a>
+              </div>
+            </div>
+          </div>
+          <div class="hero__painel">
+            <p class="rotulo" style="color:var(--grafite)">Isso é</p>
+            <p class="grande caps">Rev<br>Ops.</p>
+            <p class="pe"><span>Você não controla o que não enxerga.</span><span class="num">01</span></p>
+          </div>
+        </div>
+
+        <div class="ledger num">
+          <div><b>~30</b><small>clínicas atendidas</small></div>
+          <div><b>4 anos</b><small>de método validado</small></div>
+          <div><b>R$42M</b><small>em faturamento gerado</small></div>
+          <div><b>1 / mês</b><small>nova clínica aceita</small></div>
+        </div>
+
+        <div class="dobra2">
+          <div class="dobra2__reel"><div class="reel-caixa">vídeo · 9:16<br>"O que a Renke faz?"</div></div>
+          <div class="dobra2__texto">
+            <p class="rotulo">O que fazemos</p>
+            <h3 class="caps">O que a Renke faz?</h3>
+            <p>A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde e estética.</p>
+          </div>
+        </div>
+      </div>
+      <p class="nota">Os números seguem a pendência D1 (~30 vs. +140 clínicas). Entram aqui só para o layout ser avaliado com dado real de tamanho.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4. MUDA / FICA ============ -->
+  <section class="secao">
+    <p class="rotulo">04 · Transição</p>
+    <div>
+      <h2 class="caps">O que muda, o que fica</h2>
+      <div class="duas">
+        <div>
+          <p class="rotulo" style="margin-bottom:10px">Muda</p>
+          <ul class="lista">
+            <li><b>Base</b><span>Escura → clara. É a decisão que mais muda a percepção. Tudo o mais deriva dela.</span></li>
+            <li><b>Superfície</b><span>Vidro, brilho e halo → painéis chapados e fio de grade.</span></li>
+            <li><b>Amarelo</b><span>Dourado → limão. Sai do botão, vai para o painel.</span></li>
+            <li><b>Tipo</b><span>Open Sans → Instrument Sans. Títulos em caixa alta.</span></li>
+            <li><b>Botão</b><span>Pílula brilhante → bloco grafite reto. O contorno chapado vira a secundária.</span></li>
+          </ul>
+        </div>
+        <div>
+          <p class="rotulo" style="margin-bottom:10px">Fica</p>
+          <ul class="lista">
+            <li><b>Amarelo</b><span>Continua sendo a cor da marca. Muda o tom, não a identidade. A sede e a camiseta seguem combinando.</span></li>
+            <li><b>Copy</b><span>Toda a copy do briefing, palavra por palavra. Isso é layout.</span></li>
+            <li><b>Estrutura</b><span>As 15 páginas, o menu, o sistema de blocos. Só o CSS troca.</span></li>
+            <li><b>Regras</b><span>Amarelo nunca como texto sobre claro. Contraste mínimo 4,5:1. Movimento respeita quem pediu menos.</span></li>
+            <li><b>Vídeo</b><span>O reel na segunda dobra, agora sobre painel em vez de preto.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. PRÓXIMOS PASSOS ============ -->
+  <section class="secao" style="border-bottom:0">
+    <p class="rotulo">05 · Próximos passos</p>
+    <div>
+      <h2 class="caps">Depois do seu sim</h2>
+      <ol class="passos">
+        <li><b>Aprovar paleta e fonte</b><span>Ou apontar o que ajustar. O limão e a base clara são as duas decisões de marca aqui — as outras são consequência.</span></li>
+        <li><b>Referências</b><span>As que você vai mandar entram antes de eu tocar na home: layout se decide olhando, não descrevendo.</span></li>
+        <li><b>Home</b><span>Reconstruo dobra a dobra no novo sistema, com a mesma copy. O sistema de blocos das internas herda depois.</span></li>
+        <li><b>Transição gradual</b><span>O site sai na frente. Sede, uniforme e materiais migram no ritmo de vocês — o limão foi escolhido para conviver com o dourado enquanto isso.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <span>Renke Studio · proposta interna · não é material de cliente</span>
+    <span class="caps">Não é marketing. É RevOps.</span>
+  </footer>
+</div>
+
+<script>
+  // Contraste WCAG calculado aqui mesmo, para o número na página ser verdadeiro.
+  const lin = (hex) => {
+    const [r, g, b] = hex.match(/\w\w/g).map((h) => parseInt(h, 16) / 255)
+      .map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  document.querySelectorAll('.contraste[data-fg]').forEach((el) => {
+    const a = lin(el.dataset.fg), b = lin(el.dataset.bg);
+    const razao = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    const nivel = razao >= 7 ? 'AAA' : razao >= 4.5 ? 'AA' : razao >= 3 ? 'AA grande' : 'abaixo';
+    el.innerHTML = razao.toFixed(1).replace('.', ',') + ':1<small>' + nivel + '</small>';
+  });
+</script>

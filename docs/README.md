@@ -60,6 +60,7 @@ Gerado por `npm run docs:dossie` a partir dos arquivos abaixo — editar lá e r
 | [Notas para o designer — Home](04-design/notas-designer-home.md) | Direcionamento visual seção a seção |
 | [Diretrizes visuais gerais](04-design/diretrizes-visuais.md) | Paleta, tipografia, ritmo de scroll, imagens |
 | [Direção visual](04-design/direcao-visual.md) | Análise das referências e o que foi aplicado |
+| [Direção visual v2](04-design/direcao-visual-v2.html) | Proposta de 11/09: base clara, grafite, limão, Instrument Sans, caixa alta nos títulos — aguardando aprovação |
 | [Design system](04-design/design-system.md) | Guia inicial: tokens, botões, hierarquia de CTA |
 | [Paleta de marca](04-design/paleta-de-marca.md) | Cores oficiais extraídas do site atual e a regra de contraste do amarelo |
 | [Inventário de mídia](04-design/inventario-de-midia.md) | Os 7 slots de imagem, vídeo e animação da home |
