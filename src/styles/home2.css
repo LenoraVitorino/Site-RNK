@@ -126,9 +126,20 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   display: flex; align-items: center; gap: 24px;
 }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
-/* A assinatura é branca sobre transparente: no claro vira grafite inteira.
-   O amarelo da barra some aqui; volta no monograma, onde a cor cabe. */
-.logo__img { height: 26px; width: auto; filter: brightness(0); }
+/* Só o monograma "R", na cor da marca: funciona sobre o claro e sobre o
+   escuro da hero sem precisar de duas versões. */
+.logo__img { height: 34px; width: auto; }
+
+/* Cabeçalho escuro enquanto o palco (escuro) passa por baixo dele —
+   classe ligada pelo script da Hero. */
+.header--escuro { background: rgb(27 27 25 / .88); border-bottom-color: rgb(242 242 238 / .12); }
+.header--escuro.is-stuck { background: rgb(27 27 25 / .96); }
+.header--escuro .nav__link { color: var(--papel); }
+.header--escuro .nav-toggle { border-color: rgb(242 242 238 / .3); }
+.header--escuro .nav-toggle__bar { background: var(--papel); }
+.header--escuro .nav__indicador { background: rgb(242 242 238 / .1); }
+.header--escuro .nav__acao .botao { color: var(--papel); border-color: var(--papel); background: transparent; }
+.header--escuro .nav__acao .botao:hover { background: var(--papel); color: var(--grafite); }
 
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: auto;
@@ -239,7 +250,10 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   height: calc(100svh - var(--altura-header)); min-height: 560px;
   display: grid; grid-template-columns: 7fr 5fr; overflow: hidden;
   border-bottom: 1px solid var(--fio);
+  /* Hero escura, como a referência: o título em papel sobre grafite. */
+  background: var(--grafite); color: var(--papel);
 }
+.hero__copy .rotulo { color: rgb(242 242 238 / .6); }
 .hero__copy {
   padding: clamp(28px, 5vh, 64px) var(--gutter) clamp(24px, 4vh, 48px);
   padding-left: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
@@ -260,24 +274,27 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
    clone): numa frase que quebra em duas, cada linha recebe o seu, na altura
    certa. Um ::after num bloco de duas linhas caía entre elas. */
 .riscado {
-  display: inline; color: var(--grafite);
+  display: inline; color: var(--papel);
   --risco: clamp(0, calc(var(--p) * 2.4), 1);
-  background: linear-gradient(var(--grafite), var(--grafite)) 0 54% / calc(var(--risco) * 100%) .07em no-repeat;
+  background: linear-gradient(var(--papel), var(--papel)) 0 54% / calc(var(--risco) * 100%) .07em no-repeat;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 .hero__tomada1 { opacity: calc(1 - clamp(0, calc((var(--p) - .45) * 2.2), 1) * .62); }
 
 .hero__baixo { display: grid; gap: 18px; }
 .hero__sub { font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.35; max-width: 44ch; }
-.hero__lead { color: var(--cinza); max-width: 58ch; }
+.hero__lead { color: rgb(242 242 238 / .7); max-width: 58ch; }
 .hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
 .hero__painel {
-  position: relative; background: var(--amarelo); border-left: 1px solid var(--fio);
+  position: relative; background: var(--amarelo); color: var(--grafite);
   padding: clamp(24px, 4vh, 40px) clamp(20px, 3vw, 40px);
   display: grid; align-content: space-between; overflow: hidden;
   --v: clamp(0, calc((var(--p) - .3) * 2.2), 1);
-  opacity: var(--v); transform: translateY(calc((1 - var(--v)) * 48px));
+  /* Sobe por recorte, não por opacidade: amarelo meio transparente sobre
+     o grafite virava oliva no meio do caminho. */
+  clip-path: inset(calc((1 - var(--v)) * 100%) 0 0 0);
+  transform: translateY(calc((1 - var(--v)) * 48px));
 }
 .hero__painel .rotulo { color: var(--grafite); }
 .hero__revops { font-size: clamp(3.4rem, 9.5vw, 9rem); letter-spacing: -.045em; line-height: .86; text-transform: uppercase; }
@@ -287,7 +304,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   filter: brightness(0);
 }
 .hero__pe { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
-.hero__seta { font-size: 12px; color: var(--cinza); letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: calc(1 - var(--p) * 3); }
+.hero__seta { font-size: 12px; color: rgb(242 242 238 / .6); letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: calc(1 - var(--p) * 3); }
 
 @media (hover: none) { .degrau__texto { max-height: none; opacity: 1; } }
 
@@ -506,7 +523,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .hero__lead { display: none; }   /* volta abaixo, na faixa — o palco do celular não cabe tudo */
   /* No celular o painel amarelo já ocupa o resto da tela em repouso (sem
      buraco abaixo do CTA); só o conteúdo dele sobe com o scroll. */
-  .hero__painel { border-left: 0; border-top: 1px solid var(--fio); padding: 20px var(--gutter); opacity: 1; transform: none; }
+  .hero__painel { padding: 20px var(--gutter); clip-path: none; transform: none; }
   .hero__painel > * { opacity: var(--v); transform: translateY(calc((1 - var(--v)) * 32px)); }
   .hero__painel .hero__monograma { opacity: calc(var(--v) * .12); }
   .hero__revops { font-size: clamp(3rem, 16vw, 5rem); }
