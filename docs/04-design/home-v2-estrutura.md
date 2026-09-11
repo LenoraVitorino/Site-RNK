@@ -15,12 +15,14 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 
 ## Dobras (ordem na página)
 
-1. **Palco** (`Hero.astro`) — o título "Isso não é marketing para clínicas."
-   fica preso por ~1,4 telas de scroll. No trajeto, um risco atravessa
-   "marketing para clínicas", a frase recua e o painel amarelo sobe com
-   "RevOps." Progresso em `--p` (0→1) calculado no scroll. Sem JS ou com
-   `prefers-reduced-motion`, tudo nasce em repouso e visível. No mobile o
-   painel amarelo já ocupa o resto da tela em repouso; só o conteúdo dele sobe.
+1. **Palco** (`Hero.astro`) — hero escura e centralizada, em três tempos
+   presos por ~1,6 telas de scroll (progresso em `--p`, 0→1):
+   ao carregar, "Isso não é marketing para clínicas." com a seta para
+   baixo; no scroll, a frase é riscada e some, "Isso é RevOps." entra em
+   contorno amarelo e é preenchido da esquerda para a direita; preenchido,
+   encolhe e vira a chamada do bloco, com título, subtítulo e CTA embaixo.
+   O cabeçalho fica escuro enquanto o palco passa por baixo dele. Sem JS ou
+   com `prefers-reduced-motion`, tudo nasce no estado final.
 2. **Faixa** (`Faixa.astro`) — números do briefing em linha (⚠️ D1: números
    ilustrativos) e placeholders de logos de clientes.
 3. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +

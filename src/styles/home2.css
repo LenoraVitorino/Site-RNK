@@ -237,76 +237,95 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .secao--amarela .foto__caixa { color: var(--grafite); }
 
 /* ============================================================
-   DOBRA 1 · HERO FIXO NO SCROLL
-   O título é a tese, então ganha um palco: fica preso enquanto o scroll
-   risca "marketing para clínicas" e revela "RevOps" no painel amarelo.
-   --p vai de 0 a 1 com o scroll (script na Hero.astro).
+   DOBRA 1 · PALCO CENTRALIZADO EM TRÊS TEMPOS
+   --p vai de 0 a 1 com o scroll (script na Hero.astro). Cada tempo é
+   uma janela de --p:
+     risco da frase ........ 0 → .20
+     frase some ............ .16 → .30
+     contorno entra ........ .32 → .44
+     preenchimento ......... .44 → .72
+     encolhe + copy entra .. .74 → 1
    ============================================================ */
 
-.palco { --p: 1; height: 240svh; }
+.palco { --p: 1; height: 260svh; }
 .js .palco { --p: 0; }
 .palco__fixo {
   position: sticky; top: var(--altura-header);
   height: calc(100svh - var(--altura-header)); min-height: 560px;
-  display: grid; grid-template-columns: 7fr 5fr; overflow: hidden;
-  border-bottom: 1px solid var(--fio);
-  /* Hero escura, como a referência: o título em papel sobre grafite. */
+  display: grid; place-items: center; overflow: hidden;
+  padding: 24px var(--gutter);
   background: var(--grafite); color: var(--papel);
+  border-bottom: 1px solid var(--fio);
+  --risco:  clamp(0, calc(var(--p) / .20), 1);
+  --some:   clamp(0, calc((var(--p) - .16) / .14), 1);
+  --entra:  clamp(0, calc((var(--p) - .32) / .12), 1);
+  --cheio:  clamp(0, calc((var(--p) - .44) / .28), 1);
+  --fecha:  clamp(0, calc((var(--p) - .74) / .26), 1);
 }
-.hero__copy .rotulo { color: rgb(242 242 238 / .6); }
-.hero__copy {
-  padding: clamp(28px, 5vh, 64px) var(--gutter) clamp(24px, 4vh, 48px);
-  padding-left: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
-  display: grid; align-content: space-between; gap: 24px;
+.hero__monograma {
+  position: absolute; right: -6%; bottom: -14%; width: min(46vw, 620px);
+  opacity: .05; pointer-events: none; filter: brightness(0) invert(1);
 }
-.hero__h1 {
+.hero__centro {
+  position: relative; width: min(100%, 1040px); text-align: center;
+  display: grid; justify-items: center; gap: 0;
+}
+.hero__rotulo { color: rgb(242 242 238 / .6); margin-bottom: 22px; }
+
+/* As duas tomadas ocupam a mesma célula: uma sai enquanto a outra entra. */
+.hero__h1 { display: grid; place-items: center; width: 100%; }
+.tomada { grid-area: 1 / 1; display: block; width: 100%; text-transform: uppercase; text-wrap: balance; }
+.tomada--1 {
   font-size: clamp(2rem, 4.6vw, 4.4rem); letter-spacing: -.03em; line-height: .98;
-  text-transform: uppercase; text-wrap: balance;
+  max-width: 16ch; margin-inline: auto;
+  opacity: calc(1 - var(--some)); transform: translateY(calc(var(--some) * -12px));
 }
-.hero__linha { display: block; }
 .palavra { display: inline-block; }
 .js .palavra { opacity: 0; transform: translateY(.35em); animation: surge .7s var(--easing) calc(var(--i, 0) * 80ms) forwards; }
 @keyframes surge { to { opacity: 1; transform: none; } }
-
-/* A negação some conforme o risco atravessa: quem rola vê a frase ser
-   descartada, não só sublinhada. */
-/* O risco é um fundo pintado por fragmento de linha (box-decoration-break:
-   clone): numa frase que quebra em duas, cada linha recebe o seu, na altura
-   certa. Um ::after num bloco de duas linhas caía entre elas. */
+/* Risco pintado por fragmento de linha (box-decoration-break: clone): cada
+   linha da frase recebe o seu, na altura certa. */
 .riscado {
   display: inline; color: var(--papel);
-  --risco: clamp(0, calc(var(--p) * 2.4), 1);
   background: linear-gradient(var(--papel), var(--papel)) 0 54% / calc(var(--risco) * 100%) .07em no-repeat;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.hero__tomada1 { opacity: calc(1 - clamp(0, calc((var(--p) - .45) * 2.2), 1) * .62); }
 
-.hero__baixo { display: grid; gap: 18px; }
-.hero__sub { font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.35; max-width: 44ch; }
-.hero__lead { color: rgb(242 242 238 / .7); max-width: 58ch; }
-.hero__acoes { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-
-.hero__painel {
-  position: relative; background: var(--amarelo); color: var(--grafite);
-  padding: clamp(24px, 4vh, 40px) clamp(20px, 3vw, 40px);
-  display: grid; align-content: space-between; overflow: hidden;
-  --v: clamp(0, calc((var(--p) - .3) * 2.2), 1);
-  /* Sobe por recorte, não por opacidade: amarelo meio transparente sobre
-     o grafite virava oliva no meio do caminho. */
-  clip-path: inset(calc((1 - var(--v)) * 100%) 0 0 0);
-  transform: translateY(calc((1 - var(--v)) * 48px));
+/* "Isso é RevOps." em contorno, preenchido da esquerda para a direita e
+   depois reduzido para virar a chamada do bloco. Font-size em calc para o
+   encolhimento acontecer em fluxo (o bloco de baixo cresce no lugar). */
+.tomada--2 {
+  display: grid; place-items: center;
+  --grande: clamp(3.4rem, 11vw, 9.6rem);
+  font-size: calc(var(--grande) * (1 - var(--fecha) * .58));
+  letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
+  opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 18px));
 }
-.hero__painel .rotulo { color: var(--grafite); }
-.hero__revops { font-size: clamp(3.4rem, 9.5vw, 9rem); letter-spacing: -.045em; line-height: .86; text-transform: uppercase; }
-.hero__revops span { display: block; }
-.hero__monograma {
-  position: absolute; right: -8%; bottom: -12%; width: 46%; opacity: .12; pointer-events: none;
-  filter: brightness(0);
-}
-.hero__pe { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
-.hero__seta { font-size: 12px; color: rgb(242 242 238 / .6); letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: calc(1 - var(--p) * 3); }
+.revops { grid-area: 1 / 1; white-space: pre-wrap; }
+.revops--contorno { color: transparent; -webkit-text-stroke: 1px var(--amarelo); }
+.revops--cheio { color: var(--amarelo); clip-path: inset(-.1em calc((1 - var(--cheio)) * 100%) -.15em 0); }
 
-@media (hover: none) { .degrau__texto { max-height: none; opacity: 1; } }
+/* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
+.hero__seta {
+  height: calc((1 - var(--fecha)) * 48px); margin-top: calc((1 - var(--fecha)) * 28px);
+  overflow: hidden; display: grid; place-items: center;
+  font-size: 26px; line-height: 1; color: var(--amarelo);
+  opacity: calc(1 - clamp(0, calc(var(--p) / .08), 1));
+}
+.js .hero__seta span { animation: seta 1.6s ease-in-out .9s infinite; display: block; }
+@keyframes seta { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+/* Bloco final: cresce em fluxo (altura medida pelo script) e aparece por
+   último. Com --copy-h ausente, fica em altura automática. */
+.hero__copy {
+  width: 100%; overflow: hidden;
+  height: calc(var(--fecha) * var(--copy-h, 320px));
+  opacity: var(--fecha);
+}
+.hero__copy__miolo { display: grid; justify-items: center; gap: 18px; padding-top: 28px; }
+.hero__titulo { font-size: clamp(1.25rem, 2.2vw, 1.85rem); line-height: 1.25; letter-spacing: -.02em; max-width: 34ch; font-weight: var(--peso-titulo); }
+.hero__lead { color: rgb(242 242 238 / .7); max-width: 60ch; }
+.hero__acoes { margin-top: 6px; }
 
 /* Sem JS ou com menos movimento: nada de palco. Tudo em repouso, visível. */
 @media (prefers-reduced-motion: reduce) {
@@ -516,18 +535,13 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 }
 
 @media (max-width: 899.98px) {
-  .palco { height: 200svh; }
-  .palco__fixo { grid-template-columns: 1fr; grid-template-rows: auto 1fr; min-height: 0; }
-  .hero__copy { padding-block: 24px 16px; gap: 16px; }
-  .hero__h1 { font-size: clamp(1.9rem, 8.4vw, 3rem); }
-  .hero__lead { display: none; }   /* volta abaixo, na faixa — o palco do celular não cabe tudo */
-  /* No celular o painel amarelo já ocupa o resto da tela em repouso (sem
-     buraco abaixo do CTA); só o conteúdo dele sobe com o scroll. */
-  .hero__painel { padding: 20px var(--gutter); clip-path: none; transform: none; }
-  .hero__painel > * { opacity: var(--v); transform: translateY(calc((1 - var(--v)) * 32px)); }
-  .hero__painel .hero__monograma { opacity: calc(var(--v) * .12); }
-  .hero__revops { font-size: clamp(3rem, 16vw, 5rem); }
-  .hero__lead--mobile { display: block; padding: 20px var(--gutter) 0; color: var(--cinza); max-width: 60ch; }
+  .palco { height: 220svh; }
+  .palco__fixo { min-height: 0; padding: 16px var(--gutter); }
+  .tomada--1 { font-size: clamp(1.9rem, 8.6vw, 3rem); }
+  .tomada--2 { --grande: clamp(3rem, 15vw, 5.4rem); }
+  .hero__seta { margin-top: 20px; }
+  .hero__copy__miolo { gap: 14px; padding-top: 20px; }
+  .hero__lead { font-size: 15px; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
@@ -549,7 +563,6 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .depoimento { grid-template-columns: 88px 1fr; }
   .cabeca, .cabeca--larga { max-width: none; }
 }
-@media (min-width: 900px) { .hero__lead--mobile { display: none; } }
 
 @media (max-width: 639.98px) {
   .tel { --largura-tel: 100%; }
