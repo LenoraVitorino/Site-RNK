@@ -245,7 +245,9 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
      frase some ............ .16 → .30
      contorno entra ........ .32 → .44
      preenchimento ......... .44 → .72
-     encolhe + copy entra .. .74 → 1
+     reflexo (classe) ...... a partir de .72
+     RevOps sai ............ .76 → .86
+     título/sub/CTA entram . .88 → 1
    ============================================================ */
 
 .palco { --p: 1; height: 260svh; }
@@ -261,7 +263,8 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   --some:   clamp(0, calc((var(--p) - .16) / .14), 1);
   --entra:  clamp(0, calc((var(--p) - .32) / .12), 1);
   --cheio:  clamp(0, calc((var(--p) - .44) / .28), 1);
-  --fecha:  clamp(0, calc((var(--p) - .74) / .26), 1);
+  --sai:    clamp(0, calc((var(--p) - .76) / .10), 1);
+  --fecha:  clamp(0, calc((var(--p) - .88) / .12), 1);
 }
 .hero__monograma {
   position: absolute; right: -6%; bottom: -14%; width: min(46vw, 620px);
@@ -274,7 +277,10 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .hero__rotulo { color: rgb(242 242 238 / .6); margin-bottom: 22px; }
 
 /* As duas tomadas ocupam a mesma célula: uma sai enquanto a outra entra. */
-.hero__h1 { display: grid; place-items: center; width: 100%; }
+/* A cena: h1 e bloco final ocupam a mesma célula; um sai, o outro entra. */
+.hero__cena { display: grid; place-items: center; width: 100%; }
+.hero__cena > * { grid-area: 1 / 1; }
+.hero__h1 { display: grid; place-items: center; width: 100%; opacity: calc(1 - var(--sai)); transform: translateY(calc(var(--sai) * -28px)); }
 .tomada { grid-area: 1 / 1; display: block; width: 100%; text-transform: uppercase; text-wrap: balance; }
 .tomada--1 {
   font-size: clamp(2rem, 4.6vw, 4.4rem); letter-spacing: -.03em; line-height: .98;
@@ -292,13 +298,10 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 
-/* "Isso é RevOps." em contorno, preenchido da esquerda para a direita e
-   depois reduzido para virar a chamada do bloco. Font-size em calc para o
-   encolhimento acontecer em fluxo (o bloco de baixo cresce no lugar). */
+/* "Isso é RevOps." em contorno, preenchido da esquerda para a direita. */
 .tomada--2 {
   display: grid; place-items: center;
-  --grande: clamp(3.4rem, 11vw, 9.6rem);
-  font-size: calc(var(--grande) * (1 - var(--fecha) * .58));
+  font-size: clamp(3.4rem, 11vw, 9.6rem);
   letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 18px));
 }
@@ -309,7 +312,22 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .revops { grid-area: 1 / 1; white-space: pre-wrap; }
 .revops--borda { color: var(--amarelo); -webkit-text-stroke: 2px var(--amarelo); paint-order: stroke fill; }
 .revops--furo { color: var(--grafite); }
-.revops--cheio { color: var(--amarelo); clip-path: inset(-.1em calc((1 - var(--cheio)) * 100%) -.15em 0); }
+/* Camada cheia: amarelo por gradiente recortado no texto, para o reflexo
+   poder varrer a frase (a faixa clara do gradiente atravessa as letras). */
+.revops--cheio {
+  color: transparent; -webkit-text-fill-color: transparent;
+  background: linear-gradient(100deg, var(--amarelo) 0 38%, #FFF7D6 50%, var(--amarelo) 62% 100%) no-repeat;
+  background-size: 260% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text;
+  transition: filter .8s var(--easing-suave);
+}
+.brilha .revops--cheio {
+  animation: reflexo 1.5s cubic-bezier(.4, 0, .2, 1) .15s both;
+  filter: drop-shadow(0 0 24px rgb(255 226 122 / .45));
+}
+@keyframes reflexo { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .brilha .revops--cheio { animation: none; } }
+.revops--cheio { clip-path: inset(-.12em calc((1 - var(--cheio)) * 100%) -.15em -.06em); }
 
 /* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
 .hero__seta {
@@ -321,15 +339,14 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .js .hero__seta span { animation: seta 1.6s ease-in-out .9s infinite; display: block; }
 @keyframes seta { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-/* Bloco final: cresce em fluxo (altura medida pelo script) e aparece por
-   último. Com --copy-h ausente, fica em altura automática. */
+/* Bloco final: entra no lugar do RevOps, por último. */
 .hero__copy {
-  width: 100%; overflow: hidden;
-  height: calc(var(--fecha) * var(--copy-h, 320px));
-  opacity: var(--fecha);
+  width: 100%; display: grid; justify-items: center; gap: 20px;
+  opacity: var(--fecha); transform: translateY(calc((1 - var(--fecha)) * 28px));
+  pointer-events: none;
 }
-.hero__copy__miolo { display: grid; justify-items: center; gap: 18px; padding-top: 28px; }
-.hero__titulo { font-size: clamp(1.25rem, 2.2vw, 1.85rem); line-height: 1.25; letter-spacing: -.02em; max-width: 34ch; font-weight: var(--peso-titulo); }
+.brilha .hero__copy { pointer-events: auto; }
+.hero__titulo { font-size: clamp(1.6rem, 3.1vw, 2.7rem); line-height: 1.15; letter-spacing: -.025em; max-width: 30ch; font-weight: var(--peso-titulo); }
 .hero__lead { color: rgb(242 242 238 / .7); max-width: 60ch; }
 .hero__acoes { margin-top: 6px; }
 
@@ -544,9 +561,9 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .palco { height: 220svh; }
   .palco__fixo { min-height: 0; padding: 16px var(--gutter); }
   .tomada--1 { font-size: clamp(1.9rem, 8.6vw, 3rem); }
-  .tomada--2 { --grande: clamp(3rem, 15vw, 5.4rem); }
+  .tomada--2 { font-size: clamp(3rem, 15vw, 5.4rem); }
   .hero__seta { margin-top: 20px; }
-  .hero__copy__miolo { gap: 14px; padding-top: 20px; }
+  .hero__copy { gap: 16px; }
   .hero__lead { font-size: 15px; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
