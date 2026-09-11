@@ -14,7 +14,7 @@
   --gutter: clamp(16px, 4vw, 48px);
   --altura-header: 76px;
   --esp-secao: clamp(72px, 9vw, 128px);
-  --raio-foto: 14px;   /* o único raio do sistema: fotos e vídeo. Blocos são retos. */
+  --raio-foto: 0;      /* acabamento reto em tudo; só a moldura do celular tem canto, por ser um aparelho */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -110,81 +110,79 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .js .entra { opacity: 0; transform: translateY(16px); }
 .entra.visivel { opacity: 1; transform: none; transition: opacity .6s var(--easing), transform .6s var(--easing); }
 
-/* ---------- Header (claro) ---------- */
+/* ---------- Header (escuro, fixo, no estilo da referência) ---------- */
 
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgb(242 242 238 / .86);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--fio);
-  transition: background-color .2s var(--easing-suave);
+  background: var(--grafite); color: var(--papel);
+  border-bottom: 1px solid rgb(242 242 238 / .12);
 }
-.header.is-stuck { background: rgb(242 242 238 / .96); }
 .header__inner {
-  width: 100%; min-height: var(--altura-header);
+  width: min(100%, var(--largura)); margin-inline: auto; min-height: var(--altura-header);
   padding: 12px var(--gutter);
   display: flex; align-items: center; gap: 24px;
 }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
-/* Só o monograma "R", na cor da marca: funciona sobre o claro e sobre o
-   escuro da hero sem precisar de duas versões. */
+/* Só o monograma "R", na cor da marca. */
 .logo__img { height: 34px; width: auto; }
-
-/* Cabeçalho escuro enquanto o palco (escuro) passa por baixo dele —
-   classe ligada pelo script da Hero. */
-.header--escuro { background: rgb(27 27 25 / .88); border-bottom-color: rgb(242 242 238 / .12); }
-.header--escuro.is-stuck { background: rgb(27 27 25 / .96); }
-.header--escuro .nav__link { color: var(--papel); }
-.header--escuro .nav-toggle { border-color: rgb(242 242 238 / .3); }
-.header--escuro .nav-toggle__bar { background: var(--papel); }
-.header--escuro .nav__indicador { background: rgb(242 242 238 / .1); }
-.header--escuro .nav__acao .botao { color: var(--papel); border-color: var(--papel); background: transparent; }
-.header--escuro .nav__acao .botao:hover { background: var(--papel); color: var(--grafite); }
 
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: auto;
   width: var(--alvo); height: var(--alvo); padding: 0;
-  background: none; border: 1px solid var(--fio); border-radius: 0; cursor: pointer;
+  background: none; border: 1px solid rgb(242 242 238 / .3); border-radius: 0; cursor: pointer;
 }
-.nav-toggle__bar { display: block; width: 18px; height: 1.5px; background: var(--grafite); transition: .2s; }
+.nav-toggle__bar { display: block; width: 18px; height: 1.5px; background: var(--papel); transition: transform .25s var(--easing), opacity .2s; }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) { opacity: 0; }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
+/* Drawer (mobile) */
 .nav {
   position: fixed; inset: var(--altura-header) 0 0 auto; width: min(88vw, 360px);
-  background: var(--papel); border-left: 1px solid var(--fio);
+  background: var(--grafite); border-left: 1px solid rgb(242 242 238 / .14);
   overflow-y: auto; padding: 8px var(--gutter) 48px;
-  transform: translateX(100%); transition: transform .25s var(--easing); visibility: hidden;
+  transform: translateX(100%); transition: transform .3s var(--easing), visibility 0s .3s; visibility: hidden;
 }
-.nav.is-open { transform: none; visibility: visible; }
+.nav.is-open { transform: none; visibility: visible; transition: transform .3s var(--easing); }
 .nav__list { list-style: none; margin: 0; padding: 0; }
 .nav__acao { margin-top: 24px; }
-.nav__acao .botao { width: 100%; }
-.nav__item { border-bottom: 1px solid var(--fio); }
+.nav__item { border-bottom: 1px solid rgb(242 242 238 / .12); }
 .nav__link {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   width: 100%; min-height: var(--alvo); text-align: left; padding: 12px 0;
-  font: inherit; font-size: 16px; color: var(--grafite); text-decoration: none;
+  font: inherit; font-size: 16px; color: var(--papel); text-decoration: none;
   background: none; border: 0; cursor: pointer;
+  transition: color .25s var(--easing-suave);
 }
+.nav__link:hover, .nav__trigger[aria-expanded="true"] { color: var(--amarelo); }
+/* Sem setinha nos itens, como a referência; no drawer ela ajuda a mostrar o acordeão. */
 .nav__caret {
   width: 7px; height: 7px; flex: none; opacity: .55;
   border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg) translateY(-2px); transition: transform .2s;
+  transform: rotate(45deg) translateY(-2px); transition: transform .25s var(--easing);
 }
 .nav__trigger[aria-expanded="true"] .nav__caret { transform: rotate(-135deg) translateY(-2px); opacity: 1; }
 .megamenu { padding-bottom: 8px; }
-.megamenu__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); font-weight: var(--peso-enfase); margin: 12px 0 6px; }
+.megamenu__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .5); font-weight: var(--peso-enfase); margin: 12px 0 6px; }
 .megamenu__list { list-style: none; margin: 0 0 12px; padding: 0; }
 .megamenu__list a {
   display: flex; align-items: center; min-height: var(--alvo); padding: 8px 0 8px 12px;
-  font-size: 14px; color: var(--grafite); text-decoration: none;
-  border-left: 1px solid var(--fio); transition: border-color .15s, background-color .15s;
+  font-size: 14px; color: var(--papel); text-decoration: none;
+  border-left: 1px solid rgb(242 242 238 / .2);
+  transition: color .25s var(--easing-suave), border-color .25s var(--easing-suave), background-color .25s var(--easing-suave), padding-left .25s var(--easing);
 }
-.megamenu__list a:hover { border-left-color: var(--grafite); background: rgb(27 27 25 / .04); }
-.megamenu__list em { font-style: normal; color: var(--cinza); font-size: 13px; }
-.nav-overlay { position: fixed; inset: 0; z-index: 90; background: rgb(27 27 25 / .25); }
+.megamenu__list a:hover { color: var(--amarelo); border-left-color: var(--amarelo); }
+.megamenu__list em { font-style: normal; color: rgb(242 242 238 / .5); font-size: 13px; }
+.nav-overlay { position: fixed; inset: 0; z-index: 90; background: rgb(0 0 0 / .45); }
+
+/* A ação do cabeçalho é um link sublinhado em amarelo, não um botão. */
+.nav__acao .botao {
+  background: none; border: 0; padding: 0; min-height: 0; width: auto;
+  color: var(--amarelo); font-size: 15px; font-weight: var(--peso-enfase);
+  text-decoration: underline; text-underline-offset: 7px; text-decoration-thickness: 1px;
+  transition: text-decoration-thickness .2s var(--easing-suave), text-underline-offset .2s var(--easing-suave);
+}
+.nav__acao .botao:hover { background: none; text-decoration-thickness: 2px; text-underline-offset: 6px; }
 
 @media (min-width: 900px) {
   .nav-toggle { display: none; }
@@ -195,26 +193,29 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   .nav { display: contents; }
   .nav__list { grid-column: 2; position: relative; display: flex; align-items: center; gap: 4px; }
   .nav__acao { grid-column: 3; justify-self: end; margin-top: 0; }
-  .nav__acao .botao { width: auto; min-height: 40px; padding: .55rem 1rem; font-size: 14px; }
+  .nav__acao .botao { font-size: 14px; }
   .nav__item { border-bottom: 0; position: relative; }
   .nav__link { min-height: 0; padding: 10px 14px; font-size: 14px; white-space: nowrap; }
+  .nav__caret { display: none; }
+  /* Realce que desliza entre os itens, bem discreto */
   .nav__indicador {
     position: absolute; left: 0; top: 50%; height: calc(100% + 2px);
-    background: rgb(27 27 25 / .06); pointer-events: none; opacity: 0;
+    background: rgb(242 242 238 / .06); pointer-events: none; opacity: 0;
     transform: translate3d(var(--x, 0), -50%, 0); width: var(--w, 0);
-    transition: transform .32s var(--easing), width .32s var(--easing), opacity .2s var(--easing-suave);
+    transition: transform .4s var(--easing), width .4s var(--easing), opacity .3s var(--easing-suave);
   }
   .nav__list[data-ativo] .nav__indicador { opacity: 1; }
   .megamenu {
-    position: absolute; top: calc(100% + 10px); left: 0; z-index: 110; min-width: 280px; padding: 0;
-    background: var(--papel); border: 1px solid var(--fio);
-    box-shadow: 0 18px 40px -24px rgb(27 27 25 / .35);
-    transform-origin: top left; animation: mega-entra .18s var(--easing);
+    position: absolute; top: calc(100% + 10px); left: 0; z-index: 110; min-width: 300px; padding: 0;
+    background: var(--grafite); border: 1px solid rgb(242 242 238 / .14);
+    box-shadow: 0 24px 48px -28px rgb(0 0 0 / .7);
+    transform-origin: top left; animation: mega-entra .28s var(--easing);
   }
   @keyframes mega-entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
   .megamenu__inner { padding: 14px 16px; }
   .megamenu__list { margin-bottom: 6px; }
   .megamenu__list a { min-height: 0; padding: 8px 10px; border-left: 0; }
+  .megamenu__list a:hover { background: rgb(242 242 238 / .06); padding-left: 14px; }
 }
 
 /* ---------- Slot de foto (placeholder honesto) ---------- */
@@ -377,7 +378,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .tel__botao {
   display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px;
   font: inherit; font-size: 12px; font-weight: var(--peso-enfase); color: #fff;
-  background: rgb(0 0 0 / .55); border: 1px solid rgb(255 255 255 / .25); border-radius: 999px;
+  background: rgb(0 0 0 / .55); border: 1px solid rgb(255 255 255 / .25); border-radius: 0;
   backdrop-filter: blur(6px); cursor: pointer;
 }
 .tel__botao:hover { background: rgb(0 0 0 / .75); }
@@ -566,8 +567,8 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 @media (max-width: 639.98px) {
   .tel { --largura-tel: 100%; }
-  .tel__moldura { padding: 0; border-radius: 20px; background: none; box-shadow: none; aspect-ratio: 9 / 16; }
-  .tel__tela { border-radius: 20px; }
+  .tel__moldura { padding: 0; border-radius: 0; background: none; box-shadow: none; aspect-ratio: 9 / 16; }
+  .tel__tela { border-radius: 0; }
   .tel__ilha { display: none; }
   /* Uma coluna: número à esquerda, título e texto à direita, tudo visível. */
   .escada { grid-template-columns: 1fr; }

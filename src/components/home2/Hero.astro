@@ -70,8 +70,6 @@ const palavras = ['Isso', 'não', 'é'];
         const p = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
         palco.style.setProperty('--p', p.toFixed(4));
       }
-      // O cabeçalho fica escuro enquanto o palco (escuro) passa por baixo dele.
-      header?.classList.toggle('header--escuro', r.bottom > header.offsetHeight + 1);
     };
     const medeCopy = () => { if (miolo) palco.style.setProperty('--copy-h', miolo.offsetHeight + 'px'); };
     const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
