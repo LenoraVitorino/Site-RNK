@@ -1,25 +1,34 @@
 ---
-import Base from '../layouts/Base.astro';
+/**
+ * Home v2 — direção visual aprovada em 11/09/2026, estrutura de dobras
+ * extraída das referências. Ver docs/04-design/home-v2-estrutura.md.
+ * Os componentes antigos (src/components/home/) ficam até a v2 ser aprovada.
+ */
+import Base2 from '../layouts/Base2.astro';
 import { seo } from '../data/home';
 
-import Hero from '../components/home/Hero.astro';
-import ProvaSocial from '../components/home/ProvaSocial.astro';
-import OQueFazemos from '../components/home/OQueFazemos.astro';
-import FraseAncora from '../components/home/FraseAncora.astro';
-import Resultados from '../components/home/Resultados.astro';
-import CtaFinal from '../components/home/CtaFinal.astro';
-import AcademyTools from '../components/home/AcademyTools.astro';
-import Sobre from '../components/home/Sobre.astro';
-import Formulario from '../components/home/Formulario.astro';
+import Hero from '../components/home2/Hero.astro';
+import Faixa from '../components/home2/Faixa.astro';
+import OQueFaz from '../components/home2/OQueFaz.astro';
+import Esteira from '../components/home2/Esteira.astro';
+import Protocolos from '../components/home2/Protocolos.astro';
+import Perguntas from '../components/home2/Perguntas.astro';
+import Resultados from '../components/home2/Resultados.astro';
+import CtaFinal from '../components/home2/CtaFinal.astro';
+import AcademyTools from '../components/home2/AcademyTools.astro';
+import Sobre from '../components/home2/Sobre.astro';
+import Formulario from '../components/home2/Formulario.astro';
 ---
-<Base titulo={seo.titulo} descricao={seo.descricao}>
+<Base2 titulo={seo.titulo} descricao={seo.descricao}>
   <Hero />
-  <ProvaSocial />
-  <OQueFazemos />
-  <FraseAncora />
+  <Faixa />
+  <OQueFaz />
+  <Esteira />
+  <Protocolos />
+  <Perguntas />
   <Resultados />
   <CtaFinal />
   <AcademyTools />
   <Sobre />
   <Formulario />
-</Base>
+</Base2>

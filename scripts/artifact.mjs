@@ -65,22 +65,46 @@ const inlineFontes = (css) =>
     return `url(data:font/${arquivo.endsWith('.woff2') ? 'woff2' : 'woff'};base64,${dados})`;
   });
 
-// Todas as folhas que qualquer página referencia, sem repetir.
+// Todas as folhas que qualquer página referencia, sem repetir. As da casca
+// (a home) entram por último: no arquivo único o CSS é global, e a home v2
+// redefine tokens e componentes que as internas (ainda na v1) também usam.
+// Assim a home sai fiel; as internas ficam numa mistura v1/v2 até migrarem.
+const folhasDe = (p) =>
+  [...p.html.matchAll(/<link rel="stylesheet" href="\/_astro\/([^"]+\.css)"\s*\/?>/g)].map((m) => m[1]);
+const folhasCasca = folhasDe(casca);
 const folhas = [
-  ...new Set(
-    (modo === 'design-system' ? [casca] : paginas).flatMap((p) =>
-      [...p.html.matchAll(/<link rel="stylesheet" href="\/_astro\/([^"]+\.css)"\s*\/?>/g)].map((m) => m[1]),
-    ),
-  ),
+  ...new Set([
+    ...(modo === 'design-system' ? [] : paginas.filter((p) => p !== casca).flatMap(folhasDe)).filter((f) => !folhasCasca.includes(f)),
+    ...folhasCasca,
+  ]),
 ];
 if (folhas.length === 0) {
   console.error('Nenhuma folha de estilo encontrada.');
   process.exit(1);
 }
+// As folhas das internas ficam confinadas às rotas que não são a home
+// (@scope): assim o CSS v1 não pinta por cima da home v2 no arquivo único.
+// Regras em :root/html dentro do @scope deixam de valer — as internas
+// passam a usar os tokens da home, o que já é a direção da migração.
+const escopoInternas = '[data-rota]:not([data-rota="/"])';
+const lerFolha = (f) => readFileSync(join(dist, '_astro', f), 'utf8');
 const estilos =
   '<style>\n' +
-  inlineFontes(folhas.map((f) => readFileSync(join(dist, '_astro', f), 'utf8')).join('\n')) +
+  inlineFontes(
+    folhas
+      .map((f) =>
+        modo !== 'design-system' && !folhasCasca.includes(f) ? `@scope (${escopoInternas}) {\n${lerFolha(f)}\n}` : lerFolha(f),
+      )
+      .join('\n'),
+  ) +
   '\n</style>';
+
+// Scripts inline do <head> da casca (ex.: a classe .js que libera as
+// animações) — o corpo entra sem o <head>, então eles voltam aqui.
+const cabeca = casca.html.slice(0, casca.html.indexOf('</head>'));
+const scriptsCabeca = [...cabeca.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="module")[^>]*>[\s\S]*?<\/script>/g)]
+  .map((m) => m[0])
+  .join('\n');
 
 /* ---- 2) Corpo ----------------------------------------------------------- */
 
@@ -170,7 +194,7 @@ if (modo === 'design-system') {
 
 const titulo = titulos[modo] || modo;
 const atributosCorpo = corpoDe(casca.html).atributos;
-let final = `<title>${titulo}</title>\n${estilos}\n${
+let final = `<title>${titulo}</title>\n${scriptsCabeca}\n${estilos}\n${
   atributosCorpo ? `<div ${atributosCorpo} data-corpo>\n${corpo}\n</div>` : corpo
 }\n`;
 

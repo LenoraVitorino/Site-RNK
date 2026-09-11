@@ -1,0 +1,35 @@
+---
+/**
+ * Frase-âncora + perguntas, no bloco escuro que dá ritmo à página.
+ * As quatro primeiras ocupam o grid 2×2 que o layout pede; as outras três
+ * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
+ * esconder copy não resolve decisão.
+ */
+import { perguntas } from '../../data/home';
+const principais = perguntas.filter((p) => !p.excedente);
+const demais = perguntas.filter((p) => p.excedente);
+---
+<section class="secao secao--escura" id="perguntas">
+  <div class="container">
+    <p class="ancora entra">
+      Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+      <strong>Mas e com o seu negócio?</strong>
+    </p>
+    <div class="perguntas entra">
+      {principais.map((p, i) => (
+        <div class="pergunta">
+          <span class="pergunta__n num">0{i + 1}</span>
+          <p>{p.texto}</p>
+        </div>
+      ))}
+    </div>
+    <div class="perguntas perguntas--mais entra">
+      {demais.map((p, i) => (
+        <div class="pergunta">
+          <span class="pergunta__n num">0{i + 5}</span>
+          <p>{p.texto}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

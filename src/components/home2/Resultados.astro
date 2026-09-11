@@ -1,0 +1,40 @@
+---
+/**
+ * Resultados como extrato (cinco números em linha) e dois depoimentos em
+ * cartão com espaço de foto. Os números são placeholder do próprio briefing.
+ */
+import { resultados, hero } from '../../data/home';
+import FotoSlot from '../ui/FotoSlot.astro';
+import Botao from '../ui/Botao.astro';
+---
+<section class="secao secao--painel" id="resultados">
+  <div class="container">
+    <div class="cabeca entra">
+      <p class="rotulo">Resultados</p>
+      <h2 class="titulo caps">O que muda quando a operação tem estrutura.</h2>
+    </div>
+    <div class="ledger entra">
+      {resultados.map((r) => (
+        <div>
+          <p class="rotulo">{r.especialidade}</p>
+          <b class="num">{r.numero}</b>
+          <small>{r.depois}</small>
+        </div>
+      ))}
+    </div>
+    <p class="aviso">Números ilustrativos do briefing — entram os reais quando os cases forem autorizados.</p>
+
+    <div class="depoimentos entra">
+      {[1, 2].map(() => (
+        <figure class="depoimento">
+          <FotoSlot rotulo="Foto · paciente" prop="1 / 1" />
+          <div>
+            <blockquote>"Depoimento a coletar."</blockquote>
+            <figcaption>Nome · Especialidade · Cidade</figcaption>
+          </div>
+        </figure>
+      ))}
+    </div>
+    <p style="margin-top:28px"><Botao variante="contorno" href="/contato">{hero.cta}</Botao></p>
+  </div>
+</section>

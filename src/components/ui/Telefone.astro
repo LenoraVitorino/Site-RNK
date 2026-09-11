@@ -1,0 +1,75 @@
+---
+/**
+ * O reel dentro de uma moldura de celular. Toca ao entrar na tela, pausa ao
+ * sair, respeita uma pausa manual. No mobile (home2.css) a moldura some e o
+ * 9:16 ocupa a largura toda: ali o aparelho de quem assiste já é a moldura.
+ */
+import { porId } from '../../data/midia';
+const slot = porId('02');
+const video = slot.video!;
+---
+<div class="tel" data-tel>
+  <div class="tel__moldura">
+    <div class="tel__ilha" aria-hidden="true"></div>
+    <div class="tel__tela">
+      <video
+        poster={video.poster}
+        preload="none"
+        muted
+        playsinline
+        aria-label={`${slot.titulo}. ${video.descricao}`}
+        data-tel-video
+      >
+        {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
+      </video>
+      <div class="tel__controles">
+        <button class="tel__botao" type="button" data-tel-som aria-pressed="true">
+          <span data-tel-som-texto>Ativar som</span>
+        </button>
+        <button class="tel__botao" type="button" data-tel-toque aria-label="Pausar vídeo">
+          <span data-tel-toque-texto>Pausar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <p class="tel__legenda"><span>{video.duracao}</span><a href={video.origem} target="_blank" rel="noopener">{video.autor} no Instagram ↗</a></p>
+</div>
+
+<script>
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-tel]').forEach((raiz) => {
+    const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
+    const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
+    const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
+    let pausadoPeloUsuario = false;
+
+    const marcar = () => {
+      raiz.querySelector('[data-tel-toque-texto]')!.textContent = video.paused ? 'Tocar' : 'Pausar';
+      toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
+    };
+    video.addEventListener('play', marcar);
+    video.addEventListener('pause', marcar);
+    marcar();
+
+    const tocar = () => video.play().catch(() => {});
+    toque.addEventListener('click', () => {
+      if (video.paused) { pausadoPeloUsuario = false; tocar(); }
+      else { pausadoPeloUsuario = true; video.pause(); }
+    });
+    som.addEventListener('click', () => {
+      video.muted = !video.muted;
+      som.setAttribute('aria-pressed', String(video.muted));
+      raiz.querySelector('[data-tel-som-texto]')!.textContent = video.muted ? 'Ativar som' : 'Desativar som';
+      if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
+    });
+
+    if (reduzido.matches) return;
+    new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) { if (!pausadoPeloUsuario) tocar(); }
+        else if (!video.paused) video.pause();
+      },
+      { threshold: 0.55 },
+    ).observe(video);
+  });
+</script>

@@ -1,0 +1,44 @@
+---
+/**
+ * Faixa de fotos do escritório entre "o que fazemos" e os protocolos: a
+ * transição fotográfica que a referência faz com colunas que se movem em
+ * velocidades diferentes no scroll. --e vai de -1 a 1 conforme a faixa
+ * atravessa a viewport; cada coluna multiplica por seu próprio fator.
+ * Por enquanto são espaços reservados: as fotos da nova sede não chegaram.
+ */
+import FotoSlot from '../ui/FotoSlot.astro';
+
+const colunas: { rotulo: string; prop: string }[][] = [
+  [{ rotulo: 'Foto · sede', prop: '3 / 4' }, { rotulo: 'Foto · time', prop: '1 / 1' }],
+  [{ rotulo: 'Foto · reunião', prop: '4 / 5' }, { rotulo: 'Foto · detalhe', prop: '3 / 4' }],
+  [{ rotulo: 'Foto · time', prop: '1 / 1' }, { rotulo: 'Foto · sede', prop: '3 / 4' }],
+  [{ rotulo: 'Foto · sede', prop: '3 / 4' }, { rotulo: 'Foto · operação', prop: '4 / 5' }],
+];
+---
+<section class="esteira" data-esteira aria-label="Fotos da Renke">
+  <div class="container esteira__trilho">
+    {colunas.map((c) => (
+      <div class="esteira__coluna">
+        {c.map((f) => <FotoSlot rotulo={f.rotulo} prop={f.prop} />)}
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const faixa = document.querySelector<HTMLElement>('[data-esteira]');
+  if (faixa && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let agendado = false;
+    const mede = () => {
+      agendado = false;
+      const r = faixa.getBoundingClientRect();
+      // -1 quando a faixa entra por baixo, +1 quando sai por cima
+      const e = Math.max(-1, Math.min(1, 1 - (2 * (r.top + r.height)) / (innerHeight + r.height)));
+      faixa.style.setProperty('--e', e.toFixed(4));
+    };
+    const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
+    addEventListener('scroll', pede, { passive: true });
+    addEventListener('resize', pede, { passive: true });
+    mede();
+  }
+</script>

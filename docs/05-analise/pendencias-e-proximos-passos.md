@@ -20,7 +20,7 @@ Checklist acionável derivado da [análise do briefing](analise-do-briefing.md).
 | D10 | **Domínio**: `renke.com.br` ou `renkestudio.com.br` | Configuração de DNS, canonical, e-mail |
 | D11 | **Depoimentos como componente global** em todas as páginas — confirmar | Define arquitetura de componentes |
 | D12 | **Telefone / WhatsApp oficial** para rodapé e contato | Rodapé e /contato incompletos |
-| ~~D15~~ | ~~**Direção visual v2**: paleta e tipografia~~ → **aprovada em 11/09/2026**: base clara, grafite, amarelo `#FFE27A` no tom da marca, Instrument Sans, caixa alta nos títulos. Layout das dobras aguarda as referências. | ✅ resolvido |
+| ~~D15~~ | ~~**Direção visual v2**: paleta e tipografia~~ → **aprovada em 11/09/2026**: base clara, grafite, amarelo `#FFE27A` no tom da marca, Instrument Sans, caixa alta nos títulos. Layout das dobras aplicado na home em 11/09/2026 a partir das referências (metodobr, infinitepay, prints) — ver [home-v2-estrutura](../04-design/home-v2-estrutura.md). Internas ainda na v1. | ✅ resolvido |
 | ~~D14~~ | ~~**Vídeo institucional: auto-hospedar ou manter o embed?**~~ → **auto-hospedado**, em 30/08/2026 | ✅ resolvido |
 | ~~D13~~ | ~~**Stack**~~ → **Astro**, decidido em 29/08/2026 | ✅ resolvido |
 

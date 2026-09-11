@@ -1,0 +1,61 @@
+---
+/**
+ * Dobra 3 · Protocolo Revena.
+ *
+ * Duas partes, como a referência: a escada em grade amarela (os pilares do
+ * método, numerados porque a ordem existe) e as soluções em linhas de foto
+ * e texto alternadas dentro de uma grade de fio fino. Copy literal.
+ */
+import { pilares, protocolos } from '../../data/home';
+import { existe } from '../../data/rotas';
+import FotoSlot from '../ui/FotoSlot.astro';
+
+const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
+---
+<section class="secao secao--amarela" id="protocolo-revena">
+  <div class="container">
+    <div class="cabeca cabeca--larga entra">
+      <p class="rotulo rotulo--marca">Para Clínicas · O que fazemos</p>
+      <h2 class="titulo caps">Protocolo Revena</h2>
+      <p style="color:rgb(27 27 25 / .8)">Cinco frentes que a Renke opera na sua clínica. Passe o mouse ou toque para ler.</p>
+    </div>
+    <ol class="escada entra" aria-label="Pilares do Protocolo Revena">
+      {pilares.map((p, i) => (
+        <li class:list={['degrau', p.excedente && 'degrau--extra']} tabindex="0">
+          <span class="degrau__n num">0{i + 1}.</span>
+          <div>
+            <p class="degrau__titulo">{p.titulo}</p>
+            <p class="degrau__texto">{p.texto}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="secao" id="planos">
+  <div class="container">
+    <h3 class="divisor entra">
+      Estruturamos sua operação do zero e operamos juntos no longo prazo.<br />
+      <strong>Qual é o momento da sua clínica?</strong>
+    </h3>
+    <div class="grade">
+      {protocolos.map((p, i) => (
+        <article class="linha">
+          <div class="linha__foto"><FotoSlot rotulo={fotos[i]} reta /></div>
+          <div class="linha__texto entra">
+            <p class="rotulo">Protocolo Revena · <span class="num">0{i + 1}</span></p>
+            <h3 class="linha__nome caps">{p.label.replace('REVENA ', '')}</h3>
+            <p class="linha__fala">"{p.fala}"</p>
+            <p>{p.texto}</p>
+            <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais →</a></p>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="cta-linha">
+      <span>A Renke recomenda o protocolo certo para o momento da sua clínica.</span>
+      <a class="link-arrow" href="/contato" style="color:var(--grafite)">Fale com a equipe →</a>
+    </p>
+  </div>
+</section>

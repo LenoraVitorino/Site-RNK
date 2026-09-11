@@ -1,0 +1,71 @@
+---
+/**
+ * Dobra 1 · o título é a tese, então ganha um palco.
+ *
+ * O bloco fica preso no topo por ~1,4 telas de scroll. Nesse trajeto, o
+ * risco atravessa "marketing para clínicas", a negação recua e o painel
+ * amarelo sobe com "RevOps". Depois o palco solta e a página segue.
+ * Quem rola devagar lê a frase ser descartada; quem passa rápido vê o fim.
+ * Copy literal do briefing.
+ */
+import { hero } from '../../data/home';
+import Botao from '../ui/Botao.astro';
+
+const palavras = ['Isso', 'não', 'é'];
+---
+<section class="palco" data-palco aria-label="Apresentação">
+  <div class="palco__fixo">
+    <div class="hero__copy">
+      <div>
+        <p class="rotulo" style="margin-bottom:18px">Revenue Operations para clínicas de alto padrão</p>
+        <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
+          <span class="hero__linha hero__tomada1" aria-hidden="true">
+            {palavras.map((p, i) => <><span class="palavra" style={`--i:${i}`}>{p}</span>{' '}</>)}
+          </span>
+          <span class="hero__linha hero__tomada1" aria-hidden="true">
+            <span class="palavra riscado" style="--i:3">marketing para clínicas.</span>
+          </span>
+        </h1>
+      </div>
+
+      <div class="hero__baixo">
+        <p class="hero__sub">Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.</p>
+        <p class="hero__lead">{hero.lead}</p>
+        <div class="hero__acoes">
+          <Botao href="/contato">{hero.cta}</Botao>
+          <span class="hero__seta">Role ↓</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__painel" aria-hidden="true">
+      <p class="rotulo">Isso é</p>
+      <p class="hero__revops"><span>Rev</span><span>Ops.</span></p>
+      <img class="hero__monograma" src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />
+      <p class="hero__pe"><span><em>{hero.legenda}</em></span><span class="num">01</span></p>
+    </div>
+  </div>
+</section>
+<p class="hero__lead--mobile">{hero.lead}</p>
+
+<script>
+  /* --p = progresso do scroll dentro do palco, de 0 a 1. Só transform e
+     opacity dependem dele, então o navegador resolve na composição. */
+  const palco = document.querySelector<HTMLElement>('[data-palco]');
+  if (palco && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let agendado = false;
+    const mede = () => {
+      agendado = false;
+      const r = palco.getBoundingClientRect();
+      const curso = palco.offsetHeight - innerHeight;
+      const p = curso > 0 ? Math.min(1, Math.max(0, -r.top / curso)) : 1;
+      palco.style.setProperty('--p', p.toFixed(4));
+    };
+    const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
+    addEventListener('scroll', pede, { passive: true });
+    addEventListener('resize', pede, { passive: true });
+    mede();
+  } else if (palco) {
+    palco.style.setProperty('--p', '1');
+  }
+</script>

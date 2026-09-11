@@ -1,0 +1,62 @@
+---
+/**
+ * Casca da home v2. Mesma estrutura da Base, com a folha nova (home2.css)
+ * e a Instrument Sans self-hosted. As internas continuam na Base até
+ * migrarem para o sistema novo.
+ */
+import '@fontsource/instrument-sans/latin-400.css';
+import '@fontsource/instrument-sans/latin-400-italic.css';
+import '@fontsource/instrument-sans/latin-500.css';
+import '@fontsource/instrument-sans/latin-600.css';
+import '../styles/home2.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+}
+const { titulo, descricao } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titulo}</title>
+  <meta name="description" content={descricao} />
+  <link rel="icon" href="/marca/renke-monograma.png" type="image/png" />
+  <script is:inline>
+    /* Marca que o JS está vivo antes da primeira pintura. Só então o CSS
+       esconde o que vai entrar animado. Sem JS, tudo nasce visível. */
+    document.documentElement.classList.add('js');
+  </script>
+</head>
+<body>
+  <Header />
+  <main id="conteudo" class="trilhos">
+    <slot />
+  </main>
+  <Footer />
+
+  <script>
+    /* Revela os blocos conforme entram na viewport. */
+    const alvos = document.querySelectorAll('.entra');
+    if (alvos.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const obs = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('visivel');
+            obs.unobserve(e.target);
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },
+      );
+      alvos.forEach((a) => obs.observe(a));
+    } else {
+      alvos.forEach((a) => a.classList.add('visivel'));
+    }
+  </script>
+</body>
+</html>
