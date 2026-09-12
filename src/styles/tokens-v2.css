@@ -9,7 +9,7 @@
   /* ---- Cor ---- */
   --papel:   #F2F2EE;   /* fundo de página: claro, levemente quente */
   --painel:  #E3E3DE;   /* segundo plano: blocos, faixas, fundo do vídeo */
-  --grafite: #1B1B19;   /* texto, fios estruturais, botão principal */
+  --grafite: #171614;   /* texto, fundos escuros, botão principal — um pouco mais fundo, quente sem puxar pro amarelo (H 40°, S 13%) */
   --cinza:   #66665F;   /* texto secundário, rótulos (4,9:1 sobre papel) */
   --fio:     #C9C9C2;   /* linhas de grade: substituem sombra e raio */
 

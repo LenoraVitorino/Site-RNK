@@ -234,7 +234,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .foto__caixa svg { width: 28px; height: 28px; opacity: .55; }
 .secao--escura .foto { background: rgb(242 242 238 / .08); border-color: rgb(242 242 238 / .14); }
 .secao--escura .foto__caixa { color: rgb(242 242 238 / .6); }
-.secao--amarela .foto { background: rgb(27 27 25 / .06); border-color: rgb(27 27 25 / .18); }
+.secao--amarela .foto { background: rgb(23 22 20 / .06); border-color: rgb(23 22 20 / .18); }
 .secao--amarela .foto__caixa { color: var(--grafite); }
 
 /* ============================================================
@@ -378,7 +378,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .tel { --largura-tel: min(100%, 320px); width: var(--largura-tel); }
 .tel__moldura {
   position: relative; aspect-ratio: 9 / 19; border-radius: 46px; padding: 12px;
-  background: var(--grafite); box-shadow: 0 30px 60px -30px rgb(27 27 25 / .5), inset 0 0 0 2px rgb(255 255 255 / .06);
+  background: var(--grafite); box-shadow: 0 30px 60px -30px rgb(23 22 20 / .5), inset 0 0 0 2px rgb(255 255 255 / .06);
 }
 .tel__tela { position: relative; height: 100%; overflow: hidden; border-radius: 34px; background: #000; }
 .tel__tela video { width: 100%; height: 100%; object-fit: cover; }
@@ -408,19 +408,19 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
    DOBRA 3 · PROTOCOLOS — escada amarela + linhas foto/texto
    ============================================================ */
 
-.escada { border: 1px solid rgb(27 27 25 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
+.escada { border: 1px solid rgb(23 22 20 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
 .degrau {
   position: relative; min-height: 220px; padding: 18px; display: grid; align-content: space-between; gap: 12px;
-  border-right: 1px solid rgb(27 27 25 / .25); background: var(--amarelo);
+  border-right: 1px solid rgb(23 22 20 / .25); background: var(--amarelo);
   transition: background-color .25s var(--easing-suave);
 }
 .degrau:last-child { border-right: 0; }
 .degrau__n { font-size: 15px; font-weight: var(--peso-enfase); }
 .degrau__titulo { font-size: 17px; line-height: 1.2; font-weight: var(--peso-enfase); }
-.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(27 27 25 / .85); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s var(--easing), opacity .25s var(--easing-suave); }
+.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(23 22 20 / .85); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s var(--easing), opacity .25s var(--easing-suave); }
 .degrau:hover, .degrau:focus-within { background: var(--amarelo-claro); }
 .degrau:hover .degrau__texto, .degrau:focus-within .degrau__texto { max-height: 12em; opacity: 1; }
-.degrau--extra .degrau__n::after { content: ' · a confirmar'; font-weight: 400; font-size: 11px; color: rgb(27 27 25 / .6); }
+.degrau--extra .degrau__n::after { content: ' · a confirmar'; font-weight: 400; font-size: 11px; color: rgb(23 22 20 / .6); }
 
 .grade { border-top: 1px solid var(--fio); border-bottom: 1px solid var(--fio); }
 .linha { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--fio); }
@@ -474,7 +474,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .chamada { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: clamp(20px, 4vw, 48px); align-items: center; }
 .chamada__miolo { display: grid; gap: 18px; justify-items: center; text-align: center; }
 .chamada__miolo .titulo { max-width: 20ch; }
-.chamada__miolo p:not(.rotulo) { max-width: 44ch; color: rgb(27 27 25 / .8); }
+.chamada__miolo p:not(.rotulo) { max-width: 44ch; color: rgb(23 22 20 / .8); }
 .chamada .foto { --prop: 3 / 4; }
 
 /* ---------- Academy + Tools ---------- */
@@ -536,7 +536,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 @media (max-width: 1023.98px) {
   .escada { grid-template-columns: repeat(3, 1fr); }
   .degrau:nth-child(3n) { border-right: 0; }
-  .degrau { border-bottom: 1px solid rgb(27 27 25 / .25); }
+  .degrau { border-bottom: 1px solid rgb(23 22 20 / .25); }
   .ledger { grid-template-columns: repeat(3, 1fr); }
   .ledger > div:nth-child(3n) { border-right: 0; }
   .ledger > div { border-bottom: 1px solid var(--fio); }
