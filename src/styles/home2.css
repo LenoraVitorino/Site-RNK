@@ -14,7 +14,7 @@
   --gutter: clamp(16px, 4vw, 48px);
   --altura-header: 76px;
   --esp-secao: clamp(72px, 9vw, 128px);
-  --raio-foto: 0;      /* acabamento reto em tudo; só a moldura do celular tem canto, por ser um aparelho */
+  --raio-foto: var(--raio-caixa);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -154,7 +154,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   background: none; border: 0; cursor: pointer;
   transition: color .25s var(--easing-suave);
 }
-.nav__link:hover, .nav__trigger[aria-expanded="true"] { color: var(--amarelo); }
+.nav__link:hover, .nav__trigger[aria-expanded="true"] { color: var(--destaque); }
 /* Sem setinha nos itens, como a referência; no drawer ela ajuda a mostrar o acordeão. */
 .nav__caret {
   width: 7px; height: 7px; flex: none; opacity: .55;
@@ -171,14 +171,14 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   border-left: 1px solid rgb(242 242 238 / .2);
   transition: color .25s var(--easing-suave), border-color .25s var(--easing-suave), background-color .25s var(--easing-suave), padding-left .25s var(--easing);
 }
-.megamenu__list a:hover { color: var(--amarelo); border-left-color: var(--amarelo); }
+.megamenu__list a:hover { color: var(--destaque); border-left-color: var(--destaque); }
 .megamenu__list em { font-style: normal; color: rgb(242 242 238 / .5); font-size: 13px; }
 .nav-overlay { position: fixed; inset: 0; z-index: 90; background: rgb(0 0 0 / .45); }
 
 /* A ação do cabeçalho é um link sublinhado em amarelo, não um botão. */
 .nav__acao .botao {
   background: none; border: 0; padding: 0; min-height: 0; width: auto;
-  color: var(--amarelo); font-size: 15px; font-weight: var(--peso-enfase);
+  color: var(--destaque); font-size: 15px; font-weight: var(--peso-enfase);
   text-decoration: underline; text-underline-offset: 7px; text-decoration-thickness: 1px;
   transition: text-decoration-thickness .2s var(--easing-suave), text-underline-offset .2s var(--easing-suave);
 }
@@ -208,7 +208,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   .megamenu {
     position: absolute; top: calc(100% + 10px); left: 0; z-index: 110; min-width: 300px; padding: 0;
     background: var(--grafite); border: 1px solid rgb(242 242 238 / .14);
-    box-shadow: 0 24px 48px -28px rgb(0 0 0 / .7);
+    box-shadow: 0 24px 48px -28px rgb(0 0 0 / .7); border-radius: var(--raio-caixa);
     transform-origin: top left; animation: mega-entra .28s var(--easing);
   }
   @keyframes mega-entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
@@ -243,11 +243,9 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
    uma janela de --p:
      risco da frase ........ 0 → .20
      frase some ............ .16 → .30
-     contorno entra ........ .32 → .44
-     preenchimento ......... .44 → .72
-     reflexo (classe) ...... a partir de .72
-     RevOps sai ............ .76 → .86
-     título/sub/CTA entram . .88 → 1
+     RevOps entra .......... .30 → .48  (com o reflexo contínuo)
+     RevOps sai ............ .70 → .82
+     título/sub/CTA entram . .84 → 1
    ============================================================ */
 
 .palco { --p: 1; height: 260svh; }
@@ -261,10 +259,9 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   border-bottom: 1px solid var(--fio);
   --risco:  clamp(0, calc(var(--p) / .20), 1);
   --some:   clamp(0, calc((var(--p) - .16) / .14), 1);
-  --entra:  clamp(0, calc((var(--p) - .32) / .12), 1);
-  --cheio:  clamp(0, calc((var(--p) - .44) / .28), 1);
-  --sai:    clamp(0, calc((var(--p) - .76) / .10), 1);
-  --fecha:  clamp(0, calc((var(--p) - .88) / .12), 1);
+  --entra:  clamp(0, calc((var(--p) - .30) / .18), 1);
+  --sai:    clamp(0, calc((var(--p) - .70) / .12), 1);
+  --fecha:  clamp(0, calc((var(--p) - .84) / .16), 1);
 }
 .hero__monograma {
   position: absolute; right: -6%; bottom: -14%; width: min(46vw, 620px);
@@ -298,42 +295,32 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 
-/* "Isso é RevOps." em contorno, preenchido da esquerda para a direita. */
+/* "Isso é RevOps." entra suave, já vivo: gradiente no amarelo original
+   recortado no texto, com uma faixa de luz que vai e volta (o mesmo
+   efeito do AnimatedText da referência, em CSS). */
 .tomada--2 {
   display: grid; place-items: center;
   font-size: clamp(3.4rem, 11vw, 9.6rem);
   letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
-  opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 18px));
+  opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 22px)) scale(calc(.96 + var(--entra) * .04));
 }
-/* Contorno em camadas, não por text-stroke: a fonte desenha as letras com
-   formas sobrepostas e o stroke expõe cada contorno interno. Aqui a base é
-   a letra engordada em amarelo, o "furo" é a letra na cor do fundo por
-   cima — sobra um fio limpo de 1px em volta da forma inteira. */
-.revops { grid-area: 1 / 1; white-space: pre-wrap; }
-.revops--borda { color: var(--amarelo); -webkit-text-stroke: 2px var(--amarelo); paint-order: stroke fill; }
-.revops--furo { color: var(--grafite); }
-/* Camada cheia: amarelo por gradiente recortado no texto, para o reflexo
-   poder varrer a frase (a faixa clara do gradiente atravessa as letras). */
-.revops--cheio {
+.revops {
+  display: block; white-space: pre-wrap;
   color: transparent; -webkit-text-fill-color: transparent;
-  background: linear-gradient(100deg, var(--amarelo) 0 38%, #FFF7D6 50%, var(--amarelo) 62% 100%) no-repeat;
-  background-size: 260% 100%; background-position: 100% 0;
+  background: linear-gradient(100deg, var(--destaque) 0 30%, #FFF2B8 50%, var(--destaque) 70% 100%);
+  background-size: 220% auto; background-position: 0 0;
   -webkit-background-clip: text; background-clip: text;
-  transition: filter .8s var(--easing-suave);
+  filter: drop-shadow(0 0 22px rgb(255 209 3 / .28));
 }
-.brilha .revops--cheio {
-  animation: reflexo 1.5s cubic-bezier(.4, 0, .2, 1) .15s both;
-  filter: drop-shadow(0 0 24px rgb(255 226 122 / .45));
-}
-@keyframes reflexo { from { background-position: 100% 0; } to { background-position: 0 0; } }
-@media (prefers-reduced-motion: reduce) { .brilha .revops--cheio { animation: none; } }
-.revops--cheio { clip-path: inset(-.12em calc((1 - var(--cheio)) * 100%) -.15em -.06em); }
+.js .revops { animation: reflexo 2.6s ease-in-out infinite alternate; }
+@keyframes reflexo { from { background-position: 0 0; } to { background-position: 100% 0; } }
+@media (prefers-reduced-motion: reduce) { .js .revops { animation: none; } }
 
 /* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
 .hero__seta {
   height: calc((1 - var(--fecha)) * 48px); margin-top: calc((1 - var(--fecha)) * 28px);
   overflow: hidden; display: grid; place-items: center;
-  font-size: 26px; line-height: 1; color: var(--amarelo);
+  font-size: 26px; line-height: 1; color: var(--destaque);
   opacity: calc(1 - clamp(0, calc(var(--p) / .08), 1));
 }
 .js .hero__seta span { animation: seta 1.6s ease-in-out .9s infinite; display: block; }
@@ -345,7 +332,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   opacity: var(--fecha); transform: translateY(calc((1 - var(--fecha)) * 28px));
   pointer-events: none;
 }
-.brilha .hero__copy { pointer-events: auto; }
+.hero__copy--ativo { pointer-events: auto; }
 .hero__titulo { font-size: clamp(1.6rem, 3.1vw, 2.7rem); line-height: 1.15; letter-spacing: -.025em; max-width: 30ch; font-weight: var(--peso-titulo); }
 .hero__lead { color: rgb(242 242 238 / .7); max-width: 60ch; }
 .hero__acoes { margin-top: 6px; }
@@ -372,7 +359,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .faixa__logos { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 24px; padding: 18px var(--gutter); border-top: 1px solid var(--fio); }
 .faixa__logos ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
 .faixa__logos li {
-  flex: none; width: 128px; height: 44px; border: 1px dashed var(--fio); display: grid; place-items: center;
+  flex: none; width: 128px; height: 44px; border: 1px dashed var(--fio); border-radius: var(--raio); display: grid; place-items: center;
   font-size: 10px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza);
 }
 
@@ -400,7 +387,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .tel__botao {
   display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px;
   font: inherit; font-size: 12px; font-weight: var(--peso-enfase); color: #fff;
-  background: rgb(0 0 0 / .55); border: 1px solid rgb(255 255 255 / .25); border-radius: 0;
+  background: rgb(0 0 0 / .55); border: 1px solid rgb(255 255 255 / .25); border-radius: var(--raio);
   backdrop-filter: blur(6px); cursor: pointer;
 }
 .tel__botao:hover { background: rgb(0 0 0 / .75); }
@@ -421,7 +408,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
    DOBRA 3 · PROTOCOLOS — escada amarela + linhas foto/texto
    ============================================================ */
 
-.escada { border: 1px solid rgb(27 27 25 / .25); display: grid; grid-template-columns: repeat(5, 1fr); }
+.escada { border: 1px solid rgb(27 27 25 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
 .degrau {
   position: relative; min-height: 220px; padding: 18px; display: grid; align-content: space-between; gap: 12px;
   border-right: 1px solid rgb(27 27 25 / .25); background: var(--amarelo);
@@ -456,12 +443,12 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 /* ---------- Perguntas (escura) ---------- */
 
 .ancora { font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: -.025em; line-height: 1.15; max-width: 30ch; margin-bottom: clamp(32px, 5vw, 56px); }
-.ancora strong { color: var(--amarelo); font-weight: var(--peso-titulo); }
-.perguntas { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgb(242 242 238 / .18); }
+.ancora strong { color: var(--destaque); font-weight: var(--peso-titulo); }
+.perguntas { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgb(242 242 238 / .18); border-radius: var(--raio-caixa); overflow: hidden; }
 .pergunta { padding: 24px; display: grid; gap: 18px; align-content: start; min-height: 190px; border-right: 1px solid rgb(242 242 238 / .18); border-bottom: 1px solid rgb(242 242 238 / .18); }
 .pergunta:nth-child(2n) { border-right: 0; }
 .pergunta:nth-last-child(-n+2) { border-bottom: 0; }
-.pergunta__n { font-size: 13px; color: var(--amarelo); font-weight: var(--peso-enfase); }
+.pergunta__n { font-size: 13px; color: var(--destaque); font-weight: var(--peso-enfase); }
 .pergunta p { font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.35; max-width: 30ch; }
 .perguntas--mais { margin-top: 14px; border: 0; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .perguntas--mais .pergunta { border: 1px solid rgb(242 242 238 / .18); min-height: 0; padding: 18px; }
@@ -469,7 +456,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 /* ---------- Resultados ---------- */
 
-.ledger { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--fio); }
+.ledger { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--fio); border-radius: var(--raio-caixa); overflow: hidden; }
 .ledger > div { padding: 20px; border-right: 1px solid var(--fio); display: grid; gap: 8px; align-content: start; }
 .ledger > div:last-child { border-right: 0; }
 .ledger .rotulo { min-height: 2.6em; }
@@ -511,10 +498,11 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .form-block { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
 .form-block__text { display: grid; gap: 16px; }
 .form-block__text p:not(.rotulo) { color: var(--cinza); max-width: 48ch; }
-.form-card { display: grid; gap: 14px; padding: 24px; border: 1px solid var(--fio); background: #fff; }
+.form-card { display: grid; gap: 14px; padding: 24px; border: 1px solid var(--fio); background: #fff; border-radius: var(--raio-caixa); }
 .field { display: block; }
 .field__label { display: block; font-size: 13px; font-weight: var(--peso-enfase); margin-bottom: 6px; }
 .field input, .field select, .field textarea {
+  border-radius: var(--raio);
   width: 100%; min-height: var(--alvo); padding: 10px 12px; font: inherit; color: var(--grafite);
   border: 1px solid var(--fio); border-radius: 0; background: var(--papel);
   transition: border-color .2s;
@@ -589,8 +577,8 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 @media (max-width: 639.98px) {
   .tel { --largura-tel: 100%; }
-  .tel__moldura { padding: 0; border-radius: 0; background: none; box-shadow: none; aspect-ratio: 9 / 16; }
-  .tel__tela { border-radius: 0; }
+  .tel__moldura { padding: 0; border-radius: var(--raio-caixa); background: none; box-shadow: none; aspect-ratio: 9 / 16; }
+  .tel__tela { border-radius: var(--raio-caixa); }
   .tel__ilha { display: none; }
   /* Uma coluna: número à esquerda, título e texto à direita, tudo visível. */
   .escada { grid-template-columns: 1fr; }

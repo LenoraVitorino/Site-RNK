@@ -18,11 +18,13 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 1. **Palco** (`Hero.astro`) — hero escura e centralizada, em três tempos
    presos por ~1,6 telas de scroll (progresso em `--p`, 0→1):
    ao carregar, "Isso não é marketing para clínicas." com a seta para
-   baixo; no scroll, a frase é riscada e some, "Isso é RevOps." entra em
-   contorno amarelo e é preenchido da esquerda para a direita; preenchido,
-   encolhe e vira a chamada do bloco, com título, subtítulo e CTA embaixo.
-   O cabeçalho fica escuro enquanto o palco passa por baixo dele. Sem JS ou
-   com `prefers-reduced-motion`, tudo nasce no estado final.
+   baixo; no scroll, a frase é riscada e some e "Isso é RevOps." entra
+   suave, no amarelo original, com um reflexo de luz que vai e volta
+   (gradiente recortado no texto, `background-position` animada — o
+   mesmo efeito do AnimatedText/framer-motion usado como referência, em
+   CSS); depois ele sai e, no lugar, entram título, subtítulo e CTA.
+   Sem JS ou com `prefers-reduced-motion`, tudo nasce no estado final e o
+   reflexo não roda.
 2. **Faixa** (`Faixa.astro`) — números do briefing em linha (⚠️ D1: números
    ilustrativos) e placeholders de logos de clientes.
 3. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +
@@ -43,6 +45,19 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 10. **Sobre** (`Sobre.astro`) — texto literal do briefing + três slots de foto.
 11. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
     não ligado).
+
+## Regras de acabamento (12/09/2026)
+
+- **Amarelo original** (`--amarelo-marca` #FFD103, exposto como
+  `--destaque`) só em detalhes que precisam chamar atenção: "Isso é
+  RevOps." e seu reflexo, a seta da hero, o link "Fale com a gente", o
+  hover do menu, os números e a palavra forte da seção Perguntas. As
+  superfícies grandes continuam no amarelo pastel (`--amarelo`,
+  `--amarelo-claro`).
+- **Arredondamento mínimo**, no acabamento do símbolo "R": `--raio` 6px em
+  botões, campos e chips; `--raio-caixa` 10px em cartões, slots de foto,
+  painéis com borda (escada, extrato, perguntas, formulário, megamenu).
+  Entre as dobras, tudo reto e sangrado, como na referência.
 
 ## Slots de imagem
 

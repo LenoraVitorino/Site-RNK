@@ -17,7 +17,8 @@
      Regra mantida: nunca como texto sobre fundo claro. */
   --amarelo:       #FFE27A;   /* painéis, destaque de uma palavra — L 74% */
   --amarelo-claro: #FFEBA3;   /* superfícies grandes de fundo — L 82% */
-  --amarelo-marca: #FFD103;   /* o dourado original: logo, sede, materiais legados */
+  --amarelo-marca: #FFD103;   /* o amarelo original: só em detalhes que precisam chamar atenção */
+  --destaque:      var(--amarelo-marca);
 
   /* ---- Tipografia ---- */
   --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -28,5 +29,8 @@
   --tracking-label:  .12em;   /* rótulos pequenos em caixa alta */
 
   /* ---- Forma ---- */
-  --raio: 0;   /* chapado: nada de pílula, vidro ou brilho */
+  /* Arredondamento mínimo, no acabamento do símbolo "R": só em bordas de
+     caixas, cartões, campos e botões. Entre as dobras, tudo reto. */
+  --raio: 6px;         /* botões, campos, chips */
+  --raio-caixa: 10px;  /* cartões, slots de foto, painéis com borda */
 }

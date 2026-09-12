@@ -4,11 +4,10 @@
  *
  *  1. Ao carregar: "Isso não é marketing para clínicas." no centro, com a
  *     seta para baixo.
- *  2. No scroll: a frase é riscada e some; "Isso é RevOps." entra em
- *     contorno amarelo e vai sendo preenchido da esquerda para a direita.
- *  3. Preenchido, um reflexo de luz varre a frase (classe .brilha, ligada
- *     pelo script). Depois ela sai e, no lugar, entram título, subtítulo
- *     e CTA. Aí o palco solta e a página segue.
+ *  2. No scroll: a frase é riscada e some; "Isso é RevOps." entra suave,
+ *     no amarelo original, com um reflexo de luz que vai e volta.
+ *  3. Depois ele sai e, no lugar, entram título, subtítulo e CTA. Aí o
+ *     palco solta e a página segue.
  *
  * O bloco fica preso ~1,6 telas de scroll; --p vai de 0 a 1 nesse curso.
  * Sem JS ou com menos movimento, tudo nasce no estado final. Copy literal.
@@ -31,9 +30,7 @@ const palavras = ['Isso', 'não', 'é'];
             <span class="palavra riscado" style="--i:3">marketing para clínicas.</span>
           </span>
           <span class="tomada tomada--2" aria-hidden="true">
-            <span class="revops revops--borda">Isso é RevOps.</span>
-            <span class="revops revops--furo">Isso é RevOps.</span>
-            <span class="revops revops--cheio">Isso é RevOps.</span>
+            <span class="revops">Isso é RevOps.</span>
           </span>
         </h1>
 
@@ -51,13 +48,13 @@ const palavras = ['Isso', 'não', 'é'];
 
 <script>
   /* --p = progresso do scroll dentro do palco, de 0 a 1. O CSS deriva dele
-     cada tempo da cena; a classe .brilha dispara o reflexo uma vez, quando
-     o preenchimento termina. */
+     cada tempo da cena. */
   const palco = document.querySelector<HTMLElement>('[data-palco]');
   const header = document.getElementById('header');
   const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (palco) {
-    if (semMovimento) palco.style.setProperty('--p', '1');
+    const copy = palco.querySelector<HTMLElement>('.hero__copy');
+    if (semMovimento) { palco.style.setProperty('--p', '1'); copy?.classList.add('hero__copy--ativo'); }
     let agendado = false;
     const mede = () => {
       agendado = false;
@@ -69,7 +66,7 @@ const palavras = ['Isso', 'não', 'é'];
       const curso = palco.offsetHeight - (innerHeight - topo);
       const p = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
       palco.style.setProperty('--p', p.toFixed(4));
-      palco.classList.toggle('brilha', p >= 0.72);
+      copy?.classList.toggle('hero__copy--ativo', p >= 0.9);
     };
     const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
     addEventListener('scroll', pede, { passive: true });
