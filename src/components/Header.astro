@@ -21,7 +21,6 @@ import Botao from './ui/Botao.astro';
 
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
       <ul class="nav__list">
-        <span class="nav__indicador" aria-hidden="true"></span>
         {menu.map((item) =>
           'grupos' in item ? (
             <li class="nav__item nav__item--has-menu">

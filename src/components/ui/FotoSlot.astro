@@ -1,9 +1,9 @@
 ---
 /**
- * Espaço reservado para foto. Fundo neutro, ícone e um rótulo dizendo o que
- * vai ali — para o layout ser avaliado com o peso real da imagem, e para o
- * time saber exatamente o que produzir. Troca-se por <img> quando a foto
- * chegar, sem mexer no layout.
+ * Espaço reservado para foto: painel neutro com uma legenda pequena no
+ * canto dizendo o que vai ali. Sem ícone nem borda tracejada, para o
+ * layout ser avaliado com o peso real da imagem. Troca-se por <img>
+ * quando a foto chegar, sem mexer no layout.
  */
 interface Props {
   rotulo: string;
@@ -13,14 +13,8 @@ interface Props {
   class?: string;
 }
 const { rotulo, prop, reta = false, class: extra = '' } = Astro.props;
+const legenda = rotulo.replace(/^Foto\s*·\s*/i, '');
 ---
-<figure class:list={['foto', reta && 'foto--reta', extra]} style={prop ? `--prop: ${prop}` : undefined} aria-label={`Espaço para foto: ${rotulo}`}>
-  <div class="foto__caixa">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <circle cx="9" cy="10" r="2" />
-      <path d="M21 16l-5-5-8 8" />
-    </svg>
-    <span>{rotulo}</span>
-  </div>
+<figure class:list={['foto', reta && 'foto--reta', extra]} style={prop ? `--prop: ${prop}` : undefined} aria-label={`Espaço para foto: ${legenda}`}>
+  <figcaption class="foto__legenda">{legenda}</figcaption>
 </figure>

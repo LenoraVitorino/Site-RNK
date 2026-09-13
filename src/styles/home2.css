@@ -12,7 +12,7 @@
 :root {
   --largura: 1240px;
   --gutter: clamp(16px, 4vw, 48px);
-  --altura-header: 76px;
+  --altura-header: 96px;
   --esp-secao: clamp(72px, 9vw, 128px);
   --raio-foto: var(--raio-caixa);
 }
@@ -124,7 +124,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
 /* Só o monograma "R", na cor da marca. */
-.logo__img { height: 34px; width: auto; }
+.logo__img { height: 40px; width: auto; }
 
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: auto;
@@ -188,23 +188,15 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   .nav-toggle { display: none; }
   .nav-overlay { display: none !important; }
   .nav { position: static; width: auto; transform: none; visibility: visible; background: none; border: 0; overflow: visible; padding: 0; }
-  .header__inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-  .header__inner > .logo { justify-self: start; }
-  .nav { display: contents; }
-  .nav__list { grid-column: 2; position: relative; display: flex; align-items: center; gap: 4px; }
-  .nav__acao { grid-column: 3; justify-self: end; margin-top: 0; }
-  .nav__acao .botao { font-size: 14px; }
+  /* Logo à esquerda; menu e ação juntos, alinhados à direita. */
+  .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+  .nav { display: flex; align-items: center; gap: 40px; }
+  .nav__list { display: flex; align-items: center; gap: 40px; }
+  .nav__acao { margin-top: 0; }
+  .nav__acao .botao { font-size: 17px; }
   .nav__item { border-bottom: 0; position: relative; }
-  .nav__link { min-height: 0; padding: 10px 14px; font-size: 14px; white-space: nowrap; }
+  .nav__link { min-height: 0; padding: 12px 0; font-size: 17px; white-space: nowrap; }
   .nav__caret { display: none; }
-  /* Realce que desliza entre os itens, bem discreto */
-  .nav__indicador {
-    position: absolute; left: 0; top: 50%; height: calc(100% + 2px);
-    background: rgb(242 242 238 / .06); pointer-events: none; opacity: 0;
-    transform: translate3d(var(--x, 0), -50%, 0); width: var(--w, 0);
-    transition: transform .4s var(--easing), width .4s var(--easing), opacity .3s var(--easing-suave);
-  }
-  .nav__list[data-ativo] .nav__indicador { opacity: 1; }
   .megamenu {
     position: absolute; top: calc(100% + 10px); left: 0; z-index: 110; min-width: 300px; padding: 0;
     background: var(--grafite); border: 1px solid rgb(242 242 238 / .14);
@@ -223,19 +215,19 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .foto {
   margin: 0; position: relative; overflow: hidden;
   aspect-ratio: var(--prop, 4 / 3); border-radius: var(--raio-foto);
-  background: var(--painel); border: 1px solid var(--fio);
+  background: var(--painel);
 }
-.foto--reta { border-radius: 0; border: 0; }
-.foto__caixa {
-  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px;
-  color: var(--cinza); font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; text-align: center;
-  padding: 16px;
+.foto--reta { border-radius: 0; }
+/* Sobre fundo painel o slot precisa de um tom a mais para existir. */
+.secao--painel .foto { background: rgb(22 22 22 / .07); }
+.foto__legenda {
+  position: absolute; left: 14px; bottom: 12px;
+  font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); opacity: .8;
 }
-.foto__caixa svg { width: 28px; height: 28px; opacity: .55; }
-.secao--escura .foto { background: rgb(242 242 238 / .08); border-color: rgb(242 242 238 / .14); }
-.secao--escura .foto__caixa { color: rgb(242 242 238 / .6); }
-.secao--amarela .foto { background: rgb(22 22 22 / .06); border-color: rgb(22 22 22 / .18); }
-.secao--amarela .foto__caixa { color: var(--grafite); }
+.secao--escura .foto { background: rgb(242 242 238 / .08); }
+.secao--escura .foto__legenda { color: rgb(242 242 238 / .6); }
+.secao--amarela .foto { background: rgb(22 22 22 / .06); }
+.secao--amarela .foto__legenda { color: rgb(22 22 22 / .7); }
 
 /* ============================================================
    DOBRA 1 · PALCO CENTRALIZADO EM TRÊS TEMPOS
@@ -276,8 +268,8 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .hero__confianca .rotulo { color: rgb(242 242 238 / .6); white-space: nowrap; }
 .hero__confianca ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; justify-content: end; overflow-x: auto; scrollbar-width: none; }
 .hero__confianca li {
-  flex: none; width: 128px; height: 44px; border: 1px dashed rgb(242 242 238 / .25); border-radius: var(--raio);
-  display: grid; place-items: center; font-size: 10px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .5);
+  flex: none; width: 120px; height: 40px; border-radius: var(--raio);
+  background: rgb(242 242 238 / .08);
 }
 .hero__centro {
   position: relative; width: min(100%, 1040px); text-align: center; padding-inline: var(--gutter);
@@ -322,7 +314,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   background: linear-gradient(100deg, var(--destaque) 0 30%, #FFF2B8 50%, var(--destaque) 70% 100%);
   background-size: 220% auto; background-position: 0 0;
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 0 22px rgb(255 209 3 / .28));
+  filter: drop-shadow(0 0 18px rgb(255 209 3 / .16));
 }
 .js .revops { animation: reflexo 2.6s ease-in-out infinite alternate; }
 @keyframes reflexo { from { background-position: 0 0; } to { background-position: 100% 0; } }
@@ -428,17 +420,15 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 .escada { border: 1px solid rgb(22 22 22 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
 .degrau {
-  position: relative; min-height: 220px; padding: 18px; display: grid; align-content: space-between; gap: 12px;
+  position: relative; min-height: 220px; padding: 18px; display: grid; align-content: start; gap: 10px;
   border-right: 1px solid rgb(22 22 22 / .25); background: var(--amarelo);
   transition: background-color .25s var(--easing-suave);
 }
 .degrau:last-child { border-right: 0; }
 .degrau__n { font-size: 15px; font-weight: var(--peso-enfase); }
-.degrau__titulo { font-size: 17px; line-height: 1.2; font-weight: var(--peso-enfase); }
-.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(22 22 22 / .85); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s var(--easing), opacity .25s var(--easing-suave); }
+.degrau__titulo { font-size: 17px; line-height: 1.2; font-weight: var(--peso-enfase); margin-top: 18px; }
+.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(22 22 22 / .85); }
 .degrau:hover, .degrau:focus-within { background: var(--amarelo-claro); }
-.degrau:hover .degrau__texto, .degrau:focus-within .degrau__texto { max-height: 12em; opacity: 1; }
-.degrau--extra .degrau__n::after { content: ' · a confirmar'; font-weight: 400; font-size: 11px; color: rgb(22 22 22 / .6); }
 
 .grade { border-top: 1px solid var(--fio); border-bottom: 1px solid var(--fio); }
 .linha { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--fio); }
@@ -600,9 +590,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .degrau { border-right: 0; min-height: 0; grid-template-columns: 2.6rem 1fr; align-content: start; gap: 6px 8px; padding: 18px 16px; }
   .degrau:last-child { border-bottom: 0; }
   .degrau__n { grid-row: 1 / span 2; }
-  .degrau--extra .degrau__n::after { content: 'a confirmar'; display: block; line-height: 1.2; margin-top: 2px; }
-  .degrau__texto { max-height: none; opacity: 1; }   /* sem hover no toque: texto sempre visível */
-  .ledger { grid-template-columns: 1fr 1fr; }
+    .ledger { grid-template-columns: 1fr 1fr; }
   .ledger > div { border-right: 1px solid var(--fio); }
   .ledger > div:nth-child(2n) { border-right: 0; }
   .sobre__fotos { grid-template-columns: 1fr; }
