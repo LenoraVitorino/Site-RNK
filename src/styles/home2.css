@@ -378,6 +378,20 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 }
 /* O reflexo só começa quando o RevOps entra, e passa devagar. */
 .js .palco--revops .revops__marca { animation: reflexo 3.2s ease-in-out .6s infinite alternate; }
+/* Mesmo tratamento para "alta performance." no título: semibold, amarelo
+   original com o reflexo passando. */
+.brilho {
+  font-weight: var(--peso-detalhe);
+  padding: .12em .1em; margin: -.12em -.1em;
+  color: transparent; -webkit-text-fill-color: transparent;
+  background: linear-gradient(100deg, var(--destaque) 0 30%, #FFF2B8 50%, var(--destaque) 70% 100%);
+  background-size: 220% auto; background-position: 0 0;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  filter: drop-shadow(0 0 14px rgb(255 209 3 / .22));
+}
+.js .brilho { animation: reflexo 3.2s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) { .js .brilho { animation: none; } }
 @keyframes reflexo { from { background-position: 0 0; } to { background-position: 100% 0; } }
 @media (prefers-reduced-motion: reduce) { .js .palco--revops .revops__marca { animation: none; } }
 
