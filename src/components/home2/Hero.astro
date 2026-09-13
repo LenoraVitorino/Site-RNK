@@ -85,8 +85,12 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
   if (palco) {
     const copy = palco.querySelector<HTMLElement>('.hero__copy');
     const ALVOS = [0, 0.6, 1];
-    const DURACOES = [1700, 1400];
-    let passo = 0, p = 0, animando = false, ultimoGesto = 0;
+    // Devagar, para dar tempo de ler: passo 1 em 3,4s; passo 2 em 2,6s.
+    // Depois do RevOps entrar, o próximo gesto só vale após o reflexo
+    // atravessar a palavra uma vez (PAUSA).
+    const DURACOES = [3400, 2600];
+    const PAUSA = 2600;
+    let passo = 0, p = 0, animando = false, ultimoGesto = 0, liberaEm = 0;
     const aplica = (v: number) => {
       p = v;
       palco.style.setProperty('--p', v.toFixed(4));
@@ -100,20 +104,22 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
         const k = Math.min(1, (t - t0) / dur);
         const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
         aplica(de + (para - de) * e);
-        if (k < 1) requestAnimationFrame(quadro); else animando = false;
+        if (k < 1) requestAnimationFrame(quadro);
+        else { animando = false; if (passo === 1) liberaEm = performance.now() + PAUSA; }
       };
       requestAnimationFrame(quadro);
     };
     const vai = (dir: 1 | -1) => {
       const agora = performance.now();
-      if (animando || agora - ultimoGesto < 250) return;
+      if (animando || agora - ultimoGesto < 250 || (dir > 0 && agora < liberaEm)) return;
       const proximo = passo + dir;
       if (proximo < 0 || proximo > 2) return;
       ultimoGesto = agora;
       passo = proximo;
-      anima(ALVOS[passo], DURACOES[Math.min(passo, dir > 0 ? passo - 1 : passo)]);
+      palco.classList.toggle('palco--revops', passo >= 1);
+      anima(ALVOS[passo], DURACOES[dir > 0 ? passo - 1 : passo]);
     };
-    if (semMovimento || scrollY > 8) { passo = 2; aplica(1); }
+    if (semMovimento || scrollY > 8) { passo = 2; palco.classList.add('palco--revops'); aplica(1); }
     else {
       addEventListener('wheel', (e) => {
         if (livre() && !(scrollY <= 0 && e.deltaY < 0 && passo > 0)) return;

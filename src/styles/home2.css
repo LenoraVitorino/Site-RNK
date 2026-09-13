@@ -376,9 +376,10 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   -webkit-background-clip: text; background-clip: text;
   filter: drop-shadow(0 0 22px rgb(255 209 3 / .28));
 }
-.js .revops__marca { animation: reflexo 2.6s ease-in-out infinite alternate; }
+/* O reflexo só começa quando o RevOps entra, e passa devagar. */
+.js .palco--revops .revops__marca { animation: reflexo 3.2s ease-in-out .6s infinite alternate; }
 @keyframes reflexo { from { background-position: 0 0; } to { background-position: 100% 0; } }
-@media (prefers-reduced-motion: reduce) { .js .revops__marca { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .js .palco--revops .revops__marca { animation: none; } }
 
 /* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
 .hero__seta {
