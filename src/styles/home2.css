@@ -274,8 +274,8 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 /* Frase em caixa normal, como a da referência. */
 .hero__confianca__frase { margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap; }
 .hero__confianca__frase strong { font-weight: var(--peso-enfase); }
-/* Mapa do Brasil pontilhado (desenho próprio em malha de pontos). */
-.hero__mapa { flex: none; height: 44px; width: auto; }
+/* Mapa da América Latina em malha esparsa de pontos (desenho próprio), no estilo da referência. */
+.hero__mapa { flex: none; height: 76px; width: auto; }
 /* O carrossel fica bem afastado da frase, encostado à direita. */
 .hero__confianca .rolo { justify-self: end; width: min(100%, 620px); margin-left: clamp(32px, 8vw, 140px); }
 /* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
@@ -345,6 +345,9 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 }
 .revops {
   display: block; white-space: pre-wrap;
+  /* O gradiente só pinta dentro da caixa: folga para o acento e as
+     hastes não ficarem fora dela (e o margin devolve o espaço). */
+  padding: .2em .12em; margin: -.2em -.12em;
   color: transparent; -webkit-text-fill-color: transparent;
   background: linear-gradient(100deg, var(--destaque) 0 30%, #FFF2B8 50%, var(--destaque) 70% 100%);
   background-size: 220% auto; background-position: 0 0;
@@ -631,7 +634,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   .hero__lead { font-size: 15px; }
   .hero__confianca__inner { grid-template-columns: auto 1fr; gap: 14px 18px; padding-block: 18px; min-height: 0; }
   .hero__confianca__frase { white-space: normal; font-size: 14px; }
-  .hero__mapa { height: 34px; }
+  .hero__mapa { height: 52px; }
   .hero__confianca .rolo { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-left: 0; }
   .rolo__grupo { gap: 34px; padding-right: 34px; }
   .rolo__grupo img { height: 20px; }
