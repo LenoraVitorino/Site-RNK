@@ -107,6 +107,35 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .botao__texto { display: inline; }
 .metal, .metal__miolo, .botao__vidro { display: contents; }
 
+/* Botão "onda": escuro, texto à direita, painel no amarelo original com
+   setas pontilhadas em onda à esquerda; no hover o painel cresce até o fim. */
+.botao--onda {
+  position: relative; overflow: hidden; justify-content: flex-end;
+  min-height: 48px; padding: 0 18px 0 62px;
+  color: var(--papel); font-weight: var(--peso-enfase);
+  background: linear-gradient(180deg, #1F1F1F 0%, #0B0B0B 100%);
+  border: 1px solid rgb(242 242 238 / .14);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .08), 0 4px 12px rgb(0 0 0 / .18);
+  transition: transform .15s var(--easing-suave);
+}
+.botao--onda:hover { background: linear-gradient(180deg, #1F1F1F 0%, #0B0B0B 100%); border-color: rgb(242 242 238 / .14); }
+.botao--onda:active { transform: scale(.98); }
+.botao--onda .botao__texto { position: relative; z-index: 1; white-space: nowrap; }
+.onda {
+  position: absolute; top: 4px; bottom: 4px; left: 4px; z-index: 0;
+  width: 40px; padding-left: 12px; display: flex; align-items: center; gap: 10px; overflow: hidden;
+  border-radius: calc(var(--raio) - 2px);
+  background: linear-gradient(180deg, var(--destaque) 0%, #E9BD00 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .4), inset 0 -2px 4px rgb(0 0 0 / .12), 0 2px 4px rgb(0 0 0 / .08);
+  transition: width .35s cubic-bezier(.65, 0, .35, 1);
+}
+.botao--onda:hover .onda, .botao--onda:focus-visible .onda { width: calc(100% - 8px); }
+.botao--onda:hover .botao__texto, .botao--onda:focus-visible .botao__texto { color: var(--grafite); transition: color .2s .1s; }
+.onda__seta { flex: none; overflow: visible; fill: #0F0F0F; }
+.onda__ponto { transform-box: fill-box; transform-origin: center; animation: onda-ponto 1.4s ease-in-out infinite; }
+@keyframes onda-ponto { 0%, 70%, 100% { opacity: .25; transform: scale(.85); } 35% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .onda__ponto { animation: none; opacity: 1; } .onda { transition: none; } }
+
 /* Link sublinhado, como a referência usa no lugar de botão secundário */
 .link-arrow {
   display: inline-block; font-size: 15px; font-weight: var(--peso-enfase);

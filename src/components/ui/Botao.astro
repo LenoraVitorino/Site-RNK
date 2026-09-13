@@ -14,6 +14,7 @@
  *   claro       — sobre fundo escuro
  *   metal       — metálico neutro
  *   texto       — terciária, peso de link
+ *   onda        — escuro com painel amarelo de setas pontilhadas que cresce no hover (home v2)
  *
  * Ver docs/04-design/design-system.md
  */
@@ -21,7 +22,7 @@
 interface Props {
   variante?:
     | 'brilho' | 'metal-ouro' | 'vidro'
-    | 'relevo' | 'solido' | 'contorno' | 'claro' | 'metal' | 'texto';
+    | 'relevo' | 'solido' | 'contorno' | 'claro' | 'metal' | 'texto' | 'onda';
   tamanho?: 'sm' | 'md' | 'lg';
   href?: string;
   type?: 'button' | 'submit';
@@ -49,6 +50,15 @@ const classes = [
 ].filter(Boolean).join(' ');
 
 const Tag = href ? 'a' : 'button';
+
+/* Variante "onda": painel amarelo à esquerda com setas pontilhadas em onda,
+   que cresce até o fim no hover. Cinco setas, dez pontos cada, com atrasos
+   escalonados (desenho próprio, no amarelo original da marca). */
+const pontos = [
+  [2, 2, 0], [5, 5, .05], [8, 8, .1], [5, 11, .15], [2, 14, .2],
+  [6, 2, .05], [9, 5, .1], [12, 8, .15], [9, 11, .2], [6, 14, .25],
+];
+const setas = [0, 1, 2, 3, 4];
 ---
 {ehMetal ? (
   /* O metálico é feito de três camadas: borda em gradiente, miolo em
@@ -62,6 +72,17 @@ const Tag = href ? 'a' : 'button';
 ) : (
   <Tag class={classes} href={href} type={href ? undefined : type}>
     {variante === 'vidro' && <span class="botao__vidro" aria-hidden="true"></span>}
+    {variante === 'onda' && (
+      <span class="onda" aria-hidden="true">
+        {setas.map((i) => (
+          <svg class="onda__seta" viewBox="0 0 14 16" width="14" height="16">
+            {pontos.map(([cx, cy, d]) => (
+              <circle cx={cx} cy={cy} r="1" class="onda__ponto" style={`animation-delay:${(i * 0.12 + d).toFixed(2)}s`} />
+            ))}
+          </svg>
+        ))}
+      </span>
+    )}
     <span class="botao__texto"><slot /></span>
   </Tag>
 )}
