@@ -458,7 +458,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .esteira__cartao--escuro small { color: rgb(242 242 238 / .6); }
 .esteira__cartao--escuro img { position: absolute; right: -22%; top: -6%; width: 120%; opacity: .07; filter: brightness(0) invert(1); pointer-events: none; }
 
-.esteira__depoimento { margin: 0; display: grid; gap: 16px; align-content: start; min-height: 300px; }
+.esteira__depoimento { margin: 0; display: grid; gap: 16px; align-content: start; }
 .esteira__depoimento blockquote { margin: 0; font-size: 17px; line-height: 1.35; font-weight: var(--peso-enfase); letter-spacing: -.01em; }
 .esteira__depoimento figcaption { font-size: 13px; color: var(--cinza); }
 .esteira__logo {
