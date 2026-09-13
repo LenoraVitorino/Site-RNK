@@ -324,7 +324,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .hero__cena { display: grid; place-items: center; width: 100%; }
 .hero__cena > * { grid-area: 1 / 1; }
 .hero__h1 { display: grid; place-items: center; width: 100%; opacity: calc(1 - var(--sai)); transform: translateY(calc(var(--sai) * -28px)); }
-.tomada { grid-area: 1 / 1; display: block; width: 100%; text-transform: uppercase; text-wrap: balance; }
+.tomada { grid-area: 1 / 1; display: block; width: 100%; text-wrap: balance; }   /* como se escreve, sem caixa alta */
 .tomada--1 {
   font-size: clamp(2.3rem, 5.4vw, 5.2rem); letter-spacing: -.03em; line-height: .98;
   max-width: 16ch; margin-inline: auto;
@@ -348,7 +348,6 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   display: grid; place-items: center;
   font-size: clamp(3.4rem, 11vw, 9.6rem);
   letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
-  text-transform: none;   /* "Isso é RevOps." como se escreve, não em caixa alta */
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 22px)) scale(calc(.96 + var(--entra) * .04));
 }
 /* "Isso é" em papel, regular; "RevOps." em semibold com o reflexo amarelo. */
