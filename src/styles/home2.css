@@ -266,26 +266,29 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   background: var(--grafite);
 }
 .hero__confianca__inner {
-  width: min(100%, var(--largura)); margin-inline: auto; padding: clamp(24px, 3.6svh, 36px) var(--gutter);
-  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 40px;
+  width: min(100%, var(--largura)); margin-inline: auto; padding: 0 var(--gutter);
+  min-height: 84px;
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: clamp(32px, 5vw, 72px);
 }
-.hero__confianca .rotulo { color: rgb(242 242 238 / .6); white-space: nowrap; }
+.hero__confianca .rotulo { color: var(--papel); white-space: nowrap; display: flex; align-items: center; gap: 12px; }
+/* O ponto amarelo depois do rótulo, como na referência. */
+.hero__confianca .rotulo::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--destaque); }
 /* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
    andando -50% em loop. O gap fica dentro do grupo (gap + padding-right
    iguais) para a emenda ser invisível. */
 .rolo {
   min-width: 0; overflow: hidden; display: flex; align-items: center;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12% 88%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 12% 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16.5% 83.5%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 16.5% 83.5%, transparent 100%);
 }
-.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 28s linear infinite; }
+.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 26.5s linear infinite; }
 .rolo__grupo {
   list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex: none;
-  gap: clamp(32px, 4.4vw, 72px); padding-right: clamp(32px, 4.4vw, 72px);
+  gap: 56px; padding-right: 56px;
 }
 .rolo__grupo li { flex: none; display: flex; align-items: center; }
-/* Logos em cinza opaco sobre o escuro, sem caixa, como a referência. */
-.rolo__grupo img { height: 20px; width: auto; filter: brightness(0) invert(1); opacity: .35; }
+/* Logos claros sobre o escuro, no tamanho da referência. */
+.rolo__grupo img { height: 28px; width: auto; filter: brightness(0) invert(1); opacity: .92; }
 @keyframes rolo { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .rolo__trilho { animation: none; }
@@ -615,8 +618,9 @@ html:not(.js) .esteira__trilho { transform: none; }
   .hero__copy { gap: 16px; }
   .hero__lead { font-size: 15px; }
   .hero__confianca__inner { grid-template-columns: 1fr; gap: 14px; padding-block: 18px; }
-  .rolo__grupo { gap: 30px; padding-right: 30px; }
-  .rolo__grupo img { height: 16px; }
+  .hero__confianca__inner { min-height: 0; }
+  .rolo__grupo { gap: 34px; padding-right: 34px; }
+  .rolo__grupo img { height: 20px; }
   .rolo__trilho { animation-duration: 20s; }
   .duo, .form-block { grid-template-columns: 1fr; }
   .painel-dados__linha { grid-template-columns: 1fr auto; gap: 14px 16px; }
