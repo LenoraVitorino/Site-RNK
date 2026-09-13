@@ -1,55 +1,84 @@
 ---
 /**
- * Segunda dobra depois da hero, como a referência: cinco colunas largas
- * que intercalam fotos e cartões, saindo da borda esquerda do container e
- * sangrando pela direita. --e vai de -1 a 1 conforme a faixa atravessa a
- * viewport; cada coluna multiplica por seu próprio fator (parallax).
- * As fotos ainda são espaços reservados (a nova sede não chegou).
+ * Segunda dobra, como a referência: um trilho de cartões preso na tela
+ * que anda para o lado conforme a página rola. Colunas de larguras iguais
+ * e alturas diferentes intercalam fotos grandes, depoimentos com o logo
+ * da clínica, cartões só de logo e os números do briefing (⚠️ D1).
+ * --x é o deslocamento horizontal, calculado no scroll pelo script.
+ * Sem JS ou com menos movimento, o trilho fica solto e rola no dedo.
+ * Fotos, depoimentos e logos ainda são espaços reservados.
  */
 import FotoSlot from '../ui/FotoSlot.astro';
 
 type Item =
   | { tipo: 'foto'; rotulo: string; prop: string }
-  | { tipo: 'cartao'; valor: string; texto: string; escuro?: boolean };
+  | { tipo: 'numero'; valor: string; texto: string; escuro?: boolean }
+  | { tipo: 'depoimento' }
+  | { tipo: 'logo' };
 
-const colunas: Item[][] = [
-  [{ tipo: 'cartao', valor: '~30', texto: 'clínicas atendidas', escuro: true }, { tipo: 'foto', rotulo: 'Foto · time', prop: '1 / 1' }],
-  [{ tipo: 'foto', rotulo: 'Foto · sede', prop: '3 / 4' }, { tipo: 'cartao', valor: '4 anos', texto: 'de método validado' }],
-  [{ tipo: 'foto', rotulo: 'Foto · operação', prop: '9 / 16' }],
-  [{ tipo: 'cartao', valor: 'R$42M', texto: 'em faturamento gerado' }, { tipo: 'foto', rotulo: 'Foto · reunião', prop: '4 / 5' }],
-  [{ tipo: 'foto', rotulo: 'Foto · detalhe', prop: '3 / 4' }, { tipo: 'foto', rotulo: 'Foto · sede', prop: '1 / 1' }],
+const colunas: { desloca?: number; itens: Item[] }[] = [
+  { itens: [{ tipo: 'numero', valor: '~30', texto: 'clínicas atendidas', escuro: true }] },
+  { desloca: 40, itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Time', prop: '3 / 4' }] },
+  { desloca: -30, itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '9 / 16' }] },
+  { desloca: 20, itens: [{ tipo: 'foto', rotulo: 'Reunião', prop: '4 / 5' }, { tipo: 'logo' }] },
+  { desloca: -20, itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'numero', valor: '4 anos', texto: 'de método validado' }] },
+  { desloca: 50, itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Detalhe', prop: '1 / 1' }] },
+  { desloca: -40, itens: [{ tipo: 'foto', rotulo: 'Atendimento', prop: '9 / 16' }] },
+  { desloca: 30, itens: [{ tipo: 'logo' }, { tipo: 'numero', valor: 'R$42M', texto: 'em faturamento gerado' }] },
+  { itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'depoimento' }] },
 ];
 ---
-<section class="esteira" data-esteira aria-label="Fotos e números da Renke">
-  <div class="esteira__trilho">
-    {colunas.map((c) => (
-      <div class="esteira__coluna">
-        {c.map((f) =>
-          f.tipo === 'foto' ? (
-            <FotoSlot rotulo={f.rotulo} prop={f.prop} />
-          ) : (
-            <div class:list={['esteira__cartao', f.escuro && 'esteira__cartao--escuro']} style="aspect-ratio: 4 / 5">
-              {f.escuro && <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />}
-              <b>{f.valor}</b>
-              <small>{f.texto}</small>
-            </div>
-          ),
-        )}
-      </div>
-    ))}
+<section class="esteira" data-esteira aria-label="Fotos, depoimentos e números da Renke">
+  <div class="esteira__fixo">
+    <div class="esteira__trilho" data-esteira-trilho>
+      {colunas.map((c) => (
+        <div class="esteira__coluna" style={c.desloca ? `--desloca: ${c.desloca}px` : undefined}>
+          {c.itens.map((f) => {
+            if (f.tipo === 'foto') return <FotoSlot rotulo={f.rotulo} prop={f.prop} />;
+            if (f.tipo === 'numero')
+              return (
+                <div class:list={['esteira__cartao', 'esteira__numero', f.escuro && 'esteira__cartao--escuro']}>
+                  {f.escuro && <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />}
+                  <b>{f.valor}</b>
+                  <small>{f.texto}</small>
+                </div>
+              );
+            if (f.tipo === 'depoimento')
+              return (
+                <figure class="esteira__cartao esteira__depoimento">
+                  <span class="esteira__logo" aria-label="Espaço para logo da clínica">Logo</span>
+                  <blockquote>"Depoimento a coletar."</blockquote>
+                  <figcaption>Nome · Especialidade · Cidade</figcaption>
+                </figure>
+              );
+            return (
+              <div class="esteira__cartao esteira__somente-logo">
+                <span class="esteira__logo esteira__logo--grande" aria-label="Espaço para logo da clínica">Logo</span>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
   </div>
 </section>
 
 <script>
-  const faixa = document.querySelector<HTMLElement>('[data-esteira]');
-  if (faixa && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  /* Anda para o lado o que a página anda para baixo: --x vai de 0 até o
+     que falta do trilho fora da tela, no curso em que a dobra fica presa. */
+  const dobra = document.querySelector<HTMLElement>('[data-esteira]');
+  const trilho = dobra?.querySelector<HTMLElement>('[data-esteira-trilho]');
+  const header = document.getElementById('header');
+  if (dobra && trilho && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let agendado = false;
     const mede = () => {
       agendado = false;
-      const r = faixa.getBoundingClientRect();
-      // -1 quando a faixa entra por baixo, +1 quando sai por cima
-      const e = Math.max(-1, Math.min(1, 1 - (2 * (r.top + r.height)) / (innerHeight + r.height)));
-      faixa.style.setProperty('--e', e.toFixed(4));
+      const r = dobra.getBoundingClientRect();
+      const topo = header?.offsetHeight ?? 0;
+      const curso = dobra.offsetHeight - (innerHeight - topo);
+      const p = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
+      const sobra = Math.max(0, trilho.scrollWidth - (trilho.parentElement?.clientWidth ?? innerWidth));
+      dobra.style.setProperty('--x', (p * sobra).toFixed(1) + 'px');
     };
     const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
     addEventListener('scroll', pede, { passive: true });

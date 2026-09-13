@@ -1,10 +1,12 @@
 ---
 /**
- * Resultados como extrato (cinco números em linha) e dois depoimentos em
- * cartão com espaço de foto. Os números são placeholder do próprio briefing.
+ * Resultados num painel escuro, como a referência: contato no topo à
+ * esquerda, monograma à direita e uma linha por especialidade com o
+ * rótulo em caixa alta, a descrição (antes → depois) e o número grande
+ * alinhado à direita. Copy literal do briefing (⚠️ D1: números
+ * ilustrativos até os cases serem autorizados).
  */
 import { resultados, hero } from '../../data/home';
-import FotoSlot from '../ui/FotoSlot.astro';
 import Botao from '../ui/Botao.astro';
 ---
 <section class="secao secao--painel" id="resultados">
@@ -13,28 +15,26 @@ import Botao from '../ui/Botao.astro';
       <p class="rotulo">Resultados</p>
       <h2 class="titulo caps">O que muda quando a operação tem estrutura.</h2>
     </div>
-    <div class="ledger entra">
-      {resultados.map((r) => (
-        <div>
-          <p class="rotulo">{r.especialidade}</p>
-          <b class="num">{r.numero}</b>
-          <small>{r.depois}</small>
-        </div>
-      ))}
-    </div>
-    <!-- ⚠️ D1: números ilustrativos do briefing; entram os reais quando os cases forem autorizados. -->
 
-    <div class="depoimentos entra">
-      {[1, 2].map(() => (
-        <figure class="depoimento">
-          <FotoSlot rotulo="Foto · paciente" prop="1 / 1" />
-          <div>
-            <blockquote>"Depoimento a coletar."</blockquote>
-            <figcaption>Nome · Especialidade · Cidade</figcaption>
+    <div class="painel-dados entra">
+      <div class="painel-dados__topo">
+        <p class="painel-dados__contato">renkestudio.com.br<br />contato@renkestudio.com.br</p>
+        <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />
+      </div>
+      <dl class="painel-dados__linhas">
+        {resultados.map((r) => (
+          <div class="painel-dados__linha">
+            <dt>{r.especialidade}</dt>
+            <dd class="painel-dados__desc">
+              <span>Antes: {r.antes}.</span>
+              <span>Depois: {r.depois}.</span>
+            </dd>
+            <dd class="painel-dados__num">{r.numero}</dd>
           </div>
-        </figure>
-      ))}
+        ))}
+      </dl>
     </div>
+
     <p style="margin-top:28px"><Botao variante="contorno" href="/contato">{hero.cta}</Botao></p>
   </div>
 </section>
