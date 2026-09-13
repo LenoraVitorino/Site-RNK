@@ -1,16 +1,16 @@
 ---
 /**
- * Dobra 1 · palco centralizado em três tempos, como a hero da referência.
+ * Dobra 1 · palco centralizado em três passos, como a hero da referência.
  *
  *  1. Ao carregar: "Isso não é marketing para clínicas." no centro, com a
  *     seta para baixo.
- *  2. No scroll: a frase é riscada e some; "Isso é RevOps." entra suave,
- *     no amarelo original, com um reflexo de luz que vai e volta.
- *  3. Depois ele sai e, no lugar, entram título, subtítulo e CTA. Aí o
- *     palco solta e a página segue.
+ *  2. No primeiro gesto de rolar: a frase é riscada e some; "Isso é
+ *     RevOps." entra suave, no amarelo original, com o reflexo contínuo.
+ *  3. No gesto seguinte: ele sai e entram título, subtítulo e CTA. Só
+ *     então a página rola de verdade.
  *
- * O bloco fica preso ~1,6 telas de scroll; --p vai de 0 a 1 nesse curso.
- * Sem JS ou com menos movimento, tudo nasce no estado final. Copy literal.
+ * Nada é ligado à posição do scroll: cada passo é tocado por tempo. Sem
+ * JS ou com menos movimento, tudo nasce no estado final. Copy literal.
  */
 import { hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
@@ -72,36 +72,71 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
 </section>
 
 <script>
-  /* --p = progresso do scroll dentro do palco, de 0 a 1. O valor exibido
-     segue o real com inércia (filtro passa-baixa a cada frame), para a
-     cena não dar tranco quando o dedo ou a roda param. O CSS deriva de
-     --p cada tempo da cena, já com curva suave. */
+  /* Cena em três passos, tocada por tempo, não pela posição do scroll:
+       0  "Isso não é marketing para clínicas."
+       1  "Isso é RevOps." (com o reflexo contínuo)
+       2  título, subtítulo e CTA
+     O primeiro gesto de rolar leva de 0 a 1; o seguinte, de 1 a 2. Só
+     então a página rola de verdade. No topo, rolar para cima volta um
+     passo. --p continua sendo o que o CSS lê; aqui ele é animado entre
+     os valores de cada passo. */
   const palco = document.querySelector<HTMLElement>('[data-palco]');
-  const header = document.getElementById('header');
   const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (palco) {
     const copy = palco.querySelector<HTMLElement>('.hero__copy');
-    if (semMovimento) { palco.style.setProperty('--p', '1'); copy?.classList.add('hero__copy--ativo'); }
+    const ALVOS = [0, 0.6, 1];
+    const DURACOES = [1700, 1400];
+    let passo = 0, p = 0, animando = false, ultimoGesto = 0;
+    const aplica = (v: number) => {
+      p = v;
+      palco.style.setProperty('--p', v.toFixed(4));
+      copy?.classList.toggle('hero__copy--ativo', v >= 0.84);
+    };
+    const livre = () => passo === 2 && !animando;
+    const anima = (para: number, dur: number) => {
+      const de = p, t0 = performance.now();
+      animando = true;
+      const quadro = (t: number) => {
+        const k = Math.min(1, (t - t0) / dur);
+        const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        aplica(de + (para - de) * e);
+        if (k < 1) requestAnimationFrame(quadro); else animando = false;
+      };
+      requestAnimationFrame(quadro);
+    };
+    const vai = (dir: 1 | -1) => {
+      const agora = performance.now();
+      if (animando || agora - ultimoGesto < 250) return;
+      const proximo = passo + dir;
+      if (proximo < 0 || proximo > 2) return;
+      ultimoGesto = agora;
+      passo = proximo;
+      anima(ALVOS[passo], DURACOES[Math.min(passo, dir > 0 ? passo - 1 : passo)]);
+    };
+    if (semMovimento || scrollY > 8) { passo = 2; aplica(1); }
     else {
-      let alvo = 0, atual = 0, rodando = false;
-      const mede = () => {
-        // O palco gruda logo abaixo do cabeçalho: o curso começa quando o
-        // topo dele encosta ali e termina quando o fundo chega ao fim da tela.
-        const r = palco.getBoundingClientRect();
-        const topo = header?.offsetHeight ?? 0;
-        const curso = palco.offsetHeight - (innerHeight - topo);
-        alvo = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
-        if (!rodando) { rodando = true; requestAnimationFrame(passo); }
-      };
-      const passo = () => {
-        atual += (alvo - atual) * 0.14;
-        if (Math.abs(alvo - atual) < 0.0006) { atual = alvo; rodando = false; } else requestAnimationFrame(passo);
-        palco.style.setProperty('--p', atual.toFixed(4));
-        copy?.classList.toggle('hero__copy--ativo', atual >= 0.84);
-      };
-      addEventListener('scroll', mede, { passive: true });
-      addEventListener('resize', mede, { passive: true });
-      mede();
+      addEventListener('wheel', (e) => {
+        if (livre() && !(scrollY <= 0 && e.deltaY < 0 && passo > 0)) return;
+        e.preventDefault();
+        if (Math.abs(e.deltaY) < 4) return;
+        vai(e.deltaY > 0 ? 1 : -1);
+      }, { passive: false });
+      let y0: number | null = null;
+      addEventListener('touchstart', (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+      addEventListener('touchmove', (e) => {
+        if (y0 === null) return;
+        const dy = y0 - e.touches[0].clientY;
+        if (livre() && !(scrollY <= 0 && dy < 0)) return;
+        e.preventDefault();
+        if (Math.abs(dy) > 28) { vai(dy > 0 ? 1 : -1); y0 = null; }
+      }, { passive: false });
+      addEventListener('touchend', () => { y0 = null; }, { passive: true });
+      addEventListener('keydown', (e) => {
+        if (livre()) return;
+        if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); vai(1); }
+        else if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); vai(-1); }
+      });
+      aplica(0);
     }
   }
 </script>

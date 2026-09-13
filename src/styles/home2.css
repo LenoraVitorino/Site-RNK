@@ -244,10 +244,11 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
      título/sub/CTA entram . .84 → 1
    ============================================================ */
 
-.palco { --p: 1; height: 300svh; }
+.palco { --p: 1; }
 .js .palco { --p: 0; }
+/* Uma tela só, sem grudar: os passos são tocados por tempo (script). */
 .palco__fixo {
-  position: sticky; top: var(--altura-header);
+  position: relative;
   height: calc(100svh - var(--altura-header)); min-height: 560px;
   display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; overflow: hidden;
   padding: 24px 0 0;
@@ -413,12 +414,9 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 
 /* Sem JS ou com menos movimento: nada de palco. Tudo em repouso, visível. */
 @media (prefers-reduced-motion: reduce) {
-  .palco, .js .palco { --p: 1; height: auto; }
-  .palco__fixo { position: static; height: auto; }
+  .palco, .js .palco { --p: 1; }
   .js .palavra { animation: none; opacity: 1; transform: none; }
 }
-html:not(.js) .palco { height: auto; }
-html:not(.js) .palco__fixo { position: static; height: auto; }
 
 /* ---------- Faixa: números + quem confia ---------- */
 
@@ -652,7 +650,6 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 
 @media (max-width: 899.98px) {
-  .palco { height: 220svh; }
   .palco__fixo { min-height: 0; padding: 16px var(--gutter); }
   .tomada--1 { font-size: clamp(1.9rem, 8.6vw, 3rem); }
   .tomada--2 { font-size: clamp(3rem, 15vw, 5.4rem); }
