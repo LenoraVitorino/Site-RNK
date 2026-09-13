@@ -16,8 +16,10 @@ type Item =
   | { tipo: 'depoimento' }
   | { tipo: 'logo' };
 
-const colunas: { desloca?: number; itens: Item[] }[] = [
-  { itens: [{ tipo: 'numero', valor: '~30', texto: 'clínicas atendidas', escuro: true }] },
+const colunas: { desloca?: number; larga?: boolean; itens: Item[] }[] = [
+  // A primeira coluna é mais larga e o cartão escuro toma a altura toda,
+  // como o painel de abertura da segunda dobra da referência.
+  { larga: true, itens: [{ tipo: 'numero', valor: '~30', texto: 'clínicas atendidas', escuro: true }] },
   { desloca: 40, itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Time', prop: '3 / 4' }] },
   { desloca: -30, itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '9 / 16' }] },
   { desloca: 20, itens: [{ tipo: 'foto', rotulo: 'Reunião', prop: '4 / 5' }, { tipo: 'logo' }] },
@@ -32,7 +34,7 @@ const colunas: { desloca?: number; itens: Item[] }[] = [
   <div class="esteira__fixo">
     <div class="esteira__trilho" data-esteira-trilho>
       {colunas.map((c) => (
-        <div class="esteira__coluna" style={c.desloca ? `--desloca: ${c.desloca}px` : undefined}>
+        <div class:list={['esteira__coluna', c.larga && 'esteira__coluna--larga']} style={c.desloca ? `--desloca: ${c.desloca}px` : undefined}>
           {c.itens.map((f) => {
             if (f.tipo === 'foto') return <FotoSlot rotulo={f.rotulo} prop={f.prop} />;
             if (f.tipo === 'numero')

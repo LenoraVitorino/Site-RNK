@@ -1,7 +1,7 @@
 ---
 /**
- * Resultados num painel escuro, como a referência: contato no topo à
- * esquerda, monograma à direita e uma linha por especialidade com o
+ * Resultados num painel claro, no desenho da referência: contato no topo
+ * à esquerda, monograma à direita e uma linha por especialidade com o
  * rótulo em caixa alta, a descrição (antes → depois) e o número grande
  * alinhado à direita. Copy literal do briefing (⚠️ D1: números
  * ilustrativos até os cases serem autorizados).
@@ -9,9 +9,9 @@
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 ---
-<section class="secao secao--painel" id="resultados">
+<section class="secao" id="resultados">
   <div class="container">
-    <div class="cabeca entra">
+    <div class="cabeca cabeca--linha entra">
       <p class="rotulo">Resultados</p>
       <h2 class="titulo caps">O que muda quando a operação tem estrutura.</h2>
     </div>

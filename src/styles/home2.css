@@ -56,6 +56,10 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .secao--amarela { background: var(--amarelo); }
 .cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 5vw, 56px); max-width: 40ch; }
 .cabeca--larga { max-width: 46ch; }
+/* Cabeça com o título em uma linha só (Resultados). */
+.cabeca--linha { max-width: none; }
+.cabeca--linha .titulo { white-space: nowrap; font-size: clamp(1.35rem, 2.8vw, 2.5rem); }
+@media (max-width: 700px) { .cabeca--linha .titulo { white-space: normal; font-size: clamp(1.6rem, 6.4vw, 2rem); } }
 .cabeca p:not(.rotulo) { color: var(--cinza); max-width: 52ch; }
 
 /* Trilhos: duas linhas de fio nas bordas do container, atravessando as
@@ -401,12 +405,15 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   padding-right: max(var(--gutter), calc((100vw - var(--largura)) / 2));
   transform: translate3d(calc(var(--x, 0px) * -1), 0, 0); will-change: transform;
 }
+/* Larguras como a referência: a coluna de abertura é larga; as demais,
+   estreitas. */
 .esteira__coluna {
-  flex: none; width: clamp(220px, 19.5vw, 280px);
+  flex: none; width: clamp(190px, 16.5vw, 250px);
   display: grid; gap: clamp(14px, 2vw, 30px);
   transform: translateY(var(--desloca, 0px));
 }
-.esteira__coluna:first-child .esteira__numero { aspect-ratio: 1 / 2; }
+.esteira__coluna--larga { width: clamp(300px, 26vw, 390px); align-self: stretch; padding-block: clamp(20px, 4svh, 44px); }
+.esteira__coluna--larga .esteira__numero { aspect-ratio: auto; height: 100%; }
 
 /* Cartões que intercalam as fotos (⚠️ D1: números ilustrativos). */
 .esteira__cartao {
@@ -490,25 +497,23 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* ---------- Resultados ---------- */
 
-/* Painel escuro de resultados, como a tela da referência. */
+/* Painel claro de resultados, no desenho da tela da referência. */
 .painel-dados {
   border-radius: var(--raio-caixa); padding: clamp(24px, 3vw, 44px) clamp(20px, 3.4vw, 52px);
-  color: var(--papel);
-  background: linear-gradient(165deg, #2C2C2B 0%, #1E1E1D 45%, var(--grafite) 100%);
-  border: 1px solid rgb(242 242 238 / .08);
+  color: var(--grafite); background: #fff; border: 1px solid var(--fio);
 }
 .painel-dados__topo { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-bottom: 28px; }
-.painel-dados__contato { margin: 0; font-size: 11px; line-height: 1.6; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .65); }
+.painel-dados__contato { margin: 0; font-size: 11px; line-height: 1.6; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
 .painel-dados__topo img { width: 30px; height: 30px; }
 .painel-dados__linhas { margin: 0; }
 .painel-dados__linha {
   display: grid; grid-template-columns: minmax(150px, .8fr) minmax(200px, 1.1fr) clamp(220px, 24vw, 340px); align-items: center; gap: 24px 40px;
-  padding: clamp(18px, 2.4vw, 30px) 0; border-top: 1px solid rgb(242 242 238 / .18);
+  padding: clamp(18px, 2.4vw, 30px) 0; border-top: 1px solid var(--fio);
 }
-.painel-dados__linha:last-child { border-bottom: 1px solid rgb(242 242 238 / .18); }
+.painel-dados__linha:last-child { border-bottom: 1px solid var(--fio); }
 .painel-dados__linha dt { font-size: 13px; font-weight: var(--peso-enfase); letter-spacing: .04em; text-transform: uppercase; line-height: 1.3; max-width: 14ch; }
 .painel-dados__linha dd { margin: 0; }
-.painel-dados__desc { display: grid; gap: 4px; font-size: 12px; line-height: 1.45; color: rgb(242 242 238 / .6); max-width: 34ch; }
+.painel-dados__desc { display: grid; gap: 4px; font-size: 12px; line-height: 1.45; color: var(--cinza); max-width: 34ch; }
 .painel-dados__num { justify-self: end; font-size: clamp(2.2rem, 5vw, 4.4rem); font-weight: 400; letter-spacing: -.035em; line-height: .95; white-space: nowrap; }
 
 

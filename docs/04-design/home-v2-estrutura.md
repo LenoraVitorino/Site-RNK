@@ -31,7 +31,9 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    dobra da referência: um trilho de nove colunas preso na tela que anda
    para o lado conforme a página rola (`--x` calculado no scroll). As
    colunas intercalam fotos grandes, cartões de depoimento com o logo da
-   clínica, cartões só de logo e os números do briefing (⚠️ D1). Sem JS ou
+   clínica, cartões só de logo e os números do briefing (⚠️ D1). A
+   primeira coluna é larga, com o cartão escuro na altura toda, como o
+   painel de abertura da referência; as demais são estreitas. Sem JS ou
    com movimento reduzido, o trilho rola no dedo.
    `Faixa.astro` saiu da página (os números e os logos migraram para cá e
    para a hero).
@@ -43,10 +45,11 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    alternando foto/texto para Start, Core, Full, Scale e Run.
 6. **Perguntas** (`Perguntas.astro`) — seção escura, 4 perguntas principais
    em grade 2×2 + 3 em linha.
-7. **Resultados** (`Resultados.astro`) — painel escuro em degradê, como a
-   tela da referência "Orbital": contato no topo, monograma à direita e
-   uma linha por especialidade com rótulo, antes → depois e o número
-   grande à direita (⚠️ D1). Os depoimentos migraram para a esteira.
+7. **Resultados** (`Resultados.astro`) — seção clara com o título em uma
+   linha e um painel branco no desenho da tela da referência "Orbital":
+   contato no topo, monograma à direita e uma linha por especialidade com
+   rótulo, antes → depois e o número grande à direita (⚠️ D1). Os
+   depoimentos migraram para a esteira.
 8. **CTA final** (`CtaFinal.astro`) — painel amarelo "Limitado a 1 nova
    clínica por mês" com dois slots de foto.
 9. **Academy e Tools** (`AcademyTools.astro`) — dois cartões com slot de foto.
