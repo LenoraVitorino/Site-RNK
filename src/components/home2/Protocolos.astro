@@ -55,7 +55,7 @@ const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião d
           <div class="linha__foto"><FotoSlot rotulo={fotos[i]} reta /></div>
           <div class="linha__texto entra">
             <p class="rotulo">Protocolo Revena · <span class="num">0{i + 1}</span></p>
-            <h3 class="linha__nome caps">{p.label.replace('REVENA ', '')}</h3>
+            <h3 class="linha__nome">{(() => { const n = p.label.replace('REVENA ', '').toLowerCase(); return n[0].toUpperCase() + n.slice(1); })()}</h3>
             <p class="linha__fala">"{p.fala}"</p>
             <p>{p.texto}</p>
             <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a></p>

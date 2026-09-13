@@ -24,7 +24,8 @@
   --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   /* Tipografia grande e leve: títulos em regular, ênfases em medium,
      semibold só em detalhes pequenos (rótulos, botões). Nunca bold. */
-  --peso-titulo: 400;   /* títulos e números grandes */
+  --peso-titulo: 300;   /* títulos e números grandes: light, na Inter */
+  --font-titulo: 'Inter Variable', 'Inter', var(--font);
   --peso-enfase: 500;   /* strong, nomes, chamadas curtas */
   --peso-detalhe: 600;  /* rótulos miúdos e botões */
   --peso-corpo:  400;

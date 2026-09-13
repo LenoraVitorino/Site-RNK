@@ -29,6 +29,11 @@ body {
 img, video { max-width: 100%; display: block; }
 a { color: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; text-wrap: balance; }
+/* Textos grandes na Inter light: mais finos e delicados que a Instrument
+   permite. Os destaques (RevOps, "alta performance.") seguem na Instrument. */
+.titulo, .hero__titulo, .tomada--1, .revops__isso, .ancora, .divisor, .linha__nome, .cartao h3, .esteira__numero b, .painel-dados__num {
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
+}
 p { margin: 0; }
 strong, b { font-weight: var(--peso-enfase); }
 :focus-visible { outline: 2px solid var(--grafite); outline-offset: 3px; }
@@ -38,7 +43,8 @@ strong, b { font-weight: var(--peso-enfase); }
 /* ---------- Vocabulário ---------- */
 
 .container { width: 100%; max-width: var(--largura); margin-inline: auto; padding-inline: var(--gutter); }
-.caps { text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+/* Títulos em caixa normal: .caps fica no HTML por compatibilidade, sem efeito. */
+.caps { text-transform: none; }
 .rotulo {
   font-size: 11px; font-weight: var(--peso-detalhe); letter-spacing: var(--tracking-label);
   text-transform: uppercase; color: var(--cinza);
@@ -447,16 +453,16 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
    como o vídeo dedicado para mobile da referência.
    ============================================================ */
 
-.oquefaz { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+.oquefaz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
 .oquefaz__texto { display: grid; gap: 20px; }
 .oquefaz__texto p:not(.rotulo) { max-width: 52ch; }
-.oquefaz__midia { display: grid; justify-items: center; }
+.oquefaz__midia { display: grid; justify-items: center; min-width: 0; }
 
-.tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); }
+.tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
 .tel__moldura { position: relative; aspect-ratio: 9 / 16; border-radius: var(--raio-caixa); overflow: hidden; background: #000; }
 .tel__tela { position: relative; height: 100%; overflow: hidden; border-radius: var(--raio-caixa); background: #000; }
-.tel__tela video { width: 100%; height: 100%; object-fit: cover; }
+.tel__tela video { width: 100%; height: 100%; object-fit: cover; min-width: 0; display: block; }
 .tel__ilha { display: none; }
 .tel__controles { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 3; }
 .tel__botao {
@@ -699,7 +705,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
-  .oquefaz { grid-template-columns: 1fr; }
+  .oquefaz { grid-template-columns: minmax(0, 1fr); }
   .oquefaz__midia { order: 2; }
   .linha { grid-template-columns: 1fr; }
   .linha__foto .foto { min-height: 0; aspect-ratio: 4 / 3; }
