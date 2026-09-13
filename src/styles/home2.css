@@ -348,6 +348,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   display: grid; place-items: center;
   font-size: clamp(3.4rem, 11vw, 9.6rem);
   letter-spacing: -.045em; line-height: .9; max-width: 8ch; margin-inline: auto;
+  text-transform: none;   /* "Isso é RevOps." como se escreve, não em caixa alta */
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 22px)) scale(calc(.96 + var(--entra) * .04));
 }
 .revops {
