@@ -33,6 +33,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; 
    permite. Os destaques (RevOps, "alta performance.") seguem na Instrument. */
 .titulo, .hero__titulo, .tomada--1, .revops__isso, .ancora, .divisor, .linha__nome, .cartao h3, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
+  word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
 }
 p { margin: 0; }
 strong, b { font-weight: var(--peso-enfase); }
