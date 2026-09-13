@@ -431,20 +431,19 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   position: sticky; top: var(--altura-header); height: calc(100svh - var(--altura-header));
   overflow: hidden; padding-block: 24px; box-sizing: border-box;
 }
-/* Começa na borda esquerda do container e segue até sair da tela; a
-   última coluna ganha o mesmo respiro à direita. As colunas tomam a
+/* Começa quase na borda da tela e segue até sair dela; as colunas tomam a
    altura toda da dobra, como na referência. */
 .esteira__trilho {
   height: 100%; display: flex; align-items: stretch; gap: 20px; width: max-content;
-  padding-left: max(var(--gutter), calc((100vw - var(--largura)) / 2));
-  padding-right: max(var(--gutter), calc((100vw - var(--largura)) / 2));
+  padding-inline: var(--gutter);
   transform: translate3d(calc(var(--x, 0px) * -1), 0, 0); will-change: transform;
 }
 .esteira__coluna {
-  flex: none; width: clamp(230px, 18vw, 270px); height: 100%; min-height: 0;
+  flex: none; width: clamp(240px, 21.5vw, 320px); height: 100%; min-height: 0;
   display: grid; grid-auto-rows: 1fr; gap: 20px;
 }
-.esteira__coluna--larga { width: clamp(300px, 25vw, 380px); }
+/* O cartão escuro é bem mais largo e volta a cada duas colunas. */
+.esteira__coluna--larga { width: clamp(320px, 30.5vw, 460px); }
 /* Dentro da esteira os cartões e slots seguem a altura da grade, não a proporção. */
 .esteira__coluna > * { min-height: 0; height: 100%; aspect-ratio: auto; }
 
@@ -646,8 +645,8 @@ html:not(.js) .esteira__trilho { transform: none; }
   .esteira { height: 260svh; }
   .esteira__fixo { padding-block: 16px; }
   .esteira__trilho, .esteira__coluna { gap: 12px; }
-  .esteira__coluna { width: 200px; }
-  .esteira__coluna--larga { width: 240px; }
+  .esteira__coluna { width: 220px; }
+  .esteira__coluna--larga { width: 280px; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
