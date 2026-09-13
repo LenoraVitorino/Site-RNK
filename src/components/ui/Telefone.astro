@@ -22,12 +22,15 @@ const video = slot.video!;
       >
         {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
       </video>
+      <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
       <div class="tel__controles">
-        <button class="tel__botao" type="button" data-tel-som aria-pressed="true">
-          <span data-tel-som-texto>Ativar som</span>
+        <button class="tel__botao" type="button" data-tel-som aria-pressed="true" aria-label="Ativar som">
+          <svg class="tel__icone tel__icone--mudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <svg class="tel__icone tel__icone--som" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
         </button>
         <button class="tel__botao" type="button" data-tel-toque aria-label="Pausar vídeo">
-          <span data-tel-toque-texto>Pausar</span>
+          <svg class="tel__icone tel__icone--pausa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tel__icone tel__icone--toca" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
         </button>
       </div>
     </div>
@@ -44,8 +47,8 @@ const video = slot.video!;
     let pausadoPeloUsuario = false;
 
     const marcar = () => {
-      raiz.querySelector('[data-tel-toque-texto]')!.textContent = video.paused ? 'Tocar' : 'Pausar';
       toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
+      raiz.classList.toggle('tel--pausado', video.paused);
     };
     video.addEventListener('play', marcar);
     video.addEventListener('pause', marcar);
@@ -59,7 +62,8 @@ const video = slot.video!;
     som.addEventListener('click', () => {
       video.muted = !video.muted;
       som.setAttribute('aria-pressed', String(video.muted));
-      raiz.querySelector('[data-tel-som-texto]')!.textContent = video.muted ? 'Ativar som' : 'Desativar som';
+      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
+      raiz.classList.toggle('tel--com-som', !video.muted);
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
     });
 
