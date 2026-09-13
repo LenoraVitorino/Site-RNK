@@ -228,7 +228,7 @@ if (fontesVideo.length) {
 
 let imagens = 0;
 final = final.replace(
-  /(src|href|poster)="\/((?:marca|imagens|midia)\/[^"]+)"/g,
+  /(src|href|poster)="\/((?:marca|imagens|midia|icones)\/[^"]+)"/g,
   (m, attr, arquivo) => {
     try {
       const dados = readFileSync(join(dist, arquivo)).toString('base64');
