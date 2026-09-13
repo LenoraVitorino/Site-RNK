@@ -253,7 +253,9 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   padding: 24px 0 0;
   background: var(--grafite); color: var(--papel);
   border-bottom: 1px solid var(--fio);
-  --risco:  clamp(0, calc(var(--p) / .20), 1);
+  /* Zona morta no início: o cabeçalho mede 97px com a borda e o palco
+     gruda a 96px, o que dava um --p residual e um pingo de risco em repouso. */
+  --risco:  clamp(0, calc((var(--p) - .03) / .17), 1);
   --some:   clamp(0, calc((var(--p) - .16) / .14), 1);
   --entra:  clamp(0, calc((var(--p) - .30) / .18), 1);
   --sai:    clamp(0, calc((var(--p) - .70) / .12), 1);
