@@ -352,7 +352,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 22px)) scale(calc(.96 + var(--entra) * .04));
 }
 /* "Isso é" em papel, regular; "RevOps." em semibold com o reflexo amarelo. */
-.revops { display: block; white-space: pre-wrap; }
+.revops { display: block; white-space: normal; }
 .revops__isso { display: block; color: var(--papel); font-weight: var(--peso-corpo); }
 .revops__marca {
   display: block; font-weight: var(--peso-detalhe);
