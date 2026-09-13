@@ -45,7 +45,7 @@ const colunas: { larga?: boolean; linhas?: string; itens: Item[] }[] = [
               return (
                 <div class:list={['esteira__cartao', 'esteira__numero', f.escuro && 'esteira__cartao--escuro']}>
                   {f.escuro && <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />}
-                  <b>{f.valor}</b>
+                  <b data-contador>{f.valor}</b>
                   <small>{f.texto}</small>
                 </div>
               );

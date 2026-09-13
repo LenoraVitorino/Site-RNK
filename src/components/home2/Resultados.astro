@@ -29,7 +29,7 @@ import Botao from '../ui/Botao.astro';
               <span>Antes: {r.antes}.</span>
               <span>Depois: {r.depois}.</span>
             </dd>
-            <dd class="painel-dados__num">{r.numero}</dd>
+            <dd class="painel-dados__num" data-contador>{r.numero}</dd>
           </div>
         ))}
       </dl>
@@ -38,3 +38,40 @@ import Botao from '../ui/Botao.astro';
     <p style="margin-top:28px"><Botao variante="contorno" href="/contato">{hero.cta}</Botao></p>
   </div>
 </section>
+
+<script>
+  /* Números que carregam: cada inteiro dentro de [data-contador] sobe de 0
+     até o valor quando o elemento entra na tela (uma vez). Texto em volta
+     ("%", "dias", "→") fica parado. Sem movimento reduzido, nada anima. */
+  const alvos = document.querySelectorAll<HTMLElement>('[data-contador]');
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (alvos.length && !reduzido) {
+    const fmt = (n: number) => String(n);
+    alvos.forEach((el) => {
+      const texto = el.textContent ?? '';
+      el.textContent = '';
+      texto.split(/(\d+)/).forEach((parte) => {
+        if (/^\d+$/.test(parte)) {
+          const s = document.createElement('span');
+          s.dataset.fim = parte; s.textContent = fmt(0); s.className = 'contador';
+          el.appendChild(s);
+        } else el.appendChild(document.createTextNode(parte));
+      });
+    });
+    const anima = (el: HTMLElement) => {
+      const spans = el.querySelectorAll<HTMLElement>('.contador');
+      const dur = 1400; const t0 = performance.now();
+      const passo = (t: number) => {
+        const k = Math.min(1, (t - t0) / dur);
+        const e = 1 - Math.pow(1 - k, 3);
+        spans.forEach((s) => { s.textContent = fmt(Math.round(Number(s.dataset.fim) * e)); });
+        if (k < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+    const obs = new IntersectionObserver((ents) => {
+      for (const e of ents) if (e.isIntersecting) { anima(e.target as HTMLElement); obs.unobserve(e.target); }
+    }, { threshold: 0.6 });
+    alvos.forEach((a) => obs.observe(a));
+  }
+</script>

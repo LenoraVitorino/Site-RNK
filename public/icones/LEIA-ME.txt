@@ -9,3 +9,6 @@ Colocar aqui os SVGs da pasta "Renke Studio/SVG", com estes nomes:
 - pilar-05.svg — Construímos seu posicionamento antes de gastar um real
 
 O componente Protocolos.astro só renderiza o ícone se o arquivo existir.
+
+Os cinco arquivos atuais são ícones de linha desenhados no projeto, como
+provisórios: sobrescreva com os SVGs oficiais mantendo os nomes.

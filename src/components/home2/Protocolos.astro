@@ -30,7 +30,7 @@ const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião d
     </div>
     <ol class="escada entra" aria-label="Pilares do Protocolo Revena">
       {pilares.map((p, i) => (
-        <li class:list={['degrau', p.excedente && 'degrau--extra']} tabindex="0">
+        <li class:list={['degrau', p.excedente && 'degrau--extra']}>
           <span class="degrau__n num">0{i + 1}.</span>
           <div>
             {icone(i) && <img class="degrau__icone" src={icone(i)} alt="" width="32" height="32" loading="lazy" />}
