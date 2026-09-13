@@ -16,10 +16,12 @@ import { hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 
 const palavras = ['Isso', 'não', 'é'];
+// O lead quebra em duas linhas no desktop, na fronteira das frases.
+const corte = hero.lead.indexOf('caem. ') + 'caem. '.length;
+const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
 ---
 <section class="palco" data-palco aria-label="Apresentação">
   <div class="palco__fixo">
-    <img class="hero__monograma" src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />
     <div class="hero__centro">
       <p class="rotulo hero__rotulo">Revenue Operations para clínicas de alto padrão</p>
 
@@ -36,12 +38,21 @@ const palavras = ['Isso', 'não', 'é'];
 
         <div class="hero__copy">
           <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.</p>
-          <p class="hero__lead">{hero.lead}</p>
+          <p class="hero__lead">{leadLinhas[0]}<br class="quebra-desktop" />{leadLinhas[1]}</p>
           <p class="hero__acoes"><Botao href="/contato" variante="claro">{hero.cta}</Botao></p>
         </div>
       </div>
 
       <p class="hero__seta" aria-hidden="true"><span>↓</span></p>
+    </div>
+
+    <div class="hero__confianca">
+      <div class="hero__confianca__inner">
+        <p class="rotulo">Doutores que confiam na Renke</p>
+        <ul aria-label="Logos de clientes (a definir)">
+          {[1, 2, 3, 4, 5, 6].map((n) => <li>Logo {n}</li>)}
+        </ul>
+      </div>
     </div>
   </div>
 </section>

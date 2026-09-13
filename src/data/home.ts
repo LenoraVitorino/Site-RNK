@@ -13,7 +13,7 @@ export const seo = {
 export const hero = {
   // ⚠️ D1: conflita com "+140 clínicas" da seção Sobre.
   numeros: ['~30 clínicas', 'Método validado há 4 anos', 'R$42M em faturamento gerado'],
-  cta: 'Descubra se faz sentido para sua clínica →',
+  cta: 'Descubra se faz sentido para sua clínica',
   lead:
     'Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os ' +
     'números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo ' +

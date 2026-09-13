@@ -48,14 +48,14 @@ const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião d
             <h3 class="linha__nome caps">{p.label.replace('REVENA ', '')}</h3>
             <p class="linha__fala">"{p.fala}"</p>
             <p>{p.texto}</p>
-            <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais →</a></p>
+            <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a></p>
           </div>
         </article>
       ))}
     </div>
     <p class="cta-linha">
       <span>A Renke recomenda o protocolo certo para o momento da sua clínica.</span>
-      <a class="link-arrow" href="/contato" style="color:var(--grafite)">Fale com a equipe →</a>
+      <a class="link-arrow" href="/contato" style="color:var(--grafite)">Fale com a equipe</a>
     </p>
   </div>
 </section>

@@ -234,7 +234,7 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .foto__caixa svg { width: 28px; height: 28px; opacity: .55; }
 .secao--escura .foto { background: rgb(242 242 238 / .08); border-color: rgb(242 242 238 / .14); }
 .secao--escura .foto__caixa { color: rgb(242 242 238 / .6); }
-.secao--amarela .foto { background: rgb(23 22 20 / .06); border-color: rgb(23 22 20 / .18); }
+.secao--amarela .foto { background: rgb(22 22 22 / .06); border-color: rgb(22 22 22 / .18); }
 .secao--amarela .foto__caixa { color: var(--grafite); }
 
 /* ============================================================
@@ -253,8 +253,8 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .palco__fixo {
   position: sticky; top: var(--altura-header);
   height: calc(100svh - var(--altura-header)); min-height: 560px;
-  display: grid; place-items: center; overflow: hidden;
-  padding: 24px var(--gutter);
+  display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; overflow: hidden;
+  padding: 24px 0 0;
   background: var(--grafite); color: var(--papel);
   border-bottom: 1px solid var(--fio);
   --risco:  clamp(0, calc(var(--p) / .20), 1);
@@ -263,12 +263,24 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
   --sai:    clamp(0, calc((var(--p) - .70) / .12), 1);
   --fecha:  clamp(0, calc((var(--p) - .84) / .16), 1);
 }
-.hero__monograma {
-  position: absolute; right: -6%; bottom: -14%; width: min(46vw, 620px);
-  opacity: .05; pointer-events: none; filter: brightness(0) invert(1);
+/* Barra de prova social no pé da hero, como a referência: rótulo à
+   esquerda, logos à direita, visível em todos os tempos da cena. */
+.hero__confianca {
+  position: relative; z-index: 1; width: 100%; border-top: 1px solid rgb(242 242 238 / .12);
+  background: var(--grafite);
+}
+.hero__confianca__inner {
+  width: min(100%, var(--largura)); margin-inline: auto; padding: 16px var(--gutter);
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 32px;
+}
+.hero__confianca .rotulo { color: rgb(242 242 238 / .6); white-space: nowrap; }
+.hero__confianca ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; justify-content: end; overflow-x: auto; scrollbar-width: none; }
+.hero__confianca li {
+  flex: none; width: 128px; height: 44px; border: 1px dashed rgb(242 242 238 / .25); border-radius: var(--raio);
+  display: grid; place-items: center; font-size: 10px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .5);
 }
 .hero__centro {
-  position: relative; width: min(100%, 1040px); text-align: center;
+  position: relative; width: min(100%, 1040px); text-align: center; padding-inline: var(--gutter);
   display: grid; justify-items: center; gap: 0;
 }
 .hero__rotulo { color: rgb(242 242 238 / .6); margin-bottom: 22px; }
@@ -334,7 +346,9 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 }
 .hero__copy--ativo { pointer-events: auto; }
 .hero__titulo { font-size: clamp(1.6rem, 3.1vw, 2.7rem); line-height: 1.15; letter-spacing: -.025em; max-width: 30ch; font-weight: var(--peso-titulo); }
-.hero__lead { color: rgb(242 242 238 / .7); max-width: 60ch; }
+.hero__lead { color: rgb(242 242 238 / .7); max-width: none; }
+.quebra-desktop { display: none; }
+@media (min-width: 1100px) { .quebra-desktop { display: inline; } }
 .hero__acoes { margin-top: 6px; }
 
 /* Sem JS ou com menos movimento: nada de palco. Tudo em repouso, visível. */
@@ -351,18 +365,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .faixa { border-bottom: 1px solid var(--fio); }
 .faixa__numeros { display: grid; grid-template-columns: repeat(4, 1fr); }
 .faixa__numeros > div { padding: 22px var(--gutter); border-right: 1px solid var(--fio); display: grid; gap: 6px; }
-.faixa__numeros > div:first-child, .faixa__logos { padding-left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
-.faixa__numeros > div:last-child { padding-right: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
-.faixa__numeros > div:last-child { border-right: 0; }
-.faixa__numeros b { font-size: clamp(1.7rem, 3.2vw, 2.6rem); font-weight: var(--peso-titulo); letter-spacing: -.03em; line-height: 1; }
-.faixa__numeros small { font-size: 12px; color: var(--cinza); }
-.faixa__logos { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 24px; padding: 18px var(--gutter); border-top: 1px solid var(--fio); }
-.faixa__logos ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
-.faixa__logos li {
-  flex: none; width: 128px; height: 44px; border: 1px dashed var(--fio); border-radius: var(--raio); display: grid; place-items: center;
-  font-size: 10px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza);
-}
-
+.faixa__numeros > div:first-child, 
 /* ============================================================
    DOBRA 2 · O QUE A RENKE FAZ — texto + reel no celular
    No desktop o vídeo mora numa moldura de aparelho; no mobile a moldura
@@ -375,14 +378,12 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .oquefaz__texto p:not(.rotulo) { max-width: 52ch; }
 .oquefaz__midia { display: grid; justify-items: center; }
 
-.tel { --largura-tel: min(100%, 320px); width: var(--largura-tel); }
-.tel__moldura {
-  position: relative; aspect-ratio: 9 / 19; border-radius: 46px; padding: 12px;
-  background: var(--grafite); box-shadow: 0 30px 60px -30px rgb(23 22 20 / .5), inset 0 0 0 2px rgb(255 255 255 / .06);
-}
-.tel__tela { position: relative; height: 100%; overflow: hidden; border-radius: 34px; background: #000; }
+.tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); }
+/* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
+.tel__moldura { position: relative; aspect-ratio: 9 / 16; border-radius: var(--raio-caixa); overflow: hidden; background: #000; }
+.tel__tela { position: relative; height: 100%; overflow: hidden; border-radius: var(--raio-caixa); background: #000; }
 .tel__tela video { width: 100%; height: 100%; object-fit: cover; }
-.tel__ilha { position: absolute; top: 22px; left: 50%; width: 88px; height: 22px; transform: translateX(-50%); background: #000; border-radius: 12px; z-index: 2; }
+.tel__ilha { display: none; }
 .tel__controles { position: absolute; left: 12px; right: 12px; bottom: 14px; display: flex; justify-content: space-between; align-items: center; z-index: 3; }
 .tel__botao {
   display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px;
@@ -395,32 +396,49 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 /* ---------- Esteira de fotos (transição para os protocolos) ---------- */
 
-.esteira { overflow: hidden; height: clamp(420px, 68vh, 640px); border-block: 1px solid var(--fio); }
-.esteira__trilho { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: start; }
-.esteira__coluna { display: grid; gap: 14px; transform: translateY(calc(var(--e, 0) * var(--v, 0) * 1px)); will-change: transform; }
-.esteira__coluna:nth-child(1) { --v: -140; padding-top: 80px; }
-.esteira__coluna:nth-child(2) { --v: 90; padding-top: 0; }
-.esteira__coluna:nth-child(3) { --v: -70; padding-top: 140px; }
-.esteira__coluna:nth-child(4) { --v: 160; padding-top: 40px; }
+.esteira { overflow: hidden; height: clamp(560px, 92vh, 820px); border-block: 1px solid var(--fio); background: var(--papel); }
+/* Cinco colunas largas a partir da borda esquerda do container, sangrando
+   pela direita (a última fica cortada pela tela, como na referência). */
+.esteira__trilho {
+  height: 100%; padding-left: max(var(--gutter), calc((100% - var(--largura)) / 2));
+  display: grid; grid-template-columns: repeat(5, clamp(230px, 21vw, 300px)); gap: clamp(14px, 2vw, 30px); align-items: start;
+}
+.esteira__coluna { display: grid; gap: clamp(14px, 2vw, 30px); transform: translateY(calc(var(--e, 0) * var(--v, 0) * 1px)); will-change: transform; }
+.esteira__coluna:nth-child(1) { --v: -120; padding-top: 0; }
+.esteira__coluna:nth-child(2) { --v: 80; padding-top: 56px; }
+.esteira__coluna:nth-child(3) { --v: -60; padding-top: 0; }
+.esteira__coluna:nth-child(4) { --v: 140; padding-top: 32px; }
+.esteira__coluna:nth-child(5) { --v: -90; padding-top: 72px; }
+/* Cartões que intercalam as fotos: escuro com o monograma em textura e
+   claro com um número (⚠️ D1: ilustrativo até os reais serem liberados). */
+.esteira__cartao {
+  position: relative; overflow: hidden; border-radius: var(--raio-caixa); border: 1px solid var(--fio);
+  padding: 24px; display: grid; align-content: end; gap: 8px; background: #fff;
+}
+.esteira__cartao b { font-size: clamp(2rem, 3vw, 2.8rem); letter-spacing: -.03em; line-height: 1; font-weight: var(--peso-titulo); }
+.esteira__cartao small { font-size: 13px; color: var(--cinza); }
+.esteira__cartao--escuro { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
+.esteira__cartao--escuro small { color: rgb(242 242 238 / .6); }
+.esteira__cartao--escuro img { position: absolute; right: -22%; top: -10%; width: 120%; opacity: .07; filter: brightness(0) invert(1); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .esteira__coluna { transform: none; } }
 
 /* ============================================================
    DOBRA 3 · PROTOCOLOS — escada amarela + linhas foto/texto
    ============================================================ */
 
-.escada { border: 1px solid rgb(23 22 20 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
+.escada { border: 1px solid rgb(22 22 22 / .25); display: grid; grid-template-columns: repeat(5, 1fr); border-radius: var(--raio-caixa); overflow: hidden; }
 .degrau {
   position: relative; min-height: 220px; padding: 18px; display: grid; align-content: space-between; gap: 12px;
-  border-right: 1px solid rgb(23 22 20 / .25); background: var(--amarelo);
+  border-right: 1px solid rgb(22 22 22 / .25); background: var(--amarelo);
   transition: background-color .25s var(--easing-suave);
 }
 .degrau:last-child { border-right: 0; }
 .degrau__n { font-size: 15px; font-weight: var(--peso-enfase); }
 .degrau__titulo { font-size: 17px; line-height: 1.2; font-weight: var(--peso-enfase); }
-.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(23 22 20 / .85); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s var(--easing), opacity .25s var(--easing-suave); }
+.degrau__texto { font-size: 13.5px; line-height: 1.45; color: rgb(22 22 22 / .85); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s var(--easing), opacity .25s var(--easing-suave); }
 .degrau:hover, .degrau:focus-within { background: var(--amarelo-claro); }
 .degrau:hover .degrau__texto, .degrau:focus-within .degrau__texto { max-height: 12em; opacity: 1; }
-.degrau--extra .degrau__n::after { content: ' · a confirmar'; font-weight: 400; font-size: 11px; color: rgb(23 22 20 / .6); }
+.degrau--extra .degrau__n::after { content: ' · a confirmar'; font-weight: 400; font-size: 11px; color: rgb(22 22 22 / .6); }
 
 .grade { border-top: 1px solid var(--fio); border-bottom: 1px solid var(--fio); }
 .linha { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--fio); }
@@ -474,7 +492,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .chamada { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: clamp(20px, 4vw, 48px); align-items: center; }
 .chamada__miolo { display: grid; gap: 18px; justify-items: center; text-align: center; }
 .chamada__miolo .titulo { max-width: 20ch; }
-.chamada__miolo p:not(.rotulo) { max-width: 44ch; color: rgb(23 22 20 / .8); }
+.chamada__miolo p:not(.rotulo) { max-width: 44ch; color: rgb(22 22 22 / .8); }
 .chamada .foto { --prop: 3 / 4; }
 
 /* ---------- Academy + Tools ---------- */
@@ -536,7 +554,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 @media (max-width: 1023.98px) {
   .escada { grid-template-columns: repeat(3, 1fr); }
   .degrau:nth-child(3n) { border-right: 0; }
-  .degrau { border-bottom: 1px solid rgb(23 22 20 / .25); }
+  .degrau { border-bottom: 1px solid rgb(22 22 22 / .25); }
   .ledger { grid-template-columns: repeat(3, 1fr); }
   .ledger > div:nth-child(3n) { border-right: 0; }
   .ledger > div { border-bottom: 1px solid var(--fio); }
@@ -553,15 +571,15 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .hero__seta { margin-top: 20px; }
   .hero__copy { gap: 16px; }
   .hero__lead { font-size: 15px; }
+  .hero__confianca__inner { grid-template-columns: 1fr; gap: 10px; padding-block: 12px; }
+  .hero__confianca ul { justify-content: start; }
+  .hero__confianca li { width: 104px; height: 38px; }
+  .esteira { height: 480px; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
-  .faixa__logos { grid-template-columns: 1fr; gap: 12px; }
   .oquefaz { grid-template-columns: 1fr; }
   .oquefaz__midia { order: 2; }
-  .esteira { height: 360px; }
-  .esteira__trilho { grid-template-columns: repeat(3, 1fr); }
-  .esteira__coluna:nth-child(4) { display: none; }
   .linha { grid-template-columns: 1fr; }
   .linha__foto .foto { min-height: 0; aspect-ratio: 4 / 3; }
   .linha:nth-child(even) .linha__foto { order: 0; }
@@ -577,9 +595,6 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 
 @media (max-width: 639.98px) {
   .tel { --largura-tel: 100%; }
-  .tel__moldura { padding: 0; border-radius: var(--raio-caixa); background: none; box-shadow: none; aspect-ratio: 9 / 16; }
-  .tel__tela { border-radius: var(--raio-caixa); }
-  .tel__ilha { display: none; }
   /* Uma coluna: número à esquerda, título e texto à direita, tudo visível. */
   .escada { grid-template-columns: 1fr; }
   .degrau { border-right: 0; min-height: 0; grid-template-columns: 2.6rem 1fr; align-content: start; gap: 6px 8px; padding: 18px 16px; }
@@ -591,6 +606,4 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   .ledger > div { border-right: 1px solid var(--fio); }
   .ledger > div:nth-child(2n) { border-right: 0; }
   .sobre__fotos { grid-template-columns: 1fr; }
-  .esteira__trilho { grid-template-columns: 1fr 1fr; }
-  .esteira__coluna:nth-child(3) { display: none; }
 }

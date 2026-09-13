@@ -1,25 +1,40 @@
 ---
 /**
- * Faixa de fotos do escritório entre "o que fazemos" e os protocolos: a
- * transição fotográfica que a referência faz com colunas que se movem em
- * velocidades diferentes no scroll. --e vai de -1 a 1 conforme a faixa
- * atravessa a viewport; cada coluna multiplica por seu próprio fator.
- * Por enquanto são espaços reservados: as fotos da nova sede não chegaram.
+ * Segunda dobra depois da hero, como a referência: cinco colunas largas
+ * que intercalam fotos e cartões, saindo da borda esquerda do container e
+ * sangrando pela direita. --e vai de -1 a 1 conforme a faixa atravessa a
+ * viewport; cada coluna multiplica por seu próprio fator (parallax).
+ * As fotos ainda são espaços reservados (a nova sede não chegou).
  */
 import FotoSlot from '../ui/FotoSlot.astro';
 
-const colunas: { rotulo: string; prop: string }[][] = [
-  [{ rotulo: 'Foto · sede', prop: '3 / 4' }, { rotulo: 'Foto · time', prop: '1 / 1' }],
-  [{ rotulo: 'Foto · reunião', prop: '4 / 5' }, { rotulo: 'Foto · detalhe', prop: '3 / 4' }],
-  [{ rotulo: 'Foto · time', prop: '1 / 1' }, { rotulo: 'Foto · sede', prop: '3 / 4' }],
-  [{ rotulo: 'Foto · sede', prop: '3 / 4' }, { rotulo: 'Foto · operação', prop: '4 / 5' }],
+type Item =
+  | { tipo: 'foto'; rotulo: string; prop: string }
+  | { tipo: 'cartao'; valor: string; texto: string; escuro?: boolean };
+
+const colunas: Item[][] = [
+  [{ tipo: 'cartao', valor: '~30', texto: 'clínicas atendidas', escuro: true }, { tipo: 'foto', rotulo: 'Foto · time', prop: '1 / 1' }],
+  [{ tipo: 'foto', rotulo: 'Foto · sede', prop: '3 / 4' }, { tipo: 'cartao', valor: '4 anos', texto: 'de método validado' }],
+  [{ tipo: 'foto', rotulo: 'Foto · operação', prop: '9 / 16' }],
+  [{ tipo: 'cartao', valor: 'R$42M', texto: 'em faturamento gerado' }, { tipo: 'foto', rotulo: 'Foto · reunião', prop: '4 / 5' }],
+  [{ tipo: 'foto', rotulo: 'Foto · detalhe', prop: '3 / 4' }, { tipo: 'foto', rotulo: 'Foto · sede', prop: '1 / 1' }],
 ];
 ---
-<section class="esteira" data-esteira aria-label="Fotos da Renke">
-  <div class="container esteira__trilho">
+<section class="esteira" data-esteira aria-label="Fotos e números da Renke">
+  <div class="esteira__trilho">
     {colunas.map((c) => (
       <div class="esteira__coluna">
-        {c.map((f) => <FotoSlot rotulo={f.rotulo} prop={f.prop} />)}
+        {c.map((f) =>
+          f.tipo === 'foto' ? (
+            <FotoSlot rotulo={f.rotulo} prop={f.prop} />
+          ) : (
+            <div class:list={['esteira__cartao', f.escuro && 'esteira__cartao--escuro']} style="aspect-ratio: 4 / 5">
+              {f.escuro && <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />}
+              <b>{f.valor}</b>
+              <small>{f.texto}</small>
+            </div>
+          ),
+        )}
       </div>
     ))}
   </div>

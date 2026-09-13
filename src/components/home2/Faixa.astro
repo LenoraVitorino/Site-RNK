@@ -12,15 +12,9 @@ const partes = [
   { valor: 'R$42M', rotulo: 'em faturamento gerado' },
 ];
 ---
-<section class="faixa" aria-label="Números e clientes">
+<section class="faixa" aria-label="Números">
   <div class="faixa__numeros num">
     {partes.map((p) => <div><b>{p.valor}</b><small>{p.rotulo}</small></div>)}
     <div><b>1 / mês</b><small>nova clínica aceita</small></div>
-  </div>
-  <div class="faixa__logos">
-    <p class="rotulo">Doutores que confiam na Renke</p>
-    <ul aria-label="Logos de clientes (a definir)">
-      {[1, 2, 3, 4, 5, 6].map((n) => <li>Logo {n}</li>)}
-    </ul>
   </div>
 </section>

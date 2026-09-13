@@ -25,13 +25,17 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    CSS); depois ele sai e, no lugar, entram título, subtítulo e CTA.
    Sem JS ou com `prefers-reduced-motion`, tudo nasce no estado final e o
    reflexo não roda.
-2. **Faixa** (`Faixa.astro`) — números do briefing em linha (⚠️ D1: números
-   ilustrativos) e placeholders de logos de clientes.
+   No pé da hero, a barra "Doutores que confiam na Renke" com os logos
+   (placeholders), como a barra de parceiros da referência.
+2. **Esteira** (`Esteira.astro`) — logo depois da hero, como a segunda
+   dobra da referência: cinco colunas largas a partir da borda do
+   container, sangrando pela direita, intercalando slots de foto e cartões
+   com os números do briefing (⚠️ D1: ilustrativos). Parallax por coluna.
+   `Faixa.astro` saiu da página (os números e os logos migraram para cá e
+   para a hero).
 3. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +
-   reel no celular. Autoplay mudo ao entrar na tela, pausa ao sair; botão de
-   som e de pausa; pausa manual é lembrada.
-4. **Esteira** (`Esteira.astro`) — quatro colunas de fotos do escritório
-   (placeholders) com parallax leve por coluna.
+   reel vertical, sem moldura de aparelho. Autoplay mudo ao entrar na tela,
+   pausa ao sair; botão de som e de pausa; pausa manual é lembrada.
 5. **Protocolos** (`Protocolos.astro`) — escada amarela com os 5 pilares do
    Protocolo Revena (texto no hover; sempre visível no toque) + linhas
    alternando foto/texto para Start, Core, Full, Scale e Run.
