@@ -91,7 +91,7 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
       const curso = palco.offsetHeight - (innerHeight - topo);
       const p = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
       palco.style.setProperty('--p', p.toFixed(4));
-      copy?.classList.toggle('hero__copy--ativo', p >= 0.9);
+      copy?.classList.toggle('hero__copy--ativo', p >= 0.84);
     };
     const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
     addEventListener('scroll', pede, { passive: true });
