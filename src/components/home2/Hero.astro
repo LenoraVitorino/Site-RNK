@@ -72,30 +72,36 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
 </section>
 
 <script>
-  /* --p = progresso do scroll dentro do palco, de 0 a 1. O CSS deriva dele
-     cada tempo da cena. */
+  /* --p = progresso do scroll dentro do palco, de 0 a 1. O valor exibido
+     segue o real com inércia (filtro passa-baixa a cada frame), para a
+     cena não dar tranco quando o dedo ou a roda param. O CSS deriva de
+     --p cada tempo da cena, já com curva suave. */
   const palco = document.querySelector<HTMLElement>('[data-palco]');
   const header = document.getElementById('header');
   const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (palco) {
     const copy = palco.querySelector<HTMLElement>('.hero__copy');
     if (semMovimento) { palco.style.setProperty('--p', '1'); copy?.classList.add('hero__copy--ativo'); }
-    let agendado = false;
-    const mede = () => {
-      agendado = false;
-      if (semMovimento) return;
-      // O palco gruda logo abaixo do cabeçalho: o curso começa quando o
-      // topo dele encosta ali e termina quando o fundo chega ao fim da tela.
-      const r = palco.getBoundingClientRect();
-      const topo = header?.offsetHeight ?? 0;
-      const curso = palco.offsetHeight - (innerHeight - topo);
-      const p = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
-      palco.style.setProperty('--p', p.toFixed(4));
-      copy?.classList.toggle('hero__copy--ativo', p >= 0.84);
-    };
-    const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(mede); } };
-    addEventListener('scroll', pede, { passive: true });
-    addEventListener('resize', pede, { passive: true });
-    mede();
+    else {
+      let alvo = 0, atual = 0, rodando = false;
+      const mede = () => {
+        // O palco gruda logo abaixo do cabeçalho: o curso começa quando o
+        // topo dele encosta ali e termina quando o fundo chega ao fim da tela.
+        const r = palco.getBoundingClientRect();
+        const topo = header?.offsetHeight ?? 0;
+        const curso = palco.offsetHeight - (innerHeight - topo);
+        alvo = curso > 0 ? Math.min(1, Math.max(0, (topo - r.top) / curso)) : 1;
+        if (!rodando) { rodando = true; requestAnimationFrame(passo); }
+      };
+      const passo = () => {
+        atual += (alvo - atual) * 0.14;
+        if (Math.abs(alvo - atual) < 0.0006) { atual = alvo; rodando = false; } else requestAnimationFrame(passo);
+        palco.style.setProperty('--p', atual.toFixed(4));
+        copy?.classList.toggle('hero__copy--ativo', atual >= 0.84);
+      };
+      addEventListener('scroll', mede, { passive: true });
+      addEventListener('resize', mede, { passive: true });
+      mede();
+    }
   }
 </script>
