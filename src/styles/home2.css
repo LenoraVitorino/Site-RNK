@@ -531,11 +531,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* ---------- Resultados ---------- */
 
-/* Painel claro de resultados, no desenho da tela da referência. */
-.painel-dados {
-  border-radius: var(--raio-caixa); padding: clamp(24px, 3vw, 44px) clamp(20px, 3.4vw, 52px);
-  color: var(--grafite); background: #fff; border: 1px solid var(--fio);
-}
+/* Painel de resultados direto no fundo da seção, sem caixa. */
+.painel-dados { color: var(--grafite); }
 .painel-dados__topo { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-bottom: 28px; }
 .painel-dados__contato { margin: 0; font-size: 11px; line-height: 1.6; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
 .painel-dados__topo img { width: 30px; height: 30px; }
