@@ -47,8 +47,12 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
     <div class="hero__confianca">
       <div class="hero__confianca__inner">
         <p class="rotulo">Doutores que confiam na Renke</p>
+        <!-- Exemplo com a assinatura da Renke em cinza; entram os logos dos
+             clientes (marvee.com.br) quando os arquivos chegarem. -->
         <ul aria-label="Logos de clientes (a definir)">
-          {[1, 2, 3, 4, 5, 6].map((n) => <li aria-label={`Logo ${n}`} />)}
+          {[1, 2, 3, 4, 5, 6].map(() => (
+            <li><img src="/marca/renke-assinatura.png" alt="" width="299" height="62" loading="lazy" /></li>
+          ))}
         </ul>
       </div>
     </div>
