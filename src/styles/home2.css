@@ -351,20 +351,23 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   text-transform: none;   /* "Isso é RevOps." como se escreve, não em caixa alta */
   opacity: var(--entra); transform: translateY(calc((1 - var(--entra)) * 22px)) scale(calc(.96 + var(--entra) * .04));
 }
-.revops {
-  display: block; white-space: pre-wrap;
-  /* O gradiente só pinta dentro da caixa: folga para o acento e as
-     hastes não ficarem fora dela (e o margin devolve o espaço). */
-  padding: .2em .12em; margin: -.2em -.12em;
+/* "Isso é" em papel, regular; "RevOps." em semibold com o reflexo amarelo. */
+.revops { display: block; white-space: pre-wrap; }
+.revops__isso { display: block; color: var(--papel); font-weight: var(--peso-corpo); }
+.revops__marca {
+  display: block; font-weight: var(--peso-detalhe);
+  /* O gradiente só pinta dentro da caixa: folga para as hastes e o ponto
+     não ficarem fora dela (e o margin devolve o espaço). */
+  padding: .12em .12em; margin: -.12em -.12em;
   color: transparent; -webkit-text-fill-color: transparent;
   background: linear-gradient(100deg, var(--destaque) 0 30%, #FFF2B8 50%, var(--destaque) 70% 100%);
   background-size: 220% auto; background-position: 0 0;
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 0 18px rgb(255 209 3 / .16));
+  filter: drop-shadow(0 0 22px rgb(255 209 3 / .28));
 }
-.js .revops { animation: reflexo 2.6s ease-in-out infinite alternate; }
+.js .revops__marca { animation: reflexo 2.6s ease-in-out infinite alternate; }
 @keyframes reflexo { from { background-position: 0 0; } to { background-position: 100% 0; } }
-@media (prefers-reduced-motion: reduce) { .js .revops { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .js .revops__marca { animation: none; } }
 
 /* A seta some no primeiro scroll e o espaço dela se fecha no último tempo. */
 .hero__seta {
