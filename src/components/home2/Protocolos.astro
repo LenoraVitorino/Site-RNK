@@ -6,9 +6,18 @@
  * método, numerados porque a ordem existe) e as soluções em linhas de foto
  * e texto alternadas dentro de uma grade de fio fino. Copy literal.
  */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { pilares, protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import FotoSlot from '../ui/FotoSlot.astro';
+
+// Ícone de cada pilar: public/icones/pilar-01.svg … pilar-05.svg. Só entra
+// no HTML o que existir na pasta; sem o arquivo, o degrau fica como está.
+const icone = (i: number) => {
+  const nome = `pilar-0${i + 1}.svg`;
+  return existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null;
+};
 
 const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
 ---
@@ -24,6 +33,7 @@ const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião d
         <li class:list={['degrau', p.excedente && 'degrau--extra']} tabindex="0">
           <span class="degrau__n num">0{i + 1}.</span>
           <div>
+            {icone(i) && <img class="degrau__icone" src={icone(i)} alt="" width="32" height="32" loading="lazy" />}
             <p class="degrau__titulo">{p.titulo}</p>
             <p class="degrau__texto">{p.texto}</p>
           </div>
