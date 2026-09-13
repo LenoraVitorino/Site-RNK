@@ -131,7 +131,9 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 }
 .botao--onda:hover .onda, .botao--onda:focus-visible .onda { width: calc(100% - 8px); }
 .botao--onda:hover .botao__texto, .botao--onda:focus-visible .botao__texto { color: var(--grafite); transition: color .2s .1s; }
-.onda__seta { flex: none; overflow: visible; fill: #0F0F0F; }
+.onda__seta { flex: none; overflow: visible; fill: #0F0F0F; transition: opacity .2s var(--easing-suave); }
+/* Quando o painel cobre o botão, as setas somem para não atravessar o texto. */
+.botao--onda:hover .onda__seta, .botao--onda:focus-visible .onda__seta { opacity: 0; }
 .onda__ponto { transform-box: fill-box; transform-origin: center; animation: onda-ponto 1.4s ease-in-out infinite; }
 @keyframes onda-ponto { 0%, 70%, 100% { opacity: .25; transform: scale(.85); } 35% { opacity: 1; transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .onda__ponto { animation: none; opacity: 1; } .onda { transition: none; } }
