@@ -276,8 +276,15 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .hero__confianca__frase strong { font-weight: var(--peso-enfase); }
 /* Mapa da América Latina em malha esparsa de pontos (desenho próprio), no estilo da referência. */
 .hero__mapa { flex: none; height: 76px; width: auto; }
-/* O carrossel fica bem afastado da frase, encostado à direita. */
-.hero__confianca .rolo { justify-self: end; width: min(100%, 620px); margin-left: clamp(32px, 8vw, 140px); }
+/* Bloco "Clínicas • logos" bem afastado da frase, encostado à direita,
+   como o "Partners •" da referência. */
+.hero__clientes {
+  justify-self: end; width: min(100%, 640px); min-width: 0; margin-left: clamp(32px, 8vw, 140px);
+  display: flex; align-items: center; gap: 28px;
+}
+.hero__clientes__rotulo { color: var(--papel); white-space: nowrap; display: flex; align-items: center; gap: 24px; }
+.hero__clientes__rotulo::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--destaque); }
+.hero__clientes .rolo { flex: 1 1 0; min-width: 0; }
 /* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
    andando -50% em loop. O gap fica dentro do grupo (gap + padding-right
    iguais) para a emenda ser invisível. */
@@ -289,12 +296,12 @@ h2.titulo, .titulo { font-size: clamp(1.75rem, 3.4vw, 2.75rem); letter-spacing: 
 .rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 26.5s linear infinite; }
 .rolo__grupo {
   list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex: none;
-  gap: 56px; padding-right: 56px;
+  gap: 44px; padding-right: 44px;
 }
 .rolo__grupo li { flex: none; display: flex; align-items: center; }
 /* Logos em cinza; no hover acendem na cor original. */
 .rolo__grupo img {
-  height: 28px; width: auto;
+  height: 20px; width: auto;
   filter: brightness(0) invert(1); opacity: .38;
   transition: filter .3s var(--easing-suave), opacity .3s var(--easing-suave);
 }
@@ -632,9 +639,10 @@ html:not(.js) .esteira__trilho { transform: none; }
   .hero__confianca__inner { grid-template-columns: auto 1fr; gap: 14px 18px; padding-block: 18px; min-height: 0; }
   .hero__confianca__frase { white-space: normal; font-size: 14px; }
   .hero__mapa { height: 52px; }
-  .hero__confianca .rolo { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-left: 0; }
-  .rolo__grupo { gap: 34px; padding-right: 34px; }
-  .rolo__grupo img { height: 20px; }
+  .hero__clientes { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-left: 0; gap: 16px; }
+  .hero__clientes__rotulo { gap: 12px; }
+  .rolo__grupo { gap: 28px; padding-right: 28px; }
+  .rolo__grupo img { height: 16px; }
   .rolo__trilho { animation-duration: 20s; }
   .duo, .form-block { grid-template-columns: 1fr; }
   .painel-dados__linha { grid-template-columns: 1fr auto; gap: 14px 16px; }
