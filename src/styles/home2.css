@@ -429,32 +429,31 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
 .esteira { height: 320svh; border-block: 1px solid var(--fio); background: var(--papel); }
 .esteira__fixo {
   position: sticky; top: var(--altura-header); height: calc(100svh - var(--altura-header));
-  overflow: hidden; display: grid; align-items: center;
+  overflow: hidden; padding-block: 24px; box-sizing: border-box;
 }
 /* Começa na borda esquerda do container e segue até sair da tela; a
-   última coluna ganha o mesmo respiro à direita. */
+   última coluna ganha o mesmo respiro à direita. As colunas tomam a
+   altura toda da dobra, como na referência. */
 .esteira__trilho {
-  display: flex; align-items: center; gap: clamp(14px, 2vw, 30px); width: max-content;
+  height: 100%; display: flex; align-items: stretch; gap: 20px; width: max-content;
   padding-left: max(var(--gutter), calc((100vw - var(--largura)) / 2));
   padding-right: max(var(--gutter), calc((100vw - var(--largura)) / 2));
   transform: translate3d(calc(var(--x, 0px) * -1), 0, 0); will-change: transform;
 }
-/* Larguras como a referência: a coluna de abertura é larga; as demais,
-   estreitas. */
 .esteira__coluna {
-  flex: none; width: clamp(190px, 16.5vw, 250px);
-  display: grid; gap: clamp(14px, 2vw, 30px);
-  transform: translateY(var(--desloca, 0px));
+  flex: none; width: clamp(230px, 18vw, 270px); height: 100%; min-height: 0;
+  display: grid; grid-auto-rows: 1fr; gap: 20px;
 }
-.esteira__coluna--larga { width: clamp(300px, 26vw, 390px); align-self: stretch; padding-block: clamp(20px, 4svh, 44px); }
-.esteira__coluna--larga .esteira__numero { aspect-ratio: auto; height: 100%; }
+.esteira__coluna--larga { width: clamp(300px, 25vw, 380px); }
+/* Dentro da esteira os cartões e slots seguem a altura da grade, não a proporção. */
+.esteira__coluna > * { min-height: 0; height: 100%; aspect-ratio: auto; }
 
 /* Cartões que intercalam as fotos (⚠️ D1: números ilustrativos). */
 .esteira__cartao {
   position: relative; overflow: hidden; border-radius: var(--raio-caixa); border: 1px solid var(--fio);
   padding: 22px; background: #fff;
 }
-.esteira__numero { aspect-ratio: 4 / 5; display: grid; align-content: end; gap: 6px; }
+.esteira__numero { display: grid; align-content: end; gap: 6px; }
 .esteira__numero b { font-size: clamp(2rem, 3vw, 2.8rem); letter-spacing: -.03em; line-height: 1; font-weight: var(--peso-titulo); }
 .esteira__numero small { font-size: 13px; color: var(--cinza); }
 .esteira__cartao--escuro { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
@@ -468,7 +467,7 @@ html:not(.js) .palco__fixo { position: static; height: auto; }
   display: grid; place-items: center; width: 104px; height: 40px; border-radius: var(--raio);
   background: var(--painel); font-size: 10px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza);
 }
-.esteira__somente-logo { aspect-ratio: 4 / 3; display: grid; place-items: center; }
+.esteira__somente-logo { display: grid; place-items: center; }
 .esteira__logo--grande { width: 140px; height: 56px; }
 
 /* Sem JS ou com menos movimento: nada preso; o trilho rola no dedo. */
@@ -645,6 +644,10 @@ html:not(.js) .esteira__trilho { transform: none; }
   .painel-dados__num { grid-row: 1; grid-column: 2; }
   .painel-dados__desc { grid-row: 2; grid-column: 1 / -1; }
   .esteira { height: 260svh; }
+  .esteira__fixo { padding-block: 16px; }
+  .esteira__trilho, .esteira__coluna { gap: 12px; }
+  .esteira__coluna { width: 200px; }
+  .esteira__coluna--larga { width: 240px; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }

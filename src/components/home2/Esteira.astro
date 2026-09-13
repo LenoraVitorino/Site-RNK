@@ -1,9 +1,10 @@
 ---
 /**
  * Segunda dobra, como a referência: um trilho de cartões preso na tela
- * que anda para o lado conforme a página rola. Colunas de larguras iguais
- * e alturas diferentes intercalam fotos grandes, depoimentos com o logo
- * da clínica, cartões só de logo e os números do briefing (⚠️ D1).
+ * que anda para o lado conforme a página rola. As colunas preenchem a
+ * altura da dobra, de ponta a ponta, e intercalam fotos grandes,
+ * depoimentos com o logo da clínica, cartões só de logo e os números do
+ * briefing (⚠️ D1).
  * --x é o deslocamento horizontal, calculado no scroll pelo script.
  * Sem JS ou com menos movimento, o trilho fica solto e rola no dedo.
  * Fotos, depoimentos e logos ainda são espaços reservados.
@@ -16,25 +17,25 @@ type Item =
   | { tipo: 'depoimento' }
   | { tipo: 'logo' };
 
-const colunas: { desloca?: number; larga?: boolean; itens: Item[] }[] = [
-  // A primeira coluna é mais larga e o cartão escuro toma a altura toda,
-  // como o painel de abertura da segunda dobra da referência.
+// Cada coluna preenche a altura da dobra; `linhas` divide o espaço entre
+// os cartões (proporções desiguais, como na referência).
+const colunas: { larga?: boolean; linhas?: string; itens: Item[] }[] = [
   { larga: true, itens: [{ tipo: 'numero', valor: '~30', texto: 'clínicas atendidas', escuro: true }] },
-  { desloca: 40, itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Time', prop: '3 / 4' }] },
-  { desloca: -30, itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '9 / 16' }] },
-  { desloca: 20, itens: [{ tipo: 'foto', rotulo: 'Reunião', prop: '4 / 5' }, { tipo: 'logo' }] },
-  { desloca: -20, itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'numero', valor: '4 anos', texto: 'de método validado' }] },
-  { desloca: 50, itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Detalhe', prop: '1 / 1' }] },
-  { desloca: -40, itens: [{ tipo: 'foto', rotulo: 'Atendimento', prop: '9 / 16' }] },
-  { desloca: 30, itens: [{ tipo: 'logo' }, { tipo: 'numero', valor: 'R$42M', texto: 'em faturamento gerado' }] },
-  { itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'depoimento' }] },
+  { linhas: '1fr 1.25fr', itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Time', prop: '3 / 4' }] },
+  { itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '9 / 16' }] },
+  { linhas: '1.3fr 1fr', itens: [{ tipo: 'foto', rotulo: 'Reunião', prop: '4 / 5' }, { tipo: 'logo' }] },
+  { linhas: '1.15fr 1fr', itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'numero', valor: '4 anos', texto: 'de método validado' }] },
+  { linhas: '1fr 1.2fr', itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Detalhe', prop: '1 / 1' }] },
+  { itens: [{ tipo: 'foto', rotulo: 'Atendimento', prop: '9 / 16' }] },
+  { linhas: '1fr 1.3fr', itens: [{ tipo: 'logo' }, { tipo: 'numero', valor: 'R$42M', texto: 'em faturamento gerado' }] },
+  { linhas: '1.25fr 1fr', itens: [{ tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }, { tipo: 'depoimento' }] },
 ];
 ---
 <section class="esteira" data-esteira aria-label="Fotos, depoimentos e números da Renke">
   <div class="esteira__fixo">
     <div class="esteira__trilho" data-esteira-trilho>
       {colunas.map((c) => (
-        <div class:list={['esteira__coluna', c.larga && 'esteira__coluna--larga']} style={c.desloca ? `--desloca: ${c.desloca}px` : undefined}>
+        <div class:list={['esteira__coluna', c.larga && 'esteira__coluna--larga']} style={c.linhas ? `grid-template-rows: ${c.linhas}` : undefined}>
           {c.itens.map((f) => {
             if (f.tipo === 'foto') return <FotoSlot rotulo={f.rotulo} prop={f.prop} />;
             if (f.tipo === 'numero')
