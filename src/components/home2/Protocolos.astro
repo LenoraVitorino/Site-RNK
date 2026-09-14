@@ -2,15 +2,13 @@
 /**
  * Dobra 3 · Protocolo Revena.
  *
- * Duas partes, como a referência: a escada em grade amarela (os pilares do
- * método, numerados porque a ordem existe) e as soluções em linhas de foto
- * e texto alternadas dentro de uma grade de fio fino. Copy literal.
+ * A escada em grade amarela: os pilares do método, numerados porque a
+ * ordem existe. Os planos vivem em Planos.astro, o trilho que vem em
+ * seguida. Copy literal.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { pilares, protocolos } from '../../data/home';
-import { existe } from '../../data/rotas';
-import FotoSlot from '../ui/FotoSlot.astro';
+import { pilares } from '../../data/home';
 
 // Ícone de cada pilar: public/icones/pilar-01.svg … pilar-05.svg. Só entra
 // no HTML o que existir na pasta; sem o arquivo, o degrau fica como está.
@@ -18,8 +16,6 @@ const icone = (i: number) => {
   const nome = `pilar-0${i + 1}.svg`;
   return existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null;
 };
-
-const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
 ---
 <section class="secao secao--amarela" id="protocolo-revena">
   <div class="container">
@@ -43,29 +39,3 @@ const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião d
   </div>
 </section>
 
-<section class="secao" id="planos">
-  <div class="container">
-    <h3 class="divisor entra">
-      Estruturamos sua operação do zero e operamos juntos no longo prazo.<br />
-      <strong>Qual é o momento da sua clínica?</strong>
-    </h3>
-    <div class="grade">
-      {protocolos.map((p, i) => (
-        <article class="linha">
-          <div class="linha__foto"><FotoSlot rotulo={fotos[i]} reta /></div>
-          <div class="linha__texto entra">
-            <p class="rotulo">Protocolo Revena · <span class="num">0{i + 1}</span></p>
-            <h3 class="linha__nome">{(() => { const n = p.label.replace('REVENA ', '').toLowerCase(); return n[0].toUpperCase() + n.slice(1); })()}</h3>
-            <p class="linha__fala">"{p.fala}"</p>
-            <p>{p.texto}</p>
-            <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a></p>
-          </div>
-        </article>
-      ))}
-    </div>
-    <p class="cta-linha">
-      <span>A Renke recomenda o protocolo certo para o momento da sua clínica.</span>
-      <a class="link-arrow" href="/contato" style="color:var(--grafite)">Fale com a equipe</a>
-    </p>
-  </div>
-</section>

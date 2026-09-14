@@ -4,11 +4,15 @@
  * As quatro primeiras ocupam o grid 2×2 que o layout pede; as outras três
  * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
  * esconder copy não resolve decisão.
+ * A .cortina em volta é o que faz esta dobra entrar pela direita, por
+ * cima do trilho dos planos, no fim do curso dele (--fim vem do script
+ * de Planos.astro).
  */
 import { perguntas } from '../../data/home';
 const principais = perguntas.filter((p) => !p.excedente);
 const demais = perguntas.filter((p) => p.excedente);
 ---
+<div class="cortina">
 <section class="secao secao--escura" id="perguntas">
   <div class="container">
     <p class="ancora entra">
@@ -33,3 +37,4 @@ const demais = perguntas.filter((p) => p.excedente);
     </div>
   </div>
 </section>
+</div>

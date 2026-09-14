@@ -3,16 +3,17 @@
  * Home v2 — direção visual aprovada em 11/09/2026, estrutura de dobras
  * extraída das referências. Ver docs/04-design/home-v2-estrutura.md.
  * Os componentes antigos (src/components/home/) ficam até a v2 ser aprovada.
- * Faixa.astro saiu da página: os números vivem nos cartões da Esteira e os
- * logos, na barra do pé da hero.
+ * Faixa.astro e Esteira.astro estão fora da página por ora (a esteira
+ * volta quando houver fotos e depoimentos); os logos vivem na barra do pé
+ * da hero.
  */
 import Base2 from '../layouts/Base2.astro';
 import { seo } from '../data/home';
 
 import Hero from '../components/home2/Hero.astro';
 import OQueFaz from '../components/home2/OQueFaz.astro';
-import Esteira from '../components/home2/Esteira.astro';
 import Protocolos from '../components/home2/Protocolos.astro';
+import Planos from '../components/home2/Planos.astro';
 import Perguntas from '../components/home2/Perguntas.astro';
 import Resultados from '../components/home2/Resultados.astro';
 import CtaFinal from '../components/home2/CtaFinal.astro';
@@ -22,9 +23,9 @@ import Formulario from '../components/home2/Formulario.astro';
 ---
 <Base2 titulo={seo.titulo} descricao={seo.descricao}>
   <Hero />
-  <Esteira />
   <OQueFaz />
   <Protocolos />
+  <Planos />
   <Perguntas />
   <Resultados />
   <CtaFinal />

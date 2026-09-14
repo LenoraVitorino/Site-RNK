@@ -27,34 +27,34 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    reflexo não roda.
    No pé da hero, a barra "Doutores que confiam na Renke" com os logos
    (placeholders), como a barra de parceiros da referência.
-2. **Esteira** (`Esteira.astro`) — logo depois da hero, como a segunda
-   dobra da referência: um trilho de nove colunas preso na tela que anda
-   para o lado conforme a página rola (`--x` calculado no scroll). As
-   colunas intercalam fotos grandes, cartões de depoimento com o logo da
-   clínica, cartões só de logo e os números do briefing (⚠️ D1). A
-   primeira coluna é larga, com o cartão escuro na altura toda, como o
-   painel de abertura da referência; as demais são estreitas. Sem JS ou
-   com movimento reduzido, o trilho rola no dedo.
-   `Faixa.astro` saiu da página (os números e os logos migraram para cá e
-   para a hero).
-3. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +
+2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +
    reel vertical, sem moldura de aparelho. Autoplay mudo ao entrar na tela,
    pausa ao sair; botão de som e de pausa; pausa manual é lembrada.
-5. **Protocolos** (`Protocolos.astro`) — escada amarela com os 5 pilares do
-   Protocolo Revena (texto no hover; sempre visível no toque) + linhas
-   alternando foto/texto para Start, Core, Full, Scale e Run.
-6. **Perguntas** (`Perguntas.astro`) — seção escura, 4 perguntas principais
-   em grade 2×2 + 3 em linha.
-7. **Resultados** (`Resultados.astro`) — seção clara com o título em uma
+   (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
+   por ora: volta quando houver fotos, depoimentos e logos reais.)
+3. **Protocolos** (`Protocolos.astro`) — escada amarela com os 5 pilares do
+   Protocolo Revena, com ícone, sempre visíveis.
+4. **Planos** (`Planos.astro`) — como a dobra "Selected work" do trionn.com:
+   um trilho preso na tela. Primeiro só o título ("Estruturamos sua
+   operação do zero…") à esquerda, com a ponta do primeiro plano à mostra;
+   a página rola e os planos entram pela direita, um a um (Start, Run,
+   Scale, Core, Full), fechando com o convite "Fale com a equipe". No
+   último trecho do curso, a dobra seguinte entra pela direita por cima
+   desta (`.cortina` em volta das Perguntas; `--x` e `--fim` calculados no
+   scroll). No celular, sem JS ou com movimento reduzido, tudo fica
+   empilhado e a próxima dobra segue em fluxo.
+5. **Perguntas** (`Perguntas.astro`) — seção escura, 4 perguntas principais
+   em grade 2×2 + 3 em linha. Entra pela cortina dos planos.
+6. **Resultados** (`Resultados.astro`) — seção clara com o título em uma
    linha e um painel branco no desenho da tela da referência "Orbital":
    contato no topo, monograma à direita e uma linha por especialidade com
    rótulo, antes → depois e o número grande à direita (⚠️ D1). Os
-   depoimentos migraram para a esteira.
-8. **CTA final** (`CtaFinal.astro`) — painel amarelo "Limitado a 1 nova
+   depoimentos ficam para a esteira, quando voltar.
+7. **CTA final** (`CtaFinal.astro`) — painel amarelo "Limitado a 1 nova
    clínica por mês" com dois slots de foto.
-9. **Academy e Tools** (`AcademyTools.astro`) — dois cartões com slot de foto.
-10. **Sobre** (`Sobre.astro`) — texto literal do briefing + três slots de foto.
-11. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
+8. **Academy e Tools** (`AcademyTools.astro`) — dois cartões com slot de foto.
+9. **Sobre** (`Sobre.astro`) — texto literal do briefing + três slots de foto.
+10. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
     não ligado).
 
 ## Regras de acabamento (12/09/2026)
