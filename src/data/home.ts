@@ -103,7 +103,7 @@ export const perguntas = [
 
 /** ⚠️ Números placeholder — nota do próprio briefing. */
 export const resultados = [
-  { especialidade: 'Dermatologia', antes: 'Taxa de agendamento baixa', numero: '7% → 19%', depois: 'em 90 dias' },
+  { especialidade: 'Dermatologia', antes: 'Taxa de agendamento baixa, 7%', numero: '19%', depois: '19% de agendamento em 90 dias' },
   { especialidade: 'Otorrino', antes: 'Comercial sem tempo para fazer follow-up e resgates', numero: '29%', depois: 'Processo automatizado e recuperação de leads' },
   { especialidade: 'Cirurgia plástica', antes: 'Raramente vendia para leads do tráfego', numero: '38%', depois: 'Digital responsável por 38% da receita' },
   { especialidade: 'Nutrologia', antes: 'Pacientes sumiam depois do 1º protocolo', numero: '24%', depois: 'reativados no trimestre' },
