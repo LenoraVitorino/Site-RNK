@@ -167,8 +167,8 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .header--claro .nav__link, .header--amarelo .nav__link { color: var(--grafite); }
 .header--claro .nav__link:hover, .header--claro .nav__trigger[aria-expanded="true"] { color: #8A6D00; }
 .header--amarelo .nav__link:hover, .header--amarelo .nav__trigger[aria-expanded="true"] { color: rgb(22 22 22 / .6); }
-.header--claro .nav__acao .botao { color: var(--grafite); text-decoration-color: var(--destaque); }
-.header--amarelo .nav__acao .botao { color: var(--grafite); text-decoration-color: var(--grafite); }
+.header--claro .nav__acao .botao, .header--amarelo .nav__acao .botao { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
+.header--claro .nav__acao .botao:hover, .header--amarelo .nav__acao .botao:hover { background: #000; border-color: #000; color: var(--papel); }
 .header--amarelo .logo__img { filter: brightness(0); }
 .header--claro .nav-toggle, .header--amarelo .nav-toggle { border-color: rgb(22 22 22 / .3); }
 .header--claro .nav-toggle__bar, .header--amarelo .nav-toggle__bar { background: var(--grafite); }
@@ -182,7 +182,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .header--amarelo .megamenu__title, .header--amarelo .megamenu__list em { color: rgb(22 22 22 / .6); }
 .header--claro .nav__item, .header--amarelo .nav__item { border-bottom-color: rgb(22 22 22 / .12); }
 .header__inner {
-  width: min(100%, var(--largura)); margin-inline: auto; min-height: 72px; pointer-events: auto;
+  width: 100%; min-height: 72px; pointer-events: auto;   /* de gutter a gutter, sem o limite do container */
   padding: 10px 20px 10px 22px;
   display: flex; align-items: center; gap: 24px;
   background: var(--cab-bg); border: 1px solid var(--cab-fio); border-radius: 16px;
@@ -242,14 +242,14 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .megamenu__list em { font-style: normal; color: rgb(242 242 238 / .5); font-size: 13px; }
 .nav-overlay { position: fixed; inset: 0; z-index: 90; background: rgb(0 0 0 / .45); }
 
-/* A ação do cabeçalho é um link sublinhado em amarelo, não um botão. */
+/* A ação do cabeçalho é um botão branco na caixa escura; nas caixas clara
+   e amarela ele inverte para grafite. */
 .nav__acao .botao {
-  background: none; border: 0; padding: 0; min-height: 0; width: auto;
-  color: var(--destaque); font-size: 15px; font-weight: var(--peso-enfase);
-  text-decoration: underline; text-underline-offset: 7px; text-decoration-thickness: 1px;
-  transition: text-decoration-thickness .2s var(--easing-suave), text-underline-offset .2s var(--easing-suave);
+  background: #fff; color: var(--grafite); border: 1px solid #fff; border-radius: 12px;
+  padding: 12px 20px; min-height: 0; width: auto; font-size: 15px; font-weight: var(--peso-enfase);
+  text-decoration: none; transition: background-color .25s var(--easing-suave), color .25s var(--easing-suave), border-color .25s var(--easing-suave);
 }
-.nav__acao .botao:hover { background: none; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.nav__acao .botao:hover { background: var(--amarelo-claro); border-color: var(--amarelo-claro); color: var(--grafite); }
 
 @media (min-width: 900px) {
   /* O desfoque só no desktop: no celular ele viraria o bloco de referência
@@ -263,7 +263,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   .nav { display: flex; align-items: center; gap: 40px; }
   .nav__list { display: flex; align-items: center; gap: 40px; }
   .nav__acao { margin-top: 0; }
-  .nav__acao .botao { font-size: 17px; }
+  .nav__acao .botao { font-size: 16px; padding: 12px 22px; }
   .nav__item { border-bottom: 0; position: relative; }
   .nav__link { min-height: 0; padding: 12px 0; font-size: 17px; white-space: nowrap; }
   .nav__caret { display: none; }
