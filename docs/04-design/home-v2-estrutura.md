@@ -34,17 +34,22 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    por ora: volta quando houver fotos, depoimentos e logos reais.)
 3. **Protocolos** (`Protocolos.astro`) — escada amarela com os 5 pilares do
    Protocolo Revena, com ícone, sempre visíveis.
-4. **Planos** (`Planos.astro`) — como a dobra "Selected work" do trionn.com:
-   um trilho preso na tela. Primeiro só o título ("Estruturamos sua
-   operação do zero…") à esquerda, com a ponta do primeiro plano à mostra;
-   a página rola e os planos entram pela direita, um a um (Start, Run,
-   Scale, Core, Full), fechando com o convite "Fale com a equipe". No
-   último trecho do curso, a dobra seguinte entra pela direita por cima
-   desta (`.cortina` em volta das Perguntas; `--x` e `--fim` calculados no
-   scroll). No celular, sem JS ou com movimento reduzido, tudo fica
-   empilhado e a próxima dobra segue em fluxo.
+4. **Planos** (`Planos.astro`) — no desenho da referência "Metafore":
+   cabeçalho (rótulo em pílula, título, texto de apoio e botão escuro) e
+   os cinco cartões em linha, um aberto por vez. O aberto fica largo e mais
+   alto, com uma imagem no topo (fundo fictício em
+   `public/imagens/plano-fundo.svg` até chegarem as artes), ícone, nome, a
+   fala do doutor e o texto; os fechados mostram só o número, o ícone e o
+   nome. A dobra fica presa na tela e a página rola pelos cinco (Start,
+   Run, Scale, Core, Full); passar o mouse também abre. Grade fina ao
+   fundo, esmaecendo. Ícones: `public/icones/plano-<nome>.svg` (por ora, o
+   ícone do pilar de mesmo número). No fim do curso, a dobra seguinte entra
+   pela direita por cima desta (`.cortina` em volta das Perguntas; `--curso`,
+   `--fim` e `--sobe` calculados no scroll). No celular, sem JS ou com
+   movimento reduzido, os cartões ficam empilhados e abertos.
 5. **Perguntas** (`Perguntas.astro`) — seção escura, 4 perguntas principais
-   em grade 2×2 + 3 em linha. Entra pela cortina dos planos.
+   em grade 2×2 + 3 em linha. Entra pela cortina dos planos mostrando só a
+   frase-âncora; no scroll seguinte a frase sobe e as perguntas aparecem.
 6. **Resultados** (`Resultados.astro`) — seção clara com o título em uma
    linha e um painel branco no desenho da tela da referência "Orbital":
    contato no topo, monograma à direita e uma linha por especialidade com

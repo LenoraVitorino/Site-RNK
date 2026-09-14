@@ -5,8 +5,9 @@
  * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
  * esconder copy não resolve decisão.
  * A .cortina em volta é o que faz esta dobra entrar pela direita, por
- * cima do trilho dos planos, no fim do curso dele (--fim vem do script
- * de Planos.astro).
+ * cima dos planos, no fim do curso deles: primeiro só a frase-âncora; no
+ * scroll seguinte ela sobe e as perguntas aparecem (--fim e --sobe vêm do
+ * script de Planos.astro, no lugar do revelar .entra).
  */
 import { perguntas } from '../../data/home';
 const principais = perguntas.filter((p) => !p.excedente);
@@ -15,11 +16,11 @@ const demais = perguntas.filter((p) => p.excedente);
 <div class="cortina">
 <section class="secao secao--escura" id="perguntas">
   <div class="container">
-    <p class="ancora entra">
+    <p class="ancora">
       Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
       <strong>Mas e com o seu negócio?</strong>
     </p>
-    <div class="perguntas entra">
+    <div class="perguntas">
       {principais.map((p, i) => (
         <div class="pergunta">
           <span class="pergunta__n num">0{i + 1}</span>
@@ -27,7 +28,7 @@ const demais = perguntas.filter((p) => p.excedente);
         </div>
       ))}
     </div>
-    <div class="perguntas perguntas--mais entra">
+    <div class="perguntas perguntas--mais">
       {demais.map((p, i) => (
         <div class="pergunta">
           <span class="pergunta__n num">0{i + 5}</span>

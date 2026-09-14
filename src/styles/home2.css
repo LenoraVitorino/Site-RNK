@@ -612,69 +612,101 @@ html:not(.js) .esteira__trilho { transform: none; }
 .degrau__icone + .degrau__titulo { margin-top: 14px; }
 .degrau__texto { font-size: 14.5px; line-height: 1.5; color: rgb(22 22 22 / .85); }
 
-/* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------
-   O título abre sozinho à esquerda; conforme a página rola, o trilho anda
-   para o lado e os planos entram pela direita. A dobra tem a altura do
-   curso do trilho mais duas telas: uma para ficar presa no começo e a
-   última para a cortina, quando a dobra seguinte entra por cima. */
+/* ---------- Planos: cartões em linha, um aberto por vez, presos na tela ----------
+   Cabeçalho no alto e os cinco cartões embaixo. A dobra fica presa e a
+   página rola pelos planos (o aberto muda); a altura é o curso mais duas
+   telas: uma para ficar presa no começo e a última para a cortina, quando
+   a dobra seguinte entra por cima. */
 
-.planos { position: relative; z-index: 1; height: calc(var(--curso, 0px) + 200svh); background: var(--painel); }
+.planos { position: relative; z-index: 1; height: calc(var(--curso, 0px) + 200svh); background: var(--papel); }
 .planos__fixo {
   position: sticky; top: 0; height: 100svh; overflow: hidden; box-sizing: border-box;
-  padding: var(--altura-header) 0 24px;
+  padding: calc(var(--altura-header) + 6px) 0 28px;
 }
-.planos__trilho {
-  height: 100%; display: flex; align-items: stretch; gap: 20px; width: max-content;
-  padding-inline: var(--gutter);
-  /* O trilho anda com --x; na cortina ainda cede um pouco para a esquerda,
-     dando profundidade à entrada da próxima dobra. */
-  transform: translate3d(calc(var(--x, 0px) * -1 - var(--fim, 0) * 14vw), 0, 0); will-change: transform;
+/* Grade fina ao fundo, como a referência, esmaecendo para baixo. */
+.planos__fixo::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgb(22 22 22 / .07) 1px, transparent 1px), linear-gradient(90deg, rgb(22 22 22 / .07) 1px, transparent 1px);
+  background-size: 72px 72px; background-position: center top;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 62%); mask-image: linear-gradient(180deg, #000 0%, transparent 62%);
 }
-/* O painel de abertura deixa só uma ponta do primeiro plano à mostra. */
-.planos__abre {
-  flex: none; width: calc(100vw - var(--gutter) * 2 - 20px - clamp(180px, 22vw, 320px));
-  display: grid; align-content: center; gap: 22px; padding-right: 8vw;
+.planos__grade {
+  position: relative; height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 36px;
+  /* Na cortina a dobra cede um pouco para a esquerda, dando profundidade. */
+  transform: translate3d(calc(var(--fim, 0) * -12vw), 0, 0); will-change: transform;
 }
+.planos__cabeca { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 30%); gap: 20px 64px; align-items: end; }
+.rotulo--pilula {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+  background: rgb(255 209 3 / .16); color: var(--grafite); font-size: 10.5px;
+}
+.rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--destaque); }
 .planos__titulo {
   font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; word-spacing: -.08em;
-  font-size: clamp(2.2rem, 3.7vw, 3.6rem); line-height: 1.06; max-width: 19ch;
+  font-size: clamp(1.9rem, 2.9vw, 2.8rem); line-height: 1.08; max-width: 24ch; margin-top: 18px;
 }
-.planos__titulo strong { display: block; margin-top: .45em; font-weight: var(--peso-enfase); }
-.planos__dica { font-size: 13px; color: var(--cinza); }
+.planos__titulo strong { display: block; font-weight: var(--peso-enfase); }
+.planos__lado { display: grid; gap: 18px; justify-items: start; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; padding-bottom: 4px; }
+.planos__lado p { margin: 0; }
+
+.planos__cartoes { list-style: none; margin: 0; padding: 28px 0 0; display: flex; gap: 16px; align-items: stretch; min-height: 0; }
 .plano {
-  flex: none; width: clamp(660px, 56vw, 900px); min-width: 0;
-  display: grid; grid-template-columns: 1fr 1.1fr;
-  background: var(--papel); border: 1px solid var(--fio); border-radius: var(--raio-caixa); overflow: hidden;
+  position: relative; flex: 1 1 0; min-width: 0; display: grid; grid-template-rows: auto 1fr auto;
+  padding: 22px 20px 24px; background: #FAFAF8; border: 1px solid rgb(22 22 22 / .08); border-radius: 16px;
+  box-shadow: 0 1px 2px rgb(22 22 22 / .04); overflow: hidden; cursor: pointer;
+  transition: flex-grow .6s var(--easing-suave), margin .6s var(--easing-suave), box-shadow .6s var(--easing-suave), background-color .3s;
 }
-.plano__foto { min-height: 0; }
-.plano__foto .foto { height: 100%; aspect-ratio: auto; border-radius: 0; background: rgb(22 22 22 / .07); }
-.plano__texto { padding: clamp(28px, 3.4vw, 52px); display: grid; align-content: center; gap: 16px; }
-.plano__nome { font-size: clamp(2rem, 3.4vw, 3rem); letter-spacing: -.03em; line-height: 1; }
-.plano__fala { font-size: 17px; line-height: 1.4; font-style: italic; color: var(--cinza); max-width: 40ch; }
-.plano__texto p:not(.rotulo):not(.plano__fala) { max-width: 40ch; }
-/* Fechamento, como o último painel da referência: frase centrada e o link. */
-.planos__fecha {
-  flex: none; width: clamp(400px, 36vw, 560px); display: grid; align-content: center; justify-items: center;
-  gap: 18px; padding: 40px; text-align: center;
+.plano--ativo { flex-grow: 2.05; margin-block: -28px 0; background: #FFFFFE; box-shadow: 0 30px 60px -34px rgb(22 22 22 / .4); cursor: default; }
+.plano__n {
+  font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 3.3vw, 3.3rem); line-height: 1;
+  letter-spacing: -.04em; color: rgb(22 22 22 / .16); transition: opacity .3s;
 }
-.planos__fecha__frase { font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.03em; font-size: clamp(1.4rem, 2vw, 1.9rem); line-height: 1.2; max-width: 22ch; }
+.plano__pe { grid-row: 3; align-self: end; display: grid; gap: 12px; font-size: 16px; line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.01em; transition: opacity .3s; }
+.plano__icone { display: block; width: 30px; height: 30px; padding: 7px; box-sizing: border-box; border-radius: 50%; background: rgb(22 22 22 / .06); }
+.plano__corpo {
+  position: absolute; inset: 0; display: grid; grid-template-rows: 40% minmax(0, 1fr);
+  opacity: 0; visibility: hidden; transition: opacity .45s var(--easing-suave) .18s, visibility 0s .63s;
+}
+.plano--ativo .plano__n, .plano--ativo .plano__pe { opacity: 0; }
+.plano--ativo .plano__corpo { opacity: 1; visibility: visible; transition-delay: .18s, 0s; }
+.plano__fundo {
+  margin: 0; overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%); mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+}
+.plano__fundo img { width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block; }
+.plano__conteudo { padding: 4px 26px 0; display: grid; gap: 12px; align-content: start; min-height: 0; }
+.plano__nome { font-size: clamp(1.7rem, 2.3vw, 2.2rem); letter-spacing: -.03em; line-height: 1; margin-top: 4px; }
+.plano__fala { font-size: 15px; line-height: 1.4; font-style: italic; color: var(--cinza); }
+.plano__conteudo p { margin: 0; font-size: 15px; line-height: 1.5; }
+.plano__conteudo p:not(.plano__fala) { max-width: 38ch; }
 
 /* A cortina: a dobra seguinte começa duas telas antes do fim dos planos,
-   fica presa no alto e entra pela direita enquanto --fim vai de 0 a 1. */
-.cortina { position: relative; z-index: 2; margin-top: -200svh; overflow: clip; }
+   fica presa no alto e entra pela direita enquanto --fim vai de 0 a 1.
+   Na tela seguinte (--sobe), a frase-âncora sobe do meio para o alto e as
+   perguntas aparecem. */
+.cortina { --sobe: 1; position: relative; z-index: 2; margin-top: -200svh; overflow: clip; }
 /* O curso da cortina precisa ser conteúdo (padding não conta para o sticky). */
-.cortina::after { content: ''; display: block; height: 100svh; }
+.cortina::after { content: ''; display: block; height: 200svh; }
 .cortina > * {
-  position: sticky; top: 0;
+  position: sticky; top: 0; min-height: 100svh; box-sizing: border-box;
   transform: translate3d(calc((1 - var(--fim, 0)) * 100%), 0, 0); will-change: transform;
+}
+.cortina .ancora { transform: translate3d(0, calc((1 - var(--sobe)) * 30svh), 0); }
+.cortina .perguntas {
+  opacity: clamp(0, calc((var(--sobe) - .35) / .65), 1);
+  transform: translate3d(0, calc((1 - var(--sobe)) * (30svh + 40px)), 0);
 }
 html:not(.js) .planos { height: auto; }
 html:not(.js) .planos__fixo { position: static; height: auto; padding: var(--esp-secao) 0; }
-html:not(.js) .planos__trilho { transform: none; width: auto; flex-direction: column; gap: 16px; }
-html:not(.js) .planos__abre, html:not(.js) .plano, html:not(.js) .planos__fecha { width: auto; }
+html:not(.js) .planos__grade { transform: none; }
+html:not(.js) .planos__cartoes { flex-direction: column; }
+html:not(.js) .plano { flex: none; grid-template-rows: auto auto; margin: 0; box-shadow: none; cursor: auto; }
+html:not(.js) .plano__pe { display: none; }
+html:not(.js) .plano__corpo { position: static; opacity: 1; visibility: visible; grid-template-rows: auto auto; }
+html:not(.js) .plano__fundo { aspect-ratio: 16 / 7; }
 html:not(.js) .cortina { margin-top: 0; }
 html:not(.js) .cortina::after { display: none; }
-html:not(.js) .cortina > * { position: static; transform: none; }
+html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 /* ---------- Perguntas (escura) ---------- */
 
@@ -823,20 +855,26 @@ html:not(.js) .cortina > * { position: static; transform: none; }
   .cabeca, .cabeca--larga { max-width: none; }
 }
 
-/* Planos soltos: no celular e com menos movimento o trilho vira uma pilha
-   que rola normalmente, e a próxima dobra segue em fluxo. */
+/* Planos soltos: no celular e com menos movimento os cartões viram uma
+   pilha, todos abertos, e a próxima dobra segue em fluxo. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
   .planos { height: auto; }
   .planos__fixo { position: static; height: auto; padding: var(--esp-secao) 0; }
-  .planos__trilho { transform: none; width: auto; flex-direction: column; gap: 16px; }
-  .planos__abre { width: auto; padding-right: 0; padding-bottom: 16px; }
-  .planos__dica { display: none; }
-  .plano { width: auto; grid-template-columns: 1fr; }
-  .plano__foto .foto { height: auto; aspect-ratio: 4 / 3; }
-  .planos__fecha { width: auto; padding: 24px 0 0; justify-items: start; text-align: left; }
+  .planos__fixo::before { display: none; }
+  .planos__grade { transform: none; gap: 24px; }
+  .planos__cabeca { grid-template-columns: 1fr; align-items: start; }
+  .planos__cartoes { flex-direction: column; padding-top: 8px; }
+  .plano { flex: none; grid-template-rows: auto auto; margin: 0; padding: 20px 18px 22px; box-shadow: none; cursor: auto; }
+  .plano--ativo { margin: 0; }
+  .plano__n, .plano--ativo .plano__n { opacity: 1; margin-bottom: 8px; }
+  .plano__pe { display: none; }
+  .plano__corpo { position: static; opacity: 1; visibility: visible; grid-template-rows: auto auto; margin: 0 -18px -22px; }
+  .plano__fundo { aspect-ratio: 16 / 7; }
+  .plano__conteudo { padding: 8px 18px 22px; }
   .cortina { margin-top: 0; }
   .cortina::after { display: none; }
-  .cortina > * { position: static; transform: none; }
+  .cortina > * { position: static; min-height: 0; transform: none; }
+  .cortina .ancora, .cortina .perguntas { transform: none; opacity: 1; }
 }
 
 @media (max-width: 639.98px) {
