@@ -12,3 +12,6 @@ O componente Protocolos.astro só renderiza o ícone se o arquivo existir.
 
 Os cinco arquivos atuais são ícones de linha desenhados no projeto, como
 provisórios: sobrescreva com os SVGs oficiais mantendo os nomes.
+
+Planos (oficiais, enviados em 14/09/2026): plano-<start|run|scale|core|full>-light.svg
+para fundo claro e -dark.svg para fundo escuro. Planos.astro usa a versão light.

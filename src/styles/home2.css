@@ -662,7 +662,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   letter-spacing: -.04em; color: rgb(22 22 22 / .16); transition: opacity .3s;
 }
 .plano__pe { grid-row: 3; align-self: end; display: grid; gap: 12px; font-size: 16px; line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.01em; transition: opacity .3s; }
-.plano__icone { display: block; width: 30px; height: 30px; padding: 7px; box-sizing: border-box; border-radius: 50%; background: rgb(22 22 22 / .06); }
+.plano__icone { display: block; width: 40px; height: 40px; padding: 3px; box-sizing: border-box; border-radius: 50%; background: rgb(22 22 22 / .06); }
 .plano__corpo {
   position: absolute; inset: 0; display: grid; grid-template-rows: 40% minmax(0, 1fr);
   opacity: 0; visibility: hidden; transition: opacity .45s var(--easing-suave) .18s, visibility 0s .63s;

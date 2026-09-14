@@ -11,8 +11,9 @@
  * --curso, --fim e --sobe são calculados no scroll pelo script. Sem JS, no
  * celular ou com menos movimento, os cartões ficam empilhados e abertos.
  * A imagem do topo é um fundo fictício (public/imagens/plano-fundo.svg)
- * até chegarem as artes; os ícones dos planos entram em
- * public/icones/plano-<nome>.svg (por ora, o ícone do pilar de mesmo número).
+ * até chegarem as artes. Os ícones oficiais dos planos vivem em
+ * public/icones/plano-<nome>-light.svg (para fundo claro) e -dark.svg
+ * (para fundo escuro); aqui os cartões são claros.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -27,7 +28,7 @@ const nome = (label: string) => {
   return n[0].toUpperCase() + n.slice(1);
 };
 const icone = (label: string, i: number) => {
-  const proprio = `plano-${label.replace('REVENA ', '').toLowerCase()}.svg`;
+  const proprio = `plano-${label.replace('REVENA ', '').toLowerCase()}-light.svg`;
   if (existsSync(join(process.cwd(), 'public', 'icones', proprio))) return `/icones/${proprio}`;
   return `/icones/pilar-0${i + 1}.svg`;
 };
