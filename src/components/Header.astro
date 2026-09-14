@@ -249,6 +249,7 @@ import Botao from './ui/Botao.astro';
     return tomDeCor(getComputedStyle(document.body).backgroundColor) ?? 'header--claro';
   };
   const aplicaTom = () => {
+    if (nav.classList.contains('is-open')) return;   // com o drawer aberto, o tom congela
     const t = tomAbaixo();
     if (header.classList.contains(t)) return;
     header.classList.remove(...TONS);
