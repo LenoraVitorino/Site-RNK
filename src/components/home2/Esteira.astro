@@ -22,16 +22,18 @@ type Item =
 // Ritmo: cartão escuro largo, duas colunas estreitas, cartão escuro de
 // novo. Cada coluna preenche a altura da dobra; `linhas` divide o espaço
 // entre os cartões (proporções desiguais, como na referência).
+// Ritmo: cartão escuro largo + duas colunas estreitas de dois cartões
+// (foto, depoimento, logo), e repete. Sem colunas de foto única e alta.
 const colunas: { larga?: boolean; linhas?: string; itens: Item[] }[] = [
   { larga: true, itens: [{ tipo: 'numero', valor: '~30', texto: 'clínicas atendidas', escuro: true }] },
   { linhas: '1fr 1.25fr', itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Time', prop: '3 / 4' }] },
-  { itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '9 / 16' }] },
-  { larga: true, itens: [{ tipo: 'numero', valor: '4 anos', texto: 'de método validado', escuro: true }] },
   { linhas: '1.3fr 1fr', itens: [{ tipo: 'foto', rotulo: 'Reunião', prop: '4 / 5' }, { tipo: 'logo' }] },
+  { larga: true, itens: [{ tipo: 'numero', valor: '4 anos', texto: 'de método validado', escuro: true }] },
   { linhas: '1fr 1.2fr', itens: [{ tipo: 'depoimento' }, { tipo: 'foto', rotulo: 'Detalhe', prop: '1 / 1' }] },
-  { larga: true, itens: [{ tipo: 'numero', valor: 'R$42M', texto: 'em faturamento gerado', escuro: true }] },
   { linhas: '1fr 1.3fr', itens: [{ tipo: 'logo' }, { tipo: 'foto', rotulo: 'Sede', prop: '3 / 4' }] },
-  { itens: [{ tipo: 'foto', rotulo: 'Atendimento', prop: '9 / 16' }] },
+  { larga: true, itens: [{ tipo: 'numero', valor: 'R$42M', texto: 'em faturamento gerado', escuro: true }] },
+  { linhas: '1.25fr 1fr', itens: [{ tipo: 'foto', rotulo: 'Operação', prop: '3 / 4' }, { tipo: 'depoimento' }] },
+  { linhas: '1fr 1.3fr', itens: [{ tipo: 'logo' }, { tipo: 'foto', rotulo: 'Atendimento', prop: '3 / 4' }] },
 ];
 ---
 <section class="esteira" data-esteira aria-label="Fotos, depoimentos e números da Renke">
