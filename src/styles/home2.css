@@ -635,7 +635,12 @@ html:not(.js) .esteira__trilho { transform: none; }
   /* Na cortina a dobra cede um pouco para a esquerda, dando profundidade. */
   transform: translate3d(calc(var(--fim, 0) * -12vw), 0, 0); will-change: transform;
 }
-.planos__cabeca { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 30%); gap: 20px 64px; align-items: end; }
+/* Pílula à esquerda e o apoio com o botão à direita na primeira linha; o
+   título ocupa a largura toda embaixo, em duas linhas. */
+.planos__cabeca { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'pilula lado' 'titulo titulo'; gap: 22px 32px; align-items: center; }
+.planos__cabeca .rotulo--pilula { grid-area: pilula; justify-self: start; margin: 0; }
+.planos__lado { grid-area: lado; }
+.planos__titulo { grid-area: titulo; }
 .rotulo--pilula {
   display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
   background: rgb(255 209 3 / .16); color: var(--grafite); font-size: 10.5px;
@@ -643,11 +648,12 @@ html:not(.js) .esteira__trilho { transform: none; }
 .rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--destaque); }
 .planos__titulo {
   font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; word-spacing: -.08em;
-  font-size: clamp(1.9rem, 2.9vw, 2.8rem); line-height: 1.08; max-width: 24ch; margin-top: 18px;
+  /* Duas linhas: a frase inteira na primeira, a pergunta na segunda. */
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem); line-height: 1.1; margin: 0;
 }
 .planos__titulo strong { display: block; font-weight: var(--peso-enfase); }
-.planos__lado { display: grid; gap: 18px; justify-items: start; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; padding-bottom: 4px; }
-.planos__lado p { margin: 0; }
+.planos__lado { display: flex; align-items: center; justify-content: end; gap: 24px; font-size: 15px; line-height: 1.5; color: var(--cinza); }
+.planos__lado p { margin: 0; max-width: 30ch; text-align: right; }
 
 .planos__cartoes { list-style: none; margin: 0; padding: 28px 0 0; display: flex; gap: 16px; align-items: stretch; min-height: 0; }
 .plano {
@@ -862,7 +868,9 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .planos__fixo { position: static; height: auto; padding: var(--esp-secao) 0; }
   .planos__fixo::before { display: none; }
   .planos__grade { transform: none; gap: 24px; }
-  .planos__cabeca { grid-template-columns: 1fr; align-items: start; }
+  .planos__cabeca { grid-template-columns: 1fr; grid-template-areas: 'pilula' 'titulo' 'lado'; align-items: start; gap: 18px; }
+  .planos__lado { flex-direction: column; align-items: start; gap: 16px; }
+  .planos__lado p { text-align: left; }
   .planos__cartoes { flex-direction: column; padding-top: 8px; }
   .plano { flex: none; grid-template-rows: auto auto; margin: 0; padding: 20px 18px 22px; box-shadow: none; cursor: auto; }
   .plano--ativo { margin: 0; }
