@@ -1,25 +1,22 @@
 ---
 /**
- * Os planos do Protocolo Revena, no desenho da referência "Metafore": um
- * cabeçalho (rótulo em pílula, título, texto de apoio e botão) e cinco
- * cartões em linha, um aberto por vez. O aberto fica largo e mais alto,
- * com uma imagem no topo, ícone, nome, a fala do doutor e o texto; os
- * fechados mostram só o número, o ícone e o nome.
- * A dobra fica presa na tela e a página rola pelos cinco (Start, Run,
- * Scale, Core, Full); passar o mouse também abre. No fim do curso a dobra
+ * Os planos do Protocolo Revena num trilho preso na tela, como a dobra
+ * "Selected work" do trionn.com (medida na referência: painel de título com
+ * metade da tela, cartões com metade da tela, imagem em 670×460 e o
+ * fechamento centrado). Primeiro só o título, à esquerda; a página rola e
+ * os planos entram pela direita, um a um (Start, Run, Scale, Core, Full),
+ * fechando com o convite para falar com a equipe. No fim do curso a dobra
  * seguinte entra pela direita por cima desta (ver .cortina).
- * --curso, --fim e --sobe são calculados no scroll pelo script. Sem JS, no
- * celular ou com menos movimento, os cartões ficam empilhados e abertos.
- * A imagem do topo é um fundo fictício (public/imagens/plano-fundo.svg)
- * até chegarem as artes. Os ícones oficiais dos planos vivem em
- * public/icones/plano-<nome>-light.svg (para fundo claro) e -dark.svg
- * (para fundo escuro); aqui os cartões são claros.
+ * --x é o deslocamento do trilho, --fim o avanço da cortina e --sobe a
+ * subida do texto da próxima dobra; tudo calculado no scroll pelo script.
+ * Sem JS, no celular ou com menos movimento, tudo fica empilhado.
+ * Os ícones oficiais dos planos vivem em public/icones/plano-<nome>-light.svg.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
-import Botao from '../ui/Botao.astro';
+import FotoSlot from '../ui/FotoSlot.astro';
 
 const ordem = ['START', 'RUN', 'SCALE', 'CORE', 'FULL'];
 const planos = ordem.map((n) => protocolos.find((p) => p.label === `REVENA ${n}`)!);
@@ -27,100 +24,84 @@ const nome = (label: string) => {
   const n = label.replace('REVENA ', '').toLowerCase();
   return n[0].toUpperCase() + n.slice(1);
 };
-const icone = (label: string, i: number) => {
-  const proprio = `plano-${label.replace('REVENA ', '').toLowerCase()}-light.svg`;
-  if (existsSync(join(process.cwd(), 'public', 'icones', proprio))) return `/icones/${proprio}`;
-  return `/icones/pilar-0${i + 1}.svg`;
+const icone = (label: string) => {
+  const arq = `plano-${label.replace('REVENA ', '').toLowerCase()}-light.svg`;
+  return existsSync(join(process.cwd(), 'public', 'icones', arq)) ? `/icones/${arq}` : null;
 };
+const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
 ---
 <section class="planos" id="planos" data-planos aria-label="Os planos do Protocolo Revena">
   <div class="planos__fixo">
-    <div class="container planos__grade">
-      <header class="planos__cabeca">
-        <p class="rotulo rotulo--pilula">Protocolo Revena</p>
-        <div class="planos__lado">
-          <p>A Renke recomenda o protocolo certo para o momento da sua clínica.</p>
-          <Botao href="/contato">Fale com a equipe</Botao>
-        </div>
+    <div class="planos__trilho" data-planos-trilho>
+      <div class="planos__abre">
+        <p class="rotulo">Protocolo Revena</p>
         <h2 class="planos__titulo">
           Estruturamos sua operação do zero e operamos juntos no longo prazo.
           <strong>Qual é o momento da sua clínica?</strong>
         </h2>
-      </header>
+        <p class="planos__dica" aria-hidden="true">Role para ver os planos</p>
+      </div>
 
-      <ol class="planos__cartoes" data-planos-cartoes>
-        {planos.map((p, i) => (
-          <li class:list={['plano', i === 0 && 'plano--ativo']} data-plano>
-            <span class="plano__n" aria-hidden="true">0{i + 1}.</span>
-            <div class="plano__pe" aria-hidden="true">
-              <img class="plano__icone" src={icone(p.label, i)} alt="" width="30" height="30" loading="lazy" />
-              <span>{nome(p.label)}</span>
+      {planos.map((p, i) => (
+        <article class="plano">
+          <div class="plano__foto"><FotoSlot rotulo={fotos[i]} prop="670 / 460" /></div>
+          <div class="plano__texto">
+            <div class="plano__topo">
+              {icone(p.label) && <img class="plano__icone" src={icone(p.label)} alt="" width="40" height="40" loading="lazy" />}
+              <h3 class="plano__nome">{nome(p.label)}</h3>
+              <span class="num plano__num">0{i + 1}</span>
             </div>
-            <div class="plano__corpo">
-              <figure class="plano__fundo"><img src="/imagens/plano-fundo.svg" alt="" width="1200" height="700" loading="lazy" /></figure>
-              <div class="plano__conteudo">
-                <img class="plano__icone" src={icone(p.label, i)} alt="" width="30" height="30" loading="lazy" />
-                <h3 class="plano__nome">{nome(p.label)}</h3>
-                <p class="plano__fala">"{p.fala}"</p>
-                <p>{p.texto}</p>
-                <p><a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a></p>
-              </div>
+            <p class="plano__fala">"{p.fala}"</p>
+            <div class="plano__linha">
+              <p>{p.texto}</p>
+              <a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a>
             </div>
-          </li>
-        ))}
-      </ol>
+          </div>
+        </article>
+      ))}
+
+      <div class="planos__fecha">
+        <p class="planos__fecha__frase">A Renke recomenda o protocolo certo para o momento da sua clínica.</p>
+        <a class="link-arrow" href="/contato">Fale com a equipe</a>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  /* A página anda para baixo e o cartão aberto muda, um a um. Passado o
-     curso dos planos, vem a cortina (--fim: a próxima dobra entra pela
-     direita) e depois a subida (--sobe: o texto dela sobe e os cards
-     aparecem). Passar o mouse abre um cartão enquanto ele estiver ali. */
+  /* A página anda para baixo, o trilho anda para o lado. Passado o trilho,
+     vem a cortina (--fim: a próxima dobra entra pela direita) e depois a
+     subida (--sobe: o texto dela sobe e as perguntas aparecem). */
   const dobra = document.querySelector<HTMLElement>('[data-planos]');
-  const lista = dobra?.querySelector<HTMLElement>('[data-planos-cartoes]');
+  const trilho = dobra?.querySelector<HTMLElement>('[data-planos-trilho]');
   const cortina = document.querySelector<HTMLElement>('.cortina');
   const largo = matchMedia('(min-width: 900px)');
-  if (dobra && lista && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const cartoes = [...lista.querySelectorAll<HTMLElement>('[data-plano]')];
-    const n = cartoes.length;
+  if (dobra && trilho && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let agendado = false;
-    let curso = 0;
-    let porScroll = 0;
-    let porMouse = -1;
-    const abre = () => {
-      const i = porMouse >= 0 ? porMouse : porScroll;
-      cartoes.forEach((c, k) => c.classList.toggle('plano--ativo', k === i));
-    };
+    let sobra = 0;
     const mede = () => {
       if (!largo.matches) {
-        for (const v of ['--curso', '--fim']) dobra.style.removeProperty(v);
+        for (const v of ['--curso', '--x', '--fim']) dobra.style.removeProperty(v);
         for (const v of ['--fim', '--sobe']) cortina?.style.removeProperty(v);
         return;
       }
-      curso = Math.round(innerHeight * 0.55 * n);
-      dobra.style.setProperty('--curso', curso + 'px');
+      sobra = Math.max(0, trilho.scrollWidth - dobra.clientWidth);
+      dobra.style.setProperty('--curso', sobra.toFixed(0) + 'px');
       anda();
     };
     const anda = () => {
       agendado = false;
       if (!largo.matches) return;
       const passado = -dobra.getBoundingClientRect().top;
-      porScroll = Math.min(n - 1, Math.max(0, Math.floor(passado / (curso / n))));
-      const fim = Math.min(1, Math.max(0, (passado - curso) / innerHeight));
-      const sobe = Math.min(1, Math.max(0, (passado - curso - innerHeight) / innerHeight));
+      const x = Math.min(sobra, Math.max(0, passado));
+      const fim = Math.min(1, Math.max(0, (passado - sobra) / innerHeight));
+      const sobe = Math.min(1, Math.max(0, (passado - sobra - innerHeight) / innerHeight));
+      dobra.style.setProperty('--x', x.toFixed(1) + 'px');
       dobra.style.setProperty('--fim', fim.toFixed(4));
       cortina?.style.setProperty('--fim', fim.toFixed(4));
       cortina?.style.setProperty('--sobe', sobe.toFixed(4));
-      abre();
     };
     const pede = () => { if (!agendado) { agendado = true; requestAnimationFrame(anda); } };
-    lista.addEventListener('mouseover', (e) => {
-      const c = (e.target as HTMLElement).closest<HTMLElement>('[data-plano]');
-      if (c && largo.matches) { porMouse = cartoes.indexOf(c); abre(); }
-    });
-    lista.addEventListener('mouseleave', () => { porMouse = -1; abre(); });
     addEventListener('scroll', pede, { passive: true });
     addEventListener('resize', mede, { passive: true });
     largo.addEventListener('change', mede);
