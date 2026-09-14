@@ -222,12 +222,50 @@ import Botao from './ui/Botao.astro';
   }
 
   let ticking = false;
+  /* Cabeçalho camaleão: lê a cor de fundo do que está logo abaixo dele e
+     assume o mesmo tom (escuro, claro ou amarelo). Sem lista de seções:
+     funciona em qualquer página. */
+  const TONS = ['header--escuro', 'header--claro', 'header--amarelo'];
+  const tomDeCor = (cor: string) => {
+    const m = cor.match(/[\d.]+/g);
+    if (!m || m.length < 3) return null;
+    const [r, g, b] = m.map(Number);
+    if (m.length > 3 && Number(m[3]) < 0.9) return null;   // transparente ou translúcido: vale o fundo de trás
+    const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    if (lum < 110) return 'header--escuro';
+    if (r > 200 && g > 180 && b < 170) return 'header--amarelo';
+    return 'header--claro';
+  };
+  const tomAbaixo = () => {
+    const y = header.offsetHeight + 2;
+    let n: Element | null = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
+    while (n && n !== document.documentElement) {
+      if (!header.contains(n)) {
+        const t = tomDeCor(getComputedStyle(n).backgroundColor);
+        if (t) return t;
+      }
+      n = n.parentElement;
+    }
+    return tomDeCor(getComputedStyle(document.body).backgroundColor) ?? 'header--claro';
+  };
+  const aplicaTom = () => {
+    const t = tomAbaixo();
+    if (header.classList.contains(t)) return;
+    header.classList.remove(...TONS);
+    header.classList.add(t);
+  };
   window.addEventListener('scroll', () => {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
       header.classList.toggle('is-stuck', window.scrollY > 8);
+      aplicaTom();
       ticking = false;
     });
   }, { passive: true });
+  window.addEventListener('resize', aplicaTom, { passive: true });
+  aplicaTom();
+  // A hero anima sem rolar a página: checa de novo por um tempo depois do carregamento.
+  let checagens = 0;
+  const cadencia = setInterval(() => { aplicaTom(); if (++checagens > 40) clearInterval(cadencia); }, 500);
 </script>

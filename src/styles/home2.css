@@ -157,7 +157,28 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   background: var(--grafite); color: var(--papel);
   border-bottom: 1px solid rgb(242 242 238 / .12);
+  transition: background-color .4s var(--easing-suave), color .4s var(--easing-suave), border-color .4s var(--easing-suave);
 }
+/* Tons do cabeçalho camaleão (classe ligada pelo script conforme o fundo abaixo). */
+.header--claro { background: var(--papel); color: var(--grafite); border-bottom-color: var(--fio); }
+.header--amarelo { background: var(--amarelo); color: var(--grafite); border-bottom-color: rgb(22 22 22 / .18); }
+.header--claro .nav__link, .header--amarelo .nav__link { color: var(--grafite); }
+.header--claro .nav__link:hover, .header--claro .nav__trigger[aria-expanded="true"] { color: #8A6D00; }
+.header--amarelo .nav__link:hover, .header--amarelo .nav__trigger[aria-expanded="true"] { color: rgb(22 22 22 / .6); }
+.header--claro .nav__acao .botao { color: var(--grafite); text-decoration-color: var(--destaque); }
+.header--amarelo .nav__acao .botao { color: var(--grafite); text-decoration-color: var(--grafite); }
+.header--amarelo .logo__img { filter: brightness(0); }
+.header--claro .nav-toggle, .header--amarelo .nav-toggle { border-color: rgb(22 22 22 / .3); }
+.header--claro .nav-toggle__bar, .header--amarelo .nav-toggle__bar { background: var(--grafite); }
+/* Menu suspenso e drawer acompanham o tom. */
+.header--claro .megamenu, .header--claro .nav { background: var(--papel); border-color: var(--fio); }
+.header--amarelo .megamenu, .header--amarelo .nav { background: var(--amarelo); border-color: rgb(22 22 22 / .18); }
+.header--claro .megamenu__list a, .header--amarelo .megamenu__list a { color: var(--grafite); border-left-color: rgb(22 22 22 / .2); }
+.header--claro .megamenu__list a:hover { color: #8A6D00; border-left-color: #8A6D00; background: rgb(22 22 22 / .04); }
+.header--amarelo .megamenu__list a:hover { color: rgb(22 22 22 / .7); border-left-color: var(--grafite); background: rgb(22 22 22 / .06); }
+.header--claro .megamenu__title, .header--claro .megamenu__list em { color: var(--cinza); }
+.header--amarelo .megamenu__title, .header--amarelo .megamenu__list em { color: rgb(22 22 22 / .6); }
+.header--claro .nav__item, .header--amarelo .nav__item { border-bottom-color: rgb(22 22 22 / .12); }
 .header__inner {
   width: min(100%, var(--largura)); margin-inline: auto; min-height: var(--altura-header);
   padding: 12px var(--gutter);
