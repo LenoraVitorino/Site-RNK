@@ -624,15 +624,10 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* ---------- Letreiro: as quatro palavras do Revena Full em letras grandes ----------
    Uma faixa contínua, como a referência: palavras em caixa alta separadas
-   por um "+" fino, andando devagar, com o monograma grande e apagado
-   atrás. As palavras são as do briefing (Controle, Automação, Processo,
-   Experiência). */
+   por um "+" fino, andando devagar. As palavras são as do briefing
+   (Controle, Automação, Processo, Experiência). */
 
 .letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); border-block: 1px solid rgb(242 242 238 / .1); background: var(--fundo); }
-.letreiro__marca {
-  position: absolute; left: 50%; top: 50%; width: clamp(320px, 34vw, 520px); translate: -50% -50%;
-  opacity: .08; filter: brightness(0) invert(1); pointer-events: none;
-}
 .letreiro__trilho { position: relative; display: flex; width: max-content; animation: letreiro 42s linear infinite; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }
