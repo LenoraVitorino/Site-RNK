@@ -1,7 +1,7 @@
 ---
 /**
  * Dobra 3 · Protocolo Revena, no desenho da referência "Metafore": um
- * cabeçalho (rótulo em pílula, título, texto de apoio e botão) e os cinco
+ * cabeçalho (rótulo em pílula e título) e os cinco
  * pilares em cartões, um aberto por vez. O aberto fica largo e mais alto,
  * com uma imagem no topo, ícone, título e texto; os fechados mostram só o
  * número, o ícone e o título. Passar o mouse (ou tocar) abre.
@@ -12,7 +12,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pilares } from '../../data/home';
-import Botao from '../ui/Botao.astro';
 
 const icone = (i: number) => {
   const nome = `pilar-0${i + 1}.svg`;
@@ -25,10 +24,6 @@ const icone = (i: number) => {
       <div>
         <p class="rotulo rotulo--pilula">Para clínicas</p>
         <h2 class="titulo pilares__titulo">Protocolo Revena</h2>
-      </div>
-      <div class="pilares__lado">
-        <p>Cinco frentes que a Renke opera na sua clínica.</p>
-        <Botao href="/contato">Fale com a equipe</Botao>
       </div>
     </header>
 

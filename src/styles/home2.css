@@ -634,15 +634,13 @@ html:not(.js) .esteira__trilho { transform: none; }
   -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%); mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
 }
 .pilares .container { position: relative; }
-.pilares__cabeca { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 30%); gap: 20px 64px; align-items: end; }
+.pilares__cabeca { display: grid; gap: 20px; }
 .rotulo--pilula {
   display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
   background: var(--destaque); color: #000; font-size: 10.5px;
 }
 .rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
 .pilares__titulo { margin-top: 18px; }
-.pilares__lado { display: grid; gap: 18px; justify-items: start; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; padding-bottom: 6px; }
-.pilares__lado p { margin: 0; }
 
 .cartas { list-style: none; margin: 0; padding: clamp(40px, 5vw, 64px) 0 0; display: flex; gap: 16px; align-items: stretch; height: clamp(520px, 64vh, 640px); box-sizing: content-box; }
 .carta {
@@ -917,7 +915,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
    dobra segue em fluxo. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
   .pilares::before { display: none; }
-  .pilares__cabeca { grid-template-columns: 1fr; align-items: start; }
   .cartas { flex-direction: column; height: auto; padding-top: 32px; }
   .carta { flex: none; grid-template-rows: auto auto; margin: 0; padding: 20px 18px 22px; box-shadow: none; cursor: auto; }
   .carta--aberta { margin: 0; }
