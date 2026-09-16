@@ -779,7 +779,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .pergunta:nth-child(2n) { border-right: 0; }
 .pergunta:nth-last-child(-n+2) { border-bottom: 0; }
 .pergunta__n { font-size: 13px; color: var(--destaque); font-weight: var(--peso-enfase); }
-.pergunta p { font-size: clamp(1.15rem, 1.7vw, 1.45rem); line-height: 1.32; max-width: 30ch; }
+.pergunta p { font-size: clamp(1.15rem, 1.7vw, 1.45rem); line-height: 1.32; max-width: 46ch; }
 .perguntas--mais { margin-top: 14px; border: 0; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .perguntas--mais .pergunta { border: 1px solid rgb(242 242 238 / .18); min-height: 0; padding: 18px; }
 .perguntas--mais .pergunta p { font-size: 15px; color: rgb(242 242 238 / .8); }
