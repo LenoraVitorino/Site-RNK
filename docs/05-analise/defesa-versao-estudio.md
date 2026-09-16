@@ -32,7 +32,7 @@ palavras, rediagramação e ordem. Cada item aponta o arquivo onde a chave
 | Protocolo Revena em cartões (um aberto, os outros com número, ícone e título) | Referência "Metafore": cinco pilares numa linha só, com hierarquia clara e sem cinco blocos iguais de texto. |
 | Planos em trilho horizontal preso na tela, com cortina para as Perguntas | Referência trionn.com: título primeiro, planos entram um a um no scroll, e a próxima dobra entra pela direita — as Perguntas mostram só a frase, depois sobem e revelam os cards. |
 | Resultados como extrato de ponta a ponta (número gigante em amarelo à esquerda, especialidade e antes → depois à direita) | Referência Alphamark: os dados viram o protagonista; fios de borda a borda da tela. |
-| "Nossos números" embaixo do texto de "O que a Renke faz" | Referência "Designing for impact": os números do briefing (~30 clínicas, 4 anos, R$42M, 1 por mês) ganham peso visual ao lado do vídeo, num carrossel com setas. Saiu do Sobre junto com a dobra. |
+| "Nossos números" embaixo do texto de "O que a Renke faz" | Referência "Designing for impact": os números do briefing (~30 clínicas, 4 anos, R$42M, 1 por mês) ganham peso visual ao lado do vídeo, os quatro lado a lado. Saiu do Sobre junto com a dobra. |
 | Sobre fora da home | A home fica mais curta e direta; a copy do Sobre segue para a página /sobre (decisão da Lenora, 16/09). O desenho com declaração grande e "Nossos números" em carrossel fica guardado em `Sobre.astro`. |
 | Perguntas: cards em até duas linhas | Medida de texto alargada para o grid novo; a copy não mudou. |
 

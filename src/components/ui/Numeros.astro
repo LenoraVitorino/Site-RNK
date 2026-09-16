@@ -1,9 +1,8 @@
 ---
 /**
- * "Nossos números": carrossel com o número gigante em amarelo, legenda,
- * fio e setas (referência "Designing for impact"). Anda sozinho a cada
- * 5 s; para no hover e com menos movimento. Os números são os do briefing
- * (hero.numeros repartidos à mão, ⚠️ D1).
+ * "Nossos números": os quatro números do briefing lado a lado, em amarelo,
+ * com a legenda embaixo e um fio no alto (hero.numeros repartidos à mão,
+ * ⚠️ D1). Era um carrossel; virou linha em 16/09/2026, a pedido da Lenora.
  */
 const numeros = [
   { valor: '~30', legenda: 'clínicas atendidas' },
@@ -12,41 +11,16 @@ const numeros = [
   { valor: '1 / mês', legenda: 'nova clínica aceita' },
 ];
 ---
-<aside class="impacto entra" data-impacto aria-roledescription="carrossel" aria-label="Nossos números">
+<aside class="impacto entra" aria-label="Nossos números">
   <div class="impacto__topo">
     <p class="rotulo">Nossos números</p>
-    <div class="impacto__setas">
-      <button class="impacto__seta" type="button" data-impacto-antes aria-label="Número anterior"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6M6 10h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="impacto__seta" type="button" data-impacto-depois aria-label="Próximo número"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6M2 10h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
   </div>
-  <ol class="impacto__lista">
-    {numeros.map((n, i) => (
-      <li class:list={['impacto__item', i === 0 && 'impacto__item--ativo']} aria-hidden={i === 0 ? undefined : 'true'}>
+  <ul class="impacto__lista">
+    {numeros.map((n) => (
+      <li class="impacto__item">
         <p class="impacto__num num">{n.valor}</p>
         <p class="impacto__legenda">{n.legenda}</p>
       </li>
     ))}
-  </ol>
+  </ul>
 </aside>
-
-<script>
-  /* Carrossel dos números: setas, e anda sozinho a cada 5 s (para no hover
-     e com menos movimento). */
-  document.querySelectorAll<HTMLElement>('[data-impacto]').forEach((raiz) => {
-    const itens = [...raiz.querySelectorAll<HTMLElement>('.impacto__item')];
-    if (itens.length < 2) return;
-    let i = 0;
-    const mostra = (n: number) => {
-      i = (n + itens.length) % itens.length;
-      itens.forEach((it, k) => { it.classList.toggle('impacto__item--ativo', k === i); if (k === i) it.removeAttribute('aria-hidden'); else it.setAttribute('aria-hidden', 'true'); });
-    };
-    raiz.querySelector('[data-impacto-antes]')?.addEventListener('click', () => { mostra(i - 1); reinicia(); });
-    raiz.querySelector('[data-impacto-depois]')?.addEventListener('click', () => { mostra(i + 1); reinicia(); });
-    let relogio = 0;
-    const reinicia = () => { clearInterval(relogio); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) relogio = setInterval(() => mostra(i + 1), 5000) as unknown as number; };
-    raiz.addEventListener('mouseenter', () => clearInterval(relogio));
-    raiz.addEventListener('mouseleave', reinicia);
-    reinicia();
-  });
-</script>

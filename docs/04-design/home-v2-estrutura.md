@@ -31,8 +31,8 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    esquerda e reel vertical à direita, nas duas versões. Autoplay mudo ao
    entrar na tela, pausa ao sair; botão de som e de pausa; pausa manual é
    lembrada. (O reel sozinho e o palco 16:9 foram testados e descartados.)
-   Embaixo do texto, "Nossos números" (`ui/Numeros.astro`): carrossel com
-   o número gigante em amarelo, legenda, fio e setas, avançando sozinho.
+   Embaixo do texto, "Nossos números" (`ui/Numeros.astro`): os quatro
+   números lado a lado, em amarelo, com a legenda embaixo.
    (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
    por ora: volta quando houver fotos, depoimentos e logos reais.
    `Sobre.astro` saiu da home em 16/09/2026; a copy segue para a página
