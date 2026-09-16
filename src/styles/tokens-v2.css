@@ -17,7 +17,7 @@
   --grafite:    #161616;   /* superfícies escuras elevadas e texto sobre amarelo */
   --cinza:      #A3A39B;   /* texto secundário, rótulos (7:1 sobre preto) */
   --fio:        rgb(242 242 238 / .14);   /* linhas de grade internas (cards, tabelas) */
-  --grade:      #333333;                  /* trilhos e linhas de dobra, como a referência strativ */
+  --grade:      #333333;                  /* fios curtos de apoio: barra da hero e pé do rodapé */
 
   /* O amarelo fica no tom da marca (H 48°) e só sobe de luminosidade.
      Regra mantida: nunca como texto sobre fundo claro. */
