@@ -105,8 +105,8 @@ foi entregue, dobra a dobra — **nada é cortado nem retirado ali**, nem
 dobras inteiras (o Sobre, por exemplo, segue na versão copy). As duas usam a mesma copy literal; o que muda
 é o que aparece e em que ordem. A entrega final compara as duas lado a
 lado. Divergências até agora: o título
-da hero (a mesma frase da copy enxugada para duas linhas: saem
-"estratégico" e "médicas", nenhuma palavra nova) e a frase-âncora das
+da hero (a mesma frase da copy enxugada: saem "estratégico" e "médicas",
+e "Revenue Operations" vira "RevOps", termo da própria copy) e a frase-âncora das
 Perguntas (saem "Clinicamente," e "exatamente", e o fecho vira "Mas e com
 a sua clínica?", decisão da Lenora para falar no nicho) e o lead da hero
 (saem "você" e "quando os números caem"; "tudo conectado, tudo rastreado"
