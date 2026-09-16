@@ -1,22 +1,41 @@
 ---
 /**
  * Dobra 3 · Protocolo Revena, no desenho da referência "Metafore": um
- * cabeçalho (rótulo em pílula e título) e os cinco
- * pilares em cartões, um aberto por vez. O aberto fica largo e mais alto,
- * com uma imagem no topo, ícone, título e texto; os fechados mostram só o
- * número, o ícone e o título. Passar o mouse (ou tocar) abre.
+ * cabeçalho (rótulo em pílula, título e apoio) e cinco cartões, um aberto
+ * por vez. O aberto fica largo e mais alto, com uma imagem no topo, ícone,
+ * título e texto; os fechados mostram só o número, o ícone e o título.
+ * Passar o mouse (ou tocar) abre.
+ *
+ * Versão do estúdio: os cartões são os cinco planos (Start, Run, Scale,
+ * Core, Full), com o ícone oficial, a fala do doutor, o texto do plano e o
+ * "Saiba mais"; o apoio do título é o H3 divisor da copy. A dobra separada
+ * dos planos (Planos.astro) sai: falava a mesma coisa duas vezes. Decisão
+ * da Lenora em 16/09/2026.
+ * Versão copy: os cartões são os cinco pilares, como a copy foi entregue,
+ * e a dobra dos planos segue depois.
  * A imagem do topo é um fundo fictício (public/imagens/plano-fundo-escuro.svg)
- * até chegarem as artes; os ícones dos pilares são provisórios
- * (public/icones/pilar-0N.svg) até chegarem os oficiais. Copy literal.
+ * até chegarem as artes; os ícones dos pilares são provisórios. Copy literal.
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { pilares } from '../../data/home';
+import { pilares, protocolos } from '../../data/home';
+import { existe } from '../../data/rotas';
+import { copyLiteral } from '../../data/versao';
 
-const icone = (i: number) => {
-  const nome = `pilar-0${i + 1}.svg`;
-  return existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null;
+const arquivo = (nome: string) => (existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null);
+const iconePilar = (i: number) => arquivo(`pilar-0${i + 1}.svg`);
+const iconePlano = (label: string) => arquivo(`plano-${label.replace('REVENA ', '').toLowerCase()}-dark.svg`);
+const nomePlano = (label: string) => {
+  const n = label.replace('REVENA ', '').toLowerCase();
+  return n[0].toUpperCase() + n.slice(1);
 };
+const ordem = ['START', 'RUN', 'SCALE', 'CORE', 'FULL'];
+const planos = ordem.map((n) => protocolos.find((p) => p.label === `REVENA ${n}`)!);
+
+type Carta = { icone: string | null; titulo: string; fala?: string; texto: string; rota?: string };
+const cartas: Carta[] = copyLiteral
+  ? pilares.map((p, i) => ({ icone: iconePilar(i), titulo: p.titulo, texto: p.texto }))
+  : planos.map((p) => ({ icone: iconePlano(p.label), titulo: nomePlano(p.label), fala: p.fala, texto: p.texto, rota: p.rota }));
 ---
 <section class="secao pilares" id="protocolo-revena">
   <div class="container">
@@ -24,23 +43,31 @@ const icone = (i: number) => {
       <div>
         <p class="rotulo rotulo--pilula">Para clínicas</p>
         <h2 class="titulo pilares__titulo">Protocolo Revena</h2>
+        {!copyLiteral && (
+          <p class="pilares__apoio">
+            Estruturamos sua operação do zero e operamos juntos no longo prazo.
+            <strong>Qual é o momento da sua clínica?</strong>
+          </p>
+        )}
       </div>
     </header>
 
-    <ol class="cartas entra" data-cartas aria-label="Pilares do Protocolo Revena">
-      {pilares.map((p, i) => (
+    <ol class="cartas entra" data-cartas aria-label={copyLiteral ? 'Pilares do Protocolo Revena' : 'Planos do Protocolo Revena'}>
+      {cartas.map((c, i) => (
         <li class:list={['carta', i === 0 && 'carta--aberta']} data-carta>
           <span class="carta__n" aria-hidden="true">0{i + 1}.</span>
           <div class="carta__pe" aria-hidden="true">
-            {icone(i) && <img class="carta__icone" src={icone(i)} alt="" width="40" height="40" loading="lazy" />}
-            <span>{p.titulo}</span>
+            {c.icone && <img class:list={['carta__icone', !copyLiteral && 'carta__icone--plano']} src={c.icone} alt="" width="40" height="40" loading="lazy" />}
+            <span>{c.titulo}</span>
           </div>
           <div class="carta__corpo">
             <figure class="carta__fundo"><img src="/imagens/plano-fundo-escuro.svg" alt="" width="1200" height="700" loading="lazy" /></figure>
             <div class="carta__conteudo">
-              {icone(i) && <img class="carta__icone" src={icone(i)} alt="" width="40" height="40" loading="lazy" />}
-              <h3 class="carta__nome">{p.titulo}</h3>
-              <p>{p.texto}</p>
+              {c.icone && <img class:list={['carta__icone', !copyLiteral && 'carta__icone--plano']} src={c.icone} alt="" width="40" height="40" loading="lazy" />}
+              <h3 class="carta__nome">{c.titulo}</h3>
+              {c.fala && <p class="carta__fala">"{c.fala}"</p>}
+              <p>{c.texto}</p>
+              {c.rota && <p><a class="link-arrow" href={existe(c.rota) ? c.rota : '#'} class:list={[!existe(c.rota) && 'nav--pendente']} data-rota={c.rota}>Saiba mais</a></p>}
             </div>
           </div>
         </li>
@@ -60,6 +87,6 @@ const icone = (i: number) => {
       cartas.forEach((k) => k.classList.toggle('carta--aberta', k === c));
     };
     lista.addEventListener('mouseover', (e) => abre(e.target));
-    lista.addEventListener('click', (e) => abre(e.target));
+    lista.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('a')) abre(e.target); });
   }
 </script>

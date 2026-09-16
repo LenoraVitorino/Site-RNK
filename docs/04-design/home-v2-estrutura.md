@@ -38,15 +38,19 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    `Sobre.astro` saiu da home em 16/09/2026; a copy segue para a página
    /sobre.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
-   "Metafore": cabeçalho (rótulo em pílula, título, texto de apoio e botão
-   escuro) e os cinco pilares em cartões, um aberto por vez. O aberto fica
+   "Metafore": cabeçalho (rótulo em pílula e título) e cinco cartões, um
+   aberto por vez. Na versão do estúdio os cartões são os cinco planos
+   (Start, Run, Scale, Core, Full) com o ícone oficial, a fala do doutor,
+   o texto e o "Saiba mais", e o H3 divisor da copy vira o apoio do título;
+   a dobra separada dos planos sai. Na versão copy os cartões são os cinco
+   pilares e a dobra dos planos segue depois. O aberto fica
    largo e mais alto, com uma imagem no topo (fundo fictício em
    `public/imagens/plano-fundo.svg` até chegarem as artes), ícone, título e
    texto; os fechados mostram só o número, o ícone e o título. Passar o
    mouse ou tocar abre. Grade fina ao fundo, esmaecendo. Ícones dos pilares
    provisórios (`public/icones/pilar-0N.svg`). No celular, cartões
    empilhados e abertos.
-4. **Planos** (`Planos.astro`) — como a dobra "Selected work" do trionn.com,
+4. **Planos** (`Planos.astro`, só na versão copy) — como a dobra "Selected work" do trionn.com,
    medida na referência: um trilho preso na tela. Primeiro só o título,
    centrado na metade esquerda; a página rola e os planos entram pela
    direita, um a um (Start, Run, Scale, Core, Full), cada um com metade da

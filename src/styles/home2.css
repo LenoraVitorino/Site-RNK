@@ -670,6 +670,11 @@ html:not(.js) .esteira__trilho { transform: none; }
 .carta__conteudo { padding: 2px 26px 0; display: grid; gap: 12px; align-content: start; min-height: 0; }
 .carta__nome { font-size: clamp(1.4rem, 1.9vw, 1.8rem); letter-spacing: -.025em; line-height: 1.1; margin-top: 2px; font-weight: var(--peso-titulo); }
 .carta__conteudo p { margin: 0; font-size: 14.5px; line-height: 1.5; max-width: 40ch; }
+.carta__icone--plano { padding: 3px; }   /* a arte dos planos já tem margem própria */
+.carta__fala { font-style: italic; color: var(--cinza); }
+.carta__conteudo .link-arrow { font-size: 14px; }
+.pilares__apoio { margin-top: 22px; font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.25rem, 1.8vw, 1.7rem); line-height: 1.25; letter-spacing: -.02em; max-width: 34ch; color: rgb(242 242 238 / .85); }
+.pilares__apoio strong { display: block; margin-top: .3em; font-weight: var(--peso-enfase); color: var(--papel); }
 
 /* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------
    Como a dobra "Selected work" da referência: o título abre sozinho à
