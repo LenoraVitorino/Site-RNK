@@ -71,6 +71,9 @@ export const slots: Slot[] = [
     video: {
       arquivos: [
         { src: '/midia/o-que-a-renke-faz.mp4', tipo: 'video/mp4; codecs="avc1.4D401F, mp4a.40.2"' },
+        // Versão leve (540p, ~3 MB) só para o arquivo único do artifact, que
+        // embute o menor <source> em base64. No site o navegador usa o primeiro.
+        { src: '/midia/o-que-a-renke-faz-previa.mp4', tipo: 'video/mp4; codecs="avc1.4D401F, mp4a.40.2"' },
       ],
       poster: '/midia/reel-o-que-a-renke-faz.jpg',
       duracao: '1min42',
