@@ -39,10 +39,13 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    /sobre.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
    "Metafore": cabeçalho (rótulo em pílula e título) e cinco cartões, um
-   aberto por vez. Na versão do estúdio os cartões são os cinco planos
-   (Start, Run, Scale, Core, Full) com o ícone oficial, a fala do doutor,
-   o texto e o "Saiba mais", e o H3 divisor da copy vira o apoio do título;
-   a dobra separada dos planos sai. Na versão copy os cartões são os cinco
+   aberto por vez. Na versão do estúdio os cartões seguem sendo os cinco
+   pilares, com o texto deles, e cada um ganha o plano que o entrega:
+   ícone oficial do plano, etiqueta amarela com o nome, a frase do plano e
+   o "Saiba mais" (cruzamento pilar → plano lido do briefing, a validar:
+   tráfego pago → Core, CRM → Start, automação → Full, dados → Run,
+   posicionamento → Scale). O H3 divisor da copy vira o apoio do título e
+   a dobra separada dos planos sai. Na versão copy os cartões são só os
    pilares e a dobra dos planos segue depois. O aberto fica
    largo e mais alto, com uma imagem no topo (fundo fictício em
    `public/imagens/plano-fundo.svg` até chegarem as artes), ícone, título e

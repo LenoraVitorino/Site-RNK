@@ -642,7 +642,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
 .pilares__titulo { margin-top: 18px; }
 
-.cartas { list-style: none; margin: 0; padding: clamp(40px, 5vw, 64px) 0 0; display: flex; gap: 16px; align-items: stretch; height: clamp(520px, 64vh, 640px); box-sizing: content-box; }
+.cartas { list-style: none; margin: 0; padding: clamp(40px, 5vw, 64px) 0 0; display: flex; gap: 16px; align-items: stretch; height: clamp(620px, 78vh, 780px); box-sizing: content-box; }
 .carta {
   position: relative; flex: 1 1 0; min-width: 0; display: grid; grid-template-rows: auto 1fr auto;
   padding: 22px 20px 24px; background: var(--superficie); border: 1px solid rgb(242 242 238 / .1); border-radius: 16px;
@@ -657,7 +657,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .carta__pe { grid-row: 3; align-self: end; display: grid; gap: 12px; font-size: 16px; line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.01em; transition: opacity .3s; }
 .carta__icone { display: block; width: 40px; height: 40px; padding: 9px; box-sizing: border-box; border-radius: 50%; background: rgb(242 242 238 / .08); color: var(--papel); }
 .carta__corpo {
-  position: absolute; inset: 0; display: grid; grid-template-rows: 34% minmax(0, 1fr);
+  position: absolute; inset: 0; display: grid; grid-template-rows: 24% minmax(0, 1fr);
   opacity: 0; visibility: hidden; transition: opacity .45s var(--easing-suave) .18s, visibility 0s .63s;
 }
 .carta--aberta .carta__n, .carta--aberta .carta__pe { opacity: 0; }
@@ -667,11 +667,14 @@ html:not(.js) .esteira__trilho { transform: none; }
   -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%); mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
 }
 .carta__fundo img { width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block; }
-.carta__conteudo { padding: 2px 26px 0; display: grid; gap: 12px; align-content: start; min-height: 0; }
+.carta__conteudo { padding: 2px 24px 0; display: grid; gap: 10px; align-content: start; min-height: 0; }
 .carta__nome { font-size: clamp(1.4rem, 1.9vw, 1.8rem); letter-spacing: -.025em; line-height: 1.1; margin-top: 2px; font-weight: var(--peso-titulo); }
-.carta__conteudo p { margin: 0; font-size: 14.5px; line-height: 1.5; max-width: 40ch; }
+.carta__conteudo p { margin: 0; font-size: 14px; line-height: 1.45; max-width: 44ch; }
 .carta__icone--plano { padding: 3px; }   /* a arte dos planos já tem margem própria */
-.carta__fala { font-style: italic; color: var(--cinza); }
+/* O plano que entrega o pilar: etiqueta amarela, a frase do plano e o link. */
+.carta__plano { display: grid; gap: 7px; justify-items: start; margin-top: 4px; padding-top: 12px; border-top: 1px solid rgb(242 242 238 / .12); }
+.carta__etiqueta { display: inline-block; padding: 4px 9px; border-radius: 999px; background: var(--destaque); color: #000; font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; }
+.carta__plano p { color: rgb(242 242 238 / .85); }
 .carta__conteudo .link-arrow { font-size: 14px; }
 .pilares__apoio { margin-top: 22px; font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.25rem, 1.8vw, 1.7rem); line-height: 1.25; letter-spacing: -.02em; max-width: none; color: rgb(242 242 238 / .85); }
 .pilares__apoio strong { display: block; margin-top: .3em; font-weight: var(--peso-enfase); color: var(--papel); }

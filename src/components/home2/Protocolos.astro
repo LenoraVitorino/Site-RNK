@@ -6,13 +6,21 @@
  * título e texto; os fechados mostram só o número, o ícone e o título.
  * Passar o mouse (ou tocar) abre.
  *
- * Versão do estúdio: os cartões são os cinco planos (Start, Run, Scale,
- * Core, Full), com o ícone oficial, a fala do doutor, o texto do plano e o
- * "Saiba mais"; o apoio do título é o H3 divisor da copy. A dobra separada
- * dos planos (Planos.astro) sai: falava a mesma coisa duas vezes. Decisão
- * da Lenora em 16/09/2026.
- * Versão copy: os cartões são os cinco pilares, como a copy foi entregue,
- * e a dobra dos planos segue depois.
+ * Versão do estúdio: os cartões seguem sendo os cinco pilares, com o texto
+ * deles, e cada um ganha o plano que o entrega — ícone oficial do plano,
+ * etiqueta com o nome, a frase do plano e o "Saiba mais". O apoio do
+ * título é o H3 divisor da copy. A dobra separada dos planos (Planos.astro)
+ * sai: os planos passam a viver dentro dos pilares. Decisão da Lenora em
+ * 16/09/2026. O cruzamento pilar → plano é leitura do briefing (páginas
+ * individuais dos planos), a validar:
+ *   tráfego pago → Core (marketing + comercial + dados, anúncio otimizado
+ *   pelo paciente na cadeira); CRM → Start (organiza o comercial do zero:
+ *   CRM, processo, rastreamento); automação do atendimento → Full (jornada
+ *   completa, réguas de cuidado, pós-venda); dizer o que fazer todo mês →
+ *   Run (manutenção semanal, dados limpos, alguém de olho); posicionamento
+ *   → Scale (conteúdo que constrói autoridade, crescer por todas as frentes).
+ * Versão copy: os cartões são só os pilares, como a copy foi entregue, e
+ * a dobra dos planos segue depois.
  * A imagem do topo é um fundo fictício (public/imagens/plano-fundo-escuro.svg)
  * até chegarem as artes; os ícones dos pilares são provisórios. Copy literal.
  */
@@ -29,13 +37,17 @@ const nomePlano = (label: string) => {
   const n = label.replace('REVENA ', '').toLowerCase();
   return n[0].toUpperCase() + n.slice(1);
 };
-const ordem = ['START', 'RUN', 'SCALE', 'CORE', 'FULL'];
-const planos = ordem.map((n) => protocolos.find((p) => p.label === `REVENA ${n}`)!);
+const planos = protocolos;
 
-type Carta = { icone: string | null; titulo: string; fala?: string; texto: string; rota?: string };
-const cartas: Carta[] = copyLiteral
-  ? pilares.map((p, i) => ({ icone: iconePilar(i), titulo: p.titulo, texto: p.texto }))
-  : planos.map((p) => ({ icone: iconePlano(p.label), titulo: nomePlano(p.label), fala: p.fala, texto: p.texto, rota: p.rota }));
+// Pilar → plano que o entrega (ver nota no cabeçalho).
+const planoDoPilar = ['REVENA CORE', 'REVENA START', 'REVENA FULL', 'REVENA RUN', 'REVENA SCALE'];
+type Plano = { nome: string; texto: string; rota: string };
+type Carta = { icone: string | null; titulo: string; texto: string; plano?: Plano };
+const cartas: Carta[] = pilares.map((p, i) => {
+  if (copyLiteral) return { icone: iconePilar(i), titulo: p.titulo, texto: p.texto };
+  const pl = planos.find((x) => x.label === planoDoPilar[i])!;
+  return { icone: iconePlano(pl.label), titulo: p.titulo, texto: p.texto, plano: { nome: nomePlano(pl.label), texto: pl.texto, rota: pl.rota } };
+});
 ---
 <section class="secao pilares" id="protocolo-revena">
   <div class="container">
@@ -65,9 +77,14 @@ const cartas: Carta[] = copyLiteral
             <div class="carta__conteudo">
               {c.icone && <img class:list={['carta__icone', !copyLiteral && 'carta__icone--plano']} src={c.icone} alt="" width="40" height="40" loading="lazy" />}
               <h3 class="carta__nome">{c.titulo}</h3>
-              {c.fala && <p class="carta__fala">"{c.fala}"</p>}
               <p>{c.texto}</p>
-              {c.rota && <p><a class="link-arrow" href={existe(c.rota) ? c.rota : '#'} class:list={[!existe(c.rota) && 'nav--pendente']} data-rota={c.rota}>Saiba mais</a></p>}
+              {c.plano && (
+                <div class="carta__plano">
+                  <span class="carta__etiqueta">Revena {c.plano.nome}</span>
+                  <p>{c.plano.texto}</p>
+                  <a class="link-arrow" href={existe(c.plano.rota) ? c.plano.rota : '#'} class:list={[!existe(c.plano.rota) && 'nav--pendente']} data-rota={c.plano.rota}>Saiba mais</a>
+                </div>
+              )}
             </div>
           </div>
         </li>
