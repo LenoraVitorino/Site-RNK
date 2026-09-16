@@ -32,7 +32,10 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    faz?", e repetir o título em texto atrasava. Na versão `copy`
    (`VERSAO=copy npm run build`), texto à esquerda e reel à direita, como a
    copy foi entregue. Autoplay mudo ao entrar na tela, pausa ao sair; botão
-   de som e de pausa; pausa manual é lembrada.
+   de som e de pausa; pausa manual é lembrada. No desktop (≥900px) o reel
+   fica num palco 16:9: atrás dele, o mesmo vídeo desfocado e escurecido
+   preenche as laterais, em sincronia (segundo `<video>` mudo, só carrega
+   quando visível). No celular, só o 9:16.
    (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
    por ora: volta quando houver fotos, depoimentos e logos reais.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
@@ -94,8 +97,12 @@ separadas por um "+" fino, andando devagar, com o monograma apagado atrás
 do estúdio, com a dinâmica das dobras revista; `copy` é o site como a copy
 foi entregue, dobra a dobra. As duas usam a mesma copy literal; o que muda
 é o que aparece e em que ordem. A entrega final compara as duas lado a
-lado. Hoje só "O que a Renke faz" diverge; cada nova divergência entra
-como um `copyLiteral ? … : …` no componente.
+lado. Divergências até agora: "O que a Renke faz" (só o reel) e o título
+da hero (a mesma frase da copy enxugada para duas linhas: saem
+"estratégico" e "médicas", nenhuma palavra nova). Cada nova divergência
+entra como um `copyLiteral ? … : …` no componente.
+A abertura da hero ficou mais ágil: 1,9 s até o RevOps, 1,5 s parado com
+o reflexo passando uma vez, 1,4 s até a copy.
 
 Tipografia: uma família só, a Inter variável (títulos em 260, corpo em
 400, destaques em 500, falas em itálico). A Instrument Sans saiu.

@@ -15,6 +15,7 @@
  * literal.
  */
 import { hero } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 
 const palavras = ['Isso', 'não', 'é'];
@@ -37,7 +38,13 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
         </h1>
 
         <div class="hero__copy">
-          <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de <span class="brilho">alta performance.</span></p>
+          {copyLiteral ? (
+            <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de <span class="brilho">alta performance.</span></p>
+          ) : (
+            <!-- Versão do estúdio: a mesma frase da copy, enxugada para duas
+                 linhas (saem "estratégico" e "médicas"; nenhuma palavra nova). -->
+            <p class="hero__titulo hero__titulo--curto">Revenue Operations para transformar clínicas em negócios de <span class="brilho">alta performance.</span></p>
+          )}
           <p class="hero__lead">{leadLinhas[0]}<br class="quebra-desktop" />{leadLinhas[1]}</p>
           <p class="hero__acoes"><Botao href="/contato" variante="onda">{hero.cta}</Botao></p>
         </div>
@@ -84,9 +91,9 @@ const leadLinhas = [hero.lead.slice(0, corte), hero.lead.slice(corte)];
   const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (palco) {
     const copy = palco.querySelector<HTMLElement>('.hero__copy');
-    const T_REVOPS = 3400;   // até o RevOps entrar
-    const T_SEGURA = 3000;   // RevOps parado, reflexo passando
-    const T_HERO = 2600;     // RevOps sai, título/subtítulo/CTA entram
+    const T_REVOPS = 1900;   // até o RevOps entrar
+    const T_SEGURA = 1500;   // RevOps parado, o reflexo passa uma vez
+    const T_HERO = 1400;     // RevOps sai, título/subtítulo/CTA entram
     let p = 0, livre = false, comecou = false;
     const aplica = (v: number) => {
       p = v;

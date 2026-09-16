@@ -449,7 +449,7 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   filter: drop-shadow(0 0 22px rgb(255 209 3 / .28));
 }
 /* O reflexo só começa quando o RevOps entra, e passa devagar. */
-.js .palco--revops .revops__marca { animation: reflexo 3.2s ease-in-out .6s infinite alternate; }
+.js .palco--revops .revops__marca { animation: reflexo 1.6s ease-in-out .4s infinite alternate; }
 /* Mesmo tratamento para "alta performance." no título: semibold, amarelo
    original com o reflexo passando. */
 .brilho {
@@ -487,14 +487,16 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 }
 .hero__copy > * { opacity: 0; transform: translateY(28px); }
 .hero__copy--ativo { opacity: 1; pointer-events: auto; }
-.hero__copy--ativo > * { animation: sobe 1s cubic-bezier(.2, .7, .2, 1) forwards; }
-.hero__copy--ativo > :nth-child(2) { animation-delay: .18s; }
-.hero__copy--ativo > :nth-child(3) { animation-delay: .36s; }
+.hero__copy--ativo > * { animation: sobe .7s cubic-bezier(.2, .7, .2, 1) forwards; }
+.hero__copy--ativo > :nth-child(2) { animation-delay: .12s; }
+.hero__copy--ativo > :nth-child(3) { animation-delay: .24s; }
 @keyframes sobe { to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   .hero__copy > *, .hero__copy--ativo > * { animation: none; opacity: 1; transform: none; }
 }
 .hero__titulo { font-size: clamp(2.1rem, 4.1vw, 3.8rem); line-height: 1.08; letter-spacing: -.03em; max-width: 28ch; font-weight: var(--peso-titulo); }
+/* Versão do estúdio: a promessa em duas linhas. */
+.hero__titulo--curto { max-width: 40ch; font-size: clamp(2rem, 3.4vw, 3.1rem); }
 .hero__lead { color: rgb(242 242 238 / .7); max-width: none; font-size: 18px; line-height: 1.6; }
 .quebra-desktop { display: none; }
 @media (min-width: 1100px) { .quebra-desktop { display: inline; } }
@@ -527,6 +529,21 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .secao--reel { padding-block: clamp(40px, 5vw, 72px); }
 .oquefaz--direto { display: grid; justify-items: center; }
 .oquefaz--direto .tel { --largura-tel: min(100%, 400px); }
+.tel__fundo { display: none; }
+@media (min-width: 900px) {
+  /* Palco 16:9: o reel no centro, o mesmo vídeo desfocado e escurecido
+     preenchendo as laterais. */
+  .oquefaz--direto { display: block; }
+  .oquefaz--direto .oquefaz__midia { display: block; width: 100%; }
+  .oquefaz--direto .tel { --largura-tel: 100%; position: relative; aspect-ratio: 16 / 9; border-radius: var(--raio-caixa); overflow: hidden; background: #000; }
+  .oquefaz--direto .tel__fundo {
+    display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: blur(28px) brightness(.42) saturate(.8); transform: scale(1.12); pointer-events: none;
+  }
+  .oquefaz--direto .tel__moldura { position: absolute; top: 0; bottom: 0; left: 50%; translate: -50% 0; height: 100%; aspect-ratio: 9 / 16; border-radius: 0; box-shadow: 0 0 60px rgb(0 0 0 / .6); }
+  .oquefaz--direto .tel__tela { border-radius: 0; }
+  .oquefaz--direto .tel__legenda { position: absolute; right: 18px; bottom: 14px; margin: 0; z-index: 3; color: rgb(242 242 238 / .7); }
+}
 
 .tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
