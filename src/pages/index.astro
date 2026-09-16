@@ -20,6 +20,8 @@ import Resultados from '../components/home2/Resultados.astro';
 import CtaFinal from '../components/home2/CtaFinal.astro';
 import AcademyTools from '../components/home2/AcademyTools.astro';
 import Formulario from '../components/home2/Formulario.astro';
+import Sobre from '../components/home2/Sobre.astro';
+import { copyLiteral } from '../data/versao';
 ---
 <Base2 titulo={seo.titulo} descricao={seo.descricao}>
   <Hero />
@@ -31,5 +33,6 @@ import Formulario from '../components/home2/Formulario.astro';
   <Resultados />
   <CtaFinal />
   <AcademyTools />
+  {copyLiteral && <Sobre />}
   <Formulario />
 </Base2>

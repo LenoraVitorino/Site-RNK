@@ -101,7 +101,8 @@ respiro só nas laterais.
 
 `src/data/versao.ts` lê `VERSAO` no build: `estudio` (padrão) é a leitura
 do estúdio, com a dinâmica das dobras revista; `copy` é o site como a copy
-foi entregue, dobra a dobra. As duas usam a mesma copy literal; o que muda
+foi entregue, dobra a dobra — **nada é cortado nem retirado ali**, nem
+dobras inteiras (o Sobre, por exemplo, segue na versão copy). As duas usam a mesma copy literal; o que muda
 é o que aparece e em que ordem. A entrega final compara as duas lado a
 lado. Divergências até agora: o título
 da hero (a mesma frase da copy enxugada para duas linhas: saem
