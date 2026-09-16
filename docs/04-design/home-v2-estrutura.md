@@ -113,7 +113,8 @@ foi entregue, dobra a dobra. As duas usam a mesma copy literal; o que muda
 lado. Divergências até agora: "O que a Renke faz" (só o reel) e o título
 da hero (a mesma frase da copy enxugada para duas linhas: saem
 "estratégico" e "médicas", nenhuma palavra nova) e a frase-âncora das
-Perguntas (saem "Clinicamente," e "exatamente"). Cada nova divergência
+Perguntas (saem "Clinicamente," e "exatamente", e o fecho vira "Mas e com
+a sua clínica?", decisão da Lenora para falar no nicho). Cada nova divergência
 entra como um `copyLiteral ? … : …` no componente.
 `npm run artifact:copy` gera o arquivo único dessa versão em
 `dist-artifact/site-copy.html`, publicado como um artifact separado.
