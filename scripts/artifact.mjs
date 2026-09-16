@@ -20,12 +20,16 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dist = join(raiz, 'dist');
+// DIST e ROTULO permitem empacotar outro build (ex.: a versão "copy",
+// gerada com `VERSAO=copy npx astro build --outDir dist-copy`) num arquivo
+// separado, sem mexer no principal.
+const dist = process.env.DIST ? join(raiz, process.env.DIST) : join(raiz, 'dist');
 const saida = join(raiz, 'dist-artifact');
 
 const modo = process.argv[2] || 'site';
+const rotulo = process.env.ROTULO || '';
 const titulos = {
-  site: 'Site Renke Studio',
+  site: rotulo ? `Site Renke Studio · ${rotulo}` : 'Site Renke Studio',
   'design-system': 'Design System Renke',
 };
 
@@ -256,7 +260,7 @@ if (externa) {
 }
 
 mkdirSync(saida, { recursive: true });
-const destino = join(saida, `${modo}.html`);
+const destino = join(saida, `${modo}${rotulo ? '-' + rotulo.toLowerCase().replace(/[^a-z0-9]+/g, '-') : ''}.html`);
 writeFileSync(destino, final);
 
 const mb = final.length / 1048576;

@@ -101,6 +101,8 @@ lado. Divergências até agora: "O que a Renke faz" (só o reel) e o título
 da hero (a mesma frase da copy enxugada para duas linhas: saem
 "estratégico" e "médicas", nenhuma palavra nova). Cada nova divergência
 entra como um `copyLiteral ? … : …` no componente.
+`npm run artifact:copy` gera o arquivo único dessa versão em
+`dist-artifact/site-copy.html`, publicado como um artifact separado.
 A abertura da hero ficou mais ágil: 1,9 s até o RevOps, 1,5 s parado com
 o reflexo passando uma vez, 1,4 s até a copy.
 
