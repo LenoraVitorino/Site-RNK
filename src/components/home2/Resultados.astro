@@ -1,48 +1,43 @@
 ---
 /**
- * Resultados num painel claro, no desenho da referência: contato no topo
- * à esquerda, monograma à direita e uma linha por especialidade com o
- * rótulo em caixa alta, a descrição (antes → depois) e o número grande
- * alinhado à direita. Copy literal do briefing (⚠️ D1: números
- * ilustrativos até os cases serem autorizados).
+ * Resultados como um extrato de ponta a ponta, no desenho da referência:
+ * cada linha com o número gigante em amarelo à esquerda e, na metade
+ * direita, a especialidade e o antes → depois. Fios de uma borda à outra
+ * da tela. Copy literal do briefing (⚠️ D1: números ilustrativos até os
+ * cases serem autorizados).
  */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 ---
-<section class="secao" id="resultados">
+<section class="secao secao--extrato" id="resultados">
   <div class="container">
-    <div class="cabeca cabeca--linha entra">
+    <header class="extrato__cabeca entra">
       <p class="rotulo">Resultados</p>
-      <h2 class="titulo caps">O que muda quando a operação tem estrutura.</h2>
-    </div>
-
-    <div class="painel-dados entra">
-      <div class="painel-dados__topo">
-        <p class="painel-dados__contato">renkestudio.com.br<br />contato@renkestudio.com.br</p>
-        <img src="/marca/renke-monograma.png" alt="" width="275" height="275" loading="lazy" />
-      </div>
-      <dl class="painel-dados__linhas">
-        {resultados.map((r) => (
-          <div class="painel-dados__linha">
-            <dt>{r.especialidade}</dt>
-            <dd class="painel-dados__desc">
-              <span>Antes: {r.antes}.</span>
-              <span>Depois: {r.depois}.</span>
-            </dd>
-            <dd class="painel-dados__num" data-contador>{r.numero}</dd>
+      <h2 class="titulo">O que muda quando a operação tem estrutura.</h2>
+    </header>
+  </div>
+  <ol class="extrato" aria-label="Resultados por especialidade">
+    {resultados.map((r) => (
+      <li class="extrato__linha">
+        <div class="container extrato__grade">
+          <p class="extrato__num num" data-contador>{r.numero}</p>
+          <div class="extrato__texto entra">
+            <h3 class="extrato__titulo">{r.especialidade}</h3>
+            <p>Antes: {r.antes}. Depois: {r.depois}.</p>
           </div>
-        ))}
-      </dl>
-    </div>
-
-    <p style="margin-top:28px"><Botao variante="onda" href="/contato">{hero.cta}</Botao></p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <div class="container">
+    <p class="extrato__acao"><Botao variante="onda" href="/contato">{hero.cta}</Botao></p>
   </div>
 </section>
 
 <script>
   /* Números que carregam: cada inteiro dentro de [data-contador] sobe de 0
      até o valor quando o elemento entra na tela (uma vez). Texto em volta
-     ("%", "dias", "→") fica parado. Sem movimento reduzido, nada anima. */
+     ("%", "dias", "→") fica parado. Com movimento reduzido, nada anima. */
   const alvos = document.querySelectorAll<HTMLElement>('[data-contador]');
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (alvos.length && !reduzido) {

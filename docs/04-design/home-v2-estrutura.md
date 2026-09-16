@@ -60,15 +60,20 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 5. **Perguntas** (`Perguntas.astro`) — seção escura, 4 perguntas principais
    em grade 2×2 + 3 em linha. Entra pela cortina dos planos mostrando só a
    frase-âncora; no scroll seguinte a frase sobe e as perguntas aparecem.
-6. **Resultados** (`Resultados.astro`) — seção clara com o título em uma
-   linha e um painel branco no desenho da tela da referência "Orbital":
-   contato no topo, monograma à direita e uma linha por especialidade com
-   rótulo, antes → depois e o número grande à direita (⚠️ D1). Os
-   depoimentos ficam para a esteira, quando voltar.
+6. **Resultados** (`Resultados.astro`) — extrato de ponta a ponta, no
+   desenho da referência "Alphamark": uma linha por especialidade, com o
+   número gigante em amarelo à esquerda e, na metade direita, a
+   especialidade e o antes → depois; fios de uma borda à outra da tela
+   (⚠️ D1). Os números carregam ao entrar na tela.
 7. **CTA final** (`CtaFinal.astro`) — painel amarelo "Limitado a 1 nova
    clínica por mês" com dois slots de foto.
 8. **Academy e Tools** (`AcademyTools.astro`) — dois cartões com slot de foto.
-9. **Sobre** (`Sobre.astro`) — texto literal do briefing + três slots de foto.
+9. **Sobre** (`Sobre.astro`) — no desenho da referência "Designing for
+   impact": à esquerda a declaração em texto grande (a primeira frase
+   apagada, "Não somos agência de marketing. Não somos consultoria de
+   gestão." acesa) e os parágrafos; à direita, "Nossos números", um
+   carrossel com o número gigante em amarelo, legenda e setas (os números
+   do briefing, ⚠️ D1). Três slots de foto numa faixa abaixo.
 10. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
     não ligado).
 
@@ -90,6 +95,14 @@ Entre "O que a Renke faz" e o Protocolo Revena entra o **Letreiro**
 (Controle, Automação, Processo, Experiência) em caixa alta, grandes,
 separadas por um "+" fino, andando devagar, com o monograma apagado atrás
 — como a faixa "Impact + Inspire + Innovate" da referência.
+
+## Grid de ponta a ponta (16/09/2026)
+
+Para tirar a cara de "feito com IA": o container passou de 1240px para
+1760px, com gutter `clamp(20px, 4.5vw, 84px)`, e os trilhos laterais
+saíram. Os títulos de dobra subiram para `clamp(2.3rem, 5vw, 4.8rem)`. A
+hero continua centrada por decisão anterior; o resto ocupa a tela com um
+respiro só nas laterais.
 
 ## Duas versões para a entrega (16/09/2026)
 

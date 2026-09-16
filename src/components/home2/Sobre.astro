@@ -1,40 +1,95 @@
 ---
 /**
- * Sobre: texto à esquerda, faixa de fotos à direita. Copy literal.
+ * Sobre, no desenho da referência: à esquerda a declaração em texto grande
+ * (a primeira frase apagada, o resto aceso) e os parágrafos; à direita,
+ * "Nossos números" num carrossel com o número gigante em amarelo e a
+ * legenda, com setas. Os números são os do briefing (⚠️ D1: "~30" aqui
+ * convive com "mais de 140" no texto). Fotos numa faixa abaixo. Copy literal.
  */
 import FotoSlot from '../ui/FotoSlot.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+
+// hero.numeros repartidos à mão (o mesmo recorte da antiga Faixa).
+const numeros = [
+  { valor: '~30', legenda: 'clínicas atendidas' },
+  { valor: '4 anos', legenda: 'de método validado' },
+  { valor: 'R$42M', legenda: 'em faturamento gerado' },
+  { valor: '1 / mês', legenda: 'nova clínica aceita' },
+];
 ---
-<section class="secao secao--painel" id="sobre">
+<section class="secao" id="sobre">
   <div class="container sobre">
     <div class="sobre__texto entra">
       <p class="rotulo">Sobre</p>
-      <h2 class="titulo caps">Sobre a Renke</h2>
-      <p>
-        A Renke é a primeira <strong>assessoria de Revenue Operations</strong> para clínicas médicas e
-        odontológicas de alto padrão do mundo. Não somos agência de marketing. Não somos consultoria
-        de gestão. Somos o time que conecta marketing, processo comercial e dados em um sistema único,
-        operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
+      <p class="sobre__declaracao">
+        <span class="mudo">A Renke é a primeira assessoria de Revenue Operations para clínicas médicas e odontológicas de alto padrão do mundo.</span>
+        Não somos agência de marketing. Não somos consultoria de gestão.
       </p>
-      <p>
-        Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm
-        previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes
-        desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema
-        de marketing. É um problema de negócio.
-      </p>
-      <p>
-        Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena,
-        metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no
-        longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos
-        especialistas que fazem isso, para saúde, todo santo dia.
-      </p>
+      <div class="sobre__paragrafos">
+        <p>
+          Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado
+          de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
+        </p>
+        <p>
+          Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm
+          previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes
+          desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema
+          de marketing. É um problema de negócio.
+        </p>
+        <p>
+          Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena,
+          metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no
+          longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos
+          especialistas que fazem isso, para saúde, todo santo dia.
+        </p>
+      </div>
       <p><Botao variante="contorno" href={existe('/sobre') ? '/sobre' : '#'} class={existe('/sobre') ? '' : 'nav--pendente'}>Saiba mais</Botao></p>
     </div>
-    <div class="sobre__fotos entra">
-      <FotoSlot rotulo="Foto · nova sede" prop="16 / 9" />
-      <FotoSlot rotulo="Foto · time" prop="1 / 1" />
-      <FotoSlot rotulo="Foto · operação" prop="1 / 1" />
-    </div>
+
+    <aside class="impacto entra" data-impacto aria-roledescription="carrossel" aria-label="Nossos números">
+      <div class="impacto__topo">
+        <p class="rotulo">Nossos números</p>
+        <div class="impacto__setas">
+          <button class="impacto__seta" type="button" data-impacto-antes aria-label="Número anterior"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6M6 10h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="impacto__seta" type="button" data-impacto-depois aria-label="Próximo número"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6M2 10h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <ol class="impacto__lista">
+        {numeros.map((n, i) => (
+          <li class:list={['impacto__item', i === 0 && 'impacto__item--ativo']} aria-hidden={i === 0 ? undefined : 'true'}>
+            <p class="impacto__num num">{n.valor}</p>
+            <p class="impacto__legenda">{n.legenda}</p>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  </div>
+
+  <div class="container sobre__fotos entra">
+    <FotoSlot rotulo="Foto · nova sede" prop="4 / 3" />
+    <FotoSlot rotulo="Foto · time" prop="4 / 3" />
+    <FotoSlot rotulo="Foto · operação" prop="4 / 3" />
   </div>
 </section>
+
+<script>
+  /* Carrossel dos números: setas, e anda sozinho a cada 5 s (para no hover
+     e com menos movimento). */
+  document.querySelectorAll<HTMLElement>('[data-impacto]').forEach((raiz) => {
+    const itens = [...raiz.querySelectorAll<HTMLElement>('.impacto__item')];
+    if (itens.length < 2) return;
+    let i = 0;
+    const mostra = (n: number) => {
+      i = (n + itens.length) % itens.length;
+      itens.forEach((it, k) => { it.classList.toggle('impacto__item--ativo', k === i); if (k === i) it.removeAttribute('aria-hidden'); else it.setAttribute('aria-hidden', 'true'); });
+    };
+    raiz.querySelector('[data-impacto-antes]')?.addEventListener('click', () => { mostra(i - 1); reinicia(); });
+    raiz.querySelector('[data-impacto-depois]')?.addEventListener('click', () => { mostra(i + 1); reinicia(); });
+    let relogio = 0;
+    const reinicia = () => { clearInterval(relogio); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) relogio = setInterval(() => mostra(i + 1), 5000) as unknown as number; };
+    raiz.addEventListener('mouseenter', () => clearInterval(relogio));
+    raiz.addEventListener('mouseleave', reinicia);
+    reinicia();
+  });
+</script>

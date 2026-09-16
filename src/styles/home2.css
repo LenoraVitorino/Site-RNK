@@ -10,8 +10,8 @@
 @import './tokens-v2.css';   /* cor e tipografia da fase nova — vence o anterior */
 
 :root {
-  --largura: 1240px;
-  --gutter: clamp(16px, 4vw, 48px);
+  --largura: 1760px;                     /* de ponta a ponta, com um respiro nas laterais */
+  --gutter: clamp(20px, 4.5vw, 84px);
   --altura-header: 102px;   /* 14px de respiro + caixa de 72px + 16px até o conteúdo */
   --esp-secao: clamp(72px, 9vw, 128px);
   --raio-foto: var(--raio-caixa);
@@ -55,15 +55,15 @@ strong, b { font-weight: var(--peso-enfase); }
 .mudo { color: var(--cinza); }
 .medida { max-width: 62ch; }
 
-h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.03em; line-height: 1.02; }
+h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.035em; line-height: 1; }
 .secao { padding-block: var(--esp-secao); }
 .secao--escura { background: var(--fundo); color: var(--papel); }
 .secao--escura .rotulo { color: rgb(242 242 238 / .6); }
 .secao--painel { background: var(--painel); }
 .secao--amarela { background: var(--amarelo); color: var(--grafite); }
 .secao--amarela .rotulo { color: rgb(22 22 22 / .7); }
-.cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 5vw, 56px); max-width: 40ch; }
-.cabeca--larga { max-width: 46ch; }
+.cabeca { display: grid; gap: 14px; margin-bottom: clamp(32px, 5vw, 64px); max-width: min(100%, 760px); }
+.cabeca--larga { max-width: min(100%, 900px); }
 /* Cabeça com o título em uma linha só (Resultados). */
 .cabeca--linha { max-width: none; }
 .cabeca--linha .titulo { white-space: nowrap; font-size: clamp(1.5rem, 3.1vw, 2.85rem); }
@@ -77,12 +77,9 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
   content: ''; position: absolute; top: 0; bottom: 0; width: 1px;
   background: var(--fio); opacity: .7; pointer-events: none; z-index: 0;
 }
-/* Na borda EXTERNA do container: o conteúdo tem o gutter por dentro, então
-   nunca encosta na linha. Some quando a tela é mais estreita que o container. */
-.trilhos::before { left: calc((100% - var(--largura)) / 2); }
-.trilhos::after  { right: calc((100% - var(--largura)) / 2); }
+/* Com o grid de ponta a ponta os trilhos saíram: a página é só o preto. */
+.trilhos::before, .trilhos::after { display: none; }
 .trilhos > * { position: relative; z-index: 1; }
-@media (max-width: 1300px) { .trilhos::before, .trilhos::after { display: none; } }
 /* Blocos de largura total alinham o texto ao container por conta própria */
 .alinha-esq { padding-left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
 .alinha-dir { padding-right: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
@@ -787,25 +784,23 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .perguntas--mais .pergunta { border: 1px solid rgb(242 242 238 / .18); min-height: 0; padding: 18px; }
 .perguntas--mais .pergunta p { font-size: 15px; color: rgb(242 242 238 / .8); }
 
-/* ---------- Resultados ---------- */
+/* ---------- Resultados: extrato de ponta a ponta ----------
+   Cada linha com o número gigante em amarelo à esquerda e, na metade
+   direita, a especialidade e o antes → depois. Fios de uma borda à outra. */
 
-/* Painel de resultados direto no fundo da seção, sem caixa. */
-.painel-dados { color: var(--texto); }
-.painel-dados__topo { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-bottom: 28px; }
-.painel-dados__contato { margin: 0; font-size: 11px; line-height: 1.6; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
-.painel-dados__topo img { width: 30px; height: 30px; }
-.painel-dados__linhas { margin: 0; }
-.painel-dados__linha {
-  display: grid; grid-template-columns: minmax(150px, .7fr) minmax(260px, 1.4fr) clamp(220px, 24vw, 340px); align-items: center; gap: 24px 40px;
-  padding: clamp(18px, 2.4vw, 30px) 0; border-top: 1px solid var(--fio);
+.extrato__cabeca { display: grid; gap: 14px; max-width: min(100%, 980px); margin-bottom: clamp(32px, 5vw, 72px); }
+.extrato { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--fio); }
+.extrato__linha { border-bottom: 1px solid var(--fio); }
+.extrato__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; align-items: center; padding-block: clamp(36px, 5.5vw, 88px); }
+.extrato__num {
+  margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque);
+  font-size: clamp(4.2rem, 9.5vw, 10rem); line-height: .9; letter-spacing: -.05em; white-space: nowrap;
 }
-.painel-dados__linha:last-child { border-bottom: 1px solid var(--fio); }
-.painel-dados__linha dt { font-size: 14px; font-weight: var(--peso-enfase); letter-spacing: .04em; text-transform: uppercase; line-height: 1.3; max-width: 14ch; }
-.painel-dados__linha dd { margin: 0; }
-.painel-dados__desc { display: grid; gap: 4px; font-size: 13.5px; line-height: 1.45; color: var(--cinza); max-width: 60ch; }
 .contador { font-variant-numeric: tabular-nums; }
-.painel-dados__num { justify-self: end; font-size: clamp(2.2rem, 5vw, 4.4rem); font-weight: 400; letter-spacing: -.035em; line-height: .95; white-space: nowrap; }
-
+.extrato__texto { display: grid; gap: 12px; max-width: 52ch; }
+.extrato__titulo { font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.6rem, 2.4vw, 2.5rem); letter-spacing: -.03em; line-height: 1.1; }
+.extrato__texto p { margin: 0; color: var(--cinza); font-size: 17px; line-height: 1.55; }
+.extrato__acao { margin-top: clamp(28px, 4vw, 48px); }
 
 /* ---------- CTA final (painel amarelo com fotos) ---------- */
 
@@ -823,13 +818,31 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .cartao h3 { font-size: 1.9rem; letter-spacing: -.025em; }
 .cartao p:not(.rotulo) { color: var(--cinza); }
 
-/* ---------- Sobre ---------- */
+/* ---------- Sobre: declaração + "Nossos números" ----------
+   À esquerda o texto grande, a primeira frase apagada; à direita o
+   carrossel com o número gigante em amarelo, setas e fio, como a referência. */
 
-.sobre { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
-.sobre__texto { display: grid; gap: 16px; }
-.sobre__texto p:not(.rotulo) { max-width: 60ch; }
-.sobre__fotos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.sobre__fotos .foto:first-child { grid-column: 1 / -1; --prop: 16 / 9; }
+.sobre { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, .8fr); gap: clamp(40px, 8vw, 160px); align-items: start; }
+.sobre__texto { display: grid; gap: 28px; }
+.sobre__declaracao { font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.6rem, 2.8vw, 2.8rem); line-height: 1.18; letter-spacing: -.03em; max-width: 26ch; }
+.sobre__declaracao .mudo { color: var(--cinza); }
+.sobre__paragrafos { display: grid; gap: 16px; }
+.sobre__paragrafos p { max-width: 60ch; color: rgb(242 242 238 / .78); }
+.impacto { display: grid; gap: 28px; align-content: start; padding-top: 6px; }
+.impacto__topo { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--fio); }
+.impacto__setas { display: flex; gap: 8px; }
+.impacto__seta {
+  display: grid; place-items: center; width: 40px; height: 32px; padding: 0; color: var(--papel);
+  background: rgb(242 242 238 / .1); border: 0; border-radius: 999px; cursor: pointer; transition: background-color .2s var(--easing-suave);
+}
+.impacto__seta:hover { background: rgb(242 242 238 / .2); }
+.impacto__seta svg { width: 18px; height: 18px; }
+.impacto__lista { list-style: none; margin: 0; padding: 0; display: grid; }
+.impacto__item { grid-area: 1 / 1; display: grid; gap: 20px; opacity: 0; transform: translateY(12px); transition: opacity .5s var(--easing-suave), transform .5s var(--easing-suave); pointer-events: none; }
+.impacto__item--ativo { opacity: 1; transform: none; pointer-events: auto; }
+.impacto__num { margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque); font-size: clamp(4rem, 8vw, 8rem); line-height: .9; letter-spacing: -.05em; white-space: nowrap; }
+.impacto__legenda { margin: 0; font-size: 17px; line-height: 1.5; color: rgb(242 242 238 / .78); }
+.sobre__fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(40px, 6vw, 96px); }
 
 /* ---------- Formulário ---------- */
 
@@ -875,6 +888,8 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .chamada { grid-template-columns: 1fr; }
   .chamada .foto { display: none; }
   .sobre { grid-template-columns: 1fr; }
+  .sobre__fotos { grid-template-columns: 1fr 1fr; }
+  .extrato__grade { grid-template-columns: 1fr; gap: 16px; }
 }
 
 @media (max-width: 899.98px) {
@@ -947,5 +962,5 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 @media (max-width: 639.98px) {
   .tel { --largura-tel: 100%; }
-    .sobre__fotos { grid-template-columns: 1fr; }
+  .sobre__fotos { grid-template-columns: 1fr; }
 }
