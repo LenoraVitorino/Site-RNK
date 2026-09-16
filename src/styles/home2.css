@@ -537,7 +537,9 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .oquefaz__texto p:not(.rotulo) { max-width: 52ch; }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
-.secao--numeros .impacto__lista { gap: 24px 40px; }
+/* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
+.secao--numeros .impacto__lista { display: flex; justify-content: center; gap: clamp(48px, 9vw, 160px); }
+.secao--numeros .impacto__item { justify-items: center; text-align: center; }
 .secao--numeros .impacto__num { font-size: clamp(2.6rem, 5vw, 5.4rem); }
 .secao--numeros .impacto__legenda { font-size: 16px; }
 .oquefaz__midia { display: grid; justify-items: center; min-width: 0; }
@@ -879,6 +881,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .chamada .foto { display: none; }
   .sobre { grid-template-columns: 1fr; }
   .impacto__lista { grid-template-columns: 1fr; gap: 24px; }
+  .secao--numeros .impacto__lista { flex-direction: column; align-items: center; gap: 28px; }
   .sobre__fotos { grid-template-columns: 1fr 1fr; }
   .extrato__grade { grid-template-columns: 1fr; gap: 16px; }
 }
