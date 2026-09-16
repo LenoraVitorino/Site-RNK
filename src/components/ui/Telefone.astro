@@ -9,13 +9,6 @@ const slot = porId('02');
 const video = slot.video!;
 ---
 <div class="tel" data-tel>
-  <!-- No desktop o reel fica dentro de um palco 16:9: atrás dele, o mesmo
-       vídeo desfocado e escurecido preenche as laterais, em sincronia. No
-       celular o palco some e fica só o 9:16. -->
-  <!-- Sem <source> próprio: o script copia a fonte do vídeo principal na
-       hora de tocar. Assim o arquivo único do artifact embute o vídeo uma
-       vez só, e o principal nunca fica sem fonte. -->
-  <video class="tel__fundo" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" data-tel-fundo></video>
   <div class="tel__moldura">
     <div class="tel__ilha" aria-hidden="true"></div>
     <div class="tel__tela">
@@ -49,21 +42,6 @@ const video = slot.video!;
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
   document.querySelectorAll<HTMLElement>('[data-tel]').forEach((raiz) => {
     const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
-    const fundo = raiz.querySelector<HTMLVideoElement>('[data-tel-fundo]');
-    const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
-    /* O fundo desfocado segue o vídeo principal: toca, pausa e corrige o
-       tempo se desalinhar. Só existe (e só carrega) quando o CSS o mostra. */
-    const temFundo = () => !!fundo && getComputedStyle(fundo).display !== 'none';
-    const alinha = () => { if (temFundo() && fundo!.src && Math.abs(fundo!.currentTime - video.currentTime) > .25) fundo!.currentTime = video.currentTime; };
-    const fonteDoPrincipal = () => video.currentSrc || video.querySelector('source')?.src || '';
-    video.addEventListener('play', () => {
-      if (!temFundo()) return;
-      if (!fundo!.src) { const f = fonteDoPrincipal(); if (!f) return; fundo!.src = f; }
-      alinha(); fundo!.play().catch(() => {});
-    });
-    video.addEventListener('pause', () => fundo?.pause());
-    video.addEventListener('seeked', alinha);
-    video.addEventListener('timeupdate', alinha);
     const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
     let pausadoPeloUsuario = false;
 

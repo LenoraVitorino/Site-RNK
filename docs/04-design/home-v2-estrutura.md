@@ -27,15 +27,10 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    reflexo não roda.
    No pé da hero, a barra "Doutores que confiam na Renke" com os logos
    (placeholders), como a barra de parceiros da referência.
-2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — na versão
-   do estúdio, só o reel, centrado: ele já abre dizendo "O que a Renke
-   faz?", e repetir o título em texto atrasava. Na versão `copy`
-   (`VERSAO=copy npm run build`), texto à esquerda e reel à direita, como a
-   copy foi entregue. Autoplay mudo ao entrar na tela, pausa ao sair; botão
-   de som e de pausa; pausa manual é lembrada. No desktop (≥900px) o reel
-   fica num palco 16:9: atrás dele, o mesmo vídeo desfocado e escurecido
-   preenche as laterais, em sincronia (segundo `<video>` mudo, só carrega
-   quando visível). No celular, só o 9:16.
+2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto à
+   esquerda e reel vertical à direita, nas duas versões. Autoplay mudo ao
+   entrar na tela, pausa ao sair; botão de som e de pausa; pausa manual é
+   lembrada. (O reel sozinho e o palco 16:9 foram testados e descartados.)
    (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
    por ora: volta quando houver fotos, depoimentos e logos reais.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
@@ -110,7 +105,7 @@ respiro só nas laterais.
 do estúdio, com a dinâmica das dobras revista; `copy` é o site como a copy
 foi entregue, dobra a dobra. As duas usam a mesma copy literal; o que muda
 é o que aparece e em que ordem. A entrega final compara as duas lado a
-lado. Divergências até agora: "O que a Renke faz" (só o reel) e o título
+lado. Divergências até agora: o título
 da hero (a mesma frase da copy enxugada para duas linhas: saem
 "estratégico" e "médicas", nenhuma palavra nova) e a frase-âncora das
 Perguntas (saem "Clinicamente," e "exatamente", e o fecho vira "Mas e com
