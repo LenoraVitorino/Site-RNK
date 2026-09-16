@@ -5,7 +5,7 @@
  * pilares em cartões, um aberto por vez. O aberto fica largo e mais alto,
  * com uma imagem no topo, ícone, título e texto; os fechados mostram só o
  * número, o ícone e o título. Passar o mouse (ou tocar) abre.
- * A imagem do topo é um fundo fictício (public/imagens/plano-fundo.svg)
+ * A imagem do topo é um fundo fictício (public/imagens/plano-fundo-escuro.svg)
  * até chegarem as artes; os ícones dos pilares são provisórios
  * (public/icones/pilar-0N.svg) até chegarem os oficiais. Copy literal.
  */
@@ -41,7 +41,7 @@ const icone = (i: number) => {
             <span>{p.titulo}</span>
           </div>
           <div class="carta__corpo">
-            <figure class="carta__fundo"><img src="/imagens/plano-fundo.svg" alt="" width="1200" height="700" loading="lazy" /></figure>
+            <figure class="carta__fundo"><img src="/imagens/plano-fundo-escuro.svg" alt="" width="1200" height="700" loading="lazy" /></figure>
             <div class="carta__conteudo">
               {icone(i) && <img class="carta__icone" src={icone(i)} alt="" width="40" height="40" loading="lazy" />}
               <h3 class="carta__nome">{p.titulo}</h3>

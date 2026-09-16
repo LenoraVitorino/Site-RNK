@@ -6,12 +6,17 @@
    ============================================================ */
 
 :root {
-  /* ---- Cor ---- */
-  --papel:   #F2F2EE;   /* fundo de página: claro, levemente quente */
-  --painel:  #E3E3DE;   /* segundo plano: blocos, faixas, fundo do vídeo */
-  --grafite: #161616;   /* texto, fundos escuros, botão principal — o mesmo grafite da referência */
-  --cinza:   #66665F;   /* texto secundário, rótulos (4,9:1 sobre papel) */
-  --fio:     #C9C9C2;   /* linhas de grade: substituem sombra e raio */
+  /* ---- Cor (preto absoluto, decisão de 16/09/2026) ----
+     A página é preta; os tons de cinza só criam camadas (segundo plano,
+     cartões). O papel, antes fundo, virou a cor do texto. */
+  --fundo:      #000000;   /* fundo de página: preto absoluto */
+  --painel:     #0B0B0B;   /* segundo plano: faixas, slots de foto, trilho dos planos */
+  --superficie: #111111;   /* cartões e caixas com borda */
+  --papel:      #F2F2EE;   /* texto e superfícies claras (botão branco) */
+  --texto:      var(--papel);
+  --grafite:    #161616;   /* superfícies escuras elevadas e texto sobre amarelo */
+  --cinza:      #A3A39B;   /* texto secundário, rótulos (7:1 sobre preto) */
+  --fio:        rgb(242 242 238 / .14);   /* linhas de grade */
 
   /* O amarelo fica no tom da marca (H 48°) e só sobe de luminosidade.
      Regra mantida: nunca como texto sobre fundo claro. */
@@ -24,7 +29,7 @@
   --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   /* Tipografia grande e leve: títulos em regular, ênfases em medium,
      semibold só em detalhes pequenos (rótulos, botões). Nunca bold. */
-  --peso-titulo: 300;   /* títulos e números grandes: light, na Inter */
+  --peso-titulo: 260;   /* títulos e números grandes: mais finos que light, na Inter (sobre o preto o traço claro já parece mais fino) */
   --font-titulo: 'Inter Variable', 'Inter', var(--font);
   --peso-enfase: 500;   /* strong, nomes, chamadas curtas */
   --peso-detalhe: 600;  /* rótulos miúdos e botões */

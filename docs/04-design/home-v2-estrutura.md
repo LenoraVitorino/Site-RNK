@@ -66,6 +66,25 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 10. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
     não ligado).
 
+## Preto absoluto (16/09/2026)
+
+A página inteira é preta (`--fundo: #000`); os cinzas só criam camadas:
+`--painel` (#0B0B0B) para faixas e o trilho dos planos, `--superficie`
+(#111) para cartões e caixas. O papel (#F2F2EE) virou a cor do texto e do
+botão principal (branco, grafite ao passar no amarelo). O amarelo segue só
+nos detalhes: pílula, ícones, palavra destacada, o painel do CTA final (o
+único bloco de cor, com texto grafite). Títulos na Inter em peso 260, mais
+finos que light — sobre o preto o traço claro pede isso. Os ícones dos
+planos usam a versão `-dark` e o fundo fictício dos cartões, a versão
+`plano-fundo-escuro.svg`. A cortina das Perguntas ganhou um fio na borda
+esquerda para a entrada ler sobre o preto.
+
+Entre "O que a Renke faz" e o Protocolo Revena entra o **Letreiro**
+(`Letreiro.astro`): as quatro palavras do Revena Full no briefing
+(Controle, Automação, Processo, Experiência) em caixa alta, grandes,
+separadas por um "+" fino, andando devagar, com o monograma apagado atrás
+— como a faixa "Impact + Inspire + Innovate" da referência.
+
 ## Regras de acabamento (12/09/2026)
 
 - **Amarelo original** (`--amarelo-marca` #FFD103, exposto como

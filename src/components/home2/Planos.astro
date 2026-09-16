@@ -10,7 +10,7 @@
  * --x é o deslocamento do trilho, --fim o avanço da cortina e --sobe a
  * subida do texto da próxima dobra; tudo calculado no scroll pelo script.
  * Sem JS, no celular ou com menos movimento, tudo fica empilhado.
- * Os ícones oficiais dos planos vivem em public/icones/plano-<nome>-light.svg.
+ * Os ícones oficiais dos planos vivem em public/icones/plano-<nome>-dark.svg (fundo preto).
  */
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -25,7 +25,7 @@ const nome = (label: string) => {
   return n[0].toUpperCase() + n.slice(1);
 };
 const icone = (label: string) => {
-  const arq = `plano-${label.replace('REVENA ', '').toLowerCase()}-light.svg`;
+  const arq = `plano-${label.replace('REVENA ', '').toLowerCase()}-dark.svg`;
   return existsSync(join(process.cwd(), 'public', 'icones', arq)) ? `/icones/${arq}` : null;
 };
 const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
