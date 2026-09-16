@@ -548,7 +548,6 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .tel--com-som .tel__icone--mudo { display: none; }
 .tel--pausado .tel__icone--toca { display: block; }
 .tel--pausado .tel__icone--pausa { display: none; }
-.tel__legenda { margin-top: 14px; font-size: 12px; color: var(--cinza); display: flex; gap: 12px; justify-content: center; }
 
 /* ---------- Esteira: trilho horizontal preso na tela ---------- */
 
