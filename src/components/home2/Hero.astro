@@ -49,11 +49,9 @@ const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
           {copyLiteral ? (
             <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de <span class="brilho">alta performance.</span></p>
           ) : (
-            <!-- Versão do estúdio: a mesma frase da copy, enxugada (saem
-                 "estratégico" e "médicas"; "Revenue Operations" vira "RevOps",
-                 o termo que a própria copy usa e que a cena de abertura acabou
-                 de mostrar). Decisão da Lenora em 16/09/2026. -->
-            <p class="hero__titulo hero__titulo--curto">RevOps para transformar clínicas em negócios de <span class="brilho">alta performance.</span></p>
+            <!-- Versão do estúdio: a mesma frase da copy, enxugada para duas
+                 linhas (saem "estratégico" e "médicas"; nenhuma palavra nova). -->
+            <p class="hero__titulo hero__titulo--curto">Revenue Operations para transformar clínicas em negócios de <span class="brilho">alta performance.</span></p>
           )}
           <p class="hero__lead">{leadLinhas[0]}<br class="quebra-desktop" />{leadLinhas[1]}</p>
           <p class="hero__acoes"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
