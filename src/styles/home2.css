@@ -360,36 +360,31 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 }
 .hero__confianca__inner {
   width: min(100%, var(--largura)); margin-inline: auto; padding: 0 var(--gutter);
-  min-height: 96px;
-  display: grid; grid-template-columns: auto auto 1fr; align-items: center;
-  gap: clamp(20px, 2.4vw, 36px);
+  min-height: 104px;
+  display: grid; grid-template-columns: auto 1fr; align-items: center;
+  gap: clamp(28px, 3vw, 48px);
 }
-/* Frase em caixa normal, como a da referência. */
-.hero__confianca__frase { margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap; }
+/* Frase em caixa normal, como a da referência, com um fio vertical depois. */
+.hero__confianca__frase {
+  margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap;
+  padding-right: clamp(28px, 3vw, 48px); border-right: 1px solid var(--grade); align-self: stretch; display: flex; align-items: center;
+}
 .hero__confianca__frase strong { font-weight: var(--peso-enfase); }
-/* Mapa da América Latina em malha esparsa de pontos (desenho próprio), no estilo da referência. */
-.hero__mapa { flex: none; height: 76px; width: auto; }
-/* Bloco "Clínicas • logos" bem afastado da frase, encostado à direita,
-   como o "Partners •" da referência. */
-.hero__clientes {
-  justify-self: end; width: min(100%, 640px); min-width: 0; margin-left: clamp(32px, 8vw, 140px);
-  display: flex; align-items: center; gap: 28px;
-}
-.hero__clientes__rotulo { color: var(--papel); white-space: nowrap; display: flex; align-items: center; gap: 24px; }
-.hero__clientes__rotulo::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--destaque); }
+/* Os logos tomam o resto da largura. */
+.hero__clientes { min-width: 0; display: flex; align-items: center; }
 .hero__clientes .rolo { flex: 1 1 0; min-width: 0; }
 /* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
    andando -50% em loop. O gap fica dentro do grupo (gap + padding-right
    iguais) para a emenda ser invisível. */
 .rolo {
   min-width: 0; overflow: hidden; display: flex; align-items: center;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16.5% 83.5%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 16.5% 83.5%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
 }
-.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 26.5s linear infinite; }
+.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 34s linear infinite; }
 .rolo__grupo {
   list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex: none;
-  gap: 44px; padding-right: 44px;
+  gap: clamp(56px, 6vw, 96px); padding-right: clamp(56px, 6vw, 96px);
 }
 .rolo__grupo li { flex: none; display: flex; align-items: center; }
 /* Logos em cinza; no hover acendem na cor original. */
@@ -900,11 +895,8 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   /* O botão onda no celular: largura toda, texto quebrando se precisar. */
   .botao--onda { width: 100%; padding: 12px 18px 12px 80px; font-size: 15px; }
   .botao--onda .botao__texto { white-space: normal; text-align: right; line-height: 1.25; }
-  .hero__confianca__inner { grid-template-columns: auto 1fr; gap: 14px 18px; padding-block: 18px; min-height: 0; }
-  .hero__confianca__frase { white-space: normal; font-size: 14px; }
-  .hero__mapa { height: 52px; }
-  .hero__clientes { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-left: 0; gap: 16px; }
-  .hero__clientes__rotulo { gap: 12px; }
+  .hero__confianca__inner { grid-template-columns: 1fr; gap: 14px; padding-block: 18px; min-height: 0; }
+  .hero__confianca__frase { white-space: normal; font-size: 14px; border-right: 0; padding-right: 0; }
   .rolo__grupo { gap: 28px; padding-right: 28px; }
   .rolo__grupo img { height: 16px; }
   .rolo__trilho { animation-duration: 20s; }

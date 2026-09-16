@@ -25,8 +25,10 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    CSS); depois ele sai e, no lugar, entram título, subtítulo e CTA.
    Sem JS ou com `prefers-reduced-motion`, tudo nasce no estado final e o
    reflexo não roda.
-   No pé da hero, a barra "Doutores que confiam na Renke" com os logos
-   (placeholders), como a barra de parceiros da referência.
+   No pé da hero, a barra "Doutores que confiam na Renke": a frase à
+   esquerda, um fio vertical e o carrossel de logos (placeholders) tomando
+   o resto da largura, como a barra "Trusted by…" da referência
+   (16/09/2026: saíram o mapa pontilhado e o rótulo "Cases").
 2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto à
    esquerda e reel vertical à direita, nas duas versões. Autoplay mudo ao
    entrar na tela, pausa ao sair; botão de som e de pausa; pausa manual é
