@@ -1,0 +1,57 @@
+---
+import { pilares, protocolos } from '../../data/home';
+import Media from '../ui/Media.astro';
+import { existe } from '../../data/rotas';
+---
+<section class="section section--alt">
+  <div class="container">
+    <div class="split split--reel">
+      <div class="split__text">
+        <p class="eyebrow">O que fazemos</p>
+        <p class="kicker">Renke Studio</p>
+        <h2>O que a Renke faz?</h2>
+        <p>
+          A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do
+          mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
+          e estética.
+        </p>
+      </div>
+      <Media id="02" />
+    </div>
+
+    <p class="eyebrow">Para Clínicas</p>
+    <h3 class="h3-big">Protocolo Revena</h3>
+
+    <div class="cards cards--pillars">
+      {pilares.map((p) => (
+        <article class:list={['card', 'vidro', 'entra', p.excedente && 'card--extra']}>
+          <span class="card__icon" aria-hidden="true">ícone<br />{p.icone}</span>
+          <h4>{p.titulo}</h4>
+          <p>{p.texto}</p>
+          {p.media && <Media id={p.media} />}
+        </article>
+      ))}
+    </div>
+
+    <h3 class="divider-h3">
+      Estruturamos sua operação do zero e operamos juntos no longo prazo.<br />
+      <strong>Qual é o momento da sua clínica?</strong>
+    </h3>
+
+    <div class="cards cards--protocols">
+      {protocolos.map((p) => (
+        <article class="protocol vidro entra">
+          <p class="protocol__label">{p.label}</p>
+          <blockquote>"{p.fala}"</blockquote>
+          <p>{p.texto}</p>
+          <a href={existe(p.rota) ? p.rota : '#'} class:list={['link-arrow', !existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais →</a>
+        </article>
+      ))}
+    </div>
+
+    <p class="cta-text">
+      A Renke recomenda o protocolo certo para o momento da sua clínica.
+      <a href="/contato" class="link-arrow">Fale com a equipe →</a>
+    </p>
+  </div>
+</section>

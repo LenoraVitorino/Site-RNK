@@ -1,0 +1,100 @@
+---
+/**
+ * O reel dentro de uma moldura de celular. Toca ao entrar na tela, pausa ao
+ * sair, respeita uma pausa manual. No mobile (home2.css) a moldura some e o
+ * 9:16 ocupa a largura toda: ali o aparelho de quem assiste já é a moldura.
+ */
+import { porId } from '../../data/midia';
+const slot = porId('02');
+const video = slot.video!;
+---
+<div class="tel" data-tel>
+  <!-- No desktop o reel fica dentro de um palco 16:9: atrás dele, o mesmo
+       vídeo desfocado e escurecido preenche as laterais, em sincronia. No
+       celular o palco some e fica só o 9:16. -->
+  <!-- Sem <source> próprio: o script copia a fonte do vídeo principal na
+       hora de tocar. Assim o arquivo único do artifact embute o vídeo uma
+       vez só, e o principal nunca fica sem fonte. -->
+  <video class="tel__fundo" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" data-tel-fundo></video>
+  <div class="tel__moldura">
+    <div class="tel__ilha" aria-hidden="true"></div>
+    <div class="tel__tela">
+      <video
+        poster={video.poster}
+        preload="none"
+        muted
+        playsinline
+        aria-label={`${slot.titulo}. ${video.descricao}`}
+        data-tel-video
+      >
+        {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
+      </video>
+      <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
+      <div class="tel__controles">
+        <button class="tel__botao" type="button" data-tel-som aria-pressed="true" aria-label="Ativar som">
+          <svg class="tel__icone tel__icone--mudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <svg class="tel__icone tel__icone--som" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        </button>
+        <button class="tel__botao" type="button" data-tel-toque aria-label="Pausar vídeo">
+          <svg class="tel__icone tel__icone--pausa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="tel__icone tel__icone--toca" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <p class="tel__legenda"><span>{video.duracao}</span><a href={video.origem} target="_blank" rel="noopener">{video.autor} no Instagram ↗</a></p>
+</div>
+
+<script>
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-tel]').forEach((raiz) => {
+    const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
+    const fundo = raiz.querySelector<HTMLVideoElement>('[data-tel-fundo]');
+    const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
+    /* O fundo desfocado segue o vídeo principal: toca, pausa e corrige o
+       tempo se desalinhar. Só existe (e só carrega) quando o CSS o mostra. */
+    const temFundo = () => !!fundo && getComputedStyle(fundo).display !== 'none';
+    const alinha = () => { if (temFundo() && fundo!.src && Math.abs(fundo!.currentTime - video.currentTime) > .25) fundo!.currentTime = video.currentTime; };
+    const fonteDoPrincipal = () => video.currentSrc || video.querySelector('source')?.src || '';
+    video.addEventListener('play', () => {
+      if (!temFundo()) return;
+      if (!fundo!.src) { const f = fonteDoPrincipal(); if (!f) return; fundo!.src = f; }
+      alinha(); fundo!.play().catch(() => {});
+    });
+    video.addEventListener('pause', () => fundo?.pause());
+    video.addEventListener('seeked', alinha);
+    video.addEventListener('timeupdate', alinha);
+    const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
+    let pausadoPeloUsuario = false;
+
+    const marcar = () => {
+      toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
+      raiz.classList.toggle('tel--pausado', video.paused);
+    };
+    video.addEventListener('play', marcar);
+    video.addEventListener('pause', marcar);
+    marcar();
+
+    const tocar = () => video.play().catch(() => {});
+    toque.addEventListener('click', () => {
+      if (video.paused) { pausadoPeloUsuario = false; tocar(); }
+      else { pausadoPeloUsuario = true; video.pause(); }
+    });
+    som.addEventListener('click', () => {
+      video.muted = !video.muted;
+      som.setAttribute('aria-pressed', String(video.muted));
+      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
+      raiz.classList.toggle('tel--com-som', !video.muted);
+      if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
+    });
+
+    if (reduzido.matches) return;
+    new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) { if (!pausadoPeloUsuario) tocar(); }
+        else if (!video.paused) video.pause();
+      },
+      { threshold: 0.55 },
+    ).observe(video);
+  });
+</script>

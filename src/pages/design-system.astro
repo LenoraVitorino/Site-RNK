@@ -1,0 +1,263 @@
+---
+import '@fontsource/open-sans/latin-400.css';
+import '@fontsource/open-sans/latin-400-italic.css';
+import '@fontsource/open-sans/latin-600.css';
+import '../styles/tokens.css';
+import '../styles/botao.css';
+import '../styles/design-system.css';
+import Botao from '../components/ui/Botao.astro';
+import FiltroVidro from '../components/ui/FiltroVidro.astro';
+
+const cores = [
+  { nome: 'Amarelo Renke', token: '--marca', hex: '#FFD103', papel: 'Primária. Fundo com texto preto, ou acento sobre escuro.' },
+  { nome: 'Amarelo escuro', token: '--marca-escura', hex: '#B79500', papel: 'Estados sobre fundo claro.' },
+  { nome: 'Amarelo suave', token: '--marca-suave', hex: '#FFF4C7', papel: 'Marca-texto e lavagens amplas.' },
+  { nome: 'Preto', token: '--bg', hex: '#000000', papel: 'Superfície padrão. Preto absoluto.' },
+  { nome: 'Preto alt', token: '--bg-alt', hex: '#0A0A0A', papel: 'Alternância de seção — degrau mínimo.' },
+  { nome: 'Carvão', token: '--dark-soft', hex: '#0D0D0D', papel: 'Seções de contraste.' },
+  { nome: 'Texto', token: '--text', hex: '#F5F4F2', papel: 'Corpo e títulos sobre preto.' },
+  { nome: 'Secundário', token: '--muted', hex: '#A2A4A8', papel: 'Apoio, rótulos, legendas.' },
+  { nome: 'Linha', token: '--line', hex: 'rgb(255 255 255 / .10)', papel: 'Bordas e divisores.' },
+  { nome: 'Vidro', token: '--vidro-fundo', hex: 'rgb(255 255 255 / .05)', papel: 'Superfície de cartão.' },
+];
+
+const escala = [
+  { token: '--fs-3xl', uso: 'H1, statement', classe: 'amostra-3xl' },
+  { token: '--fs-2xl', uso: 'H2, frase-âncora', classe: 'amostra-2xl' },
+  { token: '--fs-xl', uso: 'H3, divisores', classe: 'amostra-xl' },
+  { token: '--fs-lg', uso: 'H4', classe: 'amostra-lg' },
+  { token: '--fs-md', uso: 'Lead', classe: 'amostra-md' },
+  { token: '--fs-base', uso: 'Corpo', classe: 'amostra-base' },
+  { token: '--fs-sm', uso: 'Cards, botões', classe: 'amostra-sm' },
+  { token: '--fs-xs', uso: 'Rótulos, legendas', classe: 'amostra-xs' },
+];
+
+const espacos = ['--s-1', '--s-2', '--s-3', '--s-4', '--s-5', '--s-6', '--s-7', '--s-8'];
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design System — Renke</title>
+  <meta name="description" content="Guia inicial de design do site institucional da Renke: cor, tipografia, espaçamento e componentes." />
+</head>
+<body class="ds">
+
+<header class="ds__topo">
+  <img src="/marca/renke-monograma.png" alt="Monograma Renke" width="44" height="44" />
+  <div>
+    <h1>Design System</h1>
+    <p>Guia inicial · Renke · site institucional</p>
+  </div>
+</header>
+
+<main class="ds__corpo">
+
+  <section class="ds__secao">
+    <h2>Marca</h2>
+    <p class="ds__intro">
+      Monograma e assinatura extraídos do site atual. Ainda em PNG — para o site novo precisamos
+      dos arquivos em <strong>SVG</strong>, com as versões positiva, negativa e monocromática.
+    </p>
+    <div class="ds__marcas">
+      <div class="ds__marca">
+        <img src="/marca/renke-monograma.png" alt="Monograma Renke" width="88" height="88" />
+        <span>Monograma</span>
+      </div>
+      <div class="ds__marca ds__marca--escura">
+        <img src="/marca/renke-assinatura.png" alt="Assinatura Renke" width="200" />
+        <span>Assinatura · só sobre escuro</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>Cor</h2>
+    <p class="ds__intro">
+      Preto absoluto e amarelo. Sem azul, sem teal, sem terceira cor — a paleta da Renke tem duas.
+    </p>
+
+    <div class="ds__cores">
+      {cores.map((c) => (
+        <div class="ds__cor">
+          <div class="ds__amostra" style={`background:${c.hex}`}></div>
+          <strong>{c.nome}</strong>
+          <code>{c.hex}</code>
+          <code class="ds__token">{c.token}</code>
+          <p>{c.papel}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="ds__aviso">
+      <h3>O amarelo não é cor de texto</h3>
+      <p>
+        Luminância altíssima: <strong>1,5:1</strong> sobre branco. Ilegível, e reprova em qualquer
+        critério de acessibilidade.
+      </p>
+      <div class="ds__contrastes">
+        <div class="ds__contraste ds__contraste--erro">
+          <span style="color:#FFD103;background:#fff">Amarelo sobre branco</span>
+          <b>1,5:1 · nunca</b>
+        </div>
+        <div class="ds__contraste">
+          <span style="color:#000;background:#FFD103">Preto sobre amarelo</span>
+          <b>14,6:1 · ideal</b>
+        </div>
+        <div class="ds__contraste">
+          <span style="color:#FFD103;background:#000">Amarelo sobre preto</span>
+          <b>11,9:1 · ideal</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>Tipografia</h2>
+    <p class="ds__intro">
+      <strong>Open Sans</strong> em dois pesos: 600 para títulos, 400 para texto corrido.
+      Self-hosted, sem CDN de terceiro.
+    </p>
+    <div class="ds__escala">
+      {escala.map((e) => (
+        <div class="ds__linha-escala">
+          <code>{e.token}</code>
+          <span class={e.classe}>Faturamento previsível</span>
+          <em>{e.uso}</em>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>Espaçamento</h2>
+    <p class="ds__intro">Escala de 4px. Todo respiro sai daqui — nada de margem improvisada.</p>
+    <div class="ds__espacos">
+      {espacos.map((s) => (
+        <div class="ds__espaco">
+          <div class="ds__barra" style={`width:var(${s})`}></div>
+          <code>{s}</code>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>Botões</h2>
+
+    <h3>Brilho — CTA de conversão</h3>
+    <p class="ds__intro">
+      Borda cônica animada em amarelo sobre preto. <strong>Um por página</strong>, no ponto
+      principal de conversão. A animação roda continuamente; se tudo brilha, nada brilha — e o
+      custo de repaint se multiplica.
+    </p>
+    <div class="ds__demo ds__demo--escura">
+      <Botao variante="brilho">Descubra se faz sentido para sua clínica</Botao>
+    </div>
+
+    <h3>Metal ouro — CTA de conversão</h3>
+    <p class="ds__intro">
+      Metálico com a rampa no amarelo da marca. Três camadas: borda em gradiente, miolo e
+      superfície. Sem animação contínua — o custo é zero em repouso, e o estado pressionado é
+      CSS puro, sem JavaScript.
+    </p>
+    <div class="ds__demo">
+      <Botao variante="metal-ouro" tamanho="lg">Descubra se faz sentido</Botao>
+      <Botao variante="metal" tamanho="lg">Neutro</Botao>
+    </div>
+
+    <h3>Vidro — precisa de textura atrás</h3>
+    <p class="ds__intro">
+      Distorce o que está por trás. Sobre superfície chapada quase não aparece, então só faz
+      sentido sobre foto ou gradiente. O efeito depende de <code>backdrop-filter</code> com
+      <code>url()</code>, que <strong>só Chrome e Edge suportam</strong> — em Firefox e Safari cai
+      para blur simples, que continua legível.
+    </p>
+    <div class="ds__demo ds__demo--textura">
+      <Botao variante="vidro">Converse com a equipe</Botao>
+    </div>
+
+    <h3>Relevo</h3>
+    <p class="ds__intro">
+      Gradiente com borda inferior mais grossa e anel interno. Sem animação — serve para CTAs de
+      destaque que se repetem ao longo da página.
+    </p>
+    <div class="ds__demo">
+      <Botao variante="relevo">Agendar diagnóstico</Botao>
+      <Botao variante="relevo" tamanho="lg">Grande</Botao>
+    </div>
+
+    <h3>Demais variantes</h3>
+    <div class="ds__demo">
+      <Botao variante="solido">Fale com a equipe</Botao>
+      <Botao variante="contorno">Saiba mais</Botao>
+      <Botao variante="texto">Conhecer a Academy →</Botao>
+    </div>
+    <div class="ds__demo ds__demo--escura">
+      <Botao variante="claro">Converse com a equipe</Botao>
+    </div>
+
+    <h3>Tamanhos</h3>
+    <div class="ds__demo">
+      <Botao variante="solido" tamanho="sm">Pequeno · 32px</Botao>
+      <Botao variante="solido" tamanho="md">Médio · 44px</Botao>
+      <Botao variante="solido" tamanho="lg">Grande · 52px</Botao>
+    </div>
+
+    <div class="ds__aviso ds__aviso--info">
+      <h3>Hierarquia de CTA por página</h3>
+      <ol>
+        <li><strong>Uma</strong> das três de conversão — brilho, metal ouro ou vidro — no CTA principal</li>
+        <li><strong>Relevo</strong> ou <strong>sólido</strong> — repetições a cada 2–3 scrolls</li>
+        <li><strong>Contorno</strong> — ação secundária</li>
+        <li><strong>Texto</strong> — terciária, tom leve (o "Saiba mais" dos protocolos)</li>
+      </ol>
+      <p>
+        As três de conversão não convivem na mesma página: escolher duas dilui as duas. O brilho é
+        o único com animação contínua, então é o que mais pesa; metal e relevo custam zero em
+        repouso.
+      </p>
+      <p>
+        Sob <code>prefers-reduced-motion</code> o brilho vira sólido com contorno amarelo — mantém
+        presença sem movimento.
+      </p>
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>Forma e elevação</h2>
+    <div class="ds__formas">
+      <div class="ds__forma" style="border-radius:var(--raio-nenhum)"><code>--raio-nenhum</code></div>
+      <div class="ds__forma" style="border-radius:var(--raio-sutil)"><code>--raio-sutil</code></div>
+      <div class="ds__forma" style="border-radius:var(--raio-medio)"><code>--raio-medio</code></div>
+      <div class="ds__forma" style="border-radius:var(--raio-pilula)"><code>--raio-pilula</code></div>
+    </div>
+    <div class="ds__formas">
+      <div class="ds__forma" style="box-shadow:var(--elev-1)"><code>--elev-1</code></div>
+      <div class="ds__forma" style="box-shadow:var(--elev-2)"><code>--elev-2</code></div>
+      <div class="ds__forma" style="box-shadow:var(--elev-3)"><code>--elev-3</code></div>
+    </div>
+  </section>
+
+  <section class="ds__secao">
+    <h2>O que ainda falta</h2>
+    <ul class="ds__pendencias">
+      <li>Logo em <strong>SVG</strong> — positiva, negativa e monocromática</li>
+      <li>Confirmar se o monograma amarelo é a marca oficial ou versão de aplicação</li>
+      <li>Ícones: definir biblioteca ou desenhar o set (o briefing pede link, database, raio, gráfico)</li>
+      <li>Tratamento de foto: enquadramento, tratamento de cor, uso do amarelo sobre imagem</li>
+      <li>Motion além do CTA: entradas de seção, hover de card, o fluxo do dado no hero</li>
+    </ul>
+  </section>
+
+</main>
+
+<FiltroVidro />
+
+<footer class="ds__rodape">
+  <p>Renke · design system inicial · <code>docs/04-design/design-system.md</code></p>
+</footer>
+
+</body>
+</html>

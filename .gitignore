@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+
+# gerado por wireframe/build-standalone.mjs
+wireframe/wireframe-home-renke.html
+dist-portatil/
+dist-artifact/
+dist-copy/

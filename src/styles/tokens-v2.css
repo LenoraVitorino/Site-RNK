@@ -1,0 +1,45 @@
+/* ============================================================
+   TOKENS V2 — direção visual aprovada em 11/09/2026
+   Ainda NÃO importado por nenhuma página. Entra junto com o layout
+   novo da home, dobra a dobra. Até lá, tokens.css segue mandando.
+   Proposta: docs/04-design/direcao-visual-v2.html
+   ============================================================ */
+
+:root {
+  /* ---- Cor (preto absoluto, decisão de 16/09/2026) ----
+     A página é preta; os tons de cinza só criam camadas (segundo plano,
+     cartões). O papel, antes fundo, virou a cor do texto. */
+  --fundo:      #000000;   /* fundo de página: preto absoluto */
+  --painel:     #0B0B0B;   /* segundo plano: faixas, slots de foto, trilho dos planos */
+  --superficie: #111111;   /* cartões e caixas com borda */
+  --papel:      #F2F2EE;   /* texto e superfícies claras (botão branco) */
+  --texto:      var(--papel);
+  --grafite:    #161616;   /* superfícies escuras elevadas e texto sobre amarelo */
+  --cinza:      #A3A39B;   /* texto secundário, rótulos (7:1 sobre preto) */
+  --fio:        rgb(242 242 238 / .14);   /* linhas de grade */
+
+  /* O amarelo fica no tom da marca (H 48°) e só sobe de luminosidade.
+     Regra mantida: nunca como texto sobre fundo claro. */
+  --amarelo:       #FFE27A;   /* painéis, destaque de uma palavra — L 74% */
+  --amarelo-claro: #FFEBA3;   /* superfícies grandes de fundo — L 82% */
+  --amarelo-marca: #FFD103;   /* o amarelo original: só em detalhes que precisam chamar atenção */
+  --destaque:      var(--amarelo-marca);
+
+  /* ---- Tipografia ---- */
+  --font: 'Inter Variable', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;   /* uma família só, do título ao rodapé */
+  /* Tipografia grande e leve: títulos em regular, ênfases em medium,
+     semibold só em detalhes pequenos (rótulos, botões). Nunca bold. */
+  --peso-titulo: 260;   /* títulos e números grandes: mais finos que light, na Inter (sobre o preto o traço claro já parece mais fino) */
+  --font-titulo: 'Inter Variable', 'Inter', var(--font);
+  --peso-enfase: 500;   /* strong, nomes, chamadas curtas */
+  --peso-detalhe: 600;  /* rótulos miúdos e botões */
+  --peso-corpo:  400;
+  --tracking-caps:  -.02em;   /* caixa alta em títulos */
+  --tracking-label:  .12em;   /* rótulos pequenos em caixa alta */
+
+  /* ---- Forma ---- */
+  /* Arredondamento mínimo, no acabamento do símbolo "R": só em bordas de
+     caixas, cartões, campos e botões. Entre as dobras, tudo reto. */
+  --raio: 6px;         /* botões, campos, chips */
+  --raio-caixa: 10px;  /* cartões, slots de foto, painéis com borda */
+}

@@ -1,0 +1,19 @@
+---
+/**
+ * Casca das páginas internas: mesma base da home, com o conteúdo vindo de uma
+ * lista de blocos em src/data/paginas/.
+ */
+import Base from './Base.astro';
+import Blocos from '../components/pagina/Blocos.astro';
+import '../styles/pagina.css';
+import type { Pagina } from '../data/paginas/tipos';
+
+interface Props {
+  pagina: Pagina;
+}
+
+const { pagina } = Astro.props;
+---
+<Base titulo={pagina.titulo} descricao={pagina.descricao}>
+  <Blocos blocos={pagina.blocos} />
+</Base>

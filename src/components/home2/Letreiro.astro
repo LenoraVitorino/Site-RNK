@@ -1,0 +1,25 @@
+---
+/**
+ * Faixa de letras grandes entre "O que a Renke faz" e o Protocolo Revena,
+ * como a faixa "Impact + Inspire + Innovate" da referência. As palavras
+ * são as do briefing (seção Diferencial do Revena Full): Controle,
+ * Automação, Processo, Experiência. Anda sozinha, devagar; para no hover
+ * e com menos movimento. Só as letras sobre o preto, sem marca atrás.
+ */
+const palavras = ['Controle', 'Automação', 'Processo', 'Experiência'];
+const mais = '<svg class="letreiro__mais" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1v18M1 10h18" stroke="currentColor" stroke-width="1.2"/></svg>';
+---
+<section class="letreiro" aria-label="Controle, Automação, Processo, Experiência">
+  <div class="letreiro__trilho">
+    {[0, 1].map((k) => (
+      <div class="letreiro__grupo" aria-hidden={k === 1 ? 'true' : undefined}>
+        {palavras.map((p) => (
+          <>
+            <span class="letreiro__palavra">{p}</span>
+            <Fragment set:html={mais} />
+          </>
+        ))}
+      </div>
+    ))}
+  </div>
+</section>

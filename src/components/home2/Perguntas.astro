@@ -1,0 +1,52 @@
+---
+/**
+ * Frase-âncora + perguntas, no bloco escuro que dá ritmo à página.
+ * As quatro primeiras ocupam o grid 2×2 que o layout pede; as outras três
+ * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
+ * esconder copy não resolve decisão.
+ * A .cortina em volta é o que faz esta dobra entrar pela direita, por
+ * cima dos planos, no fim do curso deles: primeiro só a frase-âncora; no
+ * scroll seguinte ela sobe e as perguntas aparecem (--fim e --sobe vêm do
+ * script de Planos.astro, no lugar do revelar .entra).
+ */
+import { perguntas } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
+const principais = perguntas.filter((p) => !p.excedente);
+const demais = perguntas.filter((p) => p.excedente);
+---
+<div class="cortina">
+<section class="secao secao--escura" id="perguntas">
+  <div class="container">
+    {copyLiteral ? (
+      <p class="ancora">
+        Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+        <strong>Mas e com o seu negócio?</strong>
+      </p>
+    ) : (
+      <!-- Versão do estúdio: a frase enxugada (saem "Clinicamente," e
+           "exatamente") e o fecho "da sua clínica" no lugar de "do seu
+           negócio", decisão da Lenora em 16/09/2026 para falar no nicho. -->
+      <p class="ancora">
+        Você sabe o que está acontecendo com seu paciente.
+        <strong>Mas e com a sua clínica?</strong>
+      </p>
+    )}
+    <div class="perguntas">
+      {principais.map((p, i) => (
+        <div class="pergunta">
+          <span class="pergunta__n num">0{i + 1}</span>
+          <p>{p.texto}</p>
+        </div>
+      ))}
+    </div>
+    <div class="perguntas perguntas--mais">
+      {demais.map((p, i) => (
+        <div class="pergunta">
+          <span class="pergunta__n num">0{i + 5}</span>
+          <p>{p.texto}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+</div>

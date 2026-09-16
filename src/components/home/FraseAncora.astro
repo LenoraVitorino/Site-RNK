@@ -1,0 +1,17 @@
+---
+import { perguntas } from '../../data/home';
+---
+<section class="section section--dark">
+  <div class="container container--narrow">
+    <p class="anchor-phrase">
+      Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+      <strong>Mas e com o seu negócio?</strong>
+    </p>
+
+    <div class="questions">
+      {perguntas.map((p) => (
+        <p class:list={['question', 'vidro', 'vidro--realce', 'entra', p.excedente && 'question--overflow']}>{p.texto}</p>
+      ))}
+    </div>
+  </div>
+</section>

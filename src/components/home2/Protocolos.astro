@@ -1,0 +1,70 @@
+---
+/**
+ * Dobra 3 · Protocolo Revena, no desenho da referência "Metafore": um
+ * cabeçalho (rótulo em pílula, título, texto de apoio e botão) e os cinco
+ * pilares em cartões, um aberto por vez. O aberto fica largo e mais alto,
+ * com uma imagem no topo, ícone, título e texto; os fechados mostram só o
+ * número, o ícone e o título. Passar o mouse (ou tocar) abre.
+ * A imagem do topo é um fundo fictício (public/imagens/plano-fundo-escuro.svg)
+ * até chegarem as artes; os ícones dos pilares são provisórios
+ * (public/icones/pilar-0N.svg) até chegarem os oficiais. Copy literal.
+ */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { pilares } from '../../data/home';
+import Botao from '../ui/Botao.astro';
+
+const icone = (i: number) => {
+  const nome = `pilar-0${i + 1}.svg`;
+  return existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null;
+};
+---
+<section class="secao pilares" id="protocolo-revena">
+  <div class="container">
+    <header class="pilares__cabeca entra">
+      <div>
+        <p class="rotulo rotulo--pilula">Para clínicas</p>
+        <h2 class="titulo pilares__titulo">Protocolo Revena</h2>
+      </div>
+      <div class="pilares__lado">
+        <p>Cinco frentes que a Renke opera na sua clínica.</p>
+        <Botao href="/contato">Fale com a equipe</Botao>
+      </div>
+    </header>
+
+    <ol class="cartas entra" data-cartas aria-label="Pilares do Protocolo Revena">
+      {pilares.map((p, i) => (
+        <li class:list={['carta', i === 0 && 'carta--aberta']} data-carta>
+          <span class="carta__n" aria-hidden="true">0{i + 1}.</span>
+          <div class="carta__pe" aria-hidden="true">
+            {icone(i) && <img class="carta__icone" src={icone(i)} alt="" width="40" height="40" loading="lazy" />}
+            <span>{p.titulo}</span>
+          </div>
+          <div class="carta__corpo">
+            <figure class="carta__fundo"><img src="/imagens/plano-fundo-escuro.svg" alt="" width="1200" height="700" loading="lazy" /></figure>
+            <div class="carta__conteudo">
+              {icone(i) && <img class="carta__icone" src={icone(i)} alt="" width="40" height="40" loading="lazy" />}
+              <h3 class="carta__nome">{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  /* Passar o mouse ou tocar abre o cartão; o último aberto fica aberto. */
+  const lista = document.querySelector<HTMLElement>('[data-cartas]');
+  if (lista) {
+    const cartas = [...lista.querySelectorAll<HTMLElement>('[data-carta]')];
+    const abre = (alvo: EventTarget | null) => {
+      const c = (alvo as HTMLElement | null)?.closest<HTMLElement>('[data-carta]');
+      if (!c || c.classList.contains('carta--aberta')) return;
+      cartas.forEach((k) => k.classList.toggle('carta--aberta', k === c));
+    };
+    lista.addEventListener('mouseover', (e) => abre(e.target));
+    lista.addEventListener('click', (e) => abre(e.target));
+  }
+</script>

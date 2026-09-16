@@ -1,0 +1,70 @@
+---
+/* Open Sans self-hosted: sem requisição a terceiro no caminho crítico,
+   o que importa para o LCP < 2,5s exigido no briefing. Só os pesos usados.
+   DESLIGADA durante o teste da Helvetica (ver tokens.css) — sem isso os
+   ~30 KB de fonte viajariam sem ninguém usar. Reativar se o teste cair. */
+// import '@fontsource/open-sans/latin-400.css';
+// import '@fontsource/open-sans/latin-400-italic.css';
+// import '@fontsource/open-sans/latin-600.css';
+import '../styles/site.css';
+import '../styles/botao.css';
+import '../styles/superficies.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+}
+
+const { titulo, descricao } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titulo}</title>
+  <meta name="description" content={descricao} />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231c1c1e'/><text x='8' y='12' font-size='10' font-family='sans-serif' fill='%23fff' text-anchor='middle'>R</text></svg>"
+  />
+  <!-- TODO: schema Organization + FAQ, canonical, OG tags.
+       Ver docs/02-arquitetura/seo-e-keywords.md -->
+  <script is:inline>
+    /* Marca que o JS está vivo, antes da primeira pintura. Só então o CSS
+       esconde os blocos com .entra para que possam entrar na tela. Sem JS,
+       eles nascem visíveis — conteúdo não pode depender de script. */
+    document.documentElement.classList.add('js');
+  </script>
+</head>
+<body>
+  <Header />
+  <main id="conteudo">
+    <slot />
+  </main>
+  <Footer />
+
+  <script>
+    /* Revela os blocos conforme entram na viewport. IntersectionObserver
+       em vez de listener de scroll: não roda a cada pixel. */
+    const alvos = document.querySelectorAll('.entra');
+    if (alvos.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const obs = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('visivel');
+            obs.unobserve(e.target);
+          }
+        },
+        { rootMargin: '0px 0px -12% 0px', threshold: 0.05 }
+      );
+      alvos.forEach((a) => obs.observe(a));
+    } else {
+      alvos.forEach((a) => a.classList.add('visivel'));
+    }
+  </script>
+</body>
+</html>

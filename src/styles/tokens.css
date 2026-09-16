@@ -1,0 +1,138 @@
+/* ============================================================
+   DESIGN SYSTEM — Tokens
+   Renke · Site institucional
+
+   Fonte única de verdade para cor, tipografia, espaçamento e forma.
+   Nenhum componente declara valor literal: tudo sai daqui.
+
+   Guia: docs/04-design/design-system.md
+   Página viva: /design-system
+   ============================================================ */
+
+:root {
+  /* ---- Marca ---------------------------------------------------------
+     Extraída do site atual (renkestudio.com.br, Elementor kit-7).
+     Ver docs/04-design/paleta-de-marca.md
+
+     REGRA DE CONTRASTE: o amarelo tem luminância altíssima. Como texto
+     sobre branco dá ~1.5:1 — ilegível. Ele funciona como FUNDO com texto
+     preto (14:1) ou como acento sobre superfície escura (9.8:1). */
+  --marca:        #FFD103;
+  --marca-escura: #B79500;   /* estados sobre fundo claro */
+  --marca-suave:  #FFF4C7;   /* lavagem para blocos amplos */
+
+  /* ---- Neutros — base escura ------------------------------------------
+     O site é preto e amarelo. Alternar com branco quebrava o vidro, que só
+     existe sobre superfície escura, e criava um corte duro entre o hero e o
+     resto. O ritmo do scroll passa a vir de variação tonal dentro do escuro,
+     não de inversão. */
+  --bg:        #000000;      /* preto absoluto */
+  --bg-alt:    #0a0a0a;      /* alternância de seção — degrau mínimo */
+  --dark:      #000000;
+  --dark-soft: #0d0d0d;
+  --line:      rgb(255 255 255 / .10);
+  --line-soft: rgb(255 255 255 / .06);
+  --box:       rgb(255 255 255 / .04);
+  --text:      #f5f4f2;
+  --muted:     #a2a4a8;
+  --on-dark:   #f5f4f2;
+  --on-dark-muted: #a2a4a8;
+  --sobre-marca: #14161a;    /* texto sobre o amarelo */
+
+  /* Foco de teclado no amarelo da marca: sobre preto dá 9,8:1, bem acima
+     do azul que estava aqui, e a paleta não tem azul. */
+  --foco:      var(--marca);
+
+  /* ---- Tipografia ----------------------------------------------------
+     TESTE (06/09/2026): Helvetica, caixa alta no herói.
+
+     Helvetica é proprietária — não existe versão livre para embutir. A pilha
+     abaixo usa a do sistema: no Mac e no iPhone é a Helvetica de verdade; no
+     Windows cai em Arial, que é clone métrico dela (mesmas larguras, desenho
+     quase igual); no Linux, Liberation Sans, idem. Se o teste for aprovado,
+     o caminho para todo mundo ver a mesma coisa é licenciar a Neue Helvetica
+     ou a Helvetica Now (Monotype) e embutir os arquivos aqui.
+
+     Para voltar à Open Sans: restaurar --font e --peso-titulo: 600, e
+     reativar os imports em Base.astro. */
+  --font: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
+  /* Helvetica não tem 600: no Mac o 600 cai para o Bold (700) ou é
+     sintetizado. Declarar 700 evita o sintético. */
+  --peso-titulo: 700;
+  --peso-corpo:  400;
+
+  /* Escala modular ~1.25. Fluida só onde o tamanho realmente muda de papel. */
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 1rem;
+  --fs-md:   1.0625rem;
+  --fs-lg:   clamp(1.125rem, 1.6vw, 1.3rem);
+  --fs-xl:   clamp(1.35rem, 2.6vw, 1.75rem);
+  --fs-2xl:  clamp(1.6rem, 3.6vw, 2.35rem);
+  --fs-3xl:  clamp(2rem, 6vw, 3.5rem);
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.35;
+  --lh-corpo: 1.65;
+
+  --tracking-label: .1em;
+
+  /* ---- Espaçamento — escala de 4px ---------------------------------- */
+  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;  --s-6: 2rem;    --s-7: 3rem;    --s-8: 4rem;
+
+  --space: clamp(3.5rem, 8vw, 7rem);
+
+  /* ---- Layout -------------------------------------------------------- */
+  --max:        1160px;
+  --max-narrow: 860px;
+  --max-prose:  700px;
+  --medida:     68ch;   /* linha de leitura confortável */
+  --radius:     2px;
+  --alvo:       44px;   /* alvo mínimo de toque */
+}
+/* ---- Forma e elevação ---------------------------------------------- */
+:root {
+  --raio-nenhum: 0;
+  --raio-sutil:  2px;
+  --raio-medio:  8px;
+  --raio-pilula: 999px;
+
+  /* Arredondamento dos botões. Um token só: mudar aqui muda todas as
+     variantes de uma vez, sem caçar valor solto por arquivo. */
+  --raio-botao: var(--raio-pilula);
+
+  --elev-1: 0 1px 2px rgb(0 0 0 / .06);
+  --elev-2: 0 2px 10px rgb(0 0 0 / .08);
+  --elev-3: 0 12px 32px rgb(0 0 0 / .12);
+
+  /* ---- Superfícies de vidro -------------------------------------------
+     Extraído da referência Framer: a assinatura do efeito é branco a 5%
+     de opacidade com blur baixo, não blur pesado. Blur alto borra o que
+     está atrás e o cartão perde a leitura de "vidro sobre algo". */
+  --vidro-fundo:   rgb(255 255 255 / .05);
+  --vidro-fundo-2: rgb(255 255 255 / .08);   /* hover */
+  --vidro-borda:   rgb(255 255 255 / .12);
+  --vidro-borda-2: rgb(255 255 255 / .22);   /* hover */
+  --vidro-blur:    blur(5px);
+
+  /* Sobre fundo claro o vidro inverte: preto a baixa opacidade */
+  --vidro-claro-fundo: rgb(0 0 0 / .035);
+  --vidro-claro-borda: rgb(0 0 0 / .08);
+
+  /* ---- Raio de card ---------------------------------------------------
+     20px, o valor dominante na referência. Generoso sem virar pílula. */
+  --raio-card: 20px;
+  --raio-card-sm: 15px;
+
+  /* ---- Movimento --------------------------------------------------- */
+  --dur-rapida: .15s;
+  --dur-media:  .3s;
+  --dur-lenta:  .8s;
+  --easing:     cubic-bezier(.25, 1, .5, 1);
+  --easing-suave: ease;
+  --dur-padrao: .25s;   /* a cadência da referência */
+
+  /* Máscara de fade nas bordas — usada em faixas que correm */
+  --fade-lateral: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}

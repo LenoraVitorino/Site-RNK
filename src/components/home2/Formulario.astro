@@ -1,0 +1,35 @@
+---
+import { formulario } from '../../data/home';
+import Botao from '../ui/Botao.astro';
+---
+<section class="secao" id="formulario">
+  <div class="container form-block">
+    <div class="form-block__text entra">
+      <p class="rotulo">Fale com a gente</p>
+      <h2 class="titulo caps">{formulario.titulo}</h2>
+      <p>{formulario.texto}</p>
+    </div>
+    <form class="form-card entra" novalidate>
+      <label class="field">
+        <span class="field__label">Nome</span>
+        <input id="h-nome" type="text" name="nome" autocomplete="name" />
+      </label>
+      <label class="field">
+        <span class="field__label">WhatsApp</span>
+        <input id="h-zap" type="tel" name="whatsapp" autocomplete="tel" />
+      </label>
+      <label class="field">
+        <span class="field__label">Especialidade</span>
+        <input id="h-esp" type="text" name="especialidade" />
+      </label>
+      <label class="field">
+        <span class="field__label">Faturamento mensal</span>
+        <select id="h-fat" name="faturamento">
+          {formulario.faixasFaturamento.map((f) => <option>{f}</option>)}
+        </select>
+      </label>
+      <Botao type="submit" bloco>{formulario.botao}</Botao>
+      <p class="form-card__aviso">O envio ainda não está ligado. Enquanto isso, escreva para <a href="mailto:contato@renkestudio.com.br">contato@renkestudio.com.br</a>.</p>
+    </form>
+  </div>
+</section>

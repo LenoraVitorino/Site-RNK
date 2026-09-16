@@ -1,0 +1,272 @@
+---
+import { menu, acaoHeader } from '../data/nav';
+import { existe } from '../data/rotas';
+import Botao from './ui/Botao.astro';
+---
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="/" class="logo" aria-label="Renke — página inicial">
+      <img class="logo__img" src="/marca/renke-monograma.png" alt="Renke" width="270" height="270" />
+    </a>
+
+    <button
+      type="button" class="nav-toggle" id="navToggle"
+      aria-expanded="false" aria-controls="navPrincipal" aria-label="Abrir menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
+      <ul class="nav__list">
+        {menu.map((item) =>
+          'grupos' in item ? (
+            <li class="nav__item nav__item--has-menu">
+              <button
+                type="button" class="nav__link nav__trigger"
+                aria-expanded="false" aria-controls={item.id}>
+                {item.rotulo} <span class="nav__caret" aria-hidden="true"></span>
+              </button>
+              <div class="megamenu" id={item.id} hidden>
+                <div class="megamenu__inner">
+                  {item.grupos.map((grupo) => (
+                    <>
+                      <p class="megamenu__title">{grupo.titulo}</p>
+                      <ul class="megamenu__list">
+                        {grupo.itens.map((sub) => (
+                          <li>
+                            <a href={existe(sub.rota) ? sub.rota : '#'} data-rota={sub.rota} aria-disabled={existe(sub.rota) ? undefined : 'true'} class:list={[!existe(sub.rota) && 'nav--pendente']}>
+                              {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ))}
+                </div>
+              </div>
+            </li>
+          ) : (
+            <li class="nav__item">
+              <a
+                href={existe(item.rota) ? item.rota : '#'} class="nav__link" data-rota={item.rota}
+                aria-current={item.atual ? 'page' : undefined}>
+                {item.rotulo}
+              </a>
+            </li>
+          )
+        )}
+      </ul>
+
+      <div class="nav__acao">
+        <Botao variante="relevo" href={acaoHeader.rota}>{acaoHeader.rotulo}</Botao>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay" hidden></div>
+
+<script>
+  /* Desktop: mega-menu no hover e no foco. Mobile: drawer com acordeão. */
+  const DESKTOP = window.matchMedia('(min-width: 900px)');
+
+  const header = document.getElementById('header')!;
+  const navToggle = document.getElementById('navToggle')!;
+  const nav = document.getElementById('navPrincipal')!;
+  const overlay = document.getElementById('navOverlay')!;
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('.nav__trigger'));
+
+  const panelOf = (t: HTMLElement) =>
+    document.getElementById(t.getAttribute('aria-controls') || '');
+
+  function openSubmenu(t: HTMLElement) {
+    const panel = panelOf(t);
+    if (!panel) return;
+    t.setAttribute('aria-expanded', 'true');
+    panel.hidden = false;
+  }
+
+  function closeSubmenu(t: HTMLElement) {
+    const panel = panelOf(t);
+    if (!panel) return;
+    t.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+  }
+
+  const closeAllSubmenus = (except?: HTMLElement) =>
+    triggers.forEach((t) => t !== except && closeSubmenu(t));
+
+  triggers.forEach((trigger) => {
+    const item = trigger.closest('.nav__item') as HTMLElement;
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Desktop: o hover já abre o painel, então o clique nunca fecha — se
+      // alternasse, clicar no item sob o cursor fecharia o menu recém-aberto.
+      // Fechar fica por conta de mouseleave, Escape, clique fora ou outro trigger.
+      if (DESKTOP.matches) {
+        closeAllSubmenus(trigger);
+        openSubmenu(trigger);
+        return;
+      }
+
+      trigger.getAttribute('aria-expanded') === 'true'
+        ? closeSubmenu(trigger)
+        : openSubmenu(trigger);
+    });
+
+    item.addEventListener('mouseenter', () => {
+      if (!DESKTOP.matches) return;
+      closeAllSubmenus(trigger);
+      openSubmenu(trigger);
+    });
+
+    item.addEventListener('mouseleave', () => {
+      if (DESKTOP.matches) closeSubmenu(trigger);
+    });
+
+    item.addEventListener('focusout', (e) => {
+      if (!DESKTOP.matches) return;
+      if (!item.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
+    });
+  });
+
+  function openNav() {
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Fechar menu');
+    nav.classList.add('is-open');
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir menu');
+    nav.classList.remove('is-open');
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    closeAllSubmenus();
+  }
+
+  navToggle.addEventListener('click', () =>
+    nav.classList.contains('is-open') ? closeNav() : openNav()
+  );
+  overlay.addEventListener('click', closeNav);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const aberto = triggers.find((t) => t.getAttribute('aria-expanded') === 'true');
+    if (aberto) {
+      closeSubmenu(aberto);
+      aberto.focus();
+    } else if (nav.classList.contains('is-open')) {
+      closeNav();
+      navToggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!DESKTOP.matches) return;
+    if ((e.target as HTMLElement).closest('.nav__item--has-menu')) return;
+    closeAllSubmenus();
+  });
+
+  // As demais páginas ainda não existem: registra a rota prevista.
+  nav.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest('a[href="#"]');
+    if (!link) return;
+    e.preventDefault();
+    closeAllSubmenus();
+    if (!DESKTOP.matches) closeNav();
+    const rota = link.getAttribute('data-rota');
+    if (rota) console.info(`[wireframe] rota prevista: ${rota} (página ainda não construída)`);
+  });
+
+  const onBreakpoint = () => {
+    closeAllSubmenus();
+    if (DESKTOP.matches) closeNav();
+  };
+  DESKTOP.addEventListener('change', onBreakpoint);
+
+  /* Pílula que desliza sob o item em foco ou sob o cursor.
+     É o equivalente ao layoutId do framer-motion: um elemento só que muda
+     de posição, em vez de um fundo por item entrando e saindo. Anima apenas
+     transform e width, então fica na composição e não força layout. */
+  const lista = nav.querySelector<HTMLElement>('.nav__list');
+  const indicador = nav.querySelector<HTMLElement>('.nav__indicador');
+
+  if (lista && indicador && DESKTOP.matches) {
+    const mover = (alvo: HTMLElement) => {
+      const r = alvo.getBoundingClientRect();
+      const base = lista.getBoundingClientRect();
+      indicador.style.setProperty('--x', `${r.left - base.left}px`);
+      indicador.style.setProperty('--w', `${r.width}px`);
+      lista.dataset.ativo = 'sim';
+    };
+    const esconder = () => delete lista.dataset.ativo;
+
+    lista.querySelectorAll<HTMLElement>('.nav__link').forEach((link) => {
+      link.addEventListener('mouseenter', () => DESKTOP.matches && mover(link));
+      link.addEventListener('focus', () => DESKTOP.matches && mover(link));
+    });
+    lista.addEventListener('mouseleave', esconder);
+    lista.addEventListener('focusout', (e) => {
+      if (!lista.contains(e.relatedTarget as Node)) esconder();
+    });
+    // Reposiciona no resize: a pílula guarda pixels, não porcentagem
+    window.addEventListener('resize', esconder, { passive: true });
+  }
+
+  let ticking = false;
+  /* Cabeçalho camaleão: lê a cor de fundo do que está logo abaixo dele e
+     assume o mesmo tom (escuro, claro ou amarelo). Sem lista de seções:
+     funciona em qualquer página. */
+  const TONS = ['header--escuro', 'header--claro', 'header--amarelo'];
+  const tomDeCor = (cor: string) => {
+    const m = cor.match(/[\d.]+/g);
+    if (!m || m.length < 3) return null;
+    const [r, g, b] = m.map(Number);
+    if (m.length > 3 && Number(m[3]) < 0.9) return null;   // transparente ou translúcido: vale o fundo de trás
+    const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    if (lum < 110) return 'header--escuro';
+    if (r > 200 && g > 180 && b < 170) return 'header--amarelo';
+    return 'header--claro';
+  };
+  const tomAbaixo = () => {
+    const y = header.offsetHeight + 2;
+    let n: Element | null = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
+    while (n && n !== document.documentElement) {
+      if (!header.contains(n)) {
+        const t = tomDeCor(getComputedStyle(n).backgroundColor);
+        if (t) return t;
+      }
+      n = n.parentElement;
+    }
+    return tomDeCor(getComputedStyle(document.body).backgroundColor) ?? 'header--claro';
+  };
+  const aplicaTom = () => {
+    if (nav.classList.contains('is-open')) return;   // com o drawer aberto, o tom congela
+    const t = tomAbaixo();
+    if (header.classList.contains(t)) return;
+    header.classList.remove(...TONS);
+    header.classList.add(t);
+  };
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle('is-stuck', window.scrollY > 8);
+      aplicaTom();
+      ticking = false;
+    });
+  }, { passive: true });
+  window.addEventListener('resize', aplicaTom, { passive: true });
+  aplicaTom();
+  // A hero anima sem rolar a página: checa de novo por um tempo depois do carregamento.
+  let checagens = 0;
+  const cadencia = setInterval(() => { aplicaTom(); if (++checagens > 40) clearInterval(cadencia); }, 500);
+</script>

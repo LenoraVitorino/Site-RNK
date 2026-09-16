@@ -1,0 +1,17 @@
+# Ícones dos pilares do Protocolo Revena
+
+Colocar aqui os SVGs da pasta "Renke Studio/SVG", com estes nomes:
+
+- pilar-01.svg — Vamos além do tráfego pago (link/conexão)
+- pilar-02.svg — Implementamos um CRM que funciona de verdade
+- pilar-03.svg — Automatizamos o seu atendimento
+- pilar-04.svg — Dizemos o que fazer todo mês
+- pilar-05.svg — Construímos seu posicionamento antes de gastar um real
+
+O componente Protocolos.astro só renderiza o ícone se o arquivo existir.
+
+Os cinco arquivos atuais são ícones de linha desenhados no projeto, como
+provisórios: sobrescreva com os SVGs oficiais mantendo os nomes.
+
+Planos (oficiais, enviados em 14/09/2026): plano-<start|run|scale|core|full>-light.svg
+para fundo claro e -dark.svg para fundo escuro. Planos.astro usa a versão light.

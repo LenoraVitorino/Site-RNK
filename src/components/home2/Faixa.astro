@@ -1,0 +1,20 @@
+---
+/**
+ * Faixa logo abaixo do palco: os números em linha, como um extrato, e a
+ * prova social "quem confia". Mesma função da faixa "reconhecida como…"
+ * da referência: ancorar a tese em fatos antes da segunda dobra.
+ */
+// Os mesmos números de hero.numeros (⚠️ D1), repartidos à mão: separar pela
+// primeira palavra dava "Método / validado há 4 anos".
+const partes = [
+  { valor: '~30', rotulo: 'clínicas atendidas' },
+  { valor: '4 anos', rotulo: 'de método validado' },
+  { valor: 'R$42M', rotulo: 'em faturamento gerado' },
+];
+---
+<section class="faixa" aria-label="Números">
+  <div class="faixa__numeros num">
+    {partes.map((p) => <div><b>{p.valor}</b><small>{p.rotulo}</small></div>)}
+    <div><b>1 / mês</b><small>nova clínica aceita</small></div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+---
+import { formulario } from '../../data/home';
+import Botao from '../ui/Botao.astro';
+---
+<section class="section section--alt">
+  <div class="container">
+    <div class="form-block">
+      <div class="form-block__text">
+        <h2>{formulario.titulo}</h2>
+        <p>{formulario.texto}</p>
+      </div>
+
+      <form class="form-card vidro" novalidate>
+
+        <label class="field">
+          <span class="field__label">Nome</span>
+          <input type="text" name="nome" autocomplete="name" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">WhatsApp</span>
+          <input type="tel" name="whatsapp" autocomplete="tel" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Especialidade</span>
+          <input type="text" name="especialidade" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Faturamento mensal</span>
+          <select name="faturamento">
+            {formulario.faixasFaturamento.map((f) => <option>{f}</option>)}
+          </select>
+        </label>
+
+        <Botao variante="relevo" type="submit" bloco>{formulario.botao}</Botao>
+      </form>
+    </div>
+  </div>
+</section>

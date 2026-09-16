@@ -1,0 +1,179 @@
+/* ============================================================
+   Página do design system. Estilos só desta página — os
+   componentes reais vivem em tokens.css e botao.css.
+   ============================================================ */
+
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.ds {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  font-weight: var(--peso-corpo);
+  line-height: var(--lh-corpo);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.ds h1, .ds h2, .ds h3, .ds strong { color: #fff; }
+
+.ds :focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; }
+
+.ds h1, .ds h2, .ds h3 {
+  margin: 0 0 .4em; font-weight: var(--peso-titulo);
+  line-height: var(--lh-tight); text-wrap: balance;
+}
+.ds code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .8125em; color: var(--marca);
+  background: rgb(255 255 255 / .05);
+  padding: .1em .35em; border-radius: var(--raio-sutil);
+  border: 1px solid var(--line);
+}
+
+/* ---- Cabeçalho ---- */
+.ds__topo {
+  display: flex; align-items: center; gap: var(--s-4);
+  padding: var(--s-6) var(--s-5);
+  background: #000; color: var(--on-dark);
+  border-bottom: 1px solid var(--marca);
+}
+.ds__topo h1 { font-size: var(--fs-xl); color: #fff; margin: 0; }
+.ds__topo p { margin: 0; font-size: var(--fs-sm); color: var(--on-dark-muted); }
+
+/* ---- Corpo ---- */
+.ds__corpo { max-width: 1080px; margin-inline: auto; padding: var(--s-7) var(--s-5); }
+
+.ds__secao { padding-block: var(--s-7); border-top: 1px solid var(--line); }
+.ds__secao:first-child { border-top: 0; padding-top: 0; }
+.ds__secao h2 { font-size: var(--fs-2xl); }
+.ds__secao h3 { font-size: var(--fs-lg); margin-top: var(--s-6); }
+.ds__intro { max-width: var(--medida); color: var(--muted); }
+
+/* ---- Marca ---- */
+.ds__marcas { display: flex; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-5); }
+.ds__marca {
+  display: grid; place-items: center; gap: var(--s-3);
+  padding: var(--s-6); min-width: 240px;
+  background: rgb(255 255 255 / .04); border: 1px solid var(--line);
+  border-radius: var(--raio-medio);
+  font-size: var(--fs-xs); color: var(--muted);
+}
+.ds__marca--escura { background: #000; }
+
+/* ---- Cores ---- */
+.ds__cores {
+  display: grid; gap: var(--s-4); margin-top: var(--s-5);
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+.ds__cor { display: grid; gap: var(--s-1); }
+.ds__amostra {
+  height: 76px; border-radius: var(--raio-medio);
+  border: 1px solid var(--line); margin-bottom: var(--s-2);
+}
+.ds__linha-escala { border-bottom-color: var(--line); }
+.ds__cor strong { font-size: var(--fs-sm); }
+.ds__cor code { justify-self: start; }
+.ds__token { color: var(--muted); }
+.ds__cor p { margin: var(--s-1) 0 0; font-size: var(--fs-xs); color: var(--muted); line-height: 1.5; }
+
+/* ---- Avisos ---- */
+.ds__aviso {
+  margin-top: var(--s-6); padding: var(--s-5);
+  background: rgb(255 209 3 / .07); border-left: 3px solid var(--marca);
+  border-radius: 0 var(--raio-medio) var(--raio-medio) 0;
+}
+.ds__aviso--info { background: rgb(255 255 255 / .04); border-left-color: var(--line); }
+.ds__aviso h3 { margin-top: 0; font-size: var(--fs-lg); }
+.ds__aviso p, .ds__aviso li { font-size: var(--fs-sm); }
+.ds__aviso ol { margin: 0 0 var(--s-3); padding-left: 1.25rem; }
+.ds__aviso li { margin-bottom: var(--s-1); }
+
+.ds__contrastes { display: grid; gap: var(--s-3); margin-top: var(--s-4); }
+.ds__contraste { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.ds__contraste span {
+  padding: var(--s-3) var(--s-4); border-radius: var(--raio-card-sm);
+  font-weight: var(--peso-titulo); border: 1px solid var(--line);
+}
+.ds__contraste b { font-size: var(--fs-xs); color: var(--muted); }
+.ds__contraste--erro span { border-color: #dc2626; }
+
+/* ---- Tipografia ---- */
+.ds__escala { display: grid; gap: var(--s-4); margin-top: var(--s-5); }
+.ds__linha-escala {
+  display: grid; gap: var(--s-2); align-items: baseline;
+  padding-bottom: var(--s-4); border-bottom: 1px solid var(--line-soft);
+}
+.ds__linha-escala code { justify-self: start; }
+.ds__linha-escala em { font-size: var(--fs-xs); color: var(--muted); font-style: normal; }
+
+.amostra-3xl  { font-size: var(--fs-3xl);  font-weight: var(--peso-titulo); line-height: var(--lh-tight); }
+.amostra-2xl  { font-size: var(--fs-2xl);  font-weight: var(--peso-titulo); line-height: var(--lh-tight); }
+.amostra-xl   { font-size: var(--fs-xl);   font-weight: var(--peso-titulo); }
+.amostra-lg   { font-size: var(--fs-lg);   font-weight: var(--peso-titulo); }
+.amostra-md   { font-size: var(--fs-md); }
+.amostra-base { font-size: var(--fs-base); }
+.amostra-sm   { font-size: var(--fs-sm); }
+.amostra-xs   { font-size: var(--fs-xs); }
+
+/* ---- Espaçamento ---- */
+.ds__espacos { display: grid; gap: var(--s-2); margin-top: var(--s-5); }
+.ds__espaco { display: flex; align-items: center; gap: var(--s-3); }
+.ds__barra { height: 1.25rem; background: var(--marca); border-radius: var(--raio-sutil); }
+
+/* ---- Demos ---- */
+.ds__demo {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4);
+  margin-top: var(--s-4); padding: var(--s-6);
+  background: rgb(255 255 255 / .03); border: 1px solid var(--line);
+  border-radius: var(--raio-medio);
+}
+.ds__demo--escura { background: #000; }
+
+/* ---- Forma ---- */
+.ds__formas { display: flex; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-4); }
+.ds__forma {
+  display: grid; place-items: center;
+  width: 150px; height: 84px; padding: var(--s-3);
+  background: rgb(255 255 255 / .05); border: 1px solid var(--line);
+  font-size: var(--fs-xs); text-align: center;
+}
+
+/* ---- Pendências ---- */
+.ds__pendencias { max-width: var(--medida); padding-left: 1.25rem; }
+.ds__pendencias li { margin-bottom: var(--s-2); font-size: var(--fs-sm); }
+
+/* ---- Rodapé ---- */
+.ds__rodape {
+  padding: var(--s-6) var(--s-5); margin-top: var(--s-7);
+  background: #000; color: var(--on-dark-muted);
+  border-top: 1px solid var(--marca);
+  font-size: var(--fs-xs); text-align: center;
+}
+
+@media (min-width: 720px) {
+  .ds__corpo { padding-inline: var(--s-6); }
+  .ds__linha-escala { grid-template-columns: 9rem 1fr 10rem; gap: var(--s-4); }
+  .ds__escala { gap: var(--s-5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds *, .ds *::before, .ds *::after { animation: none !important; transition: none !important; }
+}
+
+/* Fundo com textura, para a variante de vidro ter o que distorcer */
+.ds__demo--textura {
+  /* Textura só com a paleta: amarelo, âmbar e preto. */
+  background:
+    radial-gradient(circle at 22% 28%, var(--marca) 0, transparent 42%),
+    radial-gradient(circle at 78% 72%, var(--marca-escura) 0, transparent 46%),
+    #000;
+  border-color: var(--line);
+  color: #fff;
+}
+
+/* Publicada como página hospedada, a .ds vira um wrapper em vez do body.
+   Precisa cobrir a viewport, senão sobra o fundo do host embaixo. */
+.ds[data-corpo] { min-height: 100vh; }

@@ -1,0 +1,30 @@
+---
+/*
+ * Página de 404. O wrangler.jsonc usa not_found_handling "404-page", então
+ * é este arquivo que a Cloudflare serve quando a rota não casa com nada.
+ *
+ * Deliberadamente sobre: header e rodapé completos, para quem caiu aqui ter
+ * o menu inteiro à mão em vez de um beco sem saída.
+ */
+import Base from '../layouts/Base.astro';
+import Botao from '../components/ui/Botao.astro';
+---
+<Base
+  titulo="Página não encontrada | Renke Studio"
+  descricao="A página que você procurava não existe ou mudou de endereço."
+>
+  <section class="section section--hero erro">
+    <div class="container erro__caixa">
+      <p class="eyebrow">Erro 404</p>
+      <h1 class="erro__titulo">Esse endereço não existe.</h1>
+      <p class="erro__lead">
+        A página pode ter mudado de lugar, ou o link que te trouxe até aqui está errado.
+        O menu acima leva a tudo que existe no site.
+      </p>
+      <div class="erro__acoes">
+        <Botao variante="brilho" href="/">Voltar para a home</Botao>
+        <Botao variante="contorno" href="/contato">Falar com a gente</Botao>
+      </div>
+    </div>
+  </section>
+</Base>

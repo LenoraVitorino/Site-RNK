@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe · Home — Renke</title>
+<meta name="description" content="Wireframe estrutural da home do site institucional da Renke. Copy original do briefing.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231c1c1e'/><text x='8' y='12' font-size='10' font-family='sans-serif' fill='%23fff' text-anchor='middle'>R</text></svg>">
+<link rel="stylesheet" href="assets/css/wireframe.css">
+</head>
+<body>
+
+<!-- ============================================================
+     BARRA DE FERRAMENTAS DO WIREFRAME (não faz parte do site)
+     ============================================================ -->
+<div class="wf-toolbar" id="wfToolbar">
+  <span class="wf-toolbar__label">Wireframe · Home</span>
+  <button type="button" class="wf-toolbar__btn" id="toggleNotes" aria-pressed="true">
+    Ocultar anotações
+  </button>
+</div>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ============================================================
+     HEADER / NAVEGAÇÃO
+     ============================================================ -->
+<header class="header" id="header">
+  <div class="header__inner">
+
+    <a href="#" class="logo" aria-label="Renke — página inicial">
+      <span class="logo__box">LOGO</span>
+    </a>
+
+    <!-- Botão mobile -->
+    <button type="button" class="nav-toggle" id="navToggle"
+            aria-expanded="false" aria-controls="navPrincipal" aria-label="Abrir menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
+      <ul class="nav__list">
+
+        <li class="nav__item">
+          <a href="#" class="nav__link" aria-current="page">Home</a>
+        </li>
+
+        <li class="nav__item nav__item--has-menu">
+          <button type="button" class="nav__link nav__trigger"
+                  aria-expanded="false" aria-controls="mm-clinicas">
+            Para Clínicas <span class="nav__caret" aria-hidden="true"></span>
+          </button>
+          <div class="megamenu" id="mm-clinicas" hidden>
+            <div class="megamenu__inner">
+              <p class="megamenu__title">Protocolo Revena</p>
+              <ul class="megamenu__list">
+                <li><a href="#" data-rota="/revena-start">Protocolo Revena Start</a></li>
+                <li><a href="#" data-rota="/revena-full">Protocolo Revena Full</a></li>
+                <li><a href="#" data-rota="/revena-core">Protocolo Revena Core</a></li>
+                <li><a href="#" data-rota="/revena-scale">Protocolo Revena Scale</a></li>
+                <li><a href="#" data-rota="/revena-run">Protocolo Revena Run</a></li>
+              </ul>
+              <p class="megamenu__title">Treinamento</p>
+              <ul class="megamenu__list">
+                <li>
+                  <a href="#" data-rota="/treine-sua-equipe">Treinamento para secretárias</a>
+                  <span class="wf-inline-note" data-note>decisão pendente: descontinuar?</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav__item nav__item--has-menu">
+          <button type="button" class="nav__link nav__trigger"
+                  aria-expanded="false" aria-controls="mm-agencias">
+            Para Agências <span class="nav__caret" aria-hidden="true"></span>
+          </button>
+          <div class="megamenu" id="mm-agencias" hidden>
+            <div class="megamenu__inner">
+              <p class="megamenu__title">Renke Academy</p>
+              <ul class="megamenu__list">
+                <li><a href="#" data-rota="/academy">Renke Academy</a></li>
+                <li><a href="#" data-rota="/academy/protocolo-renke">Protocolo Renke</a></li>
+                <li><a href="#" data-rota="/academy/formacao-performa">Formação Performa</a></li>
+                <li><a href="#" data-rota="/academy/treinamento-crm">Treinamento CRM</a></li>
+                <li><a href="#" data-rota="/academy/rastreamento-avancado">Rastreamento Avançado</a></li>
+                <li><a href="#" data-rota="/academy/cultura-pro">Cultura Pro</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav__item nav__item--has-menu">
+          <button type="button" class="nav__link nav__trigger"
+                  aria-expanded="false" aria-controls="mm-solucoes">
+            Outras Soluções <span class="nav__caret" aria-hidden="true"></span>
+          </button>
+          <div class="megamenu" id="mm-solucoes" hidden>
+            <div class="megamenu__inner">
+              <p class="megamenu__title">Produtos digitais</p>
+              <ul class="megamenu__list">
+                <li><a href="#" data-rota="/site-institucional">Site Institucional</a></li>
+                <li><a href="#" data-rota="/identidade-visual">Identidade Visual</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav__item nav__item--has-menu">
+          <button type="button" class="nav__link nav__trigger"
+                  aria-expanded="false" aria-controls="mm-tecnologia">
+            Tecnologia <span class="nav__caret" aria-hidden="true"></span>
+          </button>
+          <div class="megamenu" id="mm-tecnologia" hidden>
+            <div class="megamenu__inner">
+              <p class="megamenu__title">Renke Tools</p>
+              <ul class="megamenu__list">
+                <li>
+                  <a href="#" data-rota="/tools/renke-connect">Renke Connect <em>(em breve)</em></a>
+                  <span class="wf-inline-note" data-note>estratégia diz que já está ativo</span>
+                </li>
+                <li><a href="#" data-rota="/tools/renke-crm">Renke CRM <em>(em breve)</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav__item"><a href="#" class="nav__link" data-rota="/blog">Conteúdos</a></li>
+        <li class="nav__item"><a href="#" class="nav__link" data-rota="/contato">Contato</a></li>
+        <li class="nav__item"><a href="#" class="nav__link" data-rota="/faca-parte">Faça Parte</a></li>
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay" hidden></div>
+
+<main id="conteudo">
+
+<!-- ============================================================
+     SEÇÃO 1 · HERO
+     ============================================================ -->
+<section class="section section--hero">
+  <span class="wf-tag" data-note>SEÇÃO 1 · HERO</span>
+  <div class="container">
+
+    <h1 class="hero__title">
+      Isso não é <s>marketing para clínicas</s>.<br>
+      <strong>É RevOps</strong>
+    </h1>
+
+    <p class="hero__sub callout">
+      Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.
+    </p>
+
+    <div class="wf-media wf-media--wide">
+      <span class="wf-media__label">[GIF] O que a Renke faz · pilares</span>
+      <span class="wf-media__hint">ref.: apresentação Google Slides · alternativa: motion 3–5s do fluxo do dado (anúncio → CRM → agendamento → venda)</span>
+    </div>
+
+    <ul class="stats">
+      <li>~30 clínicas</li>
+      <li>Método validado há 4 anos</li>
+      <li>R$42M em faturamento gerado</li>
+    </ul>
+    <p class="wf-note" data-note>
+      ⚠️ Conflita com "+140 clínicas" usado na Seção 7 e nas metatags. Decisão D1 pendente.
+    </p>
+
+    <p><a href="#" class="btn btn--primary">Descubra se faz sentido para sua clínica →</a></p>
+
+    <p class="hero__lead">
+      Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os
+      números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo
+      conectado, tudo rastreado.
+    </p>
+
+    <div class="proof">
+      <p class="proof__title">Doutores que confiam na Renke</p>
+      <ul class="logos">
+        <li class="logos__item">LOGO 1</li>
+        <li class="logos__item">LOGO 2</li>
+        <li class="logos__item">LOGO 3</li>
+        <li class="logos__item">LOGO 4</li>
+        <li class="logos__item">LOGO 5</li>
+        <li class="logos__item">LOGO 6</li>
+      </ul>
+      <p class="wf-note" data-note>
+        Opacidade reduzida, leve sobreposição, tooltip no hover com nome + especialidade.
+      </p>
+    </div>
+
+    <div class="wf-media wf-media--wide">
+      <span class="wf-media__label">[MOCKUP] Dashboard desktop/tablet com dados de performance</span>
+      <span class="wf-media__hint">dados borrados por confidencialidade</span>
+    </div>
+
+    <p class="hero__caption"><em>Você não controla o que não enxerga.</em></p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 2 · O QUE FAZEMOS
+     ============================================================ -->
+<section class="section section--alt">
+  <span class="wf-tag" data-note>SEÇÃO 2 · O QUE FAZEMOS</span>
+  <div class="container">
+
+    <p class="eyebrow">O que fazemos</p>
+    <p class="kicker">Renke Studio</p>
+    <h2>O que a Renke faz?</h2>
+
+    <div class="split">
+      <div class="split__text">
+        <p>
+          A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do
+          mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
+          e estética.
+        </p>
+        <p class="wf-note" data-note>⚠️ "do mundo" vs. "no Brasil" (/faca-parte). Decisão D5.</p>
+      </div>
+      <div class="wf-media wf-media--video">
+        <span class="wf-media__label">[VÍDEO] Instagram</span>
+      </div>
+    </div>
+
+    <p class="eyebrow">Para Clínicas</p>
+    <h3 class="h3-big">Protocolo Revena</h3>
+
+    <div class="cards cards--pillars">
+      <article class="card">
+        <span class="card__icon" aria-hidden="true">ícone<br>link/conexão</span>
+        <h4>Vamos além do tráfego pago</h4>
+        <p>Conectamos marketing ao comercial para lead virar paciente de verdade, não só um número em relatório.</p>
+      </article>
+
+      <article class="card">
+        <span class="card__icon" aria-hidden="true">ícone<br>database</span>
+        <h4>Implementamos um CRM que funciona de verdade</h4>
+        <p>Processo, jornadas, scripts, time treinado e usando a ferramenta de verdade. Tudo num lugar só pra você confiar no que está vendo.</p>
+        <span class="card__media">[GIF] Renke CRM</span>
+      </article>
+
+      <article class="card">
+        <span class="card__icon" aria-hidden="true">ícone<br>raio/automação</span>
+        <h4>Automatizamos o seu atendimento</h4>
+        <p>A parte chata, mas que toma tempo. Toda automatizada. Confirmação, lembrete, follow-up, NPS, avaliação do Google, anamnese... Tudo roda sozinho, sem depender de uma pessoa. Seu time foca no que move ponteiro.</p>
+      </article>
+
+      <article class="card">
+        <span class="card__icon" aria-hidden="true">ícone<br>gráfico de barras</span>
+        <h4>Dizemos o que fazer todo mês</h4>
+        <p>Custo por agendamento. Taxa de comparecimento. Faturamento por canal. Decisão com dado, não com feeling. Tomadas de decisões com a maturidade que um negócio de verdade precisa.</p>
+      </article>
+
+      <article class="card card--extra">
+        <span class="card__icon" aria-hidden="true">ícone<br>?</span>
+        <h4>Construímos seu posicionamento antes de gastar um real</h4>
+        <p>Estudamos seus concorrentes a fundo: o que comunicam, onde investem, quais brechas deixam abertas. Depois, construímos uma tese de diferenciação exclusiva pra sua clínica. Você não entra no mercado genérico. Você entra sabendo por que é a escolha óbvia.</p>
+      </article>
+    </div>
+
+    <p class="wf-note" data-note>
+      ⚠️ As notas do designer pedem <strong>4 cards</strong>; a copy traz <strong>5 blocos</strong>.
+      O 5º está marcado com borda tracejada. Decisão D9.
+    </p>
+
+    <h3 class="divider-h3">
+      Estruturamos sua operação do zero e operamos juntos no longo prazo.<br>
+      <strong>Qual é o momento da sua clínica?</strong>
+    </h3>
+
+    <div class="cards cards--protocols">
+      <article class="protocol">
+        <p class="protocol__label">REVENA START</p>
+        <blockquote>"Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados."</blockquote>
+        <p>Organizamos seu processo comercial do zero em 90 dias.</p>
+        <a href="#" class="link-arrow" data-rota="/revena-start">Saiba mais →</a>
+      </article>
+
+      <article class="protocol">
+        <p class="protocol__label">REVENA FULL</p>
+        <blockquote>"Tenho dificuldade de estruturar e gerir a jornada completa do meu paciente."</blockquote>
+        <p>Estruturamos do comercial ao pós-venda. Paciente acompanhado do começo ao fim.</p>
+        <a href="#" class="link-arrow" data-rota="/revena-full">Saiba mais →</a>
+      </article>
+
+      <article class="protocol">
+        <p class="protocol__label">REVENA CORE</p>
+        <blockquote>"Já entendi que o problema não é só tráfego. Quero um time estratégico que conecte tudo."</blockquote>
+        <p>Marketing + comercial + dados operados toda semana por um time dedicado.</p>
+        <a href="#" class="link-arrow" data-rota="/revena-core">Saiba mais →</a>
+      </article>
+
+      <article class="protocol">
+        <p class="protocol__label">REVENA SCALE</p>
+        <blockquote>"Tenho resultado, mas não metrifico e não sei como crescer e extrair mais do digital."</blockquote>
+        <p>Tudo do Core + conteúdo orgânico + reativação da sua base de pacientes.</p>
+        <a href="#" class="link-arrow" data-rota="/revena-scale">Saiba mais →</a>
+      </article>
+
+      <article class="protocol">
+        <p class="protocol__label">REVENA RUN</p>
+        <blockquote>"Comercial e dados estruturados, mas preciso de alguém pra gerir meu time e meus números."</blockquote>
+        <p>Mantemos sua operação comercial funcionando sem você precisar pensar nisso.</p>
+        <a href="#" class="link-arrow" data-rota="/revena-run">Saiba mais →</a>
+      </article>
+    </div>
+
+    <p class="cta-text">
+      A Renke recomenda o protocolo certo para o momento da sua clínica.
+      <a href="#" class="link-arrow" data-rota="/contato">Fale com a equipe →</a>
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 3 · FRASE-ÂNCORA + PERGUNTAS
+     ============================================================ -->
+<section class="section section--dark">
+  <span class="wf-tag wf-tag--onDark" data-note>SEÇÃO 3 · FRASE-ÂNCORA + PERGUNTAS</span>
+  <div class="container container--narrow">
+
+    <p class="anchor-phrase">
+      Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+      <strong>Mas e com o seu negócio?</strong>
+    </p>
+
+    <div class="questions">
+      <p class="question">Quanto custa um paciente novo pra sua clínica? De verdade, não o que a agência diz.</p>
+      <p class="question">Dos leads que chegam, quantos sentam na cadeira do seu consultório?</p>
+      <p class="question">Se sua secretária sai amanhã, o processo continua?</p>
+      <p class="question">Você sabe qual canal trouxe seus melhores pacientes este mês?</p>
+      <p class="question question--overflow">No mês que o resultado não foi bom, você encontra o motivo baseado em dados e com facilidade?</p>
+      <p class="question question--overflow">E no mês que o resultado foi bom, você consegue atribuir o porquê para replicar?</p>
+      <p class="question question--overflow">Você sabe o que seus concorrentes estão comunicando agora e qual espaço estão deixando aberto pra você?</p>
+    </div>
+
+    <p class="wf-note wf-note--onDark" data-note>
+      ⚠️ Layout pede grid 2×2 (4 slots); a copy traz 7 perguntas. As 3 excedentes estão com borda
+      tracejada. Decisão D8.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 4 · RESULTADOS
+     ============================================================ -->
+<section class="section">
+  <span class="wf-tag" data-note>SEÇÃO 4 · RESULTADOS</span>
+  <div class="container">
+
+    <p class="eyebrow">Resultados</p>
+    <h2>O que muda quando a operação tem estrutura.</h2>
+
+    <p class="wf-note" data-note>
+      ⚠️ Números são placeholder — serão substituídos por dados reais (nota do próprio briefing).
+    </p>
+
+    <div class="cards cards--results">
+      <article class="result">
+        <p class="result__specialty">Dermatologia</p>
+        <p class="result__before">Taxa de agendamento baixa</p>
+        <p class="result__number">7% → 19%</p>
+        <p class="result__after">em 90 dias</p>
+      </article>
+
+      <article class="result">
+        <p class="result__specialty">Otorrino</p>
+        <p class="result__before">Comercial sem tempo para fazer follow-up e resgates</p>
+        <p class="result__number">29%</p>
+        <p class="result__after">Processo automatizado e recuperação de leads</p>
+      </article>
+
+      <article class="result">
+        <p class="result__specialty">Cirurgia plástica</p>
+        <p class="result__before">Raramente vendia para leads do tráfego</p>
+        <p class="result__number">38%</p>
+        <p class="result__after">Digital responsável por 38% da receita</p>
+      </article>
+
+      <article class="result">
+        <p class="result__specialty">Nutrologia</p>
+        <p class="result__before">Pacientes sumiam depois do 1º protocolo</p>
+        <p class="result__number">24%</p>
+        <p class="result__after">reativados no trimestre</p>
+      </article>
+
+      <article class="result">
+        <p class="result__specialty">Tricologia</p>
+        <p class="result__before">Não mensurava quais leads eram do tráfego e quais do orgânico</p>
+        <p class="result__number">60 dias</p>
+        <p class="result__after">Painel unificado com tudo rastreado</p>
+      </article>
+    </div>
+
+    <div class="cards cards--testimonials">
+      <article class="testimonial">
+        <span class="testimonial__photo">FOTO<br>real</span>
+        <p class="testimonial__quote"><em>"[depoimento pendente]"</em></p>
+        <p class="testimonial__author">Nome · Especialidade · Cidade</p>
+      </article>
+      <article class="testimonial">
+        <span class="testimonial__photo">FOTO<br>real</span>
+        <p class="testimonial__quote"><em>"[depoimento pendente]"</em></p>
+        <p class="testimonial__author">Nome · Especialidade · Cidade</p>
+      </article>
+    </div>
+    <p class="wf-note" data-note>⚠️ Depoimentos não fornecidos no briefing.</p>
+
+    <p><a href="#" class="btn btn--primary">Descubra se faz sentido para sua clínica →</a></p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 5 · CTA FINAL  — COPY AUSENTE
+     ============================================================ -->
+<section class="section section--dark">
+  <span class="wf-tag wf-tag--onDark" data-note>SEÇÃO 5 · CTA FINAL</span>
+  <div class="container container--narrow center">
+
+    <div class="wf-placeholder">
+      <p class="wf-placeholder__title">⚠️ Copy ausente no briefing</p>
+      <p>
+        As notas do designer descrevem esta seção (fundo escuro, centralizado, H2 como statement
+        forte, botão de destaque, transmitir escassez e exclusividade), mas a copy não existe — a
+        numeração pula da Seção 4 para a Seção 6.
+      </p>
+      <p class="wf-placeholder__hint">
+        Estrutura abaixo montada a partir do CTA final das páginas de produto, apenas para
+        dimensionar o bloco. Substituir quando a copy existir.
+      </p>
+    </div>
+
+    <h2 class="statement">Limitado a 1 nova clínica por mês.</h2>
+    <p>Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.</p>
+    <p><a href="#" class="btn btn--onDark">Converse com a equipe →</a></p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 6 · ACADEMY + TOOLS
+     ============================================================ -->
+<section class="section section--alt">
+  <span class="wf-tag" data-note>SEÇÃO 6 · ACADEMY + TOOLS</span>
+  <div class="container">
+    <div class="duo">
+
+      <article class="duo__col">
+        <p class="eyebrow">Para Agências</p>
+        <h3>Renke Academy</h3>
+        <div class="wf-media"><span class="wf-media__label">[IMG]</span></div>
+        <p>
+          Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você
+          modelar. Método, processos e ferramentas.
+        </p>
+        <a href="#" class="link-arrow" data-rota="/academy">→ Conhecer a Renke Academy</a>
+      </article>
+
+      <article class="duo__col">
+        <p class="eyebrow">Tecnologia</p>
+        <h3>Renke Tools</h3>
+        <div class="wf-media"><span class="wf-media__label">[IMG]</span></div>
+        <p>
+          Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso
+          método produtizado em softwares.
+        </p>
+        <a href="#" class="link-arrow" data-rota="/tools">→ Conhecer a Renke Tools</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 7 · SOBRE
+     ============================================================ -->
+<section class="section">
+  <span class="wf-tag" data-note>SEÇÃO 7 · SOBRE</span>
+  <div class="container container--prose">
+
+    <p class="eyebrow">Sobre</p>
+    <h2>Sobre a Renke</h2>
+
+    <p>
+      A Renke é a primeira <strong>assessoria de Revenue Operations</strong> para clínicas médicas e
+      odontológicas de alto padrão do mundo. Não somos agência de marketing. Não somos consultoria
+      de gestão. Somos o time que conecta marketing, processo comercial e dados em um sistema único,
+      operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
+    </p>
+    <p>
+      Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm
+      previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes
+      desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema
+      de marketing. É um problema de negócio.
+    </p>
+    <p>
+      Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena,
+      metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no
+      longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos
+      especialistas que fazem isso, para saúde, todo santo dia.
+    </p>
+    <p class="wf-note" data-note>⚠️ "mais de 140 clínicas" aqui vs. "~30 clínicas" no hero. Decisão D1.</p>
+
+    <p><a href="#" class="btn" data-rota="/sobre">Saiba Mais</a></p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 8 · FORMULÁRIO
+     ============================================================ -->
+<section class="section section--alt">
+  <span class="wf-tag" data-note>SEÇÃO 8 · FORMULÁRIO</span>
+  <div class="container">
+    <div class="form-block">
+
+      <div class="form-block__text">
+        <h2>Antes de trocar de agência de novo, descubra o que é RevOps.</h2>
+        <p>
+          O problema da maioria das clínicas não é o canal de marketing. É que ninguém conecta o
+          anúncio ao paciente na cadeira. Isso tem nome: falta de RevOps. Preencha o formulário e
+          veja se faz sentido para sua clínica.
+        </p>
+      </div>
+
+      <form class="form-card" novalidate>
+        <p class="wf-note" data-note>⚠️ Destino do formulário não definido (CRM? e-mail? webhook?).</p>
+
+        <label class="field">
+          <span class="field__label">Nome</span>
+          <input type="text" name="nome" autocomplete="name">
+        </label>
+
+        <label class="field">
+          <span class="field__label">WhatsApp</span>
+          <input type="tel" name="whatsapp" autocomplete="tel">
+        </label>
+
+        <label class="field">
+          <span class="field__label">Especialidade</span>
+          <input type="text" name="especialidade">
+        </label>
+
+        <label class="field">
+          <span class="field__label">Faturamento mensal</span>
+          <select name="faturamento">
+            <option>Selecione</option>
+            <option>Até R$100k</option>
+            <option>R$100k – R$300k</option>
+            <option>Acima de R$300k</option>
+          </select>
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--block">Quero saber se faz sentido</button>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     SEÇÃO 9 · RODAPÉ
+     ============================================================ -->
+<footer class="footer">
+  <span class="wf-tag wf-tag--onDark" data-note>SEÇÃO 9 · RODAPÉ</span>
+  <div class="container">
+    <div class="footer__grid">
+
+      <div class="footer__col">
+        <span class="logo__box logo__box--onDark">LOGO</span>
+        <p class="footer__tagline">Não é marketing. É RevOps.</p>
+      </div>
+
+      <nav class="footer__col" aria-label="Links do rodapé">
+        <p class="footer__title">Links</p>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#" data-rota="/studio">Para Clínicas</a></li>
+          <li><a href="#" data-rota="/academy">Para Agências</a></li>
+          <li><a href="#" data-rota="/tools">Tecnologia</a></li>
+          <li><a href="#" data-rota="/blog">Conteúdos</a></li>
+          <li><a href="#" data-rota="/faca-parte">Faça Parte</a></li>
+        </ul>
+        <p class="wf-note wf-note--onDark" data-note>⚠️ "Sobre" e "Cases" não constam. Decisão D7.</p>
+      </nav>
+
+      <div class="footer__col">
+        <p class="footer__title">Siga-nos</p>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">YouTube</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <p class="footer__title">Contato</p>
+        <ul class="footer__contact">
+          <li>R. Benjamin Constant, 2364<br>Sala Térrea, Escola Agrícola<br>Blumenau/SC · CEP 89035-100</li>
+          <li><span class="wf-blank" data-note>[Telefone — não informado]</span></li>
+          <li>contato@renkestudio.com.br</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <p>© 2026 Renke Studio. Todos os direitos reservados.</p>
+      <p><em>Você não controla o que não enxerga.</em></p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+</body>
+</html>

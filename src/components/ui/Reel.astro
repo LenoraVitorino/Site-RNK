@@ -1,0 +1,115 @@
+---
+/**
+ * Vídeo vertical auto-hospedado.
+ *
+ * Toca sozinho quando entra na tela e pausa quando sai — um IntersectionObserver,
+ * não um listener de scroll, para não rodar código a cada quadro de rolagem.
+ *
+ * Autoplay só é permitido mudo, em todos os navegadores. Não é limitação aqui:
+ * o vídeo tem legenda queimada, então comunica sem som. O botão de som fica à
+ * disposição de quem quiser ouvir.
+ *
+ * `preload="none"`: são megabytes que não devem competir com o carregamento da
+ * página. O pôster segura a caixa até o vídeo começar.
+ *
+ * H.264, e só. VP9 foi testado e saiu maior neste material — imagem escura e
+ * granulada de celular, que o x264 comprime melhor: 6,6 MB contra 9,0 MB.
+ * Um segundo formato só se pagaria se fosse menor; como não é, seria peso
+ * dobrado no repositório em troca de nada.
+ */
+import type { Video } from '../../data/midia';
+
+interface Props {
+  video: Video;
+  proporcao: string;
+  titulo: string;
+}
+
+const { video, proporcao, titulo } = Astro.props;
+---
+<figure class="reel" style={`--proporcao: ${proporcao}`}>
+  <div class="reel__moldura" data-tocando="nao" data-mudo="sim">
+    <video
+      class="reel__video"
+      poster={video.poster}
+      preload="none"
+      muted
+      playsinline
+      aria-label={`${titulo}. ${video.descricao}`}
+      data-reel
+    >
+      {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
+    </video>
+
+    <button class="reel__toque" type="button" data-reel-toque aria-label="Pausar vídeo">
+      <span class="reel__icone" aria-hidden="true"></span>
+    </button>
+
+    <button class="reel__som" type="button" data-reel-som aria-pressed="true">
+      <span class="reel__som-icone" aria-hidden="true"></span>
+      <span class="reel__som-texto">Ativar som</span>
+    </button>
+  </div>
+
+  <figcaption class="reel__legenda">
+    <span class="reel__duracao">{video.duracao}</span>
+    <a href={video.origem} target="_blank" rel="noopener">{video.autor} no Instagram ↗</a>
+  </figcaption>
+</figure>
+
+<script>
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLVideoElement>('[data-reel]').forEach((video) => {
+    const moldura = video.closest('.reel__moldura')!;
+    const toque = moldura.querySelector<HTMLButtonElement>('[data-reel-toque]')!;
+    const som = moldura.querySelector<HTMLButtonElement>('[data-reel-som]')!;
+
+    // Uma pausa manual precisa sobreviver a rolar para fora e voltar: sem isso
+    // o observer daria play de novo e ignoraria a decisão de quem assiste.
+    let pausadoPeloUsuario = false;
+
+    const marcar = () => {
+      moldura.dataset.tocando = video.paused ? 'nao' : 'sim';
+      toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
+    };
+    video.addEventListener('play', marcar);
+    video.addEventListener('pause', marcar);
+    marcar();
+
+    const tocar = () => {
+      // Um play() recusado (política de autoplay) devolve promessa rejeitada;
+      // sem o catch vira erro no console e o pôster fica sem explicação.
+      video.play().catch(() => { moldura.dataset.tocando = 'nao'; });
+    };
+
+    toque.addEventListener('click', () => {
+      if (video.paused) { pausadoPeloUsuario = false; tocar(); }
+      else { pausadoPeloUsuario = true; video.pause(); }
+    });
+
+    som.addEventListener('click', () => {
+      video.muted = !video.muted;
+      som.setAttribute('aria-pressed', String(video.muted));
+      som.querySelector('.reel__som-texto')!.textContent =
+        video.muted ? 'Ativar som' : 'Desativar som';
+      moldura.dataset.mudo = video.muted ? 'sim' : 'nao';
+      // Tirar o som de um vídeo que ainda não começou é também um pedido de play.
+      if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
+    });
+
+    // Quem pediu menos movimento não recebe vídeo tocando sozinho.
+    if (reduzido.matches) return;
+
+    // 55%: com um vídeo 9:16 alto, um limiar baixo dispararia o play com só uma
+    // tira aparecendo no rodapé da tela.
+    const observador = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) { if (!pausadoPeloUsuario) tocar(); }
+        else if (!video.paused) video.pause();
+      },
+      { threshold: 0.55 },
+    );
+    observador.observe(video);
+  });
+</script>

@@ -1,0 +1,42 @@
+---
+import Media from '../ui/Media.astro';
+
+const blocos = [
+  {
+    eyebrow: 'Para Agências',
+    titulo: 'Renke Academy',
+    texto:
+      'Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você ' +
+      'modelar. Método, processos e ferramentas.',
+    cta: '→ Conhecer a Renke Academy',
+    rota: '/academy',
+    slot: '05',
+  },
+  {
+    eyebrow: 'Tecnologia',
+    titulo: 'Renke Tools',
+    texto:
+      'Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso ' +
+      'método produtizado em softwares.',
+    cta: '→ Conhecer a Renke Tools',
+    rota: '/tools',
+    slot: '06',
+  },
+];
+import { existe } from '../../data/rotas';
+---
+<section class="section section--alt">
+  <div class="container">
+    <div class="duo">
+      {blocos.map((b) => (
+        <article class="duo__col vidro entra">
+          <p class="eyebrow">{b.eyebrow}</p>
+          <h3>{b.titulo}</h3>
+          <Media id={b.slot} />
+          <p>{b.texto}</p>
+          <a href={existe(b.rota) ? b.rota : '#'} class:list={['link-arrow', !existe(b.rota) && 'nav--pendente']} data-rota={b.rota}>{b.cta}</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

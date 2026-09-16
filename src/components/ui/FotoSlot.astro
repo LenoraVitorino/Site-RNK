@@ -1,0 +1,20 @@
+---
+/**
+ * Espaço reservado para foto: painel neutro com uma legenda pequena no
+ * canto dizendo o que vai ali. Sem ícone nem borda tracejada, para o
+ * layout ser avaliado com o peso real da imagem. Troca-se por <img>
+ * quando a foto chegar, sem mexer no layout.
+ */
+interface Props {
+  rotulo: string;
+  /** Proporção largura/altura, ex.: "3 / 4". */
+  prop?: string;
+  reta?: boolean;
+  class?: string;
+}
+const { rotulo, prop, reta = false, class: extra = '' } = Astro.props;
+const legenda = rotulo.replace(/^Foto\s*·\s*/i, '');
+---
+<figure class:list={['foto', reta && 'foto--reta', extra]} style={prop ? `--prop: ${prop}` : undefined} aria-label={`Espaço para foto: ${legenda}`}>
+  <figcaption class="foto__legenda">{legenda}</figcaption>
+</figure>
