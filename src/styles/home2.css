@@ -673,7 +673,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .carta__icone--plano { padding: 3px; }   /* a arte dos planos já tem margem própria */
 .carta__fala { font-style: italic; color: var(--cinza); }
 .carta__conteudo .link-arrow { font-size: 14px; }
-.pilares__apoio { margin-top: 22px; font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.25rem, 1.8vw, 1.7rem); line-height: 1.25; letter-spacing: -.02em; max-width: 34ch; color: rgb(242 242 238 / .85); }
+.pilares__apoio { margin-top: 22px; font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.25rem, 1.8vw, 1.7rem); line-height: 1.25; letter-spacing: -.02em; max-width: none; color: rgb(242 242 238 / .85); }
 .pilares__apoio strong { display: block; margin-top: .3em; font-weight: var(--peso-enfase); color: var(--papel); }
 
 /* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------
