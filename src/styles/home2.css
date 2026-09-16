@@ -772,7 +772,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 /* ---------- Perguntas (escura) ---------- */
 
-.ancora { font-size: clamp(1.8rem, 3.6vw, 3.1rem); letter-spacing: -.03em; line-height: 1.12; max-width: 30ch; margin-bottom: clamp(32px, 5vw, 56px); }
+.ancora { font-size: clamp(1.5rem, 2.5vw, 2.3rem); letter-spacing: -.03em; line-height: 1.15; max-width: 34ch; margin-bottom: clamp(32px, 5vw, 56px); }
 .ancora strong { color: var(--destaque); font-weight: var(--peso-enfase); }
 .perguntas { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgb(242 242 238 / .18); border-radius: var(--raio-caixa); overflow: hidden; }
 .pergunta { padding: 24px; display: grid; gap: 18px; align-content: start; min-height: 190px; border-right: 1px solid rgb(242 242 238 / .18); border-bottom: 1px solid rgb(242 242 238 / .18); }
