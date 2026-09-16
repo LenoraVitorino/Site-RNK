@@ -4,11 +4,20 @@
  * embaixo, sem rótulo nem fio (hero.numeros repartidos à mão,
  * ⚠️ D1). Era um carrossel; virou linha em 16/09/2026, a pedido da Lenora.
  */
-const numeros = [
-  { valor: '~30', legenda: 'clínicas atendidas' },
-  { valor: '4 anos', legenda: 'de método validado' },
-  { valor: 'R$42M', legenda: 'em faturamento gerado' },
-];
+import { copyLiteral } from '../../data/versao';
+// Versão do estúdio: "+" no lugar do "~" e sem o "R$" (decisão da Lenora,
+// 16/09/2026). Versão copy: como os números vieram no briefing.
+const numeros = copyLiteral
+  ? [
+      { valor: '~30', legenda: 'clínicas atendidas' },
+      { valor: '4 anos', legenda: 'de método validado' },
+      { valor: 'R$42M', legenda: 'em faturamento gerado' },
+    ]
+  : [
+      { valor: '+30', legenda: 'clínicas atendidas' },
+      { valor: '+4 anos', legenda: 'de método validado' },
+      { valor: '+42M', legenda: 'em faturamento gerado' },
+    ];
 ---
 <aside class="impacto entra" aria-label="Nossos números">
   <ul class="impacto__lista">
