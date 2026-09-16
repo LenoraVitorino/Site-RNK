@@ -3,9 +3,11 @@
  * O que a Renke faz — texto à esquerda, o reel vertical à direita, nas
  * duas versões. (A variante só com o reel, e o palco 16:9 no desktop,
  * foram testados em 16/09/2026 e descartados: o vertical com o texto ao
- * lado ficou melhor.) Copy literal.
+ * lado ficou melhor.) Embaixo do texto, "Nossos números" (Numeros.astro),
+ * pedido da Lenora em 16/09/2026. Copy literal.
  */
 import Telefone from '../ui/Telefone.astro';
+import Numeros from '../ui/Numeros.astro';
 ---
 <section class="secao" id="o-que-fazemos">
   <div class="container oquefaz">
@@ -17,6 +19,7 @@ import Telefone from '../ui/Telefone.astro';
         mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
         e estética.
       </p>
+      <Numeros />
     </div>
     <div class="oquefaz__midia entra">
       <Telefone />
