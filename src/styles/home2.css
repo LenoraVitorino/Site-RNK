@@ -493,7 +493,10 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 }
 .hero__titulo { font-size: clamp(2.1rem, 4.1vw, 3.8rem); line-height: 1.08; letter-spacing: -.03em; max-width: 28ch; font-weight: var(--peso-titulo); }
 /* Versão do estúdio: a promessa em duas linhas. */
-.hero__titulo--curto { max-width: 40ch; font-size: clamp(2rem, 3.4vw, 3.1rem); }
+/* Linhas equilibradas: quando precisa quebrar em três, o navegador reparte
+   as palavras por igual em vez de deixar "alta performance." sozinho. */
+.hero__titulo--curto { max-width: 40ch; font-size: clamp(2rem, 3.4vw, 3.1rem); text-wrap: balance; }
+.hero__titulo { text-wrap: balance; }
 .hero__lead { color: rgb(242 242 238 / .7); max-width: none; font-size: 18px; line-height: 1.6; }
 .quebra-desktop { display: none; }
 @media (min-width: 1100px) { .quebra-desktop { display: inline; } }
