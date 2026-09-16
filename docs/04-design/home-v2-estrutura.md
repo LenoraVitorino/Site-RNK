@@ -32,7 +32,9 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    entrar na tela, pausa ao sair; botão de som e de pausa; pausa manual é
    lembrada. (O reel sozinho e o palco 16:9 foram testados e descartados.)
    (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
-   por ora: volta quando houver fotos, depoimentos e logos reais.)
+   por ora: volta quando houver fotos, depoimentos e logos reais.
+   `Sobre.astro` saiu da home em 16/09/2026; a copy segue para a página
+   /sobre.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
    "Metafore": cabeçalho (rótulo em pílula, título, texto de apoio e botão
    escuro) e os cinco pilares em cartões, um aberto por vez. O aberto fica
@@ -63,13 +65,7 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
 7. **CTA final** (`CtaFinal.astro`) — painel amarelo "Limitado a 1 nova
    clínica por mês" com dois slots de foto.
 8. **Academy e Tools** (`AcademyTools.astro`) — dois cartões com slot de foto.
-9. **Sobre** (`Sobre.astro`) — no desenho da referência "Designing for
-   impact": à esquerda a declaração em texto grande (a primeira frase
-   apagada, "Não somos agência de marketing. Não somos consultoria de
-   gestão." acesa) e os parágrafos; à direita, "Nossos números", um
-   carrossel com o número gigante em amarelo, legenda e setas (os números
-   do briefing, ⚠️ D1). Três slots de foto numa faixa abaixo.
-10. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
+9. **Formulário** (`Formulario.astro`) — mesmo formulário da v1 (envio ainda
     não ligado).
 
 ## Preto absoluto (16/09/2026)
