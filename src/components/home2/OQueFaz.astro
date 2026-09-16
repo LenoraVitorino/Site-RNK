@@ -1,22 +1,36 @@
 ---
 /**
- * O que a Renke faz — texto à esquerda, o reel vertical à direita. Copy literal.
+ * O que a Renke faz — na versão do estúdio o vídeo entra direto, sem
+ * título: o reel já abre dizendo "O que a Renke faz?", e repetir em texto
+ * só atrasava. Na versão "copy" (VERSAO=copy) a dobra segue como a copy
+ * foi entregue: texto à esquerda, reel à direita. Copy literal nos dois.
  */
 import Telefone from '../ui/Telefone.astro';
+import { copyLiteral } from '../../data/versao';
 ---
-<section class="secao" id="o-que-fazemos">
-  <div class="container oquefaz">
-    <div class="oquefaz__texto entra">
-      <p class="rotulo">O que fazemos</p>
-      <h2 class="titulo caps">O que a Renke faz?</h2>
-      <p>
-        A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do
-        mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
-        e estética.
-      </p>
+{copyLiteral ? (
+  <section class="secao" id="o-que-fazemos">
+    <div class="container oquefaz">
+      <div class="oquefaz__texto entra">
+        <p class="rotulo">O que fazemos</p>
+        <h2 class="titulo caps">O que a Renke faz?</h2>
+        <p>
+          A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do
+          mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
+          e estética.
+        </p>
+      </div>
+      <div class="oquefaz__midia entra">
+        <Telefone />
+      </div>
     </div>
-    <div class="oquefaz__midia entra">
-      <Telefone />
+  </section>
+) : (
+  <section class="secao secao--reel" id="o-que-fazemos" aria-label="O que a Renke faz">
+    <div class="container oquefaz--direto">
+      <div class="oquefaz__midia entra">
+        <Telefone />
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+)}

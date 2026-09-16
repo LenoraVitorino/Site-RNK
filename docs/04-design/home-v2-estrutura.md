@@ -27,9 +27,12 @@ Código: `src/pages/index.astro` → `src/layouts/Base2.astro` +
    reflexo não roda.
    No pé da hero, a barra "Doutores que confiam na Renke" com os logos
    (placeholders), como a barra de parceiros da referência.
-2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — texto +
-   reel vertical, sem moldura de aparelho. Autoplay mudo ao entrar na tela,
-   pausa ao sair; botão de som e de pausa; pausa manual é lembrada.
+2. **O que a Renke faz** (`OQueFaz.astro` + `Telefone.astro`) — na versão
+   do estúdio, só o reel, centrado: ele já abre dizendo "O que a Renke
+   faz?", e repetir o título em texto atrasava. Na versão `copy`
+   (`VERSAO=copy npm run build`), texto à esquerda e reel à direita, como a
+   copy foi entregue. Autoplay mudo ao entrar na tela, pausa ao sair; botão
+   de som e de pausa; pausa manual é lembrada.
    (`Esteira.astro`, o trilho de fotos e depoimentos, está fora da página
    por ora: volta quando houver fotos, depoimentos e logos reais.)
 3. **Protocolo Revena** (`Protocolos.astro`) — no desenho da referência
@@ -84,6 +87,20 @@ Entre "O que a Renke faz" e o Protocolo Revena entra o **Letreiro**
 (Controle, Automação, Processo, Experiência) em caixa alta, grandes,
 separadas por um "+" fino, andando devagar, com o monograma apagado atrás
 — como a faixa "Impact + Inspire + Innovate" da referência.
+
+## Duas versões para a entrega (16/09/2026)
+
+`src/data/versao.ts` lê `VERSAO` no build: `estudio` (padrão) é a leitura
+do estúdio, com a dinâmica das dobras revista; `copy` é o site como a copy
+foi entregue, dobra a dobra. As duas usam a mesma copy literal; o que muda
+é o que aparece e em que ordem. A entrega final compara as duas lado a
+lado. Hoje só "O que a Renke faz" diverge; cada nova divergência entra
+como um `copyLiteral ? … : …` no componente.
+
+Tipografia: uma família só, a Inter variável (títulos em 260, corpo em
+400, destaques em 500, falas em itálico). A Instrument Sans saiu.
+Detalhes em fundo amarelo: pílula dos rótulos, número dos planos, painel
+do botão da hero, painel do CTA final.
 
 ## Regras de acabamento (12/09/2026)
 

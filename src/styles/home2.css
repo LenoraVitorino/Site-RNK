@@ -29,8 +29,8 @@ body {
 img, video { max-width: 100%; display: block; }
 a { color: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; text-wrap: balance; }
-/* Textos grandes na Inter light: mais finos e delicados que a Instrument
-   permite. Os destaques (RevOps, "alta performance.") seguem na Instrument. */
+/* Uma família só, a Inter: títulos finos (peso 260), corpo em 400 e os
+   destaques em 500. Menos ruído para uma página com muito texto. */
 .titulo, .hero__titulo, .tomada--1, .revops__isso, .ancora, .plano__nome, .cartao h3, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
   word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
@@ -523,6 +523,10 @@ h2.titulo, .titulo { font-size: clamp(2.1rem, 4.2vw, 3.5rem); letter-spacing: -.
 .oquefaz__texto { display: grid; gap: 20px; }
 .oquefaz__texto p:not(.rotulo) { max-width: 52ch; }
 .oquefaz__midia { display: grid; justify-items: center; min-width: 0; }
+/* Versão do estúdio: só o reel, centrado, sem título por cima dele. */
+.secao--reel { padding-block: clamp(40px, 5vw, 72px); }
+.oquefaz--direto { display: grid; justify-items: center; }
+.oquefaz--direto .tel { --largura-tel: min(100%, 400px); }
 
 .tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
@@ -639,9 +643,9 @@ html:not(.js) .esteira__trilho { transform: none; }
 .pilares__cabeca { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 30%); gap: 20px 64px; align-items: end; }
 .rotulo--pilula {
   display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
-  background: rgb(255 209 3 / .14); color: var(--papel); font-size: 10.5px;
+  background: var(--destaque); color: #000; font-size: 10.5px;
 }
-.rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--destaque); }
+.rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
 .pilares__titulo { margin-top: 18px; }
 .pilares__lado { display: grid; gap: 18px; justify-items: start; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; padding-bottom: 6px; }
 .pilares__lado p { margin: 0; }
@@ -716,7 +720,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano__topo { display: flex; align-items: center; gap: 14px; }
 .plano__icone { flex: none; display: block; width: 40px; height: 40px; padding: 3px; box-sizing: border-box; border-radius: 50%; background: rgb(242 242 238 / .1); }
 .plano__nome { font-size: clamp(1.7rem, 2.4vw, 2.3rem); letter-spacing: -.03em; line-height: 1; }
-.plano__num { margin-left: auto; font-size: 13px; color: var(--cinza); }
+.plano__num { margin-left: auto; font-size: 11px; font-weight: var(--peso-detalhe); letter-spacing: .08em; padding: 5px 9px; border-radius: 999px; background: var(--destaque); color: #000; }
 .plano__fala { font-size: 16px; line-height: 1.4; font-style: italic; color: var(--cinza); max-width: 48ch; margin: 0; }
 .plano__linha { display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; }
 .plano__linha p { margin: 0; max-width: 34ch; font-size: 15px; line-height: 1.5; }

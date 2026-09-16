@@ -26,7 +26,7 @@
   --destaque:      var(--amarelo-marca);
 
   /* ---- Tipografia ---- */
-  --font: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font: 'Inter Variable', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;   /* uma família só, do título ao rodapé */
   /* Tipografia grande e leve: títulos em regular, ênfases em medium,
      semibold só em detalhes pequenos (rótulos, botões). Nunca bold. */
   --peso-titulo: 260;   /* títulos e números grandes: mais finos que light, na Inter (sobre o preto o traço claro já parece mais fino) */
