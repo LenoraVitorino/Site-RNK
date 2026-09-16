@@ -10,16 +10,26 @@
  * script de Planos.astro, no lugar do revelar .entra).
  */
 import { perguntas } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
 const principais = perguntas.filter((p) => !p.excedente);
 const demais = perguntas.filter((p) => p.excedente);
 ---
 <div class="cortina">
 <section class="secao secao--escura" id="perguntas">
   <div class="container">
-    <p class="ancora">
-      Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
-      <strong>Mas e com o seu negócio?</strong>
-    </p>
+    {copyLiteral ? (
+      <p class="ancora">
+        Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+        <strong>Mas e com o seu negócio?</strong>
+      </p>
+    ) : (
+      <!-- Versão do estúdio: a mesma frase, enxugada (saem "Clinicamente," e
+           "exatamente"; nenhuma palavra nova). -->
+      <p class="ancora">
+        Você sabe o que está acontecendo com seu paciente.
+        <strong>Mas e com o seu negócio?</strong>
+      </p>
+    )}
     <div class="perguntas">
       {principais.map((p, i) => (
         <div class="pergunta">
