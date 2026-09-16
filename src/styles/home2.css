@@ -827,7 +827,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .sobre__paragrafos { display: grid; gap: 16px; }
 .sobre__paragrafos p { max-width: 60ch; color: rgb(242 242 238 / .78); }
 .impacto { display: grid; gap: 24px; align-content: start; padding-top: 6px; }
-.impacto__topo { padding-bottom: 16px; border-bottom: 1px solid var(--fio); }
 /* Os quatro números lado a lado, cada um com a legenda embaixo. */
 .impacto__lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 24px; }
 .impacto__item { display: grid; gap: 10px; align-content: start; }

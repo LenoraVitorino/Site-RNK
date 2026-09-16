@@ -1,7 +1,7 @@
 ---
 /**
- * "Nossos números": os três números do briefing lado a lado, em amarelo,
- * com a legenda embaixo e um fio no alto (hero.numeros repartidos à mão,
+ * Os três números do briefing lado a lado, em amarelo, com a legenda
+ * embaixo, sem rótulo nem fio (hero.numeros repartidos à mão,
  * ⚠️ D1). Era um carrossel; virou linha em 16/09/2026, a pedido da Lenora.
  */
 const numeros = [
@@ -11,9 +11,6 @@ const numeros = [
 ];
 ---
 <aside class="impacto entra" aria-label="Nossos números">
-  <div class="impacto__topo">
-    <p class="rotulo">Nossos números</p>
-  </div>
   <ul class="impacto__lista">
     {numeros.map((n) => (
       <li class="impacto__item">
