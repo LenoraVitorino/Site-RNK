@@ -77,9 +77,24 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   content: ''; position: absolute; top: 0; bottom: 0; width: 1px;
   background: var(--fio); opacity: .7; pointer-events: none; z-index: 0;
 }
-/* Com o grid de ponta a ponta os trilhos saíram: a página é só o preto. */
-.trilhos::before, .trilhos::after { display: none; }
+/* Grid da referência strativ: dois trilhos verticais um pouco fora do
+   conteúdo, uma linha de borda a borda entre as dobras e um quadradinho
+   claro em cada cruzamento. Só no desktop. */
+.trilhos { --trilho: calc(var(--gutter) - 24px); }
+.trilhos::before, .trilhos::after { display: none; background: var(--grade); opacity: 1; z-index: 2; }   /* por cima dos fundos das dobras, fora do conteúdo */
+.trilhos::before { left: var(--trilho); }
+.trilhos::after { right: var(--trilho); }
 .trilhos > * { position: relative; z-index: 1; }
+.trilhos > * + * { border-top: 1px solid var(--grade); }
+.trilhos > * + *::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -3.5px; height: 6px; z-index: 3; pointer-events: none; display: none;
+  --quadrado: linear-gradient(var(--papel), var(--papel));
+  background: var(--quadrado) left calc(var(--trilho) - 2.5px) top / 6px 6px no-repeat, var(--quadrado) right calc(var(--trilho) - 2.5px) top / 6px 6px no-repeat;
+}
+.trilhos > .secao--amarela::before { --quadrado: linear-gradient(#0F0F0F, #0F0F0F); }
+@media (min-width: 900px) {
+  .trilhos::before, .trilhos::after, .trilhos > * + *::before { display: block; }
+}
 /* Blocos de largura total alinham o texto ao container por conta própria */
 .alinha-esq { padding-left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
 .alinha-dir { padding-right: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter))); }
@@ -340,7 +355,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* Barra de prova social no pé da hero, como a referência: rótulo à
    esquerda, logos à direita, visível em todos os tempos da cena. */
 .hero__confianca {
-  position: relative; z-index: 1; width: 100%; border-top: 1px solid rgb(242 242 238 / .12);
+  position: relative; z-index: 1; width: 100%; border-top: 1px solid var(--grade);
   background: var(--fundo);
 }
 .hero__confianca__inner {
@@ -613,7 +628,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    por um "+" fino, andando devagar. As palavras são as do briefing
    (Controle, Automação, Processo, Experiência). */
 
-.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); border-block: 1px solid rgb(242 242 238 / .1); background: var(--fundo); }
+.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); background: var(--fundo); }
 .letreiro__trilho { position: relative; display: flex; width: max-content; animation: letreiro 42s linear infinite; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }
@@ -630,13 +645,6 @@ html:not(.js) .esteira__trilho { transform: none; }
    ============================================================ */
 
 .pilares { position: relative; overflow: hidden; background: var(--fundo); }
-/* Grade fina ao fundo, como a referência, esmaecendo para baixo. */
-.pilares::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background-image: linear-gradient(rgb(242 242 238 / .07) 1px, transparent 1px), linear-gradient(90deg, rgb(242 242 238 / .07) 1px, transparent 1px);
-  background-size: 72px 72px; background-position: center top;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%); mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
-}
 .pilares .container { position: relative; }
 .pilares__cabeca { display: grid; gap: 20px; }
 .rotulo--pilula {
@@ -851,7 +859,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 /* ---------- Rodapé ---------- */
 
-.footer { background: var(--fundo); color: var(--papel); padding-block: 64px 28px; margin-top: 0; border-top: 1px solid rgb(242 242 238 / .12); }
+.footer { background: var(--fundo); color: var(--papel); padding-block: 64px 28px; margin-top: 0; border-top: 1px solid var(--grade); }
 .footer .logo__img { filter: brightness(0) invert(1); }
 .footer__grid { display: grid; gap: 32px; }
 .footer__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; font-weight: var(--peso-enfase); color: rgb(242 242 238 / .6); margin-bottom: 12px; }
@@ -926,7 +934,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
    viram uma pilha (todos abertos), o trilho vira uma pilha e a próxima
    dobra segue em fluxo. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
-  .pilares::before { display: none; }
   .cartas { flex-direction: column; height: auto; padding-top: 32px; }
   .carta { flex: none; grid-template-rows: auto auto; margin: 0; padding: 20px 18px 22px; box-shadow: none; cursor: auto; }
   .carta--aberta { margin: 0; }

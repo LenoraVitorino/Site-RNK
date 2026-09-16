@@ -100,8 +100,12 @@ separadas por um "+" fino, andando devagar, com o monograma apagado atrás
 ## Grid de ponta a ponta (16/09/2026)
 
 Para tirar a cara de "feito com IA": o container passou de 1240px para
-1760px, com gutter `clamp(20px, 4.5vw, 84px)`, e os trilhos laterais
-saíram. Os títulos de dobra subiram para `clamp(2.3rem, 5vw, 4.8rem)`. A
+1760px, com gutter `clamp(20px, 4.5vw, 84px)`. O grid de linhas segue a
+referência strativ.framer.ai (16/09/2026): dois trilhos verticais de 1px
+em #333, 24px fora do conteúdo; uma linha de borda a borda entre cada
+dobra; e um quadradinho claro de 6px em cada cruzamento (escuro sobre o
+painel amarelo). Só no desktop. A grade quadriculada da dobra dos pilares
+saiu. Os títulos de dobra subiram para `clamp(2.3rem, 5vw, 4.8rem)`. A
 hero continua centrada por decisão anterior; o resto ocupa a tela com um
 respiro só nas laterais.
 
