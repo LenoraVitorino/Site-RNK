@@ -367,7 +367,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* Frase em caixa normal, como a da referência, com um fio vertical depois. */
 .hero__confianca__frase {
   margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap;
-  padding-right: clamp(28px, 3vw, 48px); border-right: 1px solid var(--grade); align-self: stretch; display: flex; align-items: center;
+  padding: 10px clamp(28px, 3vw, 48px) 10px 0; border-right: 1px solid var(--grade);
 }
 .hero__confianca__frase strong { font-weight: var(--peso-enfase); }
 /* Os logos tomam o resto da largura. */
