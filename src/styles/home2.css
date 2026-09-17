@@ -680,8 +680,13 @@ html:not(.js) .esteira__trilho { transform: none; }
    pelo script a partir do scroll (sem transições CSS).
    ============================================================ */
 
-/* Curso: (n − 1) trechos de 85svh mais a tela presa. */
-.palcoplanos { position: relative; height: calc((var(--n) - 1) * 85svh + 100svh); background: var(--fundo); color: var(--papel); }
+/* Curso: (n − 1) trechos de 85svh mais a tela presa. Fundo claro como a
+   referência (#d5d5d5 lá; aqui um cinza-claro no mesmo tom): a dobra dos
+   planos é a única clara da home, e por isso se destaca do preto. */
+.palcoplanos {
+  --pp-fundo: #D6D6D2; --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
+  position: relative; height: calc((var(--n) - 1) * 85svh + 100svh); background: var(--pp-fundo); color: var(--pp-texto);
+}
 .palcoplanos__fixo {
   position: sticky; top: 0; height: 100svh; overflow: hidden; box-sizing: border-box;
   padding: calc(var(--altura-header) - 8px) var(--gutter) clamp(28px, 4vh, 48px);
@@ -692,32 +697,33 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__titulo { font-size: clamp(2rem, 3.4vw, 3.4rem); letter-spacing: -.03em; line-height: 1; margin-top: 14px; font-weight: var(--peso-titulo); }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.05rem, 1.35vw, 1.3rem); line-height: 1.3; letter-spacing: -.015em; color: rgb(242 242 238 / .8);
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.05rem, 1.35vw, 1.3rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
 }
-.palcoplanos__apoio strong { display: block; margin-top: .25em; font-weight: var(--peso-enfase); color: var(--papel); }
+.palcoplanos__apoio strong { display: block; margin-top: .25em; font-weight: var(--peso-enfase); color: var(--pp-texto); }
 
 /* O palco: lista, ícones e layers na mesma célula. */
 .palcoplanos__palco { position: relative; display: grid; min-height: 0; }
 .palcoplanos__palco > * { grid-area: 1 / 1; }
 .palcoplanos__lista { list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 10px; align-self: start; justify-self: start; z-index: 3; position: relative; }
 /* Barra fina ao lado da lista: enche com o progresso da dobra, para o scroll ter resposta visível o tempo todo. */
-.palcoplanos__barra { align-self: start; justify-self: start; width: 2px; height: 156px; background: rgb(242 242 238 / .12); z-index: 3; position: relative; overflow: hidden; }
-.palcoplanos__barra span { display: block; width: 100%; height: 100%; background: var(--destaque); transform: scaleY(0); transform-origin: top; will-change: transform; }
+.palcoplanos__barra { align-self: start; justify-self: start; width: 2px; height: 156px; background: var(--pp-fio); z-index: 3; position: relative; overflow: hidden; }
+.palcoplanos__barra span { display: block; width: 100%; height: 100%; background: var(--pp-texto); transform: scaleY(0); transform-origin: top; will-change: transform; }
 .palcoplanos__item {
   background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  font: inherit; font-size: 15px; line-height: 1.3; color: rgb(242 242 238 / .4);
+  font: inherit; font-size: 15px; line-height: 1.3; color: rgb(22 22 22 / .42);
   transition: color .4s var(--easing-suave);
 }
-.palcoplanos__item:hover { color: var(--papel); }
-.palcoplanos__item--ativo { color: var(--papel); font-weight: var(--peso-enfase); pointer-events: none; }
+.palcoplanos__item:hover { color: var(--pp-texto); }
+.palcoplanos__item--ativo { color: var(--pp-texto); font-weight: var(--peso-enfase); pointer-events: none; }
 
 /* Ícones: todos no centro, um por cima do outro; o script mostra o do plano. */
-.palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; }
+/* Como a referência: o ícone multiplica sobre o fundo claro, e as peças que se cruzam escurecem. */
+.palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; mix-blend-mode: multiply; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
 .plano-palco__icone { width: 100%; height: 100%; overflow: visible; visibility: hidden; }
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
-.peca--papel { fill: rgb(242 242 238 / .14); }
-.peca--ouro { fill: rgb(255 209 3 / .34); }
+.peca--papel { fill: rgb(22 22 22 / .22); }
+.peca--ouro { fill: rgb(242 207 49 / .85); }
 
 /* Cada plano é um layer com três cantos: nome (centro), texto (baixo-esquerda) e dados (baixo-direita). */
 .plano-palco {
@@ -733,7 +739,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   grid-column: 1 / -1; grid-row: 1 / -1; place-self: center;
   margin: 0; display: grid; width: min(66svh, 720px); position: relative; pointer-events: none;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
-  font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--papel);
+  font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--pp-texto);
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
@@ -742,9 +748,9 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__frase { margin: 0; font-size: clamp(1rem, 1.2vw, 1.2rem); line-height: 1.4; }
 /* Baixo-direita: a fala da doutora e o pilar, em rótulo + valor, alinhados à direita. */
 .plano-palco__dados { grid-column: 3; grid-row: 2; margin: 0; display: grid; gap: 20px; justify-items: end; text-align: right; }
-.plano-palco__dados dt { font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; color: rgb(242 242 238 / .55); margin-bottom: 6px; }
+.plano-palco__dados dt { font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; color: var(--pp-suave); margin-bottom: 6px; }
 .plano-palco__dados dd { margin: 0; font-size: 15px; line-height: 1.4; max-width: 30ch; }
-.plano-palco__fala { font-style: italic; color: rgb(242 242 238 / .85); }
+.plano-palco__fala { font-style: italic; color: rgb(22 22 22 / .8); }
 
 /* Sem JS ou com menos movimento, e no celular: pilha, um bloco por plano, com o ícone pequeno ao lado do nome. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
