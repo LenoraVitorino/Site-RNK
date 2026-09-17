@@ -680,7 +680,8 @@ html:not(.js) .esteira__trilho { transform: none; }
    pelo script a partir do scroll (sem transições CSS).
    ============================================================ */
 
-.palcoplanos { position: relative; height: calc(var(--n) * 100svh); background: var(--fundo); color: var(--papel); }
+/* Curso: (n − 1) trechos de 85svh mais a tela presa. */
+.palcoplanos { position: relative; height: calc((var(--n) - 1) * 85svh + 100svh); background: var(--fundo); color: var(--papel); }
 .palcoplanos__fixo {
   position: sticky; top: 0; height: 100svh; overflow: hidden; box-sizing: border-box;
   padding: calc(var(--altura-header) - 8px) var(--gutter) clamp(28px, 4vh, 48px);
@@ -698,7 +699,10 @@ html:not(.js) .esteira__trilho { transform: none; }
 /* O palco: lista, ícones e layers na mesma célula. */
 .palcoplanos__palco { position: relative; display: grid; min-height: 0; }
 .palcoplanos__palco > * { grid-area: 1 / 1; }
-.palcoplanos__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; align-self: start; justify-self: start; z-index: 3; position: relative; }
+.palcoplanos__lista { list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 10px; align-self: start; justify-self: start; z-index: 3; position: relative; }
+/* Barra fina ao lado da lista: enche com o progresso da dobra, para o scroll ter resposta visível o tempo todo. */
+.palcoplanos__barra { align-self: start; justify-self: start; width: 2px; height: 156px; background: rgb(242 242 238 / .12); z-index: 3; position: relative; overflow: hidden; }
+.palcoplanos__barra span { display: block; width: 100%; height: 100%; background: var(--destaque); transform: scaleY(0); transform-origin: top; will-change: transform; }
 .palcoplanos__item {
   background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   font: inherit; font-size: 15px; line-height: 1.3; color: rgb(242 242 238 / .4);
@@ -710,7 +714,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 /* Ícones: todos no centro, um por cima do outro; o script mostra o do plano. */
 .palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: 100%; height: 100%; overflow: visible; visibility: hidden; will-change: transform; }
+.plano-palco__icone { width: 100%; height: 100%; overflow: visible; visibility: hidden; }
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
 .peca--papel { fill: rgb(242 242 238 / .14); }
 .peca--ouro { fill: rgb(255 209 3 / .34); }
@@ -720,7 +724,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   position: relative; display: grid; min-height: 0; z-index: 2;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: end;
   gap: 24px clamp(24px, 3vw, 56px);
-  visibility: hidden; will-change: transform, opacity, clip-path;
+  visibility: hidden;
 }
 .plano-palco--ativo { visibility: visible; }
 .plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -748,7 +752,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos__fixo { position: static; height: auto; overflow: visible; padding-block: clamp(56px, 10vw, 96px); display: block; }
   .palcoplanos__cabeca { flex-direction: column; align-items: flex-start; margin-bottom: 40px; }
   .palcoplanos__apoio { text-align: left; }
-  .palcoplanos__lista, .palcoplanos__icones { display: none; }
+  .palcoplanos__lista, .palcoplanos__icones, .palcoplanos__barra { display: none; }
   .palcoplanos__palco { display: grid; gap: 44px; }
   .palcoplanos__palco > * { grid-area: auto; }
   .plano-palco { visibility: visible; grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; clip-path: none !important; transform: none !important; opacity: 1 !important; }
@@ -758,7 +762,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 html:not(.js) .palcoplanos { height: auto; }
 html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; display: block; }
-html:not(.js) .palcoplanos__lista, html:not(.js) .palcoplanos__icones { display: none; }
+html:not(.js) .palcoplanos__lista, html:not(.js) .palcoplanos__icones, html:not(.js) .palcoplanos__barra { display: none; }
 html:not(.js) .palcoplanos__palco { display: grid; gap: 44px; }
 html:not(.js) .palcoplanos__palco > * { grid-area: auto; }
 html:not(.js) .plano-palco { visibility: visible; }

@@ -197,9 +197,11 @@ container de `count × 100vh`, `.anchors` no canto superior esquerdo com
 `clip-path: inset(100% 0 0 0) → inset(0)`, título com a linha 1 à
 esquerda e a linha 2 à direita, e um SVG por item que se monta (IN) e se
 desmonta (OUT) conforme o progresso. A nossa versão faz o mesmo sem
-biblioteca: a dobra tem `n × 100svh`, o `.palcoplanos__fixo` fica preso,
-e o script converte o progresso numa linha do tempo de `2n − 1` trechos
-(segura, passa, segura…). Os ícones oficiais dos planos são lidos no build
+biblioteca: a dobra tem `(n − 1) × 85svh + 100svh`, o `.palcoplanos__fixo`
+fica preso, e o script divide o curso em `n − 1` trechos iguais: nos
+primeiros 30% de cada trecho o plano segura (ícone e nome flutuam com o
+scroll, e uma barra fina ao lado da lista enche com o progresso, para a
+página nunca parecer travada) e nos 70% restantes passa para o próximo. Os ícones oficiais dos planos são lidos no build
 e postos inline; cada `<rect>` vira uma peça que se afasta do centro,
 gira e encolhe quando desmontada. Abaixo de 900px, sem JS ou com menos
 movimento, vira uma pilha.
