@@ -605,7 +605,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    por um "+" fino, andando devagar. As palavras são as do briefing
    (Controle, Automação, Processo, Experiência). */
 
-.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); background: var(--fundo); }
+.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); border-block: 1px solid rgb(242 242 238 / .1); background: var(--fundo); }
 .letreiro__trilho { position: relative; display: flex; width: max-content; animation: letreiro 42s linear infinite; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }

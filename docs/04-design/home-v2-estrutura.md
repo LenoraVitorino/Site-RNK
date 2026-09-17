@@ -106,7 +106,8 @@ Para tirar a cara de "feito com IA": o container passou de 1240px para
 referência strativ.framer.ai (trilhos verticais, linha entre dobras e
 quadradinhos nos cruzamentos) foi testado em 16/09/2026 e retirado no
 mesmo dia: a página fica só no preto, sem fio entre as dobras. Sobram os
-fios curtos da barra da hero e do rodapé. A grade quadriculada da dobra
+fios finos de antes do grid (`rgb(242 242 238 / .1–.12)`): barra da hero,
+cima e baixo do letreiro e rodapé. A grade quadriculada da dobra
 dos pilares também saiu. Os títulos de dobra subiram para
 `clamp(2.3rem, 5vw, 4.8rem)`. A
 hero continua centrada por decisão anterior; o resto ocupa a tela com um
