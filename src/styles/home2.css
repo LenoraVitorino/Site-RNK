@@ -182,10 +182,14 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   width: 100%; min-height: 72px; pointer-events: auto;   /* de gutter a gutter, sem o limite do container */
   padding: 10px 20px 10px 22px;
   display: flex; align-items: center; gap: 24px;
-  background: var(--cab-bg); border: 1px solid var(--cab-fio); border-radius: 16px;
-  box-shadow: 0 10px 30px -12px rgb(0 0 0 / .35);
-  transition: background-color .4s var(--easing-suave), border-color .4s var(--easing-suave), color .4s var(--easing-suave);
+  border-radius: 16px;
+  /* Na hero o cabeçalho é solto sobre o preto: sem caixa. A caixa (fundo,
+     fio e sombra) entra quando a primeira dobra passa por baixo dele
+     (classe header--caixa, ligada pelo script). */
+  background: transparent; border: 1px solid transparent; box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0);
+  transition: background-color .4s var(--easing-suave), border-color .4s var(--easing-suave), box-shadow .4s var(--easing-suave), color .4s var(--easing-suave);
 }
+.header--caixa .header__inner { background: var(--cab-bg); border-color: var(--cab-fio); box-shadow: 0 10px 30px -12px rgb(0 0 0 / .35); }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
 /* Só o monograma "R", na cor da marca. */
 .logo__img { height: 40px; width: auto; }
@@ -314,7 +318,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* Uma tela só, sem grudar: os passos são tocados por tempo (script). */
 .palco__fixo {
   position: relative;
-  height: 100svh; min-height: 640px;
+  height: 100svh; min-height: 720px;
   display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; overflow: hidden;
   padding: var(--altura-header) 0 0;   /* a hero corre por baixo do cabeçalho flutuante */
   background: var(--fundo); color: var(--papel);
@@ -470,7 +474,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    tempo, não por scroll: quando a cena chega ao fim, título, subtítulo e
    CTA sobem um atrás do outro (classe ligada pelo script). */
 .hero__copy {
-  width: 100%; display: grid; justify-items: center; gap: clamp(28px, 4.6svh, 52px);
+  width: 100%; display: grid; justify-items: center; gap: clamp(36px, 6svh, 72px);
   opacity: 0; pointer-events: none;
 }
 .hero__copy > * { opacity: 0; transform: translateY(28px); }
@@ -491,7 +495,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero__lead { color: rgb(242 242 238 / .72); max-width: 80ch; font-size: clamp(1.05rem, 1.3vw, 1.3rem); line-height: 1.6; text-wrap: balance; }
 .quebra-desktop { display: none; }
 @media (min-width: 1100px) { .quebra-desktop { display: inline; } }
-.hero__acoes { margin-top: 12px; }
+.hero__acoes { margin-top: 20px; }
 
 /* Sem JS ou com menos movimento: nada de palco. Tudo em repouso, visível. */
 @media (prefers-reduced-motion: reduce) {
@@ -610,8 +614,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }
 .letreiro__palavra {
-  font-family: var(--font-titulo); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(3.4rem, 9vw, 9.5rem); line-height: 1; letter-spacing: -.035em; white-space: nowrap; color: var(--papel);
+  font-family: var(--font-titulo); font-weight: 300; text-transform: uppercase;   /* light: a 400 ficava pesado no tamanho */
+  font-size: clamp(2.8rem, 7.4vw, 7.8rem); line-height: 1; letter-spacing: -.035em; white-space: nowrap; color: var(--papel);
 }
 .letreiro__mais { flex: none; width: clamp(14px, 1.4vw, 22px); height: clamp(14px, 1.4vw, 22px); margin-inline: clamp(28px, 3.6vw, 64px); color: rgb(242 242 238 / .45); }
 @keyframes letreiro { to { transform: translate3d(-50%, 0, 0); } }
@@ -772,6 +776,11 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .extrato { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--fio); }
 .extrato__linha { border-bottom: 1px solid var(--fio); }
 .extrato__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; align-items: center; padding-block: clamp(36px, 5.5vw, 88px); }
+/* Texto à esquerda, número à direita (no celular, em pilha, o número segue em cima). */
+@media (min-width: 900px) {
+  .extrato__grade .extrato__texto { order: 1; }
+  .extrato__grade .extrato__num { order: 2; justify-self: end; text-align: right; }
+}
 .extrato__num {
   margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque);
   font-size: clamp(4.2rem, 9.5vw, 10rem); line-height: .9; letter-spacing: -.05em; white-space: nowrap;
@@ -871,7 +880,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .tomada--1 { font-size: clamp(1.9rem, 8.6vw, 3rem); }
   .tomada--2 { font-size: clamp(3rem, 15vw, 5.4rem); }
   .hero__seta { margin-top: 20px; }
-  .hero__copy { gap: 20px; }
+  .hero__copy { gap: 26px; }
   .hero__titulo--curto { font-size: clamp(1.9rem, 8.4vw, 2.6rem); max-width: none; }
   .hero__lead { font-size: 15px; }
   /* O botão onda no celular: largura toda, texto quebrando se precisar. */

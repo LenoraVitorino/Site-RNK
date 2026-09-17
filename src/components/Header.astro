@@ -248,6 +248,13 @@ import Botao from './ui/Botao.astro';
     }
     return tomDeCor(getComputedStyle(document.body).backgroundColor) ?? 'header--claro';
   };
+  /* A caixa do cabeçalho só aparece quando a primeira dobra (a hero, ou o
+     que estiver no topo) já passou por baixo dele. */
+  const primeira = document.querySelector<HTMLElement>('main > :first-child');
+  const aplicaCaixa = () => {
+    const fim = primeira ? primeira.getBoundingClientRect().bottom : Infinity;
+    header.classList.toggle('header--caixa', primeira ? fim <= header.offsetHeight : window.scrollY > 8);
+  };
   const aplicaTom = () => {
     if (nav.classList.contains('is-open')) return;   // com o drawer aberto, o tom congela
     const t = tomAbaixo();
@@ -260,11 +267,13 @@ import Botao from './ui/Botao.astro';
     ticking = true;
     requestAnimationFrame(() => {
       header.classList.toggle('is-stuck', window.scrollY > 8);
+      aplicaCaixa();
       aplicaTom();
       ticking = false;
     });
   }, { passive: true });
-  window.addEventListener('resize', aplicaTom, { passive: true });
+  window.addEventListener('resize', () => { aplicaCaixa(); aplicaTom(); }, { passive: true });
+  aplicaCaixa();
   aplicaTom();
   // A hero anima sem rolar a página: checa de novo por um tempo depois do carregamento.
   let checagens = 0;

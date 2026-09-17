@@ -61,6 +61,10 @@ const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
       <p class="hero__seta" aria-hidden="true"><span>↓</span></p>
     </div>
 
+    {copyLiteral && (
+      <!-- Barra de prova social só na versão copy. Na do estúdio ela sai por
+           enquanto: os logos dos clientes ainda não chegaram, e a barra com a
+           assinatura da Renke repetida era só um exemplo. -->
     <div class="hero__confianca">
       <div class="hero__confianca__inner">
         <p class="hero__confianca__frase">Doutores que <strong>confiam na Renke</strong></p>
@@ -84,6 +88,7 @@ const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
         </div>
       </div>
     </div>
+    )}
   </div>
 </section>
 

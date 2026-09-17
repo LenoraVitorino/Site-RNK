@@ -173,3 +173,15 @@ tokens novos e por isso aparecem numa mistura v1/v2 até migrarem.
   IntersectionObserver.
 - Reveal (`.entra`) sem elementos presos no fim da página.
 - Itens do menu sem página marcados como "em breve" (`nav--pendente`).
+
+## Cabeçalho, hero e letreiro (17/09/2026)
+
+O cabeçalho continua fixo e flutuante, mas sem caixa enquanto a primeira
+dobra está na tela: `.header__inner` nasce transparente e a classe
+`header--caixa` (ligada no `Header.astro` quando o fundo do primeiro filho
+de `main` passa do cabeçalho) traz fundo, fio e sombra. Na versão do
+estúdio a barra "Doutores que confiam na Renke" saiu da hero por enquanto
+(fica na copy); a hero tem mínimo de 720px e espaços maiores entre os
+blocos. O letreiro passou para Inter Light (300) em clamp(2.8rem, 7.4vw,
+7.8rem). No extrato de resultados o texto vai à esquerda e o número à
+direita a partir de 900px.
