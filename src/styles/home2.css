@@ -732,8 +732,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__nome {
   grid-column: 1 / -1; grid-row: 1 / -1; place-self: center;
   margin: 0; display: grid; width: min(66svh, 720px); position: relative; pointer-events: none;
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.04em; line-height: .9;
-  font-size: clamp(4rem, 8.6vw, 8.8rem); color: var(--papel);
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
+  font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--papel);
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }

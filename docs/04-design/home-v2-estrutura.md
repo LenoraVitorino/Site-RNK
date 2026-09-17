@@ -205,3 +205,11 @@ página nunca parecer travada) e nos 70% restantes passa para o próximo. Os íc
 e postos inline; cada `<rect>` vira uma peça que se afasta do centro,
 gira e encolhe quando desmontada. Abaixo de 900px, sem JS ou com menos
 movimento, vira uma pilha.
+
+## Trava da hero só com a hero na tela (17/09/2026)
+
+A cena da hero é disparada pelo primeiro gesto de rolar e, até terminar,
+bloqueia a roda (`preventDefault`). Isso valia mesmo com a página já no
+meio (barra de rolagem, âncora), e a primeira rolada ficava presa por 5 s
+sem nada na tela: a sensação de "site travado". Agora, com `scrollY > 8`
+a cena é dada como vista e a roda passa livre, em qualquer versão.

@@ -132,14 +132,28 @@ const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
       await anima(1, T_HERO);
       livre = true;
     };
-    if (semMovimento || scrollY > 8) { livre = true; comecou = true; palco.classList.add('palco--revops'); aplica(1); }
+    const solta = () => { livre = true; comecou = true; palco.classList.add('palco--revops'); aplica(1); };
+    if (semMovimento || scrollY > 8) solta();
     else {
-      const segura = (e: Event) => { if (!livre) { e.preventDefault(); toca(); } };
+      /* A trava só vale com a hero na tela. Se a página já desceu por outro
+         caminho (barra de rolagem, âncora, link), a cena é dada como vista e
+         a roda passa livre; senão o primeiro gesto no meio da página ficaria
+         preso por 5 s sem nada acontecer. */
+      const foraDaTela = () => scrollY > 8;
+      const segura = (e: Event) => {
+        if (livre) return;
+        if (foraDaTela()) { solta(); return; }
+        e.preventDefault();
+        toca();
+      };
       addEventListener('wheel', segura, { passive: false });
       addEventListener('touchmove', segura, { passive: false });
       addEventListener('keydown', (e) => {
-        if (!livre && ['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) { e.preventDefault(); toca(); }
+        if (livre) return;
+        if (foraDaTela()) { solta(); return; }
+        if (['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) { e.preventDefault(); toca(); }
       });
+      addEventListener('scroll', () => { if (!livre && !comecou && foraDaTela()) solta(); }, { passive: true });
       aplica(0);
     }
   }
