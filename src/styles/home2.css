@@ -680,12 +680,12 @@ html:not(.js) .esteira__trilho { transform: none; }
    pelo script a partir do scroll (sem transições CSS).
    ============================================================ */
 
-/* Curso: (n − 1) trechos de 85svh mais a tela presa. Fundo claro como a
-   referência (#d5d5d5 lá; aqui um cinza-claro no mesmo tom): a dobra dos
-   planos é a única clara da home, e por isso se destaca do preto. */
+/* Curso: (n − 1) trechos de uma tela mais a tela presa. Fundo no claro do
+   design system (papel): a dobra dos planos é a única clara da home, e por
+   isso se destaca do preto. */
 .palcoplanos {
-  --pp-fundo: #D6D6D2; --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
-  position: relative; height: calc((var(--n) - 1) * 85svh + 100svh); background: var(--pp-fundo); color: var(--pp-texto);
+  --pp-fundo: var(--papel); --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
+  position: relative; height: calc(var(--n) * 100svh); background: var(--pp-fundo); color: var(--pp-texto);
 }
 .palcoplanos__fixo {
   position: sticky; top: 0; height: 100svh; overflow: hidden; box-sizing: border-box;
@@ -717,13 +717,12 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__item--ativo { color: var(--pp-texto); font-weight: var(--peso-enfase); pointer-events: none; }
 
 /* Ícones: todos no centro, um por cima do outro; o script mostra o do plano. */
-/* Como a referência: o ícone multiplica sobre o fundo claro, e as peças que se cruzam escurecem. */
-.palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; mix-blend-mode: multiply; }
+/* Ícone todo amarelo, opaco; as metades entram e saem pela coreografia do plano (script). */
+.palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; overflow: visible; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
 .plano-palco__icone { width: 100%; height: 100%; overflow: visible; visibility: hidden; }
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
-.peca--papel { fill: rgb(22 22 22 / .22); }
-.peca--ouro { fill: rgb(242 207 49 / .85); }
+.peca--papel, .peca--ouro { fill: var(--destaque); }
 
 /* Cada plano é um layer com três cantos: nome (centro), texto (baixo-esquerda) e dados (baixo-direita). */
 .plano-palco {

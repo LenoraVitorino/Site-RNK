@@ -204,9 +204,13 @@ scroll, e uma barra fina ao lado da lista enche com o progresso, para a
 página nunca parecer travada) e nos 70% restantes passa para o próximo. Os ícones oficiais dos planos são lidos no build
 e postos inline; cada `<rect>` vira uma peça que se afasta do centro,
 gira e encolhe quando desmontada. Abaixo de 900px, sem JS ou com menos
-movimento, vira uma pilha. Fundo claro `#D6D6D2` (a referência usa
-`#d5d5d5`), texto grafite; `.palcoplanos__icones` em `mix-blend-mode:
-multiply`, como o `svg-darken` de lá.
+movimento, vira uma pilha. Fundo no claro do design system (`--papel`),
+texto grafite, ícone todo amarelo e opaco. Curso de `n × 100svh`, 20% de
+cada trecho segurando e 80% passando. Coreografia por plano no
+frontmatter (`coreografia`: vetores de entrada e saída de cada metade, em
+unidades do viewBox) e snap: 140 ms depois da última rolagem, se a dobra
+está presa, a página desliza até o plano mais próximo em 700 ms
+(`deslizaAte`, cancelado por qualquer gesto ou por rolagem externa).
 
 ## Trava da hero só com a hero na tela (17/09/2026)
 

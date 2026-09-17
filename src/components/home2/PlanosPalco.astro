@@ -53,6 +53,23 @@ const pecas = (label: string): Peca[] => {
   return (['ouro', 'papel'] as const).filter((l) => lados[l].length).map((l) => ({ ouro: l === 'ouro', formas: lados[l].join('') }));
 };
 
+/* Coreografia do ícone por plano (Lenora, 17/09): de onde cada metade vem
+   ao entrar e para onde vai ao sair, em unidades do viewBox (1080 = o
+   ícone; a página inteira tem uns 3000 de largura). Metade 0 = lado
+   "ouro" do arquivo (class cls-1), metade 1 = o outro lado.
+     Start: as duas vêm da diagonal, dos cantos opostos da página, só
+            direção, e se encaixam 100% quando a página centraliza.
+     Run:   as duas vêm da esquerda e se formam à direita, em movimento.
+     Scale: mesma coisa, subindo.
+     Core:  uma de cima, outra de baixo. Full: igual ao Core. */
+const coreografia: Record<string, { entra: [number, number][]; sai: [number, number][] }> = {
+  start: { entra: [[-1000, 900], [1000, -900]], sai: [[-1000, 900], [1000, -900]] },
+  run:   { entra: [[-1500, 0], [-1500, 0]],    sai: [[1500, 0], [1500, 0]] },
+  scale: { entra: [[0, 1300], [0, 1300]],      sai: [[0, -1300], [0, -1300]] },
+  core:  { entra: [[0, 1100], [0, -1100]],     sai: [[0, 1100], [0, -1100]] },
+  full:  { entra: [[0, -1100], [0, 1100]],     sai: [[0, -1100], [0, 1100]] },
+};
+
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   const iPilar = planoDoPilar.indexOf(label);
@@ -65,6 +82,7 @@ const planos = ordem.map((label) => {
     pilar: pilares[iPilar],
     numeroPilar: iPilar + 1,
     pecas: pecas(label),
+    coreografia: coreografia[chave(label)],
   };
 });
 ---
@@ -94,7 +112,7 @@ const planos = ordem.map((label) => {
            peça quando o plano entra e se desmonta quando sai (script). -->
       <div class="palcoplanos__icones" aria-hidden="true">
         {planos.map((p, i) => (
-          <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
+          <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
             {p.pecas.map((peca, k) => (
               <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
             ))}
@@ -131,14 +149,13 @@ const planos = ordem.map((label) => {
 </section>
 
 <script>
-  /* Tudo guiado pelo scroll, como a referência: a dobra tem n telas de
-     altura e o palco fica preso. Cada plano ocupa um trecho igual do curso;
-     dentro do trecho, os primeiros 30% seguram o plano (o ícone e o nome
-     flutuam com o scroll, para a página nunca parecer parada) e os 70%
-     restantes fazem a passagem para o próximo: o que sai sobe e some, o que
-     entra é revelado de baixo para cima (clip-path) e sobe até o lugar; o
-     ícone que entra se monta peça a peça e o que sai se desmonta. Rolar para
-     trás desfaz tudo na mesma medida. */
+  /* Como a referência: o scroll comanda, e a dobra tem n telas de altura
+     com o palco preso. Cada plano ocupa um trecho igual do curso; os
+     primeiros 20% seguram o plano e os 80% restantes passam para o próximo
+     (o que sai sobe e some; o que entra é revelado de baixo para cima e o
+     ícone se monta na coreografia do plano). Quando a rolagem para, a
+     página desliza sozinha até o plano mais próximo (snap), como lá: a
+     transição sempre toca inteira, em vez de ficar pela metade. */
   const dobra = document.querySelector<HTMLElement>('[data-palcoplanos]');
   const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (dobra && !reduz) {
@@ -148,18 +165,17 @@ const planos = ordem.map((label) => {
     const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
     const barra = dobra.querySelector<HTMLElement>('[data-barra]');
     const n = layers.length;
-    const SEGURA = 0.3;   // fração do trecho em que o plano fica parado
+    const SEGURA = 0.2;   // fração do trecho em que o plano fica parado
     const clamp = (v: number) => Math.min(1, Math.max(0, v));
     const suave = (x: number) => x * x * (3 - 2 * x);
+    const entraSai = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    const desktop = () => !matchMedia('(max-width: 899.98px)').matches;
 
-    /* Direção de cada peça a partir do centro do ícone: é para onde ela
-       vai quando desmontada. Medida uma vez. */
-    const pecas = icones.map((svg) => [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g) => {
-      const b = g.getBBox();
-      const cx = b.x + b.width / 2 - 540, cy = b.y + b.height / 2 - 540;
-      const len = Math.hypot(cx, cy) || 1;
-      return { g, dx: cx / len, dy: cy / len };
-    }));
+    type Vetor = [number, number];
+    const pecas = icones.map((svg) => {
+      const c = JSON.parse(svg.dataset.coreografia || '{"entra":[],"sai":[]}') as { entra: Vetor[]; sai: Vetor[] };
+      return [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g, j) => ({ g, entra: c.entra[j] || [0, 0], sai: c.sai[j] || [0, 0] }));
+    });
     const escondido = layers.map(() => false);
 
     let ativo = -1;
@@ -181,48 +197,49 @@ const planos = ordem.map((label) => {
       }
       if (escondido[k]) { l.style.visibility = 'visible'; icones[k].style.visibility = 'visible'; escondido[k] = false; }
       // Texto, nas curvas da referência: o que entra é revelado de baixo para
-      // cima em ritmo linear (o nome só aparece no último quarto) e sobe até
-      // o lugar; o que sai sobe e some na primeira metade da passagem.
+      // cima (o nome só aparece no último quarto) e sobe até o lugar; o que
+      // sai sobe e some na primeira metade da passagem.
       const corte = (1 - dentro) * 100;
       l.style.clipPath = corte > 0.01 ? `inset(${corte.toFixed(2)}% 0 0 0)` : 'none';
       l.style.transform = `translate3d(0, ${((1 - dentro) * 12 - fora * 24).toFixed(2)}%, 0)`;
       l.style.opacity = String(clamp(1 - fora * 2));
-      // Parado, nome e ícone flutuam um pouco com o scroll.
       nomes[k].style.opacity = String(clamp(dentro * 4 - 3) * clamp(1 - fora * 3));
-      nomes[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 4).toFixed(2)}%, 0)`;
-      icones[k].style.transform = `rotate(${((flutua - 0.5) * 8).toFixed(2)}deg) scale(${(0.97 + flutua * 0.06).toFixed(3)})`;
-      // Ícone: cada peça se monta com um atraso escalonado (IN) e se desmonta (OUT).
-      // As duas metades chegam de lados opostos e se encaixam no centro (IN);
-      // ao sair, se separam de novo (OUT).
-      const ps = pecas[k];
-      const m = ps.length;
-      ps.forEach(({ g, dx, dy }, j) => {
-        const ein = suave(clamp((dentro - j * (0.12 / m)) / 0.75));
-        const eout = suave(clamp((fora - (m - 1 - j) * (0.12 / m)) / 0.7));
-        const afasta = (1 - ein) * 420 + eout * 420;
-        const gira = (1 - ein) * -18 + eout * 14;
-        const escala = 0.6 + 0.4 * ein + eout * 0.15;
-        g.style.transform = `translate(${(dx * afasta).toFixed(1)}px, ${(dy * afasta).toFixed(1)}px) rotate(${gira.toFixed(1)}deg) scale(${escala.toFixed(3)})`;
-        g.style.opacity = String(clamp(ein * (1 - eout)));
+      nomes[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 3).toFixed(2)}%, 0)`;
+      icones[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 2).toFixed(2)}%, 0)`;
+      // Ícone: cada metade vem do seu canto (entra) e vai para o seu rumo
+      // (sai), só deslocamento, sem girar; encaixa 100% no fim da entrada.
+      pecas[k].forEach(({ g, entra, sai }, j) => {
+        const ein = entraSai(clamp((dentro - j * 0.06) / 0.94));
+        const eout = entraSai(clamp((fora - j * 0.06) / 0.94));
+        const x = entra[0] * (1 - ein) + sai[0] * eout;
+        const y = entra[1] * (1 - ein) + sai[1] * eout;
+        g.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+        g.style.opacity = String(clamp(ein * 2.5) * clamp(1.4 - eout * 1.4));
       });
     };
 
+    const medidas = () => {
+      const r = dobra.getBoundingClientRect();
+      const topo = r.top + scrollY;
+      const curso = dobra.offsetHeight - innerHeight;
+      return { r, topo, curso };
+    };
+    const posicaoDoPlano = (i: number, topo: number, curso: number) => topo + curso * ((i + SEGURA * 0.5) / (n - 1));
+
     let ticking = false;
     const mede = () => {
-      if (matchMedia('(max-width: 899.98px)').matches) return;
-      const r = dobra.getBoundingClientRect();
-      const curso = dobra.offsetHeight - innerHeight;
+      if (!desktop()) return;
+      const { r, curso } = medidas();
       // Antes de prender: o primeiro plano se monta enquanto a dobra chega.
       const pre = r.top > 0 ? clamp(1 - r.top / innerHeight) : 1;
       const t = clamp(-r.top / curso);
       if (barra) barra.style.transform = `scaleY(${t.toFixed(4)})`;
-      // O último plano só segura; os outros seguram e passam.
       const pos = Math.min(n - 1 - 1e-6, t * (n - 1));
       const de = Math.floor(pos);
       const f = pos - de;
       const passando = f > SEGURA;
-      const fp = passando ? (f - SEGURA) / (1 - SEGURA) : 0;   // progresso da passagem
-      const fs = passando ? 1 : f / SEGURA;                    // progresso da segurada
+      const fp = passando ? (f - SEGURA) / (1 - SEGURA) : 0;
+      const fs = passando ? 1 : f / SEGURA;
       for (let k = 0; k < n; k++) {
         if (k < de) pinta(k, 1, 1, 1);
         else if (k === de) pinta(k, k === 0 ? pre : 1, fp, fs);
@@ -232,19 +249,47 @@ const planos = ordem.map((label) => {
       marca(fp < 0.5 ? de : de + 1);
     };
 
+    /* Snap: a rolagem parou dentro da dobra → desliza até o plano mais
+       próximo em 700 ms. Qualquer gesto novo cancela. */
+    let deslizando: number | null = null;
+    let quieto: number | undefined;
+    const cancela = () => { if (deslizando !== null) { cancelAnimationFrame(deslizando); deslizando = null; } };
+    const deslizaAte = (alvo: number, dur = 700) => {
+      cancela();
+      const de = scrollY, t0 = performance.now();
+      if (Math.abs(alvo - de) < 2) return;
+      let esperado = de;
+      const quadro = (t: number) => {
+        if (Math.abs(scrollY - esperado) > 3) { deslizando = null; return; }   // alguém rolou por fora: solta
+        const k = Math.min(1, (t - t0) / dur);
+        esperado = Math.round(de + (alvo - de) * entraSai(k));
+        scrollTo({ top: esperado, behavior: 'instant' as ScrollBehavior });
+        deslizando = k < 1 ? requestAnimationFrame(quadro) : null;
+      };
+      deslizando = requestAnimationFrame(quadro);
+    };
+    const encaixa = () => {
+      if (!desktop() || deslizando !== null) return;
+      const { r, topo, curso } = medidas();
+      if (r.top > 0 || -r.top >= curso) return;   // fora do trecho preso
+      const pos = (-r.top / curso) * (n - 1);
+      const i = Math.round(pos - SEGURA * 0.5);
+      deslizaAte(posicaoDoPlano(clamp(i / (n - 1)) * (n - 1), topo, curso));
+    };
+    for (const ev of ['wheel', 'touchstart', 'keydown', 'mousedown']) addEventListener(ev, cancela, { passive: true });
+
     addEventListener('scroll', () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => { mede(); ticking = false; });
+      if (!ticking) { ticking = true; requestAnimationFrame(() => { mede(); ticking = false; }); }
+      clearTimeout(quieto);
+      quieto = setTimeout(encaixa, 140);
     }, { passive: true });
     addEventListener('resize', mede, { passive: true });
     mede();
 
-    /* Clicar num plano da lista leva ao trecho em que ele segura. */
+    /* Clicar num plano da lista desliza até ele. */
     itens.forEach((b, i) => b.addEventListener('click', () => {
-      const topo = dobra.getBoundingClientRect().top + scrollY;
-      const curso = dobra.offsetHeight - innerHeight;
-      scrollTo({ top: topo + curso * ((i + SEGURA * 0.5) / (n - 1)), behavior: 'smooth' });
+      const { topo, curso } = medidas();
+      deslizaAte(posicaoDoPlano(i, topo, curso), 900);
     }));
   }
 </script>
