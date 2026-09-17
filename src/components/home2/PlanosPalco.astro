@@ -34,17 +34,23 @@ const planoDoPilar = ['REVENA CORE', 'REVENA START', 'REVENA FULL', 'REVENA RUN'
 const chave = (label: string) => label.replace('REVENA ', '').toLowerCase();
 const nome = (label: string) => { const n = chave(label); return n[0].toUpperCase() + n.slice(1); };
 
-/* Lê o SVG oficial e devolve as peças (os <rect>) com a classe de cor,
-   para o ícone ser montado inline e animado peça a peça. */
-type Peca = { rect: string; ouro: boolean };
+/* Lê o SVG oficial e devolve as duas peças do ícone: o lado amarelo
+   (class cls-1) e o lado escuro (o resto), cada um com todas as suas
+   formas (rect, path, polygon…). O ícone se monta com as duas metades se
+   unindo, como a Lenora pediu em 17/09. Os arquivos novos, com cada lado já
+   unificado numa forma só, entram com os mesmos nomes. */
+type Peca = { formas: string; ouro: boolean };
 const pecas = (label: string): Peca[] => {
   const arq = join(process.cwd(), 'public', 'icones', `plano-${chave(label)}-light.svg`);
   if (!existsSync(arq)) return [];
   const svg = readFileSync(arq, 'utf8');
-  return [...svg.matchAll(/<rect\b([^>]*?)\/?>/g)].map((m) => {
-    const attrs = m[1];
-    return { ouro: /class="cls-1"/.test(attrs), rect: `<rect ${attrs.replace(/\s*class="[^"]*"/, '').trim()}/>` };
-  });
+  const lados: Record<'ouro' | 'papel', string[]> = { ouro: [], papel: [] };
+  for (const m of svg.matchAll(/<(rect|path|polygon|circle|ellipse)\b([^>]*?)\/?>/g)) {
+    const [, tag, attrs] = m;
+    const ouro = /class="cls-1"/.test(attrs);
+    lados[ouro ? 'ouro' : 'papel'].push(`<${tag} ${attrs.replace(/\s*class="[^"]*"/, '').trim()}/>`);
+  }
+  return (['ouro', 'papel'] as const).filter((l) => lados[l].length).map((l) => ({ ouro: l === 'ouro', formas: lados[l].join('') }));
 };
 
 const planos = ordem.map((label) => {
@@ -90,7 +96,7 @@ const planos = ordem.map((label) => {
         {planos.map((p, i) => (
           <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
             {p.pecas.map((peca, k) => (
-              <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.rect} />
+              <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
             ))}
           </svg>
         ))}
@@ -186,14 +192,16 @@ const planos = ordem.map((label) => {
       nomes[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 4).toFixed(2)}%, 0)`;
       icones[k].style.transform = `rotate(${((flutua - 0.5) * 8).toFixed(2)}deg) scale(${(0.97 + flutua * 0.06).toFixed(3)})`;
       // Ícone: cada peça se monta com um atraso escalonado (IN) e se desmonta (OUT).
+      // As duas metades chegam de lados opostos e se encaixam no centro (IN);
+      // ao sair, se separam de novo (OUT).
       const ps = pecas[k];
       const m = ps.length;
       ps.forEach(({ g, dx, dy }, j) => {
-        const ein = suave(clamp((dentro - j * (0.5 / m)) / 0.5));
-        const eout = suave(clamp((fora - (m - 1 - j) * (0.4 / m)) / 0.6));
-        const afasta = (1 - ein) * 260 + eout * 320;
-        const gira = (1 - ein) * -42 + eout * 28;
-        const escala = 0.35 + 0.65 * ein + eout * 0.25;
+        const ein = suave(clamp((dentro - j * (0.12 / m)) / 0.75));
+        const eout = suave(clamp((fora - (m - 1 - j) * (0.12 / m)) / 0.7));
+        const afasta = (1 - ein) * 420 + eout * 420;
+        const gira = (1 - ein) * -18 + eout * 14;
+        const escala = 0.6 + 0.4 * ein + eout * 0.15;
         g.style.transform = `translate(${(dx * afasta).toFixed(1)}px, ${(dy * afasta).toFixed(1)}px) rotate(${gira.toFixed(1)}deg) scale(${escala.toFixed(3)})`;
         g.style.opacity = String(clamp(ein * (1 - eout)));
       });

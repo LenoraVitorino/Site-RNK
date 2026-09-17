@@ -15,3 +15,9 @@ provisórios: sobrescreva com os SVGs oficiais mantendo os nomes.
 
 Planos (oficiais, enviados em 14/09/2026): plano-<start|run|scale|core|full>-light.svg
 para fundo claro e -dark.svg para fundo escuro. Planos.astro usa a versão light.
+
+Palco dos planos (PlanosPalco.astro, versão do estúdio): lê o -light.svg
+no build e monta o ícone inline em duas peças, o lado amarelo (class
+"cls-1") e o lado escuro (o resto), aceitando rect, path e polygon. Os
+arquivos corrigidos de 17/09 (cada lado unificado numa forma só) entram
+com os mesmos nomes, sem mexer em código.
