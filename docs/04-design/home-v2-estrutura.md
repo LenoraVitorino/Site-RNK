@@ -185,3 +185,21 @@ estúdio a barra "Doutores que confiam na Renke" saiu da hero por enquanto
 blocos. O letreiro passou para Inter Light (300) em clamp(2.8rem, 7.4vw,
 7.8rem). No extrato de resultados o texto vai à esquerda e o número à
 direita a partir de 900px.
+
+## Protocolo Revena no palco (17/09/2026, versão do estúdio)
+
+`PlanosPalco.astro` substitui, na versão do estúdio, o par Protocolos +
+Planos (que segue na copy). Referência: dobra "Financial solutions" de
+tresmarescapital.com, lida pelo código do tema (cópia da Wayback Machine
+de 06/2026): GSAP ScrollTrigger com scrub, `.sticky` de 100vh dentro de um
+container de `count × 100vh`, `.anchors` no canto superior esquerdo com
+`--active`, cada `.content` saindo com `y: -30%` + fade e entrando com
+`clip-path: inset(100% 0 0 0) → inset(0)`, título com a linha 1 à
+esquerda e a linha 2 à direita, e um SVG por item que se monta (IN) e se
+desmonta (OUT) conforme o progresso. A nossa versão faz o mesmo sem
+biblioteca: a dobra tem `n × 100svh`, o `.palcoplanos__fixo` fica preso,
+e o script converte o progresso numa linha do tempo de `2n − 1` trechos
+(segura, passa, segura…). Os ícones oficiais dos planos são lidos no build
+e postos inline; cada `<rect>` vira uma peça que se afasta do centro,
+gira e encolhe quando desmontada. Abaixo de 900px, sem JS ou com menos
+movimento, vira uma pilha.

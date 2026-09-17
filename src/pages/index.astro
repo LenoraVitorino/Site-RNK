@@ -15,6 +15,7 @@ import OQueFaz from '../components/home2/OQueFaz.astro';
 import Letreiro from '../components/home2/Letreiro.astro';
 import NumerosFaixa from '../components/home2/NumerosFaixa.astro';
 import Protocolos from '../components/home2/Protocolos.astro';
+import PlanosPalco from '../components/home2/PlanosPalco.astro';
 import Planos from '../components/home2/Planos.astro';
 import Perguntas from '../components/home2/Perguntas.astro';
 import Resultados from '../components/home2/Resultados.astro';
@@ -29,7 +30,7 @@ import { copyLiteral } from '../data/versao';
   <OQueFaz />
   {!copyLiteral && <NumerosFaixa />}
   <Letreiro />
-  <Protocolos />
+  {copyLiteral ? <Protocolos /> : <PlanosPalco />}
   {copyLiteral && <Planos />}
   <Perguntas />
   <Resultados />

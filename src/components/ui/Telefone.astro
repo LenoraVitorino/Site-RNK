@@ -42,6 +42,7 @@ const video = slot.video!;
   document.querySelectorAll<HTMLElement>('[data-tel]').forEach((raiz) => {
     const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
     const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
+    const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
     let pausadoPeloUsuario = false;
 
     const marcar = () => {

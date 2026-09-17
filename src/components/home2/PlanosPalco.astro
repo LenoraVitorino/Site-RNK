@@ -1,0 +1,232 @@
+---
+/**
+ * Dobra 3 (versão do estúdio) · Protocolo Revena num palco preso na tela,
+ * no desenho da dobra "Financial solutions" da referência Tres Mares
+ * (tresmarescapital.com, 17/09/2026): a lista dos planos no canto superior
+ * esquerdo com o atual em destaque; no centro o ícone do plano, grande e
+ * translúcido, se formando peça a peça, com o nome em duas linhas
+ * desencontradas por cima; embaixo à esquerda a frase do plano e o "Saiba
+ * mais"; à direita a fala da doutora ("o momento da clínica") e o pilar que
+ * o plano entrega. A página rola, o palco fica: cada plano ocupa uma tela
+ * de scroll. Título e apoio da dobra ficam no topo do palco.
+ *
+ * Fotos ao fundo (como a planta da referência) entram depois; por ora só o
+ * ícone. Os ícones são os oficiais dos planos (public/icones), lidos no
+ * build e postos inline para animar peça a peça; quando chegarem os SVGs
+ * novos, basta sobrescrever os arquivos.
+ *
+ * Ordem dos planos: Start, Run, Scale, Core, Full (a ordem que a Lenora
+ * usa ao falar deles). Copy literal em todos os textos; o cruzamento
+ * plano → pilar é o mesmo de Protocolos.astro, a validar.
+ *
+ * Sem JS ou com menos movimento, e abaixo de 900px, vira uma pilha: um
+ * bloco por plano.
+ */
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { pilares, protocolos } from '../../data/home';
+import { existe } from '../../data/rotas';
+
+const ordem = ['REVENA START', 'REVENA RUN', 'REVENA SCALE', 'REVENA CORE', 'REVENA FULL'];
+// Pilar → plano que o entrega (ver nota em Protocolos.astro).
+const planoDoPilar = ['REVENA CORE', 'REVENA START', 'REVENA FULL', 'REVENA RUN', 'REVENA SCALE'];
+
+const chave = (label: string) => label.replace('REVENA ', '').toLowerCase();
+const nome = (label: string) => { const n = chave(label); return n[0].toUpperCase() + n.slice(1); };
+
+/* Lê o SVG oficial e devolve as peças (os <rect>) com a classe de cor,
+   para o ícone ser montado inline e animado peça a peça. */
+type Peca = { rect: string; ouro: boolean };
+const pecas = (label: string): Peca[] => {
+  const arq = join(process.cwd(), 'public', 'icones', `plano-${chave(label)}-light.svg`);
+  if (!existsSync(arq)) return [];
+  const svg = readFileSync(arq, 'utf8');
+  return [...svg.matchAll(/<rect\b([^>]*?)\/?>/g)].map((m) => {
+    const attrs = m[1];
+    return { ouro: /class="cls-1"/.test(attrs), rect: `<rect ${attrs.replace(/\s*class="[^"]*"/, '').trim()}/>` };
+  });
+};
+
+const planos = ordem.map((label) => {
+  const p = protocolos.find((x) => x.label === label)!;
+  const iPilar = planoDoPilar.indexOf(label);
+  return {
+    id: chave(label),
+    nome: nome(label),
+    fala: p.fala,
+    texto: p.texto,
+    rota: p.rota,
+    pilar: pilares[iPilar],
+    numeroPilar: iPilar + 1,
+    pecas: pecas(label),
+  };
+});
+---
+<section class="palcoplanos" id="protocolo-revena" data-palcoplanos style={`--n:${planos.length}`}>
+  <div class="palcoplanos__fixo">
+    <header class="palcoplanos__cabeca">
+      <div>
+        <p class="rotulo rotulo--pilula">Para clínicas</p>
+        <h2 class="palcoplanos__titulo">Protocolo Revena</h2>
+      </div>
+      <p class="palcoplanos__apoio">
+        Estruturamos sua operação do zero e operamos juntos no longo prazo.
+        <strong>Qual é o momento da sua clínica?</strong>
+      </p>
+    </header>
+
+    <div class="palcoplanos__palco">
+      <!-- Lista dos planos, canto superior esquerdo: o atual em destaque; clicar leva ao plano. -->
+      <ol class="palcoplanos__lista" aria-label="Planos do Protocolo Revena">
+        {planos.map((p, i) => (
+          <li><button type="button" class:list={['palcoplanos__item', i === 0 && 'palcoplanos__item--ativo']} data-plano-ir={i} aria-current={i === 0 ? 'true' : undefined}>Revena {p.nome}</button></li>
+        ))}
+      </ol>
+
+      <!-- Os ícones, no centro, todos na mesma célula: cada um se monta peça a
+           peça quando o plano entra e se desmonta quando sai (script). -->
+      <div class="palcoplanos__icones" aria-hidden="true">
+        {planos.map((p, i) => (
+          <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
+            {p.pecas.map((peca, k) => (
+              <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.rect} />
+            ))}
+          </svg>
+        ))}
+      </div>
+
+      <!-- Um layer por plano, todos na mesma célula: nome por cima do ícone,
+           frase embaixo à esquerda, dados embaixo à direita. -->
+      {planos.map((p, i) => (
+        <article class:list={['plano-palco', i === 0 && 'plano-palco--ativo']} data-plano={i} aria-hidden={i === 0 ? undefined : 'true'}>
+          <p class="plano-palco__nome" aria-hidden="true"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
+          <h3 class="plano-palco__h3">Revena {p.nome}</h3>
+
+          <div class="plano-palco__texto">
+            <p class="plano-palco__frase">{p.texto}</p>
+            <a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a>
+          </div>
+
+          <dl class="plano-palco__dados">
+            <div>
+              <dt>Momento da clínica</dt>
+              <dd class="plano-palco__fala">“{p.fala}”</dd>
+            </div>
+            <div>
+              <dt>Pilar 0{p.numeroPilar}</dt>
+              <dd>{p.pilar.titulo}</dd>
+            </div>
+          </dl>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Tudo guiado pelo scroll, como a referência: a dobra tem n telas de
+     altura e o palco fica preso. O curso vira uma linha do tempo de
+     2n − 1 trechos: o plano k segura no trecho 2k e passa para o k+1 no
+     trecho 2k+1. Na passagem, o que sai sobe e some; o que entra é
+     revelado de baixo para cima (clip-path) e sobe até o lugar. O ícone
+     que entra se monta peça a peça (IN) e o que sai se desmonta (OUT).
+     Rolar para trás desfaz tudo na mesma medida. */
+  const dobra = document.querySelector<HTMLElement>('[data-palcoplanos]');
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (dobra && !reduz) {
+    const layers = [...dobra.querySelectorAll<HTMLElement>('[data-plano]')];
+    const icones = [...dobra.querySelectorAll<SVGSVGElement>('[data-icone]')];
+    const nomes = layers.map((l) => l.querySelector<HTMLElement>('.plano-palco__nome')!);
+    const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
+    const n = layers.length;
+    const D = 2 * n - 1;
+    const clamp = (v: number) => Math.min(1, Math.max(0, v));
+    const suave = (x: number) => x * x * (3 - 2 * x);
+
+    /* Direção de cada peça a partir do centro do ícone: é para onde ela
+       vai quando desmontada. Medida uma vez. */
+    const pecas = icones.map((svg) => [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g) => {
+      const b = g.getBBox();
+      const cx = b.x + b.width / 2 - 540, cy = b.y + b.height / 2 - 540;
+      const len = Math.hypot(cx, cy) || 1;
+      return { g, dx: cx / len, dy: cy / len };
+    }));
+
+    let ativo = -1;
+    const marca = (i: number) => {
+      if (i === ativo) return;
+      ativo = i;
+      layers.forEach((l, k) => { l.classList.toggle('plano-palco--ativo', k === i); if (k === i) l.removeAttribute('aria-hidden'); else l.setAttribute('aria-hidden', 'true'); });
+      itens.forEach((b, k) => { b.classList.toggle('palcoplanos__item--ativo', k === i); if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    };
+
+    /* Pinta um plano dado o quanto ele já entrou (dentro 0→1) e o quanto já saiu (fora 0→1). */
+    const pinta = (k: number, dentro: number, fora: number) => {
+      const l = layers[k];
+      const visivel = dentro > 0 && fora < 1;
+      l.style.visibility = visivel ? 'visible' : 'hidden';
+      icones[k].style.visibility = visivel ? 'visible' : 'hidden';
+      if (!visivel) return;
+      // Texto, nas curvas da referência: o que entra é revelado de baixo para
+      // cima em ritmo linear (o nome só aparece no último quarto) e sobe até
+      // o lugar; o que sai sobe e some na primeira metade da passagem.
+      const corte = (1 - dentro) * 100;
+      l.style.clipPath = corte > 0.01 ? `inset(${corte.toFixed(2)}% 0 0 0)` : 'none';
+      l.style.transform = `translate3d(0, ${((1 - dentro) * 12 - fora * 24).toFixed(2)}%, 0)`;
+      l.style.opacity = String(clamp(1 - fora * 2));
+      nomes[k].style.opacity = String(clamp(dentro * 4 - 3) * clamp(1 - fora * 3));
+      // Ícone: cada peça se monta com um atraso escalonado (IN) e se desmonta (OUT).
+      const ps = pecas[k];
+      const m = ps.length;
+      ps.forEach(({ g, dx, dy }, j) => {
+        const ein = suave(clamp((dentro - j * (0.5 / m)) / 0.5));       // entra: peça j começa em j·(0.5/m), dura 0.5
+        const eout = suave(clamp((fora - (m - 1 - j) * (0.4 / m)) / 0.6)); // sai: a última a entrar é a primeira a sair
+        const afasta = (1 - ein) * 260 + eout * 320;
+        const gira = (1 - ein) * -42 + eout * 28;
+        const escala = 0.35 + 0.65 * ein + eout * 0.25;
+        g.style.transform = `translate(${(dx * afasta).toFixed(1)}px, ${(dy * afasta).toFixed(1)}px) rotate(${gira.toFixed(1)}deg) scale(${escala.toFixed(3)})`;
+        g.style.opacity = String(clamp(ein * (1 - eout)));
+      });
+    };
+
+    let ticking = false;
+    const mede = () => {
+      if (matchMedia('(max-width: 899.98px)').matches) return;
+      const r = dobra.getBoundingClientRect();
+      const curso = dobra.offsetHeight - innerHeight;
+      // Antes de prender: o primeiro plano se monta enquanto a dobra chega.
+      const pre = r.top > 0 ? clamp(1 - r.top / innerHeight) : 1;
+      const t = clamp(-r.top / curso);
+      const u = t * D;
+      const trecho = Math.min(D - 1e-6, u);
+      const seg = Math.floor(trecho);
+      const f = trecho - seg;
+      const passando = seg % 2 === 1;
+      const de = passando ? (seg - 1) / 2 : seg / 2;
+      const para = passando ? de + 1 : de;
+      for (let k = 0; k < n; k++) {
+        if (k < de) pinta(k, 1, 1);
+        else if (k === de && k === para) pinta(k, k === 0 ? pre : 1, 0);
+        else if (k === de) pinta(k, 1, f);
+        else if (k === para) pinta(k, f, 0);
+        else pinta(k, 0, 0);
+      }
+      marca(passando ? (f < 0.5 ? de : para) : de);
+    };
+
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { mede(); ticking = false; });
+    }, { passive: true });
+    addEventListener('resize', mede, { passive: true });
+    mede();
+
+    /* Clicar num plano da lista leva ao trecho em que ele segura. */
+    itens.forEach((b, i) => b.addEventListener('click', () => {
+      const topo = dobra.getBoundingClientRect().top + scrollY;
+      const curso = dobra.offsetHeight - innerHeight;
+      scrollTo({ top: topo + curso * ((2 * i + 0.5) / D), behavior: 'smooth' });
+    }));
+  }
+</script>
