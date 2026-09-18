@@ -316,16 +316,6 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   background: #000; color: var(--papel);
 }
 .hero__fundo { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-/* As curvas: duas elipses enormes, um tom acima do preto, com um fio de luz na borda. */
-.hero__curva { position: absolute; border-radius: 50%; border: 1px solid rgb(255 255 255 / .05); }
-.hero__curva--1 {
-  width: 170vw; height: 125vh; left: -35vw; top: -42vh;
-  background: radial-gradient(ellipse at 50% 55%, #1c1c1c 0%, #121212 48%, #050505 70%, transparent 76%);
-}
-.hero__curva--2 {
-  width: 150vw; height: 95vh; left: -55vw; top: 38vh;
-  background: radial-gradient(ellipse at 50% 40%, #141414 0%, #0a0a0a 45%, transparent 68%);
-}
 /* O brilho amarelo no pé, como a referência. */
 .hero__brilho {
   position: absolute; left: 50%; bottom: -34vh; width: 130vw; height: 62vh; transform: translateX(-50%);
@@ -337,8 +327,8 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   position: relative; z-index: 1;
   width: min(100%, var(--largura)); margin-inline: auto;
   padding: clamp(20px, 5vh, 56px) var(--gutter) 0;
-  display: grid; grid-template-columns: minmax(0, 1.05fr) auto minmax(0, 1.05fr);
-  gap: clamp(24px, 4vw, 72px); align-items: start;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: clamp(24px, 6vw, 120px); align-items: start;
 }
 .hero__rotulo {
   display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(16px, 2.6vh, 28px);
@@ -373,13 +363,6 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero__dobra--revops { grid-template-rows: 0fr; opacity: 0; transform: translateY(.25em); }
 .hero--some .hero__dobra--revops, html:not(.js) .hero__dobra--revops { grid-template-rows: 1fr; opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .hero__dobra, .hero__nao, .hero__linha--riscada > span { transition: none; } }
-.hero__objeto { justify-self: center; align-self: start; margin-top: clamp(0px, 3vh, 32px); }
-.hero__objeto img {
-  width: clamp(150px, 17vw, 300px); height: auto;
-  filter: drop-shadow(0 0 48px rgb(255 209 3 / .5)) drop-shadow(0 34px 44px rgb(0 0 0 / .55));
-  animation: hero-flutua 6s ease-in-out infinite;
-}
-@keyframes hero-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 /* O ano ocupa a mesma linha do rótulo (mesma altura e margem) para os dois títulos começarem juntos. */
 .hero__ano { margin: 0 0 clamp(16px, 2.6vh, 28px); display: flex; align-items: center; gap: 10px; min-height: 23px; font-size: 13px; color: var(--destaque); }
 .hero__c { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; }
@@ -398,13 +381,10 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   .hero { min-height: auto; }
   .hero__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
   .hero__h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
-  .hero__objeto { margin: 0; }
-  .hero__objeto img { width: clamp(120px, 34vw, 180px); }
   .hero__scroll { padding-top: 32px; }
   .hero__fio { height: 56px; }
   .hero__brilho { bottom: -40vh; }
 }
-@media (prefers-reduced-motion: reduce) { .hero__objeto img { animation: none; } }
 
 /* Barra de prova social no pé da hero, como a referência: rótulo à
    esquerda, logos à direita, visível em todos os tempos da cena. */
