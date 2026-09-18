@@ -30,7 +30,7 @@ import { pilares, protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 
-const arquivo = (nome: string) => (existsSync(join(process.cwd(), 'public', 'icones', nome)) ? `/icones/${nome}` : null);
+const arquivo = (nome: string) => (existsSync(join(__RAIZ__, 'public', 'icones', nome)) ? `/icones/${nome}` : null);
 const iconePilar = (i: number) => arquivo(`pilar-0${i + 1}.svg`);
 const iconePlano = (label: string) => arquivo(`plano-${label.replace('REVENA ', '').toLowerCase()}-dark.svg`);
 const nomePlano = (label: string) => {
