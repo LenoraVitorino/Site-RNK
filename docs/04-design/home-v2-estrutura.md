@@ -244,3 +244,12 @@ metades do que sai se recolhem ao centro (`translate(-cx, -cy)` +
 `scale(.38)`) e somem a 70% da passagem; as do que entra chegam pela
 coreografia a partir de 28% da entrada; (5) o nome aparece só no último
 quarto. Na pilha do celular cada dobra mostra o `-light.svg` estático.
+
+## Regra de publicação (18/09/2026)
+
+A cada publicação saem juntos: o artifact do estúdio, o artifact da
+copy (`npm run artifact:copy`) e o link público (deploy temporário na
+Cloudflare a partir de `dist-publico`, uma cópia do `dist` com o vídeo
+leve no lugar do completo). O deploy temporário gera um endereço novo
+a cada vez (`site-renke.<nome>.workers.dev`) e vale por tempo limitado;
+o endereço fixo virá com a conta da Renke na Cloudflare.
