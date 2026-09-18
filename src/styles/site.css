@@ -946,7 +946,16 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   .nav__list[data-ativo] .nav__indicador { opacity: 1; }
 
   .megamenu {
-    top: calc(100% + var(--s-3));
+    position: absolute; top: 100%; left: 0; z-index: 110;
+    min-width: 280px; padding-top: var(--s-3);
+  }
+  .megamenu__inner {
+    padding: 1rem 1.1rem;
+    background: rgb(10 10 10 / .97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--line);
+    box-shadow: var(--elev-3); border-radius: var(--raio-card);
     transform-origin: top left;
     animation: mega-entra .18s var(--easing);
   }
@@ -954,17 +963,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
     from { opacity: 0; transform: translateY(-6px) scale(.985); }
     to   { opacity: 1; transform: none; }
   }
-
-  .megamenu {
-    position: absolute; top: calc(100% + .5rem); left: 0; z-index: 110;
-    min-width: 280px; padding: 0;
-    background: rgb(10 10 10 / .97);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid var(--line);
-    box-shadow: var(--elev-3); border-radius: var(--raio-card);
-  }
-  .megamenu__inner { padding: 1rem 1.1rem; }
   .megamenu__list { margin-bottom: .5rem; }
   .megamenu__list a {
     min-height: 0; padding: var(--s-2) var(--s-3);

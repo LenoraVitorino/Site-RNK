@@ -270,13 +270,15 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   .nav__link { min-height: 0; padding: 12px 0; font-size: 17px; white-space: nowrap; }
   .nav__caret { display: none; }
   .megamenu {
-    position: absolute; top: calc(100% + 18px); left: 0; z-index: 110; min-width: 300px; padding: 0;
+    position: absolute; top: 100%; left: 0; z-index: 110; min-width: 300px; padding-top: 18px;
+  }
+  .megamenu__inner {
+    padding: 14px 16px;
     background: #0A0A0A; border: 1px solid rgb(242 242 238 / .14);
     box-shadow: 0 24px 48px -28px rgb(0 0 0 / .7); border-radius: var(--raio-caixa);
     transform-origin: top left; animation: mega-entra .28s var(--easing);
   }
   @keyframes mega-entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-  .megamenu__inner { padding: 14px 16px; }
   .megamenu__list { margin-bottom: 6px; }
   .megamenu__list a { min-height: 0; padding: 8px 10px; border-left: 0; }
   .megamenu__list a:hover { background: rgb(242 242 238 / .06); padding-left: 14px; }
