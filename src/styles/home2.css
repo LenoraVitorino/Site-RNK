@@ -687,7 +687,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 .palcoplanos__intro { padding: clamp(64px, 9vw, 128px) 0 clamp(40px, 6vw, 80px); }
 .palcoplanos__cabeca { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
-.palcoplanos__titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03em; line-height: 1; margin-top: 18px; font-weight: var(--peso-titulo); }
+.palcoplanos__titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03em; line-height: 1; margin-top: 18px; font-weight: var(--peso-titulo); text-transform: uppercase; }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.1rem, 1.5vw, 1.45rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
@@ -719,9 +719,20 @@ html:not(.js) .esteira__trilho { transform: none; }
    da referência; todo amarelo e opaco. As metades cruzam a cortina. */
 .palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: min(58svh, 640px); height: min(58svh, 640px); overflow: visible; visibility: hidden; }   /* centrado na tela; o nome fica um pouco acima, como na referência */
+.plano-palco__icone { width: min(58svh, 640px); height: min(58svh, 640px); overflow: visible; visibility: hidden; filter: drop-shadow(0 16px 32px rgb(22 22 22 / .14)); }   /* centrado na tela; o nome fica um pouco acima, como na referência */
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
-.peca--papel, .peca--ouro { fill: var(--destaque); }
+/* Vidro: amarelo translúcido com um fio de luz na borda; o nome e o fundo
+   atravessam as peças. */
+.peca--papel, .peca--ouro { fill: rgb(250 209 3 / .58); stroke: rgb(255 255 255 / .55); stroke-width: 6; paint-order: stroke; }
+/* Abertura: "PROTOCOLO REVENA" por cima do ícone, centrado, no mesmo desenho do nome do plano. */
+.palcoplanos__abertura {
+  position: absolute; z-index: 5; inset: 0; margin: auto; width: min(52vw, 80svh, 960px); height: max-content;
+  display: grid; opacity: 0; pointer-events: none; will-change: opacity;
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
+  font-size: clamp(3.4rem, 10vw, 10.5rem); color: var(--pp-texto);
+}
+.palcoplanos__abertura span:first-child { justify-self: start; }
+.palcoplanos__abertura span:last-child { justify-self: end; }
 /* O nome, dentro da dobra, em duas linhas desencontradas, no tamanho do
    título da referência (~metade da largura da tela, uns 10vw). Só ocupa a
    faixa livre acima dos textos (linha 1 do grid): em telas baixas ele
@@ -769,7 +780,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos__ancoras { display: none; }
   .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; }
   .plano-palco__miolo { position: relative; inset: auto; padding: clamp(40px, 8vw, 64px) var(--gutter); grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; transform: none !important; }
-  .palcoplanos__icones { display: none; }
+  .palcoplanos__icones, .palcoplanos__abertura { display: none; }
   .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; margin-bottom: 4px; }
   .plano-palco__nome { grid-column: 1; grid-row: auto; place-self: start; width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; transform: none !important; }
   .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
