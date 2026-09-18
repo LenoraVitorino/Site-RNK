@@ -19,17 +19,6 @@ import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 
 const palavras = ['Isso', 'não', 'é'];
-// O lead quebra em duas linhas no desktop, na fronteira das frases.
-// Versão do estúdio: o mesmo lead, enxugado por corte de palavras (saem
-// "você", "quando os números caem" e a repetição de "tudo", que vira "e").
-// Decisão da Lenora em 16/09/2026. A versão copy segue com o lead íntegro.
-const leadCurto =
-  'Sua clínica fatura bem, mas não sabe de onde vem cada real nem onde trava. ' +
-  'Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado e rastreado.';
-const lead = copyLiteral ? hero.lead : leadCurto;
-const marca = copyLiteral ? 'caem. ' : 'trava. ';
-const corte = lead.indexOf(marca) + marca.length;
-const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
 ---
 <section class="palco" data-palco aria-label="Apresentação">
   <div class="palco__fixo">
@@ -49,12 +38,12 @@ const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
           {copyLiteral ? (
             <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de <span class="brilho">alta performance.</span></p>
           ) : (
-            <!-- Versão do estúdio: a mesma frase da copy, enxugada para duas
-                 linhas (saem "estratégico" e "médicas"; nenhuma palavra nova). -->
-            <p class="hero__titulo hero__titulo--curto">Revenue Operations para transformar clínicas em negócios de <span class="brilho">alta performance.</span></p>
+            <>
+              <p class="hero__titulo hero__titulo--curto">Revenue Operation</p>
+              <p class="hero__lead">Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.</p>
+            </>
           )}
-          <p class="hero__lead">{leadLinhas[0]}<br class="quebra-desktop" />{leadLinhas[1]}</p>
-          <p class="hero__acoes"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
+          <p class="hero__acoes"><Botao href="/contato" class="botao--lg">Conhecer solução</Botao></p>
         </div>
       </div>
 

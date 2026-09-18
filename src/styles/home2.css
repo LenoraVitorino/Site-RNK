@@ -870,10 +870,12 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .pergunta:nth-child(2n) { border-right: 0; }
 .pergunta:nth-last-child(-n+2) { border-bottom: 0; }
 .pergunta__n { font-size: 13px; color: var(--destaque); font-weight: var(--peso-enfase); }
-.pergunta p { font-size: clamp(1.15rem, 1.7vw, 1.45rem); line-height: 1.32; max-width: 46ch; }
+.pergunta__titulo { font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.25; font-weight: var(--peso-enfase); max-width: 26ch; }
+.pergunta p { font-size: 15px; line-height: 1.5; color: rgb(242 242 238 / .72); max-width: 46ch; }
 .perguntas--mais { margin-top: 14px; border: 0; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .perguntas--mais .pergunta { border: 1px solid rgb(242 242 238 / .18); min-height: 0; padding: 18px; }
-.perguntas--mais .pergunta p { font-size: 15px; color: rgb(242 242 238 / .8); }
+.perguntas--mais .pergunta__titulo { font-size: 1.05rem; }
+.perguntas--mais .pergunta p { font-size: 14px; color: rgb(242 242 238 / .68); }
 
 /* ---------- Resultados: extrato de ponta a ponta ----------
    Cada linha com o número gigante em amarelo à esquerda e, na metade
@@ -936,6 +938,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 .form-block { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
 .form-block__text { display: grid; gap: 16px; }
+.form-block__text .titulo { font-size: clamp(1.8rem, 3.6vw, 3.4rem); }
 .form-block__text p:not(.rotulo) { color: var(--cinza); max-width: 48ch; }
 .form-card { display: grid; gap: 14px; padding: 24px; border: 1px solid var(--fio); background: var(--superficie); border-radius: var(--raio-caixa); }
 .field { display: block; }

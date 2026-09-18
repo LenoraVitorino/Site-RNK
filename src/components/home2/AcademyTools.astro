@@ -3,22 +3,23 @@
  * Academy e Tools: dois cartões limpos com espaço de foto. Copy literal.
  */
 import FotoSlot from '../ui/FotoSlot.astro';
+import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 
 const blocos = [
   {
     eyebrow: 'Para Agências',
     titulo: 'Renke Academy',
-    texto: 'Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você modelar. Método, processos e ferramentas.',
-    cta: 'Conhecer a Renke Academy',
+    texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
+    cta: 'Conhecer',
     rota: '/academy',
     foto: 'Foto · Academy',
   },
   {
     eyebrow: 'Tecnologia',
     titulo: 'Renke Tools',
-    texto: 'Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso método produtizado em softwares.',
-    cta: 'Conhecer a Renke Tools',
+    texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para otimizar a operação e acelerar resultados.',
+    cta: 'Conhecer',
     rota: '/tools',
     foto: 'Foto · Produto',
   },
@@ -32,7 +33,7 @@ const blocos = [
         <p class="rotulo">{b.eyebrow}</p>
         <h3 class="caps">{b.titulo}</h3>
         <p>{b.texto}</p>
-        <p><a href={existe(b.rota) ? b.rota : '#'} class:list={['link-arrow', !existe(b.rota) && 'nav--pendente']} data-rota={b.rota}>{b.cta}</a></p>
+        <p><Botao href={existe(b.rota) ? b.rota : '#'} tamanho="sm">{b.cta}</Botao></p>
       </article>
     ))}
   </div>
