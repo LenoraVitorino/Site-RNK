@@ -694,70 +694,63 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 .palcoplanos__apoio strong { display: block; margin-top: .25em; font-weight: var(--peso-enfase); color: var(--pp-texto); }
 
-/* Trilho e palco preso. */
+/* Trilho (container de n × 100vh) e palco preso (.sticky). Base escura por trás, como a referência (#2b2b2b). */
 .palcoplanos__trilho { position: relative; height: calc(var(--n) * 100svh); }
-/* Base escura por trás das dobras: quando a dobra que sai perde opacidade, é isso que aparece, como no vídeo da referência. */
 .palcoplanos__fixo { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--grafite); }
 
-/* Cada dobra: tela cheia, fundo próprio (tons alternados, até as fotos chegarem). */
-.plano-palco {
-  position: absolute; inset: 0; visibility: hidden; z-index: 2;
-  background: var(--pp-fundo);
+/* .anchors: coluna a 5vw do topo e da esquerda; 0,75vw medium, opacidade .4, ativa 1. */
+.palcoplanos__ancoras {
+  position: absolute; z-index: 6; top: 5vw; left: 5vw;
+  list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .833vw;
 }
-.plano-palco--tom2 { background: var(--pp-fundo-2); }
+.palcoplanos__ancora {
+  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+  font: inherit; font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em;
+  color: var(--pp-texto); opacity: .4; transition: opacity .4s cubic-bezier(.5, 1, .89, 1);
+}
+.palcoplanos__ancora:hover, .palcoplanos__ancora--ativa { opacity: 1; }
+.palcoplanos__ancora--ativa { pointer-events: none; }
+
+/* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
+.plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; will-change: transform, opacity; }
 .plano-palco--ativo { visibility: visible; }
-.plano-palco__miolo {
-  position: absolute; inset: 0; box-sizing: border-box;
-  padding: calc(var(--altura-header) + 8px) var(--gutter) clamp(28px, 4vh, 48px);
-  width: min(100%, var(--largura)); margin-inline: auto; left: 0; right: 0;
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: end;
-  gap: 24px clamp(24px, 3vw, 56px);
-}
-.plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
+.plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
-/* Ícones: camada única no centro, por cima das dobras (z 4), como o SVG
-   da referência; todo amarelo e opaco. As metades cruzam a cortina. */
-.palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
-.palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: min(58svh, 640px); height: min(58svh, 640px); overflow: visible; visibility: hidden; }   /* centrado na tela; o nome fica um pouco acima, como na referência */
-.peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
-.peca--papel, .peca--ouro { fill: var(--destaque); }
-/* O nome, dentro da dobra, em duas linhas desencontradas, no tamanho do
-   título da referência (~metade da largura da tela, uns 10vw). Só ocupa a
-   faixa livre acima dos textos (linha 1 do grid): em telas baixas ele
-   sobe em vez de encostar no "Momento da clínica". */
+.plano-palco__info { position: absolute; inset: 0; pointer-events: none; will-change: transform, opacity; }
+.plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* .title: 50,75vw, centrado, multiply; linha 1 à esquerda, linha 2 à direita. */
 .plano-palco__nome {
-  grid-column: 1 / -1; grid-row: 1; place-self: center;
-  margin: 0; display: grid; width: min(52vw, 80svh, 960px); position: relative; z-index: 1; pointer-events: none;
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 50.75vw; margin: 0; display: grid; z-index: 1; mix-blend-mode: multiply; pointer-events: none;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
-  font-size: clamp(3.4rem, 10vw, 10.5rem); color: var(--pp-texto);
+  font-size: 10vw; color: #A0A0A0;
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
-/* Baixo-esquerda: a frase do plano + Saiba mais. Baixo-direita: fala e pilar. */
-.plano-palco__texto { grid-column: 1; grid-row: 2; display: grid; gap: 14px; justify-items: start; max-width: 30ch; position: relative; z-index: 2; }
-.plano-palco__frase { margin: 0; font-size: clamp(1rem, 1.2vw, 1.2rem); line-height: 1.4; }
-.plano-palco__dados { grid-column: 3; grid-row: 2; margin: 0; display: grid; gap: 20px; justify-items: end; text-align: right; position: relative; z-index: 2; }
-.plano-palco__dados dt { font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; color: var(--pp-suave); margin-bottom: 6px; }
-.plano-palco__dados dd { margin: 0; font-size: 15px; line-height: 1.4; max-width: 30ch; }
-.plano-palco__fala { font-style: italic; color: rgb(22 22 22 / .8); }
 
-/* Âncoras por cima das dobras, no canto superior esquerdo, com a barra de progresso. */
-.palcoplanos__ancoras {
-  position: absolute; z-index: 6; top: calc(var(--altura-header) + 8px);
-  left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter)));
-  display: flex; gap: 16px; align-items: flex-start;
-}
-.palcoplanos__barra { width: 2px; height: 156px; background: var(--pp-fio); position: relative; overflow: hidden; }
-.palcoplanos__barra span { display: block; width: 100%; height: 100%; background: var(--pp-texto); transform: scaleY(0); transform-origin: top; will-change: transform; }
-.palcoplanos__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.palcoplanos__item {
-  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  font: inherit; font-size: 15px; line-height: 1.3; color: rgb(22 22 22 / .42);
-  transition: color .4s var(--easing-suave);
-}
-.palcoplanos__item:hover { color: var(--pp-texto); }
-.palcoplanos__item--ativo { color: var(--pp-texto); font-weight: var(--peso-enfase); pointer-events: none; }
+/* .text-block-left: coluna de 10vw a 5vw do canto inferior esquerdo; texto 1vw medium. */
+.plano-palco__texto { position: absolute; left: 5vw; bottom: 5vw; width: 10vw; display: grid; gap: .833vw; justify-items: start; z-index: 2; }
+.plano-palco__frase { margin: 0; font-size: max(12px, 1vw); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
+.plano-palco__texto .link-arrow { pointer-events: auto; font-size: max(12px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
+
+/* .details: coluna de 8,333vw a 5vw do canto inferior direito; rótulo 0,75vw caixa alta, valor 0,917vw medium. */
+.plano-palco__dados { position: absolute; right: 5vw; bottom: 5vw; width: 8.333vw; margin: 0; display: flex; flex-direction: column; gap: 2.083vw; text-align: right; z-index: 2; }
+.plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
+.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
+.plano-palco__fala { font-style: italic; }
+
+/* Ícones: camada única no centro, por cima dos planos (o SVG da referência). */
+.palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.palcoplanos__icones > * { grid-area: 1 / 1; }
+.plano-palco__icone { width: min(39vw, 60svh); height: min(39vw, 60svh); overflow: visible; visibility: hidden; }
+.peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
+.peca--papel, .peca--ouro { fill: var(--destaque); }
+
+/* O cabeçalho some enquanto a dobra está presa (data-hide-header na referência). */
+.header--oculto { transform: translateY(-120%); transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.header { transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
 
 /* Sem JS ou com menos movimento, e no celular: pilha, uma dobra por plano. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
@@ -768,12 +761,17 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
   .palcoplanos__ancoras { display: none; }
   .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; }
-  .plano-palco__miolo { position: relative; inset: auto; padding: clamp(40px, 8vw, 64px) var(--gutter); grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; transform: none !important; }
-  .palcoplanos__icones { display: none; }
-  .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; margin-bottom: 4px; }
-  .plano-palco__nome { grid-column: 1; grid-row: auto; place-self: start; width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; transform: none !important; }
+  .plano-palco__imagem { position: static; padding: clamp(40px, 8vw, 64px) var(--gutter) 0; transform: none !important; }
+  .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; }
+  .plano-palco__info { position: static; pointer-events: auto; padding: 12px var(--gutter) clamp(40px, 8vw, 64px); display: grid; gap: 16px; transform: none !important; opacity: 1 !important; }
+  .plano-palco__nome { position: static; transform: none !important; width: auto; mix-blend-mode: normal; color: var(--pp-texto); font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; }
   .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
-  .plano-palco__texto, .plano-palco__dados { grid-column: 1; grid-row: auto; justify-items: start; text-align: left; }
+  .plano-palco__texto, .plano-palco__dados { position: static; width: auto; text-align: left; gap: 14px; }
+  .plano-palco__frase, .plano-palco__texto .link-arrow { font-size: 15px; line-height: 1.4; }
+  .plano-palco__dados dt { font-size: 10.5px; letter-spacing: .08em; }
+  .plano-palco__dados dd { font-size: 15px; line-height: 1.4; }
+  .palcoplanos__icones { display: none; }
+  .header--oculto { transform: none; }
 }
 html:not(.js) .palcoplanos__trilho { height: auto; }
 html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
