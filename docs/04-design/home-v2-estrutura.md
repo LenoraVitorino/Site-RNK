@@ -324,3 +324,18 @@ e encolhendo a 92%; entra esmaecendo na segunda metade, subindo do fundo.
 Na chegada da dobra, o primeiro ícone aparece no último quarto com o info.
 O nome do plano ficou preto (`--grafite`), sem `multiply`, com tracking
 `-.055em` e `word-spacing -.06em`: a Inter fina em caixa alta ficava solta.
+
+## Hero no desenho da referência (18/09/2026)
+
+Print da Lenora (agência "Creatif"): fundo preto com duas curvas escuras e
+um brilho amarelo no pé; à esquerda o rótulo com o quadradinho amarelo e o
+título em três linhas, a primeira em papel e as outras no amarelo original;
+no centro o objeto (por ora o monograma da Renke, com brilho e flutuando;
+entra a arte 3D quando houver); à direita "© 2026", o lead e o segundo
+título "Isso é / RevOps." no mesmo desenho, com o CTA embaixo; no pé, o fio
+e "Role para baixo" (âncora para #o-que-fazemos). Títulos em Inter 300,
+`clamp(2.6rem, 6.4vw, 8rem)`. A cena em três tempos e a trava de rolagem
+saíram; a frase "Revenue Operations para transformar clínicas em negócios
+de alta performance." saiu da hero. A barra de logos da versão copy segue.
+No celular tudo empilha: rótulo, título, objeto, ano, lead, segundo título,
+CTA, fio.
