@@ -618,8 +618,8 @@ html:not(.js) .esteira__trilho { transform: none; }
   --pp-fundo: var(--papel); --pp-fundo-2: #E7E7E2; --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
   position: relative; background: var(--pp-fundo); color: var(--pp-texto);
 }
-.palcoplanos__intro { padding: clamp(64px, 9vw, 128px) 0 clamp(40px, 6vw, 80px); }
-.palcoplanos__cabeca { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+.palcoplanos__intro { padding: clamp(72px, 10vw, 160px) 0; }
+.palcoplanos__cabeca { display: flex; justify-content: center; text-align: center; }
 .palcoplanos__titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03em; line-height: 1; margin-top: 18px; font-weight: var(--peso-titulo); }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
@@ -633,55 +633,56 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* .anchors: coluna a 5vw do topo e da esquerda; 0,75vw medium, opacidade .4, ativa 1. */
 .palcoplanos__ancoras {
-  position: absolute; z-index: 6; top: 5vw; left: 5vw;
-  list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .833vw;
+  position: absolute; z-index: 10; top: 5vw; left: 5vw;
+  list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0;
 }
 .palcoplanos__ancora {
-  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  font: inherit; font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em;
+  background: none; border: 0; padding: 5px 0; cursor: pointer; text-align: left;
+  font: inherit; font-size: clamp(12px, .85vw, 16px); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em;
   color: var(--pp-texto); opacity: .4; transition: opacity .4s cubic-bezier(.5, 1, .89, 1);
 }
 .palcoplanos__ancora:hover, .palcoplanos__ancora--ativa { opacity: 1; }
-.palcoplanos__ancora--ativa { pointer-events: none; }
+.palcoplanos__ancora:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 
 /* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
 .plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; will-change: transform, opacity; }
 .plano-palco--ativo { visibility: visible; }
-.plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
+.plano-palco__imagem { position: absolute; inset: -25% 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
 .plano-palco__info { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: transform, opacity; }
 .plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* .title: 50,75vw, centrado, multiply; linha 1 à esquerda, linha 2 à direita. */
+/* Nome em duas linhas desencontradas, por cima do símbolo. */
 .plano-palco__nome {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 50.75vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
+  width: 52vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
   /* Preto e com as letras mais juntas (Lenora, 18/09): a Inter fina em caixa alta fica solta com tracking frouxo. */
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.055em; word-spacing: -.06em; line-height: .92; text-transform: uppercase;
-  font-size: 10vw; color: var(--grafite);
+  font-size: 9.5vw; color: var(--grafite);
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
 
-/* .text-block-left: coluna de 10vw a 5vw do canto inferior esquerdo; texto 1vw medium. */
-.plano-palco__texto { position: absolute; left: 5vw; bottom: 5vw; width: 10vw; display: grid; gap: .833vw; justify-items: start; z-index: 2; }
-.plano-palco__frase { margin: 0; font-size: max(12px, 1vw); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
+/* Colunas laterais com largura adaptada à copy em português. */
+.plano-palco__texto { position: absolute; left: 5vw; bottom: 5vw; width: clamp(160px, 14vw, 250px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
+.plano-palco__frase { margin: 0; font-size: clamp(14px, 1vw, 18px); line-height: 1.45; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
 .plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(12px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
 
-/* .details: coluna de 8,333vw a 5vw do canto inferior direito; rótulo 0,75vw caixa alta, valor 0,917vw medium. */
-.plano-palco__dados { position: absolute; right: 5vw; bottom: 5vw; width: 8.333vw; margin: 0; display: flex; flex-direction: column; gap: 2.083vw; text-align: right; z-index: 2; }
+/* Índice e contexto do plano, alinhados pelo canto inferior direito. */
+.plano-palco__dados { position: absolute; right: 5vw; bottom: 5vw; width: clamp(145px, 12vw, 220px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
 .plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
 .plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
-.plano-palco__fala { margin: 0; font-size: max(11px, .917vw); line-height: 1.3; font-weight: var(--peso-enfase); }
+.plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-enfase); }
+.plano-palco__indice { font-size: 11px; letter-spacing: .12em; opacity: .5; }
 
 /* Ícones: camada única no centro, por cima das dobras (o SVG da referência) — a linha de
    revelação da dobra não corta o ícone. Os nomes ficam numa camada acima dos ícones:
    o texto passa na frente (pedido da Lenora, 18/09). */
-.palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: min(39vw, 60svh); height: min(39vw, 60svh); overflow: visible; visibility: hidden; will-change: transform, opacity; }
-.palcoplanos__nomes { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
+.plano-palco__icone { width: min(65vw, 100svh); height: min(65vw, 100svh); overflow: visible; visibility: hidden; will-change: transform, opacity; }
+.palcoplanos__nomes { position: absolute; z-index: 9; inset: 0; pointer-events: none; }
 .palcoplanos__nomes .plano-palco__nome { opacity: 0; }   /* o script liga só o do plano na tela */
 .plano-palco__nome--pilha { display: none; }   /* só na pilha do celular */
 .peca--papel, .peca--ouro { fill: var(--destaque); }
@@ -690,36 +691,24 @@ html:not(.js) .esteira__trilho { transform: none; }
 .header--oculto { transform: translateY(-120%); transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
 .header { transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
 
-/* Sem JS ou com menos movimento, e no celular: pilha, uma dobra por plano. */
-@media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
-  .palcoplanos__intro { padding-bottom: 8px; }
-  .palcoplanos__cabeca { flex-direction: column; align-items: flex-start; }
-  .palcoplanos__apoio { text-align: left; }
-  .palcoplanos__trilho { height: auto; }
-  .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
-  .palcoplanos__ancoras { display: none; }
-  /* Na pilha o fundo claro vai para a dobra inteira (no desktop ele fica na camada da imagem). */
-  .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; background: var(--pp-fundo); }
-  .plano-palco--tom2 { background: var(--pp-fundo-2); }
-  .plano-palco__imagem, .plano-palco--tom2 .plano-palco__imagem { position: static; background: transparent; padding: clamp(40px, 8vw, 64px) var(--gutter) 0; transform: none !important; }
-  .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; }
-  .plano-palco__info { position: static; pointer-events: auto; padding: 12px var(--gutter) clamp(40px, 8vw, 64px); display: grid; gap: 16px; transform: none !important; opacity: 1 !important; }
-  .plano-palco__nome { position: static; transform: none !important; width: auto; mix-blend-mode: normal; color: var(--pp-texto); font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; }
-  .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
-  .plano-palco__texto, .plano-palco__dados { position: static; width: auto; text-align: left; gap: 14px; }
-  .plano-palco__frase, .plano-palco__texto .link-arrow, .plano-palco__texto .botao { font-size: 15px; line-height: 1.4; }
-  .plano-palco__dados dt { font-size: 10.5px; letter-spacing: .08em; }
-  .plano-palco__dados dd { font-size: 15px; line-height: 1.4; }
-  .palcoplanos__icones, .palcoplanos__nomes { display: none; }
-  .plano-palco__nome--pilha { display: grid; }
-  .header--oculto { transform: none; }
+/* Progressive enhancement: fallback also works before JS and on live preference changes. */
+.palcoplanos:not([data-animado]) .palcoplanos__trilho { height: auto; }
+.palcoplanos:not([data-animado]) .palcoplanos__fixo { position: static; height: auto; overflow: visible; background: var(--pp-fundo); }
+.palcoplanos:not([data-animado]) :is(.palcoplanos__ancoras, .palcoplanos__icones, .palcoplanos__nomes, .plano-palco__h3) { display: none; }
+.palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
+.palcoplanos:not([data-animado]) .plano-palco--tom2 { background: var(--pp-fundo-2); }
+.palcoplanos:not([data-animado]) .plano-palco__imagem { position: static; background: transparent; transform: none !important; }
+.palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: block; width: min(48vw, 240px); height: auto; margin: 0 auto 24px; }
+.palcoplanos:not([data-animado]) .plano-palco__info { position: static; pointer-events: auto; display: grid; gap: 28px; transform: none !important; opacity: 1 !important; max-width: 620px; margin-inline: auto; }
+.palcoplanos:not([data-animado]) .plano-palco__nome--pilha { display: grid; position: static; transform: none; width: auto; font-size: clamp(3rem, 11vw, 5rem); opacity: 1; }
+.palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
+.palcoplanos:not([data-animado]) :is(.plano-palco__texto, .plano-palco__dados) { position: static; width: auto; text-align: left; gap: 14px; }
+.palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__fala, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
+.palcoplanos:not([data-animado]) .plano-palco__dados { padding-top: 20px; border-top: 1px solid var(--pp-fio); }
+@media (min-width: 900px) and (max-height: 700px) {
+  .palcoplanos[data-animado] :is(.plano-palco__texto, .plano-palco__dados) { bottom: 4vh; }
+  .palcoplanos[data-animado] .plano-palco__nome { font-size: 8vw; width: 47vw; }
 }
-html:not(.js) .palcoplanos__trilho { height: auto; }
-html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
-html:not(.js) .palcoplanos__ancoras, html:not(.js) .palcoplanos__icones, html:not(.js) .palcoplanos__nomes { display: none; }
-html:not(.js) .plano-palco { position: relative; inset: auto; visibility: visible; }
-html:not(.js) .palcoplanos__fixo { background: var(--pp-fundo); }
-html:not(.js) .plano-palco__miolo { position: relative; inset: auto; padding-block: 48px; }
 
 /* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------
    Como a dobra "Selected work" da referência: o título abre sozinho à

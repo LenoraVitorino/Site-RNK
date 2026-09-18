@@ -1,42 +1,9 @@
 ---
 /**
- * Dobra 3 (versão do estúdio) · Protocolo Revena num palco preso na tela,
- * no desenho da dobra "Financial solutions" da referência Tres Mares
- * (tresmarescapital.com, 17/09/2026): a lista dos planos no canto superior
- * esquerdo com o atual em destaque; no centro o ícone do plano, grande e
- * translúcido, se formando peça a peça, com o nome em duas linhas
- * desencontradas por cima; embaixo à esquerda a frase do plano e o "Saiba
- * mais"; à direita a fala da doutora ("o momento da clínica") e o pilar que
- * o plano entrega. A página rola, o palco fica: cada plano ocupa uma tela
- * de scroll. Título e apoio da dobra ficam no topo do palco.
- *
- * Fotos ao fundo (como a planta da referência) entram depois; por ora só o
- * ícone. Os ícones são os oficiais dos planos (public/icones), lidos no
- * build e postos inline para animar peça a peça; quando chegarem os SVGs
- * novos, basta sobrescrever os arquivos.
- *
- * Ordem dos planos: Start, Run, Scale, Core, Full (a ordem que a Lenora
- * usa ao falar deles). Copy literal em todos os textos; o cruzamento
- * plano → pilar é o mesmo de Protocolos.astro, a validar.
- *
- * 18/09/2026: refeito IGUAL à dobra "Financial solutions" da referência,
- * lida do CSS e da timeline GSAP do tema (tresmarescapital.com):
- * container de n × 100vh com o .sticky preso; âncoras a 5vw do topo e da
- * esquerda (0,75vw, opacidade .4, ativa 1); cada plano é um .content
- * absoluto com a imagem de fundo e o .info por cima; texto numa coluna de
- * 10vw no canto inferior esquerdo (1vw, medium), dados numa coluna de
- * 8,333vw à direita (rótulo 0,75vw bold caixa alta, valor 0,917vw medium);
- * título de 50,75vw em mix-blend multiply, linha 1 à esquerda e linha 2 à
- * direita. A transição ocupa o trecho inteiro, sem segurada: o que sai
- * perde opacidade (1→0) com a imagem subindo 20% e o info subindo 30% e
- * sumindo na primeira metade; o título some no primeiro quarto; o que entra
- * é revelado por clip-path inset(100%→0), imagem descendo de 20% e info de
- * 30%, título aparecendo no último quarto. A âncora troca no meio do
- * trecho. Snap nos fins de trecho. O cabeçalho some enquanto a dobra está
- * presa (data-hide-header na referência).
- *
- * Sem JS ou com menos movimento, e abaixo de 900px, vira uma pilha: um
- * bloco por plano.
+ * Revena: palco de rolagem inspirado na seção Financial solutions da Tresmares.
+ * Camadas sobem com recorte, títulos se alternam e os símbolos permanecem no
+ * centro, desmontando e remontando suas peças. Ver docs/04-design/planos-movimento.md.
+ * Sem JS, em telas pequenas ou com movimento reduzido: todos os planos em pilha.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -95,20 +62,20 @@ const planos = ordem.map((label) => {
   <div class="palcoplanos__trilho" data-trilho>
     <div class="palcoplanos__fixo">
       <!-- .anchors: canto superior esquerdo, a atual em destaque; clicar leva ao plano. -->
-      <ol class="palcoplanos__ancoras" aria-label="Planos do Protocolo Revena">
+      <ol class="palcoplanos__ancoras" aria-label="Planos Revena">
         {planos.map((p, i) => (
           <li><button type="button" class:list={['palcoplanos__ancora', i === 0 && 'palcoplanos__ancora--ativa']} data-plano-ir={i} aria-current={i === 0 ? 'true' : undefined}>Revena {p.nome}</button></li>
         ))}
       </ol>
 
-      <!-- .content: um por plano, tela cheia, com a imagem de fundo e o .info por cima. -->
+      <!-- Um plano por camada; a próxima camada é revelada de baixo para cima. -->
       {planos.map((p, i) => (
-        <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} aria-hidden={i === 0 ? undefined : 'true'}>
+        <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} >
           <div class="plano-palco__imagem" data-imagem>
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>
-            <p class="plano-palco__nome plano-palco__nome--pilha" aria-hidden="true"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
+            <h3 class="plano-palco__nome plano-palco__nome--pilha"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></h3>
             <h3 class="plano-palco__h3">Revena {p.nome}</h3>
 
             <div class="plano-palco__texto">
@@ -117,14 +84,14 @@ const planos = ordem.map((label) => {
             </div>
 
             <div class="plano-palco__dados">
+              <span class="plano-palco__indice" aria-hidden="true">0{i + 1} / 0{planos.length}</span>
               {p.fala.split(/(?<=\.)\s+/).map((linha) => <p class="plano-palco__fala">{linha}</p>)}
             </div>
           </div>
         </article>
       ))}
 
-      <!-- Os ícones numa camada só, por cima das dobras (como o SVG da referência):
-           assim a linha de revelação da dobra que entra não corta o ícone. -->
+      <!-- Símbolos independentes do recorte: as peças atravessam a troca dos fundos. -->
       <div class="palcoplanos__icones" aria-hidden="true">
         {planos.map((p, i) => (
           <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
@@ -146,142 +113,153 @@ const planos = ordem.map((label) => {
 </section>
 
 <script>
-  /* A timeline da referência, sem biblioteca. Curso = (n − 1) telas; cada
-     trecho é uma transição inteira (sem segurada). Pré-trecho (a dobra
-     chegando): imagem do primeiro plano desce de −10% a 0, info sobe de 15%
-     a 0 e aparece no último quarto. Snap nos fins de trecho quando a
-     rolagem para. */
   const secao = document.querySelector<HTMLElement>('[data-palcoplanos]');
-  const dobra = secao?.querySelector<HTMLElement>('[data-trilho]') ?? null;
-  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (dobra && !reduz) {
-    const layers = [...dobra.querySelectorAll<HTMLElement>('[data-plano]')];
-    const icones = [...dobra.querySelectorAll<SVGSVGElement>('[data-icone]')];
-    const imagens = layers.map((l) => l.querySelector<HTMLElement>('[data-imagem]')!);
-    const infos = layers.map((l) => l.querySelector<HTMLElement>('[data-info]')!);
-    const nomes = [...dobra.querySelectorAll<HTMLElement>('[data-nome]')];   // na camada de nomes, na mesma ordem dos planos
-    const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
+  const trilho = secao?.querySelector<HTMLElement>('[data-trilho]');
+  if (secao && trilho) {
+    const media = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+    const layers = [...trilho.querySelectorAll<HTMLElement>('[data-plano]')];
+    const icons = [...trilho.querySelectorAll<SVGSVGElement>('[data-icone]')];
+    const pieces = icons.map(icon => [...icon.querySelectorAll<SVGGElement>('[data-peca]')]);
+    const images = layers.map(layer => layer.querySelector<HTMLElement>('[data-imagem]')!);
+    const infos = layers.map(layer => layer.querySelector<HTMLElement>('[data-info]')!);
+    const names = [...trilho.querySelectorAll<HTMLElement>('[data-nome]')];
+    const anchors = [...trilho.querySelectorAll<HTMLButtonElement>('[data-plano-ir]')];
     const header = document.getElementById('header');
-    const n = layers.length;
-    const clamp = (v: number) => Math.min(1, Math.max(0, v));
-    const entraSai = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
-    const desktop = () => !matchMedia('(max-width: 899.98px)').matches;
+    const clamp = (x: number) => Math.max(0, Math.min(1, x));
+    const ease = (x: number) => x * x * (3 - 2 * x);
+    const count = layers.length;
+    let top = 0, travel = 1, height = 1, current = 0, target = 0;
+    let frame = 0, previousTime = 0, snapTimer = 0, scrollFrame = 0;
+    let active = -1;
+    // Directions in SVG units: each official symbol retains its own composition.
+    const directions = [[-150, 150], [-180, 0], [0, 180], [0, -180], [150, -150]];
 
-    const escondido = layers.map(() => true);
-
-    let ativo = -1;
-    const marca = (i: number) => {
-      if (i === ativo) return;
-      ativo = i;
-      layers.forEach((l, k) => { l.classList.toggle('plano-palco--ativo', k === i); if (k === i) l.removeAttribute('aria-hidden'); else l.setAttribute('aria-hidden', 'true'); });
-      itens.forEach((b, k) => { b.classList.toggle('palcoplanos__ancora--ativa', k === i); if (k === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-    };
-
-    /* Pinta um plano: dentro = quanto já entrou (0→1), fora = quanto já saiu
-       (0→1). Os valores são os da timeline da referência. */
-    const pinta = (k: number, dentro: number, fora: number) => {
-      const l = layers[k];
-      const visivel = dentro > 0 && fora < 1;
-      if (!visivel) {
-        if (!escondido[k]) { l.style.visibility = 'hidden'; icones[k].style.visibility = 'hidden'; nomes[k].style.opacity = '0'; escondido[k] = true; }
-        return;
-      }
-      if (escondido[k]) { l.style.visibility = 'visible'; icones[k].style.visibility = 'visible'; escondido[k] = false; }
-      const corte = (1 - dentro) * 100;
-      l.style.clipPath = corte > 0.01 ? `inset(${corte.toFixed(2)}% 0 0 0)` : 'none';
-      l.style.opacity = String(clamp(1 - fora));                         // contentsNotLast: 1 → 0
-      l.style.zIndex = dentro < 1 ? '3' : '2';
-      imagens[k].style.transform = `translate3d(0, ${((1 - dentro) * 20 - fora * 20).toFixed(2)}%, 0)`;   // imgs: 20% → 0 → −20%
-      infos[k].style.transform = `translate3d(0, ${((1 - dentro) * 30 - fora * 30).toFixed(2)}%, 0)`;     // infos: 30% → 0 → −30%
-      infos[k].style.opacity = String(clamp(1 - fora * 2));                // infosNotLast: 1 → −1 (some na primeira metade)
-      nomes[k].style.opacity = String(clamp(dentro * 4 - 3) * clamp(1 - fora * 4));   // titles: −3 → 1 / 1 → −3
-      // Ícone inteiro, como a forma da referência: sai esmaecendo na primeira
-      // metade e subindo com o info; entra esmaecendo na segunda metade e
-      // subindo do fundo, um pouco menor.
-      const ic = icones[k];
-      ic.style.opacity = String(clamp(dentro * 2 - 1) * clamp(1 - fora * 2));
-      ic.style.transform = `translate3d(0, ${((1 - dentro) * 30 - fora * 30).toFixed(2)}%, 0) scale(${(0.92 + 0.08 * dentro - 0.08 * fora).toFixed(3)})`;
-    };
-
-    const medidas = () => {
-      const r = dobra.getBoundingClientRect();
-      const topo = r.top + scrollY;
-      const curso = dobra.offsetHeight - innerHeight;
-      return { r, topo, curso };
-    };
-    const posicaoDoPlano = (i: number, topo: number, curso: number) => topo + curso * (i / (n - 1));
-
-    let ticking = false;
-    const mede = () => {
-      if (!desktop()) return;
-      const { r, curso } = medidas();
-      // Pré-trecho: a dobra chegando (start "top bottom" → end "top top").
-      const pre = r.top > 0 ? clamp(1 - r.top / innerHeight) : 1;
-      const t = clamp(-r.top / curso);
-      const preso = r.top <= 0 && -r.top < curso;
-      header?.classList.toggle('header--oculto', preso);
-      const pos = Math.min(n - 1 - 1e-6, t * (n - 1));
-      const de = Math.floor(pos);
-      const f = pos - de;
-      for (let k = 0; k < n; k++) {
-        if (k < de) pinta(k, 1, 1);
-        else if (k === de) pinta(k, 1, f);
-        else if (k === de + 1) pinta(k, f, 0);
-        else pinta(k, 0, 0);
-      }
-      if (de === 0 && pre < 1) {
-        // O primeiro plano chega inteiro (sem clip): imagem −10% → 0, info 15% → 0 e opacidade −3 → 1.
-        imagens[0].style.transform = `translate3d(0, ${(-(1 - pre) * 10).toFixed(2)}%, 0)`;
-        infos[0].style.transform = `translate3d(0, ${((1 - pre) * 15).toFixed(2)}%, 0)`;
+    function measure() {
+      top = trilho!.getBoundingClientRect().top + scrollY;
+      height = trilho!.querySelector<HTMLElement>('.palcoplanos__fixo')!.offsetHeight;
+      travel = Math.max(1, trilho!.offsetHeight - height);
+    }
+    function select(index: number) {
+      if (index === active) return;
+      active = index;
+      layers.forEach((layer, i) => {
+        const selected = i === index;
+        layer.inert = !selected;
+        layer.setAttribute('aria-hidden', String(!selected));
+        layer.classList.toggle('plano-palco--ativo', selected);
+        anchors[i].classList.toggle('palcoplanos__ancora--ativa', selected);
+        if (selected) anchors[i].setAttribute('aria-current', 'true');
+        else anchors[i].removeAttribute('aria-current');
+      });
+    }
+    function paint(y: number) {
+      const position = clamp((y - top) / travel) * (count - 1);
+      const pre = clamp(1 + (y - top) / height);
+      select(Math.min(count - 1, Math.round(position)));
+      header?.classList.toggle('header--oculto', scrollY >= top && scrollY < top + travel + height * .5);
+      layers.forEach((layer, i) => {
+        const incoming = clamp(position - i + 1);
+        const outgoing = clamp(position - i);
+        const visible = incoming > 0 && outgoing < 1;
+        layer.style.visibility = visible ? 'visible' : 'hidden';
+        layer.style.zIndex = String(i + 1);
+        layer.style.clipPath = `inset(${(100 * (1 - incoming)).toFixed(3)}% 0 0)`;
+        layer.style.opacity = String(1 - outgoing);
+        images[i].style.transform = `translate3d(0,${20 * (1 - incoming - outgoing)}%,0)`;
+        infos[i].style.transform = `translate3d(0,${30 * (1 - incoming - outgoing)}%,0)`;
+        infos[i].style.opacity = String(clamp(1 - outgoing * 2));
+        names[i].style.opacity = String(clamp(incoming * 4 - 3) * clamp(1 - outgoing * 4));
+        // The title travels with its information layer, independently of the wipe.
+        names[i].style.translate = `0 ${30 * (1 - incoming - outgoing)}vh`;
+        icons[i].style.visibility = visible ? 'visible' : 'hidden';
+        // Continuous silhouette: collapse into a small central form, then unfold.
+        // Both forms overlap at mid-transition; there is no blank frame.
+        const enter = ease(clamp((incoming - .5) / .5));
+        const leave = ease(clamp(outgoing / .5));
+        const opacity = clamp((incoming - .38) / .16) * (1 - clamp((outgoing - .46) / .16));
+        icons[i].style.opacity = String(opacity);
+        const scale = .34 + .66 * enter - .66 * leave;
+        icons[i].style.transform = `translate3d(0,${(1 - enter - leave) * 4}%,0) scale(${Math.max(.24, scale)})`;
+        pieces[i].forEach((piece, k) => {
+          const sign = k === 0 ? 1 : -1;
+          const amount = (1 - enter) + leave;
+          const [x, y] = directions[i];
+          piece.setAttribute('transform', `translate(${sign * x * amount} ${sign * y * amount}) rotate(${sign * amount * 18} 540 540)`);
+        });
+      });
+      if (pre < 1) {
+        const arrival = ease(clamp((pre - .3) / .7));
+        images[0].style.transform = `translate3d(0,${-10 * (1 - pre)}%,0)`;
+        infos[0].style.transform = `translate3d(0,${15 * (1 - pre)}%,0)`;
         infos[0].style.opacity = String(clamp(pre * 4 - 3));
-        nomes[0].style.opacity = String(clamp(pre * 4 - 3));
-        icones[0].style.opacity = String(clamp(pre * 4 - 3));
-        icones[0].style.transform = `translate3d(0, ${((1 - pre) * 15).toFixed(2)}%, 0) scale(1)`;
+        names[0].style.opacity = String(clamp(pre * 4 - 3));
+        names[0].style.translate = `0 ${15 * (1 - pre)}vh`;
+        icons[0].style.opacity = String(arrival);
+        icons[0].style.transform = `translate3d(0,${12 * (1 - arrival)}%,0) scale(${.65 + .35 * arrival})`;
       }
-      marca(f < 0.5 ? de : de + 1);
-    };
-
-    /* Snap: a rolagem parou dentro da dobra → desliza até o fim de trecho
-       mais próximo (os pontos "postshow" da referência). Qualquer gesto novo
-       cancela. */
-    let deslizando: number | null = null;
-    let quieto: number | undefined;
-    const cancela = () => { if (deslizando !== null) { cancelAnimationFrame(deslizando); deslizando = null; } };
-    const deslizaAte = (alvo: number, dur = 900) => {
-      cancela();
-      const de = scrollY, t0 = performance.now();
-      if (Math.abs(alvo - de) < 2) return;
-      let esperado = de;
-      const quadro = (t: number) => {
-        if (Math.abs(scrollY - esperado) > 3) { deslizando = null; return; }
-        const k = Math.min(1, (t - t0) / dur);
-        esperado = Math.round(de + (alvo - de) * entraSai(k));
-        scrollTo({ top: esperado, behavior: 'instant' as ScrollBehavior });
-        deslizando = k < 1 ? requestAnimationFrame(quadro) : null;
+    }
+    function animate(time: number) {
+      const dt = previousTime ? Math.min(64, time - previousTime) : 16;
+      previousTime = time;
+      current += (target - current) * (1 - Math.exp(-dt / 90));
+      if (Math.abs(target - current) < .2) current = target;
+      paint(current);
+      frame = current !== target ? requestAnimationFrame(animate) : 0;
+      if (!frame) previousTime = 0;
+    }
+    function update() {
+      if (!media.matches) return;
+      target = scrollY;
+      if (!frame) frame = requestAnimationFrame(animate);
+    }
+    function cancelSnap() {
+      clearTimeout(snapTimer);
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = 0;
+    }
+    function goTo(y: number, duration = 720) {
+      cancelSnap();
+      const from = scrollY, start = performance.now();
+      if (Math.abs(from - y) < 2) return;
+      const tick = (time: number) => {
+        const p = clamp((time - start) / duration);
+        scrollTo({ top: from + (y - from) * ease(p), behavior: 'instant' });
+        scrollFrame = p < 1 ? requestAnimationFrame(tick) : 0;
       };
-      deslizando = requestAnimationFrame(quadro);
-    };
-    const encaixa = () => {
-      if (!desktop() || deslizando !== null) return;
-      const { r, topo, curso } = medidas();
-      if (r.top > 0 || -r.top >= curso) return;
-      const i = Math.round((-r.top / curso) * (n - 1));
-      deslizaAte(posicaoDoPlano(i, topo, curso));
-    };
-    for (const ev of ['wheel', 'touchstart', 'keydown', 'mousedown']) addEventListener(ev, cancela, { passive: true });
-
+      scrollFrame = requestAnimationFrame(tick);
+    }
+    function snap() {
+      if (!media.matches || scrollFrame || scrollY < top || scrollY >= top + travel) return;
+      const position = (scrollY - top) / travel * (count - 1);
+      goTo(top + Math.round(position) / (count - 1) * travel);
+    }
+    function setup() {
+      cancelSnap();
+      cancelAnimationFrame(frame); frame = 0; previousTime = 0; active = -1;
+      secao!.toggleAttribute('data-animado', media.matches);
+      header?.classList.remove('header--oculto');
+      if (media.matches) {
+        measure(); current = target = scrollY; paint(current);
+      } else {
+        layers.forEach(layer => { layer.inert = false; layer.removeAttribute('aria-hidden'); layer.removeAttribute('style'); });
+      }
+    }
     addEventListener('scroll', () => {
-      if (!ticking) { ticking = true; requestAnimationFrame(() => { mede(); ticking = false; }); }
-      clearTimeout(quieto);
-      quieto = setTimeout(encaixa, 140);
+      update();
+      clearTimeout(snapTimer);
+      if (media.matches && !scrollFrame) snapTimer = window.setTimeout(snap, 260);
     }, { passive: true });
-    addEventListener('resize', mede, { passive: true });
-    mede();
-
-    /* Clicar numa âncora desliza até o plano (a referência salta direto; aqui um deslize curto). */
-    itens.forEach((b, i) => b.addEventListener('click', () => {
-      const { topo, curso } = medidas();
-      deslizaAte(posicaoDoPlano(i, topo, curso), 1000);
+    for (const event of ['wheel', 'touchstart', 'pointerdown', 'keydown']) {
+      addEventListener(event, cancelSnap, { passive: true });
+    }
+    anchors.forEach((anchor, i) => anchor.addEventListener('click', () => {
+      if (media.matches) goTo(top + i / (count - 1) * travel, 900);
     }));
+    addEventListener('resize', setup, { passive: true });
+    media.addEventListener('change', setup);
+    // Layout above can change after font load; refresh the cached scroll geometry.
+    document.fonts.ready.then(setup);
+    new ResizeObserver(() => { if (media.matches) { measure(); update(); } }).observe(document.body);
+    setup();
   }
 </script>
