@@ -264,3 +264,40 @@ dos textos), então em telas baixas ele sobe em vez de encostar no "Momento
 da clínica" (em 1280×720 sobram 100px; em 1440×900, 171px). O ícone perdeu o
 `margin-top` e fica centrado na tela, um pouco abaixo do nome, como na
 referência. Sem mudança no celular.
+
+## Palco dos planos igual à referência (18/09/2026)
+
+A Lenora pediu a dobra **igual** à "Financial solutions" de
+tresmarescapital.com. Refeita a partir do CSS e da timeline GSAP do tema,
+lidos do site em 18/09/2026 (viewport 1440×900):
+
+- Container de `n × 100vh` com o `.sticky` de 100vh preso; base escura
+  (`--grafite`, lá `#2b2b2b`).
+- Âncoras a `5vw` do topo e da esquerda, coluna com `gap .833vw`; fonte
+  `.75vw` medium, opacidade .4 (ativa e hover 1). Sem barra de progresso.
+- Cada plano é um `.content` absoluto de tela cheia: `.plano-palco__imagem`
+  (fundo, depois a foto) e `.plano-palco__info` por cima.
+- Título `.plano-palco__nome`: `50.75vw`, centrado, `mix-blend-mode:
+  multiply`, cinza `#A0A0A0`, linha 1 à esquerda e linha 2 à direita,
+  `10vw`, caixa alta (decisão anterior da Lenora).
+- Texto: coluna de `10vw` a `5vw` do canto inferior esquerdo, `1vw`
+  medium, "Saiba mais" em `1vw`. Dados: coluna de `8.333vw` a `5vw` do canto
+  inferior direito, rótulo `.75vw` caixa alta, valor `.917vw` medium com
+  `.417vw` de respiro, `2.083vw` entre grupos, alinhados à direita.
+- Transição contínua, sem segurada: cada trecho do curso é uma passagem
+  inteira. O que sai: opacidade 1→0, imagem 0→−20%, info 0→−30% sumindo na
+  primeira metade, título sumindo no primeiro quarto. O que entra:
+  `clip-path: inset(100%→0)`, imagem 20%→0, info 30%→0, título aparecendo
+  no último quarto. A âncora troca na metade do trecho.
+- Pré-trecho (a dobra chegando): imagem do primeiro plano −10%→0, info
+  15%→0 aparecendo no último quarto.
+- Snap nos fins de trecho (os "postshow" da referência) 140 ms depois da
+  rolagem parar; clique na âncora desliza até o plano.
+- O cabeçalho some enquanto a dobra está presa (`header--oculto`,
+  `data-hide-header` na referência).
+- Ícone: camada central de `min(39vw, 60svh)`, metades na coreografia do
+  plano ao longo do trecho inteiro.
+
+A abertura com "PROTOCOLO REVENA" por cima do ícone de vidro (pedida por
+print no mesmo dia) foi revertida a pedido dela. Pilha do celular mantida,
+com a marcação nova.
