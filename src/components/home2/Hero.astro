@@ -29,10 +29,13 @@ const lead = copyLiteral ? hero.lead : leadCurto;
   <div class="hero__grade">
     <div class="hero__esq">
       <p class="hero__rotulo"><span class="hero__quadrado"></span>RevOps para clínicas</p>
+      <!-- Um bloco só (Lenora, 18/09): "Isso não é", o "marketing para clínicas."
+           riscado, e embaixo "Isso é RevOps." com o RevOps no amarelo. -->
       <h1 class="hero__h1">
         <span class="hero__linha">Isso não é</span>
-        <span class="hero__linha hero__linha--destaque">marketing</span>
-        <span class="hero__linha hero__linha--destaque">para clínicas.</span>
+        <span class="hero__linha hero__linha--riscada">marketing</span>
+        <span class="hero__linha hero__linha--riscada">para clínicas.</span>
+        <span class="hero__linha">Isso é <span class="hero__linha--destaque">RevOps.</span></span>
       </h1>
     </div>
 
@@ -41,13 +44,7 @@ const lead = copyLiteral ? hero.lead : leadCurto;
     </div>
 
     <div class="hero__dir">
-      <!-- Mesma diagramação da esquerda: o ano na linha do rótulo, o título na
-           mesma altura do "Isso não é", e o lead com o CTA embaixo. -->
       <p class="hero__ano"><span class="hero__c">©</span> 2026</p>
-      <p class="hero__titulo">
-        <span class="hero__linha">Isso é</span>
-        <span class="hero__linha hero__linha--destaque">RevOps.</span>
-      </p>
       <p class="hero__lead">{lead}</p>
       <p class="hero__acoes"><Botao href="/contato">{hero.cta}</Botao></p>
     </div>

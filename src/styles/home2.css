@@ -346,13 +346,18 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 }
 .hero__quadrado { width: 12px; height: 12px; background: var(--destaque); border-radius: 2px; }
 /* Os dois títulos no mesmo desenho: linhas empilhadas, a primeira em papel e as outras no amarelo. */
-.hero__h1, .hero__titulo {
+.hero__h1 {
   margin: 0; display: grid;
-  font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; line-height: .96; text-wrap: balance;
-  font-size: clamp(2.6rem, 6.4vw, 8rem);
+  font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; line-height: .98; text-wrap: balance;
+  font-size: clamp(2.4rem, 5.6vw, 7rem);
 }
 .hero__linha { display: block; }
 .hero__linha--destaque { color: var(--destaque); }
+/* O "marketing para clínicas." riscado: amarelo apagado com o risco no amarelo cheio. */
+.hero__linha--riscada {
+  color: rgb(255 209 3 / .55);
+  text-decoration: line-through; text-decoration-color: var(--destaque); text-decoration-thickness: .06em;
+}
 .hero__objeto { justify-self: center; align-self: start; margin-top: clamp(0px, 3vh, 32px); }
 .hero__objeto img {
   width: clamp(150px, 17vw, 300px); height: auto;
@@ -363,7 +368,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* O ano ocupa a mesma linha do rótulo (mesma altura e margem) para os dois títulos começarem juntos. */
 .hero__ano { margin: 0 0 clamp(16px, 2.6vh, 28px); display: flex; align-items: center; gap: 10px; min-height: 23px; font-size: 13px; color: var(--destaque); }
 .hero__c { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; }
-.hero__lead { margin: clamp(20px, 3.5vh, 36px) 0 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); }
+.hero__lead { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); }
 .hero__acoes { margin: clamp(18px, 3vh, 28px) 0 0; }
 
 /* Fio e chamada para rolar, centrados no pé. */
@@ -377,7 +382,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 @media (max-width: 899.98px) {
   .hero { min-height: auto; }
   .hero__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
-  .hero__h1, .hero__titulo { font-size: clamp(2.6rem, 12vw, 4.2rem); }
+  .hero__h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
   .hero__objeto { margin: 0; }
   .hero__objeto img { width: clamp(120px, 34vw, 180px); }
   .hero__scroll { padding-top: 32px; }
@@ -924,7 +929,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 }
 
 @media (max-width: 899.98px) {
-  .hero__titulo--curto { font-size: clamp(1.9rem, 8.4vw, 2.6rem); max-width: none; }
   .hero__lead { font-size: 15px; }
   /* O botão onda no celular: largura toda, texto quebrando se precisar. */
   .botao--onda { width: 100%; padding: 12px 18px 12px 80px; font-size: 15px; }
