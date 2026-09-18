@@ -1024,4 +1024,3 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
    avisa qual rota é), mas sinaliza que não leva a lugar nenhum — melhor que
    um link confiante levando a um 404. */
 .nav--pendente { opacity: .45; }
-.nav--pendente::after { content: ' · em breve'; font-size: .8em; font-style: italic; }

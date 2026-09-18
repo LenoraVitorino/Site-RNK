@@ -30,7 +30,6 @@ const blocos = [
     {blocos.map((b) => (
       <article class="cartao entra">
         <FotoSlot rotulo={b.foto} prop="16 / 10" />
-        <p class="rotulo">{b.eyebrow}</p>
         <h3 class="caps">{b.titulo}</h3>
         <p>{b.texto}</p>
         <p><Botao href={existe(b.rota) ? b.rota : '#'} tamanho="sm">{b.cta}</Botao></p>

@@ -60,8 +60,8 @@ export const pilares = [
 export const protocolos = [
   {
     label: 'REVENA START',
-    fala: 'Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados.',
-    texto: 'Organizamos seu processo comercial do zero em 90 dias.',
+    fala: 'CRM que organiza sua operação. Leads, oportunidades e vendas rastreados de ponta a ponta.',
+    texto: 'Organizamos seu comercial em 90 dias. Processos claros, automações e dados confiáveis.',
     rota: '/studio/revena-start',
   },
   {

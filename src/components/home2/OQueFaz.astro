@@ -6,17 +6,19 @@
  * lado ficou melhor.) Copy literal.
  */
 import Telefone from '../ui/Telefone.astro';
+import Botao from '../ui/Botao.astro';
+import { existe } from '../../data/rotas';
 ---
 <section class="secao" id="o-que-fazemos">
   <div class="container oquefaz">
     <div class="oquefaz__texto entra">
-      <p class="rotulo">O que fazemos</p>
-      <h2 class="titulo caps">O que a Renke faz?</h2>
+      <h2 class="titulo caps">Nossa metodologia</h2>
       <p>
-        A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão do
-        mundo. Assista e entenda a nova categoria que criamos para revolucionar o setor de saúde
-        e estética.
+        Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+        Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+        processos a partir de dados, CRM e marketing.
       </p>
+      <p><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></p>
     </div>
     <div class="oquefaz__midia entra">
       <Telefone />

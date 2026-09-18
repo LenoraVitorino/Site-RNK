@@ -9,44 +9,27 @@
 import FotoSlot from '../ui/FotoSlot.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
-import Numeros from '../ui/Numeros.astro';
-
 ---
 <section class="secao" id="sobre">
   <div class="container sobre">
-    <div class="sobre__texto entra">
-      <p class="rotulo">Sobre</p>
-      <p class="sobre__declaracao">
-        <span class="mudo">A Renke é a primeira assessoria de Revenue Operations para clínicas médicas e odontológicas de alto padrão do mundo.</span>
-        Não somos agência de marketing. Não somos consultoria de gestão.
-      </p>
+    <div class="sobre__texto sobre__texto--centro entra">
+      <p class="sobre__declaracao sobre__declaracao--caps">Conheça a história da Renke</p>
       <div class="sobre__paragrafos">
         <p>
-          Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado
-          de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
-        </p>
-        <p>
-          Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm
-          previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes
-          desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema
-          de marketing. É um problema de negócio.
-        </p>
-        <p>
-          Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena,
-          metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no
-          longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos
-          especialistas que fazem isso, para saúde, todo santo dia.
+          Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+          oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
         </p>
       </div>
-      <p><Botao variante="contorno" href={existe('/sobre') ? '/sobre' : '#'} class={existe('/sobre') ? '' : 'nav--pendente'}>Saiba mais</Botao></p>
     </div>
-
-    <Numeros />
   </div>
 
   <div class="container sobre__fotos entra">
     <FotoSlot rotulo="Foto · nova sede" prop="4 / 3" />
     <FotoSlot rotulo="Foto · time" prop="4 / 3" />
     <FotoSlot rotulo="Foto · operação" prop="4 / 3" />
+  </div>
+
+  <div class="container sobre__acao entra">
+    <Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao>
   </div>
 </section>
