@@ -219,3 +219,15 @@ bloqueia a roda (`preventDefault`). Isso valia mesmo com a página já no
 meio (barra de rolagem, âncora), e a primeira rolada ficava presa por 5 s
 sem nada na tela: a sensação de "site travado". Agora, com `scrollY > 8`
 a cena é dada como vista e a roda passa livre, em qualquer versão.
+
+## Palco dos planos em dobras inteiras (18/09/2026)
+
+Reestruturado como a referência: `.palcoplanos__intro` (pílula, título,
+apoio) antes do trilho; `.palcoplanos__trilho` com `n × 100svh` e o
+`.palcoplanos__fixo` preso; cada `.plano-palco` é `position: absolute;
+inset: 0` com fundo próprio (`--pp-fundo` e `--pp-fundo-2` alternados;
+slot das fotos), e o `clip-path: inset(top)` da entrada corta a dobra
+inteira, fundo incluído, enquanto o `.plano-palco__miolo` sobe até o
+lugar. A dobra que sai perde opacidade e o miolo sobe. A que entra fica
+com `z-index` acima da que sai. As âncoras (`.palcoplanos__ancoras`) ficam
+por cima de tudo, no canto superior esquerdo.

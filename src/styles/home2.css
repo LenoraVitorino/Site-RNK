@@ -674,40 +674,75 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* ============================================================
    DOBRA 3 (estúdio) · PROTOCOLO REVENA NO PALCO — referência Tres Mares
-   A página rola, o palco fica; a dobra tem n telas de altura. Lista no
-   canto superior esquerdo, ícone translúcido se montando no centro com o
-   nome por cima, frase embaixo à esquerda, dados à direita. Tudo pintado
-   pelo script a partir do scroll (sem transições CSS).
+   Introdução (título + apoio) e depois o trilho: n telas de altura com o
+   palco preso. Cada plano é uma dobra inteira, com fundo próprio, que
+   entra por baixo cobrindo a anterior (clip-path na dobra) enquanto a
+   anterior sobe e some. Lista dos planos por cima, no canto superior
+   esquerdo. Tudo pintado pelo script a partir do scroll, com snap.
    ============================================================ */
 
-/* Curso: (n − 1) trechos de uma tela mais a tela presa. Fundo no claro do
-   design system (papel): a dobra dos planos é a única clara da home, e por
-   isso se destaca do preto. */
 .palcoplanos {
-  --pp-fundo: var(--papel); --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
-  position: relative; height: calc(var(--n) * 100svh); background: var(--pp-fundo); color: var(--pp-texto);
+  --pp-fundo: var(--papel); --pp-fundo-2: #E7E7E2; --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
+  position: relative; background: var(--pp-fundo); color: var(--pp-texto);
 }
-.palcoplanos__fixo {
-  position: sticky; top: 0; height: 100svh; overflow: hidden; box-sizing: border-box;
-  padding: calc(var(--altura-header) - 8px) var(--gutter) clamp(28px, 4vh, 48px);
-  display: grid; grid-template-rows: auto 1fr; gap: clamp(12px, 2vh, 28px);
-  width: min(100%, var(--largura)); margin-inline: auto;
-}
+.palcoplanos__intro { padding: clamp(64px, 9vw, 128px) 0 clamp(40px, 6vw, 80px); }
 .palcoplanos__cabeca { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
-.palcoplanos__titulo { font-size: clamp(2rem, 3.4vw, 3.4rem); letter-spacing: -.03em; line-height: 1; margin-top: 14px; font-weight: var(--peso-titulo); }
+.palcoplanos__titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03em; line-height: 1; margin-top: 18px; font-weight: var(--peso-titulo); }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.05rem, 1.35vw, 1.3rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.1rem, 1.5vw, 1.45rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
 }
 .palcoplanos__apoio strong { display: block; margin-top: .25em; font-weight: var(--peso-enfase); color: var(--pp-texto); }
 
-/* O palco: lista, ícones e layers na mesma célula. */
-.palcoplanos__palco { position: relative; display: grid; min-height: 0; }
-.palcoplanos__palco > * { grid-area: 1 / 1; }
-.palcoplanos__lista { list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 10px; align-self: start; justify-self: start; z-index: 3; position: relative; }
-/* Barra fina ao lado da lista: enche com o progresso da dobra, para o scroll ter resposta visível o tempo todo. */
-.palcoplanos__barra { align-self: start; justify-self: start; width: 2px; height: 156px; background: var(--pp-fio); z-index: 3; position: relative; overflow: hidden; }
+/* Trilho e palco preso. */
+.palcoplanos__trilho { position: relative; height: calc(var(--n) * 100svh); }
+.palcoplanos__fixo { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--pp-fundo); }
+
+/* Cada dobra: tela cheia, fundo próprio (tons alternados, até as fotos chegarem). */
+.plano-palco {
+  position: absolute; inset: 0; visibility: hidden; z-index: 2;
+  background: var(--pp-fundo);
+}
+.plano-palco--tom2 { background: var(--pp-fundo-2); }
+.plano-palco--ativo { visibility: visible; }
+.plano-palco__miolo {
+  position: absolute; inset: 0; box-sizing: border-box;
+  padding: calc(var(--altura-header) + 8px) var(--gutter) clamp(28px, 4vh, 48px);
+  width: min(100%, var(--largura)); margin-inline: auto; left: 0; right: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: end;
+  gap: 24px clamp(24px, 3vw, 56px);
+}
+.plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* Centro: ícone todo amarelo e opaco, com o nome por cima, em duas linhas desencontradas. */
+.plano-palco__centro { grid-column: 1 / -1; grid-row: 1 / -1; place-self: center; position: relative; display: grid; place-items: center; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; }
+.plano-palco__centro > * { grid-area: 1 / 1; }
+.plano-palco__icone { width: 100%; height: 100%; overflow: visible; }
+.peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
+.peca--papel, .peca--ouro { fill: var(--destaque); }
+.plano-palco__nome {
+  margin: 0; display: grid; width: min(66svh, 720px); position: relative; z-index: 1;
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
+  font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--pp-texto);
+}
+.plano-palco__nome__a { justify-self: start; }
+.plano-palco__nome__b { justify-self: end; }
+/* Baixo-esquerda: a frase do plano + Saiba mais. Baixo-direita: fala e pilar. */
+.plano-palco__texto { grid-column: 1; grid-row: 2; display: grid; gap: 14px; justify-items: start; max-width: 30ch; position: relative; z-index: 2; }
+.plano-palco__frase { margin: 0; font-size: clamp(1rem, 1.2vw, 1.2rem); line-height: 1.4; }
+.plano-palco__dados { grid-column: 3; grid-row: 2; margin: 0; display: grid; gap: 20px; justify-items: end; text-align: right; position: relative; z-index: 2; }
+.plano-palco__dados dt { font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; color: var(--pp-suave); margin-bottom: 6px; }
+.plano-palco__dados dd { margin: 0; font-size: 15px; line-height: 1.4; max-width: 30ch; }
+.plano-palco__fala { font-style: italic; color: rgb(22 22 22 / .8); }
+
+/* Âncoras por cima das dobras, no canto superior esquerdo, com a barra de progresso. */
+.palcoplanos__ancoras {
+  position: absolute; z-index: 5; top: calc(var(--altura-header) + 8px);
+  left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter)));
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.palcoplanos__barra { width: 2px; height: 156px; background: var(--pp-fio); position: relative; overflow: hidden; }
 .palcoplanos__barra span { display: block; width: 100%; height: 100%; background: var(--pp-texto); transform: scaleY(0); transform-origin: top; will-change: transform; }
+.palcoplanos__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .palcoplanos__item {
   background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   font: inherit; font-size: 15px; line-height: 1.3; color: rgb(22 22 22 / .42);
@@ -716,61 +751,29 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__item:hover { color: var(--pp-texto); }
 .palcoplanos__item--ativo { color: var(--pp-texto); font-weight: var(--peso-enfase); pointer-events: none; }
 
-/* Ícones: todos no centro, um por cima do outro; o script mostra o do plano. */
-/* Ícone todo amarelo, opaco; as metades entram e saem pela coreografia do plano (script). */
-.palcoplanos__icones { place-self: center; display: grid; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; z-index: 1; overflow: visible; }
-.palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: 100%; height: 100%; overflow: visible; visibility: hidden; }
-.peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
-.peca--papel, .peca--ouro { fill: var(--destaque); }
-
-/* Cada plano é um layer com três cantos: nome (centro), texto (baixo-esquerda) e dados (baixo-direita). */
-.plano-palco {
-  position: relative; display: grid; min-height: 0; z-index: 2;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-rows: 1fr auto; align-items: end;
-  gap: 24px clamp(24px, 3vw, 56px);
-  visibility: hidden;
-}
-.plano-palco--ativo { visibility: visible; }
-.plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-/* Nome em duas linhas desencontradas, a primeira à esquerda e a segunda à direita, sobre o ícone. */
-.plano-palco__nome {
-  grid-column: 1 / -1; grid-row: 1 / -1; place-self: center;
-  margin: 0; display: grid; width: min(66svh, 720px); position: relative; pointer-events: none;
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
-  font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--pp-texto);
-}
-.plano-palco__nome__a { justify-self: start; }
-.plano-palco__nome__b { justify-self: end; }
-/* Baixo-esquerda: a frase do plano + Saiba mais. */
-.plano-palco__texto { grid-column: 1; grid-row: 2; display: grid; gap: 14px; justify-items: start; max-width: 30ch; pointer-events: auto; }
-.plano-palco__frase { margin: 0; font-size: clamp(1rem, 1.2vw, 1.2rem); line-height: 1.4; }
-/* Baixo-direita: a fala da doutora e o pilar, em rótulo + valor, alinhados à direita. */
-.plano-palco__dados { grid-column: 3; grid-row: 2; margin: 0; display: grid; gap: 20px; justify-items: end; text-align: right; }
-.plano-palco__dados dt { font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; color: var(--pp-suave); margin-bottom: 6px; }
-.plano-palco__dados dd { margin: 0; font-size: 15px; line-height: 1.4; max-width: 30ch; }
-.plano-palco__fala { font-style: italic; color: rgb(22 22 22 / .8); }
-
-/* Sem JS ou com menos movimento, e no celular: pilha, um bloco por plano, com o ícone pequeno ao lado do nome. */
+/* Sem JS ou com menos movimento, e no celular: pilha, uma dobra por plano. */
 @media (max-width: 899.98px), (prefers-reduced-motion: reduce) {
-  .palcoplanos { height: auto; }
-  .palcoplanos__fixo { position: static; height: auto; overflow: visible; padding-block: clamp(56px, 10vw, 96px); display: block; }
-  .palcoplanos__cabeca { flex-direction: column; align-items: flex-start; margin-bottom: 40px; }
+  .palcoplanos__intro { padding-bottom: 8px; }
+  .palcoplanos__cabeca { flex-direction: column; align-items: flex-start; }
   .palcoplanos__apoio { text-align: left; }
-  .palcoplanos__lista, .palcoplanos__icones, .palcoplanos__barra { display: none; }
-  .palcoplanos__palco { display: grid; gap: 44px; }
-  .palcoplanos__palco > * { grid-area: auto; }
-  .plano-palco { visibility: visible; grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; clip-path: none !important; transform: none !important; opacity: 1 !important; }
-  .plano-palco__nome { grid-column: 1; grid-row: auto; place-self: start; width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); }
+  .palcoplanos__trilho { height: auto; }
+  .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
+  .palcoplanos__ancoras { display: none; }
+  .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; }
+  .plano-palco__miolo { position: relative; inset: auto; padding: clamp(40px, 8vw, 64px) var(--gutter); grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; transform: none !important; }
+  .plano-palco__centro { grid-column: 1; grid-row: auto; place-self: start; width: auto; display: grid; place-items: start; }
+  .plano-palco__centro > * { grid-area: auto; }
+  .plano-palco__icone { width: min(40vw, 180px); height: auto; transform: none !important; }
+  .plano-palco__nome { width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; transform: none !important; }
   .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
+  .peca { transform: none !important; opacity: 1 !important; }
   .plano-palco__texto, .plano-palco__dados { grid-column: 1; grid-row: auto; justify-items: start; text-align: left; }
 }
-html:not(.js) .palcoplanos { height: auto; }
-html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; display: block; }
-html:not(.js) .palcoplanos__lista, html:not(.js) .palcoplanos__icones, html:not(.js) .palcoplanos__barra { display: none; }
-html:not(.js) .palcoplanos__palco { display: grid; gap: 44px; }
-html:not(.js) .palcoplanos__palco > * { grid-area: auto; }
-html:not(.js) .plano-palco { visibility: visible; }
+html:not(.js) .palcoplanos__trilho { height: auto; }
+html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
+html:not(.js) .palcoplanos__ancoras { display: none; }
+html:not(.js) .plano-palco { position: relative; inset: auto; visibility: visible; }
+html:not(.js) .plano-palco__miolo { position: relative; inset: auto; padding-block: 48px; }
 
 /* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------
    Como a dobra "Selected work" da referência: o título abre sozinho à
