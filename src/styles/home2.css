@@ -696,7 +696,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* Trilho e palco preso. */
 .palcoplanos__trilho { position: relative; height: calc(var(--n) * 100svh); }
-.palcoplanos__fixo { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--pp-fundo); }
+/* Base escura por trás das dobras: quando a dobra que sai perde opacidade, é isso que aparece, como no vídeo da referência. */
+.palcoplanos__fixo { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--grafite); }
 
 /* Cada dobra: tela cheia, fundo próprio (tons alternados, até as fotos chegarem). */
 .plano-palco {
@@ -713,14 +714,18 @@ html:not(.js) .esteira__trilho { transform: none; }
   gap: 24px clamp(24px, 3vw, 56px);
 }
 .plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-/* Centro: ícone todo amarelo e opaco, com o nome por cima, em duas linhas desencontradas. */
-.plano-palco__centro { grid-column: 1 / -1; grid-row: 1 / -1; place-self: center; position: relative; display: grid; place-items: center; width: min(58svh, 640px); aspect-ratio: 1; pointer-events: none; }
-.plano-palco__centro > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: 100%; height: 100%; overflow: visible; }
+.plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
+/* Ícones: camada única no centro, por cima das dobras (z 4), como o SVG
+   da referência; todo amarelo e opaco. As metades cruzam a cortina. */
+.palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.palcoplanos__icones > * { grid-area: 1 / 1; }
+.plano-palco__icone { width: min(58svh, 640px); height: min(58svh, 640px); overflow: visible; visibility: hidden; margin-top: calc(var(--altura-header) * .35); }
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
 .peca--papel, .peca--ouro { fill: var(--destaque); }
+/* O nome, dentro da dobra, centrado sobre o lugar do ícone, em duas linhas desencontradas. */
 .plano-palco__nome {
-  margin: 0; display: grid; width: min(66svh, 720px); position: relative; z-index: 1;
+  grid-column: 1 / -1; grid-row: 1 / -1; place-self: center;
+  margin: 0; display: grid; width: min(66svh, 720px); position: relative; z-index: 1; pointer-events: none;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
   font-size: clamp(3.4rem, 7.6vw, 7.8rem); color: var(--pp-texto);
 }
@@ -736,7 +741,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* Âncoras por cima das dobras, no canto superior esquerdo, com a barra de progresso. */
 .palcoplanos__ancoras {
-  position: absolute; z-index: 5; top: calc(var(--altura-header) + 8px);
+  position: absolute; z-index: 6; top: calc(var(--altura-header) + 8px);
   left: max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter)));
   display: flex; gap: 16px; align-items: flex-start;
 }
@@ -761,18 +766,17 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos__ancoras { display: none; }
   .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; }
   .plano-palco__miolo { position: relative; inset: auto; padding: clamp(40px, 8vw, 64px) var(--gutter); grid-template-columns: 1fr; grid-template-rows: auto; align-items: start; gap: 16px; transform: none !important; }
-  .plano-palco__centro { grid-column: 1; grid-row: auto; place-self: start; width: auto; display: grid; place-items: start; }
-  .plano-palco__centro > * { grid-area: auto; }
-  .plano-palco__icone { width: min(40vw, 180px); height: auto; transform: none !important; }
-  .plano-palco__nome { width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; transform: none !important; }
+  .palcoplanos__icones { display: none; }
+  .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; margin-bottom: 4px; }
+  .plano-palco__nome { grid-column: 1; grid-row: auto; place-self: start; width: auto; font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; transform: none !important; }
   .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
-  .peca { transform: none !important; opacity: 1 !important; }
   .plano-palco__texto, .plano-palco__dados { grid-column: 1; grid-row: auto; justify-items: start; text-align: left; }
 }
 html:not(.js) .palcoplanos__trilho { height: auto; }
 html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
-html:not(.js) .palcoplanos__ancoras { display: none; }
+html:not(.js) .palcoplanos__ancoras, html:not(.js) .palcoplanos__icones { display: none; }
 html:not(.js) .plano-palco { position: relative; inset: auto; visibility: visible; }
+html:not(.js) .palcoplanos__fixo { background: var(--pp-fundo); }
 html:not(.js) .plano-palco__miolo { position: relative; inset: auto; padding-block: 48px; }
 
 /* ---------- Planos: trilho preso na tela + cortina para a próxima dobra ----------

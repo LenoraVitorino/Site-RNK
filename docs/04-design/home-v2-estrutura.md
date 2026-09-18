@@ -231,3 +231,16 @@ inteira, fundo incluído, enquanto o `.plano-palco__miolo` sobe até o
 lugar. A dobra que sai perde opacidade e o miolo sobe. A que entra fica
 com `z-index` acima da que sai. As âncoras (`.palcoplanos__ancoras`) ficam
 por cima de tudo, no canto superior esquerdo.
+
+## Transição lida do vídeo (18/09/2026)
+
+Quadros do "Tela ref renke.mov" (Drive, 34 s, 2 fps): (1) o
+`.palcoplanos__fixo` tem base escura (`--grafite`); (2) a dobra que sai
+faz `opacity: 1 → 0` linear ao longo da passagem, revelando a base, e o
+miolo sobe 24%; (3) a dobra que entra é cortada por `clip-path:
+inset(top)` de 100% a 0 e o miolo sobe de 18% a 0; (4) os ícones ficam em
+`.palcoplanos__icones` (absolute, z 4, centrado), por cima das dobras: as
+metades do que sai se recolhem ao centro (`translate(-cx, -cy)` +
+`scale(.38)`) e somem a 70% da passagem; as do que entra chegam pela
+coreografia a partir de 28% da entrada; (5) o nome aparece só no último
+quarto. Na pilha do celular cada dobra mostra o `-light.svg` estático.

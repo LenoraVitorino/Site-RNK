@@ -111,14 +111,8 @@ const planos = ordem.map((label) => {
       {planos.map((p, i) => (
         <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} aria-hidden={i === 0 ? undefined : 'true'}>
           <div class="plano-palco__miolo">
-            <div class="plano-palco__centro" aria-hidden="true">
-              <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
-                {p.pecas.map((peca, k) => (
-                  <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
-                ))}
-              </svg>
-              <p class="plano-palco__nome"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
-            </div>
+            <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
+            <p class="plano-palco__nome" aria-hidden="true"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
             <h3 class="plano-palco__h3">Revena {p.nome}</h3>
 
             <div class="plano-palco__texto">
@@ -139,6 +133,19 @@ const planos = ordem.map((label) => {
           </div>
         </article>
       ))}
+
+      <!-- Os ícones, numa camada só no centro, por cima das dobras (como o
+           SVG da referência): o que sai se recolhe num bloco no centro, o
+           que entra chega na coreografia do plano, cruzando a cortina. -->
+      <div class="palcoplanos__icones" aria-hidden="true">
+        {planos.map((p, i) => (
+          <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
+            {p.pecas.map((peca, k) => (
+              <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
+            ))}
+          </svg>
+        ))}
+      </div>
 
       <!-- Lista dos planos, canto superior esquerdo, por cima das dobras: o atual em destaque; clicar leva ao plano. -->
       <nav class="palcoplanos__ancoras" aria-label="Planos do Protocolo Revena">
@@ -166,7 +173,7 @@ const planos = ordem.map((label) => {
   const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (dobra && !reduz) {
     const layers = [...dobra.querySelectorAll<HTMLElement>('[data-plano]')];
-    const icones = layers.map((l) => l.querySelector<SVGSVGElement>('[data-icone]')!);
+    const icones = [...dobra.querySelectorAll<SVGSVGElement>('[data-icone]')];
     const miolos = layers.map((l) => l.querySelector<HTMLElement>('.plano-palco__miolo')!);
     const nomes = layers.map((l) => l.querySelector<HTMLElement>('.plano-palco__nome')!);
     const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
@@ -181,9 +188,12 @@ const planos = ordem.map((label) => {
     type Vetor = [number, number];
     const pecas = icones.map((svg) => {
       const c = JSON.parse(svg.dataset.coreografia || '{"entra":[],"sai":[]}') as { entra: Vetor[]; sai: Vetor[] };
-      return [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g, j) => ({ g, entra: c.entra[j] || [0, 0], sai: c.sai[j] || [0, 0] }));
+      return [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g, j) => {
+        const b = g.getBBox();   // centro da metade, para ela se recolher ao centro do ícone ao sair
+        return { g, entra: c.entra[j] || [0, 0], sai: c.sai[j] || [0, 0], cx: b.x + b.width / 2 - 540, cy: b.y + b.height / 2 - 540 };
+      });
     });
-    const escondido = layers.map(() => false);
+    const escondido = layers.map(() => true);   // tudo começa escondido; o primeiro mede() liga o que aparece
 
     let ativo = -1;
     const marca = (i: number) => {
@@ -195,35 +205,43 @@ const planos = ordem.map((label) => {
 
     /* Pinta um plano: quanto já entrou (dentro 0→1), quanto já saiu (fora 0→1)
        e, parado, quanto do trecho de segurar já passou (flutua 0→1). */
-    const pinta = (k: number, dentro: number, fora: number, flutua: number) => {
+    /* Pinta um plano: quanto a dobra já entrou (dentro 0→1), quanto já saiu
+       (fora 0→1), quanto do trecho de segurar já passou (flutua 0→1) e
+       quanto o ícone e o nome já se montaram (monta 0→1; na primeira dobra
+       isso vem da chegada da seção, com a dobra já inteira na tela). */
+    const pinta = (k: number, dentro: number, fora: number, flutua: number, monta = dentro) => {
       const l = layers[k];
       const visivel = dentro > 0 && fora < 1;
       if (!visivel) {
-        if (!escondido[k]) { l.style.visibility = 'hidden'; escondido[k] = true; }
+        if (!escondido[k]) { l.style.visibility = 'hidden'; icones[k].style.visibility = 'hidden'; escondido[k] = true; }
         return;
       }
-      if (escondido[k]) { l.style.visibility = 'visible'; escondido[k] = false; }
-      // A dobra inteira, nas curvas da referência: a que entra é revelada de
+      if (escondido[k]) { l.style.visibility = 'visible'; icones[k].style.visibility = 'visible'; escondido[k] = false; }
+      // As dobras, como no vídeo da referência: a que entra é revelada de
       // baixo para cima (clip-path na dobra, fundo incluído) com o miolo
-      // subindo até o lugar; a que sai sobe e some na primeira metade da
-      // passagem. A que entra fica por cima da que sai.
+      // subindo até o lugar; a que sai perde opacidade ao longo da passagem,
+      // revelando a base escura por trás, e o miolo sobe. A que entra fica
+      // por cima da que sai.
       const corte = (1 - dentro) * 100;
       l.style.clipPath = corte > 0.01 ? `inset(${corte.toFixed(2)}% 0 0 0)` : 'none';
-      l.style.opacity = String(clamp(1 - fora * 1.6));
+      l.style.opacity = String(clamp(1 - fora));
       l.style.zIndex = dentro < 1 ? '3' : '2';
       miolos[k].style.transform = `translate3d(0, ${((1 - dentro) * 18 - fora * 24).toFixed(2)}%, 0)`;
-      nomes[k].style.opacity = String(clamp(dentro * 4 - 3) * clamp(1 - fora * 3));
+      // O nome some logo que a passagem começa e só aparece no último quarto da entrada.
+      nomes[k].style.opacity = String(clamp(monta * 4 - 3) * clamp(1 - fora * 3));
       nomes[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 3).toFixed(2)}%, 0)`;
       icones[k].style.transform = `translate3d(0, ${((0.5 - flutua) * 2).toFixed(2)}%, 0)`;
-      // Ícone: cada metade vem do seu canto (entra) e vai para o seu rumo
-      // (sai), só deslocamento, sem girar; encaixa 100% no fim da entrada.
-      pecas[k].forEach(({ g, entra, sai }, j) => {
-        const ein = entraSai(clamp((dentro - j * 0.06) / 0.94));
-        const eout = entraSai(clamp((fora - j * 0.06) / 0.94));
-        const x = entra[0] * (1 - ein) + sai[0] * eout;
-        const y = entra[1] * (1 - ein) + sai[1] * eout;
-        g.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
-        g.style.opacity = String(clamp(ein * 2.5) * clamp(1.4 - eout * 1.4));
+      // Ícone (camada por cima das dobras): ao sair, as metades se recolhem
+      // num bloco no centro e somem; ao entrar, chegam do rumo da coreografia
+      // do plano, só deslocamento, e encaixam 100% no fim.
+      pecas[k].forEach(({ g, entra, cx, cy }, j) => {
+        const ein = entraSai(clamp((monta - 0.28 - j * 0.05) / 0.67));
+        const eout = entraSai(clamp((fora - j * 0.04) / 0.56));
+        const x = entra[0] * (1 - ein) - cx * eout;
+        const y = entra[1] * (1 - ein) - cy * eout;
+        const escala = 1 - 0.62 * eout;
+        g.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${escala.toFixed(3)})`;
+        g.style.opacity = String(clamp(ein * 3) * clamp((0.7 - fora) / 0.12 + 1));
       });
     };
 
@@ -251,7 +269,7 @@ const planos = ordem.map((label) => {
       const fs = passando ? 1 : f / SEGURA;
       for (let k = 0; k < n; k++) {
         if (k < de) pinta(k, 1, 1, 1);
-        else if (k === de) pinta(k, k === 0 ? pre : 1, fp, fs);
+        else if (k === de) pinta(k, 1, fp, fs, k === 0 ? pre : 1);   // a primeira dobra chega inteira; o ícone se monta com a chegada
         else if (k === de + 1) pinta(k, fp, 0, 0);
         else pinta(k, 0, 0, 0);
       }
@@ -263,7 +281,7 @@ const planos = ordem.map((label) => {
     let deslizando: number | null = null;
     let quieto: number | undefined;
     const cancela = () => { if (deslizando !== null) { cancelAnimationFrame(deslizando); deslizando = null; } };
-    const deslizaAte = (alvo: number, dur = 700) => {
+    const deslizaAte = (alvo: number, dur = 950) => {
       cancela();
       const de = scrollY, t0 = performance.now();
       if (Math.abs(alvo - de) < 2) return;
@@ -298,7 +316,7 @@ const planos = ordem.map((label) => {
     /* Clicar num plano da lista desliza até ele. */
     itens.forEach((b, i) => b.addEventListener('click', () => {
       const { topo, curso } = medidas();
-      deslizaAte(posicaoDoPlano(i, topo, curso), 900);
+      deslizaAte(posicaoDoPlano(i, topo, curso), 1100);
     }));
   }
 </script>
