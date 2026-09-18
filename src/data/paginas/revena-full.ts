@@ -3,7 +3,7 @@ import type { Pagina } from './tipos';
 /** Copy literal de docs/03-copy/revena-full.md */
 export const revenaFull: Pagina = {
   rota: '/studio/revena-full',
-  titulo: 'Protocolo Revena Full | Jornada completa do paciente para clínicas',
+  titulo: 'Revena Full | Jornada completa do paciente para clínicas',
   descricao:
     'Do primeiro contato ao retorno. Comercial + pós-venda conectados. Para clínicas que já têm equipe e querem retenção real.',
   blocos: [

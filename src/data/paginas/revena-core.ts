@@ -4,7 +4,7 @@ import { analiseDeMercado } from './comuns';
 /** Copy literal de docs/03-copy/revena-core.md */
 export const revenaCore: Pagina = {
   rota: '/studio/revena-core',
-  titulo: 'Protocolo Revena Core | Marketing + comercial + dados integrados para clínicas',
+  titulo: 'Revena Core | Marketing + comercial + dados integrados para clínicas',
   descricao:
     'Um time operando marketing, comercial e dados da sua clínica toda semana. Custo por paciente real, não custo por clique.',
   blocos: [

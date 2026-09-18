@@ -4,7 +4,7 @@ import { analiseDeMercado, ctaProtocolo } from './comuns';
 /** Copy literal de docs/03-copy/revena-scale.md */
 export const revenaScale: Pagina = {
   rota: '/studio/revena-scale',
-  titulo: 'Protocolo Revena Scale | Captação + conteúdo + reativação para clínicas',
+  titulo: 'Revena Scale | Captação + conteúdo + reativação para clínicas',
   descricao:
     'A operação completa: marketing, comercial, conteúdo orgânico e ativação de base. Para clínicas que querem crescer sem depender só de anúncio.',
   blocos: [
