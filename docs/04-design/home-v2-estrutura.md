@@ -264,17 +264,3 @@ dos textos), então em telas baixas ele sobe em vez de encostar no "Momento
 da clínica" (em 1280×720 sobram 100px; em 1440×900, 171px). O ícone perdeu o
 `margin-top` e fica centrado na tela, um pouco abaixo do nome, como na
 referência. Sem mudança no celular.
-
-## Abertura do palco: ícone de vidro e título por cima (18/09/2026)
-
-Pedido da Lenora a partir de um print da chegada do palco: (1) o ícone do
-Start começa do meio, partido na diagonal perto do centro (`entra`
-[[-620, 590], [620, -590]] em vez de ±1000/900), e se fecha conforme a dobra
-chega; (2) as peças são de vidro — amarelo a 58%, fio branco a 55% na borda
-(`paint-order: stroke`) e sombra suave no SVG —, o nome do plano e o fundo
-atravessam o ícone; (3) `.palcoplanos__abertura`, "PROTOCOLO REVENA" em caixa
-alta no mesmo desenho do nome do plano, centrado por cima do ícone (z 5)
-enquanto o primeiro plano se monta: opacidade 1 até 55% da chegada, some a
-80%, antes do "REVENA START" entrar (75%). O título da introdução
-(`.palcoplanos__titulo`) também passou para caixa alta. Na pilha do celular a
-abertura não existe.

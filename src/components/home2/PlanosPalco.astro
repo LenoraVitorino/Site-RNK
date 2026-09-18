@@ -63,7 +63,7 @@ const pecas = (label: string): Peca[] => {
      Scale: mesma coisa, subindo.
      Core:  uma de cima, outra de baixo. Full: igual ao Core. */
 const coreografia: Record<string, { entra: [number, number][]; sai: [number, number][] }> = {
-  start: { entra: [[-620, 590], [620, -590]], sai: [[-1000, 900], [1000, -900]] },   // começa do meio, partido na diagonal (print da Lenora, 18/09)
+  start: { entra: [[-1000, 900], [1000, -900]], sai: [[-1000, 900], [1000, -900]] },
   run:   { entra: [[-1500, 0], [-1500, 0]],    sai: [[1500, 0], [1500, 0]] },
   scale: { entra: [[0, 1300], [0, 1300]],      sai: [[0, -1300], [0, -1300]] },
   core:  { entra: [[0, 1100], [0, -1100]],     sai: [[0, 1100], [0, -1100]] },
@@ -137,10 +137,6 @@ const planos = ordem.map((label) => {
       <!-- Os ícones, numa camada só no centro, por cima das dobras (como o
            SVG da referência): o que sai se recolhe num bloco no centro, o
            que entra chega na coreografia do plano, cruzando a cortina. -->
-      <!-- Abertura: o título da dobra, em caixa alta, por cima do ícone de vidro
-           enquanto o primeiro plano chega; some quando o nome do plano entra. -->
-      <p class="palcoplanos__abertura" aria-hidden="true" data-abertura><span>Protocolo</span><span>Revena</span></p>
-
       <div class="palcoplanos__icones" aria-hidden="true">
         {planos.map((p, i) => (
           <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
@@ -182,7 +178,6 @@ const planos = ordem.map((label) => {
     const nomes = layers.map((l) => l.querySelector<HTMLElement>('.plano-palco__nome')!);
     const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
     const barra = dobra.querySelector<HTMLElement>('[data-barra]');
-    const abertura = dobra.querySelector<HTMLElement>('[data-abertura]');
     const n = layers.length;
     const SEGURA = 0.2;   // fração do trecho em que o plano fica parado
     const clamp = (v: number) => Math.min(1, Math.max(0, v));
@@ -266,8 +261,6 @@ const planos = ordem.map((label) => {
       const pre = r.top > 0 ? clamp(1 - r.top / innerHeight) : 1;
       const t = clamp(-r.top / curso);
       if (barra) barra.style.transform = `scaleY(${t.toFixed(4)})`;
-      // O título da dobra fica sobre o ícone até 55% da chegada e some antes do nome do plano (que entra a 75%).
-      if (abertura) abertura.style.opacity = String(1 - clamp((pre - 0.55) / 0.25));
       const pos = Math.min(n - 1 - 1e-6, t * (n - 1));
       const de = Math.floor(pos);
       const f = pos - de;
