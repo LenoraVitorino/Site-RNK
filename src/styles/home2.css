@@ -760,8 +760,10 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos__trilho { height: auto; }
   .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
   .palcoplanos__ancoras { display: none; }
-  .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; }
-  .plano-palco__imagem { position: static; padding: clamp(40px, 8vw, 64px) var(--gutter) 0; transform: none !important; }
+  /* Na pilha o fundo claro vai para a dobra inteira (no desktop ele fica na camada da imagem). */
+  .plano-palco, .plano-palco--ativo { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; background: var(--pp-fundo); }
+  .plano-palco--tom2 { background: var(--pp-fundo-2); }
+  .plano-palco__imagem, .plano-palco--tom2 .plano-palco__imagem { position: static; background: transparent; padding: clamp(40px, 8vw, 64px) var(--gutter) 0; transform: none !important; }
   .plano-palco__icone-mob { display: block; width: min(36vw, 160px); height: auto; }
   .plano-palco__info { position: static; pointer-events: auto; padding: 12px var(--gutter) clamp(40px, 8vw, 64px); display: grid; gap: 16px; transform: none !important; opacity: 1 !important; }
   .plano-palco__nome { position: static; transform: none !important; width: auto; mix-blend-mode: normal; color: var(--pp-texto); font-size: clamp(2.4rem, 11vw, 3.6rem); opacity: 1 !important; }
