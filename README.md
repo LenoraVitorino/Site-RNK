@@ -21,6 +21,17 @@ npm run dev     # http://localhost:4321
 
 Detalhes da stack e da estrutura de pastas: [`docs/02-arquitetura/stack.md`](docs/02-arquitetura/stack.md).
 
+## Fluxo de trabalho
+
+- **Uma pasta só no Mac:** o repositório vive em `~/Renke` (a raiz da pasta é a raiz do git).
+  Sem clones paralelos nem worktrees — trocar de branch acontece no lugar.
+- **Toda rodada de ajuste nasce da `main` atualizada:** `git switch main && git pull`, depois
+  `git switch -c <nome-do-ajuste>`, commits, push e PR contra a `main`. Depois do merge, a
+  `main` é atualizada de novo e a próxima rodada começa de outra branch nova.
+- **Dev server:** `npm run dev` sempre a partir de `~/Renke`. Os caminhos de disco do código
+  (páginas em `src/pages`, ícones em `public/icones`) usam a constante de build `__RAIZ__`
+  definida no `astro.config.mjs`, então não dependem da pasta de onde o comando roda.
+
 ## Por onde começar
 
 👉 **[`docs/README.md`](docs/README.md)** — índice completo da documentação.

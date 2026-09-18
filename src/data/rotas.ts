@@ -12,9 +12,10 @@
 import { readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-// A partir da raiz do projeto: no build, import.meta.url aponta para o chunk em
-// dist/ e '../pages/' não existe — a lista vinha vazia e tudo virava "em breve".
-const pastaPaginas = join(process.cwd(), 'src', 'pages');
+// A partir da raiz do projeto (constante de build, ver astro.config.mjs).
+// Nem import.meta.url (no build aponta para o chunk em dist/) nem
+// process.cwd() (depende da pasta de onde o comando foi rodado) servem.
+const pastaPaginas = join(__RAIZ__, 'src', 'pages');
 
 const lista = (dir: string): string[] =>
   readdirSync(dir).flatMap((n) => {
