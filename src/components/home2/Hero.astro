@@ -12,12 +12,8 @@ import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 
-// Versão do estúdio: o lead enxugado por corte de palavras (decisão da
-// Lenora em 16/09/2026). A versão copy segue com o lead íntegro.
-const leadCurto =
-  'Sua clínica fatura bem, mas não sabe de onde vem cada real nem onde trava. ' +
-  'Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado e rastreado.';
-const lead = copyLiteral ? hero.lead : leadCurto;
+const lead = copyLiteral ? hero.lead :
+  'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
 ---
 <section class="hero" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
@@ -26,7 +22,7 @@ const lead = copyLiteral ? hero.lead : leadCurto;
 
   <div class="hero__grade">
     <div class="hero__esq">
-      <p class="hero__rotulo"><span class="hero__quadrado"></span>RevOps para clínicas</p>
+      <p class="hero__rotulo"><span class="hero__quadrado"></span>Revenue Operation</p>
       <!-- A cena, por tempo (Lenora, 18/09): "Isso não é marketing para
            clínicas." entra; o risco passa por "marketing para clínicas."; o
            riscado some junto com o "não" e "RevOps." sobe no lugar. Fica
@@ -42,7 +38,7 @@ const lead = copyLiteral ? hero.lead : leadCurto;
     <div class="hero__dir">
       <p class="hero__ano"><span class="hero__c">©</span> 2026</p>
       <p class="hero__lead">{lead}</p>
-      <p class="hero__acoes"><Botao href="/contato">{hero.cta}</Botao></p>
+      <p class="hero__acoes"><Botao href="/contato">Conhecer solução</Botao></p>
     </div>
   </div>
 

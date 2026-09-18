@@ -3,7 +3,7 @@ import type { Pagina } from './tipos';
 /** Copy literal de docs/03-copy/revena-run.md */
 export const revenaRun: Pagina = {
   rota: '/studio/revena-run',
-  titulo: 'Protocolo Revena Run | Manutenção da operação comercial para clínicas',
+  titulo: 'Revena Run | Manutenção da operação comercial para clínicas',
   descricao:
     'Manutenção semanal, dados limpos, equipe aderindo. Alguém garantindo que sua operação não volta a bagunçar.',
   blocos: [

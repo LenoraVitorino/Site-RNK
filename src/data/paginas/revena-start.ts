@@ -3,7 +3,7 @@ import type { Pagina } from './tipos';
 /** Copy literal de docs/03-copy/revena-start.md */
 export const revenaStart: Pagina = {
   rota: '/studio/revena-start',
-  titulo: 'Protocolo Revena Start | Estruturação comercial para clínicas em 90 dias',
+  titulo: 'Revena Start | Estruturação comercial para clínicas em 90 dias',
   descricao:
     'Do lead ao paciente na cadeira. CRM, processo, automações e dados implementados em 90 dias. Para clínicas de alto padrão.',
   blocos: [

@@ -40,12 +40,11 @@
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { pilares, protocolos } from '../../data/home';
+import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
+import Botao from '../ui/Botao.astro';
 
 const ordem = ['REVENA START', 'REVENA RUN', 'REVENA SCALE', 'REVENA CORE', 'REVENA FULL'];
-// Pilar → plano que o entrega (ver nota em Protocolos.astro).
-const planoDoPilar = ['REVENA CORE', 'REVENA START', 'REVENA FULL', 'REVENA RUN', 'REVENA SCALE'];
 
 const chave = (label: string) => label.replace('REVENA ', '').toLowerCase();
 const nome = (label: string) => { const n = chave(label); return n[0].toUpperCase() + n.slice(1); };
@@ -71,15 +70,12 @@ const pecas = (label: string): Peca[] => {
 
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
-  const iPilar = planoDoPilar.indexOf(label);
   return {
     id: chave(label),
     nome: nome(label),
     fala: p.fala,
     texto: p.texto,
     rota: p.rota,
-    pilar: pilares[iPilar],
-    numeroPilar: iPilar + 1,
     pecas: pecas(label),
   };
 });
@@ -90,13 +86,8 @@ const planos = ordem.map((label) => {
   <div class="palcoplanos__intro">
     <div class="container palcoplanos__cabeca">
       <div>
-        <p class="rotulo rotulo--pilula">Para clínicas</p>
-        <h2 class="palcoplanos__titulo">Protocolo Revena</h2>
+        <h2 class="palcoplanos__titulo">Revena</h2>
       </div>
-      <p class="palcoplanos__apoio">
-        Estruturamos sua operação do zero e operamos juntos no longo prazo.
-        <strong>Qual é o momento da sua clínica?</strong>
-      </p>
     </div>
   </div>
 
@@ -122,19 +113,12 @@ const planos = ordem.map((label) => {
 
             <div class="plano-palco__texto">
               <p class="plano-palco__frase">{p.texto}</p>
-              <a class="link-arrow" href={existe(p.rota) ? p.rota : '#'} class:list={[!existe(p.rota) && 'nav--pendente']} data-rota={p.rota}>Saiba mais</a>
+              <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="sm">Saiba mais</Botao>
             </div>
 
-            <dl class="plano-palco__dados">
-              <div>
-                <dt>Momento da clínica</dt>
-                <dd class="plano-palco__fala">“{p.fala}”</dd>
-              </div>
-              <div>
-                <dt>Pilar 0{p.numeroPilar}</dt>
-                <dd>{p.pilar.titulo}</dd>
-              </div>
-            </dl>
+            <div class="plano-palco__dados">
+              {p.fala.split(/(?<=\.)\s+/).map((linha) => <p class="plano-palco__fala">{linha}</p>)}
+            </div>
           </div>
         </article>
       ))}
