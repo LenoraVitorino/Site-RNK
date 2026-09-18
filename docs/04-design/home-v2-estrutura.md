@@ -253,3 +253,14 @@ Cloudflare a partir de `dist-publico`, uma cópia do `dist` com o vídeo
 leve no lugar do completo). O deploy temporário gera um endereço novo
 a cada vez (`site-renke.<nome>.workers.dev`) e vale por tempo limitado;
 o endereço fixo virá com a conta da Renke na Cloudflare.
+
+## Nome do plano no tamanho da referência (18/09/2026)
+
+`.plano-palco__nome` passou de `clamp(3.4rem, 7.6vw, 7.8rem)` numa caixa de
+`min(66svh, 720px)` para `clamp(3.4rem, 10vw, 10.5rem)` em
+`min(52vw, 80svh, 960px)`: o título da Tres Mares ocupa metade da largura da
+tela, uns 11vw. O nome agora vive só na linha 1 do grid (a faixa livre acima
+dos textos), então em telas baixas ele sobe em vez de encostar no "Momento
+da clínica" (em 1280×720 sobram 100px; em 1440×900, 171px). O ícone perdeu o
+`margin-top` e fica centrado na tela, um pouco abaixo do nome, como na
+referência. Sem mudança no celular.
