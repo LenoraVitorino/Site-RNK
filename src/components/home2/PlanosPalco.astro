@@ -41,7 +41,7 @@ const nome = (label: string) => { const n = chave(label); return n[0].toUpperCas
    unificado numa forma só, entram com os mesmos nomes. */
 type Peca = { formas: string; ouro: boolean };
 const pecas = (label: string): Peca[] => {
-  const arq = join(process.cwd(), 'public', 'icones', `plano-${chave(label)}-light.svg`);
+  const arq = join(__RAIZ__, 'public', 'icones', `plano-${chave(label)}-light.svg`);
   if (!existsSync(arq)) return [];
   const svg = readFileSync(arq, 'utf8');
   const lados: Record<'ouro' | 'papel', string[]> = { ouro: [], papel: [] };
@@ -251,7 +251,9 @@ const planos = ordem.map((label) => {
       const curso = dobra.offsetHeight - innerHeight;
       return { r, topo, curso };
     };
-    const posicaoDoPlano = (i: number, topo: number, curso: number) => topo + curso * ((i + SEGURA * 0.5) / (n - 1));
+    // O último plano só fica inteiro no fim do curso: o alvo do snap não pode
+    // passar dali, senão o palco desprende e a dobra seguinte aparece por baixo.
+    const posicaoDoPlano = (i: number, topo: number, curso: number) => topo + Math.min(curso, curso * ((i + SEGURA * 0.5) / (n - 1)));
 
     let ticking = false;
     const mede = () => {
