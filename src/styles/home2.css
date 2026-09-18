@@ -723,9 +723,10 @@ html:not(.js) .esteira__trilho { transform: none; }
 /* .title: 50,75vw, centrado, multiply; linha 1 à esquerda, linha 2 à direita. */
 .plano-palco__nome {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 50.75vw; margin: 0; display: grid; z-index: 1; mix-blend-mode: multiply; pointer-events: none;
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.02em; line-height: .92; text-transform: uppercase;
-  font-size: 10vw; color: #A0A0A0;
+  width: 50.75vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
+  /* Preto e com as letras mais juntas (Lenora, 18/09): a Inter fina em caixa alta fica solta com tracking frouxo. */
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.055em; word-spacing: -.06em; line-height: .92; text-transform: uppercase;
+  font-size: 10vw; color: var(--grafite);
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
@@ -746,11 +747,10 @@ html:not(.js) .esteira__trilho { transform: none; }
    o texto passa na frente (pedido da Lenora, 18/09). */
 .palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: min(39vw, 60svh); height: min(39vw, 60svh); overflow: visible; visibility: hidden; }
+.plano-palco__icone { width: min(39vw, 60svh); height: min(39vw, 60svh); overflow: visible; visibility: hidden; will-change: transform, opacity; }
 .palcoplanos__nomes { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
 .palcoplanos__nomes .plano-palco__nome { opacity: 0; }   /* o script liga só o do plano na tela */
 .plano-palco__nome--pilha { display: none; }   /* só na pilha do celular */
-.peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
 .peca--papel, .peca--ouro { fill: var(--destaque); }
 
 /* O cabeçalho some enquanto a dobra está presa (data-hide-header na referência). */

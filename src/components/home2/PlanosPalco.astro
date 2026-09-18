@@ -69,23 +69,6 @@ const pecas = (label: string): Peca[] => {
   return (['ouro', 'papel'] as const).filter((l) => lados[l].length).map((l) => ({ ouro: l === 'ouro', formas: lados[l].join('') }));
 };
 
-/* Coreografia do ícone por plano (Lenora, 17/09): de onde cada metade vem
-   ao entrar e para onde vai ao sair, em unidades do viewBox (1080 = o
-   ícone; a página inteira tem uns 3000 de largura). Metade 0 = lado
-   "ouro" do arquivo (class cls-1), metade 1 = o outro lado.
-     Start: as duas vêm da diagonal, dos cantos opostos da página, só
-            direção, e se encaixam 100% quando a página centraliza.
-     Run:   as duas vêm da esquerda e se formam à direita, em movimento.
-     Scale: mesma coisa, subindo.
-     Core:  uma de cima, outra de baixo. Full: igual ao Core. */
-const coreografia: Record<string, { entra: [number, number][]; sai: [number, number][] }> = {
-  start: { entra: [[-1000, 900], [1000, -900]], sai: [[-1000, 900], [1000, -900]] },
-  run:   { entra: [[-1500, 0], [-1500, 0]],    sai: [[1500, 0], [1500, 0]] },
-  scale: { entra: [[0, 1300], [0, 1300]],      sai: [[0, -1300], [0, -1300]] },
-  core:  { entra: [[0, 1100], [0, -1100]],     sai: [[0, 1100], [0, -1100]] },
-  full:  { entra: [[0, -1100], [0, 1100]],     sai: [[0, -1100], [0, 1100]] },
-};
-
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   const iPilar = planoDoPilar.indexOf(label);
@@ -98,7 +81,6 @@ const planos = ordem.map((label) => {
     pilar: pilares[iPilar],
     numeroPilar: iPilar + 1,
     pecas: pecas(label),
-    coreografia: coreografia[chave(label)],
   };
 });
 ---
@@ -161,7 +143,7 @@ const planos = ordem.map((label) => {
            assim a linha de revelação da dobra que entra não corta o ícone. -->
       <div class="palcoplanos__icones" aria-hidden="true">
         {planos.map((p, i) => (
-          <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
+          <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
             {p.pecas.map((peca, k) => (
               <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
             ))}
@@ -201,14 +183,6 @@ const planos = ordem.map((label) => {
     const entraSai = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
     const desktop = () => !matchMedia('(max-width: 899.98px)').matches;
 
-    type Vetor = [number, number];
-    const pecas = icones.map((svg) => {
-      const c = JSON.parse(svg.dataset.coreografia || '{"entra":[],"sai":[]}') as { entra: Vetor[]; sai: Vetor[] };
-      return [...svg.querySelectorAll<SVGGElement>('[data-peca]')].map((g, j) => {
-        const b = g.getBBox();
-        return { g, entra: c.entra[j] || [0, 0], sai: c.sai[j] || [0, 0], cx: b.x + b.width / 2 - 540, cy: b.y + b.height / 2 - 540 };
-      });
-    });
     const escondido = layers.map(() => true);
 
     let ativo = -1;
@@ -237,16 +211,12 @@ const planos = ordem.map((label) => {
       infos[k].style.transform = `translate3d(0, ${((1 - dentro) * 30 - fora * 30).toFixed(2)}%, 0)`;     // infos: 30% → 0 → −30%
       infos[k].style.opacity = String(clamp(1 - fora * 2));                // infosNotLast: 1 → −1 (some na primeira metade)
       nomes[k].style.opacity = String(clamp(dentro * 4 - 3) * clamp(1 - fora * 4));   // titles: −3 → 1 / 1 → −3
-      // Ícone: as metades chegam na coreografia do plano ao longo do trecho
-      // e, ao sair, se recolhem ao centro e somem.
-      pecas[k].forEach(({ g, entra, cx, cy }, j) => {
-        const ein = entraSai(clamp((dentro - 0.08 - j * 0.05) / 0.87));
-        const eout = entraSai(clamp((fora - j * 0.04) / 0.6));
-        const x = entra[0] * (1 - ein) - cx * eout;
-        const y = entra[1] * (1 - ein) - cy * eout;
-        g.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${(1 - 0.62 * eout).toFixed(3)})`;
-        g.style.opacity = String(clamp(ein * 3) * clamp((0.7 - fora) / 0.12 + 1));
-      });
+      // Ícone inteiro, como a forma da referência: sai esmaecendo na primeira
+      // metade e subindo com o info; entra esmaecendo na segunda metade e
+      // subindo do fundo, um pouco menor.
+      const ic = icones[k];
+      ic.style.opacity = String(clamp(dentro * 2 - 1) * clamp(1 - fora * 2));
+      ic.style.transform = `translate3d(0, ${((1 - dentro) * 30 - fora * 30).toFixed(2)}%, 0) scale(${(0.92 + 0.08 * dentro - 0.08 * fora).toFixed(3)})`;
     };
 
     const medidas = () => {
@@ -281,11 +251,8 @@ const planos = ordem.map((label) => {
         infos[0].style.transform = `translate3d(0, ${((1 - pre) * 15).toFixed(2)}%, 0)`;
         infos[0].style.opacity = String(clamp(pre * 4 - 3));
         nomes[0].style.opacity = String(clamp(pre * 4 - 3));
-        pecas[0].forEach(({ g, entra }, j) => {
-          const ein = entraSai(clamp((pre - 0.08 - j * 0.05) / 0.87));
-          g.style.transform = `translate(${(entra[0] * (1 - ein)).toFixed(1)}px, ${(entra[1] * (1 - ein)).toFixed(1)}px) scale(1)`;
-          g.style.opacity = String(clamp(ein * 3));
-        });
+        icones[0].style.opacity = String(clamp(pre * 4 - 3));
+        icones[0].style.transform = `translate3d(0, ${((1 - pre) * 15).toFixed(2)}%, 0) scale(1)`;
       }
       marca(f < 0.5 ? de : de + 1);
     };

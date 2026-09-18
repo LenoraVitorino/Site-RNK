@@ -312,3 +312,15 @@ por plano, centrado, sem corte) e `.palcoplanos__nomes` (z 5, um
 `.plano-palco__nome` por plano, opacidade 0 por padrão e ligada pelo script
 só para o plano na tela). Na pilha do celular o nome é o
 `.plano-palco__nome--pilha`, dentro do info; as duas camadas ficam ocultas.
+
+## Ícone inteiro e nome preto (18/09/2026)
+
+Bugs apontados pela Lenora em gravação: o ícone que saía encolhia num
+bloquinho fora do centro e o que entrava chegava em metades, uma delas
+meio transparente. A coreografia das metades saiu de vez (frontmatter,
+`data-coreografia` e o laço das peças). O ícone inteiro faz o que o info
+faz na referência: sai esmaecendo na primeira metade do trecho, subindo 30%
+e encolhendo a 92%; entra esmaecendo na segunda metade, subindo do fundo.
+Na chegada da dobra, o primeiro ícone aparece no último quarto com o info.
+O nome do plano ficou preto (`--grafite`), sem `multiply`, com tracking
+`-.055em` e `word-spacing -.06em`: a Inter fina em caixa alta ficava solta.
