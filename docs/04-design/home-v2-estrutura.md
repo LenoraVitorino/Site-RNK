@@ -339,3 +339,14 @@ saíram; a frase "Revenue Operations para transformar clínicas em negócios
 de alta performance." saiu da hero. A barra de logos da versão copy segue.
 No celular tudo empilha: rótulo, título, objeto, ano, lead, segundo título,
 CTA, fio.
+
+## Cena da hero por tempo (18/09/2026)
+
+No desenho novo, o título à esquerda toca uma cena ao carregar, sem trava
+de rolagem: "Isso não é / marketing / para clínicas." entra; a 0,9 s o
+risco (gradiente de `background-size` 0 → 100%) passa por "marketing" e
+"para clínicas."; a 2,2 s as duas linhas riscadas fecham (dobras em grid,
+`1fr → 0fr`), o "não" se recolhe (`max-width → 0`, com `&nbsp;` dentro
+para o espaço não sumir) e "RevOps." sobe no lugar. Fica "Isso é /
+RevOps.". Sem JS (`html:not(.js)`) ou com menos movimento, o estado final
+direto. O segundo título da direita saiu; lá ficam ano, lead e CTA.

@@ -29,13 +29,15 @@ const lead = copyLiteral ? hero.lead : leadCurto;
   <div class="hero__grade">
     <div class="hero__esq">
       <p class="hero__rotulo"><span class="hero__quadrado"></span>RevOps para clínicas</p>
-      <!-- Um bloco só (Lenora, 18/09): "Isso não é", o "marketing para clínicas."
-           riscado, e embaixo "Isso é RevOps." com o RevOps no amarelo. -->
-      <h1 class="hero__h1">
-        <span class="hero__linha">Isso não é</span>
-        <span class="hero__linha hero__linha--riscada">marketing</span>
-        <span class="hero__linha hero__linha--riscada">para clínicas.</span>
-        <span class="hero__linha">Isso é <span class="hero__linha--destaque">RevOps.</span></span>
+      <!-- A cena, por tempo (Lenora, 18/09): "Isso não é marketing para
+           clínicas." entra; o risco passa por "marketing para clínicas."; o
+           riscado some junto com o "não" e "RevOps." sobe no lugar. Fica
+           "Isso é / RevOps.". Sem JS ou com menos movimento: estado final. -->
+      <h1 class="hero__h1" data-cena aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
+        <span class="hero__linha" aria-hidden="true">Isso <span class="hero__nao">não&nbsp;</span>é</span>
+        <span class="hero__dobra hero__dobra--riscada" aria-hidden="true"><span class="hero__linha hero__linha--riscada"><span>marketing</span></span></span>
+        <span class="hero__dobra hero__dobra--riscada" aria-hidden="true"><span class="hero__linha hero__linha--riscada"><span>para clínicas.</span></span></span>
+        <span class="hero__dobra hero__dobra--revops" aria-hidden="true"><span class="hero__linha hero__linha--destaque">RevOps.</span></span>
       </h1>
     </div>
 
@@ -81,3 +83,18 @@ const lead = copyLiteral ? hero.lead : leadCurto;
     </div>
     )}
 </section>
+
+<script>
+  /* A cena da hero, tocada uma vez ao carregar: 0,9 s até o risco começar,
+     mais 1,3 s até o riscado e o "não" saírem e o RevOps entrar. Com menos
+     movimento, vai direto ao fim. */
+  const h1 = document.querySelector<HTMLElement>('[data-cena]');
+  if (h1) {
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduz) h1.classList.add('hero--risca', 'hero--some');
+    else {
+      setTimeout(() => h1.classList.add('hero--risca'), 900);
+      setTimeout(() => h1.classList.add('hero--some'), 2200);
+    }
+  }
+</script>

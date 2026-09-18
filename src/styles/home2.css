@@ -353,11 +353,26 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 }
 .hero__linha { display: block; }
 .hero__linha--destaque { color: var(--destaque); }
-/* O "marketing para clínicas." riscado: amarelo apagado com o risco no amarelo cheio. */
-.hero__linha--riscada {
-  color: rgb(255 209 3 / .55);
-  text-decoration: line-through; text-decoration-color: var(--destaque); text-decoration-thickness: .06em;
+/* A cena: cada linha que entra ou sai é uma "dobra" (grid de 1fr ↔ 0fr) para
+   as linhas de baixo subirem junto. */
+.hero__dobra { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .7s var(--easing), opacity .45s var(--easing), transform .7s var(--easing); }
+.hero__dobra > .hero__linha { min-height: 0; overflow: hidden; }
+/* "marketing para clínicas." em amarelo apagado; o risco é um gradiente que cresce da esquerda. */
+.hero__linha--riscada > span {
+  color: rgb(255 209 3 / .6);
+  background: linear-gradient(var(--destaque), var(--destaque)) 0 56% / 0 .06em no-repeat;
+  transition: background-size .8s cubic-bezier(.65, 0, .35, 1);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
+.hero--risca .hero__linha--riscada > span, html:not(.js) .hero__linha--riscada > span { background-size: 100% .06em; }
+/* O riscado some (dobra fecha) e o "não" se recolhe. */
+.hero--some .hero__dobra--riscada, html:not(.js) .hero__dobra--riscada { grid-template-rows: 0fr; opacity: 0; }
+.hero__nao { display: inline-block; max-width: 4em; overflow: hidden; white-space: nowrap; vertical-align: bottom; transition: max-width .6s var(--easing), opacity .35s var(--easing); }
+.hero--some .hero__nao, html:not(.js) .hero__nao { max-width: 0; opacity: 0; }
+/* "RevOps." entra no lugar. */
+.hero__dobra--revops { grid-template-rows: 0fr; opacity: 0; transform: translateY(.25em); }
+.hero--some .hero__dobra--revops, html:not(.js) .hero__dobra--revops { grid-template-rows: 1fr; opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .hero__dobra, .hero__nao, .hero__linha--riscada > span { transition: none; } }
 .hero__objeto { justify-self: center; align-self: start; margin-top: clamp(0px, 3vh, 32px); }
 .hero__objeto img {
   width: clamp(150px, 17vw, 300px); height: auto;
