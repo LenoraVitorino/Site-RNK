@@ -135,7 +135,7 @@ const planos = ordem.map((label) => {
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>
-            <p class="plano-palco__nome" data-nome aria-hidden="true"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
+            <p class="plano-palco__nome plano-palco__nome--pilha" aria-hidden="true"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
             <h3 class="plano-palco__h3">Revena {p.nome}</h3>
 
             <div class="plano-palco__texto">
@@ -157,7 +157,8 @@ const planos = ordem.map((label) => {
         </article>
       ))}
 
-      <!-- Os ícones, numa camada só no centro, por cima dos planos (o SVG da referência). -->
+      <!-- Os ícones numa camada só, por cima das dobras (como o SVG da referência):
+           assim a linha de revelação da dobra que entra não corta o ícone. -->
       <div class="palcoplanos__icones" aria-hidden="true">
         {planos.map((p, i) => (
           <svg class="plano-palco__icone" data-icone={i} data-coreografia={JSON.stringify(p.coreografia)} viewBox="0 0 1080 1080" focusable="false">
@@ -165,6 +166,13 @@ const planos = ordem.map((label) => {
               <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
             ))}
           </svg>
+        ))}
+      </div>
+
+      <!-- Os nomes por cima dos ícones: o texto fica na frente (pedido da Lenora, 18/09). -->
+      <div class="palcoplanos__nomes" aria-hidden="true">
+        {planos.map((p) => (
+          <p class="plano-palco__nome" data-nome><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
         ))}
       </div>
     </div>
@@ -185,7 +193,7 @@ const planos = ordem.map((label) => {
     const icones = [...dobra.querySelectorAll<SVGSVGElement>('[data-icone]')];
     const imagens = layers.map((l) => l.querySelector<HTMLElement>('[data-imagem]')!);
     const infos = layers.map((l) => l.querySelector<HTMLElement>('[data-info]')!);
-    const nomes = layers.map((l) => l.querySelector<HTMLElement>('[data-nome]')!);
+    const nomes = [...dobra.querySelectorAll<HTMLElement>('[data-nome]')];   // na camada de nomes, na mesma ordem dos planos
     const itens = [...dobra.querySelectorAll<HTMLElement>('[data-plano-ir]')];
     const header = document.getElementById('header');
     const n = layers.length;
@@ -217,7 +225,7 @@ const planos = ordem.map((label) => {
       const l = layers[k];
       const visivel = dentro > 0 && fora < 1;
       if (!visivel) {
-        if (!escondido[k]) { l.style.visibility = 'hidden'; icones[k].style.visibility = 'hidden'; escondido[k] = true; }
+        if (!escondido[k]) { l.style.visibility = 'hidden'; icones[k].style.visibility = 'hidden'; nomes[k].style.opacity = '0'; escondido[k] = true; }
         return;
       }
       if (escondido[k]) { l.style.visibility = 'visible'; icones[k].style.visibility = 'visible'; escondido[k] = false; }

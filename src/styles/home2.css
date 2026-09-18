@@ -717,7 +717,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
-.plano-palco__info { position: absolute; inset: 0; pointer-events: none; will-change: transform, opacity; }
+.plano-palco__info { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: transform, opacity; }
 .plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* .title: 50,75vw, centrado, multiply; linha 1 à esquerda, linha 2 à direita. */
@@ -741,10 +741,15 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
 .plano-palco__fala { font-style: italic; }
 
-/* Ícones: camada única no centro, por cima dos planos (o SVG da referência). */
+/* Ícones: camada única no centro, por cima das dobras (o SVG da referência) — a linha de
+   revelação da dobra não corta o ícone. Os nomes ficam numa camada acima dos ícones:
+   o texto passa na frente (pedido da Lenora, 18/09). */
 .palcoplanos__icones { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
 .plano-palco__icone { width: min(39vw, 60svh); height: min(39vw, 60svh); overflow: visible; visibility: hidden; }
+.palcoplanos__nomes { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
+.palcoplanos__nomes .plano-palco__nome { opacity: 0; }   /* o script liga só o do plano na tela */
+.plano-palco__nome--pilha { display: none; }   /* só na pilha do celular */
 .peca { transform-box: fill-box; transform-origin: center; will-change: transform, opacity; }
 .peca--papel, .peca--ouro { fill: var(--destaque); }
 
@@ -772,12 +777,13 @@ html:not(.js) .esteira__trilho { transform: none; }
   .plano-palco__frase, .plano-palco__texto .link-arrow { font-size: 15px; line-height: 1.4; }
   .plano-palco__dados dt { font-size: 10.5px; letter-spacing: .08em; }
   .plano-palco__dados dd { font-size: 15px; line-height: 1.4; }
-  .palcoplanos__icones { display: none; }
+  .palcoplanos__icones, .palcoplanos__nomes { display: none; }
+  .plano-palco__nome--pilha { display: grid; }
   .header--oculto { transform: none; }
 }
 html:not(.js) .palcoplanos__trilho { height: auto; }
 html:not(.js) .palcoplanos__fixo { position: static; height: auto; overflow: visible; }
-html:not(.js) .palcoplanos__ancoras, html:not(.js) .palcoplanos__icones { display: none; }
+html:not(.js) .palcoplanos__ancoras, html:not(.js) .palcoplanos__icones, html:not(.js) .palcoplanos__nomes { display: none; }
 html:not(.js) .plano-palco { position: relative; inset: auto; visibility: visible; }
 html:not(.js) .palcoplanos__fixo { background: var(--pp-fundo); }
 html:not(.js) .plano-palco__miolo { position: relative; inset: auto; padding-block: 48px; }

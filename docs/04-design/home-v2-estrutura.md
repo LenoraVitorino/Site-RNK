@@ -301,3 +301,14 @@ lidos do site em 18/09/2026 (viewport 1440×900):
 A abertura com "PROTOCOLO REVENA" por cima do ícone de vidro (pedida por
 print no mesmo dia) foi revertida a pedido dela. Pilha do celular mantida,
 com a marcação nova.
+
+## Nome na frente do ícone (18/09/2026)
+
+Pedido da Lenora: o texto na frente do ícone. Primeira tentativa (ícone
+dentro da dobra, entre o fundo e o info) bugava: o `clip-path` da dobra que
+entra cortava o ícone ao meio e o ícone do plano que sai apagava com a dobra.
+Solução: três camadas sobre as dobras — `.palcoplanos__icones` (z 4, um SVG
+por plano, centrado, sem corte) e `.palcoplanos__nomes` (z 5, um
+`.plano-palco__nome` por plano, opacidade 0 por padrão e ligada pelo script
+só para o plano na tela). Na pilha do celular o nome é o
+`.plano-palco__nome--pilha`, dentro do info; as duas camadas ficam ocultas.
