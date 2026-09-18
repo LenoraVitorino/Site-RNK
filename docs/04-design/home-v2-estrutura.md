@@ -253,3 +253,11 @@ Cloudflare a partir de `dist-publico`, uma cópia do `dist` com o vídeo
 leve no lugar do completo). O deploy temporário gera um endereço novo
 a cada vez (`site-renke.<nome>.workers.dev`) e vale por tempo limitado;
 o endereço fixo virá com a conta da Renke na Cloudflare.
+
+## Snap do último plano (18/09/2026)
+
+O alvo do snap era `topo + curso × (i + 0,1) / (n − 1)`: para o quinto plano
+isso passava 2,5% do curso (90px numa tela de 900), o `.palcoplanos__fixo`
+desprendia e a cortina das Perguntas aparecia por baixo. O alvo agora é
+limitado ao fim do curso (`Math.min(curso, …)`); o Revena Full descansa
+inteiro, com o palco ainda preso.
