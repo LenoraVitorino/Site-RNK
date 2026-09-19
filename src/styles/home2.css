@@ -679,7 +679,6 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
 .plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
 .plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-enfase); }
-.plano-palco__indice { font-size: 11px; letter-spacing: .12em; opacity: .5; }
 
 /* Símbolo e nome dentro de cada plano: imóveis durante a sobreposição. */
 .palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
