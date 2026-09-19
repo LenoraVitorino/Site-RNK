@@ -92,13 +92,13 @@ export const protocolos = [
 
 /** ⚠️ D8: o layout pede grid 2×2 (4 slots); a copy traz 7 perguntas. */
 export const perguntas = [
-  { titulo: 'Aquisição sob controle', texto: 'Saiba quanto sua clínica investe para conquistar cada novo paciente e quais canais realmente geram retorno.' },
-  { titulo: 'Mais leads convertidos', texto: 'Acompanhe cada oportunidade do primeiro contato ao agendamento e reduza os leads que se perdem no caminho.' },
-  { titulo: 'Processos que funcionam', texto: 'Estruture a operação comercial para que os resultados não dependam de uma única pessoa.' },
-  { titulo: 'Investimento mais inteligente', texto: 'Identifique os canais que trazem os melhores pacientes e direcione sua verba para onde existe mais potencial.' },
-  { titulo: 'Decisões baseadas em dados', texto: 'Encontre rapidamente os gargalos que impactam seus resultados e saiba onde agir.', excedente: true },
-  { titulo: 'Crescimento replicável', texto: 'Entenda o que gera resultado, transforme em processo e replique o que funciona.', excedente: true },
-  { titulo: 'Oportunidades de mercado', texto: 'Acompanhe concorrentes, movimentos e espaços ainda pouco explorados para encontrar novas oportunidades de crescimento.', excedente: true },
+  { titulo: 'Aquisição sob controle', texto: 'Clareza sobre o investimento por paciente e os canais que realmente geram retorno.' },
+  { titulo: 'Mais conversão', texto: 'Acompanhe cada oportunidade até o agendamento e reduza perdas ao longo do processo.' },
+  { titulo: 'Processos que funcionam', texto: 'Uma operação comercial estruturada, sem depender de uma única pessoa.' },
+  { titulo: 'Investimento mais inteligente', texto: 'Direcione verba para os canais e estratégias com maior potencial de retorno.' },
+  { titulo: 'Decisões baseadas em dados', texto: 'Indicadores claros para identificar pontos de perda e definir onde agir.', excedente: true },
+  { titulo: 'Crescimento replicável', texto: 'Transforme o que funciona em processo e replique resultados com consistência.', excedente: true },
+  { titulo: 'Oportunidades de mercado', texto: 'Inteligência sobre concorrência, movimentos e espaços para novas oportunidades de crescimento.', excedente: true },
 ];
 
 /** ⚠️ Números placeholder — nota do próprio briefing. */
