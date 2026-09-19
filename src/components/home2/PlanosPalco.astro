@@ -1,8 +1,8 @@
 ---
 /**
  * Revena: palco de rolagem inspirado na seção Financial solutions da Tresmares.
- * Camadas sobem com recorte, títulos se alternam e os símbolos permanecem no
- * centro, desmontando e remontando suas peças. Ver docs/04-design/planos-movimento.md.
+ * Cada símbolo se monta perto do centro e permanece estático. A próxima
+ * dobra sobe com recorte e escurece a anterior. Ver docs/04-design/planos-movimento.md.
  * Sem JS, em telas pequenas ou com movimento reduzido: todos os planos em pilha.
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -88,26 +88,20 @@ const planos = ordem.map((label) => {
               {p.fala.split(/(?<=\.)\s+/).map((linha) => <p class="plano-palco__fala">{linha}</p>)}
             </div>
           </div>
+          <!-- Cada símbolo pertence à sua dobra: a próxima camada o cobre por inteiro. -->
+          <div class="palcoplanos__icones" aria-hidden="true">
+            <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
+              {p.pecas.map((peca, k) => (
+                <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
+              ))}
+            </svg>
+          </div>
+          <div class="palcoplanos__nomes" aria-hidden="true">
+            <p class="plano-palco__nome" data-nome><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
+          </div>
         </article>
       ))}
 
-      <!-- Símbolos independentes do recorte: as peças atravessam a troca dos fundos. -->
-      <div class="palcoplanos__icones" aria-hidden="true">
-        {planos.map((p, i) => (
-          <svg class="plano-palco__icone" data-icone={i} viewBox="0 0 1080 1080" focusable="false">
-            {p.pecas.map((peca, k) => (
-              <g class:list={['peca', peca.ouro ? 'peca--ouro' : 'peca--papel']} data-peca={k} set:html={peca.formas} />
-            ))}
-          </svg>
-        ))}
-      </div>
-
-      <!-- Os nomes por cima dos ícones: o texto fica na frente (pedido da Lenora, 18/09). -->
-      <div class="palcoplanos__nomes" aria-hidden="true">
-        {planos.map((p) => (
-          <p class="plano-palco__nome" data-nome><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></p>
-        ))}
-      </div>
     </div>
   </div>
 </section>
@@ -131,8 +125,16 @@ const planos = ordem.map((label) => {
     let top = 0, travel = 1, height = 1, current = 0, target = 0;
     let frame = 0, previousTime = 0, snapTimer = 0, scrollFrame = 0;
     let active = -1;
-    // Directions in SVG units: each official symbol retains its own composition.
-    const directions = [[-150, 150], [-180, 0], [0, 180], [0, -180], [150, -150]];
+    // Ordem das peças: ouro, papel. Deslocamentos curtos no viewBox de 1080.
+    // Start: esquerda por baixo / direita por cima. Run: ambas da esquerda.
+    // Scale: ambas de baixo. Core e Full: metades opostas em direção ao centro.
+    const directions = [
+      [[-110, 110], [110, -110]],
+      [[-150, 0], [-210, 0]],
+      [[0, 150], [0, 210]],
+      [[0, 140], [0, -140]],
+      [[0, -140], [0, 140]],
+    ];
 
     function measure() {
       top = trilho!.getBoundingClientRect().top + scrollY;
@@ -164,40 +166,28 @@ const planos = ordem.map((label) => {
         layer.style.visibility = visible ? 'visible' : 'hidden';
         layer.style.zIndex = String(i + 1);
         layer.style.clipPath = `inset(${(100 * (1 - incoming)).toFixed(3)}% 0 0)`;
-        layer.style.opacity = String(1 - outgoing);
-        images[i].style.transform = `translate3d(0,${20 * (1 - incoming - outgoing)}%,0)`;
-        infos[i].style.transform = `translate3d(0,${30 * (1 - incoming - outgoing)}%,0)`;
-        infos[i].style.opacity = String(clamp(1 - outgoing * 2));
-        names[i].style.opacity = String(clamp(incoming * 4 - 3) * clamp(1 - outgoing * 4));
-        // The title travels with its information layer, independently of the wipe.
-        names[i].style.translate = `0 ${30 * (1 - incoming - outgoing)}vh`;
+        // Depois de montada, a dobra permanece imóvel e só escurece sob a próxima.
+        layer.style.opacity = '1';
+        layer.style.filter = `brightness(${1 - outgoing * .58})`;
+        images[i].style.transform = 'none';
+        infos[i].style.transform = 'none';
+        infos[i].style.opacity = '1';
+        names[i].style.opacity = '1';
+        names[i].style.translate = 'none';
         icons[i].style.visibility = visible ? 'visible' : 'hidden';
-        // Continuous silhouette: collapse into a small central form, then unfold.
-        // Both forms overlap at mid-transition; there is no blank frame.
-        const enter = ease(clamp((incoming - .5) / .5));
-        const leave = ease(clamp(outgoing / .5));
-        const opacity = clamp((incoming - .38) / .16) * (1 - clamp((outgoing - .46) / .16));
-        icons[i].style.opacity = String(opacity);
-        const scale = .34 + .66 * enter - .66 * leave;
-        icons[i].style.transform = `translate3d(0,${(1 - enter - leave) * 4}%,0) scale(${Math.max(.24, scale)})`;
+        icons[i].style.opacity = '1';
+        icons[i].style.transform = 'none';
+        // A montagem termina antes da chegada completa, deixando o símbolo em repouso.
+        // A saída nunca altera as peças: não há morph, rotação nem redução do conjunto.
+        const arrival = i === 0 ? pre : incoming;
+        const assembled = ease(clamp((arrival - .38) / .5));
         pieces[i].forEach((piece, k) => {
-          const sign = k === 0 ? 1 : -1;
-          const amount = (1 - enter) + leave;
-          const [x, y] = directions[i];
-          piece.setAttribute('transform', `translate(${sign * x * amount} ${sign * y * amount}) rotate(${sign * amount * 18} 540 540)`);
+          const [x, y] = directions[i][k];
+          piece.setAttribute('transform', `translate(${x * (1 - assembled)} ${y * (1 - assembled)})`);
         });
       });
-      if (pre < 1) {
-        const arrival = ease(clamp((pre - .3) / .7));
-        images[0].style.transform = `translate3d(0,${-10 * (1 - pre)}%,0)`;
-        infos[0].style.transform = `translate3d(0,${15 * (1 - pre)}%,0)`;
-        infos[0].style.opacity = String(clamp(pre * 4 - 3));
-        names[0].style.opacity = String(clamp(pre * 4 - 3));
-        names[0].style.translate = `0 ${15 * (1 - pre)}vh`;
-        icons[0].style.opacity = String(arrival);
-        icons[0].style.transform = `translate3d(0,${12 * (1 - arrival)}%,0) scale(${.65 + .35 * arrival})`;
-      }
     }
+
     function animate(time: number) {
       const dt = previousTime ? Math.min(64, time - previousTime) : 16;
       previousTime = time;
