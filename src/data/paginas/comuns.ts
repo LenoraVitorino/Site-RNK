@@ -11,7 +11,6 @@ import type { Bloco } from './tipos';
 /** Seção 4 do Core e do Scale, palavra por palavra. */
 export const analiseDeMercado: Bloco = {
   tipo: 'texto',
-  eyebrow: 'Diferencial estratégico',
   h2: 'Antes de gastar um real, a gente te mostra o jogo.',
   fundo: 'alt',
   paragrafos: [

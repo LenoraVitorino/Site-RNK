@@ -31,37 +31,30 @@ export const revenaStart: Pagina = {
     {
       tipo: 'blocos',
       h2: 'O que o Start faz',
+      largo: true,
       itens: [
         {
           titulo: 'Marketing conectado ao comercial',
           texto: 'Rastreie a origem de cada lead e acompanhe sua jornada até o fechamento.',
         },
         {
-          titulo: 'Dados em uma única fonte',
-          texto: 'Informações centralizadas, confiáveis e prontas para orientar decisões.',
-        },
-        {
           titulo: 'Processo comercial estruturado',
-          texto: 'Roteiros, etapas e critérios claros para o time seguir.',
+          texto: 'Roteiros, etapas e critérios claros, com recuperação de oportunidades que ficaram pelo caminho.',
         },
         {
           titulo: 'Automação da operação',
           texto: 'Follow-ups, lembretes, confirmações e alertas acontecendo no momento certo.',
         },
         {
-          titulo: 'Recuperação de oportunidades',
-          texto: 'Processos para reativar leads e orçamentos que ficaram pelo caminho.',
-        },
-        {
           titulo: 'Dados que orientam decisões',
-          texto: 'Custo por paciente, conversão por etapa e performance por canal.',
+          texto: 'Uma fonte única e confiável: custo por paciente, conversão por etapa e performance por canal.',
         },
       ],
     },
     {
       tipo: 'etapas',
       fundo: 'alt',
-      h2: ['Primeiro, entendemos. Depois, estruturamos.'],
+      h2: ['Etapas do Start'],
       etapas: [
         { n: '1', duracao: '10 dias', nome: 'Onboarding', descricao: 'Acessos, briefing e alinhamento inicial.' },
         { n: '2', duracao: '30 dias', nome: 'Diagnóstico', descricao: 'Mapeamento da jornada, processos, canais e oportunidades.' },

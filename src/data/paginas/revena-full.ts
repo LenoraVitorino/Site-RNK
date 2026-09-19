@@ -55,7 +55,7 @@ export const revenaFull: Pagina = {
     {
       tipo: 'etapas',
       fundo: 'alt',
-      h2: ['Etapas do projeto'],
+      h2: ['Etapas do Full'],
       etapas: [
         { n: '1', duracao: '10 dias', nome: 'Onboarding', descricao: 'Coleta de acessos, briefing e kick-off para iniciar o projeto.' },
         { n: '2', duracao: '30 dias', nome: 'Diagnóstico', descricao: 'Mapeamento da jornada do paciente, processos, regras e oportunidades de automação.' },
