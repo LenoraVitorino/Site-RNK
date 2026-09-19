@@ -13,7 +13,7 @@ export const seo = {
 export const hero = {
   // ⚠️ D1: conflita com "+140 clínicas" da seção Sobre.
   numeros: ['~30 clínicas', 'Método validado há 4 anos', 'R$42M em faturamento gerado'],
-  cta: 'Descubra se faz sentido para sua clínica',
+  cta: 'Quero conhecer',
   lead:
     'Sua clínica fatura bem, mas você não sabe de onde vem cada real nem onde trava quando os ' +
     'números caem. Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo ' +
@@ -60,8 +60,8 @@ export const pilares = [
 export const protocolos = [
   {
     label: 'REVENA START',
-    fala: 'Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados.',
-    texto: 'Organizamos seu processo comercial do zero em 90 dias.',
+    fala: 'CRM que organiza sua operação. Leads, oportunidades e vendas rastreados de ponta a ponta.',
+    texto: 'Organizamos seu comercial em 90 dias. Processos claros, automações e dados confiáveis.',
     rota: '/studio/revena-start',
   },
   {
@@ -92,30 +92,29 @@ export const protocolos = [
 
 /** ⚠️ D8: o layout pede grid 2×2 (4 slots); a copy traz 7 perguntas. */
 export const perguntas = [
-  { texto: 'Quanto custa um paciente novo pra sua clínica? De verdade, não o que a agência diz.' },
-  { texto: 'Dos leads que chegam, quantos sentam na cadeira do seu consultório?' },
-  { texto: 'Se sua secretária sai amanhã, o processo continua?' },
-  { texto: 'Você sabe qual canal trouxe seus melhores pacientes este mês?' },
-  { texto: 'No mês que o resultado não foi bom, você encontra o motivo baseado em dados e com facilidade?', excedente: true },
-  { texto: 'E no mês que o resultado foi bom, você consegue atribuir o porquê para replicar?', excedente: true },
-  { texto: 'Você sabe o que seus concorrentes estão comunicando agora e qual espaço estão deixando aberto pra você?', excedente: true },
+  { titulo: 'Aquisição sob controle', texto: 'Clareza sobre o investimento por paciente e os canais que realmente geram retorno.' },
+  { titulo: 'Mais conversão', texto: 'Acompanhe cada oportunidade até o agendamento e reduza perdas ao longo do processo.' },
+  { titulo: 'Processos que funcionam', texto: 'Uma operação comercial estruturada, sem depender de uma única pessoa.' },
+  { titulo: 'Investimento mais inteligente', texto: 'Direcione verba para os canais e estratégias com maior potencial de retorno.' },
+  { titulo: 'Decisões baseadas em dados', texto: 'Indicadores claros para identificar pontos de perda e definir onde agir.', excedente: true },
+  { titulo: 'Crescimento replicável', texto: 'Transforme o que funciona em processo e replique resultados com consistência.', excedente: true },
+  { titulo: 'Oportunidades de mercado', texto: 'Inteligência sobre concorrência, movimentos e espaços para novas oportunidades de crescimento.', excedente: true },
 ];
 
 /** ⚠️ Números placeholder — nota do próprio briefing. */
 export const resultados = [
-  { especialidade: 'Dermatologia', antes: 'Taxa de agendamento baixa, 7%', numero: '19%', depois: '19% de agendamento em 90 dias' },
-  { especialidade: 'Otorrino', antes: 'Comercial sem tempo para fazer follow-up e resgates', numero: '29%', depois: 'Processo automatizado e recuperação de leads' },
-  { especialidade: 'Cirurgia plástica', antes: 'Raramente vendia para leads do tráfego', numero: '38%', depois: 'Digital responsável por 38% da receita' },
-  { especialidade: 'Nutrologia', antes: 'Pacientes sumiam depois do 1º protocolo', numero: '24%', depois: 'reativados no trimestre' },
-  { especialidade: 'Tricologia', antes: 'Não mensurava quais leads eram do tráfego e quais do orgânico', numero: '60 dias', depois: 'Painel unificado com tudo rastreado' },
+  { especialidade: 'Dermatologia', numero: '19%', texto: 'Taxa de agendamento de 19% alcançada em apenas 90 dias de operação.' },
+  { especialidade: 'Otorrino', numero: '29%', texto: 'Leads recuperados com processos comerciais automatizados e follow-ups estruturados.' },
+  { especialidade: 'Cirurgia plástica', numero: '38%', texto: 'O digital passou a representar 38% da receita total da clínica.' },
+  { especialidade: 'Nutrologia', numero: '24%', texto: 'Pacientes reativados ao longo do trimestre por meio de ações estruturadas de relacionamento.' },
+  { especialidade: 'Tricologia', numero: '60 dias', texto: 'Rastreamento completo da origem dos leads, com dados centralizados em um único painel.' },
 ];
 
 export const formulario = {
-  titulo: 'Antes de trocar de agência de novo, descubra o que é RevOps.',
+  titulo: 'Pronto para transformar a operação da sua clínica?',
   texto:
-    'O problema da maioria das clínicas não é o canal de marketing. É que ninguém conecta o ' +
-    'anúncio ao paciente na cadeira. Isso tem nome: falta de RevOps. Preencha o formulário e veja ' +
-    'se faz sentido para sua clínica.',
+    'Conecte marketing, vendas e operação para atrair mais pacientes e transformar oportunidades ' +
+    'em crescimento.',
   botao: 'Quero saber se faz sentido',
   faixasFaturamento: ['Selecione', 'Até R$100k', 'R$100k – R$300k', 'Acima de R$300k'],
 };

@@ -12,7 +12,6 @@ import Botao from '../ui/Botao.astro';
 <section class="secao secao--extrato" id="resultados">
   <div class="container">
     <header class="extrato__cabeca entra">
-      <p class="rotulo">Resultados</p>
       <h2 class="titulo">O que muda quando a operação tem estrutura.</h2>
     </header>
   </div>
@@ -23,7 +22,7 @@ import Botao from '../ui/Botao.astro';
           <p class="extrato__num num" data-contador>{r.numero}</p>
           <div class="extrato__texto entra">
             <h3 class="extrato__titulo">{r.especialidade}</h3>
-            <p>Antes: {r.antes}. Depois: {r.depois}.</p>
+            <p>{r.texto}</p>
           </div>
         </div>
       </li>

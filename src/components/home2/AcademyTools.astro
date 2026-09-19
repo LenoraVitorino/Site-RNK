@@ -1,38 +1,39 @@
 ---
-/**
- * Academy e Tools: dois cartões limpos com espaço de foto. Copy literal.
- */
-import FotoSlot from '../ui/FotoSlot.astro';
+/** Academy e Tools: composições gráficas em CSS, sem fotos provisórias. */
+import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 
 const blocos = [
   {
     eyebrow: 'Para Agências',
     titulo: 'Renke Academy',
-    texto: 'Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você modelar. Método, processos e ferramentas.',
-    cta: 'Conhecer a Renke Academy',
+    texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
+    cta: 'Conhecer',
     rota: '/academy',
-    foto: 'Foto · Academy',
   },
   {
     eyebrow: 'Tecnologia',
     titulo: 'Renke Tools',
-    texto: 'Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso método produtizado em softwares.',
-    cta: 'Conhecer a Renke Tools',
+    texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
+    cta: 'Conhecer',
     rota: '/tools',
-    foto: 'Foto · Produto',
   },
 ];
 ---
 <section class="secao" id="academy-tools">
   <div class="container duo">
-    {blocos.map((b) => (
-      <article class="cartao entra">
-        <FotoSlot rotulo={b.foto} prop="16 / 10" />
-        <p class="rotulo">{b.eyebrow}</p>
+    {blocos.map((b, i) => (
+      <article class:list={['cartao', 'entra', i === 0 ? 'cartao--academy' : 'cartao--tools']}>
+        <div class="cartao__arte" aria-hidden="true">
+          {i === 0 ? (
+            <div class="academy-marca"><span>R</span><span>A</span><i></i></div>
+          ) : (
+            <div class="tools-marca"><span>CRM</span><i></i><span>Marketing</span><i></i><span>Vendas</span></div>
+          )}
+        </div>
         <h3 class="caps">{b.titulo}</h3>
         <p>{b.texto}</p>
-        <p><a href={existe(b.rota) ? b.rota : '#'} class:list={['link-arrow', !existe(b.rota) && 'nav--pendente']} data-rota={b.rota}>{b.cta}</a></p>
+        <p><Botao href={existe(b.rota) ? b.rota : '#'} tamanho="sm">{b.cta}</Botao></p>
       </article>
     ))}
   </div>

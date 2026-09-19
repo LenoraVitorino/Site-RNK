@@ -24,7 +24,7 @@ const dev = import.meta.env.DEV;
   switch (b.tipo) {
     case 'hero':
       return (
-        <section class="section section--hero pg-hero">
+        <section class:list={['section', 'section--hero', 'pg-hero', b.centro && 'pg-hero--centro']}>
           <div class="container">
             <h1 class="pg-hero__titulo">
               {b.titulo.map((linha, i) => (
@@ -65,7 +65,8 @@ const dev = import.meta.env.DEV;
         <section class:list={['section', fundoClasse(b.fundo)]}>
           <div class="container">
             {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
-            <h2>{b.h2}</h2>
+            <h2 class:list={[b.grande && 'resolve__h2--grande']}>{b.h2}</h2>
+            {b.sub && <p class="resolve__sub">{b.sub}</p>}
             <div class:list={['resolve', b.largo && 'resolve--largo', b.numerado && 'resolve--numerado']}>
               {b.itens.map((i, n) => (
                 <article class="resolve__item vidro entra">
@@ -148,9 +149,20 @@ const dev = import.meta.env.DEV;
         <section class:list={['section', fundoClasse(b.fundo)]}>
           <div class="container center">
             {b.h2 && <h2>{b.h2}</h2>}
-            <ul class="chips chips--centro">
-              {b.itens.map((i) => <li class="chip vidro">{i}</li>)}
-            </ul>
+            {b.grade ? (
+              <ol class="pilares-grade">
+                {b.itens.map((i, n) => (
+                  <li class="pilares-grade__item">
+                    <span class="pilares-grade__n">{String(n + 1).padStart(2, '0')}</span>
+                    <span class="pilares-grade__nome">{i}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <ul class="chips chips--centro">
+                {b.itens.map((i) => <li class="chip vidro">{i}</li>)}
+              </ul>
+            )}
             {b.nota && <p class="numeros__nota">{b.nota}</p>}
           </div>
         </section>
