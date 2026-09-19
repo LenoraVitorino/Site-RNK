@@ -33,6 +33,21 @@
 }
 .pg-hero__acoes { margin-top: var(--s-5); }
 
+/* Variante centralizada, por página (padrão continua alinhado à esquerda). */
+.pg-hero--centro { padding-block: clamp(5rem, 11vw, 8.5rem) clamp(4rem, 8vw, 6.5rem); }
+.pg-hero--centro .container { text-align: center; }
+.pg-hero--centro .pg-hero__titulo {
+  margin-inline: auto;
+  font-size: clamp(2.4rem, 6.5vw, 5.2rem);
+  max-width: 22ch;
+}
+.pg-hero--centro .pg-hero__sub {
+  margin-inline: auto;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  max-width: 58ch;
+}
+.pg-hero--centro .pg-hero__acoes { display: flex; justify-content: center; }
+
 /* ---------- Lista de reconhecimento ("você se reconhece aqui?") ----------
    Não é lista de recursos: é espelho. Cada item é uma frase que o leitor
    reconhece na própria operação, então ganha respiro e um marcador discreto. */
@@ -54,17 +69,25 @@
   background: var(--marca);
 }
 
-/* Numerada: a marca vira o número da etapa, porque aí a ordem é informação */
-.reconhece--numerada { counter-reset: passo; }
-.reconhece--numerada .reconhece__item { counter-increment: passo; }
+/* Numerada: lista editorial limpa, sem cartão — número fino e pequeno,
+   texto grande e em negrito ao lado (como um mini-título), fio fino
+   separando os itens (em vez do ponto + cartão). */
+.reconhece--numerada { counter-reset: passo; gap: 0; border-top: 1px solid var(--line); }
+.reconhece--numerada .reconhece__item {
+  counter-increment: passo;
+  display: flex; align-items: baseline; gap: var(--s-5);
+  padding: var(--s-4) 0;
+  border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+  background: none;
+  font-size: var(--fs-lg); font-weight: var(--peso-titulo); line-height: var(--lh-snug);
+}
 .reconhece--numerada .reconhece__item::before {
-  content: counter(passo);
-  display: grid; place-items: center;
-  left: calc(var(--s-5) - .45rem); top: var(--s-4);
-  width: 1.4rem; height: 1.4rem;
-  font-size: var(--fs-xs); font-weight: var(--peso-titulo);
+  content: counter(passo, decimal-leading-zero);
+  position: static; flex: none;
+  width: auto; height: auto;
+  font-size: var(--fs-sm); font-weight: 400;
   font-variant-numeric: tabular-nums;
-  color: var(--bg); background: var(--marca);
+  color: rgb(255 255 255 / .4); background: none;
 }
 
 /* ---------- Produtos ---------- */

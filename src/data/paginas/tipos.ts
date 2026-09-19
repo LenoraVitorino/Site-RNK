@@ -48,6 +48,8 @@ export type Bloco =
       sub?: string;
       cta?: string;
       rotaCta?: string;
+      /** Centraliza o herói nessa página (o padrão é alinhado à esquerda). */
+      centro?: boolean;
     }
   | {
       tipo: 'lista';

@@ -61,6 +61,10 @@ strong, b { font-weight: var(--peso-titulo); }
 .container--narrow { max-width: var(--max-narrow); }
 .container--prose  { max-width: var(--max-prose); }
 .center { text-align: center; }
+/* A medida de leitura (.section p:not([class])) limita a largura mas não
+   centraliza a própria caixa; dentro de .center, a caixa também precisa
+   ficar centrada, senão o texto fica "preso" à esquerda mesmo alinhado. */
+.center p:not([class]) { margin-inline: auto; }
 
 .section {
   position: relative;

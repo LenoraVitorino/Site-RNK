@@ -24,7 +24,7 @@ const dev = import.meta.env.DEV;
   switch (b.tipo) {
     case 'hero':
       return (
-        <section class="section section--hero pg-hero">
+        <section class:list={['section', 'section--hero', 'pg-hero', b.centro && 'pg-hero--centro']}>
           <div class="container">
             <h1 class="pg-hero__titulo">
               {b.titulo.map((linha, i) => (
