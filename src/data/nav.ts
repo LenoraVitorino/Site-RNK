@@ -35,13 +35,13 @@ export const menu: NavItem[] = [
     id: 'mm-clinicas',
     grupos: [
       {
-        titulo: 'Protocolo Revena',
+        titulo: 'Revena',
         itens: [
-          { rotulo: 'Protocolo Revena Start', rota: '/studio/revena-start' },
-          { rotulo: 'Protocolo Revena Full', rota: '/studio/revena-full' },
-          { rotulo: 'Protocolo Revena Core', rota: '/studio/revena-core' },
-          { rotulo: 'Protocolo Revena Scale', rota: '/studio/revena-scale' },
-          { rotulo: 'Protocolo Revena Run', rota: '/studio/revena-run' },
+          { rotulo: 'Revena Start', rota: '/studio/revena-start' },
+          { rotulo: 'Revena Full', rota: '/studio/revena-full' },
+          { rotulo: 'Revena Core', rota: '/studio/revena-core' },
+          { rotulo: 'Revena Scale', rota: '/studio/revena-scale' },
+          { rotulo: 'Revena Run', rota: '/studio/revena-run' },
         ],
       },
       {
