@@ -650,6 +650,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 /* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
 .plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; will-change: clip-path, filter; }
 .plano-palco--ativo { visibility: visible; }
+/* O Start se distingue da abertura clara já na chegada, antes do escurecimento por scroll. */
+.plano-palco[data-plano="0"] { --pp-fundo: #D5D5D5; }
 .plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
