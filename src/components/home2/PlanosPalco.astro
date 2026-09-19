@@ -52,9 +52,12 @@ const planos = ordem.map((label) => {
        a "Financial solutions" da referência. -->
   <div class="palcoplanos__intro">
     <div class="container palcoplanos__cabeca">
-      <div>
-        <h2 class="palcoplanos__titulo">Revena</h2>
-      </div>
+      <h2 class="palcoplanos__titulo">Protocolo Revena</h2>
+      <p class="palcoplanos__manifesto" data-revena-revela>
+        {'Estruturamos sua operação do zero e operamos juntos no longo prazo. Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
+          <><span data-palavra>{palavra}</span>{' '}</>
+        ))}
+      </p>
     </div>
   </div>
 
@@ -251,5 +254,31 @@ const planos = ordem.map((label) => {
     document.fonts.ready.then(setup);
     new ResizeObserver(() => { if (media.matches) { measure(); update(); } }).observe(document.body);
     setup();
+  }
+</script>
+
+<script>
+  // Revelação sequencial vinculada à posição da abertura, reversível ao subir.
+  const manifesto = document.querySelector<HTMLElement>('[data-revena-revela]');
+  const abertura = manifesto?.closest<HTMLElement>('.palcoplanos__intro');
+  if (manifesto && abertura) {
+    const palavras = [...manifesto.querySelectorAll<HTMLElement>('[data-palavra]')];
+    const movimento = matchMedia('(prefers-reduced-motion: reduce)');
+    let quadro = 0;
+    const pintar = () => {
+      quadro = 0;
+      const progresso = movimento.matches ? 1 : Math.max(0, Math.min(1,
+        (innerHeight * .55 - abertura.getBoundingClientRect().top) / (innerHeight * .65)
+      ));
+      palavras.forEach((palavra, i) => {
+        const tinta = Math.max(0, Math.min(1, progresso * (palavras.length + 2) - i));
+        palavra.style.opacity = String(.13 + .87 * tinta);
+      });
+    };
+    const agendar = () => { if (!quadro) quadro = requestAnimationFrame(pintar); };
+    addEventListener('scroll', agendar, { passive: true });
+    addEventListener('resize', agendar, { passive: true });
+    movimento.addEventListener('change', agendar);
+    pintar();
   }
 </script>
