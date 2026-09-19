@@ -8,7 +8,7 @@ O palco fica preso por toda a sequência. O próximo conteúdo entra com recorte
 
 ## Implementação Renke — revisão de 19/09/2026
 
-A revisão segue o print e as direções de montagem descritas pela Lenora. Cada artigo contém seu fundo, símbolo, nome e informações. Quando a próxima dobra entra por baixo, cobre todos esses elementos juntos. A dobra anterior permanece estática e recebe `brightness(1 → 0.42)`, sem diminuir, girar, dissolver ou desmontar o símbolo.
+A revisão segue o print e as direções de montagem descritas pela Lenora. Cada artigo contém seu fundo, símbolo, nome e informações. A próxima dobra sobe inteira de `translateY(100%)` a `translateY(0)`, carregando fundo, símbolo e textos juntos. Não há `clip-path` nem máscara de revelação. Cada painel é opaco e contém o próprio conteúdo, sem vazamento na borda. A dobra anterior permanece estática e recebe `brightness(1 → 0.42)`, sem diminuir, girar, dissolver ou desmontar o símbolo.
 
 A montagem acontece perto do centro, com deslocamentos de 110 a 210 unidades no viewBox de 1080 (aproximadamente 80 a 160 px em desktop):
 
@@ -26,4 +26,4 @@ A animação é habilitada somente a partir de 900 px e sem preferência por mov
 
 ## Verificação
 
-Build Astro: 16 páginas. Teste de movimento com `node scripts/test-planos-motion.mjs`: cinco planos nos dois sentidos, direções das peças, retorno às coordenadas originais, símbolo/título/informações imóveis na saída, escurecimento, recorte e hierarquia das camadas, links inativos, cabeçalho e mudança de breakpoint/preferência. Conferência visual em desktop e celular.
+Build Astro: 16 páginas. Teste de movimento com `node scripts/test-planos-motion.mjs`: cinco planos nos dois sentidos, direções das peças, retorno às coordenadas originais, símbolo/título/informações imóveis na saída, escurecimento, deslocamento integral sem máscara e hierarquia das camadas, links inativos, cabeçalho e mudança de breakpoint/preferência. Conferência visual em desktop e celular.

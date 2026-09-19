@@ -609,8 +609,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    DOBRA 3 (estúdio) · PROTOCOLO REVENA NO PALCO — referência Tres Mares
    Introdução (título + apoio) e depois o trilho: n telas de altura com o
    palco preso. Cada plano é uma dobra inteira, com fundo próprio, que
-   entra por baixo cobrindo a anterior (clip-path na dobra) enquanto a
-   anterior sobe e some. Lista dos planos por cima, no canto superior
+   sobe inteira por cima da anterior, que fica imóvel e escurece. Lista dos planos por cima, no canto superior
    esquerdo. Tudo pintado pelo script a partir do scroll, com snap.
    ============================================================ */
 
@@ -648,7 +647,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__ancora:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 
 /* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
-.plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; will-change: clip-path, filter; }
+.plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; background: var(--pp-fundo); overflow: hidden; will-change: transform, filter; }
 .plano-palco--ativo { visibility: visible; }
 /* O Start se distingue da abertura clara já na chegada, antes do escurecimento por scroll. */
 .plano-palco[data-plano="0"] { --pp-fundo: #D5D5D5; }
@@ -697,7 +696,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) .palcoplanos__trilho { height: auto; }
 .palcoplanos:not([data-animado]) .palcoplanos__fixo { position: static; height: auto; overflow: visible; background: var(--pp-fundo); }
 .palcoplanos:not([data-animado]) :is(.palcoplanos__ancoras, .palcoplanos__icones, .palcoplanos__nomes, .plano-palco__h3) { display: none; }
-.palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
+.palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; transform: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
 .palcoplanos:not([data-animado]) .plano-palco--tom2 { background: var(--pp-fundo-2); }
 .palcoplanos:not([data-animado]) .plano-palco__imagem { position: static; background: transparent; transform: none !important; }
 .palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: block; width: min(48vw, 240px); height: auto; margin: 0 auto 24px; }

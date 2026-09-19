@@ -2,7 +2,7 @@
 /**
  * Revena: palco de rolagem inspirado na seção Financial solutions da Tresmares.
  * Cada símbolo se monta perto do centro e permanece estático. A próxima
- * dobra sobe com recorte e escurece a anterior. Ver docs/04-design/planos-movimento.md.
+ * dobra sobe inteira e escurece a anterior. Ver docs/04-design/planos-movimento.md.
  * Sem JS, em telas pequenas ou com movimento reduzido: todos os planos em pilha.
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -71,7 +71,7 @@ const planos = ordem.map((label) => {
         ))}
       </ol>
 
-      <!-- Um plano por camada; a próxima camada é revelada de baixo para cima. -->
+      <!-- Um plano por camada; a próxima camada inteira sobe de baixo para cima. -->
       {planos.map((p, i) => (
         <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} >
           <div class="plano-palco__imagem" data-imagem>
@@ -167,7 +167,7 @@ const planos = ordem.map((label) => {
         const visible = incoming > 0 && outgoing < 1;
         layer.style.visibility = visible ? 'visible' : 'hidden';
         layer.style.zIndex = String(i + 1);
-        layer.style.clipPath = `inset(${(100 * (1 - incoming)).toFixed(3)}% 0 0)`;
+        layer.style.transform = `translate3d(0, ${(100 * (1 - incoming)).toFixed(3)}%, 0)`;
         // Depois de montada, a dobra permanece imóvel e só escurece sob a próxima.
         layer.style.opacity = '1';
         layer.style.filter = `brightness(${1 - outgoing * .58})`;
