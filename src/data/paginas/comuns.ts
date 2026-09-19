@@ -8,18 +8,6 @@ import type { Bloco } from './tipos';
  * garantiria que um dia as duas versões divergissem.
  */
 
-/** Seção 4 do Core e do Scale, palavra por palavra. */
-export const analiseDeMercado: Bloco = {
-  tipo: 'texto',
-  h2: 'Antes de gastar um real, a gente te mostra o jogo.',
-  fundo: 'alt',
-  paragrafos: [
-    'Seus concorrentes estão investindo em anúncios agora. Você sabe no quê? Sabe como se comunicam? Sabe qual brecha estão deixando aberta pra você ocupar?',
-    'A gente estuda isso a fundo. Depois, constrói um posicionamento exclusivo pra sua clínica: o que te torna a escolha óbvia na sua região e na sua especialidade.',
-    '<strong>Não é template. É construção estratégica individual. Cada clínica tem a sua.</strong>',
-  ],
-};
-
 /** Fecho padrão dos protocolos. */
 export const ctaProtocolo: Bloco = {
   tipo: 'ctaFinal',

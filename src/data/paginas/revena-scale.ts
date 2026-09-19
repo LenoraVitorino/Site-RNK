@@ -1,5 +1,5 @@
 import type { Pagina } from './tipos';
-import { analiseDeMercado, ctaProtocolo } from './comuns';
+import { ctaProtocolo } from './comuns';
 
 /** Copy literal de docs/03-copy/revena-scale.md */
 export const revenaScale: Pagina = {
@@ -10,54 +10,47 @@ export const revenaScale: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Crescer por todos os lados:', 'pacientes novos e os antigos voltando.'],
-      realce: 1,
-      sub: 'O Revena Scale é a operação mensal mais completa da Renke. Captação, conversão, conteúdo que cresce seu perfil e comunicações automáticas de cuidado. Menos dependência de tráfego pago, mais receita de quem já confia em você.',
-      cta: 'Fale com a equipe e descubra se o Scale faz sentido para sua clínica →',
+      titulo: ['Revena Scale'],
+      centro: true,
+      sub: 'A operação mais completa da Renke para ampliar a receita da clínica, combinando captação, conteúdo e reativação da base de pacientes.',
+      cta: 'Conheça o Scale',
     },
     {
       tipo: 'lista',
-      eyebrow: 'Para quem é',
-      h2: 'Você se reconhece aqui?',
+      h2: 'Ideal para clínicas que:',
       fundo: 'alt',
+      numerada: true,
       itens: [
-        'Sua clínica fatura acima de R$300k/mês e já tá rodando bem. Quer depender menos de anúncio e fazer pacientes antigos voltarem.',
-        'Tem marketing interno mas sabe que pode performar mais.',
-        'Sabe que tem uma base de pacientes valiosa, mas não faz nada com ela.',
-        'Quer construir autoridade digital, não só comprar atenção.',
-        'Busca crescimento sustentável: todas as frentes operando juntas.',
-        'Já tem o Start ou Full implementado (pré-requisito).',
+        'Faturam acima de R$300k/mês e já possuem uma operação estruturada',
+        'Têm marketing interno e buscam ampliar sua performance',
+        'Possuem uma base relevante de pacientes ainda pouco explorada',
+        'Buscam ampliar receita com novas fontes de aquisição e reativação',
       ],
     },
     {
       tipo: 'blocos',
-      eyebrow: 'Nossa solução',
-      h2: 'O que o Scale faz pela sua clínica. Toda semana. Todo mês.',
+      h2: 'O que o Scale faz',
+      sub: 'Une operação comercial, marketing, conteúdo e reativação para ampliar as fontes de receita da clínica.',
       largo: true,
       itens: [
         {
-          titulo: 'Tudo do Core',
-          texto:
-            'Marketing + comercial + dados integrados, operando toda semana. Relatórios semanais, recuperação de orçamentos, anúncios otimizados por quem realmente virou paciente.',
+          titulo: 'Operação integrada',
+          texto: 'Marketing, comercial e dados trabalhando em conjunto, com acompanhamento e otimização contínuos.',
         },
         {
-          titulo: 'Conteúdo que constrói autoridade',
-          texto:
-            'Um profissional de conteúdo dedicado que cria material que faz seu perfil crescer organicamente. É alguém dentro do seu dia a dia, produzindo conteúdo que atrai pacientes sem pagar por cada visualização.',
+          titulo: 'Conteúdo proprietário',
+          texto: 'Produção estratégica para fortalecer autoridade e ampliar a presença orgânica da clínica.',
         },
         {
-          titulo: 'Ativação estruturada de pacientes antigos',
-          texto:
-            'Pacientes que sumiram voltam a agendar. Conforme os meses passam e os dados se acumulam, as campanhas ficam cada vez mais inteligentes: segmentação por comportamento, histórico, perfil e momento do paciente.',
+          titulo: 'Ativação da base',
+          texto: 'Estratégias de reativação para transformar pacientes inativos em novas oportunidades.',
         },
         {
-          titulo: 'Comunicações automáticas de cuidado (réguas inteligentes)',
-          texto:
-            'Geração de contratos, cobrança de exames, orientações pré e pós-procedimento, confirmações e lembretes de retorno. Tudo personalizado e automático, baseado no momento real de cada paciente.',
+          titulo: 'Comunicação automatizada',
+          texto: 'Confirmações, lembretes e orientações personalizadas ao longo da jornada.',
         },
       ],
     },
-    analiseDeMercado,
     {
       tipo: 'texto',
       centro: true,
@@ -67,21 +60,19 @@ export const revenaScale: Pagina = {
     },
     {
       tipo: 'etapas',
-      eyebrow: 'Como funciona',
       fundo: 'alt',
-      h2: ['Etapas do Revena Scale'],
+      h2: ['Etapas do Scale'],
       etapas: [
-        { n: '1', duracao: '45 dias', nome: 'Estruturação', descricao: 'Tudo do Core + otimização dos perfis digitais, estratégia de conteúdo orgânico, exportação e segmentação da base com criação do calendário de ativações.' },
-        { n: '2', duracao: '90 dias', nome: 'Laboratório', descricao: 'Testamos canais, criativos e abordagens. Validamos o que funciona. Otimizamos conteúdos orgânicos em paralelo. Performance medida de ponta a ponta.' },
-        { n: '3', duracao: '180 dias', nome: 'Performance', descricao: 'Dobramos a aposta no que tá dando certo. Abrimos novos canais. Ampliamos presença digital.' },
-        { n: '4', duracao: 'A partir de 12 meses', nome: 'Operação Contínua', descricao: 'Previsibilidade alcançada. Inovação constante pra não estagnar.' },
+        { n: '1', duracao: '45 dias', nome: 'Estruturação', descricao: 'Otimização dos perfis digitais, estratégia de conteúdo orgânico e segmentação da base com calendário de ativações.' },
+        { n: '2', duracao: '90 dias', nome: 'Laboratório', descricao: 'Testes de canais, criativos e conteúdo orgânico, com performance medida de ponta a ponta.' },
+        { n: '3', duracao: '180 dias', nome: 'Performance', descricao: 'Escala do que funciona, com novos canais e mais presença digital.' },
+        { n: '4', duracao: '12 meses', nome: 'Operação contínua', descricao: 'Previsibilidade alcançada, com inovação constante para não estagnar.' },
       ],
       fechamento:
         'Cada etapa alimenta a próxima. Sem a base construída, seria mais uma agência otimizando no escuro.',
     },
     {
       tipo: 'lista',
-      eyebrow: 'Cadência',
       h2: 'O que acontece toda semana e todo mês na sua clínica',
       itens: [
         'Olhar de marketing semanal com análise e recomendações',
@@ -96,7 +87,7 @@ export const revenaScale: Pagina = {
     {
       tipo: 'pendencia',
       o_que:
-        'Seção 8 · Resultados — o briefing traz só [IMG]. Usar o bloco global de depoimentos/resultados (D11). E a Etapa 1 diz "Tudo do Core", o que contraria a diretriz de não referenciar o Core.',
+        'Seção 8 · Resultados — o briefing traz só [IMG]. Usar o bloco global de depoimentos/resultados (D11).',
     },
     ctaProtocolo,
   ],
