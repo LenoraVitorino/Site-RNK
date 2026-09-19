@@ -1021,6 +1021,9 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .chamada__miolo .titulo { font-size: clamp(2.5rem, 5vw, 5rem); max-width: 15ch; }
 .chamada__miolo p:not(.rotulo) { max-width: 35ch; }
 .duo { gap: clamp(24px, 4vw, 64px); }
+/* O fio de baixo do card já fecha a seção visualmente; o respiro padrão
+   de .secao embaixo dele ficava dobrado antes do Sobre começar. */
+#academy-tools { padding-bottom: clamp(40px, 5vw, 64px); }
 .cartao { padding: 0 0 32px; border: 0; border-bottom: 1px solid var(--fio); border-radius: 0; background: transparent; gap: 20px; grid-template-rows: auto auto 1fr auto; }
 .cartao h3 { font-size: clamp(2rem, 3vw, 3rem); }
 .cartao > p { max-width: 46ch; }
