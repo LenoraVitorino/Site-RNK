@@ -179,10 +179,10 @@ const planos = ordem.map((label) => {
         icons[i].style.visibility = visible ? 'visible' : 'hidden';
         icons[i].style.opacity = '1';
         icons[i].style.transform = 'none';
-        // A montagem termina antes da chegada completa, deixando o símbolo em repouso.
+        // A montagem termina somente quando a dobra centraliza (arrival = 1).
         // A saída nunca altera as peças: não há morph, rotação nem redução do conjunto.
         const arrival = i === 0 ? pre : incoming;
-        const assembled = ease(clamp((arrival - .38) / .5));
+        const assembled = ease(clamp((arrival - .38) / .62));
         pieces[i].forEach((piece, k) => {
           const [x, y] = directions[i][k];
           piece.setAttribute('transform', `translate(${x * (1 - assembled)} ${y * (1 - assembled)})`);

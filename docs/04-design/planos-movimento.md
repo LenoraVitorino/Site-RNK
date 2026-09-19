@@ -18,7 +18,7 @@ A montagem acontece perto do centro, com deslocamentos de 110 a 210 unidades no 
 - Core: metades inferior e superior se encontram para formar o X.
 - Full: metades superior e inferior se encontram no centro.
 
-As peças chegam às coordenadas originais até 88% da entrada. Depois permanecem em repouso durante toda a saída. O primeiro símbolo se monta durante a chegada do palco. O movimento é reversível pelo scroll, sem morph entre planos.
+As peças chegam às coordenadas originais em 100% da entrada, exatamente quando a dobra centraliza. Depois permanecem em repouso durante toda a saída. O primeiro símbolo se monta durante a chegada do palco. O movimento é reversível pelo scroll, sem morph entre planos.
 
 Símbolos cerca de 9% menores. Nome em caixa normal, peso 450, tracking -0.07em, duas linhas desencontradas em uma largura de 46vw, aproximando a diagramação do print. As copys e a paleta Renke foram preservadas.
 

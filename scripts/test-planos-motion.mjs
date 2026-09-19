@@ -44,6 +44,10 @@ scroll(550);let xy=offsets(0);assert.ok(xy[0][0]<0&&xy[0][1]>0&&xy[1][0]>0&&xy[1
 scroll(1450);xy=offsets(1);assert.ok(xy.every(([x,y])=>x<0&&y===0),'Run from left');
 scroll(2350);xy=offsets(2);assert.ok(xy.every(([x,y])=>x===0&&y>0),'Scale from below');
 for(const i of [3,4]){scroll(1000+(i-.5)*900);xy=offsets(i);assert.ok(xy[0][1]*xy[1][1]<0,'opposed center assembly')}
+for(let i=0;i<5;i++){
+ scroll(1000+(i-.05)*900);
+ assert.ok(offsets(i).some(pair=>pair.some(v=>Math.abs(v)>.01)),'pieces still assembling before panel centers');
+}
 for(let i=0;i<5;i++){scroll(1000+i*900);assert.deepEqual(offsets(i),[[0,0],[0,0]],'exact symbol restored')}
 // Symbols must be descendants of their corresponding article so the whole panel carries them.
 const markup=readFileSync('src/components/home2/PlanosPalco.astro','utf8').split('<script>')[0];
