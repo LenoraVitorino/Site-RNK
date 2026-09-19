@@ -1,8 +1,5 @@
 ---
-/**
- * Academy e Tools: dois cartões limpos com espaço de foto. Copy literal.
- */
-import FotoSlot from '../ui/FotoSlot.astro';
+/** Academy e Tools: composições gráficas em CSS, sem fotos provisórias. */
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 
@@ -13,7 +10,6 @@ const blocos = [
     texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
     cta: 'Conhecer',
     rota: '/academy',
-    foto: 'Foto · Academy',
   },
   {
     eyebrow: 'Tecnologia',
@@ -21,15 +17,20 @@ const blocos = [
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para otimizar a operação e acelerar resultados.',
     cta: 'Conhecer',
     rota: '/tools',
-    foto: 'Foto · Produto',
   },
 ];
 ---
 <section class="secao" id="academy-tools">
   <div class="container duo">
-    {blocos.map((b) => (
-      <article class="cartao entra">
-        <FotoSlot rotulo={b.foto} prop="16 / 10" />
+    {blocos.map((b, i) => (
+      <article class:list={['cartao', 'entra', i === 0 ? 'cartao--academy' : 'cartao--tools']}>
+        <div class="cartao__arte" aria-hidden="true">
+          {i === 0 ? (
+            <div class="academy-marca"><span>R</span><span>A</span><i></i></div>
+          ) : (
+            <div class="tools-marca"><span>CRM</span><i></i><span>Marketing</span><i></i><span>Vendas</span></div>
+          )}
+        </div>
         <h3 class="caps">{b.titulo}</h3>
         <p>{b.texto}</p>
         <p><Botao href={existe(b.rota) ? b.rota : '#'} tamanho="sm">{b.cta}</Botao></p>

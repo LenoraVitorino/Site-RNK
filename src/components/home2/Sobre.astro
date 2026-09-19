@@ -1,19 +1,12 @@
 ---
-/**
- * Sobre, no desenho da referência: à esquerda a declaração em texto grande
- * (a primeira frase apagada, o resto aceso) e os parágrafos; à direita,
- * "Nossos números" num carrossel com o número gigante em amarelo e a
- * legenda, com setas. Os números são os do briefing (⚠️ D1: "~30" aqui
- * convive com "mais de 140" no texto). Fotos numa faixa abaixo. Copy literal.
- */
-import FotoSlot from '../ui/FotoSlot.astro';
+/** História da Renke: título e texto em duas colunas, sem imagens provisórias. */
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 ---
 <section class="secao" id="sobre">
   <div class="container sobre">
     <div class="sobre__texto sobre__texto--centro entra">
-      <p class="sobre__declaracao sobre__declaracao--caps">Conheça a história da Renke</p>
+      <h2 class="sobre__declaracao">Conheça a história da Renke</h2>
       <div class="sobre__paragrafos">
         <p>
           Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
@@ -21,12 +14,6 @@ import { existe } from '../../data/rotas';
         </p>
       </div>
     </div>
-  </div>
-
-  <div class="container sobre__fotos entra">
-    <FotoSlot rotulo="Foto · nova sede" prop="4 / 3" />
-    <FotoSlot rotulo="Foto · time" prop="4 / 3" />
-    <FotoSlot rotulo="Foto · operação" prop="4 / 3" />
   </div>
 
   <div class="container sobre__acao entra">

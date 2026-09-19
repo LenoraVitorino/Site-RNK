@@ -1,19 +1,15 @@
 ---
-/**
- * Chamada final no painel amarelo, com fotos ladeando o texto — a
- * composição do print de consultoria, com a copy literal do briefing.
- */
-import FotoSlot from '../ui/FotoSlot.astro';
+/** Chamada de contato: composição tipográfica com o número de vagas. */
 import Botao from '../ui/Botao.astro';
 ---
 <section class="secao secao--amarela" id="fale">
   <div class="container chamada">
-    <FotoSlot rotulo="Foto · fundador" prop="3 / 4" />
+    <span class="chamada__numero" aria-hidden="true">01</span>
     <div class="chamada__miolo entra">
       <h2 class="titulo caps">Limitado a 1 nova clínica por mês.</h2>
       <p>Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.</p>
       <Botao href="/contato" class="botao--lg">Converse com a equipe</Botao>
     </div>
-    <FotoSlot rotulo="Foto · time" prop="3 / 4" />
+
   </div>
 </section>
