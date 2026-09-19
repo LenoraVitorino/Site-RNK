@@ -28,15 +28,15 @@ const entra = copyLiteral ? '' : 'entra';
       <!-- Versão do estúdio: a frase enxugada (saem "Clinicamente," e
            "exatamente") e o fecho "da sua clínica" no lugar de "do seu
            negócio", decisão da Lenora em 16/09/2026 para falar no nicho. -->
-      <p class:list={['ancora', entra]}>
-        Você sabe o que está acontecendo com seu paciente.
-        <strong>Mas e com a sua clínica?</strong>
-      </p>
+      <h2 class:list={['ancora', entra]}>
+        Uma operação estruturada muda a forma como sua clínica cresce.
+      </h2>
     )}
     <div class:list={['perguntas', entra]}>
       {principais.map((p, i) => (
         <div class="pergunta">
           <span class="pergunta__n num">0{i + 1}</span>
+          <h3 class="pergunta__titulo">{p.titulo}</h3>
           <p>{p.texto}</p>
         </div>
       ))}
@@ -45,6 +45,7 @@ const entra = copyLiteral ? '' : 'entra';
       {demais.map((p, i) => (
         <div class="pergunta">
           <span class="pergunta__n num">0{i + 5}</span>
+          <h3 class="pergunta__titulo">{p.titulo}</h3>
           <p>{p.texto}</p>
         </div>
       ))}
