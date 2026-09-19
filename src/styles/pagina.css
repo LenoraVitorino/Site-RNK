@@ -106,6 +106,9 @@
 
 /* ---------- Blocos "o que resolve na prática" ---------- */
 
+.resolve__h2--grande { font-size: var(--fs-3xl); max-width: 20ch; }
+.resolve__sub { font-size: var(--fs-md); color: rgb(255 255 255 / .72); max-width: 52ch; margin-top: var(--s-3); }
+
 .resolve {
   display: grid; gap: var(--s-4);
   margin-top: var(--s-6);
@@ -216,6 +219,23 @@
   margin: var(--s-5) auto 0; max-width: 54ch;
   font-size: var(--fs-md); color: var(--text);
 }
+.pilares-grade + .numeros__nota { margin-top: var(--s-8); }
+
+/* Grade numerada dos pilares: 01 Controle, 02 Automação... em vez de chips. */
+.pilares-grade {
+  list-style: none; margin: var(--s-7) auto 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5);
+  max-width: 56rem;
+}
+.pilares-grade__item {
+  display: grid; gap: var(--s-2); justify-items: center;
+  padding-top: var(--s-4); border-top: 1px solid var(--line);
+}
+.pilares-grade__n {
+  font-size: var(--fs-sm); font-weight: 400; color: rgb(255 255 255 / .4);
+  font-variant-numeric: tabular-nums;
+}
+.pilares-grade__nome { font-size: var(--fs-lg); font-weight: var(--peso-titulo); }
 
 /* ---------- FAQ ----------
    <details> nativo: abre sem JS, é acessível por teclado de fábrica e
@@ -255,6 +275,7 @@
 @media (min-width: 768px) {
   .resolve { grid-template-columns: repeat(2, 1fr); }
   .produtos { grid-template-columns: repeat(2, 1fr); }
+  .pilares-grade { grid-template-columns: repeat(4, 1fr); }
   .reconhece { gap: var(--s-2); }
   .etapa {
     grid-template-columns: auto 10rem 1fr;

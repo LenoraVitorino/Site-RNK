@@ -1,4 +1,5 @@
 import type { Pagina } from './tipos';
+import { ctaProtocolo } from './comuns';
 
 /** Copy literal de docs/03-copy/revena-run.md */
 export const revenaRun: Pagina = {
@@ -88,12 +89,6 @@ export const revenaRun: Pagina = {
         'Para que o marketing use a inteligência que sua operação já tem, <a class="link-arrow" href="/studio/revena-core">conheça o Revena Core →</a>',
       ],
     },
-    {
-      tipo: 'ctaFinal',
-      destaque: 'Sua operação já está montada. Só precisa de alguém mantendo.',
-      texto:
-        'Sem template. Sem terceirização. Alguém de verdade olhando pros seus números toda semana.',
-      cta: 'Converse com a equipe →',
-    },
+    ctaProtocolo,
   ],
 };

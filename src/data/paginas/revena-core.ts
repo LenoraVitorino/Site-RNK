@@ -1,5 +1,5 @@
 import type { Pagina } from './tipos';
-import { analiseDeMercado } from './comuns';
+import { analiseDeMercado, ctaProtocolo } from './comuns';
 
 /** Copy literal de docs/03-copy/revena-core.md */
 export const revenaCore: Pagina = {
@@ -106,11 +106,6 @@ export const revenaCore: Pagina = {
       o_que:
         'Seção 7 · Resultados — decisão sugerida no briefing: depoimentos como componente global em todas as páginas (D11).',
     },
-    {
-      tipo: 'ctaFinal',
-      destaque: 'Limitado a 1 nova clínica por mês.',
-      texto: 'Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.',
-      cta: 'Converse com a equipe.',
-    },
+    ctaProtocolo,
   ],
 };

@@ -820,7 +820,8 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
 /* ---------- CTA final ---------- */
 
-.statement { font-size: var(--fs-3xl); letter-spacing: -.02em; margin-bottom: var(--s-4); }
+.statement { font-size: var(--fs-3xl); letter-spacing: -.02em; margin-bottom: var(--s-6); }
+.statement + p { margin-bottom: var(--s-6); }
 
 /* ---------- Academy + Tools ---------- */
 

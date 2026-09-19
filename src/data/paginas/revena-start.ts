@@ -1,4 +1,5 @@
 import type { Pagina } from './tipos';
+import { ctaProtocolo } from './comuns';
 
 /** Copy literal de docs/03-copy/revena-start.md */
 export const revenaStart: Pagina = {
@@ -84,11 +85,6 @@ export const revenaStart: Pagina = {
         ['Continuidade', 'Processos documentados, treináveis e independentes de pessoas.'],
       ],
     },
-    {
-      tipo: 'ctaFinal',
-      destaque: 'Atendemos uma nova clínica por mês.',
-      texto: 'Cada projeto começa com um diagnóstico próprio e acompanhamento dedicado em toda a implementação. Sem templates. Sem terceirização.',
-      cta: 'Agende uma conversa',
-    },
+    ctaProtocolo,
   ],
 };
