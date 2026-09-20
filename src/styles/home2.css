@@ -318,6 +318,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero__quadrado { width: 7px; height: 7px; border-radius: 50%; background: var(--destaque); flex-shrink: 0; }
 .hero .hero__lead { max-width: 38ch; margin: 0; font-size: clamp(16px, 1.45vw, 21px); line-height: 1.5; font-weight: 400; color: rgb(242 242 238 / .74); }
 .hero__palco { padding-block: clamp(48px, 7vh, 90px); }
+.hero__palco .hero__selo { margin-bottom: clamp(28px, 4vw, 48px); }
 .hero__h1 { position: relative; margin: 0; font-family: var(--font-titulo); font-size: clamp(3rem, 7.3vw, 7.4rem); font-weight: 300; line-height: 1.04; letter-spacing: -.065em; min-height: 3.12em; }
 .hero__mensagem { display: grid; position: absolute; inset: 0; align-content: start; }
 .hero__mensagem--antes { visibility: hidden; }
