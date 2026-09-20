@@ -1,22 +1,39 @@
 ---
-/** História da Renke: título e texto em duas colunas, sem imagens provisórias. */
+/** História, fotos do briefing e indicadores, compartilhados pelas duas versões. */
+import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
+import Numeros from '../ui/Numeros.astro';
 import { existe } from '../../data/rotas';
+import equipe from '../../../docs/assets/briefing/time-renke.png';
+import sede from '../../../docs/assets/briefing/sede-renke.png';
+import fundador from '../../../docs/assets/briefing/ceo-renke.png';
 ---
-<section class="secao" id="sobre">
-  <div class="container sobre">
-    <div class="sobre__texto sobre__texto--centro entra">
-      <h2 class="sobre__declaracao">Conheça a história da Renke</h2>
-      <div class="sobre__paragrafos">
-        <p>
+<section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
+  <div class="container">
+    <div class="sobre-editorial__grade">
+      <div class="sobre-editorial__texto entra">
+        <p class="rotulo">Por dentro da Renke</p>
+        <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história da Renke</h2>
+        <p class="sobre-editorial__descricao">
           Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
           oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
         </p>
+        <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
+      </div>
+      <div class="sobre-editorial__mosaico entra">
+        <figure class="sobre-editorial__foto sobre-editorial__foto--equipe">
+          <Image src={equipe} alt="Equipe da Renke reunida" format="webp" loading="lazy" />
+          <figcaption>Nosso time</figcaption>
+        </figure>
+        <figure class="sobre-editorial__foto sobre-editorial__foto--sede">
+          <Image src={sede} alt="Pessoas da equipe trabalhando nas estações do escritório da Renke" format="webp" loading="lazy" />
+          <figcaption>A operação, todos os dias</figcaption>
+        </figure>
+        <figure class="sobre-editorial__foto sobre-editorial__foto--fundador">
+          <Image src={fundador} alt="Fundador da Renke falando ao microfone" format="webp" loading="lazy" />
+        </figure>
       </div>
     </div>
-  </div>
-
-  <div class="container sobre__acao entra">
-    <Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao>
+    <div class="sobre-editorial__numeros"><Numeros /></div>
   </div>
 </section>
