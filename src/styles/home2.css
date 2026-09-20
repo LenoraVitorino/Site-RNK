@@ -621,7 +621,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__intro { min-height: 76svh; display: grid; align-items: center; padding: clamp(88px, 10vw, 160px) 0; }
 .palcoplanos__cabeca { display: grid; justify-items: center; gap: clamp(32px, 4vw, 64px); text-align: center; }
 .palcoplanos__titulo { font-size: clamp(15px, 1.4vw, 22px); letter-spacing: -.035em; line-height: 1.2; margin: 0; font-weight: 400; color: rgb(22 22 22 / .42); }
-.palcoplanos__manifesto { max-width: 25ch; font-family: var(--font-titulo); font-size: clamp(2.1rem, 4.5vw, 5rem); font-weight: 450; line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
+.palcoplanos__manifesto { max-width: 25ch; font-family: var(--font-titulo); font-size: clamp(2.1rem, 4.5vw, 5rem); font-weight: var(--peso-titulo); line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
 .palcoplanos__manifesto [data-palavra] { display: inline-block; }
 @media (max-width: 599.98px) { .palcoplanos__intro { min-height: 70svh; padding-block: 88px; } .palcoplanos__manifesto { font-size: clamp(1.9rem, 7.5vw, 2.8rem); max-width: 22ch; } }
 .palcoplanos__apoio {
@@ -663,7 +663,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: 46vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
   /* Referência de 19/09: caixa normal, peso entre regular e médio, tracking fechado. */
-  font-family: var(--font-titulo); font-weight: 450; letter-spacing: -.07em; word-spacing: -.06em; line-height: .84; text-transform: none;
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.07em; word-spacing: -.06em; line-height: .84; text-transform: none;
   font-size: 10vw; color: var(--grafite);
 }
 .plano-palco__nome__a { justify-self: start; }
@@ -671,14 +671,14 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* Colunas laterais com largura adaptada à copy em português. */
 .plano-palco__texto { position: absolute; left: var(--grid-inset); bottom: 5vw; width: clamp(160px, 14vw, 250px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
-.plano-palco__frase { margin: 0; font-size: clamp(14px, 1vw, 18px); line-height: 1.45; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
+.plano-palco__frase { margin: 0; font-size: clamp(14px, 1vw, 18px); line-height: 1.45; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
 .plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(12px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
 
 /* Índice e contexto do plano, alinhados pelo canto inferior direito. */
 .plano-palco__dados { position: absolute; right: var(--grid-inset); bottom: 5vw; width: clamp(145px, 12vw, 220px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
 .plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
-.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
-.plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-enfase); }
+.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
+.plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-corpo); }
 
 /* Símbolo e nome dentro de cada plano: imóveis durante a sobreposição. */
 .palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
@@ -1079,14 +1079,14 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   max-width: none;
   font-family: var(--font-titulo);
   font-size: clamp(2.1rem, 4.5vw, 5rem);
-  font-weight: 450;
+  font-weight: var(--peso-titulo);
   line-height: 1.08;
   letter-spacing: -.055em;
   text-align: center;
 }
 .ancora__linha { display: block; }
 .ancora__linha [data-palavra] { display: inline-block; }
-.ancora__destaque { color: var(--destaque); font-weight: 700; }
+.ancora__destaque { color: var(--destaque); font-weight: var(--peso-enfase); }
 @media (min-width: 900px) { .ancora__linha { white-space: nowrap; } }
 @media (max-width: 599.98px) {
   #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
