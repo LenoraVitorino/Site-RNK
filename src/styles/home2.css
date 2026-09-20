@@ -1135,7 +1135,15 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
    ou cartão + meia foto, deslizando com o scroll enquanto a dobra fica presa. */
 /* Mais cheia na tela (Lenora, 20/09): blocos mais largos e a esteira quase
    na altura toda da dobra, sangrando nas duas laterais. */
-.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(480px, calc(100svh - 176px), 920px); --bloco: clamp(280px, 26vw, 400px); --bloco-largo: clamp(380px, 38vw, 580px); --vao: 32px; }
+/* --sobre-recuo: borda esquerda do container (a mesma de todas as dobras);
+   --sobre-coluna: largura da primeira coluna do grid "duo" — assim o texto ocupa
+   a coluna 1 e a primeira foto começa na coluna 2 (Lenora, 20/09). */
+.sobre-editorial__percurso {
+  position: relative; --sobre-altura: clamp(480px, calc(100svh - 176px), 920px); --bloco: clamp(280px, 26vw, 400px); --bloco-largo: clamp(380px, 38vw, 580px); --vao: 32px;
+  --sobre-duo: clamp(24px, 4vw, 64px);
+  --sobre-recuo: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
+  --sobre-coluna: calc((min(100vw, var(--largura)) - 2 * var(--gutter) - var(--sobre-duo)) / 2);
+}
 .sobre-editorial__palco {
   width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
   display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch;
@@ -1143,7 +1151,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 /* O texto é o primeiro item do carrossel: desliza junto com as fotos. */
 /* O texto é um bloco só, alinhado ao topo das fotos (Lenora, 20/09): rótulo,
    título, descrição e botão em sequência; só a barra de progresso vai ao pé. */
-.sobre-editorial__texto { flex: 0 0 clamp(320px, 32vw, 500px); margin-left: var(--gutter); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: flex-start; gap: clamp(28px, 3vw, 44px); height: 100%; }
+.sobre-editorial__texto { flex: 0 0 var(--sobre-coluna); margin-right: calc(var(--sobre-duo) - var(--vao)); display: flex; flex-direction: column; justify-content: flex-start; gap: clamp(28px, 3vw, 44px); height: 100%; }
 .sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
 .sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
@@ -1179,11 +1187,12 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   padding: 96px 0 24px; align-content: center; overflow: hidden;
 }
 .sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
+.sobre-editorial__percurso--fixo .sobre-editorial__texto { margin-left: var(--sobre-recuo); }
 @media (max-width: 899.98px) {
   /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
   .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --bloco-largo: min(78vw, 320px); --vao: 16px; }
   .sobre-editorial__palco { padding-top: 56px; }
-  .sobre-editorial__texto { flex-basis: 84vw; margin-left: 0; margin-right: 8px; gap: 24px; justify-content: center; }
+  .sobre-editorial__texto { flex-basis: 84vw; margin-right: 8px; gap: 24px; justify-content: center; }
   .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
   .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
   .sobre-editorial__progresso { display: none; }

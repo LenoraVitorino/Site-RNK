@@ -386,3 +386,12 @@ e o botão para o pé da esteira, com um vazio no meio e o botão cortado em
 telas baixas. Agora rótulo, título, descrição e botão formam um bloco só,
 alinhado ao topo das fotos; a barra de progresso fica sozinha no pé
 (`margin-top: auto`, fora do `__pe`).
+
+### 20/09/2026 — Sobre: texto na coluna 1 do grid
+
+A coluna de texto usava só o gutter; em telas largas ficava fora do container
+(máx. 1600px) que as outras dobras seguem. Agora `--sobre-recuo` é a borda do
+container (`max(gutter, (100vw − largura)/2 + gutter)`) e `--sobre-coluna` é a
+largura da coluna 1 do grid "duo"; a margem direita desconta o vão da esteira,
+então a primeira foto começa na coluna 2. Conferido contra os cartões da
+Academy em 1820, 1440 e 1100px (mesmas bordas).
