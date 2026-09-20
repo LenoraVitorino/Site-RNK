@@ -1086,6 +1086,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 .ancora__linha { display: block; }
 .ancora__linha [data-palavra] { display: inline-block; }
+.ancora__destaque { color: var(--destaque); font-weight: 700; }
 @media (min-width: 900px) { .ancora__linha { white-space: nowrap; } }
 @media (max-width: 599.98px) {
   #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
