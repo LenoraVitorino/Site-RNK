@@ -1,12 +1,12 @@
 ---
-/** História, fotos do briefing e indicadores, compartilhados pelas duas versões. */
+/** História, fotos da sede e indicadores, compartilhados pelas duas versões. */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import Numeros from '../ui/Numeros.astro';
 import { existe } from '../../data/rotas';
-import equipe from '../../../docs/assets/briefing/time-renke.png';
-import sede from '../../../docs/assets/briefing/sede-renke.png';
-import fundador from '../../../docs/assets/briefing/ceo-renke.png';
+import operacao from '../../assets/sede/operacao.jpg';
+import conexao from '../../assets/sede/conexao.jpg';
+import reuniao from '../../assets/sede/reuniao.jpg';
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
   <div class="container">
@@ -21,16 +21,17 @@ import fundador from '../../../docs/assets/briefing/ceo-renke.png';
         <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
       </div>
       <div class="sobre-editorial__mosaico entra">
-        <figure class="sobre-editorial__foto sobre-editorial__foto--equipe">
-          <Image src={equipe} alt="Equipe da Renke reunida" format="webp" loading="lazy" />
-          <figcaption>Nosso time</figcaption>
+        <figure class="sobre-editorial__foto sobre-editorial__foto--principal">
+          <Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <figcaption>Onde tudo se conecta</figcaption>
         </figure>
-        <figure class="sobre-editorial__foto sobre-editorial__foto--sede">
-          <Image src={sede} alt="Pessoas da equipe trabalhando nas estações do escritório da Renke" format="webp" loading="lazy" />
-          <figcaption>A operação, todos os dias</figcaption>
+        <figure class="sobre-editorial__foto sobre-editorial__foto--conexao">
+          <Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <figcaption>A operação, de perto</figcaption>
         </figure>
-        <figure class="sobre-editorial__foto sobre-editorial__foto--fundador">
-          <Image src={fundador} alt="Fundador da Renke falando ao microfone" format="webp" loading="lazy" />
+        <figure class="sobre-editorial__foto sobre-editorial__foto--reuniao">
+          <Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <figcaption>Espaço para construir juntos</figcaption>
         </figure>
       </div>
     </div>

@@ -1132,7 +1132,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 
 /* História: texto editorial, mosaico de fotos reais e indicadores em uma base comum. */
 .sobre-editorial__grade {
-  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  display: grid; grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
   gap: clamp(40px, 6vw, 96px); align-items: center;
   padding-top: clamp(56px, 7vw, 100px); border-top: 1px solid var(--fio);
 }
@@ -1140,13 +1140,14 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
 .sobre-editorial__texto .sobre__declaracao { max-width: 13ch; font-size: clamp(2.4rem, 3.8vw, 4rem); }
 .sobre-editorial__descricao { max-width: 37ch; margin: 0; color: var(--cinza); font-size: clamp(16px, 1.3vw, 20px); line-height: 1.65; }
-.sobre-editorial__mosaico { display: grid; grid-template-columns: 1.25fr .75fr; gap: 16px; }
+.sobre-editorial__mosaico { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 32px 1fr 1fr 32px; gap: 16px; height: clamp(460px, 43vw, 680px); }
 .sobre-editorial__foto { position: relative; margin: 0; overflow: hidden; border-radius: 10px; background: var(--painel); }
 .sobre-editorial__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.sobre-editorial__foto--equipe { grid-column: 1 / -1; aspect-ratio: 1.65; }
-.sobre-editorial__foto--equipe img { object-position: center 42%; }
-.sobre-editorial__foto--sede, .sobre-editorial__foto--fundador { height: clamp(180px, 18vw, 260px); }
-.sobre-editorial__foto--sede img { object-position: 45% center; }
+.sobre-editorial__foto--principal { grid-column: 1; grid-row: 1 / 4; }
+.sobre-editorial__foto--conexao { grid-column: 2; grid-row: 2; }
+.sobre-editorial__foto--reuniao { grid-column: 2; grid-row: 3 / 5; }
+.sobre-editorial__foto--conexao img { object-position: center 55%; }
+.sobre-editorial__foto--reuniao img { object-position: center 62%; }
 .sobre-editorial__foto figcaption { position: absolute; inset: auto 0 0; padding: 32px 20px 16px; background: linear-gradient(transparent, rgb(0 0 0 / .8)); color: #fff; font-size: 12px; letter-spacing: .015em; }
 .sobre-editorial__numeros { margin-top: clamp(40px, 5vw, 72px); padding-top: clamp(32px, 4vw, 56px); border-top: 1px solid var(--fio); }
 .sobre-editorial__numeros .impacto__lista { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
@@ -1157,10 +1158,10 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   .sobre-editorial__grade { grid-template-columns: 1fr; }
   .sobre-editorial__texto .sobre__declaracao { max-width: 18ch; }
   .sobre-editorial__descricao { max-width: 52ch; }
-  .sobre-editorial__foto--sede, .sobre-editorial__foto--fundador { height: clamp(180px, 30vw, 260px); }
+  .sobre-editorial__mosaico { height: clamp(440px, 72vw, 660px); }
 }
 @media (max-width: 599.98px) {
-  .sobre-editorial__mosaico { gap: 10px; }
+  .sobre-editorial__mosaico { gap: 10px; height: 400px; grid-template-rows: 20px 1fr 1fr 20px; }
   .sobre-editorial__foto figcaption { padding-inline: 12px; font-size: 11px; }
   .sobre-editorial__numeros .impacto__lista { grid-template-columns: 1fr; gap: 24px; }
   .sobre-editorial__numeros .impacto__item + .impacto__item { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--fio); }
