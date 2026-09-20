@@ -1141,7 +1141,9 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch;
 }
 /* O texto é o primeiro item do carrossel: desliza junto com as fotos. */
-.sobre-editorial__texto { flex: 0 0 clamp(320px, 32vw, 500px); margin-left: var(--gutter); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; height: 100%; }
+/* O texto é um bloco só, alinhado ao topo das fotos (Lenora, 20/09): rótulo,
+   título, descrição e botão em sequência; só a barra de progresso vai ao pé. */
+.sobre-editorial__texto { flex: 0 0 clamp(320px, 32vw, 500px); margin-left: var(--gutter); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: flex-start; gap: clamp(28px, 3vw, 44px); height: 100%; }
 .sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
 .sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
@@ -1168,7 +1170,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .bloco__numero { margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque); font-size: clamp(2.4rem, 3.6vw, 4rem); line-height: .95; letter-spacing: -.04em; white-space: nowrap; }
 .bloco__legenda { margin: 0; font-size: clamp(14px, 1.1vw, 16px); color: var(--cinza); }
 .bloco__numero .contador { display: inline-block; font-variant-numeric: tabular-nums; }
-.sobre-editorial__progresso { width: 112px; height: 2px; background: var(--fio); }
+.sobre-editorial__progresso { width: 112px; height: 2px; margin-top: auto; background: var(--fio); }
 .sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
 /* Preso: a esteira sangra nas duas bordas da tela, sem recuo nem máscara
    (Lenora, 20/09); só o texto guarda o gutter à esquerda, pela margem própria. */

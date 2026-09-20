@@ -378,3 +378,11 @@ gutter, por margem própria. Altura da esteira `clamp(480px, 100svh − 176px,
 580px)`; texto `clamp(320px, 32vw, 500px)`. Medido em 1440×900 (blocos
 547/374 × 724px, curso 2150px) e 1920×1080 (580/400 × 904px); celular segue
 em rolagem horizontal comum.
+
+### 20/09/2026 — Sobre: texto agrupado no topo
+
+"Deixe os textos no grid corretamente": o `space-between` jogava a descrição
+e o botão para o pé da esteira, com um vazio no meio e o botão cortado em
+telas baixas. Agora rótulo, título, descrição e botão formam um bloco só,
+alinhado ao topo das fotos; a barra de progresso fica sozinha no pé
+(`margin-top: auto`, fora do `__pe`).
