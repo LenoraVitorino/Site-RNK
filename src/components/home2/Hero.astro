@@ -15,9 +15,6 @@ const lead = copyLiteral ? hero.lead :
   </div>
 
   <div class="hero__grade">
-    <div class="hero__intro">
-      <p class="hero__lead">{lead}</p>
-    </div>
     <div class="hero__palco">
       <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Estratégia e tecnologia para clínicas de alta performance'}</p>
       <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
@@ -31,6 +28,7 @@ const lead = copyLiteral ? hero.lead :
           <span class="hero__revops">RevOps.</span>
         </span>
       </h1>
+      <p class="hero__lead">{lead}</p>
     </div>
     <div class="hero__base">
       <ConfiancaHero />
