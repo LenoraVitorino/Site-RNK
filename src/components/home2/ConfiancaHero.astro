@@ -1,0 +1,19 @@
+---
+import { doutores, totalClinicas } from '../../data/doutores';
+---
+<div class="hero-prova" aria-label="Mais de 30 clínicas que confiam na Renke">
+  {doutores.length > 0 && (
+    <ul class="hero-prova__retratos" aria-label="Doutores">
+      {doutores.slice(0, 6).map((doutor) => (
+        <li class="hero-prova__retrato" tabindex="0" aria-label={`${doutor.nome}, ${doutor.especialidade}`}>
+          <img src={doutor.foto} alt="" width="56" height="56" />
+          <span class="hero-prova__tooltip" aria-hidden="true"><strong>{doutor.nome}</strong><span>{doutor.especialidade}</span></span>
+        </li>
+      ))}
+    </ul>
+  )}
+  <p class="hero-prova__legenda">
+    <strong class="hero-prova__numero">+{totalClinicas.toLocaleString('pt-BR')}</strong>
+    <span>Clínicas que<br /><strong>confiam na Renke</strong></span>
+  </p>
+</div>

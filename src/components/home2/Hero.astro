@@ -3,6 +3,7 @@
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
+import ConfiancaHero from './ConfiancaHero.astro';
 
 const lead = copyLiteral ? hero.lead :
   'Estratégia, tecnologia e operação para clínicas de alto padrão que exigem sofisticação e resultados concretos.';
@@ -32,38 +33,11 @@ const lead = copyLiteral ? hero.lead :
       </h1>
     </div>
     <div class="hero__base">
+      <ConfiancaHero />
       <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
     </div>
   </div>
 
   <a class="hero__scroll" href="#o-que-fazemos"><span class="hero__fio"></span>Role para baixo</a>
 
-    {copyLiteral && (
-      <!-- Barra de prova social só na versão copy. Na do estúdio ela sai por
-           enquanto: os logos dos clientes ainda não chegaram, e a barra com a
-           assinatura da Renke repetida era só um exemplo. -->
-    <div class="hero__confianca">
-      <div class="hero__confianca__inner">
-        <p class="hero__confianca__frase">Doutores que <strong>confiam na Renke</strong></p>
-        <!-- Como a barra da referência: a frase à esquerda, um fio vertical e
-             o carrossel de logos ocupando o resto da largura. Dois grupos
-             idênticos e translateX(-50%) em loop, com máscara nas bordas.
-             Exemplo com a assinatura da Renke em cinza; entram os logos dos
-             clientes (marvee.com.br) quando os arquivos chegarem. -->
-        <div class="hero__clientes">
-        <div class="rolo" aria-label="Logos de clientes (a definir)">
-          <div class="rolo__trilho">
-            {[0, 1].map((copia) => (
-              <ul class="rolo__grupo" aria-hidden={copia === 1 ? 'true' : undefined}>
-                {[1, 2, 3, 4, 5, 6].map(() => (
-                  <li><img src="/marca/renke-assinatura.png" alt="" width="299" height="62" loading="lazy" /></li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-    )}
 </section>
