@@ -324,15 +324,23 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero__mensagem--antes { visibility: hidden; }
 .hero__mensagem--depois { opacity: 1; }
 .hero__revops { color: var(--destaque); font-weight: 500; }
-.hero__risco { display: inline-block; position: relative; }
-.hero__risco::after { content: ''; position: absolute; left: 0; right: 0; top: 54%; height: 2px; background: currentColor; transform-origin: left; transform: scaleX(0); }
+@property --hero-risco-progresso {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+.hero__risco {
+  display: inline-block; position: relative;
+  background: linear-gradient(to right, #777773 0%, #777773 var(--hero-risco-progresso), var(--papel) var(--hero-risco-progresso), var(--papel) 100%);
+  background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+.hero__risco::after { content: ''; position: absolute; left: 0; width: var(--hero-risco-progresso); top: 54%; height: 2px; background: #777773; }
 .js .hero__mensagem--antes { visibility: visible; animation: hero-frase-sai .7s ease 3.1s forwards; }
 .js .hero__mensagem--depois { opacity: 0; transform: translateY(.18em); animation: hero-frase-entra .9s var(--easing) 3.35s forwards; }
-.js .hero__risco { animation: hero-cinza 1ms step-start 1s forwards; }
-.js .hero__risco::after { animation: hero-risca .8s cubic-bezier(.65,0,.35,1) 1s forwards; }
-.js .hero__risco--segundo::after { animation-delay: 1.4s; }
-@keyframes hero-risca { to { transform: scaleX(1); } }
-@keyframes hero-cinza { to { color: #777773; } }
+/* Uma única medida controla o preenchimento cinza e a ponta do traço. */
+.js .hero__risco { animation: hero-risca .8s cubic-bezier(.65,0,.35,1) 1s forwards; }
+.js .hero__risco--segundo { animation-delay: 1.4s; }
+@keyframes hero-risca { to { --hero-risco-progresso: 100%; } }
 @keyframes hero-frase-sai { to { opacity: 0; transform: translateY(-.12em); visibility: hidden; } }
 @keyframes hero-frase-entra { to { opacity: 1; transform: none; } }
 .hero__base { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
