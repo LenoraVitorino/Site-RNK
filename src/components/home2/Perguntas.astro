@@ -25,10 +25,12 @@ const entra = copyLiteral ? '' : 'entra';
         <strong>Mas e com o seu negócio?</strong>
       </p>
     ) : (
+      <!-- A frase do print da Lenora (19/09), em duas linhas, no mesmo
+           desenho do título do Protocolo Revena (tinta palavra a palavra). -->
       <h2 class="ancora ancora--revela" data-revena-revela>
-        {['Operação em', 'alta performance.'].map((linha) => (
+        {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
           <span class="ancora__linha">
-            {linha.split(' ').map((palavra) => <><span data-palavra class:list={[['alta', 'performance.'].includes(palavra) && 'ancora__destaque']}>{palavra}</span>{' '}</>)}
+            {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
           </span>
         ))}
       </h2>
