@@ -1091,3 +1091,36 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 @media (max-width: 599.98px) {
   #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
 }
+
+/* Pilares: copy original em linhas alternadas, antes da apresentação dos planos. */
+.revena-pilares__cabeca { display: grid; gap: 20px; margin-bottom: clamp(48px, 7vw, 104px); }
+.revena-pilar {
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: clamp(40px, 7vw, 112px);
+  padding-block: clamp(40px, 6vw, 88px);
+  border-top: 1px solid var(--fio);
+}
+.revena-pilar:nth-child(even) .revena-pilar__texto { grid-column: 2; grid-row: 1; }
+.revena-pilar:nth-child(even) .revena-pilar__visual { grid-column: 1; grid-row: 1; }
+.revena-pilar__texto { display: grid; gap: 24px; }
+.revena-pilar__texto h3 {
+  max-width: 21ch; font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: var(--peso-titulo); line-height: 1.12; letter-spacing: -.04em;
+}
+.revena-pilar__texto p { max-width: 45ch; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.65; color: var(--cinza); }
+.revena-pilar__visual {
+  position: relative; display: grid; place-items: center; overflow: hidden;
+  min-height: 240px; aspect-ratio: 4 / 3;
+  background: radial-gradient(ellipse at center, #1b1c18, #080908 70%);
+  border-radius: var(--raio-caixa);
+}
+.revena-pilar__orbita { position: absolute; width: 62%; aspect-ratio: 1; border: 1px solid rgb(255 209 3 / .13); border-radius: 50%; }
+.revena-pilar__orbita::after { content: ''; position: absolute; inset: 17%; border: 1px solid rgb(255 209 3 / .09); border-radius: inherit; }
+.revena-pilar__icone { position: relative; display: block; width: clamp(64px, 8vw, 120px); color: var(--destaque); }
+.revena-pilar__icone svg { display: block; width: 100%; height: auto; stroke-width: .8; }
+@media (max-width: 699.98px) {
+  .revena-pilar { grid-template-columns: 1fr; gap: 32px; }
+  .revena-pilar:nth-child(even) .revena-pilar__texto,
+  .revena-pilar:nth-child(even) .revena-pilar__visual { grid-column: auto; grid-row: auto; }
+  .revena-pilar__visual { min-height: 180px; aspect-ratio: 16 / 9; }
+}

@@ -30,7 +30,8 @@ import { copyLiteral } from '../data/versao';
   <OQueFaz />
   {!copyLiteral && <NumerosFaixa />}
   <Letreiro />
-  {copyLiteral ? <Protocolos /> : <PlanosPalco />}
+  <Protocolos />
+  {!copyLiteral && <PlanosPalco />}
   {copyLiteral && <Planos />}
   <Perguntas />
   <Resultados />
