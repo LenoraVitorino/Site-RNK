@@ -5,6 +5,6 @@ export interface Doutor {
   foto: string;
 }
 
-// Número de clínicas já exibido na home; não representa contagem de médicos.
-export const totalClinicas = 30;
+// 00 é o marcador solicitado enquanto a contagem de doutores não é definida.
+export const totalDoutores: number | null = null;
 export const doutores: Doutor[] = [];

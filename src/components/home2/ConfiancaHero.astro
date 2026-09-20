@@ -1,19 +1,21 @@
 ---
-import { doutores, totalClinicas } from '../../data/doutores';
+import { doutores, totalDoutores } from '../../data/doutores';
+const retratos = Array.from({ length: 6 }, (_, i) => doutores[i] ?? null);
+const numero = totalDoutores === null ? '00' : totalDoutores.toLocaleString('pt-BR');
 ---
-<div class="hero-prova" aria-label="Mais de 30 clínicas que confiam na Renke">
-  {doutores.length > 0 && (
-    <ul class="hero-prova__retratos" aria-label="Doutores">
-      {doutores.slice(0, 6).map((doutor) => (
-        <li class="hero-prova__retrato" tabindex="0" aria-label={`${doutor.nome}, ${doutor.especialidade}`}>
+<div class="hero-prova">
+  <ul class="hero-prova__retratos" aria-label="Retratos dos doutores">
+    {retratos.map((doutor) => (
+      <li class:list={['hero-prova__retrato', !doutor && 'hero-prova__retrato--vazio']} tabindex={doutor ? '0' : undefined} aria-label={doutor ? `${doutor.nome}, ${doutor.especialidade}` : undefined} aria-hidden={!doutor ? 'true' : undefined}>
+        {doutor && <>
           <img src={doutor.foto} alt="" width="56" height="56" />
           <span class="hero-prova__tooltip" aria-hidden="true"><strong>{doutor.nome}</strong><span>{doutor.especialidade}</span></span>
-        </li>
-      ))}
-    </ul>
-  )}
+        </>}
+      </li>
+    ))}
+  </ul>
   <p class="hero-prova__legenda">
-    <strong class="hero-prova__numero">+{totalClinicas.toLocaleString('pt-BR')}</strong>
-    <span>Clínicas que<br /><strong>confiam na Renke</strong></span>
+    <strong class="hero-prova__numero">+ de {numero}</strong>
+    <span>Doutores que<br /><strong>confiam na gente</strong></span>
   </p>
 </div>
