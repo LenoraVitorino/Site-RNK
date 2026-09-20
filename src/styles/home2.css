@@ -426,7 +426,8 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    ============================================================ */
 
 .oquefaz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
-.oquefaz__texto { display: grid; gap: 28px; }
+.oquefaz__texto { display: grid; gap: 28px; container-type: inline-size; }
+.oquefaz__texto > .titulo { white-space: nowrap; font-size: clamp(1rem, 9.5cqw, 3rem); }
 .oquefaz__texto p:not(.rotulo) { max-width: 52ch; line-height: 1.6; }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
