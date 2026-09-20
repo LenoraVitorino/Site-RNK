@@ -1164,9 +1164,16 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 /* Cartão de número: o valor em amarelo, como os indicadores, e a legenda embaixo. */
 .bloco__numero { margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque); font-size: clamp(2.4rem, 3.6vw, 4rem); line-height: .95; letter-spacing: -.04em; white-space: nowrap; }
 .bloco__legenda { margin: 0; font-size: clamp(14px, 1.1vw, 16px); color: var(--cinza); }
+.bloco__numero .contador { display: inline-block; font-variant-numeric: tabular-nums; }
 .sobre-editorial__progresso { width: 112px; height: 2px; background: var(--fio); }
 .sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
-.sobre-editorial__percurso--fixo .sobre-editorial__palco { position: sticky; top: 0; height: 100svh; padding-top: 112px; padding-bottom: 32px; align-content: center; overflow: hidden; }
+/* Preso: a esteira sangra até a borda direita da tela (sem respiro nem máscara no fim,
+   Lenora 20/09); o texto segue alinhado ao container pela esquerda. */
+.sobre-editorial__percurso--fixo .sobre-editorial__palco {
+  position: sticky; top: 0; height: 100svh; width: 100%; max-width: none;
+  padding: 112px 0 32px max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter)));
+  align-content: center; overflow: hidden;
+}
 .sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
 @media (max-width: 899.98px) {
   /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
