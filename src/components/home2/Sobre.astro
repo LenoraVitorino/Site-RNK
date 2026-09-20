@@ -9,35 +9,52 @@ import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
+  <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
+       molde da esteira do metodobr.com: blocos de largura igual, alturas
+       iguais, cada um com uma foto inteira ou um par cartão + meia foto,
+       deslizando para a esquerda enquanto a dobra fica presa. -->
   <div class="sobre-editorial__percurso">
     <div class="sobre-editorial__palco">
-      <div class="sobre-editorial__janela" tabindex="0" role="group" aria-label="Fotos da sede da Renke">
-    <div class="sobre-editorial__trilho">
       <div class="sobre-editorial__texto">
-        <p class="rotulo">Por dentro da Renke</p>
-        <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
-        <p class="sobre-editorial__descricao">
-          Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
-          oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
-        </p>
-        <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
+        <div class="sobre-editorial__cabeca">
+          <p class="rotulo">Por dentro da Renke</p>
+          <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
+        </div>
+        <div class="sobre-editorial__pe">
+          <p class="sobre-editorial__descricao">
+            Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+            oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
+          </p>
+          <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
+          <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
+        </div>
       </div>
 
-        <figure class="sobre-editorial__foto sobre-editorial__foto--principal">
-          <Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
-          <figcaption>Onde tudo se conecta</figcaption>
-        </figure>
-        <figure class="sobre-editorial__foto sobre-editorial__foto--conexao">
-          <Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
-          <figcaption>A operação, de perto</figcaption>
-        </figure>
-        <figure class="sobre-editorial__foto sobre-editorial__foto--reuniao">
-          <Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
-          <figcaption>Espaço para construir juntos</figcaption>
-        </figure>
-    </div>
+      <div class="sobre-editorial__janela" tabindex="0" role="group" aria-label="Fotos da sede da Renke">
+        <div class="sobre-editorial__trilho">
+          <div class="bloco">
+            <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">Onde tudo se conecta</p></div>
+            <figure class="bloco__foto bloco__foto--meia"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto bloco__foto--meia bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">A operação, de perto</p></div>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">Espaço para construir juntos</p></div>
+            <figure class="bloco__foto bloco__foto--meia"><Image src={reuniao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          </div>
+        </div>
       </div>
-      <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
     </div>
   </div>
   <div class="container">
@@ -66,7 +83,7 @@ import reuniao from '../../assets/sede/reuniao.jpg';
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
     const measure = () => {
       distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      pinned = !reduced.matches && window.innerHeight >= 600 && distance > 0;
+      pinned = !reduced.matches && window.innerWidth >= 900 && window.innerHeight >= 600 && distance > 0;
       section.classList.toggle('sobre-editorial__percurso--fixo', pinned);
       section.style.height = pinned ? `${stage.offsetHeight + distance * pace}px` : '';
       viewport.tabIndex = pinned ? -1 : 0;

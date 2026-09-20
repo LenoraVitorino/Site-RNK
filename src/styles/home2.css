@@ -1130,40 +1130,52 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 .hero-prova__legenda .hero-prova__numero { white-space: nowrap; }
 
-/* Galeria editorial: o scroll vertical percorre as fotos horizontalmente. */
-.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(420px, calc(100svh - 200px), 680px); }
-.sobre-editorial__palco { padding-block: 80px 24px; }
-.sobre-editorial__janela { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--destaque) transparent; }
-.sobre-editorial__trilho { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); width: max-content; height: var(--sobre-altura); padding-inline: var(--grid-inset); }
-.sobre-editorial__texto { flex: none; width: clamp(300px, 32vw, 480px); height: 100%; padding: 12px clamp(24px, 3vw, 48px) 12px 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: clamp(20px, 2.4vw, 36px); }
+/* Sobre: texto fixo à esquerda (referência Marvee) e, à direita, a esteira do
+   metodobr.com — blocos de 300px com 32px de vão, alturas iguais, foto inteira
+   ou cartão + meia foto, deslizando com o scroll enquanto a dobra fica presa. */
+.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(440px, calc(100svh - 224px), 756px); --bloco: clamp(240px, 21vw, 300px); --vao: 32px; }
+.sobre-editorial__palco {
+  width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
+  display: grid; grid-template-columns: clamp(300px, 30vw, 440px) minmax(0, 1fr); gap: clamp(32px, 5vw, 96px); align-items: stretch;
+}
+.sobre-editorial__texto { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: var(--sobre-altura); }
+.sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
+.sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
 /* Duas linhas, quebra fixa (Lenora, 20/09): o teto da fonte garante que
-   "Conheça a história" caiba na coluna de 480px em qualquer tela. */
+   "Conheça a história" caiba na coluna em qualquer tela. */
 .sobre-editorial__texto .sobre__declaracao { max-width: none; font-size: clamp(2.2rem, 3.4vw, 3.3rem); }
 .sobre-editorial__descricao { max-width: 37ch; margin: 0; color: var(--cinza); font-size: clamp(15px, 1.2vw, 19px); line-height: 1.65; }
-.sobre-editorial__foto { flex: none; position: relative; width: clamp(320px, 40vw, 620px); height: 94%; margin: 0; overflow: hidden; border-radius: 12px; background: var(--painel); }
-.sobre-editorial__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.sobre-editorial__foto--principal { align-self: flex-start; width: clamp(300px, 34vw, 520px); }
-.sobre-editorial__foto--conexao { align-self: flex-end; }
-.sobre-editorial__foto--reuniao { align-self: flex-start; }
-.sobre-editorial__foto figcaption { position: absolute; inset: auto 0 0; padding: 48px 24px 24px; background: linear-gradient(transparent, rgb(0 0 0 / .8)); color: #fff; font-size: 13px; letter-spacing: .015em; }
-.sobre-editorial__percurso--fixo .sobre-editorial__palco { position: sticky; top: 0; height: 100svh; padding: 112px 0 32px; display: flex; flex-direction: column; justify-content: center; gap: 24px; overflow: hidden; }
-.sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
-.sobre-editorial__percurso--fixo .sobre-editorial__trilho { will-change: transform; }
-.sobre-editorial__progresso { display: none; }
-.sobre-editorial__percurso--fixo .sobre-editorial__progresso { display: block; margin-left: var(--grid-inset); width: 112px; height: 2px; background: var(--fio); }
+.sobre-editorial__janela { min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--destaque) transparent; }
+.sobre-editorial__trilho { display: flex; align-items: stretch; gap: var(--vao); width: max-content; height: var(--sobre-altura); will-change: transform; }
+.bloco { flex: 0 0 var(--bloco); display: flex; flex-direction: column; gap: var(--vao); min-height: 0; }
+.bloco__foto { flex: 1 1 0; min-height: 0; margin: 0; position: relative; overflow: hidden; border-radius: 12px; background: var(--painel); }
+.bloco__foto--meia { flex: 0 0 43%; }
+.bloco__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.bloco__foto--alto img { object-position: center 20%; }
+.bloco__cartao {
+  flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px;
+  padding: clamp(24px, 2.4vw, 40px); border-radius: 12px; background: var(--painel); border: 1px solid var(--fio);
+}
+.bloco__rotulo { margin: 0; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--destaque); }
+.bloco__titulo { margin: 0; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.3; font-weight: var(--peso-enfase); color: var(--papel); text-wrap: balance; }
+.sobre-editorial__progresso { width: 112px; height: 2px; background: var(--fio); }
 .sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
+.sobre-editorial__percurso--fixo .sobre-editorial__palco { position: sticky; top: 0; height: 100svh; padding-top: 112px; padding-bottom: 32px; align-content: center; overflow: hidden; }
+.sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
 .sobre-editorial__numeros { margin-top: clamp(40px, 5vw, 72px); padding-top: clamp(32px, 4vw, 56px); border-top: 1px solid var(--fio); }
 .sobre-editorial__numeros .impacto__lista { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .sobre-editorial__numeros .impacto__item + .impacto__item { padding-left: clamp(24px, 4vw, 64px); border-left: 1px solid var(--fio); }
 .sobre-editorial__numeros .impacto__num { font-size: clamp(2.4rem, 4.8vw, 5rem); }
 .sobre-editorial__numeros .impacto__legenda { font-size: 15px; }
-@media (max-width: 699.98px) {
-  .sobre-editorial__percurso { --sobre-altura: clamp(420px, calc(100svh - 180px), 620px); }
-  .sobre-editorial__texto { width: 84vw; padding-right: 16px; gap: 22px; }
+@media (max-width: 899.98px) {
+  /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
+  .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --vao: 16px; }
+  .sobre-editorial__palco { grid-template-columns: 1fr; gap: 32px; padding-top: 56px; }
+  .sobre-editorial__texto { min-height: 0; gap: 24px; }
   .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
-  .sobre-editorial__foto { width: 82vw; }
-  .sobre-editorial__foto figcaption { padding-inline: 18px; font-size: 12px; }
+  .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+  .sobre-editorial__progresso { display: none; }
   .sobre-editorial__numeros .impacto__lista { grid-template-columns: 1fr; gap: 24px; }
   .sobre-editorial__numeros .impacto__item + .impacto__item { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--fio); }
 }

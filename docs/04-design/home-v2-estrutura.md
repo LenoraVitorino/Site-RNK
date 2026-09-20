@@ -350,3 +350,20 @@ risco (gradiente de `background-size` 0 → 100%) passa por "marketing" e
 para o espaço não sumir) e "RevOps." sobe no lugar. Fica "Isso é /
 RevOps.". Sem JS (`html:not(.js)`) ou com menos movimento, o estado final
 direto. O segundo título da direita saiu; lá ficam ano, lead e CTA.
+
+## Sobre: texto fixo + esteira do Método (20/09/2026)
+
+Pedido da Lenora com o print da dobra "Por dentro da Marvee": manter a
+composição (texto à esquerda, fotos à direita) mais perto da esteira de
+metodobr.com, lida do site em 20/09: blocos de 300px com 32px de vão,
+alturas iguais, cada um com uma foto inteira ou um par cartão + meia foto
+(43%), deslizando linearmente para a esquerda enquanto a dobra fica presa.
+Em `Sobre.astro`: coluna de texto fixa (`.sobre-editorial__texto`, rótulo e
+título em cima, descrição, CTA e barra de progresso no pé) e a
+`.sobre-editorial__janela` com o `.sobre-editorial__trilho` de seis blocos
+(`.bloco`): fotos da sede inteiras alternando com cartões escuros que levam
+as legendas ("Onde tudo se conecta", "A operação, de perto", "Espaço para
+construir juntos") e o rótulo "Sede · Blumenau/SC". O script já existente
+prende a dobra e move o trilho pela distância `scrollWidth − clientWidth`
+(ritmo 0,85); agora só no desktop (≥ 900px). No celular o texto fica em
+cima e a esteira em rolagem horizontal comum. Os números seguem embaixo.
