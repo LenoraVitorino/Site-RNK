@@ -1133,7 +1133,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 /* Sobre: texto fixo à esquerda (referência Marvee) e, à direita, a esteira do
    metodobr.com — blocos de 300px com 32px de vão, alturas iguais, foto inteira
    ou cartão + meia foto, deslizando com o scroll enquanto a dobra fica presa. */
-.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(440px, calc(100svh - 224px), 756px); --bloco: clamp(240px, 21vw, 300px); --vao: 32px; }
+.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(440px, calc(100svh - 224px), 756px); --bloco: clamp(240px, 21vw, 300px); --bloco-largo: clamp(320px, 30vw, 440px); --vao: 32px; }
 .sobre-editorial__palco {
   width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
   display: grid; grid-template-columns: clamp(300px, 30vw, 440px) minmax(0, 1fr); gap: clamp(32px, 5vw, 96px); align-items: stretch;
@@ -1149,6 +1149,8 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-editorial__janela { min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--destaque) transparent; }
 .sobre-editorial__trilho { display: flex; align-items: stretch; gap: var(--vao); width: max-content; height: var(--sobre-altura); will-change: transform; }
 .bloco { flex: 0 0 var(--bloco); display: flex; flex-direction: column; gap: var(--vao); min-height: 0; }
+/* Blocos de foto inteira mais largos (Lenora, 20/09). */
+.bloco--largo { flex-basis: var(--bloco-largo); }
 .bloco__foto { flex: 1 1 0; min-height: 0; margin: 0; position: relative; overflow: hidden; border-radius: 12px; background: var(--painel); }
 .bloco__foto--meia { flex: 0 0 43%; }
 .bloco__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
@@ -1159,23 +1161,19 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 .bloco__rotulo { margin: 0; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--destaque); }
 .bloco__titulo { margin: 0; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.3; font-weight: var(--peso-enfase); color: var(--papel); text-wrap: balance; }
+/* Cartão de número: o valor em amarelo, como os indicadores, e a legenda embaixo. */
+.bloco__numero { margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque); font-size: clamp(2.4rem, 3.6vw, 4rem); line-height: .95; letter-spacing: -.04em; white-space: nowrap; }
+.bloco__legenda { margin: 0; font-size: clamp(14px, 1.1vw, 16px); color: var(--cinza); }
 .sobre-editorial__progresso { width: 112px; height: 2px; background: var(--fio); }
 .sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
 .sobre-editorial__percurso--fixo .sobre-editorial__palco { position: sticky; top: 0; height: 100svh; padding-top: 112px; padding-bottom: 32px; align-content: center; overflow: hidden; }
 .sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
-.sobre-editorial__numeros { margin-top: clamp(40px, 5vw, 72px); padding-top: clamp(32px, 4vw, 56px); border-top: 1px solid var(--fio); }
-.sobre-editorial__numeros .impacto__lista { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
-.sobre-editorial__numeros .impacto__item + .impacto__item { padding-left: clamp(24px, 4vw, 64px); border-left: 1px solid var(--fio); }
-.sobre-editorial__numeros .impacto__num { font-size: clamp(2.4rem, 4.8vw, 5rem); }
-.sobre-editorial__numeros .impacto__legenda { font-size: 15px; }
 @media (max-width: 899.98px) {
   /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
-  .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --vao: 16px; }
+  .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --bloco-largo: min(78vw, 320px); --vao: 16px; }
   .sobre-editorial__palco { grid-template-columns: 1fr; gap: 32px; padding-top: 56px; }
   .sobre-editorial__texto { min-height: 0; gap: 24px; }
   .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
   .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
   .sobre-editorial__progresso { display: none; }
-  .sobre-editorial__numeros .impacto__lista { grid-template-columns: 1fr; gap: 24px; }
-  .sobre-editorial__numeros .impacto__item + .impacto__item { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--fio); }
-}
+    }

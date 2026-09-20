@@ -2,11 +2,25 @@
 /** História, fotos da sede e indicadores, compartilhados pelas duas versões. */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
-import Numeros from '../ui/Numeros.astro';
+import { copyLiteral } from '../../data/versao';
 import { existe } from '../../data/rotas';
 import operacao from '../../assets/sede/operacao.jpg';
 import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
+
+// Os três números do briefing (⚠️ D1), em cartões entre as fotos (Lenora,
+// 20/09). Versão do estúdio com "+" e sem "R$", como em Numeros.astro.
+const numeros = copyLiteral
+  ? [
+      { valor: '~30', legenda: 'clínicas atendidas' },
+      { valor: '4 anos', legenda: 'de método validado' },
+      { valor: 'R$42M', legenda: 'em faturamento gerado' },
+    ]
+  : [
+      { valor: '+30', legenda: 'clínicas atendidas' },
+      { valor: '+4 anos', legenda: 'de método validado' },
+      { valor: '+42M', legenda: 'em faturamento gerado' },
+    ];
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
   <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
@@ -32,33 +46,30 @@ import reuniao from '../../assets/sede/reuniao.jpg';
 
       <div class="sobre-editorial__janela" tabindex="0" role="group" aria-label="Fotos da sede da Renke">
         <div class="sobre-editorial__trilho">
-          <div class="bloco">
-            <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 78vw, 440px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
-            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">Onde tudo se conecta</p></div>
+            <div class="bloco__cartao bloco__cartao--numero"><p class="bloco__numero num">{numeros[0].valor}</p><p class="bloco__legenda">{numeros[0].legenda}</p></div>
             <figure class="bloco__foto bloco__foto--meia"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
           </div>
-          <div class="bloco">
-            <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 78vw, 440px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
             <figure class="bloco__foto bloco__foto--meia bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
-            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">A operação, de perto</p></div>
+            <div class="bloco__cartao bloco__cartao--numero"><p class="bloco__numero num">{numeros[1].valor}</p><p class="bloco__legenda">{numeros[1].legenda}</p></div>
+          </div>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 78vw, 440px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
-            <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco">
-            <div class="bloco__cartao"><p class="bloco__rotulo">Sede · Blumenau/SC</p><p class="bloco__titulo">Espaço para construir juntos</p></div>
+            <div class="bloco__cartao bloco__cartao--numero"><p class="bloco__numero num">{numeros[2].valor}</p><p class="bloco__legenda">{numeros[2].legenda}</p></div>
             <figure class="bloco__foto bloco__foto--meia"><Image src={reuniao} alt="" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 70vw, 300px" loading="lazy" /></figure>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div class="sobre-editorial__numeros"><Numeros /></div>
   </div>
 </section>
 
