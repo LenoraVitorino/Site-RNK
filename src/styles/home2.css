@@ -1137,8 +1137,9 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-editorial__trilho { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); width: max-content; height: var(--sobre-altura); padding-inline: var(--grid-inset); }
 .sobre-editorial__texto { flex: none; width: clamp(300px, 32vw, 480px); height: 100%; padding: 12px clamp(24px, 3vw, 48px) 12px 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: clamp(20px, 2.4vw, 36px); }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
-/* Duas linhas no máximo (Lenora, 20/09): "Conheça a história / da Renke". */
-.sobre-editorial__texto .sobre__declaracao { max-width: 18ch; font-size: clamp(2.2rem, 3.4vw, 4rem); text-wrap: balance; }
+/* Duas linhas, quebra fixa (Lenora, 20/09): o teto da fonte garante que
+   "Conheça a história" caiba na coluna de 480px em qualquer tela. */
+.sobre-editorial__texto .sobre__declaracao { max-width: none; font-size: clamp(2.2rem, 3.4vw, 3.3rem); }
 .sobre-editorial__descricao { max-width: 37ch; margin: 0; color: var(--cinza); font-size: clamp(15px, 1.2vw, 19px); line-height: 1.65; }
 .sobre-editorial__foto { flex: none; position: relative; width: clamp(320px, 40vw, 620px); height: 94%; margin: 0; overflow: hidden; border-radius: 12px; background: var(--painel); }
 .sobre-editorial__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
