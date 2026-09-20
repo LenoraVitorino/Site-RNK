@@ -1073,3 +1073,20 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   .academy-marca i, .tools-marca, a.botao::after { transition: none; }
   .cartao:hover .academy-marca i, .cartao:hover .tools-marca, a.botao:hover::after { transform: none; }
 }
+
+/* Frase de abertura com a mesma tipografia e revelação do Protocolo Revena. */
+#perguntas .ancora--revela {
+  max-width: none;
+  font-family: var(--font-titulo);
+  font-size: clamp(2.1rem, 4.5vw, 5rem);
+  font-weight: 450;
+  line-height: 1.08;
+  letter-spacing: -.055em;
+  text-align: center;
+}
+.ancora__linha { display: block; }
+.ancora__linha [data-palavra] { display: inline-block; }
+@media (min-width: 900px) { .ancora__linha { white-space: nowrap; } }
+@media (max-width: 599.98px) {
+  #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
+}

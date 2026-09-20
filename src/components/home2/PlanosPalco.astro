@@ -258,9 +258,8 @@ const planos = ordem.map((label) => {
 
 <script>
   // Revelação sequencial vinculada à posição da abertura, reversível ao subir.
-  const manifesto = document.querySelector<HTMLElement>('[data-revena-revela]');
-  const abertura = manifesto?.closest<HTMLElement>('.palcoplanos__intro');
-  if (manifesto && abertura) {
+  document.querySelectorAll<HTMLElement>('[data-revena-revela]').forEach((manifesto) => {
+    const abertura = manifesto.closest<HTMLElement>('.palcoplanos__intro') ?? manifesto;
     const palavras = [...manifesto.querySelectorAll<HTMLElement>('[data-palavra]')];
     const movimento = matchMedia('(prefers-reduced-motion: reduce)');
     let quadro = 0;
@@ -279,5 +278,5 @@ const planos = ordem.map((label) => {
     addEventListener('resize', agendar, { passive: true });
     movimento.addEventListener('change', agendar);
     pintar();
-  }
+  });
 </script>
