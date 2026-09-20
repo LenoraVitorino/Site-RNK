@@ -27,27 +27,27 @@ const numeros = copyLiteral
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
   <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
        molde da esteira do metodobr.com: blocos de largura igual, alturas
-       iguais, cada um com uma foto inteira ou um par cartão + meia foto,
-       deslizando para a esquerda enquanto a dobra fica presa. -->
+       iguais, cada um com uma foto inteira ou um par cartão + meia foto.
+       Tudo, texto incluído, é um carrossel que desliza para a esquerda e
+       revela as fotos enquanto a dobra fica presa (Lenora, 20/09). -->
   <div class="sobre-editorial__percurso">
     <div class="sobre-editorial__palco">
-      <div class="sobre-editorial__texto">
-        <div class="sobre-editorial__cabeca">
-          <p class="rotulo">Por dentro da Renke</p>
-          <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
-        </div>
-        <div class="sobre-editorial__pe">
-          <p class="sobre-editorial__descricao">
-            Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
-            oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
-          </p>
-          <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
-          <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
-        </div>
-      </div>
-
       <div class="sobre-editorial__janela" tabindex="0" role="group" aria-label="Fotos da sede da Renke">
         <div class="sobre-editorial__trilho">
+          <div class="sobre-editorial__texto">
+            <div class="sobre-editorial__cabeca">
+              <p class="rotulo">Por dentro da Renke</p>
+              <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
+            </div>
+            <div class="sobre-editorial__pe">
+              <p class="sobre-editorial__descricao">
+                Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+                oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
+              </p>
+              <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
+              <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
+            </div>
+          </div>
           <div class="bloco bloco--largo">
             <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 78vw, 440px" loading="lazy" /></figure>
           </div>

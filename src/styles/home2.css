@@ -1136,9 +1136,10 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-editorial__percurso { position: relative; --sobre-altura: clamp(440px, calc(100svh - 224px), 756px); --bloco: clamp(240px, 21vw, 300px); --bloco-largo: clamp(320px, 30vw, 440px); --vao: 32px; }
 .sobre-editorial__palco {
   width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
-  display: grid; grid-template-columns: clamp(300px, 30vw, 440px) minmax(0, 1fr); gap: clamp(32px, 5vw, 96px); align-items: stretch;
+  display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch;
 }
-.sobre-editorial__texto { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: var(--sobre-altura); }
+/* O texto é o primeiro item do carrossel: desliza junto com as fotos. */
+.sobre-editorial__texto { flex: 0 0 clamp(300px, 30vw, 440px); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; height: 100%; }
 .sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
 .sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
@@ -1178,8 +1179,8 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 @media (max-width: 899.98px) {
   /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
   .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --bloco-largo: min(78vw, 320px); --vao: 16px; }
-  .sobre-editorial__palco { grid-template-columns: 1fr; gap: 32px; padding-top: 56px; }
-  .sobre-editorial__texto { min-height: 0; gap: 24px; }
+  .sobre-editorial__palco { padding-top: 56px; }
+  .sobre-editorial__texto { flex-basis: 84vw; margin-right: 8px; gap: 24px; justify-content: center; }
   .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
   .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
   .sobre-editorial__progresso { display: none; }
