@@ -367,3 +367,14 @@ construir juntos") e o rótulo "Sede · Blumenau/SC". O script já existente
 prende a dobra e move o trilho pela distância `scrollWidth − clientWidth`
 (ritmo 0,85); agora só no desktop (≥ 900px). No celular o texto fica em
 cima e a esteira em rolagem horizontal comum. Os números seguem embaixo.
+
+### 20/09/2026 — Sobre: esteira full na tela
+
+Pedido da Lenora: sem recuo à esquerda e carrossel ocupando as duas laterais,
+dobra mais alta e blocos mais largos. O palco preso perdeu o padding lateral
+(a esteira parte de x=0 e termina na borda direita); só o texto guarda o
+gutter, por margem própria. Altura da esteira `clamp(480px, 100svh − 176px,
+920px)`; blocos `clamp(280px, 26vw, 400px)` e largos `clamp(380px, 38vw,
+580px)`; texto `clamp(320px, 32vw, 500px)`. Medido em 1440×900 (blocos
+547/374 × 724px, curso 2150px) e 1920×1080 (580/400 × 904px); celular segue
+em rolagem horizontal comum.

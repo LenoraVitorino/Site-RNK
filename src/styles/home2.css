@@ -1133,13 +1133,15 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 /* Sobre: texto fixo à esquerda (referência Marvee) e, à direita, a esteira do
    metodobr.com — blocos de 300px com 32px de vão, alturas iguais, foto inteira
    ou cartão + meia foto, deslizando com o scroll enquanto a dobra fica presa. */
-.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(440px, calc(100svh - 224px), 756px); --bloco: clamp(240px, 21vw, 300px); --bloco-largo: clamp(320px, 30vw, 440px); --vao: 32px; }
+/* Mais cheia na tela (Lenora, 20/09): blocos mais largos e a esteira quase
+   na altura toda da dobra, sangrando nas duas laterais. */
+.sobre-editorial__percurso { position: relative; --sobre-altura: clamp(480px, calc(100svh - 176px), 920px); --bloco: clamp(280px, 26vw, 400px); --bloco-largo: clamp(380px, 38vw, 580px); --vao: 32px; }
 .sobre-editorial__palco {
   width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
   display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch;
 }
 /* O texto é o primeiro item do carrossel: desliza junto com as fotos. */
-.sobre-editorial__texto { flex: 0 0 clamp(300px, 30vw, 440px); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; height: 100%; }
+.sobre-editorial__texto { flex: 0 0 clamp(320px, 32vw, 500px); margin-left: var(--gutter); margin-right: clamp(32px, 5vw, 96px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; height: 100%; }
 .sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
 .sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
 .sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
@@ -1168,19 +1170,18 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .bloco__numero .contador { display: inline-block; font-variant-numeric: tabular-nums; }
 .sobre-editorial__progresso { width: 112px; height: 2px; background: var(--fio); }
 .sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
-/* Preso: a esteira sangra até a borda direita da tela (sem respiro nem máscara no fim,
-   Lenora 20/09); o texto segue alinhado ao container pela esquerda. */
+/* Preso: a esteira sangra nas duas bordas da tela, sem recuo nem máscara
+   (Lenora, 20/09); só o texto guarda o gutter à esquerda, pela margem própria. */
 .sobre-editorial__percurso--fixo .sobre-editorial__palco {
   position: sticky; top: 0; height: 100svh; width: 100%; max-width: none;
-  padding: 112px 0 32px max(var(--gutter), calc((100% - var(--largura)) / 2 + var(--gutter)));
-  align-content: center; overflow: hidden;
+  padding: 96px 0 24px; align-content: center; overflow: hidden;
 }
 .sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
 @media (max-width: 899.98px) {
   /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
   .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --bloco-largo: min(78vw, 320px); --vao: 16px; }
   .sobre-editorial__palco { padding-top: 56px; }
-  .sobre-editorial__texto { flex-basis: 84vw; margin-right: 8px; gap: 24px; justify-content: center; }
+  .sobre-editorial__texto { flex-basis: 84vw; margin-left: 0; margin-right: 8px; gap: 24px; justify-content: center; }
   .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
   .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
   .sobre-editorial__progresso { display: none; }
