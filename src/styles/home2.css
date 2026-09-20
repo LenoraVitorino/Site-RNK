@@ -304,88 +304,53 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .secao--amarela .foto { background: rgb(22 22 22 / .06); }
 .secao--amarela .foto__legenda { color: rgb(22 22 22 / .7); }
 
-/* ============================================================
-   DOBRA 1 · HERO — desenho da referência (print da Lenora, 18/09/2026)
-   Fundo preto com duas curvas escuras e um brilho amarelo no pé; título à
-   esquerda (primeira linha em papel, as outras no amarelo), objeto no
-   centro, ano + lead + segundo título à direita; fio e "Role para baixo".
-   ============================================================ */
-
+/* Hero editorial compartilhada entre as duas versões de copy. */
 .hero {
-  position: relative; overflow: hidden; isolation: isolate;
-  min-height: 100svh; padding-top: var(--altura-header);
-  display: grid; grid-template-rows: 1fr auto; justify-items: stretch;
-  background: #000; color: var(--papel);
+  position: relative; overflow: hidden; isolation: isolate; background: #070909;
+  min-height: 100svh; padding-top: var(--altura-header); color: var(--papel);
 }
-.hero__fundo { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-/* O brilho amarelo no pé, como a referência. */
-.hero__brilho {
-  position: absolute; left: 50%; bottom: -34vh; width: 130vw; height: 62vh; transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 60%, rgb(255 209 3 / .8) 0%, rgb(255 209 3 / .32) 32%, transparent 64%);
-  filter: blur(18px);
-}
-
-.hero__grade {
-  position: relative; z-index: 1;
-  width: min(100%, var(--largura)); margin-inline: auto;
-  padding: clamp(20px, 5vh, 56px) var(--gutter) 0;
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  gap: clamp(24px, 6vw, 120px); align-items: start;
-}
-.hero__rotulo {
-  display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(16px, 2.6vh, 28px);
-  font-size: 15px; letter-spacing: .02em; text-transform: uppercase; color: rgb(242 242 238 / .78);
-}
-.hero__quadrado { width: 12px; height: 12px; background: var(--destaque); border-radius: 2px; }
-/* Os dois títulos no mesmo desenho: linhas empilhadas, a primeira em papel e as outras no amarelo. */
-.hero__h1 {
-  margin: 0; display: grid;
-  font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; line-height: .98; text-wrap: balance;
-  font-size: clamp(2.4rem, 5.6vw, 7rem);
-}
-.hero__linha { display: block; }
-.hero__linha--destaque { color: var(--destaque); }
-/* A cena: cada linha que entra ou sai é uma "dobra" (grid de 1fr ↔ 0fr) para
-   as linhas de baixo subirem junto. */
-.hero__dobra { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .7s var(--easing), opacity .45s var(--easing), transform .7s var(--easing); }
-.hero__dobra > .hero__linha { min-height: 0; overflow: hidden; }
-/* "marketing para clínicas." em amarelo apagado; o risco é um gradiente que cresce da esquerda. */
-.hero__linha--riscada > span {
-  color: rgb(255 209 3 / .6);
-  background: linear-gradient(var(--destaque), var(--destaque)) 0 56% / 0 .06em no-repeat;
-  transition: background-size .8s cubic-bezier(.65, 0, .35, 1);
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
-}
-.hero--risca .hero__linha--riscada > span, html:not(.js) .hero__linha--riscada > span { background-size: 100% .06em; }
-/* O riscado some (dobra fecha) e o "não" se recolhe. */
-.hero--some .hero__dobra--riscada, html:not(.js) .hero__dobra--riscada { grid-template-rows: 0fr; opacity: 0; }
-.hero__nao { display: inline-block; max-width: 4em; overflow: hidden; white-space: nowrap; vertical-align: bottom; transition: max-width .6s var(--easing), opacity .35s var(--easing); }
-.hero--some .hero__nao, html:not(.js) .hero__nao { max-width: 0; opacity: 0; }
-/* "RevOps." entra no lugar. */
-.hero__dobra--revops { grid-template-rows: 0fr; opacity: 0; transform: translateY(.25em); }
-.hero--some .hero__dobra--revops, html:not(.js) .hero__dobra--revops { grid-template-rows: 1fr; opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .hero__dobra, .hero__nao, .hero__linha--riscada > span { transition: none; } }
-/* O ano ocupa a mesma linha do rótulo (mesma altura e margem) para os dois títulos começarem juntos. */
-.hero__ano { margin: 0 0 clamp(16px, 2.6vh, 28px); display: flex; align-items: center; gap: 10px; min-height: 23px; font-size: 13px; color: var(--destaque); }
-.hero__c { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; }
-.hero__lead { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); }
-.hero__acoes { margin: clamp(18px, 3vh, 28px) 0 0; }
-
-/* Fio e chamada para rolar, centrados no pé. */
-.hero__scroll {
-  position: relative; z-index: 1; justify-self: center;
-  display: grid; justify-items: center; gap: 16px; padding-bottom: clamp(24px, 4vh, 40px);
-  font-size: 15px; color: var(--destaque); text-decoration: none;
-}
-.hero__fio { width: 1px; height: clamp(72px, 16vh, 160px); background: linear-gradient(transparent, var(--destaque)); }
-
+.hero__fundo { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.hero__ondas { width: 100%; height: 100%; object-fit: cover; opacity: .42; }
+.hero__brilho { position: absolute; inset: 0; background: linear-gradient(90deg, #070909 0%, transparent 65%), linear-gradient(0deg, #070909 0%, transparent 38%); }
+.hero__grade { width: min(100%, var(--largura)); margin-inline: auto; padding: clamp(30px, 5vh, 64px) var(--gutter) 48px; }
+.hero__intro { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.hero__rotulo { display: flex; gap: 12px; align-items: center; font-size: 13px; color: var(--cinza); }
+.hero__quadrado { width: 7px; height: 7px; border-radius: 50%; background: var(--destaque); flex-shrink: 0; }
+.hero .hero__lead { max-width: 38ch; margin: 0; font-size: clamp(16px, 1.45vw, 21px); line-height: 1.5; font-weight: 400; color: rgb(242 242 238 / .74); }
+.hero__palco { padding-block: clamp(48px, 7vh, 90px); }
+.hero__h1 { position: relative; margin: 0; font-family: var(--font-titulo); font-size: clamp(3rem, 7.3vw, 7.4rem); font-weight: 300; line-height: 1.04; letter-spacing: -.065em; min-height: 3.12em; }
+.hero__mensagem { display: grid; position: absolute; inset: 0; align-content: start; }
+.hero__mensagem--antes { visibility: hidden; }
+.hero__mensagem--depois { opacity: 1; }
+.hero__revops { color: var(--destaque); font-weight: 500; }
+.hero__risco { display: inline-block; position: relative; }
+.hero__risco::after { content: ''; position: absolute; left: 0; right: 0; top: 54%; height: 2px; background: currentColor; transform-origin: left; transform: scaleX(0); }
+.js .hero__mensagem--antes { visibility: visible; animation: hero-frase-sai .7s ease 3.1s forwards; }
+.js .hero__mensagem--depois { opacity: 0; transform: translateY(.18em); animation: hero-frase-entra .9s var(--easing) 3.35s forwards; }
+.js .hero__risco { animation: hero-apaga .55s ease 2.1s forwards; }
+.js .hero__risco::after { animation: hero-risca .8s cubic-bezier(.65,0,.35,1) 1s forwards; }
+.js .hero__risco--segundo::after { animation-delay: 1.4s; }
+@keyframes hero-risca { to { transform: scaleX(1); } }
+@keyframes hero-apaga { to { opacity: .32; } }
+@keyframes hero-frase-sai { to { opacity: 0; transform: translateY(-.12em); visibility: hidden; } }
+@keyframes hero-frase-entra { to { opacity: 1; transform: none; } }
+.hero__base { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.hero__selo { display: inline-flex; align-items: center; gap: 12px; max-width: 52ch; margin: 0; padding: 8px 18px 8px 8px; background: rgb(15 17 17 / .85); border: 1px solid rgb(242 242 238 / .12); border-radius: 40px; font-size: 14px; line-height: 1.4; }
+.hero__selo > span { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--destaque); color: #070909; font-size: 21px; }
+.hero__acoes { margin: 0; flex-shrink: 0; }
+.hero__scroll { display: flex; justify-content: center; align-items: center; gap: 12px; padding-bottom: 32px; color: var(--cinza); font-size: 12px; text-decoration: none; }
+.hero__fio { width: 1px; height: 30px; background: var(--cinza); }
 @media (max-width: 899.98px) {
-  .hero { min-height: auto; }
-  .hero__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
-  .hero__h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
-  .hero__scroll { padding-top: 32px; }
-  .hero__fio { height: 56px; }
-  .hero__brilho { bottom: -40vh; }
+  .hero__intro { grid-template-columns: 1fr; gap: 22px; }
+  .hero__h1 { font-size: clamp(2.6rem, 8.5vw, 5rem); }
+  .hero__base { align-items: flex-start; flex-direction: column; gap: 24px; }
+  .hero__palco { padding-block: 48px; }
+  .hero__ondas { object-position: 65% center; opacity: .28; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .hero__mensagem--antes { animation: none; visibility: hidden; }
+  .js .hero__mensagem--depois { animation: none; opacity: 1; transform: none; }
+  .js .hero__risco, .js .hero__risco::after { animation: none; }
 }
 
 /* Barra de prova social no pé da hero, como a referência: rótulo à
