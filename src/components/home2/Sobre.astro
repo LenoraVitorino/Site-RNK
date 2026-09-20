@@ -9,9 +9,11 @@ import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
-  <div class="container">
-    <div class="sobre-editorial__grade">
-      <div class="sobre-editorial__texto entra">
+  <div class="sobre-editorial__percurso">
+    <div class="sobre-editorial__palco">
+      <div class="sobre-editorial__janela" tabindex="0" role="group" aria-label="Fotos da sede da Renke">
+    <div class="sobre-editorial__trilho">
+      <div class="sobre-editorial__texto">
         <p class="rotulo">Por dentro da Renke</p>
         <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história da Renke</h2>
         <p class="sobre-editorial__descricao">
@@ -20,21 +22,66 @@ import reuniao from '../../assets/sede/reuniao.jpg';
         </p>
         <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
       </div>
-      <div class="sobre-editorial__mosaico entra">
+
         <figure class="sobre-editorial__foto sobre-editorial__foto--principal">
-          <Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
           <figcaption>Onde tudo se conecta</figcaption>
         </figure>
         <figure class="sobre-editorial__foto sobre-editorial__foto--conexao">
-          <Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
           <figcaption>A operação, de perto</figcaption>
         </figure>
         <figure class="sobre-editorial__foto sobre-editorial__foto--reuniao">
-          <Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 899px) 55vw, 30vw" loading="lazy" />
+          <Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[360, 720, 1080]} sizes="(max-width: 699px) 82vw, 42vw" loading="lazy" />
           <figcaption>Espaço para construir juntos</figcaption>
         </figure>
-      </div>
     </div>
+      </div>
+      <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+  <div class="container">
     <div class="sobre-editorial__numeros"><Numeros /></div>
   </div>
 </section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('.sobre-editorial__percurso');
+  if (section) {
+    const stage = section.querySelector<HTMLElement>('.sobre-editorial__palco')!;
+    const viewport = section.querySelector<HTMLElement>('.sobre-editorial__janela')!;
+    const track = section.querySelector<HTMLElement>('.sobre-editorial__trilho')!;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let distance = 0;
+    let pinned = false;
+    let frame = 0;
+    const pace = .85;
+    const update = () => {
+      frame = 0;
+      if (!pinned) return;
+      const progress = Math.max(0, Math.min(1, -section.getBoundingClientRect().top / (distance * pace || 1)));
+      track.style.transform = `translate3d(${-distance * progress}px, 0, 0)`;
+      section.style.setProperty('--sobre-progresso', String(progress));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const measure = () => {
+      distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      pinned = !reduced.matches && window.innerHeight >= 600 && distance > 0;
+      section.classList.toggle('sobre-editorial__percurso--fixo', pinned);
+      section.style.height = pinned ? `${stage.offsetHeight + distance * pace}px` : '';
+      viewport.tabIndex = pinned ? -1 : 0;
+      if (pinned) viewport.scrollLeft = 0;
+      else { track.style.transform = ''; section.style.removeProperty('--sobre-progresso'); }
+      update();
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
+    reduced.addEventListener('change', measure);
+    // Recalculate when fonts or responsive geometry change, never on image loading.
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
+    observer.observe(track);
+    document.fonts.ready.then(measure);
+    measure();
+  }
+</script>
