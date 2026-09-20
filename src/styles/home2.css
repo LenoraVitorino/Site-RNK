@@ -10,8 +10,9 @@
 @import './tokens-v2.css';   /* cor e tipografia da fase nova — vence o anterior */
 
 :root {
-  --largura: 1760px;                     /* de ponta a ponta, com um respiro nas laterais */
-  --gutter: clamp(20px, 4.5vw, 84px);
+  --largura: 1600px;                     /* composição contida em telas largas */
+  --gutter: clamp(24px, 7vw, 112px);
+  --grid-inset: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
   --altura-header: 102px;   /* 14px de respiro + caixa de 72px + 16px até o conteúdo */
   --esp-secao: clamp(72px, 9vw, 128px);
   --raio-foto: var(--raio-caixa);
@@ -154,7 +155,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    muda de tom (classe ligada pelo script conforme o fundo abaixo). */
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 14px var(--gutter) 0; pointer-events: none;
+  padding: 14px var(--grid-inset) 0; pointer-events: none;
   --cab-bg: rgb(8 8 8 / .88); --cab-cor: var(--papel); --cab-fio: rgb(242 242 238 / .14);
   color: var(--cab-cor);
 }
@@ -635,7 +636,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* .anchors: coluna a 5vw do topo e da esquerda; 0,75vw medium, opacidade .4, ativa 1. */
 .palcoplanos__ancoras {
-  position: absolute; z-index: 10; top: 5vw; left: 5vw;
+  position: absolute; z-index: 10; top: 5vw; left: var(--grid-inset);
   list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0;
 }
 .palcoplanos__ancora {
@@ -669,12 +670,12 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__nome__b { justify-self: end; }
 
 /* Colunas laterais com largura adaptada à copy em português. */
-.plano-palco__texto { position: absolute; left: 5vw; bottom: 5vw; width: clamp(160px, 14vw, 250px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
+.plano-palco__texto { position: absolute; left: var(--grid-inset); bottom: 5vw; width: clamp(160px, 14vw, 250px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
 .plano-palco__frase { margin: 0; font-size: clamp(14px, 1vw, 18px); line-height: 1.45; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
 .plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(12px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
 
 /* Índice e contexto do plano, alinhados pelo canto inferior direito. */
-.plano-palco__dados { position: absolute; right: 5vw; bottom: 5vw; width: clamp(145px, 12vw, 220px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
+.plano-palco__dados { position: absolute; right: var(--grid-inset); bottom: 5vw; width: clamp(145px, 12vw, 220px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
 .plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
 .plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
 .plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-enfase); }
