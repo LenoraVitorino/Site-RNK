@@ -1,55 +1,49 @@
 import type { Pagina } from './tipos';
 
-/** Copy literal de docs/03-copy/revena-full.md */
+/** Copy atualizada pelo PR #5, adaptada aos blocos existentes. Base: docs/03-copy/revena-full.md */
 export const revenaFull: Pagina = {
   rota: '/studio/revena-full',
-  titulo: 'Revena Full | Jornada completa do paciente para clínicas',
+  titulo: "Revena Full | Jornada completa do paciente para clínicas",
   descricao:
     'Do primeiro contato ao retorno. Comercial + pós-venda conectados. Para clínicas que já têm equipe e querem retenção real.',
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Do primeiro contato ao retorno.', 'A jornada inteira do paciente, conectada.'],
+      titulo: ["Revena Full"],
       realce: 1,
-      sub: 'O Revena Full estrutura o comercial e o pós-venda da sua clínica. Cada paciente se sente cuidado do começo ao fim. Isso faz pacientes voltarem e indicarem.',
-      cta: 'Fale com a equipe e descubra se o Full faz sentido para sua clínica →',
+      sub: "Uma operação completa para acompanhar cada paciente da aquisição ao retorno, com comercial, relacionamento e dados integrados.",
+      cta: "Conheça o Full",
     },
     {
       tipo: 'lista',
       eyebrow: 'Para quem é',
-      h2: 'Você se reconhece aqui?',
+      h2: "Ideal para clínicas que:",
       fundo: 'alt',
-      itens: [
-        'Fatura acima de R$300k/mês, mas além de não saber o que funciona na captação, seus pacientes somem depois da primeira consulta.',
-        'Tem mais de 5 planilhas que o time precisa ficar preenchendo, sem contar os sistemas.',
-        'Tem alguém no comercial e alguém cuidando do pós-venda (concierge, coordenadora, secretária dedicada), mas opera no improviso.',
-        'Paciente fecha o procedimento e raramente volta. Você não tem processo de retenção.',
-        'Quer que o paciente se sinta acompanhado, mas não tem estrutura pra isso rodar sem você pensar.',
-      ],
+      itens: ["Já possuem uma operação comercial consolidada","Têm estrutura dedicada ao atendimento e relacionamento","Querem transformar pós-venda em parte da operação de receita","Buscam aumentar retenção, recorrência e indicação","Precisam de uma jornada do paciente estruturada de ponta a ponta"],
     },
     {
       tipo: 'blocos',
       eyebrow: 'Nossa solução',
-      h2: 'Tudo do Revena Start + a jornada completa do paciente',
+      h2: "O que o Full faz",
       itens: [
         {
           titulo: 'Processo comercial completo',
           texto:
-            'Do primeiro contato até o fechamento. Sistema de gestão, automações, rastreamento de origem, formulário pré-consulta com anamnese digital, equipe treinada.',
+            "Do primeiro contato ao fechamento, com sistema, automações, rastreamento e processos estruturados para o time.",
         },
         {
           titulo: 'Acompanhamento pós-venda',
           texto:
-            'Comunicações automáticas de cuidado no momento certo: lembrete de retorno, orientação pré-procedimento, confirmação. Tudo personalizado, sem a equipe precisar lembrar.',
+            "Comunicações automáticas e personalizadas para orientar, confirmar e acompanhar o paciente no momento certo.",
         },
         {
           titulo: 'Integração com agenda',
           texto:
-            'O sistema conversa com a agenda da clínica. Menos pacientes que não aparecem, mais retorno.',
+            "Sistema integrado à agenda para acompanhar retornos, reduzir faltas e dar continuidade à jornada do paciente.",
         },
         {
           titulo: 'Processo que faz paciente voltar',
-          texto: 'Não é campanha de reconquista. É cuidado sistemático que faz pacientes voltarem.',
+          texto: "Uma rotina estruturada de relacionamento para aumentar o retorno e manter o paciente próximo da clínica.",
         },
       ],
     },
@@ -57,20 +51,20 @@ export const revenaFull: Pagina = {
       tipo: 'etapas',
       eyebrow: 'Como funciona',
       fundo: 'alt',
-      h2: ['Etapas do projeto'],
+      h2: ["Etapas do Full"],
       etapas: [
-        { n: '1', duracao: '10 dias', nome: 'Onboarding', descricao: 'Coleta de acessos, briefing e reunião de kick-off.' },
-        { n: '2', duracao: '30 dias', nome: 'Diagnóstico', descricao: 'Organização do acervo documental e gerencial. Mapeamos a jornada: captação, atendimento, procedimento e pós. Identificamos o que precisa ser automatizado, documentamos regras de negócio, criamos fluxogramas visuais e definimos quem faz o quê em cada etapa.' },
-        { n: '3', duracao: '30 dias', nome: 'Implementação', descricao: 'Vamos para a tecnologia. Implementamos o CRM do jeito certo. Processo de acompanhamento de tratamentos; processo de relacionamento com a base de pacientes; comunicações automáticas da concierge; integração com sistema de agenda; geração automática de contrato e termos LGPD.' },
-        { n: '4', duracao: '30 dias', nome: 'Acompanhamento', descricao: 'Checagem semanal: seu time tá usando? E está usando certo? Suporte proativo via WhatsApp, ajustes finos, reuniões. Garantimos que a equipe realmente use e que os dados estão entrando limpos.' },
-        { n: '5', duracao: 'Opcional', nome: 'Operação contínua', descricao: 'Acompanhamento conforme o momento da clínica. Mantém rodando no longo prazo sob nossos cuidados profissionais.' },
+        { n: '1', duracao: '10 dias', nome: 'Onboarding', descricao: "Coleta de acessos, briefing e kick-off para iniciar o projeto." },
+        { n: '2', duracao: '30 dias', nome: 'Diagnóstico', descricao: "Mapeamento da jornada do paciente, processos, regras e oportunidades de automação." },
+        { n: '3', duracao: '30 dias', nome: 'Implementação', descricao: "Configuração do CRM, automações, integrações e processos da operação." },
+        { n: '4', duracao: '30 dias', nome: 'Acompanhamento', descricao: "Monitoramento semanal, ajustes e suporte para garantir a adoção da operação." },
+        { n: '5', duracao: 'Opcional', nome: 'Operação contínua', descricao: "Suporte e evolução contínua da operação conforme o momento da clínica." },
       ],
     },
     {
       tipo: 'numeros',
-      h2: 'O Full é o único produto que entrega os 4 pilares na íntegra',
-      itens: ['Controle', 'Automação', 'Processo', 'Experiência'],
-      nota: 'O paciente se sente cuidado do começo ao fim. Isso faz ele voltar e indicar.',
+      h2: "O Full integra os 4 pilares da operação",
+      itens: ["Controle","Automação","Processo","Experiência"],
+      nota: "Uma operação que acompanha o paciente de ponta a ponta, do primeiro contato ao retorno.",
     },
     {
       tipo: 'pendencia',
@@ -79,9 +73,9 @@ export const revenaFull: Pagina = {
     },
     {
       tipo: 'ctaFinal',
-      destaque: 'Limitado a 1 nova clínica por mês.',
-      texto: 'Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.',
-      cta: 'Converse com a equipe. Em 90 dias, sua operação pode estar rodando. →',
+      destaque: "Atendemos uma nova clínica por mês.",
+      texto: "Cada projeto começa com um diagnóstico próprio e acompanhamento dedicado em toda a implementação. Sem templates. Sem terceirização.",
+      cta: "Agende uma conversa",
     },
   ],
 };
