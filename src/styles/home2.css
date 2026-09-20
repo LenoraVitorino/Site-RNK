@@ -1100,3 +1100,12 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   .revena-pilar:nth-child(even) .revena-pilar__visual { grid-column: auto; grid-row: auto; }
   .revena-pilar__visual { min-height: 180px; aspect-ratio: 16 / 9; }
 }
+
+@media (min-width: 900px) {
+  .oquefaz__texto > .oquefaz__descricao:not(:last-child) {
+    max-width: none;
+    font-size: min(3.3cqw, 19px);
+    letter-spacing: -.015em;
+  }
+  .oquefaz__descricao > span { display: block; white-space: nowrap; }
+}
