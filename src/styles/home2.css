@@ -1237,18 +1237,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .form-card__copiar { justify-self: start; background: none; border: 0; padding: 0; color: var(--papel); cursor: pointer; }
 .field__erro { display: block; margin-top: 6px; font-size: 13px; line-height: 1.4; color: var(--erro); }
 .field--invalido input, .field--invalido select { border-color: var(--erro); }
-/* Prova social por números, enquanto não há retratos de doutores (data/doutores.ts). */
-.hero-numeros { list-style: none; margin: 0; padding: 12px 0; display: flex; flex-wrap: wrap; gap: 16px 0; }
-.hero-numeros__item { display: grid; gap: 4px; padding-inline: clamp(18px, 2vw, 32px); border-left: 1px solid rgb(242 242 238 / .16); }
-.hero-numeros__item:first-child { padding-left: 0; border-left: 0; }
-.hero-numeros__valor { font-size: clamp(28px, 2.4vw, 36px); font-weight: 300; letter-spacing: -.055em; line-height: 1; color: var(--papel); white-space: nowrap; }
-.hero-numeros__legenda { font-size: 13px; line-height: 1.35; color: var(--cinza); max-width: 12ch; }
-@media (max-width: 899.98px) {
-  .hero-numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
-  .hero-numeros__item { padding-inline: 12px; }
-  .hero-numeros__valor { font-size: clamp(20px, 6.4vw, 28px); }
-  .hero-numeros__legenda { font-size: 12px; max-width: none; }
-}
 /* Cartão cuja página ainda não existe: rótulo no lugar do botão. */
 .cartao__pendente { margin: 0; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
 /* Letreiro com frases (versão do estúdio): letra menor e curso mais lento, porque o trilho é mais longo. */
