@@ -1,5 +1,4 @@
 ---
-import Icone from '../ui/Icone.astro';
 /** Hero compartilhada: frase riscada, transição para RevOps e fundo gráfico próprio. */
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
@@ -35,7 +34,5 @@ const lead = copyLiteral ? hero.lead :
       <ConfiancaHero />
     </div>
   </div>
-
-  <a class="hero__scroll" href="#o-que-fazemos"><Icone nome="ArrowDown" size={20} />Role para baixo</a>
 
 </section>
