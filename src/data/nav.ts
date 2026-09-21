@@ -134,7 +134,6 @@ export const menu: NavItem[] = [
 export const acaoHeader = { rotulo: 'Fale com a gente', rota: '/contato' };
 
 export const rodape = {
-  tagline: 'Não é marketing. É RevOps.',
   links: [
     { rotulo: 'Home', rota: '/' },
     { rotulo: 'Para Clínicas', rota: '/studio' },
@@ -154,6 +153,8 @@ export const rodape = {
     'Blumenau/SC · CEP 89035-100',
   ],
   email: 'contato@renkestudio.com.br',
+  /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
+  whatsapp: '',
   copyright: '© 2026 Renke Studio. Todos os direitos reservados.',
   assinatura: 'Você não controla o que não enxerga.',
 };

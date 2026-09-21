@@ -20,7 +20,7 @@ const blocos = [
   },
 ];
 ---
-<section class="secao" id="academy-tools">
+<section class="secao" id="academy-tools" aria-label="Renke Academy e Renke Tools">
   <div class="container duo">
     {blocos.map((b, i) => (
       <article class:list={['cartao', 'entra', i === 0 ? 'cartao--academy' : 'cartao--tools']}>
@@ -33,7 +33,7 @@ const blocos = [
         </div>
         <h3 class="caps">{b.titulo}</h3>
         <p>{b.texto}</p>
-        <p><Botao href={existe(b.rota) ? b.rota : '#'} tamanho="sm">{b.cta}</Botao></p>
+        {existe(b.rota) ? <p><Botao href={b.rota} tamanho="sm">{b.cta}</Botao></p> : <p class="cartao__pendente">Em breve</p>}
       </article>
     ))}
   </div>

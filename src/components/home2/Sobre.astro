@@ -6,25 +6,16 @@ import IlustracaoIndicador from './IlustracaoIndicador.astro';
 import CabecaIndicador from './CabecaIndicador.astro';
 import { copyLiteral } from '../../data/versao';
 import { existe } from '../../data/rotas';
+import { numerosProva } from '../../data/home';
 import operacao from '../../assets/sede/operacao.jpg';
 import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
 
 // Os três números do briefing (⚠️ D1), em cartões entre as fotos (Lenora,
-// 20/09). Versão do estúdio com "+" e sem "R$", como em Numeros.astro.
+// 20/09), compartilhados com a prova social da hero (data/home.ts).
 // [data-contador]: o contador de Resultados.astro (um só para a página)
 // faz cada número subir de 0 ao valor quando o cartão entra na tela.
-const numeros = copyLiteral
-  ? [
-      { valor: '~30', legenda: 'clínicas atendidas' },
-      { valor: '4 anos', legenda: 'de método validado' },
-      { valor: 'R$42M', legenda: 'em faturamento gerado' },
-    ]
-  : [
-      { valor: '+30', legenda: 'clínicas atendidas' },
-      { valor: '+4 anos', legenda: 'de método validado' },
-      { valor: '+42M', legenda: 'em faturamento gerado' },
-    ];
+const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
   <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
@@ -46,7 +37,7 @@ const numeros = copyLiteral
                 Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
                 oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
               </p>
-              <div><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></div>
+              {existe('/sobre') && <div><Botao href="/sobre">Ver mais sobre a Renke</Botao></div>}
             </div>
             <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
           </div>

@@ -6,8 +6,7 @@ import { existe } from '../data/rotas';
   <div class="container">
     <div class="footer__grid">
       <div class="footer__col">
-        <img class="logo__img logo__img--rodape" src="/marca/renke-assinatura.png" alt="Renke" width="299" height="62" />
-        <p class="footer__tagline">{rodape.tagline}</p>
+        <img class="logo__img logo__img--rodape" src="/marca/renke-assinatura.png" alt="Renke Studio" width="299" height="62" />
       </div>
 
       <nav class="footer__col" aria-label="Links do rodapé">
@@ -15,11 +14,9 @@ import { existe } from '../data/rotas';
         <ul>
           {rodape.links.map((l) => (
             <li>
-              <a
-                href={existe(l.rota) ? l.rota : '#'}
-                data-rota={l.rota}
-                class:list={[!existe(l.rota) && 'nav--pendente']}
-              >{l.rotulo}</a>
+              {existe(l.rota)
+                ? <a href={l.rota}>{l.rotulo}</a>
+                : <span class="nav--pendente">{l.rotulo} <em>em breve</em></span>}
             </li>
           ))}
         </ul>
@@ -28,7 +25,13 @@ import { existe } from '../data/rotas';
       <div class="footer__col">
         <p class="footer__title">Siga-nos</p>
         <ul>
-          {rodape.redes.map((r) => <li><a href={r.rota}>{r.rotulo}</a></li>)}
+          {rodape.redes.map((r) => (
+            <li>
+              {r.rota && r.rota !== '#'
+                ? <a href={r.rota} rel="noopener">{r.rotulo}</a>
+                : <span class="nav--pendente">{r.rotulo} <em>em breve</em></span>}
+            </li>
+          ))}
         </ul>
       </div>
 

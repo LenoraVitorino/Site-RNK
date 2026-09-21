@@ -47,12 +47,12 @@ const planos = ordem.map((label) => {
   };
 });
 ---
-<section class="palcoplanos" id="protocolo-revena" data-palcoplanos style={`--n:${planos.length}`}>
+<section class="palcoplanos" id="protocolo-revena" aria-labelledby="protocolo-revena-titulo" data-palcoplanos style={`--n:${planos.length}`}>
   <!-- Introdução da dobra, antes do palco, como o bloco de texto que antecede
        a "Financial solutions" da referência. -->
   <div class="palcoplanos__intro">
     <div class="container palcoplanos__cabeca">
-      <h2 class="palcoplanos__titulo">Protocolo Revena</h2>
+      <h2 class="palcoplanos__titulo" id="protocolo-revena-titulo">Protocolo Revena</h2>
       <p class="palcoplanos__manifesto" data-revena-revela>
         {'Estruturamos sua operação do zero e operamos juntos no longo prazo. Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
           <><span data-palavra>{palavra}</span>{' '}</>
@@ -78,8 +78,7 @@ const planos = ordem.map((label) => {
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>
-            <h3 class="plano-palco__nome plano-palco__nome--pilha"><span class="plano-palco__nome__a">Revena</span><span class="plano-palco__nome__b">{p.nome}</span></h3>
-            <h3 class="plano-palco__h3">Revena {p.nome}</h3>
+            <h3 class="plano-palco__nome plano-palco__nome--pilha"><span class="plano-palco__nome__a">Revena</span> <span class="plano-palco__nome__b">{p.nome}</span></h3>
 
             <div class="plano-palco__texto">
               <p class="plano-palco__frase">{p.texto}</p>
@@ -120,7 +119,6 @@ const planos = ordem.map((label) => {
     const infos = layers.map(layer => layer.querySelector<HTMLElement>('[data-info]')!);
     const names = [...trilho.querySelectorAll<HTMLElement>('[data-nome]')];
     const anchors = [...trilho.querySelectorAll<HTMLButtonElement>('[data-plano-ir]')];
-    const header = document.getElementById('header');
     const clamp = (x: number) => Math.max(0, Math.min(1, x));
     const ease = (x: number) => x * x * (3 - 2 * x);
     const count = layers.length;
@@ -160,7 +158,6 @@ const planos = ordem.map((label) => {
       const position = clamp((y - top) / travel) * (count - 1);
       const pre = clamp(1 + (y - top) / height);
       select(Math.min(count - 1, Math.round(position)));
-      header?.classList.toggle('header--oculto', scrollY >= top && scrollY < top + travel + height * .5);
       layers.forEach((layer, i) => {
         const incoming = clamp(position - i + 1);
         const outgoing = clamp(position - i);
@@ -229,7 +226,6 @@ const planos = ordem.map((label) => {
       cancelSnap();
       cancelAnimationFrame(frame); frame = 0; previousTime = 0; active = -1;
       secao!.toggleAttribute('data-animado', media.matches);
-      header?.classList.remove('header--oculto');
       if (media.matches) {
         measure(); current = target = scrollY; paint(current);
       } else {
@@ -239,7 +235,7 @@ const planos = ordem.map((label) => {
     addEventListener('scroll', () => {
       update();
       clearTimeout(snapTimer);
-      if (media.matches && !scrollFrame) snapTimer = window.setTimeout(snap, 260);
+      if (media.matches && !scrollFrame) snapTimer = window.setTimeout(snap, 600);
     }, { passive: true });
     for (const event of ['wheel', 'touchstart', 'pointerdown', 'keydown']) {
       addEventListener(event, cancelSnap, { passive: true });

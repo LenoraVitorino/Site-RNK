@@ -3,13 +3,13 @@
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 ---
-<section class="secao secao--extrato" id="resultados">
+<section class="secao secao--extrato" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
     <div class="extrato__layout">
       <p class="extrato__rotulo">Resultados</p>
       <div class="extrato__conteudo">
         <header class="extrato__cabeca entra">
-          <h2 class="titulo">O que muda quando a operação tem <strong class="extrato__destaque">estrutura</strong>.</h2>
+          <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem <strong class="extrato__destaque">estrutura</strong>.</h2>
         </header>
         <ol class="extrato" aria-label="Resultados por especialidade">
           {resultados.map((r) => (

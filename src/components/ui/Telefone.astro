@@ -25,7 +25,7 @@ const video = slot.video!;
       </video>
       <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
       <div class="tel__controles">
-        <button class="tel__botao" type="button" data-tel-som aria-pressed="true" aria-label="Ativar som">
+        <button class="tel__botao" type="button" data-tel-som aria-pressed="false" aria-label="Ativar som">
           <Icone nome="VolumeX" class="tel__icone tel__icone--mudo" size={20} />
           <Icone nome="Volume2" class="tel__icone tel__icone--som" size={20} />
         </button>
@@ -61,7 +61,7 @@ const video = slot.video!;
     });
     som.addEventListener('click', () => {
       video.muted = !video.muted;
-      som.setAttribute('aria-pressed', String(video.muted));
+      som.setAttribute('aria-pressed', String(!video.muted));
       som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
       raiz.classList.toggle('tel--com-som', !video.muted);
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }

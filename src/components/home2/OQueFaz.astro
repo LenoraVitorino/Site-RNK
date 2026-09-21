@@ -9,17 +9,17 @@ import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 ---
-<section class="secao" id="o-que-fazemos">
+<section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo">
   <div class="container oquefaz">
     <div class="oquefaz__texto entra">
-      <h2 class="titulo caps">Nossa metodologia</h2>
+      <h2 class="titulo caps" id="o-que-fazemos-titulo">Nossa metodologia</h2>
       <p class="oquefaz__descricao">
         <span>Utilizamos a metodologia de Revenue Operations para</span>{' '}
         <span>estruturar a operação de receita. Analisamos cada etapa</span>{' '}
         <span>da jornada comercial, identificamos oportunidades e</span>{' '}
         <span>estruturamos processos a partir de dados, CRM e marketing.</span>
       </p>
-      <p><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></p>
+      {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
     </div>
     <div class="oquefaz__midia entra">
       <Telefone />
