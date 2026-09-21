@@ -5,6 +5,9 @@
  * "Home" saiu: a assinatura no header já leva à raiz, e o item ocupava espaço
  * sem oferecer destino novo.
  *
+ * "Outras Soluções" (Site Institucional, Identidade Visual) saiu em 20/09/2026:
+ * é entrega de agência, e a Renke não quer ser lida como agência (Lenora).
+ *
  * "Conteúdos", "Contato" e "Faça Parte" eram três itens soltos no fim. Viraram:
  * um grupo "A Renke" (Sobre · Cases · Conteúdos · Faça Parte) e o Contato
  * promovido a botão, que é o que ele de fato é — a ação de conversão.
@@ -70,20 +73,6 @@ export const menu: NavItem[] = [
           { rotulo: 'Treinamento CRM', rota: '/academy/treinamento-crm' },
           { rotulo: 'Rastreamento Avançado', rota: '/academy/rastreamento-avancado' },
           { rotulo: 'Cultura Pro', rota: '/academy/cultura-pro' },
-        ],
-      },
-    ],
-  },
-
-  {
-    rotulo: 'Outras Soluções',
-    id: 'mm-solucoes',
-    grupos: [
-      {
-        titulo: 'Produtos digitais',
-        itens: [
-          { rotulo: 'Site Institucional', rota: '/studio/site-institucional' },
-          { rotulo: 'Identidade Visual', rota: '/studio/identidade-visual' },
         ],
       },
     ],
