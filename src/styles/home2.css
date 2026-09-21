@@ -339,7 +339,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero .hero__lead { max-width: 54ch; margin: 24px 0 0; font-size: clamp(16px, 1.35vw, 20px); line-height: 1.6; font-weight: 400; letter-spacing: -.015em; text-wrap: pretty; color: rgb(242 242 238 / .74); }
 .hero__palco { padding-block: clamp(48px, 7vh, 90px); }
 .hero__palco .hero__selo { margin-bottom: clamp(28px, 4vw, 48px); }
-.hero__h1 { position: relative; margin: 0; font-family: var(--font-titulo); font-size: clamp(3rem, 7.3vw, 7.4rem); font-weight: 300; line-height: 1.04; letter-spacing: -.065em; min-height: 3.12em; }
+.hero__h1 { position: relative; margin: 0; font-family: var(--font-titulo); font-size: clamp(3rem, 7.3vw, 7.4rem); font-weight: 300; line-height: 1.04; letter-spacing: -.065em; min-height: 2.08em; }   /* duas linhas: "Isso não é marketing" / "para clínicas." e "Isso é" / "RevOps." */
 .hero__mensagem { display: grid; position: absolute; inset: 0; align-content: start; }
 .hero__mensagem--antes { visibility: hidden; }
 .hero__mensagem--depois { opacity: 1; }
@@ -370,7 +370,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .hero__scroll { display: flex; justify-content: center; align-items: center; gap: 12px; padding-bottom: 32px; color: var(--cinza); font-size: 12px; text-decoration: none; }
 .hero__fio { width: 1px; height: 30px; background: var(--cinza); }
 @media (max-width: 899.98px) {
-  .hero__h1 { font-size: clamp(2.6rem, 8.5vw, 5rem); }
+  .hero__h1 { font-size: clamp(2.6rem, 8.5vw, 5rem); min-height: 3.12em; }   /* no celular a primeira linha quebra */
   .hero__base { align-items: flex-start; flex-direction: column; gap: 24px; }
   .hero__palco { padding-block: 48px; }
   .hero__ondas { object-position: 65% center; opacity: .28; }
