@@ -1,4 +1,5 @@
 ---
+import Icone from '../ui/Icone.astro';
 /** Hero compartilhada: frase riscada, transição para RevOps e fundo gráfico próprio. */
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
@@ -16,7 +17,7 @@ const lead = copyLiteral ? hero.lead :
 
   <div class="hero__grade">
     <div class="hero__palco">
-      <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Estratégia e tecnologia para clínicas de alta performance'}</p>
+      <p class="hero__selo"><span aria-hidden="true"><Icone nome="Sparkles" size={18} /></span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Estratégia e tecnologia para clínicas de alta performance'}</p>
       <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
         <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
           <span>Isso</span>
@@ -36,6 +37,6 @@ const lead = copyLiteral ? hero.lead :
     </div>
   </div>
 
-  <a class="hero__scroll" href="#o-que-fazemos"><span class="hero__fio"></span>Role para baixo</a>
+  <a class="hero__scroll" href="#o-que-fazemos"><Icone nome="ArrowDown" size={20} />Role para baixo</a>
 
 </section>

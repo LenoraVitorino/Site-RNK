@@ -1,4 +1,5 @@
 ---
+import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
@@ -14,9 +15,7 @@ import Botao from './ui/Botao.astro';
     <button
       type="button" class="nav-toggle" id="navToggle"
       aria-expanded="false" aria-controls="navPrincipal" aria-label="Abrir menu">
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
+<Icone nome="Menu" class="nav-icone-menu" /><Icone nome="X" class="nav-icone-fechar" />
     </button>
 
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
@@ -27,7 +26,7 @@ import Botao from './ui/Botao.astro';
               <button
                 type="button" class="nav__link nav__trigger"
                 aria-expanded="false" aria-controls={item.id}>
-                {item.rotulo} <span class="nav__caret" aria-hidden="true"></span>
+                {item.rotulo} <Icone nome="ChevronDown" class="nav-chevron" size={16} />
               </button>
               <div class="megamenu" id={item.id} hidden>
                 <div class="megamenu__inner">

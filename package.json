@@ -18,6 +18,7 @@
     "deploy:teste": "astro build && wrangler deploy --dry-run"
   },
   "devDependencies": {
+    "@lucide/astro": "^1.47.0",
     "astro": "^5.14.1",
     "wrangler": "^4.129.0"
   },

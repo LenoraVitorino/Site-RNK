@@ -3,32 +3,96 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pilares } from '../../data/home';
+import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
 
 const cartas = pilares.map((p, i) => ({
   ...p,
+  ...(!copyLiteral ? pilaresEstudio[i] : {}),
   iconeSvg: readFileSync(join(process.cwd(), 'public', 'icones', `pilar-0${i + 1}.svg`), 'utf8'),
 }));
 ---
-<section class="secao revena-pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo">
-  <div class="container">
-    <header class="revena-pilares__cabeca entra">
+<section class="revena-pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo">
+  <div class="revena-pilares__palco container">
+    <header class="revena-pilares__cabeca">
       <p class="rotulo">Para clínicas</p>
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
     </header>
-    <div class="revena-pilares__lista">
-      {cartas.map((p) => (
-        <article class="revena-pilar entra">
-          <div class="revena-pilar__texto">
-            <h3>{p.titulo}</h3>
+    <div class="revena-pilares__janela" tabindex="0" role="region" aria-label="Os cinco pilares do Protocolo Revena">
+      <div class="revena-pilares__lista">
+        {cartas.map((p) => (
+          <article class="revena-pilar">
             <p>{p.texto}</p>
-          </div>
-          <div class="revena-pilar__visual" aria-hidden="true">
-            <span class="revena-pilar__orbita"></span>
-            <span class="revena-pilar__icone" set:html={p.iconeSvg} />
-          </div>
-        </article>
-      ))}
+            <div class="revena-pilar__progresso" aria-hidden="true"><span></span></div>
+            <div class="revena-pilar__base">
+              <h3>{p.titulo}</h3>
+              <span class="revena-pilar__icone" aria-hidden="true" set:html={p.iconeSvg} />
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
+
   </div>
 </section>
+<script>
+  const section = document.querySelector<HTMLElement>('.revena-pilares');
+  if (section) {
+    const stage = section.querySelector<HTMLElement>('.revena-pilares__palco')!;
+    const viewport = section.querySelector<HTMLElement>('.revena-pilares__janela')!;
+    const cards = [...section.querySelectorAll<HTMLElement>('.revena-pilar')];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let pinned = false, distance = 0, frame = 0;
+    const step = () => cards[1].offsetLeft - cards[0].offsetLeft;
+    const paint = (position: number) => {
+      const active = Math.min(cards.length - 1, Math.floor(position));
+      cards.forEach((card, i) => {
+        card.classList.toggle('is-active', i === active);
+        card.classList.toggle('is-complete', i < active);
+        card.style.setProperty('--progresso', String(Math.max(0, Math.min(1, position - i))));
+      });
+    };
+    const update = () => {
+      frame = 0;
+      if (!pinned) return;
+      const progress = Math.max(0, Math.min(1, -section.getBoundingClientRect().top / distance));
+      const position = progress * cards.length;
+      const current = Math.min(cards.length - 1, Math.floor(position));
+      const transition = Math.max(0, Math.min(1, (position - current - .55) / .45));
+      const eased = transition * transition * (3 - 2 * transition);
+      viewport.scrollLeft = Math.min(cards.length - 1, current + eased) * step();
+      paint(position);
+
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const measure = () => {
+      section.classList.remove('is-pinned');
+      section.style.height = '';
+      pinned = !reduced.matches && innerWidth >= 900 && stage.offsetHeight <= innerHeight;
+      distance = cards.length * Math.max(280, innerHeight * .5);
+      section.classList.toggle('is-pinned', pinned);
+      if (pinned) section.style.height = `${stage.offsetHeight + distance}px`;
+      else { viewport.scrollLeft = 0; paint(.999); }
+      update();
+    };
+    viewport.addEventListener('scroll', () => {
+      if (pinned) return;
+      const width = step();
+      const max = viewport.scrollWidth - viewport.clientWidth;
+      const i = max > 0 && viewport.scrollLeft >= max - 2 ? cards.length - 1 : Math.round(viewport.scrollLeft / width);
+      paint(i + .999);
+    }, {passive:true});
+    viewport.addEventListener('keydown', (event) => {
+      if (!pinned || !['ArrowRight', 'ArrowLeft'].includes(event.key)) return;
+      event.preventDefault();
+      const current = Math.round(viewport.scrollLeft / step());
+      const next = Math.max(0, Math.min(cards.length - 1, current + (event.key === 'ArrowRight' ? 1 : -1)));
+      window.scrollTo({ top: window.scrollY + section.getBoundingClientRect().top + next / cards.length * distance });
+    });
+    window.addEventListener('scroll', schedule, {passive:true});
+    window.addEventListener('resize', measure, {passive:true});
+    reduced.addEventListener('change', measure);
+    document.fonts.ready.then(measure);
+    measure();
+  }
+</script>

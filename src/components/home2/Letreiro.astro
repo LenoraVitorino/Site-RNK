@@ -1,4 +1,5 @@
 ---
+import Icone from '../ui/Icone.astro';
 /**
  * Faixa de letras grandes entre "O que a Renke faz" e o Protocolo Revena,
  * como a faixa "Impact + Inspire + Innovate" da referência. As palavras
@@ -7,7 +8,6 @@
  * e com menos movimento. Só as letras sobre o preto, sem marca atrás.
  */
 const palavras = ['Controle', 'Automação', 'Processo', 'Experiência'];
-const mais = '<svg class="letreiro__mais" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1v18M1 10h18" stroke="currentColor" stroke-width="1.2"/></svg>';
 ---
 <section class="letreiro" aria-label="Controle, Automação, Processo, Experiência">
   <div class="letreiro__trilho">
@@ -16,7 +16,7 @@ const mais = '<svg class="letreiro__mais" viewBox="0 0 20 20" aria-hidden="true"
         {palavras.map((p) => (
           <>
             <span class="letreiro__palavra">{p}</span>
-            <Fragment set:html={mais} />
+            <Icone nome="Plus" class="letreiro__mais" />
           </>
         ))}
       </div>
