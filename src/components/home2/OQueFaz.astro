@@ -1,27 +1,90 @@
 ---
 /**
- * O que a Renke faz — texto à esquerda, o reel vertical à direita, nas
- * duas versões. (A variante só com o reel, e o palco 16:9 no desktop,
- * foram testados em 16/09/2026 e descartados: o vertical com o texto ao
- * lado ficou melhor.) Copy literal.
+ * Nossa metodologia — o vídeo vertical à esquerda, o texto à direita e,
+ * abaixo da descrição, os três números do briefing (os mesmos dos cartões
+ * do Sobre), no desenho da referência que a Lenora mandou em 21/09/2026:
+ * número, fio fino e legenda. Vale para as duas versões; só os textos
+ * mudam (numerosProva.copy / .estudio).
+ *
+ * Desktop com JS e movimento permitido: o vídeo entra subindo e aparecendo
+ * quando a dobra chega à tela (--entra, 0→1, escrito pelo script; o resto
+ * é CSS em .oquefaz--profundo). Sem JS, no celular ou com movimento
+ * reduzido, a dobra fica estática.
  */
 import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+import { copyLiteral } from '../../data/versao';
+import { numerosProva } from '../../data/home';
+const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
 ---
-<section class="secao" id="o-que-fazemos">
+<section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
   <div class="container oquefaz">
-    <div class="oquefaz__texto entra">
-      <h2 class="titulo caps">Nossa metodologia</h2>
-      <p>
-        Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
-        Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
-        processos a partir de dados, CRM e marketing.
-      </p>
-      <p><Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao></p>
-    </div>
     <div class="oquefaz__midia entra">
       <Telefone />
     </div>
+    <div class="oquefaz__texto entra">
+      <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
+      <p class="oquefaz__descricao">
+        Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+        Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+        processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+      </p>
+      <ul class="oquefaz__numeros" aria-label="Números da Renke">
+        {numeros.map((n) => (
+          <li class="oquefaz__numero">
+            <p class="oquefaz__valor num" data-contador>{n.valor.replace(/ /g, '\u00a0')}</p>
+            <p class="oquefaz__legenda">{n.legenda}</p>
+          </li>
+        ))}
+      </ul>
+      {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
+    </div>
   </div>
 </section>
+
+<script>
+  const secao = document.querySelector<HTMLElement>('[data-metodologia]');
+  if (secao) {
+    const media = matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)');
+    const midia = secao.querySelector<HTMLElement>('.oquefaz__midia')!;
+    const clamp = (x: number) => Math.max(0, Math.min(1, x));
+    let quadro = 0;
+
+    const pintar = () => {
+      quadro = 0;
+      const vh = innerHeight;
+      const r = secao.getBoundingClientRect();
+      // Longe da tela (mais de 25% de altura para cada lado): só desliga o will-change.
+      const perto = r.bottom > -vh * .25 && r.top < vh * 1.25;
+      secao.classList.toggle('oquefaz--em-tela', perto);
+      if (!perto) return;
+      // Topo do vídeo sem o transform: ele fica centrado na seção (padding simétrico).
+      const topoMidia = r.top + (r.height - midia.offsetHeight) / 2;
+      // Entrada: parte de 12vh abaixo quando aparece no pé da tela e repousa
+      // quando o topo dele chega a 15% da altura. Saída exponencial.
+      const entra = 1 - Math.pow(1 - clamp((vh * .95 - topoMidia) / (vh * .8)), 3);
+      secao.style.setProperty('--entra', entra.toFixed(4));
+    };
+    const agendar = () => { if (secao.classList.contains('oquefaz--profundo') && !quadro) quadro = requestAnimationFrame(pintar); };
+
+    const ligar = () => {
+      secao.classList.toggle('oquefaz--profundo', media.matches);
+      if (media.matches) {
+        pintar();
+      } else {
+        cancelAnimationFrame(quadro); quadro = 0;
+        secao.classList.remove('oquefaz--em-tela');
+        secao.style.removeProperty('--entra');
+      }
+    };
+
+    addEventListener('scroll', agendar, { passive: true });
+    addEventListener('resize', () => {
+      // O change do matchMedia nem sempre chega com o redimensionamento; confere aqui também.
+      if (media.matches !== secao.classList.contains('oquefaz--profundo')) ligar(); else agendar();
+    }, { passive: true });
+    media.addEventListener('change', ligar);
+    ligar();
+  }
+</script>

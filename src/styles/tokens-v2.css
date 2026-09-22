@@ -17,6 +17,7 @@
   --grafite:    #161616;   /* superfícies escuras elevadas e texto sobre amarelo */
   --cinza:      #A3A39B;   /* texto secundário, rótulos (7:1 sobre preto) */
   --fio:        rgb(242 242 238 / .14);   /* linhas de grade internas (cards, tabelas) */
+  --erro:       #B8B8B0;   /* texto e borda de campo inválido: cinza claro, não vermelho (Lenora, 21/09); 7,4:1 sobre #191a17 */
   --grade:      rgb(242 242 238 / .12);  /* fios curtos de apoio: barra da hero, letreiro e pé do rodapé */
 
   /* O amarelo fica no tom da marca (H 48°) e só sobe de luminosidade.
@@ -28,12 +29,12 @@
 
   /* ---- Tipografia ---- */
   --font: 'Inter Variable', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;   /* uma família só, do título ao rodapé */
-  /* Tipografia grande e leve: títulos em regular, ênfases em medium,
-     semibold só em detalhes pequenos (rótulos, botões). Nunca bold. */
-  --peso-titulo: 260;   /* títulos e números grandes: mais finos que light, na Inter (sobre o preto o traço claro já parece mais fino) */
+  /* Tipografia delicada: títulos em light, corpo em regular e destaques
+     em medium, com contraste sem excesso de peso. */
+  --peso-titulo: 300;   /* light para títulos e números grandes */
   --font-titulo: 'Inter Variable', 'Inter', var(--font);
   --peso-enfase: 500;   /* strong, nomes, chamadas curtas */
-  --peso-detalhe: 600;  /* rótulos miúdos e botões */
+  --peso-detalhe: 500;  /* rótulos miúdos e botões */
   --peso-corpo:  400;
   --tracking-caps:  -.02em;   /* caixa alta em títulos */
   --tracking-label:  .12em;   /* rótulos pequenos em caixa alta */

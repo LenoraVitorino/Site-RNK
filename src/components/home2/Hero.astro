@@ -1,90 +1,38 @@
 ---
-/**
- * Dobra 1 · hero no desenho da referência (print da Lenora, 18/09/2026):
- * fundo preto com duas curvas escuras e um brilho amarelo no pé; à esquerda
- * o rótulo e o título em três linhas (a primeira em papel, as outras no
- * amarelo); no centro o objeto (o monograma da Renke, com brilho, até
- * chegar a arte 3D); à direita o ano, o lead e o segundo título ("Isso é
- * RevOps."), com o CTA; no pé, o fio e "Role para baixo". Sem cena por
- * tempo e sem trava de rolagem. Copy literal.
- */
+/** Hero compartilhada: frase riscada, transição para RevOps e fundo gráfico próprio. */
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
+import ConfiancaHero from './ConfiancaHero.astro';
 
 const lead = copyLiteral ? hero.lead :
   'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
 ---
 <section class="hero" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
+    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" />
     <span class="hero__brilho"></span>
   </div>
 
   <div class="hero__grade">
-    <div class="hero__esq">
-      <p class="hero__rotulo"><span class="hero__quadrado"></span>Revenue Operation</p>
-      <!-- A cena, por tempo (Lenora, 18/09): "Isso não é marketing para
-           clínicas." entra; o risco passa por "marketing para clínicas."; o
-           riscado some junto com o "não" e "RevOps." sobe no lugar. Fica
-           "Isso é / RevOps.". Sem JS ou com menos movimento: estado final. -->
-      <h1 class="hero__h1" data-cena aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
-        <span class="hero__linha" aria-hidden="true">Isso <span class="hero__nao">não&nbsp;</span>é</span>
-        <span class="hero__dobra hero__dobra--riscada" aria-hidden="true"><span class="hero__linha hero__linha--riscada"><span>marketing</span></span></span>
-        <span class="hero__dobra hero__dobra--riscada" aria-hidden="true"><span class="hero__linha hero__linha--riscada"><span>para clínicas.</span></span></span>
-        <span class="hero__dobra hero__dobra--revops" aria-hidden="true"><span class="hero__linha hero__linha--destaque">RevOps.</span></span>
+    <div class="hero__palco">
+      <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</p>
+      <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
+        <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
+          <span>Isso <span class="hero__risco">não é marketing</span></span>
+          <span><span class="hero__risco hero__risco--segundo">para clínicas.</span></span>
+        </span>
+        <span class="hero__mensagem hero__mensagem--depois" aria-hidden="true">
+          <span>Isso é</span>
+          <span class="hero__revops">RevOps.</span>
+        </span>
       </h1>
-    </div>
-
-    <div class="hero__dir">
-      <p class="hero__ano"><span class="hero__c">©</span> 2026</p>
       <p class="hero__lead">{lead}</p>
-      <p class="hero__acoes"><Botao href="/contato">Conhecer solução</Botao></p>
+    </div>
+    <div class="hero__base">
+      <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
+      <ConfiancaHero />
     </div>
   </div>
 
-  <a class="hero__scroll" href="#o-que-fazemos"><span class="hero__fio"></span>Role para baixo</a>
-
-    {copyLiteral && (
-      <!-- Barra de prova social só na versão copy. Na do estúdio ela sai por
-           enquanto: os logos dos clientes ainda não chegaram, e a barra com a
-           assinatura da Renke repetida era só um exemplo. -->
-    <div class="hero__confianca">
-      <div class="hero__confianca__inner">
-        <p class="hero__confianca__frase">Doutores que <strong>confiam na Renke</strong></p>
-        <!-- Como a barra da referência: a frase à esquerda, um fio vertical e
-             o carrossel de logos ocupando o resto da largura. Dois grupos
-             idênticos e translateX(-50%) em loop, com máscara nas bordas.
-             Exemplo com a assinatura da Renke em cinza; entram os logos dos
-             clientes (marvee.com.br) quando os arquivos chegarem. -->
-        <div class="hero__clientes">
-        <div class="rolo" aria-label="Logos de clientes (a definir)">
-          <div class="rolo__trilho">
-            {[0, 1].map((copia) => (
-              <ul class="rolo__grupo" aria-hidden={copia === 1 ? 'true' : undefined}>
-                {[1, 2, 3, 4, 5, 6].map(() => (
-                  <li><img src="/marca/renke-assinatura.png" alt="" width="299" height="62" loading="lazy" /></li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-    )}
 </section>
-
-<script>
-  /* A cena da hero, tocada uma vez ao carregar: 0,9 s até o risco começar,
-     mais 1,3 s até o riscado e o "não" saírem e o RevOps entrar. Com menos
-     movimento, vai direto ao fim. */
-  const h1 = document.querySelector<HTMLElement>('[data-cena]');
-  if (h1) {
-    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduz) h1.classList.add('hero--risca', 'hero--some');
-    else {
-      setTimeout(() => h1.classList.add('hero--risca'), 900);
-      setTimeout(() => h1.classList.add('hero--some'), 2200);
-    }
-  }
-</script>

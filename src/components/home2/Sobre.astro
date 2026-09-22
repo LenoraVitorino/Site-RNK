@@ -1,22 +1,99 @@
 ---
-/** História da Renke: título e texto em duas colunas, sem imagens provisórias. */
+/** História e fotos da sede, compartilhadas pelas duas versões. */
+import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+import operacao from '../../assets/sede/operacao.jpg';
+import conexao from '../../assets/sede/conexao.jpg';
+import reuniao from '../../assets/sede/reuniao.jpg';
+
+// Os números do briefing saíram daqui em 21/09 (Lenora): ficam só em
+// "Nossa metodologia". A esteira tem só as fotos da sede.
 ---
-<section class="secao" id="sobre">
-  <div class="container sobre">
-    <div class="sobre__texto sobre__texto--centro entra">
-      <h2 class="sobre__declaracao">Conheça a história da Renke</h2>
-      <div class="sobre__paragrafos">
-        <p>
-          Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
-          oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
-        </p>
+<section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
+  <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
+       molde da esteira do metodobr.com: blocos de largura igual (largos e
+       estreitos alternados), alturas iguais, uma foto inteira em cada.
+       Tudo, texto incluído, é um carrossel que desliza para a esquerda e
+       revela as fotos enquanto a dobra fica presa (Lenora, 20/09). -->
+  <div class="sobre-editorial__percurso">
+    <div class="sobre-editorial__palco">
+      <div class="sobre-editorial__janela" tabindex="0" role="region" aria-labelledby="sobre-titulo">
+        <div class="sobre-editorial__trilho">
+          <div class="sobre-editorial__texto">
+            <div class="sobre-editorial__cabeca">
+              <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
+            </div>
+            <div class="sobre-editorial__pe">
+              <p class="sobre-editorial__descricao">
+                Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+                oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
+              </p>
+              {existe('/sobre') && <div><Botao href="/sobre">Ver mais sobre a Renke</Botao></div>}
+            </div>
+            <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
+          </div>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco bloco--largo">
+            <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
+          </div>
+          <div class="bloco">
+            <figure class="bloco__foto"><Image src={reuniao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="container sobre__acao entra">
-    <Botao href={existe('/sobre') ? '/sobre' : '#'}>Ver mais sobre a Renke</Botao>
-  </div>
 </section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('.sobre-editorial__percurso');
+  if (section) {
+    const stage = section.querySelector<HTMLElement>('.sobre-editorial__palco')!;
+    const viewport = section.querySelector<HTMLElement>('.sobre-editorial__janela')!;
+    const track = section.querySelector<HTMLElement>('.sobre-editorial__trilho')!;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let distance = 0;
+    let pinned = false;
+    let frame = 0;
+    const pace = .85;
+    const update = () => {
+      frame = 0;
+      if (!pinned) return;
+      const progress = Math.max(0, Math.min(1, -section.getBoundingClientRect().top / (distance * pace || 1)));
+      track.style.transform = `translate3d(${-distance * progress}px, 0, 0)`;
+      section.style.setProperty('--sobre-progresso', String(progress));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const measure = () => {
+      distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      pinned = !reduced.matches && window.innerWidth >= 900 && window.innerHeight >= 600 && distance > 0;
+      section.classList.toggle('sobre-editorial__percurso--fixo', pinned);
+      section.style.height = pinned ? `${stage.offsetHeight + distance * pace}px` : '';
+      viewport.tabIndex = pinned ? -1 : 0;
+      if (pinned) viewport.scrollLeft = 0;
+      else { track.style.transform = ''; section.style.removeProperty('--sobre-progresso'); }
+      update();
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
+    reduced.addEventListener('change', measure);
+    // Recalculate when fonts or responsive geometry change, never on image loading.
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
+    observer.observe(track);
+    document.fonts.ready.then(measure);
+    measure();
+  }
+</script>

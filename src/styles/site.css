@@ -866,7 +866,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   font-size: var(--fs-xs); letter-spacing: var(--tracking-label); text-transform: uppercase;
   font-weight: var(--peso-titulo); color: var(--on-dark-muted); margin-bottom: var(--s-3);
 }
-.footer__tagline { font-size: .9375rem; margin-top: .75rem; }
 .footer__col ul { list-style: none; margin: 0; padding: 0; }
 .footer__col li { font-size: var(--fs-sm); }
 .footer__col a {
@@ -930,25 +929,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
     border-radius: var(--raio-pilula);
   }
   .nav__link:hover { text-decoration: none; }
-
-  /* Pílula que acompanha o item sob o cursor.
-     Reproduz o layoutId do framer-motion: um único elemento que se move,
-     em vez de um fundo por item aparecendo e sumindo. Só transform e width
-     animam, então o navegador resolve na composição. */
-  .nav__indicador {
-    position: absolute; left: 0; top: 50%;
-    height: calc(100% + 4px);
-    border-radius: var(--raio-pilula);
-    background: rgb(255 255 255 / .09);
-    border: 1px solid rgb(255 255 255 / .07);
-    pointer-events: none;
-    opacity: 0;
-    transform: translate3d(var(--x, 0), -50%, 0);
-    width: var(--w, 0);
-    transition: transform .32s var(--easing), width .32s var(--easing),
-                opacity .2s var(--easing-suave);
-  }
-  .nav__list[data-ativo] .nav__indicador { opacity: 1; }
 
   .megamenu {
     position: absolute; top: 100%; left: 0; z-index: 110;
@@ -1019,7 +999,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .nav__indicador { transition: opacity .01s !important; }
   html { scroll-behavior: auto; }
 }
 

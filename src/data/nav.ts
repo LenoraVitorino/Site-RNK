@@ -5,6 +5,9 @@
  * "Home" saiu: a assinatura no header já leva à raiz, e o item ocupava espaço
  * sem oferecer destino novo.
  *
+ * "Outras Soluções" (Site Institucional, Identidade Visual) saiu em 20/09/2026:
+ * é entrega de agência, e a Renke não quer ser lida como agência (Lenora).
+ *
  * "Conteúdos", "Contato" e "Faça Parte" eram três itens soltos no fim. Viraram:
  * um grupo "A Renke" (Sobre · Cases · Conteúdos · Faça Parte) e o Contato
  * promovido a botão, que é o que ele de fato é — a ação de conversão.
@@ -35,13 +38,13 @@ export const menu: NavItem[] = [
     id: 'mm-clinicas',
     grupos: [
       {
-        titulo: 'Protocolo Revena',
+        titulo: 'Revena',
         itens: [
-          { rotulo: 'Protocolo Revena Start', rota: '/studio/revena-start' },
-          { rotulo: 'Protocolo Revena Full', rota: '/studio/revena-full' },
-          { rotulo: 'Protocolo Revena Core', rota: '/studio/revena-core' },
-          { rotulo: 'Protocolo Revena Scale', rota: '/studio/revena-scale' },
-          { rotulo: 'Protocolo Revena Run', rota: '/studio/revena-run' },
+          { rotulo: 'Revena Start', rota: '/studio/revena-start' },
+          { rotulo: 'Revena Full', rota: '/studio/revena-full' },
+          { rotulo: 'Revena Core', rota: '/studio/revena-core' },
+          { rotulo: 'Revena Scale', rota: '/studio/revena-scale' },
+          { rotulo: 'Revena Run', rota: '/studio/revena-run' },
         ],
       },
       {
@@ -70,20 +73,6 @@ export const menu: NavItem[] = [
           { rotulo: 'Treinamento CRM', rota: '/academy/treinamento-crm' },
           { rotulo: 'Rastreamento Avançado', rota: '/academy/rastreamento-avancado' },
           { rotulo: 'Cultura Pro', rota: '/academy/cultura-pro' },
-        ],
-      },
-    ],
-  },
-
-  {
-    rotulo: 'Outras Soluções',
-    id: 'mm-solucoes',
-    grupos: [
-      {
-        titulo: 'Produtos digitais',
-        itens: [
-          { rotulo: 'Site Institucional', rota: '/studio/site-institucional' },
-          { rotulo: 'Identidade Visual', rota: '/studio/identidade-visual' },
         ],
       },
     ],
@@ -134,7 +123,6 @@ export const menu: NavItem[] = [
 export const acaoHeader = { rotulo: 'Fale com a gente', rota: '/contato' };
 
 export const rodape = {
-  tagline: 'Não é marketing. É RevOps.',
   links: [
     { rotulo: 'Home', rota: '/' },
     { rotulo: 'Para Clínicas', rota: '/studio' },
@@ -154,6 +142,8 @@ export const rodape = {
     'Blumenau/SC · CEP 89035-100',
   ],
   email: 'contato@renkestudio.com.br',
+  /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
+  whatsapp: '',
   copyright: '© 2026 Renke Studio. Todos os direitos reservados.',
   assinatura: 'Você não controla o que não enxerga.',
 };

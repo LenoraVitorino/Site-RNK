@@ -10,8 +10,9 @@
 @import './tokens-v2.css';   /* cor e tipografia da fase nova — vence o anterior */
 
 :root {
-  --largura: 1760px;                     /* de ponta a ponta, com um respiro nas laterais */
-  --gutter: clamp(20px, 4.5vw, 84px);
+  --largura: 1600px;                     /* composição contida em telas largas */
+  --gutter: clamp(24px, 7vw, 112px);
+  --grid-inset: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
   --altura-header: 102px;   /* 14px de respiro + caixa de 72px + 16px até o conteúdo */
   --esp-secao: clamp(72px, 9vw, 128px);
   --raio-foto: var(--raio-caixa);
@@ -31,7 +32,7 @@ a { color: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; text-wrap: balance; }
 /* Uma família só, a Inter: títulos finos (peso 260), corpo em 400 e os
    destaques em 500. Menos ruído para uma página com muito texto. */
-.titulo, .ancora, .plano__nome, .cartao h3, .esteira__numero b, .painel-dados__num {
+.titulo, .ancora, .plano__nome, .cartao h2, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
   word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
 }
@@ -141,7 +142,11 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   transition: text-decoration-thickness .15s;
 }
 .link-arrow:hover { text-decoration-thickness: 2px; }
-.nav--pendente { opacity: .45; }
+.nav--pendente { display: inline-flex; align-items: center; gap: 6px; color: rgb(242 242 238 / .62); cursor: default; }
+.nav--pendente em { font-style: normal; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+.header--claro .nav--pendente, .header--amarelo .nav--pendente { color: rgb(22 22 22 / .62); }
+.megamenu__list .nav--pendente { min-height: var(--alvo); padding: 8px 0 8px 12px; font-size: 14px; border-left: 1px solid rgb(242 242 238 / .2); }
+.footer__col .nav--pendente { min-height: 2.25rem; }
 
 /* Entrada por scroll: repouso visível; só com JS vivo o bloco nasce escondido */
 .js .entra { opacity: 0; transform: translateY(16px); }
@@ -154,7 +159,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    muda de tom (classe ligada pelo script conforme o fundo abaixo). */
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 14px var(--gutter) 0; pointer-events: none;
+  padding: 14px var(--grid-inset) 0; pointer-events: none;
   --cab-bg: rgb(8 8 8 / .88); --cab-cor: var(--papel); --cab-fio: rgb(242 242 238 / .14);
   color: var(--cab-cor);
 }
@@ -163,8 +168,8 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .header--claro .nav__link, .header--amarelo .nav__link { color: var(--grafite); }
 .header--claro .nav__link:hover, .header--claro .nav__trigger[aria-expanded="true"] { color: #8A6D00; }
 .header--amarelo .nav__link:hover, .header--amarelo .nav__trigger[aria-expanded="true"] { color: rgb(22 22 22 / .6); }
-.header--claro .nav__acao .botao, .header--amarelo .nav__acao .botao { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
-.header--claro .nav__acao .botao:hover, .header--amarelo .nav__acao .botao:hover { background: #000; border-color: #000; color: var(--papel); }
+.header--claro .header__acao .botao, .header--amarelo .header__acao .botao { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
+.header--claro .header__acao .botao:hover, .header--amarelo .header__acao .botao:hover { background: #000; border-color: #000; color: var(--papel); }
 .header--amarelo .logo__img { filter: brightness(0); }
 .header--claro .nav-toggle, .header--amarelo .nav-toggle { border-color: rgb(22 22 22 / .3); }
 .header--claro .nav-toggle__bar, .header--amarelo .nav-toggle__bar { background: var(--grafite); }
@@ -179,8 +184,8 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .header--claro .nav__item, .header--amarelo .nav__item { border-bottom-color: rgb(22 22 22 / .12); }
 .header__inner {
   width: 100%; min-height: 72px; pointer-events: auto;   /* de gutter a gutter, sem o limite do container */
-  padding: 10px 20px 10px 22px;
-  display: flex; align-items: center; gap: 24px;
+  padding: 8px 14px 8px 16px;
+  display: flex; align-items: center; gap: 12px;
   border-radius: 16px;
   /* Na hero o cabeçalho é solto sobre o preto: sem caixa. A caixa (fundo,
      fio e sombra) entra quando a primeira dobra passa por baixo dele
@@ -191,10 +196,11 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .header--caixa .header__inner { background: var(--cab-bg); border-color: var(--cab-fio); box-shadow: 0 10px 30px -12px rgb(0 0 0 / .35); }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
 /* Só o monograma "R", na cor da marca. */
-.logo__img { height: 40px; width: auto; }
+.logo__img { width: 40px; height: 40px; max-width: none; }
+.logo__img--rodape { width: auto; height: 40px; }
 
 .nav-toggle {
-  display: grid; gap: 4px; place-content: center; margin-left: auto;
+  display: grid; gap: 4px; place-content: center; margin-left: 0; flex: none;
   width: var(--alvo); height: var(--alvo); padding: 0;
   background: none; border: 1px solid rgb(242 242 238 / .3); border-radius: 0; cursor: pointer;
 }
@@ -212,7 +218,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 }
 .nav.is-open { transform: none; visibility: visible; transition: transform .3s var(--easing); }
 .nav__list { list-style: none; margin: 0; padding: 0; }
-.nav__acao { margin-top: 24px; }
+.header__acao { margin-left: auto; }
 .nav__item { border-bottom: 1px solid rgb(242 242 238 / .12); }
 .nav__link {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -236,7 +242,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   display: flex; align-items: center; min-height: var(--alvo); padding: 8px 0 8px 12px;
   font-size: 14px; color: var(--papel); text-decoration: none;
   border-left: 1px solid rgb(242 242 238 / .2);
-  transition: color .25s var(--easing-suave), border-color .25s var(--easing-suave), background-color .25s var(--easing-suave), padding-left .25s var(--easing);
+  transition: color .25s var(--easing-suave), border-color .25s var(--easing-suave), background-color .25s var(--easing-suave), transform .25s var(--easing);
 }
 .megamenu__list a:hover { color: var(--destaque); border-left-color: var(--destaque); }
 .megamenu__list em { font-style: normal; color: rgb(242 242 238 / .5); font-size: 13px; }
@@ -244,28 +250,29 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 
 /* A ação do cabeçalho é um botão branco na caixa escura; nas caixas clara
    e amarela ele inverte para grafite. */
-.nav__acao .botao {
+.header__acao .botao {
   background: #fff; color: var(--grafite); border: 1px solid #fff; border-radius: 12px;
-  padding: 12px 20px; min-height: 0; width: auto; font-size: 15px; font-weight: var(--peso-enfase);
+  padding: 9px 12px; min-height: 0; width: auto; font-size: 13px; white-space: nowrap; font-weight: var(--peso-enfase);
   text-decoration: none; transition: background-color .25s var(--easing-suave), color .25s var(--easing-suave), border-color .25s var(--easing-suave);
 }
-.nav__acao .botao:hover { background: var(--amarelo-claro); border-color: var(--amarelo-claro); color: var(--grafite); }
+.header__acao .botao:hover { background: var(--amarelo-claro); border-color: var(--amarelo-claro); color: var(--grafite); }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   /* O desfoque só no desktop: no celular ele viraria o bloco de referência
      do drawer fixo e o prenderia dentro da caixa. */
-  .header__inner { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .header__inner { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding: 10px 20px 10px 22px; }
   .nav-toggle { display: none; }
   .nav-overlay { display: none !important; }
   .nav { position: static; width: auto; transform: none; visibility: visible; background: none; border: 0; overflow: visible; padding: 0; }
   /* Logo à esquerda, itens do menu no centro da caixa, ação à direita. */
-  .header__inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: clamp(20px, 3vw, 40px); }
+  .header__inner { display: grid; grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: clamp(20px, 3vw, 40px); }
   .nav { display: contents; }
-  .nav__acao { justify-self: end; }
-  .nav__acao .botao { white-space: nowrap; }
+  .logo { grid-column: 1; }
+  .nav__list { grid-column: 2; justify-self: center; }
+  .header__acao { grid-column: 3; grid-row: 1; justify-self: end; }
+  .header__acao .botao { white-space: nowrap; }
   .nav__list { display: flex; align-items: center; gap: clamp(20px, 2.8vw, 40px); }
-  .nav__acao { margin-top: 0; }
-  .nav__acao .botao { font-size: 16px; padding: 12px 22px; }
+    .header__acao .botao { font-size: 16px; padding: 12px 22px; }
   .nav__item { border-bottom: 0; position: relative; }
   .nav__link { min-height: 0; padding: 12px 0; font-size: 17px; white-space: nowrap; }
   .nav__caret { display: none; }
@@ -281,7 +288,22 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   @keyframes mega-entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
   .megamenu__list { margin-bottom: 6px; }
   .megamenu__list a { min-height: 0; padding: 8px 10px; border-left: 0; }
-  .megamenu__list a:hover { background: rgb(242 242 238 / .06); padding-left: 14px; }
+  .megamenu__list a:hover { background: rgb(242 242 238 / .06); transform: translateX(4px); }
+  .megamenu__list .nav--pendente { min-height: 0; padding: 8px 10px; border-left: 0; }
+}
+
+/* Entre 1024 e 1359px o menu de cinco itens não cabe no tamanho cheio. */
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  .header__inner { gap: 24px; }
+  .nav__list { gap: 16px; }
+  .nav__link { font-size: 14px; }
+  .header__acao .botao { font-size: 14px; padding: 10px 16px; }
+}
+@media (min-width: 1200px) and (max-width: 1359.98px) {
+  .header__inner { gap: 32px; }
+  .nav__list { gap: 20px; }
+  .nav__link { font-size: 15px; }
+  .header__acao .botao { font-size: 15px; padding: 11px 18px; }
 }
 
 /* ---------- Slot de foto (placeholder honesto) ---------- */
@@ -303,139 +325,60 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .secao--amarela .foto { background: rgb(22 22 22 / .06); }
 .secao--amarela .foto__legenda { color: rgb(22 22 22 / .7); }
 
-/* ============================================================
-   DOBRA 1 · HERO — desenho da referência (print da Lenora, 18/09/2026)
-   Fundo preto com duas curvas escuras e um brilho amarelo no pé; título à
-   esquerda (primeira linha em papel, as outras no amarelo), objeto no
-   centro, ano + lead + segundo título à direita; fio e "Role para baixo".
-   ============================================================ */
-
+/* Hero editorial compartilhada entre as duas versões de copy. */
 .hero {
-  position: relative; overflow: hidden; isolation: isolate;
-  min-height: 100svh; padding-top: var(--altura-header);
-  display: grid; grid-template-rows: 1fr auto; justify-items: stretch;
-  background: #000; color: var(--papel);
+  position: relative; overflow: hidden; isolation: isolate; background: #070909;
+  min-height: 100svh; padding-top: var(--altura-header); color: var(--papel);
 }
-.hero__fundo { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-/* O brilho amarelo no pé, como a referência. */
-.hero__brilho {
-  position: absolute; left: 50%; bottom: -34vh; width: 130vw; height: 62vh; transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 60%, rgb(255 209 3 / .8) 0%, rgb(255 209 3 / .32) 32%, transparent 64%);
-  filter: blur(18px);
+.hero__fundo { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.hero__ondas { width: 100%; height: 100%; object-fit: cover; opacity: .42; }
+.hero__brilho { position: absolute; inset: 0; background: linear-gradient(90deg, #070909 0%, transparent 65%), linear-gradient(0deg, #070909 0%, transparent 38%); }
+.hero__grade { width: min(100%, var(--largura)); margin-inline: auto; padding: clamp(30px, 5vh, 64px) var(--gutter) 48px; }
+.hero__rotulo { display: flex; gap: 12px; align-items: center; font-size: 13px; color: var(--cinza); }
+.hero__quadrado { width: 7px; height: 7px; border-radius: 50%; background: var(--destaque); flex-shrink: 0; }
+.hero .hero__lead { max-width: 54ch; margin: clamp(28px, 4vw, 48px) 0 0; font-size: clamp(16px, 1.35vw, 20px); line-height: 1.6; font-weight: 400; letter-spacing: -.015em; text-wrap: pretty; color: rgb(242 242 238 / .74); }
+.hero__palco { padding-block: clamp(48px, 7vh, 90px); }
+.hero__palco .hero__selo { margin-bottom: clamp(28px, 4vw, 48px); }
+.hero__h1 { position: relative; margin: 0; font-family: var(--font-titulo); font-size: clamp(3rem, 7.3vw, 7.4rem); font-weight: 300; line-height: 1.04; letter-spacing: -.065em; min-height: 3.12em; }   /* três linhas reservadas: mantém o respiro entre título, lead e CTA (Lenora, 20/09) */
+.hero__mensagem { display: grid; position: absolute; inset: 0; align-content: center; }   /* duas linhas centradas na altura reservada: mesmo respiro para o selo e para o lead */
+.hero__mensagem--antes { visibility: hidden; }
+.hero__mensagem--depois { opacity: 1; }
+.hero__revops { color: var(--destaque); font-weight: 500; }
+@property --hero-risco-progresso {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
 }
-
-.hero__grade {
-  position: relative; z-index: 1;
-  width: min(100%, var(--largura)); margin-inline: auto;
-  padding: clamp(20px, 5vh, 56px) var(--gutter) 0;
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  gap: clamp(24px, 6vw, 120px); align-items: start;
+.hero__risco {
+  display: inline-block; position: relative;
+  background: linear-gradient(to right, #777773 0%, #777773 var(--hero-risco-progresso), var(--papel) var(--hero-risco-progresso), var(--papel) 100%);
+  background-clip: text; -webkit-background-clip: text; color: transparent;
 }
-.hero__rotulo {
-  display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(16px, 2.6vh, 28px);
-  font-size: 15px; letter-spacing: .02em; text-transform: uppercase; color: rgb(242 242 238 / .78);
-}
-.hero__quadrado { width: 12px; height: 12px; background: var(--destaque); border-radius: 2px; }
-/* Os dois títulos no mesmo desenho: linhas empilhadas, a primeira em papel e as outras no amarelo. */
-.hero__h1 {
-  margin: 0; display: grid;
-  font-family: var(--font-titulo); font-weight: 300; letter-spacing: -.035em; line-height: .98; text-wrap: balance;
-  font-size: clamp(2.4rem, 5.6vw, 7rem);
-}
-.hero__linha { display: block; }
-.hero__linha--destaque { color: var(--destaque); }
-/* A cena: cada linha que entra ou sai é uma "dobra" (grid de 1fr ↔ 0fr) para
-   as linhas de baixo subirem junto. */
-.hero__dobra { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .7s var(--easing), opacity .45s var(--easing), transform .7s var(--easing); }
-.hero__dobra > .hero__linha { min-height: 0; overflow: hidden; }
-/* "marketing para clínicas." em amarelo apagado; o risco é um gradiente que cresce da esquerda. */
-.hero__linha--riscada > span {
-  color: rgb(255 209 3 / .6);
-  background: linear-gradient(var(--destaque), var(--destaque)) 0 56% / 0 .06em no-repeat;
-  transition: background-size .8s cubic-bezier(.65, 0, .35, 1);
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
-}
-.hero--risca .hero__linha--riscada > span, html:not(.js) .hero__linha--riscada > span { background-size: 100% .06em; }
-/* O riscado some (dobra fecha) e o "não" se recolhe. */
-.hero--some .hero__dobra--riscada, html:not(.js) .hero__dobra--riscada { grid-template-rows: 0fr; opacity: 0; }
-.hero__nao { display: inline-block; max-width: 4em; overflow: hidden; white-space: nowrap; vertical-align: bottom; transition: max-width .6s var(--easing), opacity .35s var(--easing); }
-.hero--some .hero__nao, html:not(.js) .hero__nao { max-width: 0; opacity: 0; }
-/* "RevOps." entra no lugar. */
-.hero__dobra--revops { grid-template-rows: 0fr; opacity: 0; transform: translateY(.25em); }
-.hero--some .hero__dobra--revops, html:not(.js) .hero__dobra--revops { grid-template-rows: 1fr; opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .hero__dobra, .hero__nao, .hero__linha--riscada > span { transition: none; } }
-/* O ano ocupa a mesma linha do rótulo (mesma altura e margem) para os dois títulos começarem juntos. */
-.hero__ano { margin: 0 0 clamp(16px, 2.6vh, 28px); display: flex; align-items: center; gap: 10px; min-height: 23px; font-size: 13px; color: var(--destaque); }
-.hero__c { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; }
-.hero__lead { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); }
-.hero__acoes { margin: clamp(18px, 3vh, 28px) 0 0; }
-
-/* Fio e chamada para rolar, centrados no pé. */
-.hero__scroll {
-  position: relative; z-index: 1; justify-self: center;
-  display: grid; justify-items: center; gap: 16px; padding-bottom: clamp(24px, 4vh, 40px);
-  font-size: 15px; color: var(--destaque); text-decoration: none;
-}
-.hero__fio { width: 1px; height: clamp(72px, 16vh, 160px); background: linear-gradient(transparent, var(--destaque)); }
-
+.hero__risco::after { content: ''; position: absolute; left: 0; width: var(--hero-risco-progresso); top: 54%; height: 2px; background: #777773; }
+.js .hero__mensagem--antes { visibility: visible; animation: hero-frase-sai .7s ease 3.1s forwards; }
+.js .hero__mensagem--depois { opacity: 0; transform: translateY(.18em); animation: hero-frase-entra .9s var(--easing) 3.35s forwards; }
+/* Uma única medida controla o preenchimento cinza e a ponta do traço. */
+.js .hero__risco { animation: hero-risca .8s cubic-bezier(.65,0,.35,1) 1s forwards; }
+.js .hero__risco--segundo { animation-delay: 1.4s; }
+@keyframes hero-risca { to { --hero-risco-progresso: 100%; } }
+@keyframes hero-frase-sai { to { opacity: 0; transform: translateY(-.12em); visibility: hidden; } }
+@keyframes hero-frase-entra { to { opacity: 1; transform: none; } }
+.hero__base { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.hero__selo { display: inline-flex; align-items: center; gap: 12px; max-width: 52ch; margin: 0; padding: 8px 18px 8px 8px; background: rgb(15 17 17 / .85); border: 1px solid rgb(242 242 238 / .12); border-radius: 40px; font-size: 14px; line-height: 1.4; }
+.hero__selo > span { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--destaque); color: #070909; font-size: 21px; }
+.hero__acoes { margin: 0; flex-shrink: 0; }
 @media (max-width: 899.98px) {
-  .hero { min-height: auto; }
-  .hero__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 24px; }
-  .hero__h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
-  .hero__scroll { padding-top: 32px; }
-  .hero__fio { height: 56px; }
-  .hero__brilho { bottom: -40vh; }
+  .hero__h1 { font-size: clamp(2.6rem, 8.5vw, 5rem); }
+  .hero__base { align-items: flex-start; flex-direction: column; gap: 24px; }
+  .hero__palco { padding-block: 48px; }
+  .hero__ondas { object-position: 65% center; opacity: .28; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .hero__mensagem--antes { animation: none; visibility: hidden; }
+  .js .hero__mensagem--depois { animation: none; opacity: 1; transform: none; }
+  .js .hero__risco, .js .hero__risco::after { animation: none; }
 }
 
-/* Barra de prova social no pé da hero, como a referência: rótulo à
-   esquerda, logos à direita, visível em todos os tempos da cena. */
-.hero__confianca {
-  position: relative; z-index: 1; width: 100%; border-top: 1px solid var(--grade);
-  background: var(--fundo);
-}
-.hero__confianca__inner {
-  width: min(100%, var(--largura)); margin-inline: auto; padding: 0 var(--gutter);
-  min-height: 104px;
-  display: grid; grid-template-columns: auto 1fr; align-items: center;
-  gap: clamp(28px, 3vw, 48px);
-}
-/* Frase em caixa normal, como a da referência, com um fio vertical depois. */
-.hero__confianca__frase {
-  margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap;
-  padding: 10px clamp(28px, 3vw, 48px) 10px 0; border-right: 1px solid var(--grade);
-}
-.hero__confianca__frase strong { font-weight: var(--peso-enfase); }
-/* Os logos tomam o resto da largura. */
-.hero__clientes { min-width: 0; display: flex; align-items: center; }
-.hero__clientes .rolo { flex: 1 1 0; min-width: 0; }
-/* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
-   andando -50% em loop. O gap fica dentro do grupo (gap + padding-right
-   iguais) para a emenda ser invisível. */
-.rolo {
-  min-width: 0; overflow: hidden; display: flex; align-items: center;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
-}
-.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 34s linear infinite; }
-.rolo__grupo {
-  list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex: none;
-  gap: clamp(56px, 6vw, 96px); padding-right: clamp(56px, 6vw, 96px);
-}
-.rolo__grupo li { flex: none; display: flex; align-items: center; }
-/* Logos em cinza; no hover acendem na cor original. */
-.rolo__grupo img {
-  height: 20px; width: auto;
-  filter: brightness(0) invert(1); opacity: .38;
-  transition: filter .3s var(--easing-suave), opacity .3s var(--easing-suave);
-}
-.rolo__grupo li:hover img { filter: none; opacity: 1; }
-/* Parar de andar no hover ajuda a mirar o logo. */
-.rolo:hover .rolo__trilho { animation-play-state: paused; }
-@keyframes rolo { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) {
-  .rolo__trilho { animation: none; }
-  .rolo { -webkit-mask-image: none; mask-image: none; overflow-x: auto; scrollbar-width: none; }
-}
 /* ---------- Faixa: números + quem confia ---------- */
 
 .faixa { border-bottom: 1px solid var(--fio); }
@@ -449,9 +392,32 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    como o vídeo dedicado para mobile da referência.
    ============================================================ */
 
-.oquefaz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
-.oquefaz__texto { display: grid; gap: 28px; }
-.oquefaz__texto p:not(.rotulo) { max-width: 52ch; line-height: 1.6; }
+/* Nossa metodologia (Lenora, 21/09): vídeo à esquerda, texto à direita e os
+   três números abaixo da descrição, como a referência. Título na mesma
+   fonte da frase-âncora das perguntas. */
+/* O par vídeo + texto fica centrado no container, com o vídeo na largura
+   dele e colado ao texto por um vão fixo (Lenora, 21/09: o vídeo estava
+   na margem, longe do texto). */
+.oquefaz { display: grid; grid-template-columns: min(100%, 380px) minmax(0, 620px); justify-content: center; column-gap: clamp(40px, 6vw, 96px); row-gap: 32px; align-items: center; }
+.oquefaz__midia .tel { --largura-tel: 100%; }
+.oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
+.oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
+/* Só os parágrafos filhos diretos da coluna: text-wrap é atalho de
+   text-wrap-mode, e com especificidade maior que .oquefaz__legenda ele
+   reativava a quebra ali, anulando o nowrap da legenda. */
+.oquefaz__texto > p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
+/* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
+.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(12px, 1.5vw, 28px); }
+/* Três colunas, nenhuma mais estreita que o seu conteúdo (número e legenda
+   não quebram). O traço cinza separa as colunas (Lenora, 21/09): fica na
+   borda esquerda, com o mesmo recuo do vão, então nasce centrado entre
+   uma coluna e a outra. */
+.oquefaz__numero { flex: 1 1 auto; min-width: min-content; }
+.oquefaz__numero + .oquefaz__numero { border-left: 1px solid rgb(242 242 238 / .16); padding-left: clamp(12px, 1.5vw, 28px); }
+/* Número grande em amarelo (o desenho dos antigos cartões do Sobre), legenda em cinza (Lenora, 21/09). */
+.oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
+.oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.oquefaz__numeros .oquefaz__legenda { margin: 14px 0 0; font-size: clamp(12px, 1.05vw, 16px); line-height: 1.35; color: var(--cinza); text-wrap: nowrap; white-space: nowrap; }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -459,7 +425,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .secao--numeros .impacto__item { justify-items: center; text-align: center; }
 .secao--numeros .impacto__num { font-size: clamp(2.6rem, 5vw, 5.4rem); }
 .secao--numeros .impacto__legenda { font-size: 16px; }
-.oquefaz__midia { display: grid; justify-items: center; min-width: 0; }
+.oquefaz__midia { display: grid; justify-items: start; min-width: 0; }
 
 .tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
@@ -542,7 +508,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    por um "+" fino, andando devagar. As palavras são as do briefing
    (Controle, Automação, Processo, Experiência). */
 
-.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); border-block: 1px solid rgb(242 242 238 / .1); background: var(--fundo); }
+.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); background: var(--fundo); }   /* sem os fios em cima e embaixo (Lenora, 21/09) */
 .letreiro__trilho { position: relative; display: flex; width: max-content; animation: letreiro 42s linear infinite; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }
@@ -609,8 +575,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    DOBRA 3 (estúdio) · PROTOCOLO REVENA NO PALCO — referência Tres Mares
    Introdução (título + apoio) e depois o trilho: n telas de altura com o
    palco preso. Cada plano é uma dobra inteira, com fundo próprio, que
-   entra por baixo cobrindo a anterior (clip-path na dobra) enquanto a
-   anterior sobe e some. Lista dos planos por cima, no canto superior
+   sobe inteira por cima da anterior, que fica imóvel e escurece. Lista dos planos por cima, no canto superior
    esquerdo. Tudo pintado pelo script a partir do scroll, com snap.
    ============================================================ */
 
@@ -618,9 +583,12 @@ html:not(.js) .esteira__trilho { transform: none; }
   --pp-fundo: var(--papel); --pp-fundo-2: #E7E7E2; --pp-texto: var(--grafite); --pp-suave: rgb(22 22 22 / .62); --pp-fio: rgb(22 22 22 / .16);
   position: relative; background: var(--pp-fundo); color: var(--pp-texto);
 }
-.palcoplanos__intro { padding: clamp(72px, 10vw, 160px) 0; }
-.palcoplanos__cabeca { display: flex; justify-content: center; text-align: center; }
-.palcoplanos__titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03em; line-height: 1; margin-top: 18px; font-weight: var(--peso-titulo); }
+.palcoplanos__intro { min-height: 76svh; display: grid; align-items: center; padding: clamp(88px, 10vw, 160px) 0; }
+.palcoplanos__cabeca { display: grid; justify-items: center; gap: clamp(32px, 4vw, 64px); text-align: center; }
+.palcoplanos__titulo { font-size: clamp(15px, 1.4vw, 22px); letter-spacing: -.035em; line-height: 1.2; margin: 0; font-weight: 400; color: rgb(22 22 22 / .62); }
+.palcoplanos__manifesto { max-width: 25ch; font-family: var(--font-titulo); font-size: clamp(1.85rem, 3.95vw, 4.4rem); font-weight: var(--peso-titulo); line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
+.palcoplanos__manifesto [data-palavra] { display: inline-block; }
+@media (max-width: 599.98px) { .palcoplanos__intro { min-height: 70svh; padding-block: 88px; } .palcoplanos__manifesto { font-size: clamp(1.7rem, 6.6vw, 2.45rem); max-width: 22ch; } }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.1rem, 1.5vw, 1.45rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
@@ -633,74 +601,68 @@ html:not(.js) .esteira__trilho { transform: none; }
 
 /* .anchors: coluna a 5vw do topo e da esquerda; 0,75vw medium, opacidade .4, ativa 1. */
 .palcoplanos__ancoras {
-  position: absolute; z-index: 10; top: 5vw; left: 5vw;
+  position: absolute; z-index: 10; top: 5vw; left: var(--grid-inset);
   list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0;
 }
 .palcoplanos__ancora {
   background: none; border: 0; padding: 5px 0; cursor: pointer; text-align: left;
   font: inherit; font-size: clamp(12px, .85vw, 16px); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em;
-  color: var(--pp-texto); opacity: .4; transition: opacity .4s cubic-bezier(.5, 1, .89, 1);
+  color: var(--pp-texto); opacity: .62; transition: opacity .4s cubic-bezier(.5, 1, .89, 1);
 }
 .palcoplanos__ancora:hover, .palcoplanos__ancora--ativa { opacity: 1; }
 .palcoplanos__ancora:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 
 /* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
-.plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; will-change: transform, opacity; }
+.plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; background: var(--pp-fundo); overflow: hidden; will-change: transform, filter; }
 .plano-palco--ativo { visibility: visible; }
-.plano-palco__imagem { position: absolute; inset: -25% 0; background: var(--pp-fundo); will-change: transform; }
+/* O Start se distingue da abertura clara já na chegada, antes do escurecimento por scroll. */
+.plano-palco[data-plano="0"] { --pp-fundo: #D5D5D5; }
+.plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
 .plano-palco__info { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: transform, opacity; }
-.plano-palco__h3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Nome em duas linhas desencontradas, por cima do símbolo. */
 .plano-palco__nome {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 52vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
-  /* Preto e com as letras mais juntas (Lenora, 18/09): a Inter fina em caixa alta fica solta com tracking frouxo. */
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.055em; word-spacing: -.06em; line-height: .92; text-transform: uppercase;
-  font-size: 9.5vw; color: var(--grafite);
+  width: 46vw; margin: 0; display: grid; z-index: 1; pointer-events: none;
+  /* Referência de 19/09: caixa normal, peso entre regular e médio, tracking fechado. */
+  font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.07em; word-spacing: -.06em; line-height: .84; text-transform: none;
+  font-size: 10vw; color: var(--grafite);
 }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
 
 /* Colunas laterais com largura adaptada à copy em português. */
-.plano-palco__texto { position: absolute; left: 5vw; bottom: 5vw; width: clamp(160px, 14vw, 250px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
-.plano-palco__frase { margin: 0; font-size: clamp(14px, 1vw, 18px); line-height: 1.45; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
-.plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(12px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
+.plano-palco__texto { position: absolute; left: var(--grid-inset); bottom: 5vw; width: clamp(280px, 24vw, 420px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
+.plano-palco__frase { margin: 0; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.45; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
+.plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(14px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
 
 /* Índice e contexto do plano, alinhados pelo canto inferior direito. */
-.plano-palco__dados { position: absolute; right: 5vw; bottom: 5vw; width: clamp(145px, 12vw, 220px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
+.plano-palco__dados { position: absolute; right: var(--grid-inset); bottom: 5vw; width: clamp(200px, 16vw, 300px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
 .plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
-.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-enfase); letter-spacing: -.02em; }
-.plano-palco__fala { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.45; font-weight: var(--peso-enfase); }
-.plano-palco__indice { font-size: 11px; letter-spacing: .12em; opacity: .5; }
+.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
+.plano-palco__fala { margin: 0; font-size: clamp(15px, 1.05vw, 18px); line-height: 1.45; font-weight: var(--peso-corpo); }
 
-/* Ícones: camada única no centro, por cima das dobras (o SVG da referência) — a linha de
-   revelação da dobra não corta o ícone. Os nomes ficam numa camada acima dos ícones:
-   o texto passa na frente (pedido da Lenora, 18/09). */
+/* Símbolo e nome dentro de cada plano: imóveis durante a sobreposição. */
 .palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
-.plano-palco__icone { width: min(65vw, 100svh); height: min(65vw, 100svh); overflow: visible; visibility: hidden; will-change: transform, opacity; }
+.plano-palco__icone { width: min(59vw, 91svh); height: min(59vw, 91svh); overflow: visible; visibility: hidden; will-change: transform, opacity; }
 .palcoplanos__nomes { position: absolute; z-index: 9; inset: 0; pointer-events: none; }
 .palcoplanos__nomes .plano-palco__nome { opacity: 0; }   /* o script liga só o do plano na tela */
-.plano-palco__nome--pilha { display: none; }   /* só na pilha do celular */
+.plano-palco__nome--pilha { position: absolute; left: 0; top: 0; transform: none; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; font-size: 1px; }   /* o H3 do plano: lido pelo leitor de tela; visível só na pilha do celular */
 .peca--papel, .peca--ouro { fill: var(--destaque); }
-
-/* O cabeçalho some enquanto a dobra está presa (data-hide-header na referência). */
-.header--oculto { transform: translateY(-120%); transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
-.header { transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
 
 /* Progressive enhancement: fallback also works before JS and on live preference changes. */
 .palcoplanos:not([data-animado]) .palcoplanos__trilho { height: auto; }
 .palcoplanos:not([data-animado]) .palcoplanos__fixo { position: static; height: auto; overflow: visible; background: var(--pp-fundo); }
-.palcoplanos:not([data-animado]) :is(.palcoplanos__ancoras, .palcoplanos__icones, .palcoplanos__nomes, .plano-palco__h3) { display: none; }
-.palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; clip-path: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
+.palcoplanos:not([data-animado]) :is(.palcoplanos__ancoras, .palcoplanos__icones, .palcoplanos__nomes) { display: none; }
+.palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; transform: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
 .palcoplanos:not([data-animado]) .plano-palco--tom2 { background: var(--pp-fundo-2); }
 .palcoplanos:not([data-animado]) .plano-palco__imagem { position: static; background: transparent; transform: none !important; }
 .palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: block; width: min(48vw, 240px); height: auto; margin: 0 auto 24px; }
 .palcoplanos:not([data-animado]) .plano-palco__info { position: static; pointer-events: auto; display: grid; gap: 28px; transform: none !important; opacity: 1 !important; max-width: 620px; margin-inline: auto; }
-.palcoplanos:not([data-animado]) .plano-palco__nome--pilha { display: grid; position: static; transform: none; width: auto; font-size: clamp(3rem, 11vw, 5rem); opacity: 1; }
+.palcoplanos:not([data-animado]) .plano-palco__nome--pilha { display: grid; position: static; transform: none; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; font-size: clamp(3rem, 11vw, 5rem); opacity: 1; }
 .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
 .palcoplanos:not([data-animado]) :is(.plano-palco__texto, .plano-palco__dados) { position: static; width: auto; text-align: left; gap: 14px; }
 .palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__fala, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
@@ -736,7 +698,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 .planos__titulo {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em; word-spacing: -.08em;
-  font-size: clamp(2rem, 3.1vw, 3rem); line-height: 1.08; max-width: 18ch;
+  font-size: clamp(1.75rem, 2.73vw, 2.64rem); line-height: 1.08; max-width: 18ch;
 }
 .planos__titulo strong { display: block; margin-top: .45em; font-weight: var(--peso-enfase); }
 .planos__dica { font-size: 13px; color: var(--cinza); }
@@ -808,28 +770,47 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .perguntas--mais .pergunta__titulo { font-size: 1.05rem; }
 .perguntas--mais .pergunta p { font-size: 14px; color: rgb(242 242 238 / .68); }
 
-/* ---------- Resultados: extrato de ponta a ponta ----------
-   Cada linha com o número gigante em amarelo à esquerda e, na metade
-   direita, a especialidade e o antes → depois. Fios de uma borda à outra. */
-
-.extrato__cabeca { display: grid; gap: 14px; max-width: min(100%, 980px); margin-bottom: clamp(32px, 5vw, 72px); }
-.extrato { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--fio); }
-.extrato__linha { border-bottom: 1px solid var(--fio); }
-.extrato__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; align-items: center; padding-block: clamp(36px, 5.5vw, 88px); }
-/* Texto à esquerda, número à direita (no celular, em pilha, o número segue em cima). */
-@media (min-width: 900px) {
-  .extrato__grade .extrato__texto { order: 1; }
-  .extrato__grade .extrato__num { order: 2; justify-self: end; text-align: right; }
-}
-.extrato__num {
-  margin: 0; font-family: var(--font-titulo); font-weight: 300; color: var(--destaque);
-  font-size: clamp(4.2rem, 9.5vw, 10rem); line-height: .9; letter-spacing: -.05em; white-space: nowrap;
-}
+/* ---------- Resultados: rótulo lateral e indicadores em linhas ---------- */
+#resultados { background: #e8e7df; color: #161616; padding-block: var(--esp-secao); }
+.extrato__layout { display: grid; grid-template-columns: 1fr 3fr; column-gap: 24px; border-top: 1px solid #cecec4; padding-top: clamp(32px, 3vw, 48px); }
+.extrato__rotulo { padding-top: 8px; color: #5C5C57; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
+.extrato__conteudo { min-width: 0; }
+.extrato__destaque { color: #4A4B46; font-weight: 600; }
+.extrato__cabeca { margin-bottom: clamp(48px, 5vw, 80px); }
+.extrato__cabeca .titulo { max-width: 19ch; font-size: clamp(2.3rem, 3.6vw, 3.6rem); line-height: 1.08; }
+.extrato { list-style: none; margin: 0; padding: 0; }
+.extrato__linha { border-top: 1px solid #cecec4; }
+.extrato__grade { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: start; padding-block: clamp(32px, 3.6vw, 58px); }
+.extrato__num { margin: 0; font-family: var(--font-titulo); font-weight: 400; color: #4A4B46; font-size: clamp(4rem, 7.5vw, 7.5rem); line-height: 1; letter-spacing: -.065em; white-space: nowrap; text-align: right; }
 .contador { font-variant-numeric: tabular-nums; }
-.extrato__texto { display: grid; gap: 12px; max-width: 52ch; }
-.extrato__titulo { font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.6rem, 2.4vw, 2.5rem); letter-spacing: -.03em; line-height: 1.1; }
-.extrato__texto p { margin: 0; color: var(--cinza); font-size: 17px; line-height: 1.55; }
+.extrato__texto { display: grid; gap: 14px; max-width: 34ch; }
+.extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.35rem, 1.7vw, 1.7rem); letter-spacing: -.035em; line-height: 1.2; }
+.extrato__texto p { margin: 0; color: #404040; font-size: 16px; line-height: 1.45; }
 .extrato__acao { margin-top: clamp(28px, 4vw, 48px); }
+/* Foto da área no hover (mockup, Lenora 21/09): no canto esquerdo, na coluna
+   do rótulo "Resultados", alinhada ao topo de cada linha. Absoluta em relação
+   à linha, empurrada para a esquerda da coluna de conteúdo. */
+.extrato__slot { display: none; }
+@media (hover: hover) and (min-width: 1024px) {
+  .extrato__linha { position: relative; }
+  /* A coluna do rótulo mede 1/3 da coluna de conteúdo (grade 1fr 3fr, vão de 24 px): a foto encosta na margem esquerda. */
+  /* Moldura maior (Lenora, 21/09): ocupa a coluna do rótulo quase inteira e
+     a altura útil da linha, com um respiro de 8 px em cima e embaixo. */
+  .extrato__slot { display: block; position: absolute; top: 8px; bottom: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 8px); pointer-events: none; }
+  .extrato__foto {
+    aspect-ratio: auto; height: 100%; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
+    transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
+  }
+  .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .extrato__foto { transition: none; } }
+#resultados :focus-visible { outline-color: #161616; }
+@media (max-width: 700px) {
+  .extrato__layout { grid-template-columns: 1fr; gap: 28px; }
+  .extrato__cabeca .titulo { font-size: clamp(2rem, 7vw, 2.8rem); }
+  .extrato__grade { grid-template-columns: 1fr; gap: 24px; }
+  .extrato__num { text-align: left; font-size: clamp(4rem, 15vw, 6rem); }
+}
 
 /* ---------- CTA final (painel amarelo com fotos) ---------- */
 
@@ -844,7 +825,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .cartao { display: grid; gap: 16px; padding: 20px; border: 1px solid var(--fio); background: var(--superficie); border-radius: var(--raio-foto); }
 .cartao .foto { --prop: 16 / 10; }
-.cartao h3 { font-size: 1.9rem; letter-spacing: -.025em; }
+.cartao h2 { font-size: 1.9rem; letter-spacing: -.025em; }
 .cartao p:not(.rotulo) { color: var(--cinza); }
 
 /* ---------- Sobre: declaração + "Nossos números" ----------
@@ -884,15 +865,13 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   transition: border-color .2s;
 }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--papel); outline: none; }
-.form-card__aviso { font-size: 12px; color: var(--cinza); line-height: 1.5; margin-top: 4px; }
+.form-card__aviso { font-size: 13px; color: var(--cinza); line-height: 1.5; margin: 0; }
 
 /* ---------- Rodapé ---------- */
 
 .footer { background: var(--fundo); color: var(--papel); padding-block: 64px 28px; margin-top: 0; border-top: 1px solid var(--grade); }
-.footer .logo__img { filter: brightness(0) invert(1); }
 .footer__grid { display: grid; gap: 32px; }
 .footer__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; font-weight: var(--peso-enfase); color: rgb(242 242 238 / .6); margin-bottom: 12px; }
-.footer__tagline { font-size: 15px; margin-top: 12px; }
 .footer__col ul { list-style: none; margin: 0; padding: 0; }
 .footer__col li { font-size: 14px; }
 .footer__col a { display: inline-flex; align-items: center; min-height: 2.25rem; color: var(--papel); text-decoration: none; }
@@ -916,7 +895,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .impacto__lista { grid-template-columns: 1fr; gap: 24px; }
   .secao--numeros .impacto__lista { flex-direction: column; align-items: center; gap: 28px; }
   .sobre__fotos { grid-template-columns: 1fr 1fr; }
-  .extrato__grade { grid-template-columns: 1fr; gap: 16px; }
 }
 
 @media (max-width: 899.98px) {
@@ -924,11 +902,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   /* O botão onda no celular: largura toda, texto quebrando se precisar. */
   .botao--onda { width: 100%; padding: 12px 18px 12px 80px; font-size: 15px; }
   .botao--onda .botao__texto { white-space: normal; text-align: right; line-height: 1.25; }
-  .hero__confianca__inner { grid-template-columns: 1fr; gap: 14px; padding-block: 18px; min-height: 0; }
-  .hero__confianca__frase { white-space: normal; font-size: 14px; border-right: 0; padding-right: 0; }
-  .rolo__grupo { gap: 28px; padding-right: 28px; }
-  .rolo__grupo img { height: 16px; }
-  .rolo__trilho { animation-duration: 20s; }
   .duo, .form-block { grid-template-columns: 1fr; }
   .painel-dados__linha { grid-template-columns: 1fr auto; gap: 14px 16px; }
   .painel-dados__linha dt { grid-row: 1; grid-column: 1; }
@@ -942,8 +915,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
-  .oquefaz { grid-template-columns: minmax(0, 1fr); }
-  .oquefaz__midia { order: 2; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; }
   .pergunta { border-right: 0; min-height: 0; }
   .pergunta:nth-last-child(-n+2) { border-bottom: 1px solid rgb(242 242 238 / .18); }
@@ -993,13 +964,11 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .palcoplanos .botao { background: transparent; border-color: rgb(22 22 22 / .28); padding: 12px 16px; }
 .palcoplanos .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite); }
 .palcoplanos :focus-visible { outline-color: var(--grafite); }
-#o-que-fazemos .oquefaz__texto { max-width: 570px; gap: 32px; }
 .oquefaz__texto > p:not(:last-child) { color: rgb(242 242 238 / .7); font-size: clamp(17px, 1.35vw, 21px); }
 #perguntas { padding-block: clamp(88px, 11vw, 176px); }
-#perguntas .ancora { max-width: 21ch; font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-bottom: clamp(48px, 7vw, 100px); }
+#perguntas .ancora { text-align: left; max-width: 21ch; font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-bottom: clamp(48px, 7vw, 100px); }
 .perguntas { border: 0; border-radius: 0; column-gap: clamp(28px, 5vw, 80px); overflow: visible; }
-.pergunta { border: 0; border-top: 1px solid rgb(242 242 238 / .22); padding: 30px 0 40px; gap: 16px; min-height: 230px; transition: border-color .3s ease; }
-.pergunta:hover { border-top-color: var(--destaque); }
+.pergunta { border: 0; border-top: 1px solid rgb(242 242 238 / .22); padding: 30px 0 40px; gap: 16px; min-height: 230px; }
 .pergunta__n { font-size: 12px; margin-bottom: 12px; }
 .pergunta__titulo { font-size: clamp(1.35rem, 2vw, 2rem); font-weight: 400; letter-spacing: -.025em; }
 .pergunta p { max-width: 43ch; font-size: 16px; line-height: 1.65; }
@@ -1007,13 +976,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .perguntas--mais .pergunta { border: 0; border-top: 1px solid rgb(242 242 238 / .22); padding: 30px 0 0; }
 .perguntas--mais .pergunta__titulo { font-size: clamp(1.25rem, 1.6vw, 1.65rem); }
 .perguntas--mais .pergunta p { font-size: 15px; line-height: 1.65; }
-#resultados { padding-top: 0; }
-.extrato__cabeca { max-width: 850px; }
-.extrato__grade { padding-block: clamp(32px, 4.2vw, 64px); }
-.extrato__linha { transition: background-color .3s ease; }
-.extrato__linha:hover { background: rgb(242 242 238 / .025); }
-.extrato__texto p { max-width: 39ch; color: rgb(242 242 238 / .65); }
-.extrato__num { font-size: clamp(4.2rem, 10vw, 10rem); }
 #fale { position: relative; overflow: hidden; padding-block: clamp(80px, 9vw, 144px); }
 .chamada { grid-template-columns: .8fr 1.2fr; gap: clamp(32px, 7vw, 112px); }
 .chamada__numero { font-size: clamp(180px, 30vw, 480px); font-weight: 260; line-height: .75; letter-spacing: -.1em; color: rgb(22 22 22 / .14); user-select: none; }
@@ -1021,11 +983,8 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .chamada__miolo .titulo { font-size: clamp(2.5rem, 5vw, 5rem); max-width: 15ch; }
 .chamada__miolo p:not(.rotulo) { max-width: 35ch; }
 .duo { gap: clamp(24px, 4vw, 64px); }
-/* O fio de baixo do card já fecha a seção visualmente; o respiro padrão
-   de .secao embaixo dele ficava dobrado antes do Sobre começar. */
-#academy-tools { padding-bottom: clamp(40px, 5vw, 64px); }
-.cartao { padding: 0 0 32px; border: 0; border-radius: 0; background: transparent; gap: 20px; grid-template-rows: auto auto 1fr auto; }
-.cartao h3 { font-size: clamp(2rem, 3vw, 3rem); }
+.cartao { padding: 0 0 32px; border: 0; border-bottom: 1px solid var(--fio); border-radius: 0; background: transparent; gap: 20px; grid-template-rows: auto auto 1fr auto; }
+.cartao h2 { font-size: clamp(2rem, 3vw, 3rem); }
 .cartao > p { max-width: 46ch; }
 .cartao > p:last-child { padding-top: 8px; }
 .cartao__arte { aspect-ratio: 16 / 10; overflow: hidden; position: relative; display: grid; place-items: center; margin-bottom: 16px; border-radius: 10px; }
@@ -1049,9 +1008,24 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre__acao { justify-content: start; margin-top: 32px; }
 #formulario { background: #111210; }
 .form-block__text .titulo { max-width: 15ch; }
-.form-card { background: #191a17; border-color: rgb(242 242 238 / .12); border-radius: 12px; gap: 22px; }
-.field input, .field select, .field textarea { background: #111210; min-height: 52px; border-color: rgb(242 242 238 / .18); }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--destaque); box-shadow: 0 0 0 2px rgb(255 209 3 / .12); }
+/* Cartão do formulário (Lenora, 21/09): mais estreito e compacto, encostado
+   à direita; rótulos e avisos pequenos em cinza claro; nada em vermelho.
+   O [hidden] dos erros e do "Copiar mensagem" precisa vencer o display das
+   classes, senão eles aparecem sempre (bug de 20/09). */
+.form-card { background: #191a17; border-color: rgb(242 242 238 / .12); border-radius: 14px; gap: 18px; padding: clamp(24px, 2.4vw, 34px); width: 100%; max-width: 460px; justify-self: end; }
+.form-card [hidden] { display: none; }
+.form-card .field { margin: 0; }
+.form-card__duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-card .field__label { font-size: 13px; font-weight: var(--peso-enfase); letter-spacing: .01em; color: rgb(242 242 238 / .78); margin-bottom: 7px; }
+.field input, .field select, .field textarea { background: #121311; min-height: 46px; padding: 10px 14px; font-size: 15px; border-radius: 9px; border-color: rgb(242 242 238 / .14); transition: border-color .2s ease, box-shadow .2s ease; }
+.field input::placeholder { color: rgb(242 242 238 / .32); }
+.field input:hover, .field select:hover { border-color: rgb(242 242 238 / .3); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: rgb(242 242 238 / .6); box-shadow: 0 0 0 3px rgb(242 242 238 / .08); }
+.form-card .botao { margin-top: 4px; }
+@media (max-width: 899.98px) {
+  .form-card { max-width: none; justify-self: stretch; }
+  .form-card__duo { grid-template-columns: 1fr; gap: 18px; }
+}
 @media (max-width: 899.98px) {
   .hero__lead { font-size: 18px; max-width: 36ch; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; gap: 0; }
@@ -1073,4 +1047,206 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   html { scroll-behavior: auto; }
   .academy-marca i, .tools-marca, a.botao::after { transition: none; }
   .cartao:hover .academy-marca i, .cartao:hover .tools-marca, a.botao:hover::after { transform: none; }
+}
+
+/* Frase de abertura com a mesma tipografia e revelação do Protocolo Revena. */
+#perguntas .ancora--revela {
+  max-width: none;
+  font-family: var(--font-titulo);
+  font-size: clamp(2.1rem, 4.5vw, 5rem);
+  font-weight: var(--peso-titulo);
+  line-height: 1.08;
+  letter-spacing: -.055em;
+  text-align: left;
+}
+.ancora__linha { display: block; }
+.ancora__linha [data-palavra] { display: inline-block; }
+.ancora__destaque { color: var(--destaque); font-weight: var(--peso-enfase); }
+@media (min-width: 900px) { .ancora__linha { white-space: nowrap; } }
+@media (max-width: 599.98px) {
+  #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
+}
+
+/* Pilares centralizados: o scroll conduz cada cartão da direita para a esquerda. */
+/* Pilares em cartões (Lenora, 21/09): grade estática, três na primeira
+   linha e dois na segunda no desktop, sem a dobra presa ao scroll. */
+.pilares { background: var(--fundo); }
+.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 4vw, 56px); text-align: center; justify-items: center; }
+.pilares__cabeca .titulo { font-size: clamp(2.2rem, 3.6vw, 3.6rem); }
+.pilares__grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(16px, 1.6vw, 24px); }
+.pilar-card {
+  grid-column: span 2; min-width: 0; display: grid; align-content: start; gap: 16px;
+  padding: clamp(24px, 2.4vw, 34px);
+  border: 1px solid var(--fio); border-radius: 12px;
+  background: radial-gradient(ellipse at 100% 0%, #27291e66, transparent 65%), #141513;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06);
+}
+.pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: span 3; }
+.pilar-card__icone { display: block; width: 32px; color: var(--destaque); }
+.pilar-card__icone svg { display: block; width: 100%; height: auto; }
+.pilar-card__titulo { font-family: var(--font-titulo); font-size: clamp(19px, 1.5vw, 23px); line-height: 1.25; font-weight: 400; letter-spacing: -.035em; color: var(--papel); text-wrap: pretty; }
+.pilar-card__texto { margin: 0; font-size: 15px; line-height: 1.6; color: var(--cinza); text-wrap: pretty; }
+@media (max-width: 899.98px) {
+  .pilares__grade { grid-template-columns: minmax(0, 1fr); }
+  .pilar-card, .pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: auto; }
+}
+
+/* Guardado: o palco anterior dos pilares (um cartão por tela, dobra presa),
+   caso a apresentação volte a ser essa. */
+.revena-pilares { position: relative; background: var(--fundo); color: var(--papel); }
+.revena-pilares__palco { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 112px 24px 48px; }
+.revena-pilares.is-pinned .revena-pilares__palco { position: sticky; top: 0; }
+.revena-pilares__cabeca { display: grid; gap: 12px; margin-bottom: 28px; text-align: center; }
+.revena-pilares__cabeca .titulo { font-size: clamp(2.5rem, 4vw, 4rem); }
+.revena-pilares__janela { width: min(100%, 560px); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--destaque) transparent; border-radius: 12px; }
+.revena-pilares.is-pinned .revena-pilares__janela { overflow: hidden; scroll-snap-type: none; }
+.revena-pilares__lista { display: grid; position: relative; grid-auto-columns: 100%; grid-auto-flow: column; gap: 24px; }
+.revena-pilar {
+  --progresso: 0; min-width: 0; overflow: hidden;
+  display: grid; grid-template-rows: subgrid; grid-row: span 3; gap: 0;
+  border: 1px solid var(--fio); border-radius: 12px;
+  background: linear-gradient(145deg, #171816, #0c0d0b); color: #a6a79f;
+  transition: background .3s, border-color .3s, color .3s; scroll-snap-align: center;
+}
+.revena-pilar h3 { color: var(--papel); font-family: var(--font-titulo); font-size: 24px; line-height: 1.2; font-weight: 400; letter-spacing: -.035em; text-wrap: initial; }
+.revena-pilar > p { font-size: 14px; line-height: 1.55; padding: 32px; min-height: 150px; align-content: end; }
+.revena-pilar__base { position: relative; min-height: 170px; padding: 28px 32px 84px; }
+.revena-pilar__icone { position: absolute; right: 32px; bottom: 24px; display: block; width: 36px; color: #777a70; }
+.revena-pilar__icone svg { display: block; width: 100%; height: auto; }
+.revena-pilar__progresso { height: 5px; background: #ffffff0c; overflow: hidden; }
+.revena-pilar__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--progresso)); transform-origin: left; }
+.revena-pilar.is-active { background: linear-gradient(145deg, #28291a, #14150f); border-color: #ffd10366; color: var(--papel); }
+.revena-pilar.is-active :is(h3, .revena-pilar__icone) { color: var(--destaque); }
+.revena-pilar.is-complete { color: #c2c3bb; }
+@media (max-width: 899px) {
+  .revena-pilares__palco { min-height: auto; padding-block: 96px 64px; }
+  .revena-pilar > p { padding: 24px; }
+  .revena-pilar__base { padding-inline: 24px; }
+  .revena-pilar__icone { right: 24px; }
+  .revena-pilar h3 { font-size: 23px; }
+}
+@media (prefers-reduced-motion: reduce) { .revena-pilar { transition: none; } }
+
+/* Prova social da hero: retratos reais, mesma apresentação nas duas copys. */
+.hero-prova { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; padding-block: 12px; }
+.hero-prova__retratos { list-style: none; display: flex; margin: 0; padding: 0; }
+.hero-prova__retrato { position: relative; width: 56px; height: 56px; flex: none; border-radius: 50%; outline-offset: 4px; }
+.hero-prova__retrato + .hero-prova__retrato { margin-left: -13px; }
+.hero-prova__retrato img { display: block; width: 100%; height: 100%; object-fit: cover; border: 2px solid #070909; border-radius: inherit; filter: grayscale(1); transition: filter .25s ease; }
+.hero-prova__retrato:hover, .hero-prova__retrato:focus { z-index: 2; }
+.hero-prova__retrato:hover img, .hero-prova__retrato:focus img { filter: none; }
+.hero-prova__tooltip { position: absolute; bottom: calc(100% + 12px); left: 0; display: grid; gap: 3px; width: max-content; max-width: 220px; padding: 12px 16px; background: #181a18; border: 1px solid var(--fio); border-radius: 8px; font-size: 12px; line-height: 1.4; visibility: hidden; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.hero-prova__tooltip > span { color: var(--cinza); }
+.hero-prova__retrato:hover .hero-prova__tooltip, .hero-prova__retrato:focus .hero-prova__tooltip { visibility: visible; opacity: 1; }
+.hero-prova__legenda { display: flex; align-items: center; gap: 14px; margin: 0; font-size: 13px; line-height: 1.45; color: var(--cinza); }
+.hero-prova__legenda strong { color: var(--papel); font-weight: 500; }
+.hero-prova__legenda .hero-prova__numero { font-size: 36px; font-weight: 300; letter-spacing: -.055em; }
+@media (prefers-reduced-motion: reduce) { .hero-prova__retrato img, .hero-prova__tooltip { transition: none; } }
+
+.hero-prova__retrato--vazio {
+  background: linear-gradient(145deg, #363936, #1d201e);
+  border: 2px solid #070909;
+  box-shadow: inset 0 0 0 1px rgb(242 242 238 / .16);
+}
+.hero-prova__legenda .hero-prova__numero { white-space: nowrap; }
+
+/* Sobre: texto fixo à esquerda (referência Marvee) e, à direita, a esteira do
+   metodobr.com — blocos de 300px com 32px de vão, alturas iguais, foto inteira
+   ou cartão + meia foto, deslizando com o scroll enquanto a dobra fica presa. */
+/* Mais cheia na tela (Lenora, 20/09): blocos mais largos e a esteira quase
+   na altura toda da dobra, sangrando nas duas laterais. */
+/* Texto com largura contida e intervalo curto até a primeira foto. */
+.sobre-editorial__percurso {
+  position: relative; --sobre-altura: clamp(480px, calc(100svh - 176px), 920px); --bloco: clamp(280px, 26vw, 400px); --bloco-largo: clamp(380px, 38vw, 580px); --vao: 32px;
+  --sobre-duo: clamp(24px, 2.4vw, 38px);
+  --sobre-recuo: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter)));
+  --sobre-coluna: clamp(350px, 35vw, 500px);
+}
+.sobre-editorial__palco {
+  width: min(100%, var(--largura)); margin-inline: auto; padding: 80px var(--gutter) 24px;
+  display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch;
+}
+/* O texto é o primeiro item do carrossel: desliza junto com as fotos. */
+/* O texto é um bloco só, alinhado ao topo das fotos (Lenora, 20/09): rótulo,
+   título, descrição e botão em sequência; só a barra de progresso vai ao pé. */
+.sobre-editorial__texto { flex: 0 0 var(--sobre-coluna); margin-right: calc(var(--sobre-duo) - var(--vao)); display: flex; flex-direction: column; justify-content: flex-start; gap: clamp(28px, 3vw, 44px); height: 100%; }
+.sobre-editorial__cabeca { display: grid; gap: clamp(16px, 2vw, 28px); }
+.sobre-editorial__pe { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; }
+.sobre-editorial__texto .rotulo { margin: 0; color: var(--destaque); }
+/* Duas linhas, quebra fixa (Lenora, 20/09): o teto da fonte garante que
+   "Conheça a história" caiba na coluna em qualquer tela. */
+.sobre-editorial__texto .sobre__declaracao { max-width: none; font-size: clamp(2.2rem, 3.4vw, 3.3rem); }
+.sobre-editorial__descricao { max-width: 37ch; margin: 0; color: var(--cinza); font-size: clamp(15px, 1.2vw, 19px); line-height: 1.65; }
+.sobre-editorial__janela { min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--destaque) transparent; }
+.sobre-editorial__trilho { display: flex; align-items: stretch; gap: var(--vao); width: max-content; height: var(--sobre-altura); will-change: transform; }
+.bloco { flex: 0 0 var(--bloco); display: flex; flex-direction: column; gap: var(--vao); min-height: 0; }
+/* Blocos de foto inteira mais largos (Lenora, 20/09). */
+.bloco--largo { flex-basis: var(--bloco-largo); }
+.bloco__foto { flex: 1 1 0; min-height: 0; margin: 0; position: relative; overflow: hidden; border-radius: 12px; background: var(--painel); }
+.bloco__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.bloco__foto--alto img { object-position: center 20%; }
+.sobre-editorial__progresso { width: 112px; height: 2px; margin-top: auto; background: var(--fio); }
+.sobre-editorial__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--sobre-progresso, 0)); transform-origin: left; }
+/* Preso: a esteira sangra nas duas bordas da tela, sem recuo nem máscara
+   (Lenora, 20/09); só o texto guarda o gutter à esquerda, pela margem própria. */
+.sobre-editorial__percurso--fixo .sobre-editorial__palco {
+  position: sticky; top: 0; height: 100svh; width: 100%; max-width: none;
+  padding: 96px 0 24px; align-content: center; overflow: hidden;
+}
+.sobre-editorial__percurso--fixo .sobre-editorial__janela { overflow: hidden; }
+.sobre-editorial__percurso--fixo .sobre-editorial__texto { margin-left: var(--sobre-recuo); }
+@media (max-width: 899.98px) {
+  /* Sem prender: texto em cima e a esteira em rolagem horizontal comum embaixo. */
+  .sobre-editorial__percurso { --sobre-altura: clamp(380px, 60svh, 520px); --bloco: min(70vw, 280px); --bloco-largo: min(78vw, 320px); --vao: 16px; }
+  .sobre-editorial__palco { padding-top: 56px; }
+  .sobre-editorial__texto { flex-basis: 80vw; margin-right: 0; gap: 24px; justify-content: center; }
+  .sobre-editorial__texto .sobre__declaracao { font-size: clamp(30px, 8vw, 40px); }
+  .sobre-editorial__janela { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+  .sobre-editorial__progresso { display: none; }
+    }
+
+/* Indicador central: amarelo luminoso e tipografia escura, nas duas copys. */
+
+.bloco__cabeca { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; width: 100%; margin-bottom: auto; }
+.bloco__cabeca p { max-width: 18ch; color: var(--papel); font-size: clamp(12px, 1vw, 15px); line-height: 1.35; }
+.bloco__cabeca svg { flex: 0 0 28px; width: 28px; height: 28px; color: var(--destaque); }
+@media (max-width: 899.98px) { .sobre-editorial__percurso { --sobre-altura: clamp(540px, 70svh, 620px); } }
+
+/* ---------- Polish 20/09/2026: formulário, prova por números, pendências, letreiro ---------- */
+/* Estados do formulário: erro por campo, nota do canal, status após o envio. */
+.form-card__status { margin: 0; font-size: 13.5px; line-height: 1.5; padding: 12px 14px; border: 1px solid rgb(242 242 238 / .14); border-radius: 9px; background: rgb(242 242 238 / .04); color: rgb(242 242 238 / .8); }
+.form-card__status:empty { display: none; }
+.form-card__copiar { justify-self: start; background: none; border: 0; padding: 0; font-size: 14px; color: var(--papel); cursor: pointer; }
+.form-card__aviso { font-size: 12.5px; line-height: 1.55; color: rgb(242 242 238 / .5); }
+.form-card__aviso a { color: rgb(242 242 238 / .7); }
+.field__erro { display: block; margin-top: 6px; font-size: 12.5px; line-height: 1.4; color: var(--erro); }
+.field--invalido input, .field--invalido select { border-color: rgb(242 242 238 / .45); }
+/* Cartão cuja página ainda não existe: rótulo no lugar do botão. */
+.cartao__pendente { margin: 0; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
+/* Letreiro com frases (versão do estúdio): letra menor e curso mais lento, porque o trilho é mais longo. */
+.letreiro--frases .letreiro__palavra { font-size: clamp(2rem, 5.2vw, 5.6rem); }
+.letreiro--frases .letreiro__trilho { animation-duration: 96s; }
+
+/* Abaixo de 1080 px o vídeo sobe para cima do texto: lado a lado, a coluna
+   de texto não comporta as três legendas numa linha só (Lenora, 21/09). */
+@media (max-width: 1079.98px) {
+  .oquefaz { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
+  .oquefaz__midia { justify-items: center; }
+}
+@media (max-width: 599.98px) {
+  .oquefaz__numeros { flex-direction: column; gap: 18px; }
+  .oquefaz__numero + .oquefaz__numero { border-left: 0; border-top: 1px solid rgb(242 242 238 / .16); padding: 18px 0 0; }
+}
+
+/* ---------- Nossa metodologia: entrada do vídeo (20/09/2026) ----------
+   Só no desktop, com JS e movimento permitido (classe .oquefaz--profundo
+   ligada pelo script): o vídeo sobe e aparece quando a dobra chega à tela.
+   Sem a classe, a dobra é estática. */
+@media (min-width: 1080px) {
+  .oquefaz--profundo { --entra: 0; overflow: clip; }
+  .oquefaz--profundo .oquefaz__midia.entra {
+    opacity: var(--entra); transition: none;
+    transform: translate3d(0, calc((1 - var(--entra)) * 12vh), 0) scale(calc(.94 + .06 * var(--entra)));
+  }
+  .oquefaz--em-tela .oquefaz__midia { will-change: transform; }
 }

@@ -118,3 +118,19 @@ export const formulario = {
   botao: 'Quero saber se faz sentido',
   faixasFaturamento: ['Selecione', 'Até R$100k', 'R$100k – R$300k', 'Acima de R$300k'],
 };
+
+/** Os três números do briefing (⚠️ D1): prova social da hero (enquanto não há
+ *  retratos de doutores) e cartões do Sobre. Versão do estúdio com "+" e sem
+ *  "R$", como em Numeros.astro. */
+export const numerosProva = {
+  copy: [
+    { valor: '~30', legenda: 'clínicas atendidas' },
+    { valor: '4 anos', legenda: 'de método validado' },
+    { valor: 'R$42M', legenda: 'em faturamento gerado' },
+  ],
+  estudio: [
+    { valor: '+30', legenda: 'clínicas atendidas' },
+    { valor: '+4 anos', legenda: 'de método validado' },
+    { valor: '+42M', legenda: 'em faturamento gerado' },
+  ],
+};

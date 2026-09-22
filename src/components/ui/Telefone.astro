@@ -1,4 +1,5 @@
 ---
+import Icone from './Icone.astro';
 /**
  * O reel dentro de uma moldura de celular. Toca ao entrar na tela, pausa ao
  * sair, respeita uma pausa manual. No mobile (home2.css) a moldura some e o
@@ -24,13 +25,13 @@ const video = slot.video!;
       </video>
       <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
       <div class="tel__controles">
-        <button class="tel__botao" type="button" data-tel-som aria-pressed="true" aria-label="Ativar som">
-          <svg class="tel__icone tel__icone--mudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-          <svg class="tel__icone tel__icone--som" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        <button class="tel__botao" type="button" data-tel-som aria-pressed="false" aria-label="Ativar som">
+          <Icone nome="VolumeX" class="tel__icone tel__icone--mudo" size={20} />
+          <Icone nome="Volume2" class="tel__icone tel__icone--som" size={20} />
         </button>
         <button class="tel__botao" type="button" data-tel-toque aria-label="Pausar vídeo">
-          <svg class="tel__icone tel__icone--pausa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-          <svg class="tel__icone tel__icone--toca" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <Icone nome="Pause" class="tel__icone tel__icone--pausa" size={20} />
+          <Icone nome="Play" class="tel__icone tel__icone--toca" size={20} />
         </button>
       </div>
     </div>
@@ -60,7 +61,7 @@ const video = slot.video!;
     });
     som.addEventListener('click', () => {
       video.muted = !video.muted;
-      som.setAttribute('aria-pressed', String(video.muted));
+      som.setAttribute('aria-pressed', String(!video.muted));
       som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
       raiz.classList.toggle('tel--com-som', !video.muted);
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }

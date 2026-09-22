@@ -1,4 +1,5 @@
 ---
+import Icone from '../ui/Icone.astro';
 /**
  * Desenha a lista de blocos de uma página interna.
  *
@@ -34,7 +35,7 @@ const dev = import.meta.env.DEV;
             {b.sub && <p class="pg-hero__sub">{b.sub}</p>}
             {b.cta && (
               <div class="pg-hero__acoes">
-                <Botao variante="brilho" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao>
+                <Botao variante="brilho" href={b.rotaCta ?? '/contato'}>{b.cta.replace(/\s*→$/, '')}</Botao>
               </div>
             )}
           </div>
@@ -75,7 +76,7 @@ const dev = import.meta.env.DEV;
                   {i.texto && <p class="resolve__texto">{i.texto}</p>}
                   {i.itens && (
                     <ul class="resolve__lista">
-                      {i.itens.map((li) => <li>{li}</li>)}
+                      {i.itens.map((li) => <li><Icone nome="Check" class="resolve-check" size={18} />{li}</li>)}
                     </ul>
                   )}
                   {i.media && <Media id={i.media} />}
@@ -139,7 +140,7 @@ const dev = import.meta.env.DEV;
           <div class:list={['container', 'container--prose', b.centro && 'center']}>
             {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
             {b.h2 && <h2>{b.h2}</h2>}
-            {b.paragrafos.map((p) => <p set:html={p} />)}
+            {b.paragrafos.map((p) => <p set:html={p.replaceAll(' →', '')} />)}
           </div>
         </section>
       );
@@ -180,7 +181,7 @@ const dev = import.meta.env.DEV;
                 <article class="produto vidro entra">
                   <h3 class="produto__titulo">{i.titulo}</h3>
                   <p class="produto__texto">{i.texto}</p>
-                  <a class="link-arrow produto__link" href={i.rota}>{i.cta} →</a>
+                  <a class="link-arrow produto__link" href={i.rota}>{i.cta} <Icone nome="ArrowRight" size={18} /></a>
                 </article>
               ))}
             </div>
@@ -196,7 +197,7 @@ const dev = import.meta.env.DEV;
             <div class="faq">
               {b.perguntas.map((q, i) => (
                 <details class="faq__item" open={i === 0}>
-                  <summary class="faq__pergunta">{q.p}</summary>
+                  <summary class="faq__pergunta">{q.p}<Icone nome="ChevronDown" class="faq-chevron" size={20} /></summary>
                   <p class="faq__resposta">{q.r}</p>
                 </details>
               ))}
@@ -250,7 +251,7 @@ const dev = import.meta.env.DEV;
                   )}
                 </p>
               ))}
-              <Botao variante="brilho" type="submit">{b.botao}</Botao>
+              <Botao variante="brilho" type="submit">{b.botao.replace(/\s*→$/, '')}<Icone nome="ArrowRight" size={18} /></Botao>
               <p class="form-card__aviso">
                 O envio ainda não está ligado. Enquanto isso, escreva para
                 <a href="mailto:contato@renkestudio.com.br"> contato@renkestudio.com.br</a>.
@@ -266,7 +267,7 @@ const dev = import.meta.env.DEV;
           <div class="container container--narrow center">
             {b.destaque && <h2 class="statement">{b.destaque}</h2>}
             {b.texto && <p>{b.texto}</p>}
-            <p><Botao variante="claro" tamanho="lg" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao></p>
+            <p><Botao variante="claro" tamanho="lg" href={b.rotaCta ?? '/contato'}>{b.cta.replace(/\s*→$/, '')}</Botao></p>
           </div>
         </section>
       );

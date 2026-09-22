@@ -17,7 +17,7 @@ const demais = perguntas.filter((p) => p.excedente);
 const entra = copyLiteral ? '' : 'entra';
 ---
 <div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura" id="perguntas">
+<section class="secao secao--escura" id="perguntas" aria-labelledby="perguntas-titulo">
   <div class="container">
     {copyLiteral ? (
       <p class="ancora">
@@ -25,11 +25,14 @@ const entra = copyLiteral ? '' : 'entra';
         <strong>Mas e com o seu negócio?</strong>
       </p>
     ) : (
-      <!-- Versão do estúdio: a frase enxugada (saem "Clinicamente," e
-           "exatamente") e o fecho "da sua clínica" no lugar de "do seu
-           negócio", decisão da Lenora em 16/09/2026 para falar no nicho. -->
-      <h2 class:list={['ancora', entra]}>
-        Operação em alta performance.
+      <!-- A frase do print da Lenora (19/09), em duas linhas, no mesmo
+           desenho do título do Protocolo Revena (tinta palavra a palavra). -->
+      <h2 class="ancora ancora--revela" id="perguntas-titulo" data-revena-revela>
+        {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
+          <span class="ancora__linha">
+            {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
+          </span>
+        ))}
       </h2>
     )}
     <div class:list={['perguntas', entra]}>
