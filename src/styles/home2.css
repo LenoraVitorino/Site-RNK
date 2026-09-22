@@ -405,8 +405,10 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
 /* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
 .oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(20px, 3vw, 48px); }
-/* Três colunas iguais; o número nunca quebra (espaço fixo no valor), só a legenda pode. */
-.oquefaz__numero { min-width: 0; flex: 1 1 0; }
+/* Três colunas iguais, mas nunca mais estreitas que o próprio número (que
+   não quebra): min-content aqui é a largura do valor, porque a legenda
+   pode quebrar. Sem isso o valor mais largo invadia o vão do vizinho. */
+.oquefaz__numero { flex: 1 1 0; min-width: min-content; }
 /* Número grande em amarelo (o desenho dos antigos cartões do Sobre), legenda em cinza (Lenora, 21/09). */
 .oquefaz__valor { margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
