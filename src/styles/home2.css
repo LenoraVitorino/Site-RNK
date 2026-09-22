@@ -32,7 +32,7 @@ a { color: inherit; }
 h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; text-wrap: balance; }
 /* Uma família só, a Inter: títulos finos (peso 260), corpo em 400 e os
    destaques em 500. Menos ruído para uma página com muito texto. */
-.titulo, .ancora, .plano__nome, .cartao h3, .esteira__numero b, .painel-dados__num {
+.titulo, .ancora, .plano__nome, .cartao h2, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
   word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
 }
@@ -379,55 +379,6 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   .js .hero__risco, .js .hero__risco::after { animation: none; }
 }
 
-/* Barra de prova social no pé da hero, como a referência: rótulo à
-   esquerda, logos à direita, visível em todos os tempos da cena. */
-.hero__confianca {
-  position: relative; z-index: 1; width: 100%; border-top: 1px solid var(--grade);
-  background: var(--fundo);
-}
-.hero__confianca__inner {
-  width: min(100%, var(--largura)); margin-inline: auto; padding: 0 var(--gutter);
-  min-height: 104px;
-  display: grid; grid-template-columns: auto 1fr; align-items: center;
-  gap: clamp(28px, 3vw, 48px);
-}
-/* Frase em caixa normal, como a da referência, com um fio vertical depois. */
-.hero__confianca__frase {
-  margin: 0; font-size: 16px; line-height: 1.45; color: var(--papel); white-space: nowrap;
-  padding: 10px clamp(28px, 3vw, 48px) 10px 0; border-right: 1px solid var(--grade);
-}
-.hero__confianca__frase strong { font-weight: var(--peso-enfase); }
-/* Os logos tomam o resto da largura. */
-.hero__clientes { min-width: 0; display: flex; align-items: center; }
-.hero__clientes .rolo { flex: 1 1 0; min-width: 0; }
-/* Carrossel contínuo: viewport mascarada, trilho com dois grupos idênticos
-   andando -50% em loop. O gap fica dentro do grupo (gap + padding-right
-   iguais) para a emenda ser invisível. */
-.rolo {
-  min-width: 0; overflow: hidden; display: flex; align-items: center;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 8% 92%, transparent 100%);
-}
-.rolo__trilho { display: flex; width: max-content; will-change: transform; animation: rolo 34s linear infinite; }
-.rolo__grupo {
-  list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex: none;
-  gap: clamp(56px, 6vw, 96px); padding-right: clamp(56px, 6vw, 96px);
-}
-.rolo__grupo li { flex: none; display: flex; align-items: center; }
-/* Logos em cinza; no hover acendem na cor original. */
-.rolo__grupo img {
-  height: 20px; width: auto;
-  filter: brightness(0) invert(1); opacity: .38;
-  transition: filter .3s var(--easing-suave), opacity .3s var(--easing-suave);
-}
-.rolo__grupo li:hover img { filter: none; opacity: 1; }
-/* Parar de andar no hover ajuda a mirar o logo. */
-.rolo:hover .rolo__trilho { animation-play-state: paused; }
-@keyframes rolo { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) {
-  .rolo__trilho { animation: none; }
-  .rolo { -webkit-mask-image: none; mask-image: none; overflow-x: auto; scrollbar-width: none; }
-}
 /* ---------- Faixa: números + quem confia ---------- */
 
 .faixa { border-bottom: 1px solid var(--fio); }
@@ -822,7 +773,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .extrato__num { text-align: left; font-size: clamp(4rem, 15vw, 6rem); }
 }
 
-
 /* ---------- CTA final (painel amarelo com fotos) ---------- */
 
 .chamada { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: clamp(20px, 4vw, 48px); align-items: center; }
@@ -836,7 +786,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .cartao { display: grid; gap: 16px; padding: 20px; border: 1px solid var(--fio); background: var(--superficie); border-radius: var(--raio-foto); }
 .cartao .foto { --prop: 16 / 10; }
-.cartao h3 { font-size: 1.9rem; letter-spacing: -.025em; }
+.cartao h2 { font-size: 1.9rem; letter-spacing: -.025em; }
 .cartao p:not(.rotulo) { color: var(--cinza); }
 
 /* ---------- Sobre: declaração + "Nossos números" ----------
@@ -913,11 +863,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   /* O botão onda no celular: largura toda, texto quebrando se precisar. */
   .botao--onda { width: 100%; padding: 12px 18px 12px 80px; font-size: 15px; }
   .botao--onda .botao__texto { white-space: normal; text-align: right; line-height: 1.25; }
-  .hero__confianca__inner { grid-template-columns: 1fr; gap: 14px; padding-block: 18px; min-height: 0; }
-  .hero__confianca__frase { white-space: normal; font-size: 14px; border-right: 0; padding-right: 0; }
-  .rolo__grupo { gap: 28px; padding-right: 28px; }
-  .rolo__grupo img { height: 16px; }
-  .rolo__trilho { animation-duration: 20s; }
   .duo, .form-block { grid-template-columns: 1fr; }
   .painel-dados__linha { grid-template-columns: 1fr auto; gap: 14px 16px; }
   .painel-dados__linha dt { grid-row: 1; grid-column: 1; }
@@ -987,8 +932,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 #perguntas { padding-block: clamp(88px, 11vw, 176px); }
 #perguntas .ancora { text-align: left; max-width: 21ch; font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-bottom: clamp(48px, 7vw, 100px); }
 .perguntas { border: 0; border-radius: 0; column-gap: clamp(28px, 5vw, 80px); overflow: visible; }
-.pergunta { border: 0; border-top: 1px solid rgb(242 242 238 / .22); padding: 30px 0 40px; gap: 16px; min-height: 230px; transition: border-color .3s ease; }
-.pergunta:hover { border-top-color: var(--destaque); }
+.pergunta { border: 0; border-top: 1px solid rgb(242 242 238 / .22); padding: 30px 0 40px; gap: 16px; min-height: 230px; }
 .pergunta__n { font-size: 12px; margin-bottom: 12px; }
 .pergunta__titulo { font-size: clamp(1.35rem, 2vw, 2rem); font-weight: 400; letter-spacing: -.025em; }
 .pergunta p { max-width: 43ch; font-size: 16px; line-height: 1.65; }
@@ -1004,7 +948,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .chamada__miolo p:not(.rotulo) { max-width: 35ch; }
 .duo { gap: clamp(24px, 4vw, 64px); }
 .cartao { padding: 0 0 32px; border: 0; border-bottom: 1px solid var(--fio); border-radius: 0; background: transparent; gap: 20px; grid-template-rows: auto auto 1fr auto; }
-.cartao h3 { font-size: clamp(2rem, 3vw, 3rem); }
+.cartao h2 { font-size: clamp(2rem, 3vw, 3rem); }
 .cartao > p { max-width: 46ch; }
 .cartao > p:last-child { padding-top: 8px; }
 .cartao__arte { aspect-ratio: 16 / 10; overflow: hidden; position: relative; display: grid; place-items: center; margin-bottom: 16px; border-radius: 10px; }
@@ -1255,14 +1199,18 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
     column-gap: 24px; row-gap: clamp(28px, 4vw, 56px); align-items: center; isolation: isolate;
   }
   .oquefaz--profundo .oquefaz__texto { display: contents; }
+  /* Mesma fonte da frase-âncora das perguntas, diagramado à esquerda como
+     ela (Lenora, 21/09): as duas palavras empilhadas nas colunas 1–6, acima
+     da descrição; o celular continua nas colunas 7–11. As camadas guardam só
+     a paralaxe vertical leve entre as palavras. */
   .oquefaz--profundo .oquefaz__texto > .oquefaz__titulo {
-    grid-column: 1 / -1; grid-row: 1; margin: 0; display: grid; pointer-events: none;
-    white-space: normal; font-size: clamp(5.5rem, 10vw, 9.5rem); line-height: .9; letter-spacing: -.055em; font-weight: 300;
+    grid-column: 1 / 7; grid-row: 1; margin: 0; display: grid; justify-items: start; align-self: end; pointer-events: none;
+    white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo);
   }
   .oquefaz--profundo .oquefaz__palavra { display: block; width: max-content; position: relative; }
-  .oquefaz--profundo .oquefaz__palavra--tras { z-index: 1; margin-left: 34%; transform: translate3d(0, calc(var(--par) * 3vh), 0); }
-  .oquefaz--profundo .oquefaz__palavra--frente { z-index: 3; transform: translate3d(0, calc(var(--par) * -3vh), 0); }
-  .oquefaz--profundo .oquefaz__texto > .oquefaz__descricao { grid-column: 1 / 7; grid-row: 2; margin: 0; max-width: 44ch; font-size: 19px; line-height: 1.55; }
+  .oquefaz--profundo .oquefaz__palavra--tras { z-index: 1; transform: translate3d(0, calc(var(--par) * 2vh), 0); }
+  .oquefaz--profundo .oquefaz__palavra--frente { z-index: 3; transform: translate3d(0, calc(var(--par) * -2vh), 0); }
+  .oquefaz--profundo .oquefaz__texto > .oquefaz__descricao { grid-column: 1 / 7; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 19px; line-height: 1.55; }
   .oquefaz--profundo .oquefaz__descricao > span { display: inline; white-space: normal; }
   .oquefaz--profundo .oquefaz__midia.entra {
     grid-column: 7 / 12; grid-row: 1 / 3; justify-self: center; align-self: center; z-index: 2;
