@@ -1068,6 +1068,31 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 
 /* Pilares centralizados: o scroll conduz cada cartão da direita para a esquerda. */
+/* Pilares em cartões (Lenora, 21/09): grade estática, três na primeira
+   linha e dois na segunda no desktop, sem a dobra presa ao scroll. */
+.pilares { background: var(--fundo); }
+.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 4vw, 56px); text-align: center; justify-items: center; }
+.pilares__cabeca .titulo { font-size: clamp(2.2rem, 3.6vw, 3.6rem); }
+.pilares__grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(16px, 1.6vw, 24px); }
+.pilar-card {
+  grid-column: span 2; min-width: 0; display: grid; align-content: start; gap: 16px;
+  padding: clamp(24px, 2.4vw, 34px);
+  border: 1px solid var(--fio); border-radius: 12px;
+  background: radial-gradient(ellipse at 100% 0%, #27291e66, transparent 65%), #141513;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06);
+}
+.pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: span 3; }
+.pilar-card__icone { display: block; width: 32px; color: var(--destaque); }
+.pilar-card__icone svg { display: block; width: 100%; height: auto; }
+.pilar-card__titulo { font-family: var(--font-titulo); font-size: clamp(19px, 1.5vw, 23px); line-height: 1.25; font-weight: 400; letter-spacing: -.035em; color: var(--papel); text-wrap: pretty; }
+.pilar-card__texto { margin: 0; font-size: 15px; line-height: 1.6; color: var(--cinza); text-wrap: pretty; }
+@media (max-width: 899.98px) {
+  .pilares__grade { grid-template-columns: minmax(0, 1fr); }
+  .pilar-card, .pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: auto; }
+}
+
+/* Guardado: o palco anterior dos pilares (um cartão por tela, dobra presa),
+   caso a apresentação volte a ser essa. */
 .revena-pilares { position: relative; background: var(--fundo); color: var(--papel); }
 .revena-pilares__palco { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 112px 24px 48px; }
 .revena-pilares.is-pinned .revena-pilares__palco { position: sticky; top: 0; }
