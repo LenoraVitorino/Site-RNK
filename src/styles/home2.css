@@ -395,14 +395,19 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* Nossa metodologia (Lenora, 21/09): vídeo à esquerda, texto à direita e os
    três números abaixo da descrição, como a referência. Título na mesma
    fonte da frase-âncora das perguntas. */
-.oquefaz { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+/* O par vídeo + texto fica centrado no container, com o vídeo na largura
+   dele e colado ao texto por um vão fixo (Lenora, 21/09: o vídeo estava
+   na margem, longe do texto). */
+.oquefaz { display: grid; grid-template-columns: min(100%, 380px) minmax(0, 620px); justify-content: center; column-gap: clamp(40px, 6vw, 96px); row-gap: 32px; align-items: center; }
+.oquefaz__midia .tel { --largura-tel: 100%; }
 .oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
 .oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
 .oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
-.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 24px clamp(24px, 3.5vw, 64px); }
-.oquefaz__numero { min-width: 0; }
+/* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
+.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(20px, 3vw, 48px); }
+.oquefaz__numero { min-width: 0; flex: 0 1 auto; }
 /* Número no tamanho e na cor dos cartões do Sobre (.bloco__numero), legenda em cinza (Lenora, 21/09). */
-.oquefaz__valor { margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 3.6vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
+.oquefaz__valor { margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline-block; font-variant-numeric: tabular-nums; }
 .oquefaz__legenda { margin: 12px 0 0; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.35; color: var(--cinza); }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
@@ -495,7 +500,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    por um "+" fino, andando devagar. As palavras são as do briefing
    (Controle, Automação, Processo, Experiência). */
 
-.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); border-block: 1px solid rgb(242 242 238 / .1); background: var(--fundo); }
+.letreiro { position: relative; overflow: hidden; padding-block: clamp(40px, 6vw, 88px); background: var(--fundo); }   /* sem os fios em cima e embaixo (Lenora, 21/09) */
 .letreiro__trilho { position: relative; display: flex; width: max-content; animation: letreiro 42s linear infinite; }
 .letreiro:hover .letreiro__trilho { animation-play-state: paused; }
 .letreiro__grupo { display: flex; align-items: center; flex: none; }
@@ -900,7 +905,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
-  .oquefaz { grid-template-columns: minmax(0, 1fr); }
+  .oquefaz { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
   .oquefaz__midia { justify-items: center; }
   .oquefaz__numeros { flex-direction: column; gap: 18px; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; }
@@ -952,7 +957,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .palcoplanos .botao { background: transparent; border-color: rgb(22 22 22 / .28); padding: 12px 16px; }
 .palcoplanos .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite); }
 .palcoplanos :focus-visible { outline-color: var(--grafite); }
-#o-que-fazemos .oquefaz__texto { max-width: 600px; }
 .oquefaz__texto > p:not(:last-child) { color: rgb(242 242 238 / .7); font-size: clamp(17px, 1.35vw, 21px); }
 #perguntas { padding-block: clamp(88px, 11vw, 176px); }
 #perguntas .ancora { text-align: left; max-width: 21ch; font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-bottom: clamp(48px, 7vw, 100px); }
@@ -1227,6 +1231,5 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
     opacity: var(--entra); transition: none;
     transform: translate3d(0, calc((1 - var(--entra)) * 12vh), 0) scale(calc(.94 + .06 * var(--entra)));
   }
-  .oquefaz .tel { --largura-tel: min(100%, 380px); }
   .oquefaz--em-tela .oquefaz__midia { will-change: transform; }
 }
