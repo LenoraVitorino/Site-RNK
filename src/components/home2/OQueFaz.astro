@@ -24,7 +24,7 @@ const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
       <Telefone />
     </div>
     <div class="oquefaz__texto entra">
-      <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa metodologia</h2>
+      <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
       <p class="oquefaz__descricao">
         Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
         Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
@@ -33,7 +33,7 @@ const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
       <ul class="oquefaz__numeros" aria-label="Números da Renke">
         {numeros.map((n) => (
           <li class="oquefaz__numero">
-            <p class="oquefaz__valor num" data-contador>{n.valor}</p>
+            <p class="oquefaz__valor num" data-contador>{n.valor.replace(/ /g, '\u00a0')}</p>
             <p class="oquefaz__legenda">{n.legenda}</p>
           </li>
         ))}
