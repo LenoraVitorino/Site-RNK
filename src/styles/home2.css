@@ -398,12 +398,13 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .oquefaz { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
 .oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
 .oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
-.oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; }
-.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; gap: clamp(24px, 3.5vw, 64px); }
+.oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
+.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 24px clamp(24px, 3.5vw, 64px); }
 .oquefaz__numero { min-width: 0; }
-.oquefaz__valor { margin: 0; padding-bottom: 10px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.7rem, 2.3vw, 2.4rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
+/* Número no tamanho e na cor dos cartões do Sobre (.bloco__numero), legenda em cinza (Lenora, 21/09). */
+.oquefaz__valor { margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 3.6vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline-block; font-variant-numeric: tabular-nums; }
-.oquefaz__legenda { margin: 10px 0 0; font-size: 14px; line-height: 1.35; color: var(--cinza); }
+.oquefaz__legenda { margin: 12px 0 0; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.35; color: var(--cinza); }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -900,7 +901,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
   .oquefaz { grid-template-columns: minmax(0, 1fr); }
   .oquefaz__midia { justify-items: center; }
-  .oquefaz__numeros { grid-template-columns: 1fr; gap: 18px; }
+  .oquefaz__numeros { flex-direction: column; gap: 18px; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; }
   .pergunta { border-right: 0; min-height: 0; }
   .pergunta:nth-last-child(-n+2) { border-bottom: 1px solid rgb(242 242 238 / .18); }
