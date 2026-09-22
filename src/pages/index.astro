@@ -12,6 +12,7 @@ import { seo } from '../data/home';
 
 import Hero from '../components/home2/Hero.astro';
 import OQueFaz from '../components/home2/OQueFaz.astro';
+import Protocolos from '../components/home2/Protocolos.astro';
 import Letreiro from '../components/home2/Letreiro.astro';
 import PlanosPalco from '../components/home2/PlanosPalco.astro';
 import Planos from '../components/home2/Planos.astro';
@@ -26,8 +27,10 @@ import { copyLiteral } from '../data/versao';
 <Base2 titulo={seo.titulo} descricao={seo.descricao}>
   <Hero />
   <OQueFaz />
+  {/* O que a Renke entrega na prática, logo depois da metodologia (Lenora,
+      21/09): os cinco pilares da copy, em cartões percorridos pelo scroll. */}
+  <Protocolos />
   <Letreiro />
-  {/* Seção de pilares pausada temporariamente; componente Protocolos preservado. */}
   {!copyLiteral && <PlanosPalco />}
   {copyLiteral && <Planos />}
   <Perguntas />
