@@ -1,26 +1,19 @@
 ---
-/** História, fotos da sede e indicadores, compartilhados pelas duas versões. */
+/** História e fotos da sede, compartilhadas pelas duas versões. */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
-import IlustracaoIndicador from './IlustracaoIndicador.astro';
-import CabecaIndicador from './CabecaIndicador.astro';
-import { copyLiteral } from '../../data/versao';
 import { existe } from '../../data/rotas';
-import { numerosProva } from '../../data/home';
 import operacao from '../../assets/sede/operacao.jpg';
 import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
 
-// Os três números do briefing (⚠️ D1), em cartões entre as fotos (Lenora,
-// 20/09), compartilhados com a prova social da hero (data/home.ts).
-// [data-contador]: o contador de Resultados.astro (um só para a página)
-// faz cada número subir de 0 ao valor quando o cartão entra na tela.
-const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
+// Os números do briefing saíram daqui em 21/09 (Lenora): ficam só em
+// "Nossa metodologia". A esteira tem só as fotos da sede.
 ---
 <section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
   <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
-       molde da esteira do metodobr.com: blocos de largura igual, alturas
-       iguais, cada um com uma foto inteira ou um par cartão + meia foto.
+       molde da esteira do metodobr.com: blocos de largura igual (largos e
+       estreitos alternados), alturas iguais, uma foto inteira em cada.
        Tudo, texto incluído, é um carrossel que desliza para a esquerda e
        revela as fotos enquanto a dobra fica presa (Lenora, 20/09). -->
   <div class="sobre-editorial__percurso">
@@ -44,22 +37,19 @@ const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
             <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
-            <div class="bloco__cartao bloco__cartao--numero"><CabecaIndicador tipo="clientes" /><p class="bloco__numero num" data-contador>{numeros[0].valor}</p><p class="bloco__legenda">{numeros[0].legenda}</p></div>
-            <figure class="bloco__foto bloco__foto--meia"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
+            <figure class="bloco__foto"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
           </div>
           <div class="bloco bloco--largo">
             <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
-            <figure class="bloco__foto bloco__foto--meia bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
-            <div class="bloco__cartao bloco__cartao--numero bloco__cartao--destaque"><CabecaIndicador tipo="metodo" /><p class="bloco__numero num" data-contador>{numeros[1].valor}</p><p class="bloco__legenda">{numeros[1].legenda}</p></div>
+            <figure class="bloco__foto bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
           </div>
           <div class="bloco bloco--largo">
             <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
           </div>
           <div class="bloco">
-            <div class="bloco__cartao bloco__cartao--numero"><CabecaIndicador tipo="receita" /><IlustracaoIndicador tipo="receita" /><p class="bloco__numero num" data-contador>{numeros[2].valor}</p><p class="bloco__legenda">{numeros[2].legenda}</p></div>
-            <figure class="bloco__foto bloco__foto--meia"><Image src={reuniao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
+            <figure class="bloco__foto"><Image src={reuniao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
           </div>
         </div>
       </div>
