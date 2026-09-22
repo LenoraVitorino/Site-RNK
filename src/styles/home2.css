@@ -986,9 +986,24 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre__acao { justify-content: start; margin-top: 32px; }
 #formulario { background: #111210; }
 .form-block__text .titulo { max-width: 15ch; }
-.form-card { background: #191a17; border-color: rgb(242 242 238 / .12); border-radius: 12px; gap: 22px; }
-.field input, .field select, .field textarea { background: #111210; min-height: 52px; border-color: rgb(242 242 238 / .18); }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--destaque); box-shadow: 0 0 0 3px rgb(255 209 3 / .28); }
+/* Cartão do formulário (Lenora, 21/09): mais estreito e compacto, encostado
+   à direita; rótulos e avisos pequenos em cinza claro; nada em vermelho.
+   O [hidden] dos erros e do "Copiar mensagem" precisa vencer o display das
+   classes, senão eles aparecem sempre (bug de 20/09). */
+.form-card { background: #191a17; border-color: rgb(242 242 238 / .12); border-radius: 14px; gap: 18px; padding: clamp(24px, 2.4vw, 34px); width: 100%; max-width: 460px; justify-self: end; }
+.form-card [hidden] { display: none; }
+.form-card .field { margin: 0; }
+.form-card__duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-card .field__label { font-size: 13px; font-weight: var(--peso-enfase); letter-spacing: .01em; color: rgb(242 242 238 / .78); margin-bottom: 7px; }
+.field input, .field select, .field textarea { background: #121311; min-height: 46px; padding: 10px 14px; font-size: 15px; border-radius: 9px; border-color: rgb(242 242 238 / .14); transition: border-color .2s ease, box-shadow .2s ease; }
+.field input::placeholder { color: rgb(242 242 238 / .32); }
+.field input:hover, .field select:hover { border-color: rgb(242 242 238 / .3); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: rgb(242 242 238 / .6); box-shadow: 0 0 0 3px rgb(242 242 238 / .08); }
+.form-card .botao { margin-top: 4px; }
+@media (max-width: 899.98px) {
+  .form-card { max-width: none; justify-self: stretch; }
+  .form-card__duo { grid-template-columns: 1fr; gap: 18px; }
+}
 @media (max-width: 899.98px) {
   .hero__lead { font-size: 18px; max-width: 36ch; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; gap: 0; }
@@ -1187,12 +1202,13 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 
 /* ---------- Polish 20/09/2026: formulário, prova por números, pendências, letreiro ---------- */
 /* Estados do formulário: erro por campo, nota do canal, status após o envio. */
-.form-card__nota { margin: -4px 0 0; font-size: 13px; line-height: 1.5; color: var(--cinza); }
-.form-card__status { margin: 0; font-size: 14px; line-height: 1.5; padding: 12px 14px; border: 1px solid rgb(242 242 238 / .18); border-radius: var(--raio); background: rgb(242 242 238 / .04); }
+.form-card__status { margin: 0; font-size: 13.5px; line-height: 1.5; padding: 12px 14px; border: 1px solid rgb(242 242 238 / .14); border-radius: 9px; background: rgb(242 242 238 / .04); color: rgb(242 242 238 / .8); }
 .form-card__status:empty { display: none; }
-.form-card__copiar { justify-self: start; background: none; border: 0; padding: 0; color: var(--papel); cursor: pointer; }
-.field__erro { display: block; margin-top: 6px; font-size: 13px; line-height: 1.4; color: var(--erro); }
-.field--invalido input, .field--invalido select { border-color: var(--erro); }
+.form-card__copiar { justify-self: start; background: none; border: 0; padding: 0; font-size: 14px; color: var(--papel); cursor: pointer; }
+.form-card__aviso { font-size: 12.5px; line-height: 1.55; color: rgb(242 242 238 / .5); }
+.form-card__aviso a { color: rgb(242 242 238 / .7); }
+.field__erro { display: block; margin-top: 6px; font-size: 12.5px; line-height: 1.4; color: var(--erro); }
+.field--invalido input, .field--invalido select { border-color: rgb(242 242 238 / .45); }
 /* Cartão cuja página ainda não existe: rótulo no lugar do botão. */
 .cartao__pendente { margin: 0; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); }
 /* Letreiro com frases (versão do estúdio): letra menor e curso mais lento, porque o trilho é mais longo. */
