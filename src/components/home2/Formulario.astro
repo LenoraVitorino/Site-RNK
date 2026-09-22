@@ -1,35 +1,108 @@
 ---
+/**
+ * Formulário da home. Enquanto não existe um endpoint de envio, o envio é
+ * real do mesmo jeito: a mensagem é montada com os campos e abre no WhatsApp
+ * (quando rodape.whatsapp está preenchido) ou no e-mail do visitante, pronta
+ * para revisar e mandar. Nada trafega pela URL do site. Quando o endpoint
+ * chegar, basta trocar o handler de submit.
+ */
 import { formulario } from '../../data/home';
+import { rodape } from '../../data/nav';
 import Botao from '../ui/Botao.astro';
+const whatsapp = (rodape.whatsapp ?? '').replace(/\D/g, '');
+const canal = whatsapp ? 'WhatsApp' : 'e-mail';
 ---
-<section class="secao" id="formulario">
+<section class="secao" id="formulario" aria-labelledby="formulario-titulo">
   <div class="container form-block">
     <div class="form-block__text entra">
-      <p class="rotulo">Fale com a gente</p>
-      <h2 class="titulo caps">{formulario.titulo}</h2>
+      <h2 class="titulo caps" id="formulario-titulo">{formulario.titulo}</h2>
       <p>{formulario.texto}</p>
     </div>
-    <form class="form-card entra" novalidate>
+    <form class="form-card entra" novalidate data-form-contato data-email={rodape.email} data-whatsapp={whatsapp}>
       <label class="field">
         <span class="field__label">Nome</span>
-        <input id="h-nome" type="text" name="nome" autocomplete="name" />
+        <input id="h-nome" type="text" name="nome" autocomplete="name" placeholder="Como podemos te chamar" required aria-describedby="h-nome-erro" />
+        <span class="field__erro" id="h-nome-erro" hidden>Precisamos do seu nome.</span>
       </label>
       <label class="field">
         <span class="field__label">WhatsApp</span>
-        <input id="h-zap" type="tel" name="whatsapp" autocomplete="tel" />
+        <input id="h-zap" type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(47) 99999-9999" required aria-describedby="h-zap-erro" />
+        <span class="field__erro" id="h-zap-erro" hidden>Precisamos do seu WhatsApp para responder.</span>
       </label>
-      <label class="field">
-        <span class="field__label">Especialidade</span>
-        <input id="h-esp" type="text" name="especialidade" />
-      </label>
-      <label class="field">
-        <span class="field__label">Faturamento mensal</span>
-        <select id="h-fat" name="faturamento">
-          {formulario.faixasFaturamento.map((f) => <option>{f}</option>)}
-        </select>
-      </label>
+      <div class="form-card__duo">
+        <label class="field">
+          <span class="field__label">Especialidade</span>
+          <input id="h-esp" type="text" name="especialidade" placeholder="Ex.: Dermatologia" />
+        </label>
+        <label class="field">
+          <span class="field__label">Faturamento mensal</span>
+          <select id="h-fat" name="faturamento">
+            {formulario.faixasFaturamento.map((f, i) =>
+              i === 0 ? <option value="" selected disabled>{f}</option> : <option value={f}>{f}</option>
+            )}
+          </select>
+        </label>
+      </div>
       <Botao type="submit" bloco>{formulario.botao}</Botao>
-      <p class="form-card__aviso">O envio ainda não está ligado. Enquanto isso, escreva para <a href="mailto:contato@renkestudio.com.br">contato@renkestudio.com.br</a>.</p>
+      <p class="form-card__status" role="status" aria-live="polite" data-status></p>
+      <button type="button" class="form-card__copiar link-arrow" data-copiar hidden>Copiar mensagem</button>
+      <p class="form-card__aviso">A mensagem abre no seu {canal}, pronta para revisar e enviar. Ou escreva para <a href={`mailto:${rodape.email}`}>{rodape.email}</a>.</p>
     </form>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-form-contato]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const copiar = form.querySelector<HTMLButtonElement>('[data-copiar]')!;
+    const campos = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
+    let texto = '';
+
+    const valida = (campo: HTMLInputElement | HTMLSelectElement) => {
+      const ok = !campo.required || campo.value.trim() !== '';
+      campo.setAttribute('aria-invalid', String(!ok));
+      campo.closest('.field')?.classList.toggle('field--invalido', !ok);
+      const erro = document.getElementById(`${campo.id}-erro`);
+      if (erro) erro.hidden = ok;
+      return ok;
+    };
+    campos.forEach((campo) => campo.addEventListener('input', () => {
+      if (campo.getAttribute('aria-invalid') === 'true') valida(campo);
+    }));
+
+    form.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const invalidos = campos.filter((campo) => !valida(campo));
+      if (invalidos.length) { invalidos[0].focus(); return; }
+
+      const valor = (nome: string) => (form.elements.namedItem(nome) as HTMLInputElement | HTMLSelectElement).value.trim();
+      const linhas = [
+        `Nome: ${valor('nome')}`,
+        `WhatsApp: ${valor('whatsapp')}`,
+        valor('especialidade') && `Especialidade: ${valor('especialidade')}`,
+        valor('faturamento') && `Faturamento mensal: ${valor('faturamento')}`,
+      ].filter(Boolean);
+      texto = `Olá, Renke. Quero saber se o Revena faz sentido para a minha clínica.\n\n${linhas.join('\n')}`;
+
+      const zap = form.dataset.whatsapp;
+      const email = form.dataset.email;
+      if (zap) {
+        window.open(`https://wa.me/${zap}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+        status.textContent = 'Sua mensagem abriu no WhatsApp, pronta para enviar.';
+      } else {
+        location.href = `mailto:${email}?subject=${encodeURIComponent('Contato pelo site')}&body=${encodeURIComponent(texto)}`;
+        status.textContent = `Sua mensagem abriu no seu e-mail, pronta para enviar. Se não abriu, copie e mande para ${email}.`;
+      }
+      copiar.hidden = false;
+    });
+
+    copiar.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(texto);
+        status.textContent = `Mensagem copiada. Cole no seu ${form.dataset.whatsapp ? 'WhatsApp' : 'e-mail'} e envie.`;
+      } catch {
+        status.textContent = texto;
+      }
+    });
+  });
+</script>

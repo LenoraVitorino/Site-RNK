@@ -1,0 +1,9 @@
+---
+/** Ícones de interface: Lucide oficial. Símbolos Revena usam os assets da marca. */
+import { Check, ArrowUpRight, ArrowRight, ArrowDown, ChevronRight, ChevronDown, Menu, X, Plus, Sparkles, Users, BadgeCheck, TrendingUp, VolumeX, Volume2, Play, Pause } from '@lucide/astro';
+const icones = { Check, ArrowUpRight, ArrowRight, ArrowDown, ChevronRight, ChevronDown, Menu, X, Plus, Sparkles, Users, BadgeCheck, TrendingUp, VolumeX, Volume2, Play, Pause };
+interface Props { nome: keyof typeof icones; class?: string; size?: number }
+const { nome, class: classe = '', size = 24 } = Astro.props;
+const Icone = icones[nome];
+---
+<Icone size={size} stroke-width={1.5} class={`icone-lucide ${classe}`} aria-hidden="true" focusable="false" />

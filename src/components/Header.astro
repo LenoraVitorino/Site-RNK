@@ -1,4 +1,5 @@
 ---
+import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
@@ -11,12 +12,15 @@ import Botao from './ui/Botao.astro';
       <img class="logo__img" src="/marca/renke-monograma.png" alt="Renke" width="270" height="270" />
     </a>
 
+    <!-- A ação de conversão fica fora do menu: visível no celular, sem abrir o drawer. -->
+    <div class="header__acao">
+      <Botao variante="relevo" href={acaoHeader.rota}>{acaoHeader.rotulo}</Botao>
+    </div>
+
     <button
       type="button" class="nav-toggle" id="navToggle"
       aria-expanded="false" aria-controls="navPrincipal" aria-label="Abrir menu">
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
+<Icone nome="Menu" class="nav-icone-menu" /><Icone nome="X" class="nav-icone-fechar" />
     </button>
 
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
@@ -27,7 +31,7 @@ import Botao from './ui/Botao.astro';
               <button
                 type="button" class="nav__link nav__trigger"
                 aria-expanded="false" aria-controls={item.id}>
-                {item.rotulo} <span class="nav__caret" aria-hidden="true"></span>
+                {item.rotulo} <Icone nome="ChevronDown" class="nav-chevron" size={16} />
               </button>
               <div class="megamenu" id={item.id} hidden>
                 <div class="megamenu__inner">
@@ -37,9 +41,9 @@ import Botao from './ui/Botao.astro';
                       <ul class="megamenu__list">
                         {grupo.itens.map((sub) => (
                           <li>
-                            <a href={existe(sub.rota) ? sub.rota : '#'} data-rota={sub.rota} aria-disabled={existe(sub.rota) ? undefined : 'true'} class:list={[!existe(sub.rota) && 'nav--pendente']}>
-                              {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
-                            </a>
+                            {existe(sub.rota)
+                              ? <a href={sub.rota}>{sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}</a>
+                              : <span class="nav--pendente">{sub.rotulo} <em>em breve</em></span>}
                           </li>
                         ))}
                       </ul>
@@ -50,19 +54,13 @@ import Botao from './ui/Botao.astro';
             </li>
           ) : (
             <li class="nav__item">
-              <a
-                href={existe(item.rota) ? item.rota : '#'} class="nav__link" data-rota={item.rota}
-                aria-current={item.atual ? 'page' : undefined}>
-                {item.rotulo}
-              </a>
+              {existe(item.rota)
+                ? <a href={item.rota} class="nav__link" aria-current={item.atual ? 'page' : undefined}>{item.rotulo}</a>
+                : <span class="nav__link nav--pendente">{item.rotulo} <em>em breve</em></span>}
             </li>
           )
         )}
       </ul>
-
-      <div class="nav__acao">
-        <Botao variante="relevo" href={acaoHeader.rota}>{acaoHeader.rotulo}</Botao>
-      </div>
     </nav>
   </div>
 </header>
@@ -71,7 +69,7 @@ import Botao from './ui/Botao.astro';
 
 <script>
   /* Desktop: mega-menu no hover e no foco. Mobile: drawer com acordeão. */
-  const DESKTOP = window.matchMedia('(min-width: 900px)');
+  const DESKTOP = window.matchMedia('(min-width: 1024px)');
 
   const header = document.getElementById('header')!;
   const navToggle = document.getElementById('navToggle')!;
@@ -175,51 +173,11 @@ import Botao from './ui/Botao.astro';
     closeAllSubmenus();
   });
 
-  // As demais páginas ainda não existem: registra a rota prevista.
-  nav.addEventListener('click', (e) => {
-    const link = (e.target as HTMLElement).closest('a[href="#"]');
-    if (!link) return;
-    e.preventDefault();
-    closeAllSubmenus();
-    if (!DESKTOP.matches) closeNav();
-    const rota = link.getAttribute('data-rota');
-    if (rota) console.info(`[wireframe] rota prevista: ${rota} (página ainda não construída)`);
-  });
-
   const onBreakpoint = () => {
     closeAllSubmenus();
     if (DESKTOP.matches) closeNav();
   };
   DESKTOP.addEventListener('change', onBreakpoint);
-
-  /* Pílula que desliza sob o item em foco ou sob o cursor.
-     É o equivalente ao layoutId do framer-motion: um elemento só que muda
-     de posição, em vez de um fundo por item entrando e saindo. Anima apenas
-     transform e width, então fica na composição e não força layout. */
-  const lista = nav.querySelector<HTMLElement>('.nav__list');
-  const indicador = nav.querySelector<HTMLElement>('.nav__indicador');
-
-  if (lista && indicador && DESKTOP.matches) {
-    const mover = (alvo: HTMLElement) => {
-      const r = alvo.getBoundingClientRect();
-      const base = lista.getBoundingClientRect();
-      indicador.style.setProperty('--x', `${r.left - base.left}px`);
-      indicador.style.setProperty('--w', `${r.width}px`);
-      lista.dataset.ativo = 'sim';
-    };
-    const esconder = () => delete lista.dataset.ativo;
-
-    lista.querySelectorAll<HTMLElement>('.nav__link').forEach((link) => {
-      link.addEventListener('mouseenter', () => DESKTOP.matches && mover(link));
-      link.addEventListener('focus', () => DESKTOP.matches && mover(link));
-    });
-    lista.addEventListener('mouseleave', esconder);
-    lista.addEventListener('focusout', (e) => {
-      if (!lista.contains(e.relatedTarget as Node)) esconder();
-    });
-    // Reposiciona no resize: a pílula guarda pixels, não porcentagem
-    window.addEventListener('resize', esconder, { passive: true });
-  }
 
   let ticking = false;
   /* Cabeçalho camaleão: lê a cor de fundo do que está logo abaixo dele e

@@ -1,4 +1,5 @@
 ---
+import Icone from '../ui/Icone.astro';
 /**
  * Desenha a lista de blocos de uma página interna.
  *
@@ -24,7 +25,7 @@ const dev = import.meta.env.DEV;
   switch (b.tipo) {
     case 'hero':
       return (
-        <section class="section section--hero pg-hero">
+        <section class:list={['section', 'section--hero', 'pg-hero', b.centro && 'pg-hero--centro']}>
           <div class="container">
             <h1 class="pg-hero__titulo">
               {b.titulo.map((linha, i) => (
@@ -34,7 +35,7 @@ const dev = import.meta.env.DEV;
             {b.sub && <p class="pg-hero__sub">{b.sub}</p>}
             {b.cta && (
               <div class="pg-hero__acoes">
-                <Botao variante="brilho" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao>
+                <Botao variante="brilho" href={b.rotaCta ?? '/contato'}>{b.cta.replace(/\s*→$/, '')}</Botao>
               </div>
             )}
           </div>
@@ -65,7 +66,8 @@ const dev = import.meta.env.DEV;
         <section class:list={['section', fundoClasse(b.fundo)]}>
           <div class="container">
             {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
-            <h2>{b.h2}</h2>
+            <h2 class:list={[b.grande && 'resolve__h2--grande']}>{b.h2}</h2>
+            {b.sub && <p class="resolve__sub">{b.sub}</p>}
             <div class:list={['resolve', b.largo && 'resolve--largo', b.numerado && 'resolve--numerado']}>
               {b.itens.map((i, n) => (
                 <article class="resolve__item vidro entra">
@@ -74,7 +76,7 @@ const dev = import.meta.env.DEV;
                   {i.texto && <p class="resolve__texto">{i.texto}</p>}
                   {i.itens && (
                     <ul class="resolve__lista">
-                      {i.itens.map((li) => <li>{li}</li>)}
+                      {i.itens.map((li) => <li><Icone nome="Check" class="resolve-check" size={18} />{li}</li>)}
                     </ul>
                   )}
                   {i.media && <Media id={i.media} />}
@@ -138,7 +140,7 @@ const dev = import.meta.env.DEV;
           <div class:list={['container', 'container--prose', b.centro && 'center']}>
             {b.eyebrow && <p class="eyebrow">{b.eyebrow}</p>}
             {b.h2 && <h2>{b.h2}</h2>}
-            {b.paragrafos.map((p) => <p set:html={p} />)}
+            {b.paragrafos.map((p) => <p set:html={p.replaceAll(' →', '')} />)}
           </div>
         </section>
       );
@@ -148,9 +150,20 @@ const dev = import.meta.env.DEV;
         <section class:list={['section', fundoClasse(b.fundo)]}>
           <div class="container center">
             {b.h2 && <h2>{b.h2}</h2>}
-            <ul class="chips chips--centro">
-              {b.itens.map((i) => <li class="chip vidro">{i}</li>)}
-            </ul>
+            {b.grade ? (
+              <ol class="pilares-grade">
+                {b.itens.map((i, n) => (
+                  <li class="pilares-grade__item">
+                    <span class="pilares-grade__n">{String(n + 1).padStart(2, '0')}</span>
+                    <span class="pilares-grade__nome">{i}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <ul class="chips chips--centro">
+                {b.itens.map((i) => <li class="chip vidro">{i}</li>)}
+              </ul>
+            )}
             {b.nota && <p class="numeros__nota">{b.nota}</p>}
           </div>
         </section>
@@ -168,7 +181,7 @@ const dev = import.meta.env.DEV;
                 <article class="produto vidro entra">
                   <h3 class="produto__titulo">{i.titulo}</h3>
                   <p class="produto__texto">{i.texto}</p>
-                  <a class="link-arrow produto__link" href={i.rota}>{i.cta} →</a>
+                  <a class="link-arrow produto__link" href={i.rota}>{i.cta} <Icone nome="ArrowRight" size={18} /></a>
                 </article>
               ))}
             </div>
@@ -184,7 +197,7 @@ const dev = import.meta.env.DEV;
             <div class="faq">
               {b.perguntas.map((q, i) => (
                 <details class="faq__item" open={i === 0}>
-                  <summary class="faq__pergunta">{q.p}</summary>
+                  <summary class="faq__pergunta">{q.p}<Icone nome="ChevronDown" class="faq-chevron" size={20} /></summary>
                   <p class="faq__resposta">{q.r}</p>
                 </details>
               ))}
@@ -238,7 +251,7 @@ const dev = import.meta.env.DEV;
                   )}
                 </p>
               ))}
-              <Botao variante="brilho" type="submit">{b.botao}</Botao>
+              <Botao variante="brilho" type="submit">{b.botao.replace(/\s*→$/, '')}<Icone nome="ArrowRight" size={18} /></Botao>
               <p class="form-card__aviso">
                 O envio ainda não está ligado. Enquanto isso, escreva para
                 <a href="mailto:contato@renkestudio.com.br"> contato@renkestudio.com.br</a>.
@@ -254,7 +267,7 @@ const dev = import.meta.env.DEV;
           <div class="container container--narrow center">
             {b.destaque && <h2 class="statement">{b.destaque}</h2>}
             {b.texto && <p>{b.texto}</p>}
-            <p><Botao variante="claro" tamanho="lg" href={b.rotaCta ?? '/contato'}>{b.cta}</Botao></p>
+            <p><Botao variante="claro" tamanho="lg" href={b.rotaCta ?? '/contato'}>{b.cta.replace(/\s*→$/, '')}</Botao></p>
           </div>
         </section>
       );

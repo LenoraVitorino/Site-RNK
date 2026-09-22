@@ -48,6 +48,8 @@ export type Bloco =
       sub?: string;
       cta?: string;
       rotaCta?: string;
+      /** Centraliza o herói nessa página (o padrão é alinhado à esquerda). */
+      centro?: boolean;
     }
   | {
       tipo: 'lista';
@@ -70,6 +72,10 @@ export type Bloco =
       tipo: 'blocos';
       eyebrow?: string;
       h2: string;
+      /** Linha de apoio abaixo do título. */
+      sub?: string;
+      /** Título maior, para dar mais peso à abertura do bloco. */
+      grande?: boolean;
       itens: ItemBloco[];
       /** Numera os blocos quando a ordem é informação, não decoração. */
       numerado?: boolean;
@@ -107,6 +113,8 @@ export type Bloco =
       itens: string[];
       /** Frase de fechamento sob os números. */
       nota?: string;
+      /** Grade numerada (01, 02…) em vez da fileira de chips. */
+      grade?: boolean;
       fundo?: 'alt' | 'escuro';
     }
   | { tipo: 'faq'; h2: string; perguntas: Pergunta[]; fundo?: 'alt' | 'escuro' }

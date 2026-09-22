@@ -61,6 +61,10 @@ strong, b { font-weight: var(--peso-titulo); }
 .container--narrow { max-width: var(--max-narrow); }
 .container--prose  { max-width: var(--max-prose); }
 .center { text-align: center; }
+/* A medida de leitura (.section p:not([class])) limita a largura mas não
+   centraliza a própria caixa; dentro de .center, a caixa também precisa
+   ficar centrada, senão o texto fica "preso" à esquerda mesmo alinhado. */
+.center p:not([class]) { margin-inline: auto; }
 
 .section {
   position: relative;
@@ -816,7 +820,8 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
 /* ---------- CTA final ---------- */
 
-.statement { font-size: var(--fs-3xl); letter-spacing: -.02em; margin-bottom: var(--s-4); }
+.statement { font-size: var(--fs-3xl); letter-spacing: -.02em; margin-bottom: var(--s-6); }
+.statement + p { margin-bottom: var(--s-6); }
 
 /* ---------- Academy + Tools ---------- */
 
@@ -861,7 +866,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   font-size: var(--fs-xs); letter-spacing: var(--tracking-label); text-transform: uppercase;
   font-weight: var(--peso-titulo); color: var(--on-dark-muted); margin-bottom: var(--s-3);
 }
-.footer__tagline { font-size: .9375rem; margin-top: .75rem; }
 .footer__col ul { list-style: none; margin: 0; padding: 0; }
 .footer__col li { font-size: var(--fs-sm); }
 .footer__col a {
@@ -926,27 +930,17 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
   }
   .nav__link:hover { text-decoration: none; }
 
-  /* Pílula que acompanha o item sob o cursor.
-     Reproduz o layoutId do framer-motion: um único elemento que se move,
-     em vez de um fundo por item aparecendo e sumindo. Só transform e width
-     animam, então o navegador resolve na composição. */
-  .nav__indicador {
-    position: absolute; left: 0; top: 50%;
-    height: calc(100% + 4px);
-    border-radius: var(--raio-pilula);
-    background: rgb(255 255 255 / .09);
-    border: 1px solid rgb(255 255 255 / .07);
-    pointer-events: none;
-    opacity: 0;
-    transform: translate3d(var(--x, 0), -50%, 0);
-    width: var(--w, 0);
-    transition: transform .32s var(--easing), width .32s var(--easing),
-                opacity .2s var(--easing-suave);
-  }
-  .nav__list[data-ativo] .nav__indicador { opacity: 1; }
-
   .megamenu {
-    top: calc(100% + var(--s-3));
+    position: absolute; top: 100%; left: 0; z-index: 110;
+    min-width: 280px; padding-top: var(--s-3);
+  }
+  .megamenu__inner {
+    padding: 1rem 1.1rem;
+    background: rgb(10 10 10 / .97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--line);
+    box-shadow: var(--elev-3); border-radius: var(--raio-card);
     transform-origin: top left;
     animation: mega-entra .18s var(--easing);
   }
@@ -954,17 +948,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
     from { opacity: 0; transform: translateY(-6px) scale(.985); }
     to   { opacity: 1; transform: none; }
   }
-
-  .megamenu {
-    position: absolute; top: calc(100% + .5rem); left: 0; z-index: 110;
-    min-width: 280px; padding: 0;
-    background: rgb(10 10 10 / .97);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid var(--line);
-    box-shadow: var(--elev-3); border-radius: var(--raio-card);
-  }
-  .megamenu__inner { padding: 1rem 1.1rem; }
   .megamenu__list { margin-bottom: .5rem; }
   .megamenu__list a {
     min-height: 0; padding: var(--s-2) var(--s-3);
@@ -1016,7 +999,6 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .nav__indicador { transition: opacity .01s !important; }
   html { scroll-behavior: auto; }
 }
 
@@ -1024,4 +1006,3 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
    avisa qual rota é), mas sinaliza que não leva a lugar nenhum — melhor que
    um link confiante levando a um 404. */
 .nav--pendente { opacity: .45; }
-.nav--pendente::after { content: ' · em breve'; font-size: .8em; font-style: italic; }
