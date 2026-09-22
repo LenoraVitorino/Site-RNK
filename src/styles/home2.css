@@ -763,9 +763,10 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .extrato__rotulo { padding-top: 8px; color: #5C5C57; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
 .extrato__conteudo { min-width: 0; }
 .extrato__destaque { color: #4A4B46; font-weight: 600; }
-.extrato__cabeca { margin-bottom: clamp(48px, 5vw, 80px); }
+.extrato__cabeca { margin-bottom: clamp(40px, 4vw, 64px); }
 .extrato__cabeca .titulo { max-width: 19ch; font-size: clamp(2.3rem, 3.6vw, 3.6rem); line-height: 1.08; }
-.extrato { list-style: none; margin: 0; padding: 0; }
+.extrato { list-style: none; margin: 0; padding: 0; grid-column: 1 / -1; }
+.extrato__acao { grid-column: 1 / -1; }
 .extrato__linha { border-top: 1px solid #cecec4; }
 .extrato__grade { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: start; padding-block: clamp(32px, 3.6vw, 58px); }
 .extrato__num { margin: 0; font-family: var(--font-titulo); font-weight: 400; color: #4A4B46; font-size: clamp(4rem, 7.5vw, 7.5rem); line-height: 1; letter-spacing: -.065em; white-space: nowrap; text-align: right; }

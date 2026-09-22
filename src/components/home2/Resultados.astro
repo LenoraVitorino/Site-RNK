@@ -12,14 +12,18 @@ import FotoSlot from '../ui/FotoSlot.astro';
         <header class="extrato__cabeca entra">
           <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem <strong class="extrato__destaque">estrutura</strong>.</h2>
         </header>
-        <ol class="extrato" aria-label="Resultados por especialidade">
-          {resultados.map((r) => (
-            <li class="extrato__linha">
-              <div class="extrato__grade">
-                <div class="extrato__texto entra">
-                  <h3 class="extrato__titulo">{r.especialidade}</h3>
-                  <p>{r.texto}</p>
-                </div>
+      </div>
+      <!-- As linhas ocupam a largura toda: texto na margem, foto no centro e
+           número na direita (Lenora, 21/09). Só o rótulo e o título ficam na
+           grade de duas colunas. -->
+      <ol class="extrato" aria-label="Resultados por especialidade">
+        {resultados.map((r) => (
+          <li class="extrato__linha">
+            <div class="extrato__grade">
+              <div class="extrato__texto entra">
+                <h3 class="extrato__titulo">{r.especialidade}</h3>
+                <p>{r.texto}</p>
+              </div>
                 <!-- Mockup (Lenora, 21/09): ao passar o mouse na linha aparece uma
                      foto da área, no vão entre o texto e o número. Só desktop com
                      mouse; some no toque e no celular. Troca-se o slot pela foto real. -->
@@ -28,9 +32,8 @@ import FotoSlot from '../ui/FotoSlot.astro';
               </div>
             </li>
           ))}
-        </ol>
-        <p class="extrato__acao"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
-      </div>
+      </ol>
+      <p class="extrato__acao"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
     </div>
   </div>
 </section>
