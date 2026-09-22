@@ -786,9 +786,9 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 @media (hover: hover) and (min-width: 1024px) {
   .extrato__linha { position: relative; }
   /* A coluna do rótulo mede 1/3 da coluna de conteúdo (grade 1fr 3fr, vão de 24 px): a foto encosta na margem esquerda. */
-  .extrato__slot { display: block; position: absolute; top: calc(clamp(32px, 3.6vw, 58px) + 6px); left: calc(-100% / 3 - 24px); width: min(220px, 21vw); pointer-events: none; }
+  .extrato__slot { display: block; position: absolute; top: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 24px); pointer-events: none; }
   .extrato__foto {
-    background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
+    --prop: 3 / 2; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
     transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
   }
   .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: none; }
