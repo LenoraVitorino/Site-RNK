@@ -599,13 +599,13 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__trilho { position: relative; height: calc(var(--n) * 100svh); }
 .palcoplanos__fixo { position: sticky; top: 0; height: 100svh; overflow: hidden; background: var(--grafite); }
 
-/* .anchors: coluna a 5vw do topo e da esquerda; 0,75vw medium, opacidade .4, ativa 1. */
+/* .anchors: coluna a 5vw do topo e da direita; 0,75vw medium, opacidade .4, ativa 1. */
 .palcoplanos__ancoras {
-  position: absolute; z-index: 10; top: 5vw; left: var(--grid-inset);
+  position: absolute; z-index: 10; top: 5vw; right: var(--grid-inset);
   list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0;
 }
 .palcoplanos__ancora {
-  background: none; border: 0; padding: 5px 0; cursor: pointer; text-align: left;
+  background: none; border: 0; padding: 5px 0; cursor: pointer; text-align: right;
   font: inherit; font-size: clamp(12px, .85vw, 16px); line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.02em;
   color: var(--pp-texto); opacity: .62; transition: opacity .4s cubic-bezier(.5, 1, .89, 1);
 }
@@ -633,16 +633,11 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__nome__a { justify-self: start; }
 .plano-palco__nome__b { justify-self: end; }
 
-/* Colunas laterais com largura adaptada à copy em português. */
-.plano-palco__texto { position: absolute; left: var(--grid-inset); bottom: 5vw; width: clamp(280px, 24vw, 420px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
+/* Coluna do plano no canto superior esquerdo, na mesma régua das âncoras
+   (top: 5vw), que ocupam o canto superior direito. */
+.plano-palco__texto { position: absolute; left: var(--grid-inset); top: 5vw; width: clamp(280px, 24vw, 420px); display: grid; gap: 20px; justify-items: start; z-index: 2; }
 .plano-palco__frase { margin: 0; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.45; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
 .plano-palco__texto .link-arrow, .plano-palco__texto .botao { pointer-events: auto; font-size: max(14px, 1vw); font-weight: var(--peso-enfase); text-underline-offset: 3px; }
-
-/* Índice e contexto do plano, alinhados pelo canto inferior direito. */
-.plano-palco__dados { position: absolute; right: var(--grid-inset); bottom: 5vw; width: clamp(200px, 16vw, 300px); margin: 0; display: flex; flex-direction: column; gap: 16px; text-align: right; z-index: 2; }
-.plano-palco__dados dt { font-size: max(10px, .75vw); line-height: 1.2; font-weight: var(--peso-detalhe); letter-spacing: -.02em; text-transform: uppercase; color: var(--pp-texto); }
-.plano-palco__dados dd { margin: .417vw 0 0; font-size: max(11px, .917vw); line-height: 1.15; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
-.plano-palco__fala { margin: 0; font-size: clamp(15px, 1.05vw, 18px); line-height: 1.45; font-weight: var(--peso-corpo); }
 
 /* Símbolo e nome dentro de cada plano: imóveis durante a sobreposição. */
 .palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
@@ -664,11 +659,10 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) .plano-palco__info { position: static; pointer-events: auto; display: grid; gap: 28px; transform: none !important; opacity: 1 !important; max-width: 620px; margin-inline: auto; }
 .palcoplanos:not([data-animado]) .plano-palco__nome--pilha { display: grid; position: static; transform: none; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; font-size: clamp(3rem, 11vw, 5rem); opacity: 1; }
 .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
-.palcoplanos:not([data-animado]) :is(.plano-palco__texto, .plano-palco__dados) { position: static; width: auto; text-align: left; gap: 14px; }
-.palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__fala, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
-.palcoplanos:not([data-animado]) .plano-palco__dados { padding-top: 20px; border-top: 1px solid var(--pp-fio); }
+.palcoplanos:not([data-animado]) .plano-palco__texto { position: static; width: auto; text-align: left; gap: 14px; }
+.palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
 @media (min-width: 900px) and (max-height: 700px) {
-  .palcoplanos[data-animado] :is(.plano-palco__texto, .plano-palco__dados) { bottom: 4vh; }
+  .palcoplanos[data-animado] .plano-palco__texto { top: 4vh; }
   .palcoplanos[data-animado] .plano-palco__nome { font-size: 8vw; width: 47vw; }
 }
 
