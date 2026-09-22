@@ -404,15 +404,17 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
 .oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
 /* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
-.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(20px, 3vw, 48px); }
-/* Três colunas iguais, mas nunca mais estreitas que o próprio número (que
-   não quebra): min-content aqui é a largura do valor, porque a legenda
-   pode quebrar. Sem isso o valor mais largo invadia o vão do vizinho. */
-.oquefaz__numero { flex: 1 1 0; min-width: min-content; }
+.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(12px, 1.5vw, 28px); }
+/* Três colunas, nenhuma mais estreita que o seu conteúdo (número e legenda
+   não quebram). O traço cinza separa as colunas (Lenora, 21/09): fica na
+   borda esquerda, com o mesmo recuo do vão, então nasce centrado entre
+   uma coluna e a outra. */
+.oquefaz__numero { flex: 1 1 auto; min-width: min-content; }
+.oquefaz__numero + .oquefaz__numero { border-left: 1px solid rgb(242 242 238 / .16); padding-left: clamp(12px, 1.5vw, 28px); }
 /* Número grande em amarelo (o desenho dos antigos cartões do Sobre), legenda em cinza (Lenora, 21/09). */
-.oquefaz__valor { margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
+.oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.oquefaz__legenda { margin: 12px 0 0; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.35; color: var(--cinza); }
+.oquefaz__legenda { margin: 14px 0 0; font-size: clamp(12px, 1.05vw, 16px); line-height: 1.35; color: var(--cinza); white-space: nowrap; }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -789,9 +791,11 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 @media (hover: hover) and (min-width: 1024px) {
   .extrato__linha { position: relative; }
   /* A coluna do rótulo mede 1/3 da coluna de conteúdo (grade 1fr 3fr, vão de 24 px): a foto encosta na margem esquerda. */
-  .extrato__slot { display: block; position: absolute; top: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 24px); pointer-events: none; }
+  /* Moldura maior (Lenora, 21/09): ocupa a coluna do rótulo quase inteira e
+     a altura útil da linha, com um respiro de 8 px em cima e embaixo. */
+  .extrato__slot { display: block; position: absolute; top: 8px; bottom: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 8px); pointer-events: none; }
   .extrato__foto {
-    --prop: 3 / 2; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
+    aspect-ratio: auto; height: 100%; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
     transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
   }
   .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: none; }
@@ -908,9 +912,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .faixa__numeros { grid-template-columns: 1fr 1fr; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
-  .oquefaz { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
-  .oquefaz__midia { justify-items: center; }
-  .oquefaz__numeros { flex-direction: column; gap: 18px; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; }
   .pergunta { border-right: 0; min-height: 0; }
   .pergunta:nth-last-child(-n+2) { border-bottom: 1px solid rgb(242 242 238 / .18); }
@@ -1198,11 +1199,22 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .letreiro--frases .letreiro__palavra { font-size: clamp(2rem, 5.2vw, 5.6rem); }
 .letreiro--frases .letreiro__trilho { animation-duration: 96s; }
 
+/* Abaixo de 1080 px o vídeo sobe para cima do texto: lado a lado, a coluna
+   de texto não comporta as três legendas numa linha só (Lenora, 21/09). */
+@media (max-width: 1079.98px) {
+  .oquefaz { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
+  .oquefaz__midia { justify-items: center; }
+}
+@media (max-width: 599.98px) {
+  .oquefaz__numeros { flex-direction: column; gap: 18px; }
+  .oquefaz__numero + .oquefaz__numero { border-left: 0; border-top: 1px solid rgb(242 242 238 / .16); padding: 18px 0 0; }
+}
+
 /* ---------- Nossa metodologia: entrada do vídeo (20/09/2026) ----------
    Só no desktop, com JS e movimento permitido (classe .oquefaz--profundo
    ligada pelo script): o vídeo sobe e aparece quando a dobra chega à tela.
    Sem a classe, a dobra é estática. */
-@media (min-width: 1024px) {
+@media (min-width: 1080px) {
   .oquefaz--profundo { --entra: 0; overflow: clip; }
   .oquefaz--profundo .oquefaz__midia.entra {
     opacity: var(--entra); transition: none;
