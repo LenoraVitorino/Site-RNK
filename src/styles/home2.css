@@ -402,7 +402,10 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .oquefaz__midia .tel { --largura-tel: 100%; }
 .oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
 .oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
-.oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
+/* Só os parágrafos filhos diretos da coluna: text-wrap é atalho de
+   text-wrap-mode, e com especificidade maior que .oquefaz__legenda ele
+   reativava a quebra ali, anulando o nowrap da legenda. */
+.oquefaz__texto > p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
 /* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
 .oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(12px, 1.5vw, 28px); }
 /* Três colunas, nenhuma mais estreita que o seu conteúdo (número e legenda
@@ -414,7 +417,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 /* Número grande em amarelo (o desenho dos antigos cartões do Sobre), legenda em cinza (Lenora, 21/09). */
 .oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 4rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.oquefaz__legenda { margin: 14px 0 0; font-size: clamp(12px, 1.05vw, 16px); line-height: 1.35; color: var(--cinza); white-space: nowrap; }
+.oquefaz__numeros .oquefaz__legenda { margin: 14px 0 0; font-size: clamp(12px, 1.05vw, 16px); line-height: 1.35; color: var(--cinza); text-wrap: nowrap; white-space: nowrap; }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
