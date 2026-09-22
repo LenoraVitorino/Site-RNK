@@ -40,7 +40,6 @@ const planos = ordem.map((label) => {
   return {
     id: chave(label),
     nome: nome(label),
-    fala: p.fala,
     texto: p.texto,
     rota: p.rota,
     pecas: pecas(label),
@@ -85,9 +84,6 @@ const planos = ordem.map((label) => {
               <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="sm">Saiba mais</Botao>
             </div>
 
-            <div class="plano-palco__dados">
-              {p.fala.split(/(?<=\.)\s+/).map((linha) => <p class="plano-palco__fala">{linha}</p>)}
-            </div>
           </div>
           <!-- Cada símbolo pertence à sua dobra: a próxima camada o cobre por inteiro. -->
           <div class="palcoplanos__icones" aria-hidden="true">

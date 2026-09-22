@@ -61,31 +61,31 @@ export const protocolos = [
   {
     label: 'REVENA START',
     fala: 'CRM que organiza sua operação. Leads, oportunidades e vendas rastreados de ponta a ponta.',
-    texto: 'Organizamos seu comercial em 90 dias. Processos claros, automações e dados confiáveis.',
+    texto: 'Operação comercial estruturada em 90 dias. Processos, automações e dados integrados.',
     rota: '/studio/revena-start',
   },
   {
     label: 'REVENA FULL',
     fala: 'Tenho dificuldade de estruturar e gerir a jornada completa do meu paciente.',
-    texto: 'Estruturamos do comercial ao pós-venda. Paciente acompanhado do começo ao fim.',
+    texto: 'Do comercial ao pós-venda, uma jornada estruturada do início ao fim.',
     rota: '/studio/revena-full',
   },
   {
     label: 'REVENA CORE',
     fala: 'Já entendi que o problema não é só tráfego. Quero um time estratégico que conecte tudo.',
-    texto: 'Marketing + comercial + dados operados toda semana por um time dedicado.',
+    texto: 'Marketing, comercial e dados acompanhados de perto, toda semana.',
     rota: '/studio/revena-core',
   },
   {
     label: 'REVENA SCALE',
     fala: 'Tenho resultado, mas não metrifico e não sei como crescer e extrair mais do digital.',
-    texto: 'Tudo do Core + conteúdo orgânico + reativação da sua base de pacientes.',
+    texto: 'Tudo do Core, com conteúdo orgânico e reativação da base de pacientes.',
     rota: '/studio/revena-scale',
   },
   {
     label: 'REVENA RUN',
     fala: 'Comercial e dados estruturados, mas preciso de alguém pra gerir meu time e meus números.',
-    texto: 'Mantemos sua operação comercial funcionando sem você precisar pensar nisso.',
+    texto: 'Sua operação comercial, acompanhada e otimizada continuamente.',
     rota: '/studio/revena-run',
   },
 ];
