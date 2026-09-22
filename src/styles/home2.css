@@ -392,10 +392,18 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
    como o vídeo dedicado para mobile da referência.
    ============================================================ */
 
-.oquefaz { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
-.oquefaz__texto { display: grid; gap: 28px; container-type: inline-size; }
-.oquefaz__texto > .titulo { white-space: nowrap; font-size: clamp(1rem, 9.5cqw, 3rem); }
-.oquefaz__texto p:not(.rotulo) { max-width: 52ch; line-height: 1.6; }
+/* Nossa metodologia (Lenora, 21/09): vídeo à esquerda, texto à direita e os
+   três números abaixo da descrição, como a referência. Título na mesma
+   fonte da frase-âncora das perguntas. */
+.oquefaz { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
+.oquefaz__texto > .titulo { white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
+.oquefaz__texto p:not(.rotulo) { max-width: 48ch; line-height: 1.6; }
+.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, auto)); justify-content: start; gap: clamp(24px, 3.5vw, 64px); }
+.oquefaz__numero { min-width: 0; }
+.oquefaz__valor { margin: 0; padding-bottom: 10px; border-bottom: 1px solid rgb(242 242 238 / .16); font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.7rem, 2.3vw, 2.4rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
+.oquefaz__valor .contador { display: inline-block; font-variant-numeric: tabular-nums; }
+.oquefaz__legenda { margin: 10px 0 0; font-size: 14px; line-height: 1.35; color: var(--cinza); }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -403,7 +411,7 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
 .secao--numeros .impacto__item { justify-items: center; text-align: center; }
 .secao--numeros .impacto__num { font-size: clamp(2.6rem, 5vw, 5.4rem); }
 .secao--numeros .impacto__legenda { font-size: 16px; }
-.oquefaz__midia { display: grid; justify-items: center; min-width: 0; }
+.oquefaz__midia { display: grid; justify-items: start; min-width: 0; }
 
 .tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
@@ -891,7 +899,8 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .faixa__numeros > div:nth-child(2n) { border-right: 0; }
   .faixa__numeros > div:nth-child(-n+2) { border-bottom: 1px solid var(--fio); }
   .oquefaz { grid-template-columns: minmax(0, 1fr); }
-  .oquefaz__midia { order: 2; }
+  .oquefaz__midia { justify-items: center; }
+  .oquefaz__numeros { grid-template-columns: 1fr; gap: 18px; }
   .perguntas, .perguntas--mais { grid-template-columns: 1fr; }
   .pergunta { border-right: 0; min-height: 0; }
   .pergunta:nth-last-child(-n+2) { border-bottom: 1px solid rgb(242 242 238 / .18); }
@@ -941,7 +950,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .palcoplanos .botao { background: transparent; border-color: rgb(22 22 22 / .28); padding: 12px 16px; }
 .palcoplanos .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite); }
 .palcoplanos :focus-visible { outline-color: var(--grafite); }
-#o-que-fazemos .oquefaz__texto { max-width: 570px; gap: 32px; }
+#o-que-fazemos .oquefaz__texto { max-width: 600px; }
 .oquefaz__texto > p:not(:last-child) { color: rgb(242 242 238 / .7); font-size: clamp(17px, 1.35vw, 21px); }
 #perguntas { padding-block: clamp(88px, 11vw, 176px); }
 #perguntas .ancora { text-align: left; max-width: 21ch; font-size: clamp(2.4rem, 5.2vw, 5.2rem); margin-bottom: clamp(48px, 7vw, 100px); }
@@ -1080,15 +1089,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 @media (prefers-reduced-motion: reduce) { .revena-pilar { transition: none; } }
 
-@media (min-width: 900px) {
-  .oquefaz__texto > .oquefaz__descricao:not(:last-child) {
-    max-width: none;
-    font-size: min(3.3cqw, 19px);
-    letter-spacing: -.015em;
-  }
-  .oquefaz__descricao > span { display: block; white-space: nowrap; }
-}
-
 /* Prova social da hero: retratos reais, mesma apresentação nas duas copys. */
 .hero-prova { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; padding-block: 12px; }
 .hero-prova__retratos { list-style: none; display: flex; margin: 0; padding: 0; }
@@ -1215,38 +1215,16 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .letreiro--frases .letreiro__palavra { font-size: clamp(2rem, 5.2vw, 5.6rem); }
 .letreiro--frases .letreiro__trilho { animation-duration: 96s; }
 
-/* ---------- Nossa metodologia com profundidade (20/09/2026) ----------
+/* ---------- Nossa metodologia: entrada do vídeo (20/09/2026) ----------
    Só no desktop, com JS e movimento permitido (classe .oquefaz--profundo
-   ligada pelo script). Grade de 12 colunas: o celular ocupa as colunas 7–11
-   e as duas linhas; "Nossa" (camada 1) entra por trás dele e "metodologia"
-   (camada 3) passa por cima; a descrição fica na segunda linha, à esquerda.
-   Sem a classe, a dobra é a de sempre. */
-.oquefaz__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+   ligada pelo script): o vídeo sobe e aparece quando a dobra chega à tela.
+   Sem a classe, a dobra é estática. */
 @media (min-width: 1024px) {
-  .oquefaz--profundo { --entra: 0; --par: -1; overflow: clip; }
-  .oquefaz--profundo .oquefaz {
-    grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto;
-    column-gap: 24px; row-gap: clamp(28px, 4vw, 56px); align-items: center; isolation: isolate;
-  }
-  .oquefaz--profundo .oquefaz__texto { display: contents; }
-  /* Mesma fonte da frase-âncora das perguntas, diagramado à esquerda como
-     ela (Lenora, 21/09): as duas palavras empilhadas nas colunas 1–6, acima
-     da descrição; o celular continua nas colunas 7–11. As camadas guardam só
-     a paralaxe vertical leve entre as palavras. */
-  .oquefaz--profundo .oquefaz__texto > .oquefaz__titulo {
-    grid-column: 1 / 7; grid-row: 1; margin: 0; display: grid; justify-items: start; align-self: end; pointer-events: none;
-    white-space: normal; font-size: clamp(2.1rem, 4.5vw, 5rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo);
-  }
-  .oquefaz--profundo .oquefaz__palavra { display: block; width: max-content; position: relative; }
-  .oquefaz--profundo .oquefaz__palavra--tras { z-index: 1; transform: translate3d(0, calc(var(--par) * 2vh), 0); }
-  .oquefaz--profundo .oquefaz__palavra--frente { z-index: 3; transform: translate3d(0, calc(var(--par) * -2vh), 0); }
-  .oquefaz--profundo .oquefaz__texto > .oquefaz__descricao { grid-column: 1 / 7; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 19px; line-height: 1.55; }
-  .oquefaz--profundo .oquefaz__descricao > span { display: inline; white-space: normal; }
+  .oquefaz--profundo { --entra: 0; overflow: clip; }
   .oquefaz--profundo .oquefaz__midia.entra {
-    grid-column: 7 / 12; grid-row: 1 / 3; justify-self: center; align-self: center; z-index: 2;
     opacity: var(--entra); transition: none;
     transform: translate3d(0, calc((1 - var(--entra)) * 12vh), 0) scale(calc(.94 + .06 * var(--entra)));
   }
-  .oquefaz--profundo .tel { --largura-tel: min(100%, 380px); }
-  .oquefaz--em-tela .oquefaz__palavra, .oquefaz--em-tela .oquefaz__midia { will-change: transform; }
+  .oquefaz .tel { --largura-tel: min(100%, 380px); }
+  .oquefaz--em-tela .oquefaz__midia { will-change: transform; }
 }
