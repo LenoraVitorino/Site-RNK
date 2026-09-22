@@ -31,7 +31,7 @@ const blocos = [
             <div class="tools-marca"><span>CRM</span><i></i><span>Marketing</span><i></i><span>Vendas</span></div>
           )}
         </div>
-        <h3 class="caps">{b.titulo}</h3>
+        <h2 class="caps">{b.titulo}</h2>
         <p>{b.texto}</p>
         {existe(b.rota) ? <p><Botao href={b.rota} tamanho="sm">{b.cta}</Botao></p> : <p class="cartao__pendente">Em breve</p>}
       </article>
