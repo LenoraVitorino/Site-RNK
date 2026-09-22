@@ -2,6 +2,7 @@
 /** Layout compartilhado pelas versões estudio e copy. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
+import FotoSlot from '../ui/FotoSlot.astro';
 ---
 <section class="secao secao--extrato" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
@@ -19,6 +20,10 @@ import Botao from '../ui/Botao.astro';
                   <h3 class="extrato__titulo">{r.especialidade}</h3>
                   <p>{r.texto}</p>
                 </div>
+                <!-- Mockup (Lenora, 21/09): ao passar o mouse na linha aparece uma
+                     foto da área, no vão entre o texto e o número. Só desktop com
+                     mouse; some no toque e no celular. Troca-se o slot pela foto real. -->
+                <div class="extrato__slot" aria-hidden="true"><FotoSlot rotulo={`Foto · ${r.especialidade}`} class="extrato__foto" /></div>
                 <p class="extrato__num num" data-contador>{r.numero}</p>
               </div>
             </li>

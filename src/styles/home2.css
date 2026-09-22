@@ -765,6 +765,20 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.35rem, 1.7vw, 1.7rem); letter-spacing: -.035em; line-height: 1.2; }
 .extrato__texto p { margin: 0; color: #404040; font-size: 16px; line-height: 1.45; }
 .extrato__acao { margin-top: clamp(28px, 4vw, 48px); }
+/* Foto da área no hover (mockup): terceira coluna entre o texto e o número,
+   com a foto absoluta e centrada nela para não alterar a altura da linha. */
+.extrato__slot { display: none; }
+@media (hover: hover) and (min-width: 1200px) {
+  .extrato__grade { grid-template-columns: minmax(0, 34ch) 1fr auto; }
+  .extrato__slot { display: block; position: relative; align-self: stretch; pointer-events: none; }
+  .extrato__foto {
+    position: absolute; top: 50%; left: 50%; z-index: 1; width: min(220px, 100% + 80px);
+    background: #d9d8ce; opacity: 0; transform: translate(-50%, -44%) scale(.96);
+    transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
+  }
+  .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .extrato__foto { transition: none; } }
 #resultados :focus-visible { outline-color: #161616; }
 @media (max-width: 700px) {
   .extrato__layout { grid-template-columns: 1fr; gap: 28px; }
