@@ -1,0 +1,30 @@
+---
+/**
+ * Fundo vivo (laboratório, 22/09/2026). Um <canvas> fixo atrás da página;
+ * a cena (fundo-cena.ts) só carrega depois que o texto pintou, por import
+ * dinâmico, e nunca atrasa a hero. O objeto vem de ?objeto= (seda, fita,
+ * perola) para comparar as alternativas. Especificação:
+ * docs/04-design/hero-aneis-prompt.md.
+ */
+---
+<canvas class="fundo-vivo" data-fundo-vivo aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
+  const temWebGL = (() => {
+    try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+  })();
+  if (canvas && temWebGL) {
+    const objeto = new URLSearchParams(location.search).get('objeto') ?? 'fita';
+    const comecar = () => import('./fundo-cena').then(({ iniciar }) => iniciar(canvas, objeto));
+    if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
+    else setTimeout(comecar, 300);
+  }
+</script>
+
+<style>
+  .fundo-vivo {
+    position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh;
+    display: block; pointer-events: none; opacity: 0;
+  }
+</style>

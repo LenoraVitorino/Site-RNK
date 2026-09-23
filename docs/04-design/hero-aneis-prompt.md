@@ -1,8 +1,18 @@
 # Prompt — Hero com os três anéis e o fundo que atravessa as dobras
 
+> **Situação em 22/09/2026.** A Lenora aprovou a dinâmica (fundo fixo que
+> atravessa as dobras, cartões de vidro, dobras claras subindo como cortina)
+> e reprovou o objeto: os anéis saíram. Três alternativas estão em teste em
+> `/laboratorio/fundo`, com um seletor: **fita** (fita acetinada contínua, a
+> jornada do paciente, que termina em espiral), **seda** (lenço de cetim
+> ondulando, que se acalma ao integrar) e **pérola** (esfera leitosa com luz
+> âmbar por dentro, onde três gotas se fundem). Tudo o que está abaixo sobre
+> movimento, coreografia, cartões e requisitos técnicos segue valendo; a seção
+> "O objeto" será reescrita com a escolha dela.
+
 Documento de 22/09/2026. Serve para duas coisas: como prompt completo para uma
 IA de código ou um dev criativo construir a animação, e como especificação do
-protótipo em `/laboratorio/aneis`. O fim do arquivo traz também um prompt curto,
+protótipo em `/laboratorio/fundo`. O fim do arquivo traz também um prompt curto,
 em inglês, para gerar imagens de conceito numa IA de imagem.
 
 ---

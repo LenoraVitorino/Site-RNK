@@ -1,0 +1,104 @@
+---
+/**
+ * Laboratório: a home com um fundo vivo por trás (22/09/2026). Página de
+ * teste, fora dos buscadores e do menu. As dobras são as mesmas da home; só
+ * o fundo e os cartões dos pilares mudam, com estilos presos a
+ * body.laboratorio-fundo. A Lenora aprovou a dinâmica e reprovou os anéis:
+ * o seletor no canto compara três objetos (?objeto=seda|fita|perola).
+ * Especificação: docs/04-design/hero-aneis-prompt.md.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import { seo } from '../../data/home';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import Perguntas from '../../components/home2/Perguntas.astro';
+import Resultados from '../../components/home2/Resultados.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+import Sobre from '../../components/home2/Sobre.astro';
+import { copyLiteral } from '../../data/versao';
+---
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-fundo">
+  <FundoVivo slot="fundo" />
+  <Hero />
+  <OQueFaz />
+  <Protocolos />
+  <Letreiro />
+  {!copyLiteral && <PlanosPalco />}
+  {copyLiteral && <Planos />}
+  <Perguntas />
+  <Resultados />
+  <CtaFinal />
+  <AcademyTools />
+  <Sobre />
+  <Formulario />
+  <nav class="lab-seletor" aria-label="Objeto do fundo">
+    <span>Objeto</span>
+    {[['fita', 'Fita'], ['seda', 'Seda'], ['perola', 'Pérola']].map(([id, nome]) => (
+      <a href={`?objeto=${id}`} data-objeto={id}>{nome}</a>
+    ))}
+  </nav>
+</Base2>
+
+<script>
+  // Marca o objeto em uso no seletor (fita é o padrão).
+  const atual = new URLSearchParams(location.search).get('objeto') ?? 'fita';
+  document.querySelector(`[data-objeto="${atual}"]`)?.setAttribute('aria-current', 'true');
+</script>
+
+<style is:global>
+  /* Dobras escuras sem fundo próprio: o fundo passa a ser a cena dos anéis.
+     As claras e a amarela continuam sólidas e sobem por cima dela. */
+  body.laboratorio-fundo { background: #000; }
+  .laboratorio-fundo .hero,
+  .laboratorio-fundo #o-que-fazemos,
+  .laboratorio-fundo #pilares-revena,
+  .laboratorio-fundo .letreiro,
+  .laboratorio-fundo #perguntas,
+  .laboratorio-fundo #formulario { background: transparent; }
+  .laboratorio-fundo .hero__fundo { display: none; }
+  /* Dobras escuras que não participam: sólidas, para os anéis não aparecerem nelas. */
+  .laboratorio-fundo #academy-tools,
+  .laboratorio-fundo #sobre { background: var(--fundo); }
+  /* Tudo o que é conteúdo fica acima da tela fixa dos anéis. */
+  .laboratorio-fundo .footer { position: relative; z-index: 1; }
+
+  /* Cartões dos pilares em vidro: escuro a 55% (abaixo disso o texto cinza
+     perde contraste sobre o anel desfocado), desfoque do que está
+     atrás, fio claro e brilho fino na borda de cima (terceira referência). */
+  .laboratorio-fundo .pilar-card {
+    background: rgb(12 12 11 / .55);
+    -webkit-backdrop-filter: blur(22px) saturate(1.25);
+    backdrop-filter: blur(22px) saturate(1.25);
+    border: 1px solid rgb(242 242 238 / .12);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .09), 0 30px 60px -30px rgb(0 0 0 / .6);
+    transition: background .4s ease, border-color .4s ease;
+  }
+  .laboratorio-fundo .pilar-card:hover { background: rgb(22 22 20 / .62); border-color: rgb(242 242 238 / .2); }
+  /* Seletor do laboratório: pílula vertical fixa na lateral direita, longe do conteúdo. */
+  .lab-seletor {
+    position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 120;
+    display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: center; border-radius: 22px !important;
+    padding: 6px; border-radius: 999px; background: rgb(12 12 11 / .72);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    border: 1px solid rgb(242 242 238 / .14); font-size: 13px; color: var(--cinza);
+  }
+  .lab-seletor span { padding: 6px 4px 2px; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; }
+  .lab-seletor a { padding: 7px 14px; border-radius: 999px; color: var(--papel); text-decoration: none; }
+  .lab-seletor a:hover { background: rgb(242 242 238 / .08); }
+  .lab-seletor a[aria-current] { background: var(--destaque); color: var(--grafite); }
+  @media (max-width: 899.98px) {
+    .lab-seletor { top: auto; bottom: 16px; right: 50%; transform: translateX(50%); flex-direction: row; border-radius: 999px !important; }
+    .lab-seletor span { padding: 0 6px 0 8px; }
+  }
+  /* O pai com overflow: hidden recortaria o desfoque nas bordas da dobra. */
+  .laboratorio-fundo #pilares-revena { overflow: visible; }
+</style>
