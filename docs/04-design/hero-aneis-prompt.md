@@ -5,6 +5,10 @@ IA de código ou um dev criativo construir a animação, e como especificação 
 protótipo em `/laboratorio/aneis`. O fim do arquivo traz também um prompt curto,
 em inglês, para gerar imagens de conceito numa IA de imagem.
 
+> A dinâmica descrita aqui foi aprovada; o objeto (os anéis), não. O novo
+> briefing, com três caminhos para o elemento do fundo, está em
+> [`fundo-vivo-briefing.md`](fundo-vivo-briefing.md).
+
 ---
 
 ## 1. Análise das referências
