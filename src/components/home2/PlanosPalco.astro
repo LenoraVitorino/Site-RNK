@@ -197,6 +197,12 @@ const planos = ordem.map((label) => {
       target = scrollY;
       if (!frame) frame = requestAnimationFrame(animate);
     }
+    // O menu sai de cena enquanto o palco está preso (e meia tela depois, até
+    // a última dobra sair por cima), e volta fora dele (Lenora, 22/09).
+    const header = document.getElementById('header');
+    function toggleHeader() {
+      header?.classList.toggle('header--oculto', media.matches && scrollY >= top - 2 && scrollY < top + travel + height * .5);
+    }
     function cancelSnap() {
       clearTimeout(snapTimer);
       cancelAnimationFrame(scrollFrame);
@@ -225,11 +231,13 @@ const planos = ordem.map((label) => {
       if (media.matches) {
         measure(); current = target = scrollY; paint(current);
       } else {
+        header?.classList.remove('header--oculto');
         layers.forEach(layer => { layer.inert = false; layer.removeAttribute('aria-hidden'); layer.removeAttribute('style'); });
       }
     }
     addEventListener('scroll', () => {
       update();
+      toggleHeader();
       clearTimeout(snapTimer);
       if (media.matches && !scrollFrame) snapTimer = window.setTimeout(snap, 600);
     }, { passive: true });
@@ -243,8 +251,9 @@ const planos = ordem.map((label) => {
     media.addEventListener('change', setup);
     // Layout above can change after font load; refresh the cached scroll geometry.
     document.fonts.ready.then(setup);
-    new ResizeObserver(() => { if (media.matches) { measure(); update(); } }).observe(document.body);
+    new ResizeObserver(() => { if (media.matches) { measure(); update(); toggleHeader(); } }).observe(document.body);
     setup();
+    toggleHeader();
   }
 </script>
 

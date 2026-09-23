@@ -163,6 +163,13 @@ h2.titulo, .titulo { font-size: clamp(2.3rem, 5vw, 4.8rem); letter-spacing: -.03
   --cab-bg: rgb(8 8 8 / .88); --cab-cor: var(--papel); --cab-fio: rgb(242 242 238 / .14);
   color: var(--cab-cor);
 }
+/* Some enquanto o palco dos planos está preso na tela (Lenora, 22/09: o
+   menu atrapalhava a leitura do texto do plano). Volta se o foco do
+   teclado entrar nele ou se o drawer estiver aberto. */
+.header { transition: transform .5s cubic-bezier(.16, 1, .3, 1); }
+.header--oculto { transform: translateY(calc(-100% - 48px)); }   /* passa da borda com folga, sombra incluída */
+.header--oculto:focus-within, .header--oculto:has(.is-open) { transform: none; }
+@media (prefers-reduced-motion: reduce) { .header { transition: none; } }
 .header--claro { --cab-bg: rgb(242 242 238 / .92); --cab-cor: var(--grafite); --cab-fio: rgb(22 22 22 / .14); }
 .header--amarelo { --cab-bg: rgb(255 226 122 / .96); --cab-cor: var(--grafite); --cab-fio: rgb(22 22 22 / .18); }
 .header--claro .nav__link, .header--amarelo .nav__link { color: var(--grafite); }
