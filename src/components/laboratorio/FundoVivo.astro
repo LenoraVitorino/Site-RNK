@@ -1,0 +1,30 @@
+---
+/**
+ * Fundo vivo (laboratório, 22/09/2026). Um <canvas> fixo atrás da página;
+ * a cena só carrega depois que o texto pintou, por import dinâmico, e nunca
+ * atrasa a hero. ?fundo= escolhe o caminho: particulas (padrão) ou
+ * superficie. Especificação: docs/04-design/fundo-vivo-briefing.md.
+ */
+---
+<canvas class="fundo-vivo" data-fundo-vivo aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
+  const temWebGL = (() => {
+    try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+  })();
+  if (canvas && temWebGL) {
+    const superficie = new URLSearchParams(location.search).get('fundo') === 'superficie';
+    const comecar = () => (superficie ? import('./fundo-superficie') : import('./fundo-particulas'))
+      .then(({ iniciar }) => iniciar(canvas));
+    if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
+    else setTimeout(comecar, 300);
+  }
+</script>
+
+<style>
+  .fundo-vivo {
+    position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh;
+    display: block; pointer-events: none; opacity: 0;
+  }
+</style>

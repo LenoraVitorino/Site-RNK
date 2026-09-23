@@ -1,12 +1,16 @@
 # Briefing e prompt: o fundo vivo da home
 
-Documento de 22/09/2026. Tem cinco partes:
+Documento de 22/09/2026. Tem sete partes:
 
 1. o briefing;
 2. a leitura das referências;
 3. três caminhos para escolher;
 4. o prompt pronto para executar o caminho escolhido;
-5. prompts em inglês para gerar quadros de conceito antes de programar.
+5. prompts em inglês para gerar quadros de conceito antes de programar;
+6. os próximos passos;
+7. o roteiro detalhado de execução: as regras da dinâmica, a legibilidade,
+   o vidro e a cena de cada dobra, medidos no layout real. Os caminhos B e
+   C já estão prototipados com ele em `/laboratorio/fundo`.
 
 Este documento substitui a parte do objeto em
 [`hero-aneis-prompt.md`](hero-aneis-prompt.md). Os anéis seguem no laboratório
@@ -439,11 +443,155 @@ photography, no text, 16:9, photorealistic render
 
 ## 6. Próximos passos
 
-1. A Lenora escolhe o caminho, ou dois para comparar.
-2. Se quiser, gera os quadros de conceito com os prompts da parte 5, para
-   fechar a estética antes do código.
-3. Protótipo no laboratório, em `/laboratorio/fundo`, com seletor e sem tocar
-   na home. Os anéis continuam em `/laboratorio/aneis`.
-4. Ajuste fino junto com ela: posição por dobra, intensidade da luz e
+1. ~~Protótipo no laboratório, com seletor e sem tocar na home.~~ Feito em
+   `/laboratorio/fundo`, com os caminhos B e C (parte 7). Os anéis continuam
+   em `/laboratorio/aneis`.
+2. A Lenora compara os dois e escolhe um.
+3. Ajuste fino junto com ela: posição por dobra, intensidade da luz e
    velocidade.
-5. Levar para a home.
+4. Levar para a home.
+
+---
+
+## 7. Roteiro detalhado de execução
+
+Esta parte completa o prompt da parte 4. É o que foi usado para construir
+os protótipos, e vale como especificação para qualquer ajuste daqui para a
+frente.
+
+### 7.1 A dinâmica dos vídeos, em regras
+
+1. **Parado na dobra, transformando na passagem.** Enquanto uma dobra ocupa
+   a tela, o fundo fica no quadro dela e só respira. Conta como ocupando a
+   tela do momento em que o topo da dobra chega a 15% da altura até a base
+   chegar a 85%. A transformação acontece na passagem, enquanto a divisa
+   entre duas dobras atravessa a tela de 85% a 15%. É o que se vê nos
+   vídeos: o objeto se acomoda enquanto se lê e muda quando a seção muda.
+2. **O scroll é a agulha.** A transformação é presa ao scroll, não a um
+   tempo. Rolar para trás desfaz o caminho. Tudo passa por amortecimento de
+   cerca de 220 ms, para nunca dar tranco.
+3. **O scroll mexe também dentro da forma.** Mesmo parado num quadro, rolar
+   gira os anéis e a esfera, faz a fita correr, gira o portal e empurra as
+   ondas para fora. Rolar rápido dá um pouco de agitação, que se acalma em
+   meio segundo.
+4. **Salto longo não atravessa a página.** Num clique do menu, aparece só a
+   última passagem, e não todas as formas em sequência.
+5. **Dobra coberta prepara a próxima.** Enquanto o palco dos planos (claro)
+   cobre a tela, o fundo já vai para o quadro das perguntas. Quando a cortina
+   sobe, a cena está pronta. O mesmo vale para Resultados e para o convite
+   amarelo, que preparam a Academy.
+6. **Todas as dobras escuras participam**, incluindo Academy e Sobre, que no
+   protótipo dos anéis eram sólidas. Só as dobras claras e a amarela cobrem o
+   fundo.
+
+### 7.2 Legibilidade garantida pelo código
+
+O fundo não depende de estar no lugar certo para o texto ser lido.
+
+- **Máscara de leitura.** A cada quadro, o motor mede o retângulo justo de
+  cada bloco de texto visível, até dez por vez. O fundo escurece 85% atrás
+  deles, com uma borda macia de 90 px (60 px no celular), como uma sombra de
+  luz. O retângulo é o do texto, não o da caixa, então um título curto numa
+  coluna larga não apaga a tela inteira.
+- **Blocos protegidos**:
+  - na hero: selo, título, lead, botão e prova;
+  - na metodologia: título, descrição e números;
+  - nos pilares: o título do Protocolo Revena;
+  - no letreiro: as letras, com escurecimento menor (55% nas partículas, 75%
+    na superfície) para o fundo ainda passar por trás delas;
+  - nas perguntas: a frase-âncora e as perguntas;
+  - no fim da página: os títulos da Academy, do Sobre e do formulário.
+- **Cartões** ficam fora da máscara, porque o vidro já cuida deles.
+- **Exposição por dobra.** Cada quadro tem o seu brilho. Onde a luz ficaria
+  forte demais (metodologia, Academy, formulário na superfície), ele cai.
+
+### 7.3 Vidro em todo cartão sobre o fundo
+
+- **Onde**:
+  - os cinco cartões do Protocolo Revena;
+  - os dois cartões da Academy e do Tools;
+  - o cartão do formulário;
+  - a pílula do selo da hero.
+- **Receita**:
+  - fundo preto a 55%;
+  - desfoque de 22 px com saturação de 1,25;
+  - fio claro de 1 px a 12%;
+  - brilho interno de 1 px na borda de cima;
+  - raio de 16 px e sombra longa e macia embaixo.
+- **Hover**: o fundo sobe para 62% e o fio para 20%.
+- **Fora do vidro**: as fotos do Sobre continuam opacas, porque são fotos.
+
+### 7.4 Mapa das dobras (medido em 1440 × 900)
+
+| Dobra | Fundo | Onde está o conteúdo | Espaço livre para o elemento |
+|---|---|---|---|
+| Hero | vivo | título, lead e botão à esquerda; retratos embaixo à direita | a direita e a metade de baixo |
+| Metodologia | vivo | vídeo de 357 × 635 px à esquerda; texto e números à direita | em volta do vídeo |
+| Protocolo Revena | vivo | título no alto; cinco cartões de vidro em 3 + 2 | atrás e entre os cartões |
+| Letreiro | vivo | faixa de letras de ponta a ponta, 248 px de altura | acima e abaixo das letras |
+| Palco dos planos | coberto | — | — |
+| Perguntas | vivo | frase em duas linhas no alto; perguntas em grade 2 × 2 | alto à direita e entre as colunas |
+| Resultados e convite | cobertos | — | — |
+| Academy | vivo | dois cartões grandes lado a lado | embaixo e através do vidro |
+| Sobre | vivo | texto e fotos em carrossel horizontal preso | frestas entre as fotos |
+| Formulário | vivo | texto à esquerda; cartão de 460 px à direita | em volta do cartão |
+
+### 7.5 Cenas do caminho B: partículas
+
+26.880 pontos no desktop (grade de 240 × 112) e 10.200 no celular (150 × 68).
+O ponto nítido tem 2,5 px (2,1 px no celular). Fora de foco, ele cresce até
+virar bokeh e perde brilho na mesma proporção. O que está mais perto acende,
+o que está no fundo apaga.
+
+| Dobra | Forma | Onde e como |
+|---|---|---|
+| Hero | **Onda** | Malha regular ocupando a metade de baixo e subindo à direita, maior que a tela. Inclinada para que se veja a superfície de cima, com as cristas mais acesas. É a referência da malha de pontos. |
+| Metodologia | **Três anéis** | Em cascata, centrados no vídeo, com raio de cerca de 420 px para aparecerem em volta dele. Cada um num plano, balançando devagar; o scroll os gira. |
+| Protocolo Revena | **Esfera** | Cerca de 740 px de diâmetro, um pouco mais funda e fora de foco, no centro, vista pelos cartões de vidro. Os anéis inflam até virar a esfera; o scroll a gira. |
+| Letreiro | **Fita** | Uma fita torcida que atravessa a tela na altura das letras e corre na horizontal com o scroll, com as pontas apagadas fora da tela. |
+| Perguntas | **Curva ascendente** | A onda volta subindo da esquerda para o alto à direita, ao lado da frase, passando atrás das perguntas com a máscara. |
+| Academy | **Horizonte** | A onda calma e baixa, como um chão de luz sob os dois cartões. |
+| Sobre | **Respiro** | Só 6% dos pontos acesos, grandes e desfocados, atrás das fotos. |
+| Formulário | **Portal** | Túnel em espiral visto de frente, com a boca em volta do cartão. O eixo aponta para a câmera mesmo fora do centro, e o scroll gira o túnel. |
+
+Na passagem, cada ponto parte no seu tempo, com atraso de 0 a 40%,
+varrendo da esquerda para a direita, e faz uma curva no meio do caminho
+(cardume). Todas as formas usam a mesma grade, com u na horizontal ou em
+volta do eixo, então cada ponto viaja pouco.
+
+### 7.6 Cenas do caminho C: superfície
+
+Um disco de malha polar com 200 anéis × 256 segmentos (110 × 144 no
+celular). As ondas concêntricas têm crista redonda e vale largo. O material é
+preto polido (`#131210`, metal 0,7, rugosidade 0,2, verniz cheio). O estúdio
+refletido tem três faixas:
+
+- uma amarela, alta, à direita;
+- uma clara, macia, em cima;
+- uma fria, à esquerda.
+
+O estúdio gira a cada dobra, e o reflexo amarelo corre pelas cristas.
+
+| Dobra | Onde e como |
+|---|---|
+| Hero | Quase de frente (13°), como a referência dos anéis pretos. O centro das ondas fica à direita do título, a 73% da largura, e os anéis maiores saem pela borda. |
+| Metodologia | A câmera deita (57°), e as ondas viram relevo em perspectiva embaixo, à esquerda, passando atrás do vídeo. Exposição mais baixa. |
+| Protocolo Revena | Superfície quase lisa. Só um reflexo largo e dourado passa atrás dos cartões de vidro. |
+| Letreiro | Rasante (69°). Uma onda solitária cruza atrás das letras, com uma faixa escura de leitura. |
+| Perguntas | Um novo centro nasce no alto à direita, discreto. |
+| Academy | Chão calmo e baixo sob os cartões. |
+| Sobre | Mais escura, embaixo à esquerda, atrás das fotos. |
+| Formulário | De frente de novo. As ondas emolduram o cartão e o centro afunda como um túnel raso. |
+
+### 7.7 Onde está no código
+
+- `src/components/laboratorio/fundo-motor.ts`: o motor comum, com o roteiro
+  medido, as passagens, o amortecimento, a máscara de leitura, as pausas e
+  os casos sem WebGL e de movimento reduzido.
+- `src/components/laboratorio/fundo-particulas.ts`: o caminho B, com os
+  quadros de cada dobra no topo do arquivo.
+- `src/components/laboratorio/fundo-superficie.ts`: o caminho C, com os
+  quadros no mesmo lugar.
+- `src/components/laboratorio/FundoVivo.astro` e
+  `src/pages/laboratorio/fundo.astro`: a página de teste, com o seletor
+  (`?fundo=particulas` ou `?fundo=superficie`) e o vidro nos cartões.
