@@ -36,6 +36,19 @@ export interface Momento {
 export interface Elemento {
   quadros: Quadros;
   pintar(m: Momento): void;
+  /** Ajustes do motor para este fundo; o que faltar usa o padrão. */
+  config?: Partial<Config>;
+}
+
+export interface Config {
+  roteiro: [string, string][];   // dobra → quadro
+  transparentes: string;         // dobras que deixam o fundo aparecer (ligam o laço)
+  textos: string;                // blocos que a máscara de leitura protege
+  cartoes: string;               // caixas atrás das quais o fundo fica fosco
+  tau: number;                   // amortecimento do tempo de roteiro, em segundos
+  curva: (t: number) => number;  // suavização da passagem entre dobras
+  saltoMax: number;              // num salto de âncora, quantas passagens aparecem
+  esperarEntrada: () => boolean; // o fade de entrada só começa quando isto for verdade
 }
 
 export interface Contexto {
@@ -66,8 +79,11 @@ const ROTEIRO: [string, string][] = [
 
 export const DOBRAS_TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, .letreiro, #perguntas, #academy-tools, #sobre, #formulario';
 
+export const suave = (x: number) => x * x * (3 - 2 * x);
+export const maisSuave = (x: number) => x * x * x * (x * (x * 6 - 15) + 10);
+
 /** Blocos de texto que a máscara protege. Cartões ficam de fora: o vidro já cuida deles. */
-const TEXTOS = [
+export const TEXTOS = [
   '.hero__selo', '.hero__h1', '.hero__lead', '.hero__acoes', '.hero-prova',
   '#o-que-fazemos .titulo', '.oquefaz__descricao', '.oquefaz__numeros',
   '#pilares-revena .titulo', '.letreiro__trilho',
@@ -77,7 +93,8 @@ const TEXTOS = [
   '#formulario .titulo', '.form-block__text p',
 ].join(', ');
 
-const MAX_RETANGULOS = 10;
+const MAX_RETANGULOS = 16;
+const MAX_CARTOES = 8;
 
 const GLSL_LEITURA = /* glsl */ `
 uniform vec4 uLeituraRet[${MAX_RETANGULOS}];
@@ -95,9 +112,22 @@ float leitura(vec2 p) {
   }
   return 1.0 - m * uLeituraForca;
 }
+uniform vec4 uCartaoRet[${MAX_CARTOES}];
+uniform int uCartaoN;
+// 1 dentro de um cartão (borda macia de 6 px), 0 fora.
+float cartao(vec2 p) {
+  float m = 0.0;
+  for (int i = 0; i < ${MAX_CARTOES}; i++) {
+    if (i >= uCartaoN) break;
+    vec4 r = uCartaoRet[i];
+    vec2 d = abs(p - (r.xy + r.zw) * .5) - (r.zw - r.xy) * .5;
+    float dist = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+    m = max(m, 1.0 - smoothstep(-6.0, 6.0, dist));
+  }
+  return m;
+}
 `;
 
-const suave = (x: number) => x * x * (3 - 2 * x);
 const limita = (x: number, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 
 export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Elemento) {
@@ -119,11 +149,14 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   camera.position.set(0, 0, 11);
 
   const retangulos = Array.from({ length: MAX_RETANGULOS }, () => new Vector4());
+  const cartoesRet = Array.from({ length: MAX_CARTOES }, () => new Vector4());
   const uniformsLeitura = {
     uLeituraRet: { value: retangulos },
     uLeituraN: { value: 0 },
     uLeituraForca: { value: .85 },
     uLeituraPena: { value: 90 },
+    uCartaoRet: { value: cartoesRet },
+    uCartaoN: { value: 0 },
   };
 
   const meia = () => {
@@ -136,13 +169,18 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     leitura: { uniforms: uniformsLeitura, glsl: GLSL_LEITURA },
   });
   const quadros = celular ? elemento.quadros.celular : elemento.quadros.desktop;
+  const cfg: Config = {
+    roteiro: ROTEIRO, transparentes: DOBRAS_TRANSPARENTES, textos: TEXTOS, cartoes: '',
+    tau: .22, curva: suave, saltoMax: 1.2, esperarEntrada: () => true,
+    ...elemento.config,
+  };
 
   // Roteiro medido: um trecho parado por dobra (nomes consecutivos iguais se fundem).
   let nomes: string[] = ['hero'];
   let trechos: [number, number][] = [[0, 0]];
   const medir = () => {
     const vh = innerHeight;
-    const brutos = ROTEIRO.flatMap(([seletor, nome]) => {
+    const brutos = cfg.roteiro.flatMap(([seletor, nome]) => {
       const el = document.querySelector<HTMLElement>(seletor);
       if (!el) return [];
       const r = el.getBoundingClientRect();
@@ -168,7 +206,7 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       if (y < de) {
         if (i === 0) return 0;
         const antes = trechos[i - 1][1];
-        return i - 1 + suave(limita((y - antes) / Math.max(1, de - antes)));
+        return i - 1 + cfg.curva(limita((y - antes) / Math.max(1, de - antes)));
       }
       if (y <= ate) return i;
     }
@@ -178,13 +216,16 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   // Textos: posições na página guardadas na medição; o retângulo justo do
   // texto (pela Range, que ignora o espaço vazio da caixa) é lido a cada quadro.
   let textos: { el: Element; de: number; ate: number }[] = [];
+  let cartoes: { el: Element; de: number; ate: number }[] = [];
   const faixa = document.createRange();
   const medirTextos = () => {
     // O filtro usa a dobra inteira: dentro dela há texto preso (sticky) que muda de lugar.
-    textos = [...document.querySelectorAll(TEXTOS)].map((el) => {
+    const posicoes = (sel: string) => (sel ? [...document.querySelectorAll(sel)] : []).map((el) => {
       const r = (el.closest('section') ?? el).getBoundingClientRect();
       return { el, de: r.top + scrollY, ate: r.bottom + scrollY };
     });
+    textos = posicoes(cfg.textos);
+    cartoes = posicoes(cfg.cartoes);
   };
   const atualizarLeitura = () => {
     const vh = innerHeight, pr = renderer.getPixelRatio(), folga = 14;
@@ -199,6 +240,15 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     }
     uniformsLeitura.uLeituraN.value = n;
     uniformsLeitura.uLeituraPena.value = (celular ? 60 : 90) * pr;
+    let c = 0;
+    for (const t of cartoes) {
+      if (c >= MAX_CARTOES) break;
+      if (t.ate < scrollY || t.de > scrollY + vh) continue;
+      const r = t.el.getBoundingClientRect();
+      if (r.width < 1 || r.bottom < 0 || r.top > vh) continue;
+      cartoesRet[c++].set(r.left * pr, (vh - r.bottom) * pr, r.right * pr, (vh - r.top) * pr);
+    }
+    uniformsLeitura.uCartaoN.value = c;
   };
 
   const ponteiro = { x: 0, y: 0, ax: 0, ay: 0 };
@@ -221,7 +271,7 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   let energia = 0;
   let tempo = 0;
   let ultimo = performance.now();
-  const inicio = performance.now();
+  let inicio = 0;   // começa a contar quando o fundo pode entrar
 
   const estado = (pp: number): Quadro => {
     const i = Math.min(Math.floor(pp), nomes.length - 1);
@@ -239,8 +289,8 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     // Tempo de roteiro amortecido. Num salto longo (âncora do menu), só a
     // última passagem aparece, para o fundo não atravessar a página inteira.
     const alvo = progresso(scrollY);
-    if (Math.abs(alvo - p) > 1.2) p = alvo - Math.sign(alvo - p) * 1.2;
-    p += (alvo - p) * (parado ? 1 : 1 - Math.exp(-dt / .22));
+    if (Math.abs(alvo - p) > cfg.saltoMax) p = alvo - Math.sign(alvo - p) * cfg.saltoMax;
+    p += (alvo - p) * (parado ? 1 : 1 - Math.exp(-dt / cfg.tau));
 
     const rAlvo = scrollY / innerHeight;
     const rAntes = rolagem;
@@ -251,7 +301,8 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     ponteiro.ax += (ponteiro.x - ponteiro.ax) * (parado ? 1 : 1 - Math.exp(-dt / .35));
     ponteiro.ay += (ponteiro.y - ponteiro.ay) * (parado ? 1 : 1 - Math.exp(-dt / .35));
 
-    const decorrido = (performance.now() - inicio) / 1000;
+    if (!inicio && cfg.esperarEntrada()) inicio = performance.now();
+    const decorrido = inicio ? (performance.now() - inicio) / 1000 : 0;
     const entrada = parado ? 1 : suave(limita(decorrido / 1.6));
 
     const i = Math.min(Math.floor(p), nomes.length - 1);
@@ -289,7 +340,7 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     for (const e of entradas) e.isIntersecting ? naTela.add(e.target) : naTela.delete(e.target);
     acordar();
   });
-  document.querySelectorAll(DOBRAS_TRANSPARENTES).forEach((el) => observador.observe(el));
+  document.querySelectorAll(cfg.transparentes).forEach((el) => observador.observe(el));
   document.addEventListener('visibilitychange', acordar);
   addEventListener('scroll', () => { if (reduzido.matches) pintar(0); acordar(); }, { passive: true });
   addEventListener('resize', () => { redimensionar(); pintar(0); acordar(); }, { passive: true });
