@@ -1,5 +1,10 @@
 # Briefing e prompt: o fundo vivo da home
 
+> Atualização de 25/09/2026: os caminhos B e C foram reprovados por excesso
+> de amarelo. A direção que vale agora está em
+> [`referencias-alto-padrao.md`](referencias-alto-padrao.md). A dinâmica e o
+> motor descritos aqui continuam valendo.
+
 Documento de 22/09/2026. Tem sete partes:
 
 1. o briefing;
