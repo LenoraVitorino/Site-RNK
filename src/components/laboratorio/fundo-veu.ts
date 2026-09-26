@@ -21,20 +21,23 @@ import { iniciar as iniciarMotor, maisSuave, TEXTOS, type Contexto, type Element
  * Quadros por dobra. cx, cy: centro da crista em frações da tela (0,0 no
  * canto superior esquerdo). ang: inclinação em graus (positivo sobe para a
  * direita). int: intensidade. nit: nitidez (1 nítido, 0 desfocado como o
- * cromo das referências). curva: quanto a faixa se curva.
+ * cromo das referências). curva: quanto a faixa se curva. leitura: quanto a
+ * máscara escurece o véu atrás do texto (menos no letreiro, que corre).
+ * lado: para que lado da crista o tecido cai (1 para baixo, -1 para cima).
  */
-const q = (cx: number, cy: number, ang: number, int: number, nit: number, curva = .32): Quadro => ({ cx, cy, ang, int, nit, curva });
+const q = (cx: number, cy: number, ang: number, int: number, nit: number, curva = .32, leitura = .85, lado = 1): Quadro => ({ cx, cy, ang, int, nit, curva, leitura, lado });
 
 const QUADROS = {
   desktop: {
-    // A crista nasce embaixo, perto do meio, e sobe em curva larga até sair pela direita.
-    hero:        q(.70, .80, 24, 1, 1),
+    // A crista atravessa o vazio à direita do título, na altura do meio, e sai
+    // pela direita; o tecido cai abaixo dela sem chegar à prova social.
+    hero:        q(.72, .40, 24, 1, 1),
     // Gira e sobe quase na vertical atrás do vídeo, como fumaça; o vídeo ganha contraluz.
     metodologia: q(.30, .52, 64, .6, .6, .22),
     // Sai de foco atrás da grade de cartões.
     pilares:     q(.66, .50, 24, .45, 0),
-    // Faixa baixa, quase horizontal e desfocada, passando sob o letreiro.
-    letreiro:    q(.50, .68, 4, .5, .2, .12),
+    // Faixa baixa, quase horizontal e desfocada, passando sob as letras que correm.
+    letreiro:    q(.50, .68, 4, .5, .2, .12, .55),
     // Luz de janela lateral: vertical, fraca, com o centro fora da tela à direita.
     perguntas:   q(1.04, .42, 84, .3, .5, .1),
     // Um traço horizontal sob o título centralizado, como linha de assinatura.
@@ -45,10 +48,10 @@ const QUADROS = {
     formulario:  q(.40, .88, 8, .55, .7, .08),
   },
   celular: {
-    hero:        q(.88, .98, 52, .85, .85),
+    hero:        q(.96, .56, 62, .85, .85),
     metodologia: q(.90, .66, 68, .51, .45, .22),
     pilares:     q(.82, .74, 52, .38, 0),
-    letreiro:    q(.50, .86, 4, .42, .05, .12),
+    letreiro:    q(.50, .86, 4, .42, .05, .12, .55),
     perguntas:   q(1.06, .45, 75, .25, .35, .1),
     convite:     q(.50, .66, -6, .55, .75, .06),
     sobre:       q(.42, 1.02, 6, .21, 0, .1),
@@ -79,6 +82,9 @@ const TEXTOS_VEU = [
 
 const CARTOES = '.pilar-card, #academy-tools .cartao__arte';
 
+// Blocos sem texto que também pedem o fundo escuro atrás (os retratos da prova social).
+const CAIXAS = '.hero-prova__retratos';
+
 const VERTICE = /* glsl */ `
 void main() { gl_Position = vec4(position.xy, 0., 1.); }
 `;
@@ -87,7 +93,7 @@ const FRAGMENTO = /* glsl */ `
 precision highp float;
 uniform vec2 uRes;
 uniform vec2 uCentro;
-uniform float uAngulo, uIntensidade, uNitidez, uCurva, uTempo, uRespira, uQuadro;
+uniform float uAngulo, uIntensidade, uNitidez, uCurva, uLado, uTempo, uRespira, uQuadro;
 __LEITURA__
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -125,10 +131,10 @@ void main() {
   float nit = uNitidez * (1. - noCartao);
   float sb = mix(.22, .14, nit), sc = mix(.035, .005, nit);
 
-  float corpo = exp(-.5 * pow((vc + sb * .55) / sb, 2.));    // o tecido cai para um lado da crista
+  float corpo = exp(-.5 * pow((vc + uLado * sb * .55) / sb, 2.));   // o tecido cai para um lado da crista
   float crista = exp(-.5 * pow(vc / sc, 2.));
-  float vd = v - uCurva * .7 * u * u - .16 - resp * .6;       // segunda dobra, deslocada
-  float dobra = .2 * exp(-.5 * pow((vd + sb * .4) / (sb * .8), 2.)) + .12 * exp(-.5 * pow(vd / (sc * 1.4), 2.));
+  float vd = v - uCurva * .7 * u * u + uLado * .16 - resp * .6;   // segunda dobra, deslocada para o lado do tecido
+  float dobra = .11 * exp(-.5 * pow((vd + uLado * sb * .4) / (sb * .8), 2.)) + .055 * exp(-.5 * pow(vd / (sc * 1.4), 2.));   // ~20% do brilho da principal
 
   float nasce = smoothstep(-1.1, -.35, u);                    // entra macio numa ponta, sai da tela na outra
   float luz = .78 + .22 * smoothstep(-.6, .6, u);             // luz do alto à esquerda, no sentido da leitura
@@ -152,7 +158,7 @@ function criar(ctx: Contexto): Elemento {
 
   const u = {
     uRes: { value: [1, 1] }, uCentro: { value: [.5, .5] },
-    uAngulo: { value: 0 }, uIntensidade: { value: 1 }, uNitidez: { value: 1 }, uCurva: { value: .3 },
+    uAngulo: { value: 0 }, uIntensidade: { value: 1 }, uNitidez: { value: 1 }, uCurva: { value: .3 }, uLado: { value: 1 },
     uTempo: { value: 0 }, uRespira: { value: celular ? 0 : 1 }, uQuadro: { value: 0 },
   };
   const material = new ShaderMaterial({
@@ -172,8 +178,8 @@ function criar(ctx: Contexto): Elemento {
   return {
     quadros: QUADROS,
     config: {
-      roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_VEU, cartoes: CARTOES,
-      tau: .35, curva: maisSuave, saltoMax: 1,
+      roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_VEU, cartoes: CARTOES, caixas: CAIXAS,
+      tau: .35, curva: maisSuave, saltoMax: 1, pena: 150,
       // Na hero, o véu só aparece depois da troca do título (ou no primeiro scroll).
       esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 4300,
     },
@@ -185,7 +191,8 @@ function criar(ctx: Contexto): Elemento {
       u.uIntensidade.value = e.int * (.9 + .1 * entrada);
       u.uNitidez.value = e.nit;
       u.uCurva.value = e.curva;
-      u.uTempo.value = tempo;
+      u.uLado.value = e.lado;
+      u.uTempo.value = celular ? 0 : tempo;   // no celular o véu fica parado
       u.uQuadro.value = ++quadro;
     },
   };

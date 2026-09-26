@@ -57,7 +57,7 @@ concluir um passo, marque `[x]` neste arquivo, no mesmo commit.
   - na seção 10, tire "letreiro correndo" da lista do que não fazer;
   - registre a decisão dela, de 25/09.
 
-- [ ] **2. Página `/laboratorio/veu`.**
+- [x] **2. Página `/laboratorio/veu`.**
   - Crie `src/pages/laboratorio/veu.astro` a partir de
     `src/pages/laboratorio/fundo.astro`:
     - mesmas dobras;
@@ -102,7 +102,7 @@ concluir um passo, marque `[x]` neste arquivo, no mesmo commit.
   - Confira a versão `VERSAO=copy` também. Ela usa `Planos` e a `.cortina`
     nas perguntas.
 
-- [ ] **3. Ver e ajustar o véu.**
+- [x] **3. Ver e ajustar o véu.**
   - Suba o dev (`npm run dev`) e abra `/laboratorio/veu` em 1440×900 e
     375×812.
   - Dobra por dobra, use `__fundo.assentar()` e confira:
@@ -114,10 +114,10 @@ concluir um passo, marque `[x]` neste arquivo, no mesmo commit.
   - Ajuste os quadros no topo de `fundo-veu.ts` até ficar calmo e elegante.
     Na dúvida, menos.
 
-- [ ] **4. Builds, commit e push.** Rode os dois builds, faça um commit
+- [x] **4. Builds, commit e push.** Rode os dois builds, faça um commit
   explicando o que ela vai ver e faça o push na `ajustes-layout-2`.
 
-- [ ] **5. Mostrar para ela pelo celular.**
+- [x] **5. Mostrar para ela pelo celular.**
   - O `localhost` não abre no celular, e o `npm run deploy` publica em
     produção, então **não use**.
   - Tente publicar o `/laboratorio/veu` como página hospedada (Artifact). O
@@ -128,9 +128,29 @@ concluir um passo, marque `[x]` neste arquivo, no mesmo commit.
   - Se não der no ambiente, diga isso a ela com clareza e combine de ver no
     Mac.
 
-- [ ] **6. Resumo para ela.** Curto, em português, contando:
+- [x] **6. Resumo para ela.** Curto, em português, contando:
   - o que ela vai ver e onde;
   - o que mudou em relação às partículas e à superfície;
   - o que ainda espera a decisão dela (seção 9 do documento).
 
   Pergunte se o véu vai para a home.
+
+## Resultado (25/09/2026)
+
+Todos os passos foram feitos.
+
+- **A página**: `/laboratorio/veu`, pelo servidor local, ou o arquivo único
+  gerado por `npm run laboratorio:unico` (`dist-unico/laboratorio-veu.html`,
+  enviado a ela).
+- **Revisão**: uma revisão independente confirmou 16 pontos, e todos foram
+  corrigidos, entre eles:
+  - a cortina das perguntas na copy;
+  - a assinatura do rodapé;
+  - o hover dos botões nas dobras claras;
+  - o ícone da pilha no celular;
+  - as trocas de quadro, que agora ficam escondidas atrás das dobras opacas;
+  - o lado do tecido, que não troca mais no meio de uma passagem;
+  - os retratos na máscara;
+  - os hovers sem movimento.
+- **Próximo passo**: a Lenora decide se o véu e os ajustes vão para a home.
+  As mudanças da seção 9 do documento continuam esperando o aval dela.

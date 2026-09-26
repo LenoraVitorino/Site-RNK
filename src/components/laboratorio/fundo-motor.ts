@@ -49,6 +49,8 @@ export interface Config {
   curva: (t: number) => number;  // suavização da passagem entre dobras
   saltoMax: number;              // num salto de âncora, quantas passagens aparecem
   esperarEntrada: () => boolean; // o fade de entrada só começa quando isto for verdade
+  pena: number;                  // borda macia da máscara de leitura, em px de CSS (desktop)
+  caixas: string;                // blocos sem texto que a máscara protege pela caixa inteira
 }
 
 export interface Contexto {
@@ -171,7 +173,7 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   const quadros = celular ? elemento.quadros.celular : elemento.quadros.desktop;
   const cfg: Config = {
     roteiro: ROTEIRO, transparentes: DOBRAS_TRANSPARENTES, textos: TEXTOS, cartoes: '',
-    tau: .22, curva: suave, saltoMax: 1.2, esperarEntrada: () => true,
+    tau: .22, curva: suave, saltoMax: 1.2, esperarEntrada: () => true, pena: 90, caixas: '',
     ...elemento.config,
   };
 
@@ -188,10 +190,22 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       // Parado enquanto a dobra ocupa a tela: do topo a 15% da tela até a base a 85%.
       let de = topo - vh * .15, ate = base - vh * .85;
       if (ate < de) de = ate = (de + ate) / 2;   // dobra curta: só o instante em que ela está no meio
-      return [{ nome, de, ate }];
+      const opaca = !el.matches(cfg.transparentes) && r.height > vh * 1.2;
+      return [{ nome, de, ate, topo, opaca, altura: r.height }];
     }).sort((x, y) => x.de - y.de);
     if (!brutos.length) return;
     brutos[0].de = Math.min(brutos[0].de, 0);
+    // Dobra opaca que cobre a tela inteira: a troca de quadro acontece
+    // escondida atrás dela. O quadro anterior fica até ela cobrir tudo, e a
+    // passagem cabe na metade de uma tela, ainda com a tela coberta.
+    for (let i = 1; i < brutos.length; i++) {
+      const b = brutos[i], antes = brutos[i - 1];
+      if (!b.opaca || antes.nome === b.nome) continue;
+      antes.ate = Math.max(antes.ate, b.topo);
+      if (antes.de > antes.ate) antes.de = antes.ate;
+      b.de = Math.max(b.de, b.topo + Math.min(vh * .5, b.altura - vh));
+      if (b.ate < b.de) b.ate = b.de;
+    }
     nomes = []; trechos = [];
     for (const b of brutos) {
       if (nomes[nomes.length - 1] === b.nome) trechos[trechos.length - 1][1] = b.ate;
@@ -215,8 +229,19 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
 
   // Textos: posições na página guardadas na medição; o retângulo justo do
   // texto (pela Range, que ignora o espaço vazio da caixa) é lido a cada quadro.
-  let textos: { el: Element; de: number; ate: number }[] = [];
+  let textos: { el: Element; de: number; ate: number; nos: Text[] }[] = [];
   let cartoes: { el: Element; de: number; ate: number }[] = [];
+  // Os nós de texto de um bloco: o retângulo justo é a união das linhas
+  // visíveis. A Range sobre o elemento inteiro incluiria as caixas dos filhos
+  // (itens de grid esticados, a mensagem escondida da hero) e apagaria demais.
+  const nosDeTexto = (el: Element) => {
+    const nos: Text[] = [];
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) if (n.nodeValue?.trim()) nos.push(n as Text);
+    return nos;
+  };
+  const visivel = (el: Element | null) =>
+    !el || !('checkVisibility' in el) || (el as Element & { checkVisibility(o: object): boolean }).checkVisibility({ opacityProperty: true, visibilityProperty: true });
   const faixa = document.createRange();
   const medirTextos = () => {
     // O filtro usa a dobra inteira: dentro dela há texto preso (sticky) que muda de lugar.
@@ -224,7 +249,10 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       const r = (el.closest('section') ?? el).getBoundingClientRect();
       return { el, de: r.top + scrollY, ate: r.bottom + scrollY };
     });
-    textos = posicoes(cfg.textos);
+    textos = [
+      ...posicoes(cfg.textos).map((t) => ({ ...t, nos: nosDeTexto(t.el) })),
+      ...posicoes(cfg.caixas).map((t) => ({ ...t, nos: [] as Text[] })),   // sem nós: vale a caixa
+    ];
     cartoes = posicoes(cfg.cartoes);
   };
   const atualizarLeitura = () => {
@@ -233,13 +261,23 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     for (const t of textos) {
       if (n >= MAX_RETANGULOS) break;
       if (t.ate < scrollY || t.de > scrollY + vh) continue;
-      faixa.selectNodeContents(t.el);
-      const r = faixa.getBoundingClientRect();
-      if (r.width < 1 || r.bottom < -100 || r.top > vh + 100) continue;
-      retangulos[n++].set((r.left - folga) * pr, (vh - r.bottom - folga) * pr, (r.right + folga) * pr, (vh - r.top + folga) * pr);
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      if (!t.nos.length && visivel(t.el)) {
+        const r = t.el.getBoundingClientRect();
+        x0 = r.left; y0 = r.top; x1 = r.right; y1 = r.bottom;
+      }
+      for (const no of t.nos) {
+        if (!visivel(no.parentElement)) continue;
+        faixa.selectNodeContents(no);
+        const r = faixa.getBoundingClientRect();
+        if (r.width < 1) continue;
+        x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
+      }
+      if (x1 <= x0 || y1 < -100 || y0 > vh + 100) continue;
+      retangulos[n++].set((x0 - folga) * pr, (vh - y1 - folga) * pr, (x1 + folga) * pr, (vh - y0 + folga) * pr);
     }
     uniformsLeitura.uLeituraN.value = n;
-    uniformsLeitura.uLeituraPena.value = (celular ? 60 : 90) * pr;
+    uniformsLeitura.uLeituraPena.value = cfg.pena * (celular ? .65 : 1) * pr;
     let c = 0;
     for (const t of cartoes) {
       if (c >= MAX_CARTOES) break;
@@ -357,7 +395,8 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     Object.assign(window, {
       __fundo: {
         pintar, medir, redimensionar,
-        assentar(passos = 90) { for (let k = 0; k < passos; k++) pintar(1 / 30); },
+        // Também completa a entrada, que conta tempo real.
+        assentar(passos = 90) { inicio = performance.now() - 60000; for (let k = 0; k < passos; k++) pintar(1 / 30); },
         roteiro: () => ({ p, nomes, trechos }),
         quadros,
       },

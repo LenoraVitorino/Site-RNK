@@ -2,21 +2,32 @@
 /**
  * Fundo vivo (laboratório, 22/09/2026). Um <canvas> fixo atrás da página;
  * a cena só carrega depois que o texto pintou, por import dinâmico, e nunca
- * atrasa a hero. ?fundo= escolhe o caminho: particulas (padrão) ou
- * superficie. Especificação: docs/04-design/fundo-vivo-briefing.md.
+ * atrasa a hero. A prop `fundo` fixa o caminho (a página do véu usa 'veu');
+ * sem ela, ?fundo= escolhe entre particulas (padrão) e superficie.
+ * Especificação: docs/04-design/fundo-vivo-briefing.md e
+ * docs/04-design/referencias-alto-padrao.md.
  */
+interface Props { fundo?: 'veu' | 'particulas' | 'superficie' }
+const { fundo } = Astro.props;
 ---
-<canvas class="fundo-vivo" data-fundo-vivo aria-hidden="true"></canvas>
+<canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} aria-hidden="true"></canvas>
 
 <script>
   const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
   const temWebGL = (() => {
     try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
   })();
-  if (canvas && temWebGL) {
-    const superficie = new URLSearchParams(location.search).get('fundo') === 'superficie';
-    const comecar = () => (superficie ? import('./fundo-superficie') : import('./fundo-particulas'))
-      .then(({ iniciar }) => iniciar(canvas));
+  // Sem a prop, ?fundo= só escolhe entre os dois caminhos da página de fundos.
+  const pedido = new URLSearchParams(location.search).get('fundo');
+  const fundo = canvas?.dataset.fundo || (pedido === 'superficie' ? 'superficie' : 'particulas');
+  // O véu não nasce com movimento reduzido: a página fica no preto.
+  const semVeu = fundo === 'veu' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canvas && temWebGL && !semVeu) {
+    const carregar = () =>
+      fundo === 'veu' ? import('./fundo-veu')
+      : fundo === 'superficie' ? import('./fundo-superficie')
+      : import('./fundo-particulas');
+    const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas));
     if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
     else setTimeout(comecar, 300);
   }

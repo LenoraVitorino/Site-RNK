@@ -23,7 +23,3 @@ A Renke fala com médicos e médicas donos de clínicas de alto padrão. O site 
 - Referências de direção visual: docs/04-design/referencias-alto-padrao.md.
 
 Regra definida pela usuária em 25/09/2026.
-
-# Trabalho em andamento
-
-Existe um roteiro de continuação em `docs/04-design/continuar-veu.md`. Quando a usuária disser "ok continue", "continue" ou algo parecido sem dar outra instrução, leia esse arquivo e execute os passos a partir do primeiro que não estiver marcado como feito. Quando todos estiverem feitos, remova esta seção.

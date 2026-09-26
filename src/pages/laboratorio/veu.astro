@@ -1,0 +1,176 @@
+---
+/**
+ * Laboratório: a home com o véu de luz por trás (25/09/2026). Página de teste,
+ * fora dos buscadores e do menu. As dobras e os textos são os da home; mudam só
+ * o fundo e o acabamento, com estilos presos a body.laboratorio-veu, seguindo
+ * a direção de docs/04-design/referencias-alto-padrao.md (seções 4 a 7):
+ * alto padrão, menos é mais, amarelo só como detalhe. A home não muda até a
+ * Lenora aprovar.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import { seo } from '../../data/home';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import Perguntas from '../../components/home2/Perguntas.astro';
+import Resultados from '../../components/home2/Resultados.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+import Sobre from '../../components/home2/Sobre.astro';
+import { copyLiteral } from '../../data/versao';
+---
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu">
+  <FundoVivo slot="fundo" fundo="veu" />
+  <Hero />
+  <OQueFaz />
+  <Protocolos />
+  <Letreiro />
+  {!copyLiteral && <PlanosPalco />}
+  {copyLiteral && <Planos />}
+  <Perguntas />
+  <Resultados />
+  <CtaFinal />
+  <AcademyTools />
+  <Sobre />
+  <Formulario />
+</Base2>
+
+<style is:global>
+  /* Textura de metal escovado quente: ruído esticado na horizontal, a 5%. */
+  .laboratorio-veu {
+    --escovado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='600'%3E%3Cfilter id='e'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0015 0.35' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23e)' opacity='.05'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Dobras ----------
+     Todas as escuras deixam o véu aparecer; as claras sobem por cima como
+     cortina, agora em papel escovado em vez de chapado. */
+  body.laboratorio-veu { background: #000; }
+  .laboratorio-veu :is(.hero, #o-que-fazemos, #pilares-revena, #protocolo-revena.pilares, .letreiro, #perguntas, #fale, #academy-tools, #sobre, #formulario) { background: transparent; }
+  /* Na copy, as perguntas entram numa cortina por cima do trilho escuro dos
+     Planos: ali elas precisam do fundo próprio para cobrir o trilho. */
+  .laboratorio-veu .cortina > #perguntas { background: #000; }
+  .laboratorio-veu .hero__fundo { display: none; }
+  .laboratorio-veu .footer { position: relative; z-index: 1; }
+  .laboratorio-veu #pilares-revena { overflow: visible; }
+
+  .laboratorio-veu #resultados {
+    background:
+      var(--escovado),
+      radial-gradient(120% 70% at 15% 0%, rgb(255 255 255 / .5), transparent 60%),
+      linear-gradient(180deg, #EEEDE7 0%, #E3E2DB 100%),
+      #E8E7E0;   /* a cor de base também avisa o cabeçalho para ficar claro */
+  }
+  .laboratorio-veu .plano-palco__imagem {
+    background-image:
+      var(--escovado),
+      radial-gradient(120% 70% at 15% 0%, rgb(255 255 255 / .4), transparent 60%),
+      linear-gradient(180deg, transparent, rgb(0 0 0 / .03));
+  }
+  .laboratorio-veu .palcoplanos__intro,
+  .laboratorio-veu .palcoplanos:not([data-animado]) .plano-palco {
+    background-image:
+      var(--escovado),
+      radial-gradient(120% 70% at 15% 0%, rgb(255 255 255 / .4), transparent 60%),
+      linear-gradient(180deg, transparent, rgb(0 0 0 / .03));
+  }
+  /* Na pilha (celular, movimento reduzido ou sem JS), o ícone do plano fica pequeno, junto do nome. */
+  .laboratorio-veu .palcoplanos:not([data-animado]) .plano-palco__icone-mob { width: 56px; height: 56px; margin: 0 0 16px; }
+  /* O símbolo gigante do palco vira relevo tom sobre tom. */
+  .laboratorio-veu .peca--papel, .laboratorio-veu .peca--ouro { fill: rgb(22 22 22 / .06); }
+
+  /* ---------- Hero ---------- */
+  .laboratorio-veu .hero__selo {
+    padding: 0; background: none; border: 0; border-radius: 0;
+    font-size: 13px; color: var(--cinza);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .laboratorio-veu .hero__selo > span { display: none; }
+  .laboratorio-veu .hero__revops { font-weight: 300; }
+
+  /* ---------- Amarelo só como detalhe ---------- */
+  .laboratorio-veu .header .logo__img { width: 32px; height: 32px; }
+  .laboratorio-veu .oquefaz__valor { color: var(--papel); }
+  .laboratorio-veu .pilar-card__icone { color: rgb(242 242 238 / .85); }
+  .laboratorio-veu .pergunta__n { color: var(--cinza); }
+  .laboratorio-veu .ancora strong { font-weight: inherit; }   /* copy: o único amarelo da dobra, no peso do resto da frase */
+  .laboratorio-veu .sobre-editorial__texto .rotulo { color: var(--cinza); }
+  .laboratorio-veu .sobre-editorial__janela { scrollbar-color: rgb(242 242 238 / .25) transparent; }
+  .laboratorio-veu .academy-marca i { background: rgb(22 22 22 / .08); }
+  .laboratorio-veu .tools-marca span:first-child { background: transparent; color: var(--papel); border-color: rgb(242 242 238 / .22); }
+  /* Na copy, os planos no trilho escuro: ícones monocromáticos, número como rótulo. */
+  .laboratorio-veu .plano__icone { background: transparent; filter: grayscale(1) brightness(1.5); opacity: .85; }
+  .laboratorio-veu .plano__num { background: transparent; color: var(--cinza); padding: 0; letter-spacing: .14em; }
+
+  /* ---------- Botões: 48px, raio 8px, hover só de fundo, sem amarelo e sem pulo ---------- */
+  .laboratorio-veu .botao { border-radius: 8px; transition: background-color .3s cubic-bezier(.25, 1, .5, 1), border-color .3s cubic-bezier(.25, 1, .5, 1), color .3s cubic-bezier(.25, 1, .5, 1); }
+  .laboratorio-veu .botao--lg { min-height: 48px; padding: 0 22px; font-size: 15px; }
+  .laboratorio-veu .botao:hover, .laboratorio-veu .botao:active { transform: none; }
+  .laboratorio-veu a.botao:hover .botao__icone { transform: none; }
+  .laboratorio-veu .megamenu__list a:hover { transform: none; }
+  .laboratorio-veu :is(.hero, #o-que-fazemos, #pilares-revena, #perguntas, #fale, #academy-tools, #sobre) .botao:hover { background: #E6E5DE; border-color: #E6E5DE; color: var(--grafite); }
+  /* Sobre as dobras claras o botão é grafite. */
+  .laboratorio-veu .palcoplanos .botao:hover { background: var(--grafite); border-color: var(--grafite); color: var(--papel); }
+  .laboratorio-veu #resultados .botao { background: #161616; color: var(--papel); border-color: #161616; }
+  .laboratorio-veu #resultados .botao:hover { background: #2A2A28; border-color: #2A2A28; color: var(--papel); }
+  .laboratorio-veu .header__acao .botao { border-radius: 8px; background: rgb(242 242 238 / .06); color: var(--papel); border-color: rgb(242 242 238 / .22); }
+  .laboratorio-veu .header__acao .botao:hover { background: rgb(242 242 238 / .12); color: var(--papel); border-color: rgb(242 242 238 / .32); }
+  .laboratorio-veu .header--claro .header__acao .botao { background: transparent; color: var(--grafite); border-color: rgb(22 22 22 / .25); }
+  .laboratorio-veu .header--claro .header__acao .botao:hover { background: rgb(22 22 22 / .06); color: var(--grafite); border-color: rgb(22 22 22 / .4); }
+  .laboratorio-veu .header--claro :is(.nav__link:hover, .nav__trigger[aria-expanded="true"]) { color: var(--grafite); text-decoration: underline; text-underline-offset: 6px; }
+  .laboratorio-veu .header--claro .megamenu__list a:hover { color: var(--grafite); border-left-color: var(--grafite); }
+  .laboratorio-veu :focus-visible { outline-color: var(--destaque); }
+  .laboratorio-veu :is(#resultados, .palcoplanos, .form-card, .header--claro) :focus-visible { outline-color: #161616; }
+
+  /* ---------- Cartões de vidro ----------
+     Sem backdrop-filter: o próprio véu perde o foco atrás deles (shader). */
+  .laboratorio-veu .pilar-card {
+    background: rgb(12 12 11 / .74);
+    border: 1px solid rgb(242 242 238 / .10);
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 rgb(242 242 238 / .06);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    transition: background-color .35s ease, border-color .35s ease;
+  }
+  .laboratorio-veu .pilar-card:hover { background: rgb(16 16 15 / .8); border-color: rgb(242 242 238 / .18); }
+  .laboratorio-veu .pilares__cabeca { text-align: left; justify-items: start; }
+
+  /* ---------- Convite: escuro, centralizado, um filete amarelo ---------- */
+  .laboratorio-veu #fale { color: var(--papel); }
+  .laboratorio-veu #fale .chamada { display: block; }
+  .laboratorio-veu #fale .chamada__numero { display: none; }
+  .laboratorio-veu #fale .chamada__miolo { justify-items: center; text-align: center; gap: 24px; margin-inline: auto; }
+  .laboratorio-veu #fale .chamada__miolo .titulo { text-transform: none; max-width: 15ch; font-size: clamp(2.25rem, 4.2vw, 4rem); }
+  .laboratorio-veu #fale .chamada__miolo .titulo::before {
+    content: ""; display: block; width: 40px; height: 1px; margin: 0 auto clamp(24px, 3vw, 36px); background: var(--destaque);
+  }
+  .laboratorio-veu #fale .chamada__miolo p:not(.rotulo) { color: var(--cinza); max-width: 44ch; }
+  .laboratorio-veu #fale .botao { background: var(--papel); color: var(--grafite); border-color: var(--papel); }
+  .laboratorio-veu #fale .botao:hover { background: #E6E5DE; border-color: #E6E5DE; }
+
+  /* ---------- Formulário: o único destaque sólido claro da parte escura ---------- */
+  .laboratorio-veu .form-card {
+    background: #F2F2EE; color: #161616; border: 0; border-radius: 12px; box-shadow: none;
+    padding: clamp(28px, 3vw, 40px);
+  }
+  .laboratorio-veu .form-card .field__label { color: #4A4B46; }
+  .laboratorio-veu .form-card .field :is(input, select) {
+    min-height: 48px; border-radius: 8px; border: 1px solid #D5D5CF; background-color: #FAFAF7; color: #161616;
+  }
+  .laboratorio-veu .form-card .field input::placeholder { color: #6B6B65; }
+  .laboratorio-veu .form-card .field :is(input, select):hover { border-color: #B9B9B1; }
+  .laboratorio-veu .form-card .field :is(input, select):focus { border-color: #161616; box-shadow: none; outline: 2px solid #161616; outline-offset: 2px; }
+  .laboratorio-veu .form-card .field--invalido :is(input, select) { border-color: #161616; }
+  .laboratorio-veu .form-card .field__erro { color: #5C5C57; }
+  .laboratorio-veu .form-card .botao { background: #161616; color: var(--papel); border-color: #161616; }
+  .laboratorio-veu .form-card .botao:hover { background: #2A2A28; border-color: #2A2A28; }
+  .laboratorio-veu .form-card__status { color: #161616; border-color: #D5D5CF; background: #FAFAF7; }
+  .laboratorio-veu .form-card__copiar { color: #161616; }
+  .laboratorio-veu .form-card__aviso { color: #5C5C57; }
+  .laboratorio-veu .form-card__aviso a { color: #161616; }
+</style>

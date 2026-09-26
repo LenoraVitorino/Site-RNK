@@ -66,6 +66,9 @@ import { copyLiteral } from '../../data/versao';
   .laboratorio-fundo #academy-tools,
   .laboratorio-fundo #sobre,
   .laboratorio-fundo #formulario { background: transparent; }
+  /* Na copy, as perguntas entram numa cortina por cima do trilho escuro dos
+     Planos: ali elas precisam do fundo próprio para cobrir o trilho. */
+  .laboratorio-fundo .cortina > #perguntas { background: #000; }
   .laboratorio-fundo .hero__fundo { display: none; }
   .laboratorio-fundo .footer { position: relative; z-index: 1; }
   /* Pais com overflow: hidden recortariam o desfoque nas bordas da dobra. */

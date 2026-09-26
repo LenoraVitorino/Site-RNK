@@ -252,7 +252,7 @@ fosco no próprio shader; e um teste em dev confere os pixels (seção 11).
 
 | # | Dobra | Fundo | O que o véu faz | Como a leitura é garantida |
 |---|---|---|---|---|
-| 1 | Hero | Transparente. Saem `#070909` e `hero-ondas.svg` | A crista nasce na borda de baixo, perto do meio, e sobe em curva larga até sair pela direita, abaixo da metade da altura. Nítido, intensidade máxima | Título e botão ficam no preto, em cima e embaixo à esquerda. H1, lead, botão (`.hero__acoes`) e prova social na máscara |
+| 1 | Hero | Transparente. Saem `#070909` e `hero-ondas.svg` | A crista atravessa o vazio à direita do título, na altura do meio, e sai pela direita em curva larga; o tecido cai abaixo dela sem chegar à prova social. Nítido, intensidade máxima | Título, texto e botão ficam no preto, à esquerda. H1, lead, botão (`.hero__acoes`), prova social e retratos na máscara |
 | 2 | Metodologia | Transparente | Gira e sobe quase na vertical atrás do vídeo, como a fumaça da Ref. A. O vídeo ganha contraluz | O texto, à direita, fica no preto |
 | 3 | Protocolo Revena (pilares) | Transparente | Sai de foco atrás da grade. O vidro precisa de luz variando por trás para ler como vidro | Cartões com fosco no shader e dentro da máscara |
 | 4 | Letreiro | Transparente | Faixa baixa, quase horizontal e desfocada, passando sob as letras que correm | Letras na máscara, com escurecimento mais leve, para o véu ainda passar por trás |
@@ -270,7 +270,7 @@ esquerdo). Ângulo positivo sobe para a direita. Nitidez 1 é nítido.
 
 | Quadro | Dobras | Centro | Ângulo | Intensidade | Nitidez |
 |---|---|---|---|---|---|
-| `hero` | 1 | .70, .80 | 24° | 1,0 | 1,0 |
+| `hero` | 1 | .72, .40 | 24° | 1,0 | 1,0 |
 | `metodologia` | 2 | .30, .52 | 64° | ,60 | ,60 |
 | `pilares` | 3 | .66, .50 | 24° | ,45 | 0 |
 | `letreiro` | 4 | .50, .68 | 4° | ,50 | ,20 |
@@ -290,12 +290,12 @@ valores saem do desktop com intensidade ×0,85 e nitidez −0,15, limitadas a
 0–1, e ângulos entre 50° e 75° nos quadros diagonais e verticais. Os quadros
 horizontais por conceito (`letreiro`, `convite`, `sobre` e `formulario`) ficam
 fora dessa faixa e mantêm o ângulo do desktop. Na hero em 375×812, o botão
-ocupa y .76–.82 e a prova social .85–1.04: a crista fica abaixo do botão, no
-canto de baixo à direita, e `.hero__acoes` entra na máscara.
+ocupa y .76–.82 e a prova social .85–1.04: a crista corre pela borda direita,
+na altura do meio, e `.hero__acoes` entra na máscara.
 
 | Quadro | Centro | Ângulo | Intensidade | Nitidez |
 |---|---|---|---|---|
-| `hero` | .88, .98 | 52° | ,85 | ,85 |
+| `hero` | .96, .56 | 62° | ,85 | ,85 |
 | `metodologia` | .90, .66 | 68° | ,51 | ,45 |
 | `pilares` | .82, .74 | 52° | ,38 | 0 |
 | `letreiro` | .50, .86 | 4° | ,42 | ,05 |
