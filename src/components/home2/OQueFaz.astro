@@ -1,19 +1,5 @@
 ---
-/**
- * Nossa metodologia: um painel de vidro (o molde do painel "Product" da
- * referência PeachWeb "curious") com o reel à direita e, à esquerda, os três
- * verbos da própria descrição em letras grandes, um aceso por vez:
- * Analisamos. Identificamos. Estruturamos. É a composição tipográfica do pin
- * QClay ("Design. Development. Knowledge.") que a Lenora mandou. No pé, os
- * três números com um fio fino em cima.
- *
- * 26/09/2026: a versão com capítulos por scroll "não ficou dinâmica" e a
- * versão com diagrama "ficou uma merda". Aqui o movimento é a luz passando
- * pelos verbos, devagar, e o reel; nada de trava e nada de diagrama.
- * Os verbos são um recorte da descrição e entram só na versão do estúdio;
- * a copy integral mostra o título grande com o mesmo painel.
- * Vale para as duas versões; só os números mudam (numerosProva).
- */
+/** Método editorial, vídeo com controles e prova em três colunas. Textos por versão. */
 import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
@@ -25,12 +11,13 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
   <div class="container">
-    <div class:list={['metodo', 'vidro', 'entra', copyLiteral && 'metodo--copy']}>
+    <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
+        <p class="rotulo"><span>01 /</span> O método</p>
         <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">Nossa metodologia</h2>
         {!copyLiteral && (
-          <p class="metodo__verbos" aria-hidden="true" data-verbos>
-            {verbos.map((v, i) => <span class:list={['metodo__verbo', i === 0 && 'metodo__verbo--acesa']} data-verbo={i}>{v}.</span>)}
+          <p class="metodo__verbos" aria-hidden="true">
+            {verbos.map((v) => <span class="metodo__verbo">{v}.</span>)}
           </p>
         )}
         <p class="metodo__descricao">
@@ -42,6 +29,7 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
       </div>
       <div class="metodo__midia">
         <Telefone />
+        <p class="metodo-editorial__legenda">Por dentro do método <span>01:42</span></p>
       </div>
       <ul class="metodo__numeros" aria-label="Números da Renke">
         {numeros.map((n) => (
@@ -54,20 +42,3 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
     </div>
   </div>
 </section>
-
-<script>
-  // A luz passa pelos verbos, um de cada vez, só com a dobra na tela.
-  const bloco = document.querySelector<HTMLElement>('[data-verbos]');
-  if (bloco && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const verbos = [...bloco.querySelectorAll<HTMLElement>('[data-verbo]')];
-    let atual = 0, relogio = 0;
-    const passo = () => {
-      atual = (atual + 1) % verbos.length;
-      verbos.forEach((v, i) => v.classList.toggle('metodo__verbo--acesa', i === atual));
-    };
-    new IntersectionObserver(([e]) => {
-      clearInterval(relogio);
-      if (e.isIntersecting) relogio = setInterval(passo, 2600);
-    }, { threshold: .3 }).observe(bloco);
-  }
-</script>

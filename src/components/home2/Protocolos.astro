@@ -1,58 +1,50 @@
 ---
-/**
- * Protocolo Revena: os cinco pilares em cartões, no molde da seção
- * "Features" da referência PeachWeb "curious" (Lenora, 26/09/2026): título
- * centrado, três cartões por linha, cada um com uma arte grande em traço
- * fino sobre um clarão granulado (public/arte/pilar-*.svg), o título e o
- * texto embaixo. A segunda linha leva os dois últimos pilares e, no lugar do
- * sexto cartão, a ponte para os planos.
- *
- * Vidro translúcido por cima da cena do fundo. Sem trava e sem estado por
- * scroll: os cartões só entram com a rolagem (.entra), um atrás do outro.
- * Mesma apresentação nas duas versões; os textos vêm dos recortes do
- * estúdio ou da copy integral. No celular, uma coluna.
- */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+/** Índice navegável: conteúdo nativo em details, arte complementar no desktop. */
 import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
-
-const ARTES = ['trafego', 'crm', 'atendimento', 'dados', 'posicionamento'];
-const arte = (nome: string) => {
-  const arquivo = join(process.cwd(), 'public', 'arte', `pilar-${nome}.svg`);
-  return existsSync(arquivo) ? readFileSync(arquivo, 'utf8') : '';
-};
-const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}), arte: arte(ARTES[i]) }));
-const dois = (i: number) => String(i + 1).padStart(2, '0');
-// A ponte para os planos, com frases que já existem em cada versão.
-const ponte = copyLiteral
-  ? { frase: 'A Renke recomenda o protocolo certo para o momento da sua clínica.', rotulo: 'Fale com a equipe', rota: '/contato' }
-  : { frase: 'Qual é o momento da sua clínica?', rotulo: 'Ver os planos', rota: '#protocolo-revena' };
+const artes = ['trafego', 'crm', 'atendimento', 'dados', 'posicionamento'];
+const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 ---
-<section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
+<section class="secao pilares pilares-editoriais" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
-    <header class="pilares__cabeca entra">
-      <p class="rotulo">Para clínicas</p>
+    <header class="secao-indice entra">
+      <p class="rotulo"><span>02 /</span> Para clínicas</p>
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
+      {!copyLiteral && <p>Cinco frentes.<br />Uma operação conectada.</p>}
     </header>
-    <ol class="pilares__cartoes" aria-label="Os cinco pilares do Protocolo Revena">
-      {cartas.map((p, i) => (
-        <li class="pilar-cartao vidro entra" style={`--i:${i}`}>
-          <div class="pilar-cartao__arte" aria-hidden="true">
-            <Fragment set:html={p.arte} />
-          </div>
-          <div class="pilar-cartao__corpo">
-            <span class="pilar-cartao__n num">{dois(i)}</span>
-            <h3 class="pilar-cartao__titulo">{p.titulo}</h3>
-            <p class="pilar-cartao__texto">{p.texto}</p>
-          </div>
-        </li>
-      ))}
-      <li class="pilar-cartao pilar-cartao--ponte entra" style={`--i:${cartas.length}`} aria-label="Próximo passo">
-        <p class="pilar-cartao__frase">{ponte.frase}</p>
-        <a class="link-arrow" href={ponte.rota}>{ponte.rotulo}</a>
-      </li>
-    </ol>
+    <div class="pilares-editoriais__grade">
+      <div class="pilares-editoriais__lista">
+        {cartas.map((p, i) => (
+          <details class="pilar-linha" name="pilares-revena" open={i === 0} data-pilar={i}>
+            <summary><span class="pilar-linha__n">0{i + 1}</span><h3>{p.titulo}</h3><span class="pilar-linha__mais" aria-hidden="true">+</span></summary>
+            <div class="pilar-linha__conteudo"><p>{p.texto}</p></div>
+          </details>
+        ))}
+      </div>
+      <div class="pilares-editoriais__visual" aria-hidden="true">
+        <span class="pilares-editoriais__etiqueta">REVENA / SISTEMA INTEGRADO</span>
+        {artes.map((arte, i) => <img src={`/arte/pilar-${arte}.svg`} alt="" width="600" height="450" loading="lazy" class:list={['pilares-editoriais__arte', i === 0 && 'ativa']} data-pilar-arte={i} />)}
+        <div class="pilares-editoriais__legenda"><span data-pilar-numero>01 / 05</span><span>Marketing · Comercial · Dados</span></div>
+      </div>
+    </div>
+    <div class="pilares-editoriais__ponte">
+      <p>{copyLiteral ? 'A Renke recomenda o protocolo certo para o momento da sua clínica.' : 'Qual é o momento da sua clínica?'}</p>
+      <a class="link-arrow" href={copyLiteral ? '#planos' : '#protocolo-revena'}>Ver os planos</a>
+    </div>
   </div>
 </section>
+<script>
+  document.querySelectorAll<HTMLElement>('.pilares-editoriais').forEach((raiz) => {
+    const itens = [...raiz.querySelectorAll<HTMLDetailsElement>('[data-pilar]')];
+    const artes = [...raiz.querySelectorAll<HTMLElement>('[data-pilar-arte]')];
+    const numero = raiz.querySelector('[data-pilar-numero]');
+    itens.forEach((item, i) => item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      // Também mantém a exclusividade em navegadores sem suporte a details[name].
+      itens.forEach((outro) => { if (outro !== item) outro.open = false; });
+      artes.forEach((arte, j) => arte.classList.toggle('ativa', i === j));
+      if (numero) numero.textContent = `0${i + 1} / 05`;
+    }));
+  });
+</script>

@@ -28,13 +28,18 @@ const lead = copyLiteral ? hero.lead :
           <span class="hero__revops">RevOps.</span>
         </span>
       </h1>
-      <p class="hero__lead">{lead}</p>
     </div>
     <div class="hero__base">
       <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
+      <p class="hero__lead">{lead}</p>
       {/* A prova social só aparece com os retratos e o total reais (Lenora, 26/09: esconder o "+ de 00"). */}
       {totalDoutores !== null && <ConfiancaHero />}
     </div>
+    <nav class="hero__indice" aria-label="Explore a Renke">
+      <a href="#o-que-fazemos"><span>01</span> O método <span aria-hidden="true">↘</span></a>
+      <a href={copyLiteral ? '#planos' : '#protocolo-revena'}><span>02</span> Para sua clínica <span aria-hidden="true">↘</span></a>
+      <a href="#resultados"><span>03</span> Resultados <span aria-hidden="true">↘</span></a>
+    </nav>
   </div>
 
 </section>
