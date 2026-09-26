@@ -1,0 +1,39 @@
+/* Direção global: superfícies sem contornos decorativos (26/09/2026).
+   Bordas transparentes preservam as dimensões e o grid. A prioridade é
+   intencional para abranger variantes e hover, sem apagar ícones ou foco. */
+body :is(
+  .header, .header__inner, .nav, .nav-toggle, .nav__item,
+  .megamenu__inner, .megamenu__destaque, .megamenu__list a, .nav--pendente,
+  .botao, .vidro, .hero__selo, .hero-prova__retrato img,
+  .hero-prova__retrato--vazio, .hero-prova__tooltip,
+  .section, .secao, .faixa, .faixa__numeros > div, .esteira,
+  .metodo__numeros, .metodo__numero, .feature-card,
+  .pilares-editoriais__ponte, .palcoplanos__ancora, .plano-palco,
+  .planos__abre, .plano, .planos__fecha, .carta, .cortina > *,
+  .extrato__layout, .extrato__linha, .operacao__cartao, .resultado-ficha,
+  .ecossistema__box, .produto, .produto__arte, .produto__selo,
+  .produto__lista, .produto__lista li,
+  .sobre__texto--centro, .sobre-janela__nome, .revena-pilar,
+  .card, .card__icon, .card__media, .logos__item, .testimonial__photo,
+  .reel__moldura, .reel__icone, .reel__som, .tel__botao,
+  .reconhece__item, .reconhece--numerada, .resolve__item,
+  .etapas__fechamento, .antes-depois th, .antes-depois td,
+  .pilares-grade__item, .faq__item, .protocol blockquote,
+  .form-card, .form-card__status, .field input, .field select, .field textarea,
+  .footer, .footer__bottom
+) {
+  border-color: transparent !important;
+}
+
+/* Alguns contornos eram desenhados como sombras internas. */
+body :is(.botao, .botao__vidro, .hero-prova__retrato--vazio) {
+  box-shadow: none !important;
+}
+body .vidro--realce::before { display: none; }
+body .botao--brilho { background: var(--brilho-fundo); }
+
+/* A navegação por teclado continua perceptível, inclusive nos campos. */
+.field :is(input, select, textarea):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
