@@ -222,3 +222,13 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 359.98px) {
   .metodo-editorial .metodo__valor { font-size: 22px; }
 }
+
+/* Contato: texto e formulário próximos, centralizados na mesma composição. */
+#formulario .form-block { grid-template-columns: minmax(0, 400px) minmax(0, 460px); justify-content: center; gap: clamp(32px, 4vw, 56px); }
+#formulario .form-block__text { gap: 24px; }
+#formulario .form-block__text .titulo { max-width: none; }
+#formulario .form-card { justify-self: stretch; }
+@media (max-width: 899.98px) {
+  #formulario .form-block { grid-template-columns: minmax(0, 560px); gap: 32px; }
+  #formulario .form-card { max-width: none; }
+}

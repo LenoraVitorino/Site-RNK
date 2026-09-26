@@ -41,6 +41,8 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 - Mosaico dos números preservado; o card de 19% ganhou uma ilustração de agenda com confirmação, relacionada ao agendamento.
 - Academy/Tools fica dentro de uma única caixa escura sólida, envolvendo o título e os dois cards, com borda discreta e espaçamento responsivo. Conteúdo e links permanecem visíveis. Os cinco planos e sua ordem foram preservados.
 
+- Contato com colunas centralizadas de até 400 e 460 px, intervalo máximo de 56 px; no celular, texto e formulário em sequência com 32 px de separação.
+
 ## Limites de conteúdo
 
 Nenhum depoimento, retrato de cliente ou indicador novo foi inventado. As divergências históricas de números anotadas em `src/data/home.ts` continuam sendo pendências de conteúdo da base. As páginas ainda inexistentes de Tools permanecem sem links falsos. As imagens do Pinterest não foram copiadas para o site.
