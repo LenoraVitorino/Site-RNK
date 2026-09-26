@@ -187,7 +187,6 @@ section[id] { scroll-margin-top: 110px; }
 .metodo__descricao > span { display: block; }
 .metodo-editorial .metodo__midia { grid-area: midia; width: 100%; max-width: none; align-self: center; justify-self: stretch; }
 .metodo-editorial .tel__tela { border-radius: 8px; }
-.metodo-editorial__legenda { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 11px; color: #a1a19f; }
 .metodo-editorial .metodo__numeros {
   grid-area: auto; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px; margin: 0; padding-top: 22px; border-top: 1px solid var(--ref-fio);
