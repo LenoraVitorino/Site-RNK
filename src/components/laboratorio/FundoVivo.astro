@@ -7,10 +7,11 @@
  * Especificação: docs/04-design/fundo-vivo-briefing.md e
  * docs/04-design/referencias-alto-padrao.md.
  */
-interface Props { fundo?: 'veu' | 'particulas' | 'superficie' }
+interface Props { fundo?: 'prata' | 'veu' | 'particulas' | 'superficie' }
 const { fundo } = Astro.props;
 ---
 <canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} aria-hidden="true"></canvas>
+{fundo === 'prata' && <div class="fundo-vivo__grao" aria-hidden="true"></div>}
 
 <script>
   const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
@@ -20,11 +21,12 @@ const { fundo } = Astro.props;
   // Sem a prop, ?fundo= só escolhe entre os dois caminhos da página de fundos.
   const pedido = new URLSearchParams(location.search).get('fundo');
   const fundo = canvas?.dataset.fundo || (pedido === 'superficie' ? 'superficie' : 'particulas');
-  // O véu não nasce com movimento reduzido: a página fica no preto.
-  const semVeu = fundo === 'veu' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // O véu e a prata não nascem com movimento reduzido: a página fica no preto.
+  const semVeu = (fundo === 'veu' || fundo === 'prata') && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (canvas && temWebGL && !semVeu) {
     const carregar = () =>
-      fundo === 'veu' ? import('./fundo-veu')
+      fundo === 'prata' ? import('./fundo-prata')
+      : fundo === 'veu' ? import('./fundo-veu')
       : fundo === 'superficie' ? import('./fundo-superficie')
       : import('./fundo-particulas');
     const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas));
@@ -37,5 +39,12 @@ const { fundo } = Astro.props;
   .fundo-vivo {
     position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh;
     display: block; pointer-events: none; opacity: 0;
+  }
+  /* Grão e vinheta por cima do anel, como na cena de referência (lá, pós-processamento). */
+  .fundo-vivo__grao {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / .55) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.09'/%3E%3C/svg%3E");
   }
 </style>

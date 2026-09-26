@@ -217,6 +217,8 @@ body.notes-hidden .question--overflow { border: 1px solid #3f3f46; }
 .nav__link:hover .nav__caret { opacity: 1; }
 
 .megamenu { padding-bottom: .5rem; }
+/* O cartão de destaque e os ícones dos planos são do menu da home (home2.css). */
+.megamenu__destaque, .megamenu__plano { display: none; }
 .megamenu__title {
   font-size: var(--fs-xs); letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: var(--muted); font-weight: var(--peso-titulo); margin: var(--s-3) 0 var(--s-2);

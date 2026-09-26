@@ -1,99 +1,118 @@
 ---
-/** História e fotos da sede, compartilhadas pelas duas versões. */
+/**
+ * Conheça a Renke: texto e fotos da sede, compartilhados pelas duas versões.
+ *
+ * Refeito em 26/09/2026 (Lenora: a esteira de fotos ficou institucional
+ * demais). Referências da curadoria (docs/04-design/curadoria-pinterest.md):
+ * Exo Ape (foto que troca por cortina vertical), Nenya e Harmony Haven (foto
+ * numa moldura ao lado do texto). No desktop a dobra fica presa: a foto nasce
+ * na moldura à direita, cresce até ocupar a tela por trás do texto e as
+ * outras fotos entram por cima, de baixo para cima. No celular e com
+ * movimento reduzido, texto e fotos seguem em fluxo, as fotos numa faixa
+ * que rola de lado.
+ */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+import { copyLiteral } from '../../data/versao';
 import operacao from '../../assets/sede/operacao.jpg';
 import conexao from '../../assets/sede/conexao.jpg';
 import reuniao from '../../assets/sede/reuniao.jpg';
 
-// Os números do briefing saíram daqui em 21/09 (Lenora): ficam só em
-// "Nossa metodologia". A esteira tem só as fotos da sede.
+// "Conheça a história" virou "Conheça a Renke" na versão do estúdio (Lenora, 26/09).
+const titulo = copyLiteral ? ['Conheça a história', 'da Renke'] : ['Conheça', 'a Renke'];
+
+const fotos = [
+  { src: operacao, alt: 'Escritório da Renke com estações de trabalho, equipe e sala envidraçada', legenda: 'Operação' },
+  { src: conexao, alt: 'Vista da sala de reunião para a operação da Renke', legenda: 'Sala de reunião' },
+  { src: reuniao, alt: 'Sala de reuniões da Renke com mesa, quadro e tela', legenda: 'Onde o método acontece' },
+];
 ---
-<section class="secao sobre-editorial" id="sobre" aria-labelledby="sobre-titulo">
-  <!-- Composição da referência Marvee (texto à esquerda, fotos à direita) no
-       molde da esteira do metodobr.com: blocos de largura igual (largos e
-       estreitos alternados), alturas iguais, uma foto inteira em cada.
-       Tudo, texto incluído, é um carrossel que desliza para a esquerda e
-       revela as fotos enquanto a dobra fica presa (Lenora, 20/09). -->
-  <div class="sobre-editorial__percurso">
-    <div class="sobre-editorial__palco">
-      <div class="sobre-editorial__janela" tabindex="0" role="region" aria-labelledby="sobre-titulo">
-        <div class="sobre-editorial__trilho">
-          <div class="sobre-editorial__texto">
-            <div class="sobre-editorial__cabeca">
-              <h2 class="sobre__declaracao" id="sobre-titulo">Conheça a história<br />da Renke</h2>
-            </div>
-            <div class="sobre-editorial__pe">
-              <p class="sobre-editorial__descricao">
-                Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
-                oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
-              </p>
-              {existe('/sobre') && <div><Botao href="/sobre">Ver mais sobre a Renke</Botao></div>}
-            </div>
-            <div class="sobre-editorial__progresso" aria-hidden="true"><span></span></div>
-          </div>
-          <div class="bloco bloco--largo">
-            <figure class="bloco__foto"><Image src={operacao} alt="Escritório da Renke com estações de trabalho, equipe e sala envidraçada" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco">
-            <figure class="bloco__foto"><Image src={conexao} alt="Vista da sala de reunião para a operação da Renke" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco bloco--largo">
-            <figure class="bloco__foto"><Image src={reuniao} alt="Sala de reuniões da Renke com mesa, quadro e tela" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco">
-            <figure class="bloco__foto bloco__foto--alto"><Image src={operacao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco bloco--largo">
-            <figure class="bloco__foto"><Image src={conexao} alt="" format="webp" widths={[600, 1200, 1800]} sizes="(max-width: 899px) 78vw, 580px" loading="lazy" /></figure>
-          </div>
-          <div class="bloco">
-            <figure class="bloco__foto"><Image src={reuniao} alt="" format="webp" widths={[400, 800, 1200]} sizes="(max-width: 899px) 70vw, 400px" loading="lazy" /></figure>
-          </div>
-        </div>
+<section class="secao sobre-janela" id="sobre" aria-labelledby="sobre-titulo" data-sobre>
+  <div class="sobre-janela__palco">
+    <div class="sobre-janela__fotos" data-sobre-fotos>
+      {fotos.map((f, i) => (
+        <figure class="sobre-janela__foto" data-sobre-foto>
+          <Image src={f.src} alt={f.alt} format="webp" widths={[640, 1280, 1920]} sizes="(max-width: 899px) 80vw, 100vw" loading="lazy" />
+        </figure>
+      ))}
+      <div class="sobre-janela__veu" aria-hidden="true"></div>
+      <p class="sobre-janela__legenda" aria-hidden="true">
+        <span class="num" data-sobre-n>01</span><span class="sobre-janela__total">/ 0{fotos.length}</span>
+        <span class="sobre-janela__nome" data-sobre-nome>{fotos[0].legenda}</span>
+      </p>
+    </div>
+    <div class="container sobre-janela__grade">
+      <div class="sobre-janela__texto">
+        <h2 class="sobre__declaracao" id="sobre-titulo">{titulo[0]}<br />{titulo[1]}</h2>
+        <p class="sobre-janela__descricao">
+          Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+          oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
+        </p>
+        {existe('/sobre') && <div><Botao href="/sobre">Ver mais sobre a Renke</Botao></div>}
       </div>
+      <div class="sobre-janela__molde" data-sobre-molde aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
-<script>
-  const section = document.querySelector<HTMLElement>('.sobre-editorial__percurso');
-  if (section) {
-    const stage = section.querySelector<HTMLElement>('.sobre-editorial__palco')!;
-    const viewport = section.querySelector<HTMLElement>('.sobre-editorial__janela')!;
-    const track = section.querySelector<HTMLElement>('.sobre-editorial__trilho')!;
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    let distance = 0;
-    let pinned = false;
-    let frame = 0;
-    const pace = .85;
-    const update = () => {
-      frame = 0;
-      if (!pinned) return;
-      const progress = Math.max(0, Math.min(1, -section.getBoundingClientRect().top / (distance * pace || 1)));
-      track.style.transform = `translate3d(${-distance * progress}px, 0, 0)`;
-      section.style.setProperty('--sobre-progresso', String(progress));
+<script define:vars={{ legendas: fotos.map((f) => f.legenda) }}>
+  const secao = document.querySelector('[data-sobre]');
+  if (secao) {
+    const palco = secao.querySelector('.sobre-janela__palco');
+    const janela = secao.querySelector('[data-sobre-fotos]');
+    const molde = secao.querySelector('[data-sobre-molde]');
+    const fotos = [...secao.querySelectorAll('[data-sobre-foto]')];
+    const numero = secao.querySelector('[data-sobre-n]');
+    const nome = secao.querySelector('[data-sobre-nome]');
+    const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+    const limita = (x) => Math.max(0, Math.min(1, x));
+    const suave = (x) => x * x * (3 - 2 * x);
+    let preso = false, quadro = 0, curso = 0, m = { t: 0, r: 0, b: 0, l: 0 }, atual = -1;
+
+    const pintar = () => {
+      quadro = 0;
+      if (!preso) return;
+      const p = limita(-secao.getBoundingClientRect().top / (curso || 1));
+      // 0 a .3: a moldura cresce até a tela inteira. .3 a 1: as fotos se sucedem.
+      const a = suave(limita(p / .3));
+      const vw = innerWidth, vh = innerHeight;
+      const t = m.t * (1 - a), r = (vw - m.r) * (1 - a), b = (vh - m.b) * (1 - a), l = m.l * (1 - a);
+      janela.style.clipPath = `inset(${t}px ${r}px ${b}px ${l}px round ${16 * (1 - a)}px)`;
+      secao.style.setProperty('--sobre-a', a.toFixed(4));
+      const passo = limita((p - .3) / .7) * (fotos.length - 1);
+      fotos.forEach((f, i) => {
+        if (i === 0) return;
+        const e = suave(limita(passo - (i - 1)));
+        f.style.clipPath = `inset(${(1 - e) * 100}% 0 0 0)`;
+        f.firstElementChild.style.transform = `scale(${1.08 - .08 * e})`;
+      });
+      const i = Math.min(fotos.length - 1, Math.round(passo));
+      if (i !== atual) {
+        atual = i;
+        numero.textContent = String(i + 1).padStart(2, '0');
+        nome.textContent = legendas[i];
+      }
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    const measure = () => {
-      distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      pinned = !reduced.matches && window.innerWidth >= 900 && window.innerHeight >= 600 && distance > 0;
-      section.classList.toggle('sobre-editorial__percurso--fixo', pinned);
-      section.style.height = pinned ? `${stage.offsetHeight + distance * pace}px` : '';
-      viewport.tabIndex = pinned ? -1 : 0;
-      if (pinned) viewport.scrollLeft = 0;
-      else { track.style.transform = ''; section.style.removeProperty('--sobre-progresso'); }
-      update();
+    const agendar = () => { if (!quadro) quadro = requestAnimationFrame(pintar); };
+    const medir = () => {
+      preso = !reduzido.matches && innerWidth >= 900 && innerHeight >= 600;
+      secao.classList.toggle('sobre-janela--presa', preso);
+      curso = preso ? innerHeight * 2.2 : 0;
+      secao.style.height = preso ? `${innerHeight + curso}px` : '';
+      if (!preso) {
+        janela.style.clipPath = '';
+        fotos.forEach((f) => { f.style.clipPath = ''; f.firstElementChild.style.transform = ''; });
+        return;
+      }
+      const r = molde.getBoundingClientRect(), p = palco.getBoundingClientRect();
+      m = { t: r.top - p.top, r: r.right - p.left, b: r.bottom - p.top, l: r.left - p.left };
+      pintar();
     };
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', measure, { passive: true });
-    reduced.addEventListener('change', measure);
-    // Recalculate when fonts or responsive geometry change, never on image loading.
-    const observer = new ResizeObserver(measure);
-    observer.observe(viewport);
-    observer.observe(track);
-    document.fonts.ready.then(measure);
-    measure();
+    addEventListener('scroll', agendar, { passive: true });
+    addEventListener('resize', medir, { passive: true });
+    reduzido.addEventListener('change', medir);
+    document.fonts?.ready.then(medir);
+    medir();
   }
 </script>

@@ -1,11 +1,10 @@
 ---
 /**
- * Laboratório: a home com o véu de luz por trás (25/09/2026). Página de teste,
- * fora dos buscadores e do menu. As dobras e os textos são os da home; mudam só
- * o fundo e o acabamento, com estilos presos a body.laboratorio-veu, seguindo
- * a direção de docs/04-design/referencias-alto-padrao.md (seções 4 a 7):
- * alto padrão, menos é mais, amarelo só como detalhe. A home não muda até a
- * Lenora aprovar.
+ * Laboratório: a home com o anel de fios prateados por trás (26/09/2026).
+ * Página de teste, fora dos buscadores e do menu. Mesmas dobras e o mesmo
+ * acabamento de /laboratorio/veu (src/styles/laboratorio-alto-padrao.css);
+ * muda só o fundo, a partir da cena da PeachWeb que a Lenora escolheu
+ * (docs/04-design/curadoria-pinterest.md, seção 1).
  */
 import Base2 from '../../layouts/Base2.astro';
 import { seo } from '../../data/home';
@@ -26,8 +25,8 @@ import Formulario from '../../components/home2/Formulario.astro';
 import Sobre from '../../components/home2/Sobre.astro';
 import { copyLiteral } from '../../data/versao';
 ---
-<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu">
-  <FundoVivo slot="fundo" fundo="veu" />
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu laboratorio-prata">
+  <FundoVivo slot="fundo" fundo="prata" />
   <Hero />
   <OQueFaz />
   <Protocolos />

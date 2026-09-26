@@ -21,7 +21,12 @@ export type NavLink = {
   rota: string;
   sufixo?: string;
   nota?: string;
+  /** Ícone ao lado do nome no menu do desktop (nome do plano em /icones/plano-<id>-<tom>.svg). */
+  plano?: string;
 };
+
+/** Cartão de destaque à direita do painel do menu (desktop). Textos já usados no site. */
+export type NavDestaque = { titulo: string; texto: string; rota: string; rotulo: string };
 
 export type NavGrupo = {
   titulo: string;
@@ -30,7 +35,7 @@ export type NavGrupo = {
 
 export type NavItem =
   | { rotulo: string; rota: string; atual?: boolean }
-  | { rotulo: string; id: string; grupos: NavGrupo[] };
+  | { rotulo: string; id: string; grupos: NavGrupo[]; destaque?: NavDestaque };
 
 export const menu: NavItem[] = [
   {
@@ -40,11 +45,11 @@ export const menu: NavItem[] = [
       {
         titulo: 'Revena',
         itens: [
-          { rotulo: 'Revena Start', rota: '/studio/revena-start' },
-          { rotulo: 'Revena Full', rota: '/studio/revena-full' },
-          { rotulo: 'Revena Core', rota: '/studio/revena-core' },
-          { rotulo: 'Revena Scale', rota: '/studio/revena-scale' },
-          { rotulo: 'Revena Run', rota: '/studio/revena-run' },
+          { rotulo: 'Revena Start', rota: '/studio/revena-start', plano: 'start' },
+          { rotulo: 'Revena Full', rota: '/studio/revena-full', plano: 'full' },
+          { rotulo: 'Revena Core', rota: '/studio/revena-core', plano: 'core' },
+          { rotulo: 'Revena Scale', rota: '/studio/revena-scale', plano: 'scale' },
+          { rotulo: 'Revena Run', rota: '/studio/revena-run', plano: 'run' },
         ],
       },
       {
@@ -58,6 +63,12 @@ export const menu: NavItem[] = [
         ],
       },
     ],
+    destaque: {
+      titulo: 'Protocolo Revena',
+      texto: 'Do anúncio ao retorno do paciente, tudo conectado, tudo rastreado.',
+      rota: '/contato',
+      rotulo: 'Fale com a gente',
+    },
   },
 
   {
@@ -76,6 +87,12 @@ export const menu: NavItem[] = [
         ],
       },
     ],
+    destaque: {
+      titulo: 'Renke Academy',
+      texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
+      rota: '/academy',
+      rotulo: 'Conhecer',
+    },
   },
 
   {
@@ -95,6 +112,12 @@ export const menu: NavItem[] = [
         ],
       },
     ],
+    destaque: {
+      titulo: 'Renke Tools',
+      texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
+      rota: '/tools',
+      rotulo: 'Conhecer',
+    },
   },
 
   {
@@ -116,6 +139,12 @@ export const menu: NavItem[] = [
         ],
       },
     ],
+    destaque: {
+      titulo: 'Conheça a Renke',
+      texto: 'Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam oportunidades por falta de conexão entre marketing, comercial e operação.',
+      rota: '/#sobre',
+      rotulo: 'Ler mais',
+    },
   },
 ];
 

@@ -91,7 +91,7 @@ export const TEXTOS = [
   '#pilares-revena .titulo', '.letreiro__trilho',
   '.ancora', '.pergunta',
   '#academy-tools .titulo',
-  '.sobre__declaracao', '.sobre-editorial__descricao',
+  '.sobre__declaracao', '.sobre-janela__descricao',
   '#formulario .titulo', '.form-block__text p',
 ].join(', ');
 

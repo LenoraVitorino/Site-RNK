@@ -15,7 +15,8 @@
  * feito aqui e não com backdrop-filter).
  */
 import { Mesh, PlaneGeometry, ShaderMaterial } from 'three';
-import { iniciar as iniciarMotor, maisSuave, TEXTOS, type Contexto, type Elemento, type Quadro } from './fundo-motor';
+import { iniciar as iniciarMotor, maisSuave, type Contexto, type Elemento, type Quadro } from './fundo-motor';
+import { CAIXAS, CARTOES, ROTEIRO, TEXTOS_DOBRAS, TRANSPARENTES } from './fundo-dobras';
 
 /**
  * Quadros por dobra. cx, cy: centro da crista em frações da tela (0,0 no
@@ -43,6 +44,7 @@ const QUADROS = {
     // Um traço horizontal sob o título centralizado, como linha de assinatura.
     convite:     q(.50, .64, -6, .65, .9, .06),
     // Só um brilho de chão, desfocado e fraco; quem manda são as fotos.
+    academy:     q(.42, 1.02, 6, .25, 0, .1),
     sobre:       q(.42, 1.02, 6, .25, 0, .1),
     // Horizonte baixo e calmo fechando a página.
     formulario:  q(.40, .88, 8, .55, .7, .08),
@@ -54,36 +56,11 @@ const QUADROS = {
     letreiro:    q(.50, .86, 4, .42, .05, .12, .55),
     perguntas:   q(1.06, .45, 75, .25, .35, .1),
     convite:     q(.50, .66, -6, .55, .75, .06),
+    academy:     q(.42, 1.02, 6, .21, 0, .1),
     sobre:       q(.42, 1.02, 6, .21, 0, .1),
     formulario:  q(.40, .92, 8, .47, .55, .08),
   },
 };
-
-const ROTEIRO: [string, string][] = [
-  ['.hero', 'hero'],
-  ['#o-que-fazemos', 'metodologia'],
-  ['#pilares-revena, #protocolo-revena.pilares', 'pilares'],
-  ['.letreiro', 'letreiro'],
-  ['[data-palcoplanos], [data-planos]', 'perguntas'],   // dobra clara: o véu troca de quadro coberto
-  ['#perguntas', 'perguntas'],
-  ['#resultados', 'convite'],
-  ['#fale', 'convite'],
-  ['#academy-tools', 'sobre'],
-  ['#sobre', 'sobre'],
-  ['#formulario', 'formulario'],
-];
-
-const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo-revena.pilares, .letreiro, #perguntas, #fale, #academy-tools, #sobre, #formulario';
-
-const TEXTOS_VEU = [
-  TEXTOS, '#protocolo-revena.pilares .titulo', '#fale .titulo', '#fale p',
-  '#academy-tools .cartao h2', '#academy-tools .cartao > p',
-].join(', ');
-
-const CARTOES = '.pilar-card, #academy-tools .cartao__arte';
-
-// Blocos sem texto que também pedem o fundo escuro atrás (os retratos da prova social).
-const CAIXAS = '.hero-prova__retratos';
 
 const VERTICE = /* glsl */ `
 void main() { gl_Position = vec4(position.xy, 0., 1.); }
@@ -178,7 +155,7 @@ function criar(ctx: Contexto): Elemento {
   return {
     quadros: QUADROS,
     config: {
-      roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_VEU, cartoes: CARTOES, caixas: CAIXAS,
+      roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
       tau: .35, curva: maisSuave, saltoMax: 1, pena: 150,
       // Na hero, o véu só aparece depois da troca do título (ou no primeiro scroll).
       esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 4300,

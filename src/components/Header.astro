@@ -36,19 +36,35 @@ import Botao from './ui/Botao.astro';
               <div class="megamenu" id={item.id} hidden>
                 <div class="megamenu__inner">
                   {item.grupos.map((grupo) => (
-                    <>
+                    <div class="megamenu__coluna">
                       <p class="megamenu__title">{grupo.titulo}</p>
                       <ul class="megamenu__list">
                         {grupo.itens.map((sub) => (
                           <li>
                             {existe(sub.rota)
-                              ? <a href={sub.rota}>{sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}</a>
+                              ? <a href={sub.rota}>
+                                  {sub.plano && <span class="megamenu__plano" aria-hidden="true"><img class="megamenu__plano--escuro" src={`/icones/plano-${sub.plano}-dark.svg`} alt="" width="24" height="24" loading="lazy" /><img class="megamenu__plano--claro" src={`/icones/plano-${sub.plano}-light.svg`} alt="" width="24" height="24" loading="lazy" /></span>}
+                                  {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
+                                </a>
                               : <span class="nav--pendente">{sub.rotulo} <em>em breve</em></span>}
                           </li>
                         ))}
                       </ul>
-                    </>
+                    </div>
                   ))}
+                  {item.destaque && (
+                    existe(item.destaque.rota.split('#')[0] || '/')
+                      ? <a class="megamenu__destaque" href={item.destaque.rota}>
+                          <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
+                          <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
+                          <span class="megamenu__destaque-acao">{item.destaque.rotulo} <span aria-hidden="true">↗</span></span>
+                        </a>
+                      : <div class="megamenu__destaque">
+                          <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
+                          <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
+                          <span class="megamenu__destaque-acao">Em breve</span>
+                        </div>
+                  )}
                 </div>
               </div>
             </li>
@@ -66,6 +82,8 @@ import Botao from './ui/Botao.astro';
 </header>
 
 <div class="nav-overlay" id="navOverlay" hidden></div>
+<!-- Desktop: escurece a página enquanto o painel do menu está aberto. -->
+<div class="menu-veu" aria-hidden="true"></div>
 
 <script>
   /* Desktop: mega-menu no hover e no foco. Mobile: drawer com acordeão. */
@@ -80,11 +98,25 @@ import Botao from './ui/Botao.astro';
   const panelOf = (t: HTMLElement) =>
     document.getElementById(t.getAttribute('aria-controls') || '');
 
+  /* Desktop (Lenora, 26/09, referência ClickUp): o cabeçalho e o painel são
+     uma peça só. Ao abrir, a caixa cresce para baixo até a altura do painel
+     ativo; entre um item e outro ela muda de altura e o conteúdo troca com
+     fade. Fecha ao sair da caixa inteira, com uma folga curta. */
+  const caixa = header.querySelector<HTMLElement>('.header__inner')!;
+  let fechar = 0;
+  const alturaPainel = (panel: HTMLElement) =>
+    (panel.querySelector<HTMLElement>('.megamenu__inner')?.offsetHeight ?? 0);
+
   function openSubmenu(t: HTMLElement) {
     const panel = panelOf(t);
     if (!panel) return;
     t.setAttribute('aria-expanded', 'true');
     panel.hidden = false;
+    if (DESKTOP.matches) {
+      clearTimeout(fechar);
+      header.style.setProperty('--painel-h', `${alturaPainel(panel)}px`);
+      header.classList.add('header--menu');
+    }
   }
 
   function closeSubmenu(t: HTMLElement) {
@@ -92,6 +124,7 @@ import Botao from './ui/Botao.astro';
     if (!panel) return;
     t.setAttribute('aria-expanded', 'false');
     panel.hidden = true;
+    if (!triggers.some((x) => x.getAttribute('aria-expanded') === 'true')) header.classList.remove('header--menu');
   }
 
   const closeAllSubmenus = (except?: HTMLElement) =>
@@ -105,7 +138,6 @@ import Botao from './ui/Botao.astro';
 
       // Desktop: o hover já abre o painel, então o clique nunca fecha — se
       // alternasse, clicar no item sob o cursor fecharia o menu recém-aberto.
-      // Fechar fica por conta de mouseleave, Escape, clique fora ou outro trigger.
       if (DESKTOP.matches) {
         closeAllSubmenus(trigger);
         openSubmenu(trigger);
@@ -117,21 +149,27 @@ import Botao from './ui/Botao.astro';
         : openSubmenu(trigger);
     });
 
-    item.addEventListener('mouseenter', () => {
+    trigger.addEventListener('mouseenter', () => {
       if (!DESKTOP.matches) return;
       closeAllSubmenus(trigger);
       openSubmenu(trigger);
     });
 
-    item.addEventListener('mouseleave', () => {
-      if (DESKTOP.matches) closeSubmenu(trigger);
-    });
-
     item.addEventListener('focusout', (e) => {
       if (!DESKTOP.matches) return;
-      if (!item.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
+      if (!caixa.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
     });
   });
+
+  // Passar o mouse pelos itens sem painel também fecha o que estiver aberto.
+  document.querySelectorAll<HTMLElement>('.nav__item:not(.nav__item--has-menu)').forEach((item) =>
+    item.addEventListener('mouseenter', () => { if (DESKTOP.matches) closeAllSubmenus(); }));
+  caixa.addEventListener('mouseleave', () => {
+    if (!DESKTOP.matches) return;
+    clearTimeout(fechar);
+    fechar = window.setTimeout(() => closeAllSubmenus(), 160);
+  });
+  caixa.addEventListener('mouseenter', () => clearTimeout(fechar));
 
   function openNav() {
     navToggle.setAttribute('aria-expanded', 'true');
@@ -169,7 +207,7 @@ import Botao from './ui/Botao.astro';
 
   document.addEventListener('click', (e) => {
     if (!DESKTOP.matches) return;
-    if ((e.target as HTMLElement).closest('.nav__item--has-menu')) return;
+    if (caixa.contains(e.target as Node)) return;
     closeAllSubmenus();
   });
 

@@ -1,33 +1,44 @@
 ---
 /**
- * Frase-âncora + perguntas, no bloco escuro que dá ritmo à página.
- * As quatro primeiras ocupam o grid 2×2 que o layout pede; as outras três
- * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
- * esconder copy não resolve decisão.
- * Na versão copy, a .cortina em volta faz esta dobra entrar pela direita,
- * por cima do trilho dos planos, no fim do curso dele: primeiro só a
- * frase-âncora; no scroll seguinte ela sobe e as perguntas aparecem
- * (--fim e --sobe vêm do script de Planos.astro). Na versão do estúdio o
- * trilho não existe e a dobra segue em fluxo, com o revelar .entra.
+ * "Uma operação estruturada muda a forma como sua clínica cresce": os sete
+ * ganhos da copy.
+ *
+ * Refeito em 26/09/2026 (Lenora: a grade 2×2 + 3 estava carregada e parecida
+ * com as outras dobras). Referências da curadoria
+ * (docs/04-design/curadoria-pinterest.md): pin 124 (foto da empresa com os
+ * itens em cartões por cima), pin 69 (índice com barra de progresso) e pin
+ * 176 (cartão flutuando sobre a foto). Uma foto da operação ocupa o palco. À
+ * esquerda, um índice de vidro com os sete itens; o ativo tem uma barra fina
+ * que anda e passa para o próximo. À direita, embaixo, o cartão claro mostra
+ * o texto do item ativo. Só um texto por vez: menos peso na tela.
+ *
+ * Os itens são abas (role="tab"); sem JS, todos os textos ficam visíveis. No
+ * celular o palco vira foto em cima e acordeão embaixo.
+ *
+ * Na versão copy, a .cortina em volta faz esta dobra entrar pela direita, por
+ * cima do trilho dos planos (--fim e --sobe vêm do script de Planos.astro);
+ * as classes .ancora e .perguntas continuam sendo o que a cortina move.
  */
+import { Image } from 'astro:assets';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
-const principais = perguntas.filter((p) => !p.excedente);
-const demais = perguntas.filter((p) => p.excedente);
+import foto from '../../assets/sede/operacao.jpg';
+
 const entra = copyLiteral ? '' : 'entra';
+const dois = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura" id="perguntas" aria-labelledby="perguntas-titulo">
+<section class="secao secao--escura operacao" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
   <div class="container">
     {copyLiteral ? (
-      <p class="ancora">
+      <h2 class="ancora operacao__titulo" id="perguntas-titulo">
         Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
         <strong>Mas e com o seu negócio?</strong>
-      </p>
+      </h2>
     ) : (
-      <!-- A frase do print da Lenora (19/09), em duas linhas, no mesmo
-           desenho do título do Protocolo Revena (tinta palavra a palavra). -->
-      <h2 class="ancora ancora--revela" id="perguntas-titulo" data-revena-revela>
+      <!-- A frase do print da Lenora (19/09), em duas linhas, com a tinta
+           palavra a palavra do Protocolo Revena. -->
+      <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
         {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
           <span class="ancora__linha">
             {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
@@ -35,24 +46,93 @@ const entra = copyLiteral ? '' : 'entra';
         ))}
       </h2>
     )}
-    <div class:list={['perguntas', entra]}>
-      {principais.map((p, i) => (
-        <div class="pergunta">
-          <span class="pergunta__n num">0{i + 1}</span>
-          <h3 class="pergunta__titulo">{p.titulo}</h3>
-          <p>{p.texto}</p>
-        </div>
-      ))}
-    </div>
-    <div class:list={['perguntas', 'perguntas--mais', entra]}>
-      {demais.map((p, i) => (
-        <div class="pergunta">
-          <span class="pergunta__n num">0{i + 5}</span>
-          <h3 class="pergunta__titulo">{p.titulo}</h3>
-          <p>{p.texto}</p>
-        </div>
-      ))}
+
+    <div class:list={['perguntas', 'operacao__palco', entra]}>
+      <figure class="operacao__foto">
+        <Image src={foto} alt="Equipe da Renke trabalhando na operação, no escritório de Blumenau" format="webp" widths={[640, 1280, 1920]} sizes="(max-width: 899px) 100vw, 1200px" loading="lazy" />
+      </figure>
+
+      <div class="operacao__indice" role="tablist" aria-label="O que muda na sua clínica" aria-orientation="vertical">
+        {perguntas.map((p, i) => (
+          <button
+            class="operacao__aba" role="tab" type="button" id={`operacao-aba-${i}`}
+            aria-selected={i === 0 ? 'true' : 'false'} aria-controls={`operacao-painel-${i}`} tabindex={i === 0 ? 0 : -1}
+            data-operacao-aba={i}>
+            <span class="operacao__n num">{dois(i)}</span>
+            <span class="operacao__nome">{p.titulo}</span>
+            <span class="operacao__progresso" aria-hidden="true"><span></span></span>
+          </button>
+        ))}
+      </div>
+
+      <div class="operacao__cartoes">
+        {perguntas.map((p, i) => (
+          <div class="operacao__cartao pergunta" role="tabpanel" id={`operacao-painel-${i}`} aria-labelledby={`operacao-aba-${i}`} data-operacao-painel={i} data-ativo={i === 0 ? '' : undefined}>
+            <span class="pergunta__n num">{dois(i)} <span>/ {dois(perguntas.length - 1)}</span></span>
+            <h3 class="pergunta__titulo">{p.titulo}</h3>
+            <p>{p.texto}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </section>
 </div>
+
+<script>
+  const secao = document.querySelector<HTMLElement>('[data-operacao]');
+  if (secao) {
+    const abas = [...secao.querySelectorAll<HTMLButtonElement>('[data-operacao-aba]')];
+    const paineis = [...secao.querySelectorAll<HTMLElement>('[data-operacao-painel]')];
+    const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+    const DURACAO = 6500;   // ms por item quando anda sozinho
+    let ativo = 0, inicio = 0, quadro = 0, emTela = false, pausado = false, tocou = false;
+
+    secao.classList.add('operacao--viva');
+    const mostrar = (i: number, foco = false) => {
+      ativo = (i + abas.length) % abas.length;
+      abas.forEach((a, k) => {
+        const sim = k === ativo;
+        a.setAttribute('aria-selected', String(sim));
+        a.tabIndex = sim ? 0 : -1;
+        a.style.setProperty('--andou', '0');
+      });
+      paineis.forEach((p, k) => p.toggleAttribute('data-ativo', k === ativo));
+      if (foco) abas[ativo].focus();
+      inicio = performance.now();
+    };
+
+    // Anda sozinho só com a dobra na tela, sem mouse ou foco dentro, até o primeiro clique.
+    const passo = (agora: number) => {
+      quadro = 0;
+      if (!emTela || pausado || tocou || reduzido.matches) return;
+      const t = (agora - inicio) / DURACAO;
+      if (t >= 1) mostrar(ativo + 1);
+      else abas[ativo].style.setProperty('--andou', t.toFixed(4));
+      quadro = requestAnimationFrame(passo);
+    };
+    const acordar = () => {
+      if (!quadro && emTela && !pausado && !tocou && !reduzido.matches) {
+        inicio = performance.now() - (parseFloat(abas[ativo].style.getPropertyValue('--andou')) || 0) * DURACAO;
+        quadro = requestAnimationFrame(passo);
+      }
+    };
+
+    abas.forEach((a, i) => {
+      a.addEventListener('click', () => { tocou = true; mostrar(i); });
+      a.addEventListener('keydown', (e) => {
+        const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (d) { e.preventDefault(); tocou = true; mostrar(ativo + d, true); }
+        if (e.key === 'Home') { e.preventDefault(); tocou = true; mostrar(0, true); }
+        if (e.key === 'End') { e.preventDefault(); tocou = true; mostrar(abas.length - 1, true); }
+      });
+    });
+    const palco = secao.querySelector<HTMLElement>('.operacao__palco')!;
+    palco.addEventListener('pointerenter', () => { pausado = true; });
+    palco.addEventListener('pointerleave', () => { pausado = false; acordar(); });
+    palco.addEventListener('focusin', () => { pausado = true; });
+    palco.addEventListener('focusout', () => { pausado = false; acordar(); });
+    new IntersectionObserver(([e]) => { emTela = e.isIntersecting; acordar(); }, { threshold: .35 }).observe(palco);
+    mostrar(0);
+  }
+</script>

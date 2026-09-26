@@ -1,40 +1,111 @@
 ---
-/** Academy e Tools: composições gráficas em CSS, sem fotos provisórias. */
+/**
+ * Ecossistema Renke: Academy e Tools, compartilhado pelas duas versões.
+ *
+ * Refeito em 26/09/2026 (Lenora: "duas opções soltas na home", sem sentido).
+ * Referências da curadoria (docs/04-design/curadoria-pinterest.md): pin 122
+ * (dois produtos lado a lado, cada um com a lista do que entrega), pin 2 (nó
+ * central ligado aos serviços) e pin 125 (educação com um detalhe amarelo).
+ * Cada produto ganha uma arte (a foto da sala onde a Renke ensina; a rede que
+ * a tecnologia conecta), o texto e a lista do que existe dentro dele, com os
+ * nomes do menu. O que ainda não tem página aparece como "em breve".
+ */
+import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+import { copyLiteral } from '../../data/versao';
+import { menu } from '../../data/nav';
+import foto from '../../assets/sede/reuniao.jpg';
 
-const blocos = [
+const itensDo = (id: string) => {
+  const item = menu.find((m) => 'id' in m && m.id === id);
+  return item && 'grupos' in item ? item.grupos.flatMap((g) => g.itens) : [];
+};
+
+const produtos = [
   {
+    chave: 'academy',
     eyebrow: 'Para Agências',
     titulo: 'Renke Academy',
     texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
-    cta: 'Conhecer',
     rota: '/academy',
+    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy'),
   },
   {
+    chave: 'tools',
     eyebrow: 'Tecnologia',
     titulo: 'Renke Tools',
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
-    cta: 'Conhecer',
     rota: '/tools',
+    itens: itensDo('mm-tecnologia'),
   },
 ];
+
+// A rede da arte do Tools: o que a Renke conecta (marketing, comercial e operação) em volta do R.
+const nos = [
+  { nome: 'Marketing', x: 104, y: 78 },
+  { nome: 'Comercial', x: 104, y: 242 },
+  { nome: 'Operação', x: 496, y: 160 },
+];
+const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(x + 300) / 2} 160, 300 160`;
 ---
-<section class="secao" id="academy-tools" aria-label="Renke Academy e Renke Tools">
-  <div class="container duo">
-    {blocos.map((b, i) => (
-      <article class:list={['cartao', 'entra', i === 0 ? 'cartao--academy' : 'cartao--tools']}>
-        <div class="cartao__arte" aria-hidden="true">
-          {i === 0 ? (
-            <div class="academy-marca"><span>R</span><span>A</span><i></i></div>
-          ) : (
-            <div class="tools-marca"><span>CRM</span><i></i><span>Marketing</span><i></i><span>Vendas</span></div>
-          )}
-        </div>
-        <h2 class="caps">{b.titulo}</h2>
-        <p>{b.texto}</p>
-        {existe(b.rota) ? <p><Botao href={b.rota} tamanho="sm">{b.cta}</Botao></p> : <p class="cartao__pendente">Em breve</p>}
-      </article>
-    ))}
+<section class="secao ecossistema" id="academy-tools" aria-labelledby="ecossistema-titulo">
+  <div class="container">
+    <header class="ecossistema__cabeca entra">
+      <p class="rotulo">Ecossistema Renke</p>
+      {copyLiteral
+        ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
+        : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
+    </header>
+
+    <div class="ecossistema__grade">
+      {produtos.map((p) => (
+        <article class:list={['produto', `produto--${p.chave}`, 'entra']}>
+          <div class="produto__arte" aria-hidden="true">
+            {p.chave === 'academy' ? (
+              <>
+                <Image src={foto} alt="" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 44vw" loading="lazy" />
+                <span class="produto__selo"><i></i>Formação</span>
+              </>
+            ) : (
+              <svg class="rede" viewBox="0 0 600 320" role="presentation">
+                {nos.map((n) => (
+                  <>
+                    <path class="rede__fio" d={curva(n.x, n.y)} pathLength="100" />
+                    <path class="rede__luz" d={curva(n.x, n.y)} pathLength="100" style={`--atraso:${(n.y / 250) * 1.4}s`} />
+                  </>
+                ))}
+                {nos.map((n) => (
+                  <g class="rede__no" transform={`translate(${n.x} ${n.y})`}>
+                    <rect x="-76" y="-23" width="152" height="46" rx="10" />
+                    <text y="6" text-anchor="middle">{n.nome}</text>
+                  </g>
+                ))}
+                <circle class="rede__halo" cx="300" cy="160" r="66" />
+                <circle class="rede__centro" cx="300" cy="160" r="46" />
+                <image href="/marca/renke-monograma.png" x="279" y="139" width="42" height="42" />
+              </svg>
+            )}
+          </div>
+          <div class="produto__corpo">
+            <p class="rotulo">{p.eyebrow}</p>
+            <h3 class="produto__nome">{p.titulo}</h3>
+            <p class="produto__texto">{p.texto}</p>
+            <ul class="produto__lista">
+              {p.itens.map((i) => (
+                <li>
+                  {existe(i.rota)
+                    ? <a href={i.rota}><span>{i.rotulo}</span><span class="produto__seta" aria-hidden="true">↗</span></a>
+                    : <span class="produto__item"><span>{i.rotulo}</span><em>Em breve</em></span>}
+                </li>
+              ))}
+            </ul>
+            {existe(p.rota)
+              ? <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>
+              : <p class="cartao__pendente">Em breve</p>}
+          </div>
+        </article>
+      ))}
+    </div>
   </div>
 </section>
