@@ -39,7 +39,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 - Ilustrações SVG próprias de interfaces com vidro, luz suave, grão e traços cinza: aquisição, integração, automação, dados e posicionamento. Não representam um produto funcional nem acrescentam indicadores.
 - Na prática segue Solutions: título fixo no desktop, cards translúcidos ilustrados em uma coluna à direita. No celular, tudo segue o fluxo natural. Quatro ganhos no estúdio e sete na copy.
 - Mosaico dos números preservado; o card de 19% ganhou uma ilustração de agenda com confirmação, relacionada ao agendamento.
-- Academy/Tools permanece com conteúdo e links visíveis. Os cinco planos e sua ordem foram preservados.
+- Academy/Tools fica dentro de uma única caixa escura sólida, envolvendo o título e os dois cards, com borda discreta e espaçamento responsivo. Conteúdo e links permanecem visíveis. Os cinco planos e sua ordem foram preservados.
 
 ## Limites de conteúdo
 

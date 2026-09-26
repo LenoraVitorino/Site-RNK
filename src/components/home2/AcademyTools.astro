@@ -34,44 +34,46 @@ const produtos = [
 ---
 <section class="secao ecossistema ecossistema-editorial" id="academy-tools" aria-labelledby="ecossistema-titulo" data-ecossistema>
   <div class="container">
-    <header class="ecossistema__cabeca entra">
-      {copyLiteral
-        ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
-        : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
-    </header>
+    <div class="ecossistema__box">
+      <header class="ecossistema__cabeca entra">
+        {copyLiteral
+          ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
+          : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
+      </header>
 
-    <div class="ecossistema__paineis entra">
-      {produtos.map((p, i) => (
-        <article class:list={['produto', `produto--${p.chave}`, 'vidro', 'produto--aberto']} data-produto={i}>
-          <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
-            {p.chave === 'academy' ? (
-              <>
-                <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 60vw" loading="lazy" />
-                <span class="produto__selo"><i></i>Formação</span>
-              </>
-            ) : (
-              <Conexoes />
-            )}
-          </div>
-          <div class="produto__corpo" id={`produto-miolo-${i}`}>
-            <p class="rotulo">{p.eyebrow}</p>
-            <h3 class="produto__nome">{p.titulo}</h3>
-            <p class="produto__texto">{p.texto}</p>
-            {p.itens.length > 0 && (
-              <ul class="produto__lista">
-                {p.itens.map((item) => (
-                  <li>
-                    {existe(item.rota)
-                      ? <a href={item.rota}><span>{item.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a>
-                      : <span class="produto__item">{item.rotulo}</span>}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
-          </div>
-        </article>
-      ))}
+      <div class="ecossistema__paineis entra">
+        {produtos.map((p, i) => (
+          <article class:list={['produto', `produto--${p.chave}`, 'vidro', 'produto--aberto']} data-produto={i}>
+            <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
+              {p.chave === 'academy' ? (
+                <>
+                  <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 60vw" loading="lazy" />
+                  <span class="produto__selo"><i></i>Formação</span>
+                </>
+              ) : (
+                <Conexoes />
+              )}
+            </div>
+            <div class="produto__corpo" id={`produto-miolo-${i}`}>
+              <p class="rotulo">{p.eyebrow}</p>
+              <h3 class="produto__nome">{p.titulo}</h3>
+              <p class="produto__texto">{p.texto}</p>
+              {p.itens.length > 0 && (
+                <ul class="produto__lista">
+                  {p.itens.map((item) => (
+                    <li>
+                      {existe(item.rota)
+                        ? <a href={item.rota}><span>{item.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a>
+                        : <span class="produto__item">{item.rotulo}</span>}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </div>
 </section>
