@@ -24,7 +24,7 @@ export const analiseDeMercado: Bloco = {
 /** Fecho padrão dos protocolos. */
 export const ctaProtocolo: Bloco = {
   tipo: 'ctaFinal',
-  destaque: 'Limitado a 1 nova clínica por mês.',
-  texto: 'Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.',
-  cta: 'Converse com a equipe.',
+  destaque: "Atendemos uma nova clínica por mês.",
+  texto: "Cada projeto começa com um diagnóstico próprio e acompanhamento dedicado em toda a implementação. Sem templates. Sem terceirização.",
+  cta: "Agende uma conversa",
 };

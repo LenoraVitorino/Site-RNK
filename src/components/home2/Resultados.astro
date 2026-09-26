@@ -1,36 +1,37 @@
 ---
-/**
- * Resultados como um extrato de ponta a ponta, no desenho da referência:
- * cada linha com o número gigante em amarelo à esquerda e, na metade
- * direita, a especialidade e o antes → depois. Fios de uma borda à outra
- * da tela. Copy literal do briefing (⚠️ D1: números ilustrativos até os
- * cases serem autorizados).
- */
+/** Layout compartilhado pelas versões estudio e copy. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
+import FotoSlot from '../ui/FotoSlot.astro';
 ---
-<section class="secao secao--extrato" id="resultados">
+<section class="secao secao--extrato" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
-    <header class="extrato__cabeca entra">
-      <p class="rotulo">Resultados</p>
-      <h2 class="titulo">O que muda quando a operação tem estrutura.</h2>
-    </header>
-  </div>
-  <ol class="extrato" aria-label="Resultados por especialidade">
-    {resultados.map((r) => (
-      <li class="extrato__linha">
-        <div class="container extrato__grade">
-          <p class="extrato__num num" data-contador>{r.numero}</p>
-          <div class="extrato__texto entra">
-            <h3 class="extrato__titulo">{r.especialidade}</h3>
-            <p>Antes: {r.antes}. Depois: {r.depois}.</p>
-          </div>
-        </div>
-      </li>
-    ))}
-  </ol>
-  <div class="container">
-    <p class="extrato__acao"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
+    <div class="extrato__layout">
+      <p class="extrato__rotulo">Resultados</p>
+      <div class="extrato__conteudo">
+        <header class="extrato__cabeca entra">
+          <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem <strong class="extrato__destaque">estrutura</strong>.</h2>
+        </header>
+        <ol class="extrato" aria-label="Resultados por especialidade">
+          {resultados.map((r) => (
+            <li class="extrato__linha">
+              <div class="extrato__grade">
+                <div class="extrato__texto entra">
+                  <h3 class="extrato__titulo">{r.especialidade}</h3>
+                  <p>{r.texto}</p>
+                </div>
+                <!-- Mockup (Lenora, 21/09): ao passar o mouse na linha aparece uma
+                     foto da área, no vão entre o texto e o número. Só desktop com
+                     mouse; some no toque e no celular. Troca-se o slot pela foto real. -->
+                <div class="extrato__slot" aria-hidden="true"><FotoSlot rotulo={`Foto · ${r.especialidade}`} class="extrato__foto" /></div>
+                <p class="extrato__num num" data-contador>{r.numero}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="extrato__acao"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
+      </div>
+    </div>
   </div>
 </section>
 

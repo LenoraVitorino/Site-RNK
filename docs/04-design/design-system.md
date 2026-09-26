@@ -233,3 +233,8 @@ que gira, e o painel com cantos arredondados.
 
 O que não veio: os ícones por item de submenu (`lucide-react`) e a coluna de descrição. Nosso
 mega-menu é de navegação, não de vitrine de produto — as descrições vivem nas páginas.
+
+
+## Ícones de interface
+
+Usar o componente `src/components/ui/Icone.astro`, baseado no pacote oficial `@lucide/astro`, com traço de 1,5 px, cor herdada e tamanho padrão de 24 px. Ícones decorativos ficam ocultos de leitores de tela; botões mantêm nomes acessíveis. Os símbolos próprios dos planos e pilares do Protocolo Revena permanecem nos assets da marca. Logos e ilustrações de dados não são ícones de interface.

@@ -1,54 +1,71 @@
 ---
 /**
- * Frase-âncora + perguntas, no bloco escuro que dá ritmo à página.
- * As quatro primeiras ocupam o grid 2×2 que o layout pede; as outras três
- * seguem em linha menor — a D8 (quais quatro) continua em aberto, e
- * esconder copy não resolve decisão.
- * Na versão copy, a .cortina em volta faz esta dobra entrar pela direita,
- * por cima do trilho dos planos, no fim do curso dele: primeiro só a
- * frase-âncora; no scroll seguinte ela sobe e as perguntas aparecem
- * (--fim e --sobe vêm do script de Planos.astro). Na versão do estúdio o
- * trilho não existe e a dobra segue em fluxo, com o revelar .entra.
+ * "Uma operação estruturada muda a forma como sua clínica cresce": no molde
+ * da seção "Solutions" da referência PeachWeb "curious" (Lenora, 26/09/2026:
+ * "gosto dessa ideia pra dobra que tem os 7 cards"). O título fica preso à
+ * esquerda; à direita, os ganhos passam em cartões de vidro empilhados, e
+ * dois deles levam uma foto da operação dentro, numa moldura (nunca tela
+ * cheia: as fotos com grão não aguentam ampliação).
+ *
+ * Quantos itens: a versão do estúdio usa os quatro que o layout sempre pediu
+ * (D8 em data/home.ts: os três marcados como excedentes ficam de fora); a
+ * copy integral segue com os sete. Sem abas nem autoplay: menos é mais.
+ *
+ * Na versão copy, a .cortina em volta faz esta dobra entrar por cima do
+ * trilho dos planos (--fim e --sobe vêm do script de Planos.astro);
+ * .ancora e .perguntas continuam sendo o que a cortina move, e ali os
+ * cartões não usam .entra (a cortina já é a entrada).
  */
+import { Image } from 'astro:assets';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
-const principais = perguntas.filter((p) => !p.excedente);
-const demais = perguntas.filter((p) => p.excedente);
+import salaVidro from '../../assets/sede/sala-vidro.jpg';
+import equipe from '../../assets/sede/equipe.jpg';
+
+const itens = copyLiteral ? perguntas : perguntas.filter((p) => !('excedente' in p && p.excedente));
+const fotos: Record<number, { src: ImageMetadata; alt: string }> = {
+  0: { src: salaVidro, alt: 'A operação da Renke vista da sala de reunião envidraçada, no escritório de Blumenau' },
+  2: { src: equipe, alt: 'A equipe da Renke nas estações de trabalho, com as faixas amarelas do R na parede do fundo' },
+};
 const entra = copyLiteral ? '' : 'entra';
+const dois = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura" id="perguntas">
-  <div class="container">
-    {copyLiteral ? (
-      <p class="ancora">
-        Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
-        <strong>Mas e com o seu negócio?</strong>
-      </p>
-    ) : (
-      <!-- Versão do estúdio: a frase enxugada (saem "Clinicamente," e
-           "exatamente") e o fecho "da sua clínica" no lugar de "do seu
-           negócio", decisão da Lenora em 16/09/2026 para falar no nicho. -->
-      <p class:list={['ancora', entra]}>
-        Você sabe o que está acontecendo com seu paciente.
-        <strong>Mas e com a sua clínica?</strong>
-      </p>
-    )}
-    <div class:list={['perguntas', entra]}>
-      {principais.map((p, i) => (
-        <div class="pergunta">
-          <span class="pergunta__n num">0{i + 1}</span>
-          <p>{p.texto}</p>
-        </div>
-      ))}
+<section class="secao secao--escura operacao" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
+  <div class="container operacao__grade">
+    <div class="operacao__texto">
+      {copyLiteral ? (
+        <h2 class="ancora operacao__titulo" id="perguntas-titulo">
+          Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+          <strong>Mas e com o seu negócio?</strong>
+        </h2>
+      ) : (
+        <!-- A frase do print da Lenora (19/09), em duas linhas, com a tinta
+             palavra a palavra do Protocolo Revena. -->
+        <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
+          {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
+            <span class="ancora__linha">
+              {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
+            </span>
+          ))}
+        </h2>
+      )}
     </div>
-    <div class:list={['perguntas', 'perguntas--mais', entra]}>
-      {demais.map((p, i) => (
-        <div class="pergunta">
-          <span class="pergunta__n num">0{i + 5}</span>
-          <p>{p.texto}</p>
-        </div>
+
+    <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
+      {itens.map((p, i) => (
+        <li class:list={['operacao__cartao', 'vidro', entra]} style={`--i:${i}`}>
+          <p class="operacao__n num">{dois(i)} <span>/ {dois(itens.length - 1)}</span></p>
+          <h3 class="operacao__nome">{p.titulo}</h3>
+          {fotos[i] && (
+            <figure class="operacao__foto">
+              <Image src={fotos[i].src} alt={fotos[i].alt} format="webp" quality={78} widths={[640, 1280, 1920]} sizes="(max-width: 899px) 90vw, 640px" loading="lazy" />
+            </figure>
+          )}
+          <p class="operacao__texto-item">{p.texto}</p>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
 </div>

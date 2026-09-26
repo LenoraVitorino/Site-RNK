@@ -6,21 +6,15 @@ import { existe } from '../data/rotas';
   <div class="container">
     <div class="footer__grid">
       <div class="footer__col">
-        <img class="logo__img logo__img--rodape" src="/marca/renke-assinatura.png" alt="Renke" width="299" height="62" />
-        <p class="footer__tagline">{rodape.tagline}</p>
+        <img class="logo__img logo__img--rodape" src="/marca/renke-assinatura.png" alt="Renke Studio" width="299" height="62" />
       </div>
 
       <nav class="footer__col" aria-label="Links do rodapé">
         <p class="footer__title">Links</p>
         <ul>
-          {rodape.links.map((l) => (
-            <li>
-              <a
-                href={existe(l.rota) ? l.rota : '#'}
-                data-rota={l.rota}
-                class:list={[!existe(l.rota) && 'nav--pendente']}
-              >{l.rotulo}</a>
-            </li>
+          {/* Sem "em breve" à mostra (Lenora, 26/09): só o que já tem página. */}
+          {rodape.links.filter((l) => existe(l.rota)).map((l) => (
+            <li><a href={l.rota}>{l.rotulo}</a></li>
           ))}
         </ul>
       </nav>
@@ -28,7 +22,9 @@ import { existe } from '../data/rotas';
       <div class="footer__col">
         <p class="footer__title">Siga-nos</p>
         <ul>
-          {rodape.redes.map((r) => <li><a href={r.rota}>{r.rotulo}</a></li>)}
+          {rodape.redes.filter((r) => r.rota && r.rota !== '#').map((r) => (
+            <li><a href={r.rota} rel="noopener">{r.rotulo}</a></li>
+          ))}
         </ul>
       </div>
 

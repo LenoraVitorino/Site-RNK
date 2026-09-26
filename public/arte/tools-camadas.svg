@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+  <g class="tools-camada" transform="translate(114 244) skewY(-7) scale(1 .8)">
+    <rect width="340" height="86" rx="10" fill="currentColor" fill-opacity=".06" vector-effect="non-scaling-stroke"/>
+    <path d="M24 22h56" stroke-width="1" stroke-opacity=".35" vector-effect="non-scaling-stroke"/>
+  </g>
+  <g class="tools-camada" transform="translate(130 156) skewY(-7) scale(1 .8)">
+    <rect width="340" height="86" rx="10" fill="currentColor" fill-opacity=".06" vector-effect="non-scaling-stroke"/>
+    <path d="M24 22h56" stroke-width="1" stroke-opacity=".35" vector-effect="non-scaling-stroke"/>
+  </g>
+  <g class="tools-camada tools-topo" transform="translate(146 68) skewY(-7) scale(1 .8)">
+    <rect width="340" height="86" rx="10" fill="currentColor" fill-opacity=".06" vector-effect="non-scaling-stroke"/>
+    <rect x="24" y="16" width="104" height="10" rx="5" fill="currentColor" fill-opacity=".1" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <g class="tools-pontos" fill="currentColor" fill-opacity=".1" stroke-width="1">
+      <circle cx="30" cy="44" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="46" cy="44" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="62" cy="44" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="78" cy="44" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="94" cy="44" r="3.5" vector-effect="non-scaling-stroke"/>
+      <circle cx="30" cy="60" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="46" cy="60" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="62" cy="60" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="78" cy="60" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="94" cy="60" r="3.5" vector-effect="non-scaling-stroke"/>
+      <circle cx="30" cy="76" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="46" cy="76" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="62" cy="76" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="78" cy="76" r="3.5" vector-effect="non-scaling-stroke"/><circle cx="94" cy="76" r="3.5" vector-effect="non-scaling-stroke"/>
+    </g>
+  </g>
+  <g class="tools-fio">
+    <path d="M394 244L426 68" stroke-opacity=".8"/>
+    <circle cx="394" cy="244" r="4.5" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+    <circle cx="410" cy="156" r="4.5" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+    <g class="acento">
+      <circle cx="426" cy="68" r="11" stroke-width="1" stroke-opacity=".5"/>
+      <circle cx="426" cy="68" r="4.5" fill="currentColor" fill-opacity=".1"/>
+    </g>
+  </g>
+</svg>

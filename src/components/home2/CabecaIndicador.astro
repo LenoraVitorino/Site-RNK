@@ -1,0 +1,10 @@
+---
+import Icone from '../ui/Icone.astro';
+interface Props { tipo: 'clientes' | 'metodo' | 'receita' }
+const { tipo } = Astro.props;
+const textos = { clientes: 'Conexões que crescem', metodo: 'Experiência na prática', receita: 'Crescimento em números' };
+---
+<div class="bloco__cabeca">
+  <p>{textos[tipo]}</p>
+  <Icone nome={tipo === 'clientes' ? 'Users' : tipo === 'metodo' ? 'BadgeCheck' : 'TrendingUp'} size={28} />
+</div>

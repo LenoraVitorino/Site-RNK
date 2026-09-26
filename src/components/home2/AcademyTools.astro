@@ -1,39 +1,123 @@
 ---
 /**
- * Academy e Tools: dois cartões limpos com espaço de foto. Copy literal.
+ * Ecossistema Renke: Academy e Tools, compartilhado pelas duas versões.
+ *
+ * 26/09/2026 (Lenora: "temos que pensar uma forma mais dinâmica de
+ * apresentar; o Tools também tem ferramentas"). Dois painéis de vidro lado a
+ * lado que se revezam: o aberto mostra a arte, o texto e a lista do que
+ * existe dentro dele; o outro fica estreito, com a arte escurecida e o nome
+ * em pé, e abre ao passar o mouse ou tocar (referência da curadoria, pin
+ * 122: "ao clicar, um produto cresce e o outro vira aba"). A lista do Tools
+ * traz as ferramentas mesmo sem página ainda: nome sem link, sem "em breve".
+ * No celular os dois ficam abertos, um embaixo do outro.
  */
-import FotoSlot from '../ui/FotoSlot.astro';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { Image } from 'astro:assets';
+import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
+import { copyLiteral } from '../../data/versao';
+import { menu } from '../../data/nav';
+import foto from '../../assets/sede/estudio.jpg';
 
-const blocos = [
+// Arte do Tools: camadas em traço fino, na mesma linguagem das artes dos pilares.
+const arquivoCamadas = join(process.cwd(), 'public', 'arte', 'tools-camadas.svg');
+const camadas = existsSync(arquivoCamadas) ? readFileSync(arquivoCamadas, 'utf8') : '';
+
+const itensDo = (id: string) => {
+  const item = menu.find((m) => 'id' in m && m.id === id);
+  return item && 'grupos' in item ? item.grupos.flatMap((g) => g.itens) : [];
+};
+
+const produtos = [
   {
+    chave: 'academy',
     eyebrow: 'Para Agências',
     titulo: 'Renke Academy',
-    texto: 'Você é dono de agência? O Renke Academy abre os bastidores da nossa operação para você modelar. Método, processos e ferramentas.',
-    cta: 'Conhecer a Renke Academy',
+    texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
     rota: '/academy',
-    foto: 'Foto · Academy',
+    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy'),
   },
   {
+    chave: 'tools',
     eyebrow: 'Tecnologia',
     titulo: 'Renke Tools',
-    texto: 'Tecnologias proprietárias construídas por quem está nas trincheiras todo dia. Nosso método produtizado em softwares.',
-    cta: 'Conhecer a Renke Tools',
+    texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
     rota: '/tools',
-    foto: 'Foto · Produto',
+    itens: itensDo('mm-tecnologia'),
   },
 ];
 ---
-<section class="secao" id="academy-tools">
-  <div class="container duo">
-    {blocos.map((b) => (
-      <article class="cartao entra">
-        <FotoSlot rotulo={b.foto} prop="16 / 10" />
-        <p class="rotulo">{b.eyebrow}</p>
-        <h3 class="caps">{b.titulo}</h3>
-        <p>{b.texto}</p>
-        <p><a href={existe(b.rota) ? b.rota : '#'} class:list={['link-arrow', !existe(b.rota) && 'nav--pendente']} data-rota={b.rota}>{b.cta}</a></p>
-      </article>
-    ))}
+<section class="secao ecossistema" id="academy-tools" aria-labelledby="ecossistema-titulo" data-ecossistema>
+  <div class="container">
+    <header class="ecossistema__cabeca entra">
+      {copyLiteral
+        ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
+        : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
+    </header>
+
+    <div class="ecossistema__paineis entra">
+      {produtos.map((p, i) => (
+        <article class:list={['produto', `produto--${p.chave}`, 'vidro', i === 0 && 'produto--aberto']} data-produto={i}>
+          <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
+            {p.chave === 'academy' ? (
+              <>
+                <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 60vw" loading="lazy" />
+                <span class="produto__selo"><i></i>Formação</span>
+              </>
+            ) : (
+              <Fragment set:html={camadas} />
+            )}
+          </div>
+          <!-- A aba do painel fechado: o nome em pé; clicar abre. -->
+          <button type="button" class="produto__aba" data-produto-abrir={i} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`produto-miolo-${i}`}>
+            <span class="produto__aba-n num">0{i + 1}</span>
+            <span class="produto__aba-nome">{p.titulo}</span>
+          </button>
+          <div class="produto__corpo" id={`produto-miolo-${i}`}>
+            <p class="rotulo">{p.eyebrow}</p>
+            <h3 class="produto__nome">{p.titulo}</h3>
+            <p class="produto__texto">{p.texto}</p>
+            {p.itens.length > 0 && (
+              <ul class="produto__lista">
+                {p.itens.map((item) => (
+                  <li>
+                    {existe(item.rota)
+                      ? <a href={item.rota}><span>{item.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a>
+                      : <span class="produto__item">{item.rotulo}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
+          </div>
+        </article>
+      ))}
+    </div>
   </div>
 </section>
+
+<script>
+  // Um painel aberto por vez no desktop: abre no mouse (com um respiro) e no toque/clique.
+  const secao = document.querySelector<HTMLElement>('[data-ecossistema]');
+  if (secao) {
+    const paineis = [...secao.querySelectorAll<HTMLElement>('[data-produto]')];
+    const largo = matchMedia('(min-width: 900px)');
+    let espera = 0;
+    const abrir = (k: number) => {
+      paineis.forEach((p, i) => {
+        p.classList.toggle('produto--aberto', i === k);
+        p.querySelector('[data-produto-abrir]')?.setAttribute('aria-expanded', String(i === k));
+      });
+    };
+    paineis.forEach((p, i) => {
+      p.querySelector('[data-produto-abrir]')?.addEventListener('click', () => abrir(i));
+      p.addEventListener('pointerenter', (e) => {
+        if (!largo.matches || e.pointerType !== 'mouse') return;
+        clearTimeout(espera);
+        espera = setTimeout(() => abrir(i), 140);
+      });
+      p.addEventListener('pointerleave', () => clearTimeout(espera));
+    });
+  }
+</script>

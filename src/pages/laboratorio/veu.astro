@@ -1,0 +1,42 @@
+---
+/**
+ * Laboratório: a home com o véu de luz por trás (25/09/2026). Página de teste,
+ * fora dos buscadores e do menu. As dobras e os textos são os da home; mudam só
+ * o fundo e o acabamento, com estilos presos a body.laboratorio-veu, seguindo
+ * a direção de docs/04-design/referencias-alto-padrao.md (seções 4 a 7):
+ * alto padrão, menos é mais, amarelo só como detalhe. A home não muda até a
+ * Lenora aprovar.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import { seo } from '../../data/home';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import '../../styles/laboratorio-alto-padrao.css';
+
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import Perguntas from '../../components/home2/Perguntas.astro';
+import Resultados from '../../components/home2/Resultados.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+import { copyLiteral } from '../../data/versao';
+---
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu">
+  <FundoVivo slot="fundo" fundo="veu" />
+  <Hero />
+  <OQueFaz />
+  <Protocolos />
+  <Letreiro />
+  {!copyLiteral && <PlanosPalco />}
+  {copyLiteral && <Planos />}
+  <Perguntas />
+  <Resultados />
+  <CtaFinal />
+  <AcademyTools />
+  {/* Conheça a Renke saiu da página (Lenora, 26/09: "tira, depois vemos o que fazer"). */}
+  <Formulario />
+</Base2>

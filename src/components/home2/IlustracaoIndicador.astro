@@ -1,0 +1,44 @@
+---
+interface Props { tipo: 'clientes' | 'receita' }
+const { tipo } = Astro.props;
+---
+<div class={`indicador-arte indicador-arte--${tipo}`} aria-hidden="true">
+  {tipo === 'clientes' ? (
+    <div class="rede-doutores">
+      <svg viewBox="0 0 280 160" fill="none">
+        <path d="M42 42H238M42 118H238M42 42V118M140 42V118M238 42V118M42 80H238" stroke="currentColor" stroke-opacity=".1" />
+        <path d="M42 42H140V118H238" stroke="var(--destaque)" stroke-opacity=".18" />
+        <defs><radialGradient id="retrato-vazio"><stop stop-color="#373834" /><stop offset="1" stop-color="#191a18" /></radialGradient></defs>
+        {[42, 140, 238].map(x => [42, 118].map(y => <circle cx={x} cy={y} r="27" fill="url(#retrato-vazio)" stroke="#ffffff30" />))}
+      </svg>
+    </div>
+  ) : (
+    <svg viewBox="0 0 280 160" fill="none" class="receita-curva">
+      <defs>
+        <linearGradient id="receita-linha" x1="4" y1="140" x2="278" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#e4ed64" stop-opacity="0" />
+          <stop offset=".25" stop-color="#b6bf4c" stop-opacity=".7" />
+          <stop offset=".52" stop-color="#e9f276" />
+          <stop offset=".8" stop-color="#cad65a" stop-opacity=".65" />
+          <stop offset="1" stop-color="#dce665" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M4 140C18 112 25 83 46 91S79 101 91 97 115 60 140 59 174 90 196 71 216 24 239 20L278 4" stroke="url(#receita-linha)" stroke-width="3.5" stroke-linecap="round" />
+      <circle cx="140" cy="59" r="7" fill="#151614" stroke="#f8f8ed" stroke-width="3.5" />
+    </svg>
+  )}
+</div>
+<style>
+  .indicador-arte { flex: 1 1 auto; min-height: 64px; max-height: none; display: grid; align-items: center; margin-bottom: 12px; color: var(--papel); }
+  svg { display: block; width: 100%; height: 100%; max-height: 220px; min-height: 0; }
+  .rede-doutores { position: relative; width: 100%; height: 100%; min-height: 0; }
+  .rede-doutores svg { position: absolute; inset: 0; max-height: none; }
+  .rede-doutores :global(.rede-doutores__retrato) {
+    position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%);
+    width: 22%; aspect-ratio: 1; border-radius: 50%;
+    border: 1px solid rgb(242 242 238 / .1);
+    background: radial-gradient(circle at 35% 20%, #373834, #20211f 65%, #191a18);
+    box-shadow: 0 6px 14px #0005, inset 0 1px 2px #ffffff14, 0 0 0 5px #1b1c1980;
+  }
+  .indicador-arte--receita { margin-inline: -8px; }
+</style>

@@ -1,0 +1,27 @@
+/* Padrão Lucide em todas as interfaces; marcas e símbolos Revena são próprios. */
+.icone-lucide { flex-shrink: 0; vertical-align: middle; fill: none; }
+.nav-toggle { color: inherit; }
+.nav-toggle .nav-icone-fechar { display: none; }
+.nav-toggle[aria-expanded="true"] .nav-icone-fechar { display: block; }
+.nav-toggle[aria-expanded="true"] .nav-icone-menu { display: none; }
+.nav-chevron { transition: transform .2s; }
+.nav__trigger[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+a.botao:not(.botao--onda)::after { content: none; }
+.botao__icone { margin-left: 12px; transition: transform .25s; }
+a.botao:hover .botao__icone { transform: translate(2px, -2px); }
+.tel__icone.icone-lucide { fill: none; }
+.reel__icone::before, .reel__moldura[data-tocando='sim'] .reel__icone::before { content: none; }
+.reel__icone { color: #fff; }
+.reel-pause, .reel-volume { display: none; }
+.reel__moldura[data-tocando='sim'] .reel-play, .reel__moldura[data-mudo='nao'] .reel-muted { display: none; }
+.reel__moldura[data-tocando='sim'] .reel-pause, .reel__moldura[data-mudo='nao'] .reel-volume { display: block; }
+.faq__pergunta::after { content: none; }
+.faq-chevron { color: var(--marca); transition: transform .2s; }
+.faq__item[open] .faq-chevron { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .icone-lucide { transition: none; } }
+
+.onda__seta.icone-lucide { fill: none; color: #0f0f0f; }
+
+.resolve__lista li::before { content: none; }
+.resolve-check { position: absolute; left: 0; top: .15em; color: var(--marca); }
+summary.faq__pergunta::after { content: none; }
