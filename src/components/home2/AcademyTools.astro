@@ -29,7 +29,7 @@ const produtos = [
     titulo: 'Renke Academy',
     texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
     rota: '/academy',
-    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy'),
+    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy' && existe(i.rota)),
   },
   {
     chave: 'tools',
@@ -37,7 +37,7 @@ const produtos = [
     titulo: 'Renke Tools',
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
     rota: '/tools',
-    itens: itensDo('mm-tecnologia'),
+    itens: itensDo('mm-tecnologia').filter((i) => existe(i.rota)),
   },
 ];
 
@@ -90,18 +90,15 @@ const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(
             <p class="rotulo">{p.eyebrow}</p>
             <h3 class="produto__nome">{p.titulo}</h3>
             <p class="produto__texto">{p.texto}</p>
-            <ul class="produto__lista">
-              {p.itens.map((i) => (
-                <li>
-                  {existe(i.rota)
-                    ? <a href={i.rota}><span>{i.rotulo}</span><span class="produto__seta" aria-hidden="true">↗</span></a>
-                    : <span class="produto__item"><span>{i.rotulo}</span><em>Em breve</em></span>}
-                </li>
-              ))}
-            </ul>
-            {existe(p.rota)
-              ? <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>
-              : <p class="cartao__pendente">Em breve</p>}
+            {/* Só o que já tem página (Lenora, 26/09: nada de "em breve" à mostra). */}
+            {p.itens.length > 0 && (
+              <ul class="produto__lista">
+                {p.itens.map((i) => (
+                  <li><a href={i.rota}><span>{i.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a></li>
+                ))}
+              </ul>
+            )}
+            {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
           </div>
         </article>
       ))}

@@ -4,6 +4,7 @@ import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
+import { totalDoutores } from '../../data/doutores';
 
 const lead = copyLiteral ? hero.lead :
   'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
@@ -31,7 +32,8 @@ const lead = copyLiteral ? hero.lead :
     </div>
     <div class="hero__base">
       <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
-      <ConfiancaHero />
+      {/* A prova social só aparece com os retratos e o total reais (Lenora, 26/09: esconder o "+ de 00"). */}
+      {totalDoutores !== null && <ConfiancaHero />}
     </div>
   </div>
 

@@ -44,12 +44,19 @@ const pecas = (label: string): Peca[] => {
   return (['ouro', 'papel'] as const).filter((l) => lados[l].length).map((l) => ({ ouro: l === 'ouro', formas: lados[l].join('') }));
 };
 
+// Na escada do palco o Scale vem antes do Core, então o texto dele não pode
+// começar por "Tudo do Core" (Lenora, 26/09; o briefing já apontava o
+// conflito). A copy original, em data/home.ts, fica como está.
+const textoEstudio: Record<string, string> = {
+  'REVENA SCALE': 'Comercial e marketing medidos de perto, com conteúdo orgânico e reativação da base de pacientes.',
+};
+
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   return {
     id: chave(label),
     nome: nome(label),
-    texto: p.texto,
+    texto: textoEstudio[label] ?? p.texto,
     rota: p.rota,
     pecas: pecas(label),
   };

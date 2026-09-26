@@ -45,11 +45,12 @@ export const menu: NavItem[] = [
       {
         titulo: 'Revena',
         itens: [
+          // Mesma escada do palco (Lenora, 26/09): Start, Run, Scale, Core, Full.
           { rotulo: 'Revena Start', rota: '/studio/revena-start', plano: 'start' },
-          { rotulo: 'Revena Full', rota: '/studio/revena-full', plano: 'full' },
-          { rotulo: 'Revena Core', rota: '/studio/revena-core', plano: 'core' },
-          { rotulo: 'Revena Scale', rota: '/studio/revena-scale', plano: 'scale' },
           { rotulo: 'Revena Run', rota: '/studio/revena-run', plano: 'run' },
+          { rotulo: 'Revena Scale', rota: '/studio/revena-scale', plano: 'scale' },
+          { rotulo: 'Revena Core', rota: '/studio/revena-core', plano: 'core' },
+          { rotulo: 'Revena Full', rota: '/studio/revena-full', plano: 'full' },
         ],
       },
       {

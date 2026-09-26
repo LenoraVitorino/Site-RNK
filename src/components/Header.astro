@@ -3,6 +3,19 @@ import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
+
+// Sem "em breve" à mostra (Lenora, 26/09): no menu só entra o que já tem
+// página. Grupo sem itens some; menu sem grupos some (a Tecnologia, por ora);
+// o cartão de destaque só aparece se o destino existir.
+const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
+const itensMenu = menu.flatMap((item) => {
+  if (!('grupos' in item)) return existe(item.rota) ? [item] : [];
+  const grupos = item.grupos
+    .map((g) => ({ ...g, itens: g.itens.filter((sub) => existe(sub.rota)) }))
+    .filter((g) => g.itens.length);
+  if (!grupos.length) return [];
+  return [{ ...item, grupos, destaque: item.destaque && temPagina(item.destaque.rota) ? item.destaque : undefined }];
+});
 ---
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
@@ -25,7 +38,7 @@ import Botao from './ui/Botao.astro';
 
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
       <ul class="nav__list">
-        {menu.map((item) =>
+        {itensMenu.map((item) =>
           'grupos' in item ? (
             <li class="nav__item nav__item--has-menu">
               <button
@@ -53,17 +66,11 @@ import Botao from './ui/Botao.astro';
                     </div>
                   ))}
                   {item.destaque && (
-                    existe(item.destaque.rota.split('#')[0] || '/')
-                      ? <a class="megamenu__destaque" href={item.destaque.rota}>
-                          <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
-                          <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
-                          <span class="megamenu__destaque-acao">{item.destaque.rotulo} <span aria-hidden="true">→</span></span>
-                        </a>
-                      : <div class="megamenu__destaque">
-                          <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
-                          <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
-                          <span class="megamenu__destaque-acao">Em breve</span>
-                        </div>
+                    <a class="megamenu__destaque" href={item.destaque.rota}>
+                      <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
+                      <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
+                      <span class="megamenu__destaque-acao">{item.destaque.rotulo} <span aria-hidden="true">→</span></span>
+                    </a>
                   )}
                 </div>
               </div>
