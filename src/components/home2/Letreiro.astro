@@ -27,3 +27,31 @@ const palavras = copyLiteral
     ))}
   </div>
 </section>
+
+<script>
+  // O letreiro responde à leitura (26/09, referência CoffeeTech, pins 27 e 90):
+  // acelera enquanto a página rola, no sentido da rolagem, e volta devagar ao
+  // passo de sempre quando ela para. Com movimento reduzido, nada muda.
+  const trilho = document.querySelector<HTMLElement>('.letreiro__trilho');
+  const animacao = trilho?.getAnimations()[0];
+  if (trilho && animacao && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let ultimoY = scrollY, ultimoT = performance.now(), alvo = 1, taxa = 1, quadro = 0, emTela = false;
+    const passo = () => {
+      quadro = 0;
+      taxa += (alvo - taxa) * .08;
+      alvo += (1 - alvo) * .06;   // o impulso da rolagem se desfaz sozinho
+      animacao.playbackRate = taxa;
+      if (emTela && (Math.abs(taxa - 1) > .01 || Math.abs(alvo - 1) > .01)) quadro = requestAnimationFrame(passo);
+      else if (!emTela) animacao.playbackRate = 1;
+    };
+    addEventListener('scroll', () => {
+      const agora = performance.now();
+      const v = (scrollY - ultimoY) / Math.max(16, agora - ultimoT);   // px por ms
+      ultimoY = scrollY; ultimoT = agora;
+      if (!emTela) return;
+      alvo = Math.max(-2.2, Math.min(3.2, 1 + v * 2.4));
+      if (!quadro) quadro = requestAnimationFrame(passo);
+    }, { passive: true });
+    new IntersectionObserver(([e]) => { emTela = e.isIntersecting; }).observe(trilho);
+  }
+</script>

@@ -10,6 +10,15 @@ import { join } from 'node:path';
 import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import Botao from '../ui/Botao.astro';
+import { Image } from 'astro:assets';
+// Fundo de cada plano (26/09, referência Tres Mares): traços finos que vão do
+// caos à ordem, plano a plano. Gerados por scripts/gerar-fundos-palco.py.
+import fundoStart from '../../assets/palco/start.webp';
+import fundoRun from '../../assets/palco/run.webp';
+import fundoScale from '../../assets/palco/scale.webp';
+import fundoCore from '../../assets/palco/core.webp';
+import fundoFull from '../../assets/palco/full.webp';
+const fundos = { start: fundoStart, run: fundoRun, scale: fundoScale, core: fundoCore, full: fundoFull } as const;
 
 const ordem = ['REVENA START', 'REVENA RUN', 'REVENA SCALE', 'REVENA CORE', 'REVENA FULL'];
 
@@ -64,6 +73,16 @@ const planos = ordem.map((label) => {
   <div class="palcoplanos__trilho" data-trilho>
     <div class="palcoplanos__fixo">
       <!-- .anchors: canto superior esquerdo, a atual em destaque; clicar leva ao plano. -->
+      <!-- Mapa de posição (26/09, referência pin 109): os cinco planos empilhados
+           em perspectiva; o da tela atual fica preenchido, com o fio amarelo. -->
+      <svg class="palcoplanos__mapa" viewBox="0 0 72 112" aria-hidden="true" focusable="false">
+        {planos.map((p, i) => (
+          <g class:list={['mapa__plano', i === 0 && 'mapa__plano--ativo']} transform={`translate(0 ${i * 20})`} data-mapa={i}>
+            <path class="mapa__face" d="M36 2 L70 14 L36 26 L2 14 Z" />
+            <path class="mapa__fio" d="M2 14 L36 26 L70 14" />
+          </g>
+        ))}
+      </svg>
       <ol class="palcoplanos__ancoras" aria-label="Planos Revena">
         {planos.map((p, i) => (
           <li><button type="button" class:list={['palcoplanos__ancora', i === 0 && 'palcoplanos__ancora--ativa']} data-plano-ir={i} aria-current={i === 0 ? 'true' : undefined}>Revena {p.nome}</button></li>
@@ -74,6 +93,7 @@ const planos = ordem.map((label) => {
       {planos.map((p, i) => (
         <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} >
           <div class="plano-palco__imagem" data-imagem>
+            <Image class="plano-palco__fundo" src={fundos[p.id as keyof typeof fundos]} alt="" widths={[960, 1600, 2400]} sizes="100vw" loading="lazy" decoding="async" aria-hidden="true" />
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>
@@ -115,6 +135,7 @@ const planos = ordem.map((label) => {
     const infos = layers.map(layer => layer.querySelector<HTMLElement>('[data-info]')!);
     const names = [...trilho.querySelectorAll<HTMLElement>('[data-nome]')];
     const anchors = [...trilho.querySelectorAll<HTMLButtonElement>('[data-plano-ir]')];
+    const mapa = [...trilho.querySelectorAll<SVGGElement>('[data-mapa]')];
     const clamp = (x: number) => Math.max(0, Math.min(1, x));
     const ease = (x: number) => x * x * (3 - 2 * x);
     const count = layers.length;
@@ -146,6 +167,8 @@ const planos = ordem.map((label) => {
         layer.setAttribute('aria-hidden', String(!selected));
         layer.classList.toggle('plano-palco--ativo', selected);
         anchors[i].classList.toggle('palcoplanos__ancora--ativa', selected);
+        mapa[i]?.classList.toggle('mapa__plano--ativo', selected);
+        mapa[i]?.classList.toggle('mapa__plano--passado', i < index);
         if (selected) anchors[i].setAttribute('aria-current', 'true');
         else anchors[i].removeAttribute('aria-current');
       });
@@ -164,7 +187,9 @@ const planos = ordem.map((label) => {
         // Depois de montada, a dobra permanece imóvel e só escurece sob a próxima.
         layer.style.opacity = '1';
         layer.style.filter = `brightness(${1 - outgoing * .58})`;
-        images[i].style.transform = 'none';
+        // O fundo sobe mais devagar que a dobra (parallax, como a referência) e,
+        // já montada, segue subindo um pouco enquanto escurece sob a próxima.
+        images[i].style.transform = `translate3d(0, ${(-(1 - incoming) * 22 - outgoing * 6).toFixed(3)}%, 0)`;
         infos[i].style.transform = 'none';
         infos[i].style.opacity = '1';
         names[i].style.opacity = '1';
@@ -260,14 +285,20 @@ const planos = ordem.map((label) => {
 <script>
   // Revelação sequencial vinculada à posição da abertura, reversível ao subir.
   document.querySelectorAll<HTMLElement>('[data-revena-revela]').forEach((manifesto) => {
-    const abertura = manifesto.closest<HTMLElement>('.palcoplanos__intro') ?? manifesto;
+    const noPalco = manifesto.closest<HTMLElement>('.palcoplanos__intro');
+    const abertura = noPalco ?? manifesto;
     const palavras = [...manifesto.querySelectorAll<HTMLElement>('[data-palavra]')];
     const movimento = matchMedia('(prefers-reduced-motion: reduce)');
     let quadro = 0;
     const pintar = () => {
       quadro = 0;
-      const progresso = movimento.matches ? 1 : Math.max(0, Math.min(1,
-        (innerHeight * .55 - abertura.getBoundingClientRect().top) / (innerHeight * .65)
+      // Na intro alta do palco a tinta acompanha a dobra inteira; num título
+      // solto (a frase das perguntas) ela termina com o título a 40% da tela,
+      // ainda na posição natural de leitura (crítica de 26/09).
+      const topo = abertura.getBoundingClientRect().top;
+      const progresso = movimento.matches ? 1 : Math.max(0, Math.min(1, noPalco
+        ? (innerHeight * .55 - topo) / (innerHeight * .65)
+        : (innerHeight * .92 - topo) / (innerHeight * .52)
       ));
       palavras.forEach((palavra, i) => {
         const tinta = Math.max(0, Math.min(1, progresso * (palavras.length + 2) - i));

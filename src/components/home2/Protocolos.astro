@@ -1,10 +1,18 @@
 ---
 /**
- * O que a Renke entrega na prática: os cinco pilares da copy, em cartões
- * (Lenora, 21/09 — "insira como card por enquanto"). Grade estática, sem a
- * dobra presa ao scroll; o CSS do palco anterior segue em home2.css, para o
- * caso de voltar. Apresentação compartilhada pelas duas versões; os textos
- * vêm dos recortes do estúdio ou da copy integral.
+ * O que a Renke entrega na prática: os cinco pilares do Protocolo Revena.
+ *
+ * Refeito em 26/09/2026 (Lenora: "dá um trato" na dobra 3, sem cartões de
+ * banco de IA). Referência escolhida na curadoria (docs/04-design/curadoria/):
+ * pins 61 e 114 (Lama Lama), as etapas que se empilham. Cada pilar entra
+ * grande, com o número, o símbolo em amarelo se desenhando e o texto; quando
+ * o próximo chega, a linha dele gruda no topo, abaixo da anterior. No fim, os
+ * cinco formam o índice do Protocolo. Rolagem nativa (position: sticky), sem
+ * trava nova; o script só marca o pilar ativo.
+ *
+ * Apresentação compartilhada pelas duas versões; os textos vêm dos recortes
+ * do estúdio ou da copy integral. Sem JS, no celular e com movimento
+ * reduzido: lista simples, nada preso.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -17,21 +25,69 @@ const cartas = pilares.map((p, i) => ({
   ...(!copyLiteral ? pilaresEstudio[i] : {}),
   iconeSvg: readFileSync(join(process.cwd(), 'public', 'icones', `pilar-0${i + 1}.svg`), 'utf8'),
 }));
+const dois = (i: number) => String(i + 1).padStart(2, '0');
 ---
-<section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo">
+<section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
     <header class="pilares__cabeca entra">
       <p class="rotulo">Para clínicas</p>
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
     </header>
-    <ul class="pilares__grade entra">
-      {cartas.map((p) => (
-        <li class="pilar-card">
-          <span class="pilar-card__icone" aria-hidden="true" set:html={p.iconeSvg} />
-          <h3 class="pilar-card__titulo">{p.titulo}</h3>
-          <p class="pilar-card__texto">{p.texto}</p>
-        </li>
+    <!-- Cabeçalhos e textos são irmãos no mesmo container: dentro de um <li>
+         cada, o sticky soltaria no fim do item e a pilha não se formaria. -->
+    <div class="pilares__lista" style={`--n:${cartas.length}`}>
+      {cartas.map((p, i) => (
+        <>
+          <h3 class="pilar__linha" style={`--i:${i}`} data-pilar={i}>
+            <span class="pilar__n num">{dois(i)}</span>
+            <span class="pilar__titulo">{p.titulo}</span>
+            <span class="pilar__icone" aria-hidden="true" set:html={p.iconeSvg} />
+          </h3>
+          <div class="pilar__corpo" data-pilar-corpo={i}>
+            <p class="pilar__texto">{p.texto}</p>
+          </div>
+        </>
       ))}
-    </ul>
+    </div>
   </div>
 </section>
+
+<script>
+  // Marca o pilar ativo (o último cujo texto já passou da faixa de 62% da
+  // tela): número e símbolo acendem, os de cima ficam apagados. Só estado.
+  const secao = document.querySelector<HTMLElement>('[data-pilares]');
+  if (secao) {
+    const itens = [...secao.querySelectorAll<HTMLElement>('[data-pilar]')];
+    const corpos = [...secao.querySelectorAll<HTMLElement>('[data-pilar-corpo]')];
+    const media = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+    let quadro = 0;
+    const marcar = () => {
+      quadro = 0;
+      if (!media.matches) return;
+      // Ativo: o último pilar cujo texto já saiu de baixo da pilha e chegou ao
+      // terço de cima do espaço livre (o limiar desce conforme a pilha cresce).
+      let ativo = -1;
+      corpos.forEach((c, i) => {
+        const base = itens[i].getBoundingClientRect().bottom;
+        if (c.getBoundingClientRect().top < base + (innerHeight - base) * .35) ativo = i;
+      });
+      // Presa: a linha chegou ao seu lugar na escada (o fundo escuro só entra aí).
+      const topo = parseFloat(getComputedStyle(itens[0]).top) || 0;
+      const passo = itens.length > 1 ? (parseFloat(getComputedStyle(itens[1]).top) || 0) - topo : 0;
+      itens.forEach((li, i) => {
+        li.classList.toggle('pilar--ativo', i === ativo);
+        li.classList.toggle('pilar--passado', i < ativo);
+        if (i <= ativo) li.classList.add('pilar--visto');
+        li.classList.toggle('pilar--preso', li.getBoundingClientRect().top <= topo + passo * i + .5);
+      });
+    };
+    const ligar = () => {
+      secao.classList.toggle('pilares--vivo', media.matches);
+      if (!media.matches) itens.forEach((li) => li.classList.remove('pilar--ativo', 'pilar--passado', 'pilar--preso'));
+      marcar();
+    };
+    addEventListener('scroll', () => { if (!quadro) quadro = requestAnimationFrame(marcar); }, { passive: true });
+    media.addEventListener('change', ligar);
+    ligar();
+  }
+</script>

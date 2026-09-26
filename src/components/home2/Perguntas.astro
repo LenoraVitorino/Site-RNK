@@ -22,7 +22,7 @@
 import { Image } from 'astro:assets';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
-import foto from '../../assets/sede/operacao.jpg';
+import foto from '../../assets/sede/conexao.jpg';
 
 const entra = copyLiteral ? '' : 'entra';
 const dois = (i: number) => String(i + 1).padStart(2, '0');
@@ -49,7 +49,7 @@ const dois = (i: number) => String(i + 1).padStart(2, '0');
 
     <div class:list={['perguntas', 'operacao__palco', entra]}>
       <figure class="operacao__foto">
-        <Image src={foto} alt="Equipe da Renke trabalhando na operação, no escritório de Blumenau" format="webp" widths={[640, 1280, 1920]} sizes="(max-width: 899px) 100vw, 1200px" loading="lazy" />
+        <Image src={foto} alt="A operação da Renke vista da sala de reunião envidraçada, no escritório de Blumenau" format="webp" widths={[640, 1280, 1920]} sizes="(max-width: 899px) 100vw, 1200px" loading="lazy" />
       </figure>
 
       <div class="operacao__indice" role="tablist" aria-label="O que muda na sua clínica" aria-orientation="vertical">

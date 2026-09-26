@@ -56,7 +56,6 @@ body.laboratorio-veu { background: #000; }
 /* ---------- Amarelo só como detalhe ---------- */
 .laboratorio-veu .header .logo__img { width: 32px; height: 32px; }
 .laboratorio-veu .oquefaz__valor { color: var(--papel); }
-.laboratorio-veu .pilar-card__icone { color: rgb(242 242 238 / .85); }
 .laboratorio-veu .pergunta__n { color: var(--cinza); }
 .laboratorio-veu .ancora strong { font-weight: inherit; }   /* copy: o único amarelo da dobra, no peso do resto da frase */
 /* Na copy, os planos no trilho escuro: ícones monocromáticos, número como rótulo. */
@@ -82,19 +81,6 @@ body.laboratorio-veu { background: #000; }
 .laboratorio-veu .header--claro .megamenu__list a:hover { color: var(--grafite); border-left-color: var(--grafite); }
 .laboratorio-veu :focus-visible { outline-color: var(--destaque); }
 .laboratorio-veu :is(#resultados, .palcoplanos, .form-card, .header--claro) :focus-visible { outline-color: #161616; }
-
-/* ---------- Cartões de vidro ----------
-   Sem backdrop-filter: o próprio véu perde o foco atrás deles (shader). */
-.laboratorio-veu .pilar-card {
-  background: rgb(12 12 11 / .74);
-  border: 1px solid rgb(242 242 238 / .10);
-  border-radius: 12px;
-  box-shadow: inset 0 1px 0 rgb(242 242 238 / .06);
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-  transition: background-color .35s ease, border-color .35s ease;
-}
-.laboratorio-veu .pilar-card:hover { background: rgb(16 16 15 / .8); border-color: rgb(242 242 238 / .18); }
-.laboratorio-veu .pilares__cabeca { text-align: left; justify-items: start; }
 
 /* ---------- Convite: escuro, centralizado, um filete amarelo ---------- */
 .laboratorio-veu #fale { color: var(--papel); }

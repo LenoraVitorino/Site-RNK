@@ -1,15 +1,17 @@
 ---
 /**
- * Nossa metodologia — o vídeo vertical à esquerda, o texto à direita e,
- * abaixo da descrição, os três números do briefing (os mesmos dos cartões
- * do Sobre), no desenho da referência que a Lenora mandou em 21/09/2026:
- * número, fio fino e legenda. Vale para as duas versões; só os textos
- * mudam (numerosProva.copy / .estudio).
+ * Nossa metodologia: o vídeo vertical e, ao lado, o texto e os três números
+ * do briefing. Vale para as duas versões; só os textos mudam
+ * (numerosProva.copy / .estudio).
  *
- * Desktop com JS e movimento permitido: o vídeo entra subindo e aparecendo
- * quando a dobra chega à tela (--entra, 0→1, escrito pelo script; o resto
- * é CSS em .oquefaz--profundo). Sem JS, no celular ou com movimento
- * reduzido, a dobra fica estática.
+ * Refeito em 26/09/2026 (Lenora: "dá um trato" na dobra 2). Referências da
+ * curadoria (docs/04-design/curadoria/): pins 12 e 34 (coluna presa e lista
+ * que corre) e 11 (números com um fio fino em cima e legenda curta). No
+ * desktop o vídeo fica preso à esquerda e, à direita, os capítulos passam um
+ * de cada vez: primeiro o título e a descrição, depois cada número, grande. O
+ * capítulo no meio da tela acende e ganha um fio amarelo curto; os outros
+ * ficam apagados. Rolagem nativa, sem trava. No celular e com movimento
+ * reduzido, tudo em fluxo, sem estados.
  */
 import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
@@ -23,67 +25,54 @@ const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
     <div class="oquefaz__midia entra">
       <Telefone />
     </div>
-    <div class="oquefaz__texto entra">
-      <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
-      <p class="oquefaz__descricao">
-        Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
-        Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
-        processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
-      </p>
+    <div class="oquefaz__texto">
+      <div class="oquefaz__capitulo oquefaz__capitulo--abre" data-capitulo>
+        <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
+        <p class="oquefaz__descricao">
+          Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+          Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+          processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+        </p>
+        {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
+      </div>
       <ul class="oquefaz__numeros" aria-label="Números da Renke">
-        {numeros.map((n) => (
-          <li class="oquefaz__numero">
-            <p class="oquefaz__valor num" data-contador>{n.valor.replace(/ /g, '\u00a0')}</p>
+        {numeros.map((n, i) => (
+          <li class="oquefaz__capitulo oquefaz__numero" data-capitulo>
+            <span class="oquefaz__fio" aria-hidden="true"><span></span></span>
+            <p class="oquefaz__valor num">{n.valor.replace(/ /g, ' ')}</p>
             <p class="oquefaz__legenda">{n.legenda}</p>
           </li>
         ))}
       </ul>
-      {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
     </div>
   </div>
 </section>
 
 <script>
+  // Acende o capítulo cujo centro está mais perto do meio da tela.
   const secao = document.querySelector<HTMLElement>('[data-metodologia]');
   if (secao) {
-    const media = matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)');
-    const midia = secao.querySelector<HTMLElement>('.oquefaz__midia')!;
-    const clamp = (x: number) => Math.max(0, Math.min(1, x));
+    const media = matchMedia('(min-width: 1080px) and (prefers-reduced-motion: no-preference)');
+    const caps = [...secao.querySelectorAll<HTMLElement>('[data-capitulo]')];
     let quadro = 0;
-
-    const pintar = () => {
+    const marcar = () => {
       quadro = 0;
-      const vh = innerHeight;
-      const r = secao.getBoundingClientRect();
-      // Longe da tela (mais de 25% de altura para cada lado): só desliga o will-change.
-      const perto = r.bottom > -vh * .25 && r.top < vh * 1.25;
-      secao.classList.toggle('oquefaz--em-tela', perto);
-      if (!perto) return;
-      // Topo do vídeo sem o transform: ele fica centrado na seção (padding simétrico).
-      const topoMidia = r.top + (r.height - midia.offsetHeight) / 2;
-      // Entrada: parte de 12vh abaixo quando aparece no pé da tela e repousa
-      // quando o topo dele chega a 15% da altura. Saída exponencial.
-      const entra = 1 - Math.pow(1 - clamp((vh * .95 - topoMidia) / (vh * .8)), 3);
-      secao.style.setProperty('--entra', entra.toFixed(4));
+      if (!media.matches) return;
+      const meio = innerHeight / 2;
+      let melhor = 0, dist = Infinity;
+      caps.forEach((c, i) => {
+        const r = c.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - meio);
+        if (d < dist) { dist = d; melhor = i; }
+      });
+      caps.forEach((c, i) => c.classList.toggle('oquefaz__capitulo--ativo', i === melhor));
     };
-    const agendar = () => { if (secao.classList.contains('oquefaz--profundo') && !quadro) quadro = requestAnimationFrame(pintar); };
-
     const ligar = () => {
-      secao.classList.toggle('oquefaz--profundo', media.matches);
-      if (media.matches) {
-        pintar();
-      } else {
-        cancelAnimationFrame(quadro); quadro = 0;
-        secao.classList.remove('oquefaz--em-tela');
-        secao.style.removeProperty('--entra');
-      }
+      secao.classList.toggle('oquefaz--viva', media.matches);
+      if (!media.matches) caps.forEach((c) => c.classList.remove('oquefaz__capitulo--ativo'));
+      marcar();
     };
-
-    addEventListener('scroll', agendar, { passive: true });
-    addEventListener('resize', () => {
-      // O change do matchMedia nem sempre chega com o redimensionamento; confere aqui também.
-      if (media.matches !== secao.classList.contains('oquefaz--profundo')) ligar(); else agendar();
-    }, { passive: true });
+    addEventListener('scroll', () => { if (!quadro) quadro = requestAnimationFrame(marcar); }, { passive: true });
     media.addEventListener('change', ligar);
     ligar();
   }

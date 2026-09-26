@@ -41,6 +41,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; 
 p { margin: 0; }
 strong, b { font-weight: var(--peso-enfase); }
 :focus-visible { outline: 2px solid var(--papel); outline-offset: 3px; }
+/* Superfícies do navegador na paleta: seleção com o amarelo como detalhe e barra de rolagem discreta. */
+::selection { background: rgb(255 209 3 / .88); color: #161616; }
+html { scrollbar-color: rgb(242 242 238 / .22) #000; }
 .skip-link { position: absolute; left: -9999px; background: var(--papel); color: var(--grafite); padding: .75rem 1rem; z-index: 200; }
 .skip-link:focus { left: 1rem; top: 1rem; }
 
@@ -213,7 +216,7 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: 0; flex: none;
   width: var(--alvo); height: var(--alvo); padding: 0;
-  background: none; border: 1px solid rgb(242 242 238 / .3); border-radius: 0; cursor: pointer;
+  background: none; border: 1px solid rgb(242 242 238 / .3); border-radius: 8px; cursor: pointer;
 }
 .nav-toggle__bar { display: block; width: 18px; height: 1.5px; background: var(--papel); transition: transform .25s var(--easing), opacity .2s; }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
@@ -441,26 +444,29 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 /* O par vídeo + texto fica centrado no container, com o vídeo na largura
    dele e colado ao texto por um vão fixo (Lenora, 21/09: o vídeo estava
    na margem, longe do texto). */
-.oquefaz { display: grid; grid-template-columns: min(100%, 340px) minmax(0, 560px); justify-content: center; column-gap: clamp(40px, 6vw, 96px); row-gap: 32px; align-items: center; }
-.oquefaz__midia .tel { --largura-tel: 100%; }
-.oquefaz__texto { display: grid; gap: clamp(24px, 2.4vw, 32px); }
-.oquefaz__texto > .titulo { white-space: normal; font-size: clamp(1.9rem, 3.4vw, 3.4rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
-/* Só os parágrafos filhos diretos da coluna: text-wrap é atalho de
-   text-wrap-mode, e com especificidade maior que .oquefaz__legenda ele
-   reativava a quebra ali, anulando o nowrap da legenda. */
-.oquefaz__texto > p:not(.rotulo) { max-width: 48ch; line-height: 1.6; text-wrap: pretty; }   /* sem palavra sozinha na última linha (Lenora, 21/09) */
-/* Os três números sempre lado a lado: sem quebra, vão e fonte encolhem com a coluna. */
-.oquefaz__numeros { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: nowrap; gap: clamp(12px, 1.5vw, 28px); }
-/* Três colunas, nenhuma mais estreita que o seu conteúdo (número e legenda
-   não quebram). O traço cinza separa as colunas (Lenora, 21/09): fica na
-   borda esquerda, com o mesmo recuo do vão, então nasce centrado entre
-   uma coluna e a outra. */
-.oquefaz__numero { flex: 1 1 auto; min-width: min-content; }
-.oquefaz__numero + .oquefaz__numero { border-left: 1px solid rgb(242 242 238 / .16); padding-left: clamp(12px, 1.5vw, 28px); }
-/* Número grande em amarelo (o desenho dos antigos cartões do Sobre), legenda em cinza (Lenora, 21/09). */
-.oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2rem, 2.8vw, 3rem); line-height: .95; letter-spacing: -.04em; color: var(--destaque); white-space: nowrap; }
+/* Dobra 2 (26/09/2026): vídeo preso à esquerda e capítulos que passam à
+   direita, um de cada vez (referências: pins 12, 34 e 11). */
+.oquefaz { --tel: min(340px, calc((100svh - 170px) * .5625)); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(40px, 7vw, 120px); row-gap: 32px; align-items: start; }
+.oquefaz__midia .tel { --largura-tel: var(--tel); }
+.oquefaz__texto { display: grid; }
+.oquefaz__capitulo { display: grid; gap: clamp(18px, 2vw, 28px); align-content: center; }
+.oquefaz__texto .oquefaz__titulo { white-space: normal; font-size: clamp(1.9rem, 3.4vw, 3.4rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
+.oquefaz__descricao { max-width: 46ch; line-height: 1.65; text-wrap: pretty; color: rgb(242 242 238 / .7); font-size: clamp(16px, 1.15vw, 18px); }
+.oquefaz__numeros { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 28px; }
+/* Número: fio fino em cima (com o traço amarelo do ativo), valor grande e fino, legenda curta. */
+.oquefaz__fio { position: relative; display: block; height: 1px; background: rgb(242 242 238 / .16); }
+.oquefaz__fio span { position: absolute; left: 0; top: 0; width: 28px; height: 1px; background: var(--destaque); transform: scaleX(0); transform-origin: left; transition: transform .8s cubic-bezier(.22, 1, .36, 1); }
+.oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 4.2vw, 4.4rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
 .oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.oquefaz__numeros .oquefaz__legenda { margin: 12px 0 0; font-size: clamp(12px, .95vw, 14px); line-height: 1.35; color: var(--cinza); text-wrap: nowrap; white-space: nowrap; }
+.oquefaz__numeros .oquefaz__legenda { margin: 0; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; }
+/* Viva (desktop): o vídeo fica preso no meio da altura e cada capítulo ocupa meia tela. */
+.oquefaz--viva .oquefaz__midia { position: sticky; top: calc(50svh - var(--tel) * .8889 + 20px); }
+.oquefaz--viva .oquefaz__capitulo { min-height: 56svh; }
+.oquefaz--viva .oquefaz__numeros { margin: 0; gap: 0; }
+.oquefaz--viva .oquefaz__capitulo { opacity: .5; transition: opacity .7s var(--easing-suave); }
+.oquefaz--viva .oquefaz__capitulo--ativo { opacity: 1; }
+.oquefaz--viva .oquefaz__capitulo--ativo .oquefaz__fio span { transform: none; }
+.oquefaz--viva .oquefaz__valor { font-size: clamp(3rem, 5.6vw, 5.8rem); }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -567,7 +573,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    DOBRA 3 · PROTOCOLO REVENA — cabeçalho + cartões, um aberto por vez
    ============================================================ */
 
-.pilares { position: relative; overflow: hidden; background: var(--fundo); }
+.pilares { position: relative; overflow: clip; background: var(--fundo); }   /* clip, não hidden: hidden quebraria o sticky do índice dos pilares */
 .pilares .container { position: relative; }
 .pilares__cabeca { display: grid; gap: 20px; }
 .rotulo--pilula {
@@ -654,6 +660,14 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 .palcoplanos__ancora:hover, .palcoplanos__ancora--ativa { opacity: 1; }
 .palcoplanos__ancora:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+/* Mapa de posição ao lado das âncoras: planos em perspectiva, o atual preenchido. */
+.palcoplanos__mapa { position: absolute; z-index: 10; top: calc(5vw + 4px); right: calc(var(--grid-inset) + 132px); width: 44px; height: auto; overflow: visible; }
+.mapa__face { fill: none; stroke: rgb(22 22 22 / .26); stroke-width: 1; transition: fill .6s var(--easing-suave), stroke .6s var(--easing-suave); }
+.mapa__fio { fill: none; stroke: transparent; stroke-width: 1.4; transition: stroke .6s var(--easing-suave); }
+.mapa__plano--passado .mapa__face { stroke: rgb(22 22 22 / .45); }
+.mapa__plano--ativo .mapa__face { fill: rgb(22 22 22 / .88); stroke: rgb(22 22 22 / .88); }
+.mapa__plano--ativo .mapa__fio { stroke: var(--destaque); }
+.palcoplanos:not([data-animado]) .palcoplanos__mapa { display: none; }
 
 /* .content: um plano por tela, absoluto; a imagem (fundo) embaixo e o .info por cima. */
 .plano-palco { position: absolute; inset: 0; visibility: hidden; z-index: 2; background: var(--pp-fundo); overflow: hidden; will-change: transform, filter; }
@@ -663,6 +677,8 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
+/* Traços de fundo do plano: um pouco maiores que a tela, para o parallax não mostrar a borda. */
+.plano-palco__fundo { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; pointer-events: none; user-select: none; }
 .plano-palco__info { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: transform, opacity; }
 
 /* Nome em duas linhas desencontradas, por cima do símbolo. */
@@ -698,6 +714,9 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) .plano-palco { position: relative; inset: auto; visibility: visible; transform: none !important; opacity: 1 !important; background: var(--pp-fundo); padding: clamp(40px, 6vw, 80px) var(--gutter); border-top: 1px solid var(--pp-fio); }
 .palcoplanos:not([data-animado]) .plano-palco--tom2 { background: var(--pp-fundo-2); }
 .palcoplanos:not([data-animado]) .plano-palco__imagem { position: static; background: transparent; transform: none !important; }
+.palcoplanos:not([data-animado]) .plano-palco { overflow: hidden; }
+.palcoplanos:not([data-animado]) .plano-palco__fundo { top: 0; height: 100%; opacity: .7; }
+.palcoplanos:not([data-animado]) .plano-palco__info, .palcoplanos:not([data-animado]) .plano-palco__icone-mob { position: relative; z-index: 1; }
 .palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: block; width: min(48vw, 240px); height: auto; margin: 0 auto 24px; }
 .palcoplanos:not([data-animado]) .plano-palco__info { position: static; pointer-events: auto; display: grid; gap: 28px; transform: none !important; opacity: 1 !important; max-width: 620px; margin-inline: auto; }
 .palcoplanos:not([data-animado]) .plano-palco__nome--pilha { display: grid; position: static; transform: none; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; font-size: clamp(3rem, 11vw, 5rem); opacity: 1; }
@@ -800,11 +819,11 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .operacao__titulo { margin-bottom: clamp(32px, 4vw, 56px); }
 .operacao__palco { position: relative; display: grid; grid-template-columns: minmax(260px, 340px) 1fr; align-items: end; gap: 24px; min-height: clamp(560px, 72svh, 720px); padding: clamp(16px, 1.6vw, 24px); border-radius: 16px; overflow: hidden; isolation: isolate; }
 .operacao__foto { position: absolute; inset: 0; z-index: -2; margin: 0; }
-.operacao__foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.6s var(--easing); }
+.operacao__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) brightness(.86); transition: transform 1.6s var(--easing); }
 .js .operacao__palco.entra:not(.visivel) .operacao__foto img { transform: scale(1.05); }
 .operacao__palco::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(0 0 0 / .62) 0%, rgb(0 0 0 / .2) 42%, rgb(0 0 0 / .05) 70%), linear-gradient(0deg, rgb(0 0 0 / .45), transparent 45%); }
 /* Índice: vidro escuro, um item por linha, o ativo claro com a barra que anda. */
-.operacao__indice { align-self: stretch; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px; border-radius: 12px; background: rgb(10 10 9 / .55); border: 1px solid rgb(242 242 238 / .12); -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); }
+.operacao__indice { align-self: end; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px; border-radius: 12px; background: rgb(10 10 9 / .55); border: 1px solid rgb(242 242 238 / .12); -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); }
 .operacao__aba { position: relative; display: grid; grid-template-columns: 28px 1fr; align-items: baseline; gap: 10px; width: 100%; padding: 12px 12px 14px; background: none; border: 0; border-radius: 8px; color: rgb(242 242 238 / .56); font: inherit; font-size: 14.5px; line-height: 1.35; text-align: left; cursor: pointer; transition: color .4s var(--easing-suave), background-color .4s var(--easing-suave); }
 .operacao__aba:hover { color: rgb(242 242 238 / .86); }
 .operacao__aba[aria-selected="true"] { color: var(--papel); background: rgb(242 242 238 / .06); }
@@ -816,14 +835,14 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .operacao__aba:focus-visible { outline: 2px solid var(--papel); outline-offset: -2px; }
 /* Cartão claro: só o item ativo, entrando devagar. */
 .operacao__cartoes { position: relative; justify-self: end; width: min(100%, 420px); }
-.operacao__cartao { display: grid; gap: 12px; padding: clamp(22px, 2vw, 30px); border-radius: 12px; background: var(--papel); color: var(--grafite); }
+.operacao__cartao { display: grid; gap: 12px; padding: clamp(22px, 2vw, 30px); border-radius: 12px; background: rgb(10 10 9 / .62); border: 1px solid rgb(242 242 238 / .14); color: var(--papel); -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); }
 .operacao--viva .operacao__cartao { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translate3d(0, 10px, 0); transition: opacity .5s var(--easing-suave), transform .7s var(--easing), visibility 0s .5s; }
 .operacao--viva .operacao__cartoes { display: grid; }
 .operacao--viva .operacao__cartao[data-ativo] { opacity: 1; visibility: visible; transform: none; transition-delay: .08s, .08s, 0s; }
-.operacao__cartao .pergunta__n { font-size: 12px; letter-spacing: .06em; color: #6B6B65; }
-.operacao__cartao .pergunta__n span { color: #A3A39B; }
-.operacao__cartao .pergunta__titulo { font-family: var(--font-titulo); font-size: clamp(1.3rem, 1.6vw, 1.6rem); font-weight: 400; line-height: 1.2; letter-spacing: -.03em; }
-.operacao__cartao p { margin: 0; font-size: 15px; line-height: 1.6; color: #45453F; }
+.operacao__cartao .pergunta__n { font-size: 12px; letter-spacing: .06em; color: var(--papel); }
+.operacao__cartao .pergunta__n span { color: rgb(242 242 238 / .45); }
+.operacao__cartao .pergunta__titulo { font-family: var(--font-titulo); font-size: clamp(1.4rem, 1.8vw, 1.8rem); font-weight: 300; line-height: 1.15; letter-spacing: -.035em; }
+.operacao__cartao p { margin: 0; font-size: 15px; line-height: 1.65; color: rgb(242 242 238 / .74); }
 /* Sem JS: todos os textos, em coluna, sobre a foto. */
 .operacao:not(.operacao--viva) .operacao__cartoes { display: grid; gap: 12px; }
 /* Na copy, a dobra entra presa na cortina: precisa caber numa tela. */
@@ -835,7 +854,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .operacao__foto { position: relative; inset: auto; z-index: 0; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
   .operacao__indice { display: none; }
   .operacao__cartoes, .operacao--viva .operacao__cartoes { display: grid; gap: 0; width: 100%; }
-  .operacao--viva .operacao__cartao, .operacao__cartao { grid-area: auto; opacity: 1; visibility: visible; transform: none; padding: 22px 0; border-radius: 0; background: none; color: var(--papel); border-top: 1px solid rgb(242 242 238 / .16); }
+  .operacao--viva .operacao__cartao, .operacao__cartao { grid-area: auto; opacity: 1; visibility: visible; transform: none; padding: 22px 0; border: 0; border-top: 1px solid rgb(242 242 238 / .16); border-radius: 0; background: none; color: var(--papel); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .operacao__cartao .pergunta__n { color: rgb(242 242 238 / .5); }
   .operacao__cartao p { color: rgb(242 242 238 / .72); }
 }
@@ -845,45 +864,43 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 /* ---------- Resultados: rótulo lateral e indicadores em linhas ---------- */
 #resultados { background: #e8e7df; color: #161616; padding-block: var(--esp-secao); }
-.extrato__layout { display: grid; grid-template-columns: 1fr 3fr; column-gap: 24px; border-top: 1px solid #cecec4; padding-top: clamp(32px, 3vw, 48px); }
-.extrato__rotulo { padding-top: 8px; color: #5C5C57; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
-.extrato__conteudo { min-width: 0; }
+/* Dobra 7 (26/09/2026): coluna presa com o título e um número por vez; as
+   especialidades passam à direita (referências: pins 46 e 234). */
+.resultados { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(40px, 7vw, 120px); align-items: start; }
+.resultados__fixo { display: grid; gap: clamp(20px, 2.4vw, 32px); align-content: start; }
+.extrato__rotulo { margin: 0; color: #5C5C57; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
 .extrato__destaque { color: #4A4B46; font-weight: 600; }
-.extrato__cabeca { margin-bottom: clamp(48px, 5vw, 80px); }
-.extrato__cabeca .titulo { max-width: 19ch; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.08; }
-.extrato { list-style: none; margin: 0; padding: 0; }
-.extrato__linha { border-top: 1px solid #cecec4; }
-.extrato__grade { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: start; padding-block: clamp(32px, 3.6vw, 58px); }
-.extrato__num { margin: 0; font-family: var(--font-titulo); font-weight: 400; color: #4A4B46; font-size: clamp(3.2rem, 5.4vw, 5.2rem); line-height: 1; letter-spacing: -.065em; white-space: nowrap; text-align: right; }
-.contador { font-variant-numeric: tabular-nums; }
-.extrato__texto { display: grid; gap: 14px; max-width: 34ch; }
-.extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.25rem, 1.45vw, 1.45rem); letter-spacing: -.035em; line-height: 1.2; }
-.extrato__texto p { margin: 0; color: #404040; font-size: 15px; line-height: 1.5; }
-.extrato__acao { margin-top: clamp(28px, 4vw, 48px); }
-/* Foto da área no hover (mockup, Lenora 21/09): no canto esquerdo, na coluna
-   do rótulo "Resultados", alinhada ao topo de cada linha. Absoluta em relação
-   à linha, empurrada para a esquerda da coluna de conteúdo. */
-.extrato__slot { display: none; }
-@media (hover: hover) and (min-width: 1024px) {
-  .extrato__linha { position: relative; }
-  /* A coluna do rótulo mede 1/3 da coluna de conteúdo (grade 1fr 3fr, vão de 24 px): a foto encosta na margem esquerda. */
-  /* Moldura maior (Lenora, 21/09): ocupa a coluna do rótulo quase inteira e
-     a altura útil da linha, com um respiro de 8 px em cima e embaixo. */
-  .extrato__slot { display: block; position: absolute; top: 8px; bottom: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 8px); pointer-events: none; }
-  .extrato__foto {
-    aspect-ratio: auto; height: 100%; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
-    transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
-  }
-  .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: none; }
+.resultados__fixo .titulo { max-width: 16ch; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.08; }
+.resultados__placar { display: none; }
+.resultados__lista { list-style: none; margin: 0; padding: 0; }
+.resultados__linha { display: grid; gap: 12px; align-content: start; padding: clamp(24px, 2.6vw, 36px) 0; border-top: 1px solid #cecec4; }
+.resultados__num-linha { margin: 0 0 4px; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1; letter-spacing: -.055em; color: #4A4B46; }
+.extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.25rem, 1.6vw, 1.55rem); letter-spacing: -.035em; line-height: 1.2; }
+.resultados__texto { margin: 0; max-width: 40ch; color: #404040; font-size: 15px; line-height: 1.6; }
+.extrato__acao { margin: 0; }
+/* Vivo (desktop): a coluna fica presa e o placar mostra o número da linha ativa. */
+.resultados--vivo .resultados__fixo { position: sticky; top: calc(var(--altura-header) + 24px); }
+.resultados--vivo .resultados__placar { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid #cecec4; }
+.resultados--vivo .resultados__num-linha { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.resultados--vivo .resultados__linha { min-height: 40svh; align-content: center; transition: color .6s var(--easing-suave); color: #66665F; }
+.resultados--vivo .resultados__linha .resultados__texto { color: #66665F; transition: color .6s var(--easing-suave); }
+.resultados--vivo .resultados__linha--ativa { color: #161616; }
+.resultados--vivo .resultados__linha--ativa .resultados__texto { color: #404040; }
+.resultados--vivo .resultados__lista { padding-bottom: 20svh; }
+.resultados__contagem { margin: 0; font-size: 12px; letter-spacing: .08em; color: #55554F; }
+.resultados__contagem span { color: #161616; }
+/* Os números empilhados na mesma célula; o ativo sobe da linha de base, o que sai sobe e some. */
+.resultados__numeros { display: grid; overflow: hidden; padding-block: .06em; }
+.resultados__num { grid-area: 1 / 1; margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(4rem, 8.4vw, 8.4rem); line-height: .92; letter-spacing: -.065em; color: #2A2A28; white-space: nowrap; transition: transform 1s cubic-bezier(.22, 1, .36, 1), opacity .6s var(--easing-suave); }
+.resultados__num[data-estado="antes"] { transform: translate3d(0, -105%, 0); opacity: 0; }
+.resultados__num[data-estado="depois"] { transform: translate3d(0, 105%, 0); opacity: 0; }
+.resultados__area { margin: 0; font-size: 15px; color: #4A4B46; }
+@media (max-width: 1023.98px) {
+  .resultados { grid-template-columns: minmax(0, 1fr); row-gap: 32px; }
 }
-@media (prefers-reduced-motion: reduce) { .extrato__foto { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .resultados__num { transition: none; } }
 #resultados :focus-visible { outline-color: #161616; }
-@media (max-width: 700px) {
-  .extrato__layout { grid-template-columns: 1fr; gap: 28px; }
-  .extrato__cabeca .titulo { font-size: clamp(2rem, 7vw, 2.8rem); }
-  .extrato__grade { grid-template-columns: 1fr; gap: 24px; }
-  .extrato__num { text-align: left; font-size: clamp(4rem, 15vw, 6rem); }
-}
+
 
 /* ---------- CTA final (painel amarelo com fotos) ---------- */
 
@@ -1028,7 +1045,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .palcoplanos .botao { background: transparent; border-color: rgb(22 22 22 / .28); padding: 12px 16px; }
 .palcoplanos .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite); }
 .palcoplanos :focus-visible { outline-color: var(--grafite); }
-.oquefaz__texto > p:not(:last-child) { color: rgb(242 242 238 / .7); font-size: clamp(16px, 1.15vw, 18px); }
 #fale { position: relative; overflow: hidden; padding-block: clamp(80px, 9vw, 144px); }
 .chamada { grid-template-columns: .8fr 1.2fr; gap: clamp(32px, 7vw, 112px); }
 .chamada__numero { font-size: clamp(160px, 24vw, 380px); font-weight: 260; line-height: .75; letter-spacing: -.1em; color: rgb(22 22 22 / .14); user-select: none; }
@@ -1093,28 +1109,50 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
 }
 
-/* Pilares centralizados: o scroll conduz cada cartão da direita para a esquerda. */
-/* Pilares em cartões (Lenora, 21/09): grade estática, três na primeira
-   linha e dois na segunda no desktop, sem a dobra presa ao scroll. */
+/* ---------- Protocolo Revena: os cinco pilares (26/09/2026) ----------
+   Referência: pins 61 e 114 (Lama Lama). Cada pilar entra grande e, quando o
+   próximo chega, a linha dele gruda no topo, abaixo da anterior: no fim os
+   cinco formam o índice. Rolagem nativa (sticky); o script só marca o ativo. */
 .pilares { background: var(--fundo); }
-.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 4vw, 56px); text-align: center; justify-items: center; }
+.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(40px, 5vw, 72px); }
 .pilares__cabeca .titulo { font-size: clamp(2rem, 3vw, 3rem); }
-.pilares__grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(16px, 1.6vw, 24px); }
-.pilar-card {
-  grid-column: span 2; min-width: 0; display: grid; align-content: start; gap: 16px;
-  padding: clamp(24px, 2.4vw, 34px);
-  border: 1px solid var(--fio); border-radius: 12px;
-  background: radial-gradient(ellipse at 100% 0%, #27291e66, transparent 65%), #141513;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06);
+.pilares__lista { --linha: 76px; }
+.pilar__linha { margin: 0; font: inherit; }
+.pilar__linha {
+  position: relative; display: grid; grid-template-columns: clamp(48px, 6vw, 88px) minmax(0, 1fr) 36px; align-items: center; gap: clamp(16px, 2vw, 32px);
+  min-height: var(--linha); border-top: 1px solid rgb(242 242 238 / .14);
 }
-.pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: span 3; }
-.pilar-card__icone { display: block; width: 32px; color: var(--destaque); }
-.pilar-card__icone svg { display: block; width: 100%; height: auto; }
-.pilar-card__titulo { font-family: var(--font-titulo); font-size: clamp(18px, 1.3vw, 20px); line-height: 1.25; font-weight: 400; letter-spacing: -.035em; color: var(--papel); text-wrap: pretty; }
-.pilar-card__texto { margin: 0; font-size: 15px; line-height: 1.6; color: var(--cinza); text-wrap: pretty; }
+.pilar__n { font-size: 12px; letter-spacing: .08em; color: rgb(242 242 238 / .42); transition: color .6s var(--easing-suave); }
+.pilar__titulo { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.35rem, 2.3vw, 2.25rem); line-height: 1.12; letter-spacing: -.035em; color: rgb(242 242 238 / .9); text-wrap: balance; transition: color .6s var(--easing-suave), opacity .6s var(--easing-suave); }
+.pilar__icone { display: block; width: 32px; justify-self: end; color: var(--destaque); opacity: .35; transition: opacity .6s var(--easing-suave); }
+.pilar__icone svg { display: block; width: 100%; height: auto; overflow: visible; }
+.pilar__corpo { padding: clamp(16px, 2vw, 28px) 0 clamp(72px, 14vh, 160px) calc(clamp(48px, 6vw, 88px) + clamp(16px, 2vw, 32px)); }
+.pilar__texto { max-width: 46ch; margin: 0; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.65; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+/* Vivo (desktop, com JS e movimento): linhas presas em escada e o símbolo se desenhando. */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .pilares--vivo .pilar__linha {
+    position: sticky; top: calc(var(--altura-header) - 14px + var(--i) * var(--linha)); z-index: calc(2 + var(--i));
+    transition: background-color .4s var(--easing-suave);
+  }
+  /* Só a linha presa ganha fundo, para o texto que corre por baixo não colidir. */
+  .pilares--vivo .pilar--preso { background: rgb(0 0 0 / .84); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  .pilares--vivo .pilar--preso:first-of-type::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--altura-header); background: rgb(0 0 0 / .84); }
+  .pilares--vivo .pilar__corpo { min-height: 34svh; }
+  .pilares--vivo .pilar__texto { opacity: .35; transform: translate3d(0, 12px, 0); transition: opacity .8s var(--easing-suave), transform 1s var(--easing); }
+  .pilares--vivo :is(.pilar--ativo, .pilar--passado) + .pilar__corpo .pilar__texto { opacity: 1; transform: none; }
+  /* Espaço no fim para os cinco chegarem a empilhar antes de a dobra sair. */
+  .pilares--vivo .pilares__lista { padding-bottom: 18svh; }
+  .pilares--vivo .pilar__icone svg * { stroke-dasharray: 64; stroke-dashoffset: 64; transition: stroke-dashoffset 1.6s var(--easing); }
+  .pilares--vivo .pilar--visto .pilar__icone svg * { stroke-dashoffset: 0; }
+}
+.pilar--ativo .pilar__n { color: var(--destaque); }
+.pilar--ativo .pilar__titulo { color: var(--papel); }
+.pilar--ativo .pilar__icone { opacity: 1; }
+.pilar--passado .pilar__titulo { color: rgb(242 242 238 / .5); }
+.pilar--passado .pilar__icone { opacity: .5; }
 @media (max-width: 899.98px) {
-  .pilares__grade { grid-template-columns: minmax(0, 1fr); }
-  .pilar-card, .pilar-card:nth-child(4), .pilar-card:nth-child(5) { grid-column: auto; }
+  .pilar__linha { grid-template-columns: 40px minmax(0, 1fr) 28px; min-height: 64px; }
+  .pilar__corpo { padding: 4px 0 32px 56px; }
 }
 
 /* Guardado: o palco anterior dos pilares (um cartão por tela, dobra presa),
@@ -1232,7 +1270,7 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-janela__molde { aspect-ratio: 4 / 5; max-height: 72svh; width: 100%; justify-self: end; }
 .sobre-janela__fotos { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
 .sobre-janela__foto { position: absolute; inset: 0; margin: 0; overflow: hidden; }
-.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8); will-change: transform; }
 /* Escurece o lado do texto conforme a foto toma a tela. */
 .sobre-janela__veu { position: absolute; inset: 0; pointer-events: none; opacity: var(--sobre-a, 0); background: linear-gradient(90deg, rgb(0 0 0 / .82) 0%, rgb(0 0 0 / .55) 38%, rgb(0 0 0 / .1) 70%), linear-gradient(0deg, rgb(0 0 0 / .5), transparent 30%); }
 .sobre-janela__legenda { position: absolute; right: var(--grid-inset); bottom: 32px; z-index: 2; display: flex; align-items: baseline; gap: 10px; margin: 0; font-size: 13px; color: rgb(242 242 238 / .78); opacity: var(--sobre-a, 0); }
@@ -1271,26 +1309,10 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .letreiro--frases .letreiro__palavra { font-size: clamp(1.8rem, 4vw, 4rem); }
 .letreiro--frases .letreiro__trilho { animation-duration: 96s; }
 
-/* Abaixo de 1080 px o vídeo sobe para cima do texto: lado a lado, a coluna
-   de texto não comporta as três legendas numa linha só (Lenora, 21/09). */
+/* Abaixo de 1080 px o vídeo sobe para cima do texto. */
 @media (max-width: 1079.98px) {
-  .oquefaz { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
-  .oquefaz__midia { justify-items: center; }
-}
-@media (max-width: 599.98px) {
-  .oquefaz__numeros { flex-direction: column; gap: 18px; }
-  .oquefaz__numero + .oquefaz__numero { border-left: 0; border-top: 1px solid rgb(242 242 238 / .16); padding: 18px 0 0; }
+  .oquefaz { grid-template-columns: minmax(0, 1fr); }
+  .oquefaz__midia { justify-self: center; }
 }
 
-/* ---------- Nossa metodologia: entrada do vídeo (20/09/2026) ----------
-   Só no desktop, com JS e movimento permitido (classe .oquefaz--profundo
-   ligada pelo script): o vídeo sobe e aparece quando a dobra chega à tela.
-   Sem a classe, a dobra é estática. */
-@media (min-width: 1080px) {
-  .oquefaz--profundo { --entra: 0; overflow: clip; }
-  .oquefaz--profundo .oquefaz__midia.entra {
-    opacity: var(--entra); transition: none;
-    transform: translate3d(0, calc((1 - var(--entra)) * 12vh), 0) scale(calc(.94 + .06 * var(--entra)));
-  }
-  .oquefaz--em-tela .oquefaz__midia { will-change: transform; }
-}
+
