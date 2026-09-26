@@ -401,10 +401,13 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 }
 .hero__risco {
   display: inline-block; position: relative;
+  /* O fundo recortado no texto precisa cobrir acentos e descendentes,
+     inclusive além da caixa de linha. As margens preservam o alinhamento. */
+  padding: .12em .06em; margin: -.12em -.06em;
   background: linear-gradient(to right, #777773 0%, #777773 var(--hero-risco-progresso), var(--papel) var(--hero-risco-progresso), var(--papel) 100%);
   background-clip: text; -webkit-background-clip: text; color: transparent;
 }
-.hero__risco::after { content: ''; position: absolute; left: 0; width: var(--hero-risco-progresso); top: 54%; height: 2px; background: #777773; }
+.hero__risco::after { content: ''; position: absolute; left: .06em; width: clamp(0px, calc(var(--hero-risco-progresso) - .06em), calc(100% - .12em)); top: 54%; height: 2px; background: #777773; }
 .js .hero__mensagem--antes { visibility: visible; animation: hero-frase-sai .7s ease 3.1s forwards; }
 .js .hero__mensagem--depois { opacity: 0; transform: translateY(.18em); animation: hero-frase-entra .9s var(--easing) 3.35s forwards; }
 /* Uma única medida controla o preenchimento cinza e a ponta do traço. */
