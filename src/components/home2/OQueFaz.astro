@@ -12,7 +12,11 @@ const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
-        <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">{copyLiteral ? 'Nossa metodologia' : 'O que a Renke faz'}</h2>
+        <h2 class="titulo metodo__titulo" id="o-que-fazemos-titulo">
+          {copyLiteral
+            ? <><span>Nossa</span>{' '}<span>metodologia</span></>
+            : <><span>O que a</span>{' '}<span>Renke faz</span></>}
+        </h2>
         <p class="metodo__descricao">
           <span>Utilizamos a metodologia de Revenue Operations</span>{' '}
           <span>para estruturar a operação de receita. Analisamos cada etapa</span>{' '}

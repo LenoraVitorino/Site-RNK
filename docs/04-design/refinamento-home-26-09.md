@@ -33,7 +33,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 ## Decisões de implementação — ajustes pedidos pela Lenora
 
 - Abertura recuperada da versão `49123ae`, com selo arredondado no topo, seis espaços circulares para fotos e a legenda “Doutores que confiam na gente”. O bloco aparece mesmo enquanto as fotos aguardam inserção; a contagem só aparece quando preenchida em `src/data/doutores.ts`. Sem índice numerado, com a cena Peachweb preservada.
-- Metodologia com título, subtítulo original e três indicadores agrupados ao lado do vídeo, alinhada às margens globais. Retirados os três verbos soltos, divisórias e setas a pedido da Lenora. Parágrafo em quatro linhas no desktop; no celular, texto e números precedem o vídeo. Valores de cada versão preservados.
+- Segunda dobra baseada na referência enviada “Crafting ideas that inspire”: título grande em duas linhas no alto à esquerda, apresentação e três indicadores na base da coluna, vídeo vertical ampliado à direita. Título “O que a Renke faz” no estúdio e “Nossa metodologia” na copy. Mantidos o grid global, a cena Peachweb e os valores de cada versão, sem contornos nem legenda abaixo do vídeo. No celular, título, texto e números precedem o vídeo; o parágrafo quebra naturalmente conforme a largura.
 - Removidos os rótulos auxiliares numerados das seções.
 - Cinco pilares em cards como Features: três na primeira linha e dois centralizados na segunda; duas colunas no tablet e uma no celular. As duas versões preservam seus textos próprios.
 - Ilustrações SVG próprias de interfaces com vidro, luz suave, grão e traços cinza: aquisição, integração, automação, dados e posicionamento. Não representam um produto funcional nem acrescentam indicadores.
