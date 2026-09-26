@@ -19,9 +19,9 @@ const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[
         </article>
       ))}
     </div>
-    <div class="pilares-editoriais__ponte">
-      <p>{copyLiteral ? 'A Renke recomenda o protocolo certo para o momento da sua clínica.' : 'Qual é o momento da sua clínica?'}</p>
-      <a class="link-arrow" href={copyLiteral ? '#planos' : '#protocolo-revena'}>Ver os planos</a>
-    </div>
+    {copyLiteral && <div class="pilares-editoriais__ponte">
+      <p>A Renke recomenda o protocolo certo para o momento da sua clínica.</p>
+      <a class="link-arrow" href="#planos">Ver os planos</a>
+    </div>}
   </div>
 </section>
