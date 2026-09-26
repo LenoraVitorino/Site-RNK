@@ -173,12 +173,12 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Composição editorial: título no alto, apresentação e prova na base,
-   com o vídeo vertical ocupando a coluna direita inteira. */
+   com o vídeo vertical ocupando a coluna esquerda inteira. */
 #o-que-fazemos { padding-block: clamp(64px, 7vw, 104px); }
 .metodo-editorial {
   width: 100%; max-width: none; margin: 0; padding: 0;
-  grid-template-columns: minmax(0, 1fr) minmax(0, .55fr);
-  grid-template-areas: "texto midia";
+  grid-template-columns: minmax(0, .55fr) minmax(0, 1fr);
+  grid-template-areas: "midia texto";
   gap: clamp(40px, 5vw, 80px); align-items: stretch;
   border: 0; border-radius: 0; background: none;
 }
