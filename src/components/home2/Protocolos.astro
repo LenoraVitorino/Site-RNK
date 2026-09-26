@@ -2,7 +2,7 @@
 import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
-import ArteInterface from './ArteInterface.astro';
+import ArtePilar from './ArtePilar.astro';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
@@ -14,7 +14,7 @@ const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[
     <div class="features-grade">
       {cartas.map((p, i) => (
         <article class="feature-card entra">
-          <div class="feature-card__arte"><ArteInterface id={`pilar-${i}`} tipo={i} /></div>
+          <div class="feature-card__arte"><ArtePilar tipo={i} /></div>
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
         </article>
       ))}
