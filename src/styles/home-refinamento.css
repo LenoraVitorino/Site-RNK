@@ -173,12 +173,12 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Composição editorial: título no alto, apresentação e prova na base,
-   com o vídeo vertical ocupando a coluna esquerda inteira. */
+   com o vídeo vertical ocupando a coluna direita inteira. */
 #o-que-fazemos { padding-block: clamp(64px, 7vw, 104px); }
 .metodo-editorial {
   width: 100%; max-width: none; margin: 0; padding: 0;
-  grid-template-columns: minmax(0, .55fr) minmax(0, 1fr);
-  grid-template-areas: "midia texto";
+  grid-template-columns: minmax(0, 1fr) minmax(0, .55fr);
+  grid-template-areas: "texto midia";
   gap: clamp(40px, 5vw, 80px); align-items: stretch;
   border: 0; border-radius: 0; background: none;
 }
@@ -201,10 +201,7 @@ section[id] { scroll-margin-top: 110px; }
   gap: 24px; margin: auto 0 0; padding: 28px 0 0; border: 0;
 }
 .metodo-editorial .metodo__numero { display: grid; align-content: start; gap: 10px; padding: 0; border: 0; }
-.metodo-editorial .metodo__valor { display: flex; align-items: baseline; gap: .04em; font-size: clamp(46px, 4.8vw, 70px); line-height: 1; letter-spacing: -.055em; color: var(--destaque); }
-.metodo__valor-digitos { display: grid; }
-.metodo__valor-prefixo { font-size: .55em; letter-spacing: -.04em; }
-.metodo__valor-unidade { margin-left: .12em; font-size: .45em; letter-spacing: -.04em; }
+.metodo-editorial .metodo__valor { display: grid; font-size: clamp(46px, 4.8vw, 70px); line-height: 1; letter-spacing: -.055em; color: var(--destaque); }
 .metodo__valor-reserva, .metodo__valor-contagem { grid-area: 1 / 1; }
 .metodo__valor-reserva { visibility: hidden; }
 .metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 14px; line-height: 1.45; color: #c4c4c4; }
