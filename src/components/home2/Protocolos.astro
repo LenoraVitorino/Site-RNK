@@ -1,58 +1,27 @@
 ---
-/**
- * Protocolo Revena: os cinco pilares em cartões, no molde da seção
- * "Features" da referência PeachWeb "curious" (Lenora, 26/09/2026): título
- * centrado, três cartões por linha, cada um com uma arte grande em traço
- * fino sobre um clarão granulado (public/arte/pilar-*.svg), o título e o
- * texto embaixo. A segunda linha leva os dois últimos pilares e, no lugar do
- * sexto cartão, a ponte para os planos.
- *
- * Vidro translúcido por cima da cena do fundo. Sem trava e sem estado por
- * scroll: os cartões só entram com a rolagem (.entra), um atrás do outro.
- * Mesma apresentação nas duas versões; os textos vêm dos recortes do
- * estúdio ou da copy integral. No celular, uma coluna.
- */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
-
-const ARTES = ['trafego', 'crm', 'atendimento', 'dados', 'posicionamento'];
-const arte = (nome: string) => {
-  const arquivo = join(process.cwd(), 'public', 'arte', `pilar-${nome}.svg`);
-  return existsSync(arquivo) ? readFileSync(arquivo, 'utf8') : '';
-};
-const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}), arte: arte(ARTES[i]) }));
-const dois = (i: number) => String(i + 1).padStart(2, '0');
-// A ponte para os planos, com frases que já existem em cada versão.
-const ponte = copyLiteral
-  ? { frase: 'A Renke recomenda o protocolo certo para o momento da sua clínica.', rotulo: 'Fale com a equipe', rota: '/contato' }
-  : { frase: 'Qual é o momento da sua clínica?', rotulo: 'Ver os planos', rota: '#protocolo-revena' };
+import ArtePilar from './ArtePilar.astro';
+const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 ---
-<section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
+<section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
     <header class="pilares__cabeca entra">
-      <p class="rotulo">Para clínicas</p>
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
+      {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
-    <ol class="pilares__cartoes" aria-label="Os cinco pilares do Protocolo Revena">
+    <div class="features-grade">
       {cartas.map((p, i) => (
-        <li class="pilar-cartao vidro entra" style={`--i:${i}`}>
-          <div class="pilar-cartao__arte" aria-hidden="true">
-            <Fragment set:html={p.arte} />
-          </div>
-          <div class="pilar-cartao__corpo">
-            <span class="pilar-cartao__n num">{dois(i)}</span>
-            <h3 class="pilar-cartao__titulo">{p.titulo}</h3>
-            <p class="pilar-cartao__texto">{p.texto}</p>
-          </div>
-        </li>
+        <article class="feature-card entra">
+          <div class="feature-card__arte"><ArtePilar tipo={i} /></div>
+          <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+        </article>
       ))}
-      <li class="pilar-cartao pilar-cartao--ponte entra" style={`--i:${cartas.length}`} aria-label="Próximo passo">
-        <p class="pilar-cartao__frase">{ponte.frase}</p>
-        <a class="link-arrow" href={ponte.rota}>{ponte.rotulo}</a>
-      </li>
-    </ol>
+    </div>
+    <div class="pilares-editoriais__ponte">
+      <p>{copyLiteral ? 'A Renke recomenda o protocolo certo para o momento da sua clínica.' : 'Qual é o momento da sua clínica?'}</p>
+      <a class="link-arrow" href={copyLiteral ? '#planos' : '#protocolo-revena'}>Ver os planos</a>
+    </div>
   </div>
 </section>

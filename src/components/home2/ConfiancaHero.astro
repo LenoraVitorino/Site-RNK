@@ -1,7 +1,7 @@
 ---
 import { doutores, totalDoutores } from '../../data/doutores';
 const retratos = Array.from({ length: 6 }, (_, i) => doutores[i] ?? null);
-const numero = totalDoutores === null ? '00' : totalDoutores.toLocaleString('pt-BR');
+const numero = totalDoutores?.toLocaleString('pt-BR');
 ---
 <div class="hero-prova">
   <ul class="hero-prova__retratos" aria-label="Retratos dos doutores">
@@ -15,7 +15,7 @@ const numero = totalDoutores === null ? '00' : totalDoutores.toLocaleString('pt-
     ))}
   </ul>
   <p class="hero-prova__legenda">
-    <strong class="hero-prova__numero">+ de {numero}</strong>
-    <span>Doutores que<br /><strong>confiam na Renke</strong></span>
+    {numero && <strong class="hero-prova__numero">+ de {numero}</strong>}
+    <span>Doutores que<br /><strong>confiam na gente</strong></span>
   </p>
 </div>

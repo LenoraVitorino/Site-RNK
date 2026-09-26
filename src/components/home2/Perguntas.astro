@@ -1,39 +1,20 @@
 ---
-/**
- * "Uma operação estruturada muda a forma como sua clínica cresce": no molde
- * da seção "Solutions" da referência PeachWeb "curious" (Lenora, 26/09/2026:
- * "gosto dessa ideia pra dobra que tem os 7 cards"). O título fica preso à
- * esquerda; à direita, os ganhos passam em cartões de vidro empilhados, e
- * dois deles levam uma foto da operação dentro, numa moldura (nunca tela
- * cheia: as fotos com grão não aguentam ampliação).
- *
- * Quantos itens: a versão do estúdio usa os quatro que o layout sempre pediu
- * (D8 em data/home.ts: os três marcados como excedentes ficam de fora); a
- * copy integral segue com os sete. Sem abas nem autoplay: menos é mais.
- *
- * Na versão copy, a .cortina em volta faz esta dobra entrar por cima do
- * trilho dos planos (--fim e --sobe vêm do script de Planos.astro);
- * .ancora e .perguntas continuam sendo o que a cortina move, e ali os
- * cartões não usam .entra (a cortina já é a entrada).
- */
-import { Image } from 'astro:assets';
+/** Composição Solutions: título fixo e ganhos em cards ilustrados. */
+import ArteInterface from './ArteInterface.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
-import salaVidro from '../../assets/sede/sala-vidro.jpg';
-import equipe from '../../assets/sede/equipe.jpg';
+
+
 
 const itens = copyLiteral ? perguntas : perguntas.filter((p) => !('excedente' in p && p.excedente));
-const fotos: Record<number, { src: ImageMetadata; alt: string }> = {
-  0: { src: salaVidro, alt: 'A operação da Renke vista da sala de reunião envidraçada, no escritório de Blumenau' },
-  2: { src: equipe, alt: 'A equipe da Renke nas estações de trabalho, com as faixas amarelas do R na parede do fundo' },
-};
 const entra = copyLiteral ? '' : 'entra';
-const dois = (i: number) => String(i + 1).padStart(2, '0');
+
 ---
 <div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura operacao" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
+<section class="secao secao--escura operacao operacao-editorial" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
   <div class="container operacao__grade">
     <div class="operacao__texto">
+
       {copyLiteral ? (
         <h2 class="ancora operacao__titulo" id="perguntas-titulo">
           Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
@@ -50,18 +31,14 @@ const dois = (i: number) => String(i + 1).padStart(2, '0');
           ))}
         </h2>
       )}
+
     </div>
 
     <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
       {itens.map((p, i) => (
-        <li class:list={['operacao__cartao', 'vidro', entra]} style={`--i:${i}`}>
-          <p class="operacao__n num">{dois(i)} <span>/ {dois(itens.length - 1)}</span></p>
+        <li class:list={['operacao__cartao', entra]} style={`--i:${i}`}>
+          <div class="operacao__ilustracao"><ArteInterface id={`solucao-${i}`} tipo={[2, 5, 1, 3, 3, 1, 4][i]} /></div>
           <h3 class="operacao__nome">{p.titulo}</h3>
-          {fotos[i] && (
-            <figure class="operacao__foto">
-              <Image src={fotos[i].src} alt={fotos[i].alt} format="webp" quality={78} widths={[640, 1280, 1920]} sizes="(max-width: 899px) 90vw, 640px" loading="lazy" />
-            </figure>
-          )}
           <p class="operacao__texto-item">{p.texto}</p>
         </li>
       ))}

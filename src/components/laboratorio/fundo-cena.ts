@@ -111,8 +111,8 @@ const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
 /**
  * Quadros por dobra: trechos escolhidos da folha da referência (hero → 0,
  * seção Product → metodologia, Features → pilares, Solutions → perguntas e
- * convite, Pricing → academy). O formulário fecha voltando ao toro do hero,
- * mais ao fundo e mais escuro.
+ * convite, Pricing → academy). O formulário retoma a cena da abertura,
+ * com o mesmo enquadramento e iluminação para o background permanecer visível.
  */
 const DESKTOP: Record<string, Quadro> = {
   hero:        amostra(0),
@@ -124,7 +124,7 @@ const DESKTOP: Record<string, Quadro> = {
   convite:     amostra(.497, { leitura: .9 }),
   academy:     amostra(.560),
   sobre:       amostra(.620),
-  formulario:  amostra(0, { dz: -14.5, dsx: .70, dsy: .82, dsz: .71, l1i: 4, l3i: 3, si: 0, pz: -60, leitura: .85 }),
+  formulario:  amostra(0),
 };
 const QUADROS = { desktop: DESKTOP, celular: DESKTOP };
 
@@ -182,7 +182,8 @@ const DONUT_FRAG_SULCO = /* glsl */ `
 #include <opaque_fragment>
 `;
 
-const MINHOCA_VERT_CABECA = /* glsl */ `uniform float uTempo;`;
+const MINHOCA_VERT_CABECA = /* glsl */ `uniform float uTempo;
+`;
 const MINHOCA_VERT_POS = /* glsl */ `
 vec3 transformed = position + vec3(0., .05 * sin(uv.x * 18.85 - uTempo * .5), .035 * cos(uv.x * 12.57 + uTempo * .4));
 `;

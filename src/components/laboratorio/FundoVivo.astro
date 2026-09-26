@@ -31,7 +31,7 @@ const { fundo } = Astro.props;
       : fundo === 'veu' ? import('./fundo-veu')
       : fundo === 'superficie' ? import('./fundo-superficie')
       : import('./fundo-particulas');
-    const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas));
+    const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas)).catch((erro) => { canvas.hidden = true; console.warn('Fundo vivo indisponível; mantendo a composição estática.', erro); });
     if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
     else setTimeout(comecar, 300);
   }

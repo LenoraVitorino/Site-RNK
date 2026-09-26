@@ -8,6 +8,7 @@
  * da hero.
  */
 import Base2 from '../layouts/Base2.astro';
+import FundoVivo from '../components/laboratorio/FundoVivo.astro';
 import { seo } from '../data/home';
 
 import Hero from '../components/home2/Hero.astro';
@@ -23,7 +24,8 @@ import AcademyTools from '../components/home2/AcademyTools.astro';
 import Formulario from '../components/home2/Formulario.astro';
 import { copyLiteral } from '../data/versao';
 ---
-<Base2 titulo={seo.titulo} descricao={seo.descricao}>
+<Base2 titulo={seo.titulo} descricao={seo.descricao} classe="home-refinada">
+  <FundoVivo slot="fundo" fundo="cena" />
   <Hero />
   <OQueFaz />
   {/* O que a Renke entrega na prática, logo depois da metodologia (Lenora,
