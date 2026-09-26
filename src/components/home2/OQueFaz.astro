@@ -33,8 +33,12 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map(n =
               <li class="metodo__numero">
                 <p class="metodo__valor num">
                   <span class="visually-hidden">{n.valor}</span>
-                  <span class="metodo__valor-reserva" aria-hidden="true">{n.valor}</span>
-                  <span class="metodo__valor-contagem" aria-hidden="true" data-metodo-contador data-alvo={n.alvo} data-prefixo={n.prefixo} data-sufixo={n.sufixo}>{n.valor}</span>
+                  <span class="metodo__valor-prefixo" aria-hidden="true">{n.prefixo}</span>
+                  <span class="metodo__valor-digitos" aria-hidden="true">
+                    <span class="metodo__valor-reserva">{n.alvo}</span>
+                    <span class="metodo__valor-contagem" data-metodo-contador data-alvo={n.alvo}>{n.alvo}</span>
+                  </span>
+                  {n.sufixo && <span class="metodo__valor-unidade" aria-hidden="true">{n.sufixo.trim()}</span>}
                 </p>
                 <p class="metodo__legenda">{n.legenda}</p>
               </li>
@@ -58,7 +62,7 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map(n =
     const pintar = (progresso: number) => {
       for (const el of contadores) {
         const valor = Math.floor(Number(el.dataset.alvo) * progresso);
-        el.textContent = `${el.dataset.prefixo ?? ''}${valor}${el.dataset.sufixo ?? ''}`;
+        el.textContent = String(valor);
       }
     };
     const observar = new IntersectionObserver(([entrada]) => {

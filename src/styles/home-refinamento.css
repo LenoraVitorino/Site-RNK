@@ -182,8 +182,8 @@ section[id] { scroll-margin-top: 110px; }
   gap: clamp(40px, 5vw, 80px); align-items: stretch;
   border: 0; border-radius: 0; background: none;
 }
-.metodo-editorial .metodo__texto { display: grid; grid-template-rows: minmax(min-content, 54%) auto; align-content: start; gap: 0; min-width: 0; }
-.metodo__apresentacao { min-width: 0; }
+.metodo-editorial .metodo__texto { display: grid; grid-template-rows: minmax(min-content, 54%) 1fr; gap: 0; min-width: 0; }
+.metodo__apresentacao { display: flex; flex-direction: column; min-width: 0; }
 .metodo-editorial h2.metodo__titulo {
   max-width: none; margin: 0 0 36px; align-self: start;
   font-family: var(--font); font-size: clamp(48px, 5.5vw, 82px); line-height: 1;
@@ -198,13 +198,19 @@ section[id] { scroll-margin-top: 110px; }
 .metodo-editorial .tel__moldura, .metodo-editorial .tel__tela { border-radius: 8px; }
 .metodo-editorial .metodo__numeros {
   grid-area: auto; grid-template-columns: repeat(3, max-content); justify-content: space-between;
-  gap: 24px; margin: 24px 0 0; padding: 0; border: 0;
+  gap: 24px; margin: auto 0 0; padding: 28px 0 0; border: 0;
 }
 .metodo-editorial .metodo__numero { display: grid; align-content: start; gap: 10px; padding: 0; border: 0; }
-.metodo-editorial .metodo__valor { display: grid; font-size: clamp(40px, 4vw, 58px); line-height: 1.05; letter-spacing: -.065em; color: var(--destaque); }
+.metodo-editorial .metodo__valor { display: flex; align-items: baseline; gap: .04em; font-size: clamp(46px, 4.8vw, 70px); line-height: 1; letter-spacing: -.055em; color: var(--destaque); }
+.metodo__valor-digitos { display: grid; }
+.metodo__valor-prefixo { font-size: .55em; letter-spacing: -.04em; }
+.metodo__valor-unidade { margin-left: .12em; font-size: .45em; letter-spacing: -.04em; }
 .metodo__valor-reserva, .metodo__valor-contagem { grid-area: 1 / 1; }
 .metodo__valor-reserva { visibility: hidden; }
-.metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 13px; line-height: 1.45; color: #b5b5b3; }
+.metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 14px; line-height: 1.45; color: #c4c4c4; }
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .metodo-editorial .metodo__texto { grid-template-rows: minmax(min-content, 48%) 1fr; }
+}
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
   .metodo-editorial .metodo__texto { grid-template-rows: auto auto; }
