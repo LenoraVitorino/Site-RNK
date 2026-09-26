@@ -41,7 +41,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 - Mosaico dos números preservado; o card de 19% ganhou uma ilustração de agenda com confirmação, relacionada ao agendamento.
 - Academy/Tools fica dentro de uma única caixa escura sólida, envolvendo o título e os dois cards, com borda discreta e espaçamento responsivo. Conteúdo e links permanecem visíveis. Os cinco planos e sua ordem foram preservados.
 
-- Contato com colunas centralizadas de até 400 e 460 px, intervalo máximo de 56 px; no celular, texto e formulário em sequência com 32 px de separação.
+- Contato com colunas centralizadas de até 400 e 460 px, intervalo máximo de 56 px; no celular, texto e formulário em sequência com 32 px de separação. A cena de fundo retoma o enquadramento e a iluminação da abertura, deixando a animação visível atrás da seção; a caixa dos campos permanece clara.
 
 ## Limites de conteúdo
 
