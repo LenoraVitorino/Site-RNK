@@ -33,7 +33,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 ## Decisões de implementação — ajustes pedidos pela Lenora
 
 - Abertura recuperada da versão `49123ae`, com selo arredondado no topo, seis espaços circulares para fotos e a legenda “Doutores que confiam na gente”. O bloco aparece mesmo enquanto as fotos aguardam inserção; a contagem só aparece quando preenchida em `src/data/doutores.ts`. Sem índice numerado, com a cena Peachweb preservada.
-- Metodologia alinhada ao container e às margens globais do site, sem limite interno de largura: texto e três indicadores na mesma coluna, com o vídeo ao lado ocupando as duas linhas. Divisória e seta ascendente à direita de cada verbo; parágrafo em quatro linhas no desktop e quebra natural no celular. No mobile os indicadores precedem o vídeo, com valores próprios de cada versão preservados.
+- Metodologia com título, subtítulo original e três indicadores agrupados ao lado do vídeo, alinhada às margens globais. Retirados os três verbos soltos, divisórias e setas a pedido da Lenora. Parágrafo em quatro linhas no desktop; no celular, texto e números precedem o vídeo. Valores de cada versão preservados.
 - Removidos os rótulos auxiliares numerados das seções.
 - Cinco pilares em cards como Features: três na primeira linha e dois centralizados na segunda; duas colunas no tablet e uma no celular. As duas versões preservam seus textos próprios.
 - Ilustrações SVG próprias de interfaces com vidro, luz suave, grão e traços cinza: aquisição, integração, automação, dados e posicionamento. Não representam um produto funcional nem acrescentam indicadores.
