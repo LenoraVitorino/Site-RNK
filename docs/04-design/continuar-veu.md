@@ -48,7 +48,7 @@ concluir um passo, marque `[x]` neste arquivo, no mesmo commit.
 
 ## Passos
 
-- [ ] **1. Corrigir o documento: o letreiro continua correndo.** Em
+- [x] **1. Corrigir o documento: o letreiro continua correndo.** Em
   `referencias-alto-padrao.md`:
   - troque a "linha de métricas" pelo letreiro que corre, como está hoje, nas
     seções 5 (linha 4 da tabela e quadro `metricas`, que passa a se chamar

@@ -255,7 +255,7 @@ fosco no próprio shader; e um teste em dev confere os pixels (seção 11).
 | 1 | Hero | Transparente. Saem `#070909` e `hero-ondas.svg` | A crista nasce na borda de baixo, perto do meio, e sobe em curva larga até sair pela direita, abaixo da metade da altura. Nítido, intensidade máxima | Título e botão ficam no preto, em cima e embaixo à esquerda. H1, lead, botão (`.hero__acoes`) e prova social na máscara |
 | 2 | Metodologia | Transparente | Gira e sobe quase na vertical atrás do vídeo, como a fumaça da Ref. A. O vídeo ganha contraluz | O texto, à direita, fica no preto |
 | 3 | Protocolo Revena (pilares) | Transparente | Sai de foco atrás da grade. O vidro precisa de luz variando por trás para ler como vidro | Cartões com fosco no shader e dentro da máscara |
-| 4 | Linha de métricas (ex-letreiro) | Transparente | Faixa baixa, quase horizontal e desfocada, passando por baixo da linha | Texto na máscara, sem caixa |
+| 4 | Letreiro | Transparente | Faixa baixa, quase horizontal e desfocada, passando sob as letras que correm | Letras na máscara, com escurecimento mais leve, para o véu ainda passar por trás |
 | 5 | Palco (estúdio) / Planos (copy) | Opaco: papel escovado no palco, `#0B0B0B` no trilho | Coberto. O véu troca de quadro sem ninguém ver e o canvas pausa | Não se aplica |
 | 6 | Perguntas | Transparente. Na copy, a `.cortina` passa de `#000` a transparente depois de cobrir | Vertical e fraco, com o centro fora do container, à direita: só o degradê entra no gutter direito, como luz de janela lateral | Frase-âncora e perguntas no preto; a luz fica à direita de x .93 |
 | 7 | Resultados | Opaco, papel escovado | Coberto; troca para o quadro do convite | Texto `#161616` a 15:1 |
@@ -273,7 +273,7 @@ esquerdo). Ângulo positivo sobe para a direita. Nitidez 1 é nítido.
 | `hero` | 1 | .70, .80 | 24° | 1,0 | 1,0 |
 | `metodologia` | 2 | .30, .52 | 64° | ,60 | ,60 |
 | `pilares` | 3 | .66, .50 | 24° | ,45 | 0 |
-| `metricas` | 4 | .50, .68 | 4° | ,50 | ,20 |
+| `letreiro` | 4 | .50, .68 | 4° | ,50 | ,20 |
 | `perguntas` | 5, 6 | 1.04, .42 | 84° | ,30 | ,50 |
 | `convite` | 7, 8 | .50, .64 | −6° | ,65 | ,90 |
 | `sobre` | 9, 10 | .42, 1.02 | 6° | ,25 | 0 |
@@ -288,7 +288,7 @@ outras acontecem atrás de uma dobra opaca que cobre a tela.
 baixo ou na borda direita e nunca atravessa a coluna de texto com força. Os
 valores saem do desktop com intensidade ×0,85 e nitidez −0,15, limitadas a
 0–1, e ângulos entre 50° e 75° nos quadros diagonais e verticais. Os quadros
-horizontais por conceito (`metricas`, `convite`, `sobre` e `formulario`) ficam
+horizontais por conceito (`letreiro`, `convite`, `sobre` e `formulario`) ficam
 fora dessa faixa e mantêm o ângulo do desktop. Na hero em 375×812, o botão
 ocupa y .76–.82 e a prova social .85–1.04: a crista fica abaixo do botão, no
 canto de baixo à direita, e `.hero__acoes` entra na máscara.
@@ -298,7 +298,7 @@ canto de baixo à direita, e `.hero__acoes` entra na máscara.
 | `hero` | .88, .98 | 52° | ,85 | ,85 |
 | `metodologia` | .90, .66 | 68° | ,51 | ,45 |
 | `pilares` | .82, .74 | 52° | ,38 | 0 |
-| `metricas` | .50, .86 | 4° | ,42 | ,05 |
+| `letreiro` | .50, .86 | 4° | ,42 | ,05 |
 | `perguntas` | 1.06, .45 | 75° | ,25 | ,35 |
 | `convite` | .50, .66 | −6° | ,55 | ,75 |
 | `sobre` | .42, 1.02 | 6° | ,21 | 0 |
@@ -354,46 +354,12 @@ cartões, e dentro deles o shader zera a nitidez do véu e baixa o brilho em 15%
 Custa quase nada, funciona igual no iOS e, sem canvas, o cartão continua um
 cartão escuro e limpo. O `backdrop-filter` fica só na caixa do cabeçalho.
 
-### Linha de métricas (substitui o letreiro nas duas versões)
+### Letreiro
 
-Uma linha estática, sem caixa. Cada versão mantém o próprio texto: no estúdio,
-as quatro expressões ("Custo por agendamento", "Taxa de comparecimento",
-"Faturamento por canal", "Retorno do paciente"); na copy, as quatro palavras
-("Controle", "Automação", "Processo", "Experiência"). Não há número nem
-legenda, e a linha não ganha números enquanto a Lenora não mandar a copy:
-inventar valores seria mudar a copy. O véu passa por baixo, no quadro
-`metricas`. A seção continua `.letreiro`, que é o seletor do roteiro do motor.
-
-```css
-.metricas {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  list-style: none; margin: 0; padding: 0;
-}
-.metricas__item {
-  display: flex; align-items: flex-end;   /* texto encostado embaixo */
-  min-height: clamp(96px, 8vw, 140px);
-  padding: 0 clamp(16px, 1.6vw, 24px);
-  border-left: 1px solid var(--fio);
-  font-size: clamp(1.25rem, 1.7vw, 1.75rem); font-weight: 300; line-height: 1.2;
-  hyphens: manual; text-wrap: balance;
-}
-.metricas__item:first-child { border-left: 0; padding-left: 0; }
-@media (max-width: 899.98px) {
-  .metricas { grid-template-columns: 1fr 1fr; row-gap: 32px; }
-  .metricas__item:nth-child(odd) { border-left: 0; padding-left: 0; }
-}
-@media (max-width: 599.98px) {
-  .metricas { grid-template-columns: 1fr; row-gap: 0; }
-  .metricas__item { min-height: 0; padding: 16px 0; border-left: 0; border-top: 1px solid var(--fio); }
-  .metricas__item:first-child { border-top: 0; }
-}
-```
-
-Sem vidro, sem `tabular-nums`, sem valor e sem legenda. Tudo estático, em
-sentence case. Nessa medida, "comparecimento" ocupa cerca de 190px em 1440
-(coluna de ~260px úteis) e 155px em 600 (~225px úteis). Abaixo de 600px, onde
-duas colunas não comportam a palavra, a linha vira uma lista de uma coluna com
-fio entre os itens.
+Continua correndo, como está hoje, nas duas versões. A Lenora decidiu em
+25/09: "tem que correr, acho massa". O véu passa por baixo das letras no
+quadro `letreiro`, e a máscara de leitura escurece menos ali que no resto da
+página, para a luz continuar aparecendo atrás delas.
 
 ### O único destaque sólido: o cartão do formulário
 
@@ -474,7 +440,7 @@ escassez fica igual.
 ### Fios, raios e grade
 
 - **Fios:** 1px. Cartões a `rgb(242 242 238 / .10)`. Fios de lista
-  (perguntas, métricas, rodapé) seguem em `--fio`. No claro, `#CECEC4`. Nunca
+  (perguntas, rodapé) seguem em `--fio`. No claro, `#CECEC4`. Nunca
   entre dobras.
 - **Raios:** dois só. 8px em botões, campos e chips; 12px em toda caixa
   (cartão, vídeo, foto, formulário, caixa do cabeçalho). Zero nas dobras. As
@@ -498,8 +464,7 @@ escassez fica igual.
   ficarem soltas, −.04em.
 - **Pesos:** títulos 300, "RevOps." 300, números 300 com `tabular-nums`,
   corpo 400, rótulos 500.
-- **Caixa:** sentence case em tudo, inclusive o convite, a linha de métricas e
-  a Academy e Tools. Caixa alta só nos rótulos: 12px, peso 500, `.14em`,
+- **Caixa:** sentence case em tudo, inclusive o convite e a Academy e Tools. Caixa alta só nos rótulos: 12px, peso 500, `.14em`,
   cinza, no máximo um por dobra, sem caixa e sem ícone. O selo da hero não é
   rótulo: é uma linha de apoio de 13px, cinza, em sentence case.
 - **Hierarquia:** no máximo quatro tamanhos por dobra: título, número de
@@ -552,9 +517,8 @@ copy é `Planos.astro`.
 
 ### Depois: efeitos de agência
 
-5. **Letreiro vira linha de métricas.** `Letreiro.astro:16-28` e
-   `home2.css:518-528, 1227-1229`: sai o trilho que corre e entra a lista
-   estática da seção 7, sem caixa.
+5. **Letreiro continua correndo.** Decisão da Lenora (25/09). Nada muda em
+   `Letreiro.astro`; o véu passa por baixo no quadro `letreiro`.
 6. **Tinta palavra a palavra sai das duas dobras.**
    `PlanosPalco.astro:55-58, 260-283` e `Perguntas.astro:28-36`. As duas usam
    `.entra`.
@@ -616,6 +580,7 @@ copy é `Planos.astro`.
 - Mecânica do palco dos planos: é a cortina que agradou.
 - `.entra`, uma vez só, respeitando o movimento reduzido.
 - A frase riscada que vira "Isso é RevOps.": o único momento narrativo.
+- O letreiro que corre, com as frases de cada versão.
 - Motor do fundo (`fundo-motor.ts`): canvas fixo, quadro por dobra, pausa
   fora da tela e na aba oculta, máscara de leitura.
 - As fotos reais da sede no Sobre.
@@ -648,7 +613,7 @@ dela, a página segue como está.
   faixas no degradê; luz forte atrás de título.
 - **Na navegação:** nova trava, além das três que existem (seção 6), snap ou
   sequestro da roda do mouse; bibliotecas de rolagem suave.
-- **No texto:** letreiro correndo, contador, texto palavra a palavra, letras
+- **No texto:** contador, texto palavra a palavra, letras
   separadas, digitação, embaralhamento, texto em degradê.
 - **Nos componentes:** cursor próprio, botão magnético, hover que gira ou
   desliza, pílula com "✦", selo "novo", sombra externa pesada, `saturate` no
@@ -668,8 +633,7 @@ dela, a página segue como está.
 
 1. **Laboratório.** Novo `fundo-veu.ts` em `/laboratorio/fundo?fundo=veu`,
    ainda no motor com three, sem gastar tempo com o porte. A página do
-   laboratório recebe junto o vidro com fosco no shader, a linha de métricas,
-   as dobras em papel escovado, o convite sem amarelo e o formulário claro. A
+   laboratório recebe junto o vidro com fosco no shader, as dobras em papel escovado, o convite sem amarelo e o formulário claro. A
    cortina amarela do laboratório vira papel. No motor:
    - smootherstep, τ .35s e salto longo limitado a 1 dobra;
    - troca escondida atrás das dobras opacas;
@@ -683,7 +647,7 @@ dela, a página segue como está.
 
    ```ts
    ['#pilares-revena, #protocolo-revena.pilares', 'pilares'],
-   ['.letreiro', 'metricas'],
+   ['.letreiro', 'letreiro'],
    ['#resultados', 'convite'], ['#fale', 'convite'],
    ['#academy-tools', 'sobre'],
    ```
