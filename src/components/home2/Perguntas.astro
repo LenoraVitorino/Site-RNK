@@ -1,20 +1,20 @@
 ---
-/** Ganhos ao lado da operação real; o texto de cada versão permanece integral. */
-import { Image } from 'astro:assets';
+/** Composição Solutions: título fixo e ganhos em cards ilustrados. */
+import ArteInterface from './ArteInterface.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
-import salaVidro from '../../assets/sede/sala-vidro.jpg';
+
 
 
 const itens = copyLiteral ? perguntas : perguntas.filter((p) => !('excedente' in p && p.excedente));
 const entra = copyLiteral ? '' : 'entra';
-const dois = (i: number) => String(i + 1).padStart(2, '0');
+
 ---
 <div class:list={[copyLiteral && 'cortina']}>
 <section class="secao secao--escura operacao operacao-editorial" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
   <div class="container operacao__grade">
     <div class="operacao__texto">
-      <p class="rotulo"><span>03 /</span> Na prática</p>
+
       {copyLiteral ? (
         <h2 class="ancora operacao__titulo" id="perguntas-titulo">
           Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
@@ -31,16 +31,13 @@ const dois = (i: number) => String(i + 1).padStart(2, '0');
           ))}
         </h2>
       )}
-      <figure class="operacao-editorial__foto">
-        <Image src={salaVidro} alt="Sala de reunião e operação da Renke em Blumenau" format="webp" quality={78} widths={[480, 800, 1200]} sizes="(max-width: 899px) 90vw, 42vw" loading="lazy" />
-        <figcaption><span>RENKE / BLUMENAU, SC</span><span>Por dentro da operação</span></figcaption>
-      </figure>
+
     </div>
 
     <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
       {itens.map((p, i) => (
         <li class:list={['operacao__cartao', entra]} style={`--i:${i}`}>
-          <p class="operacao__n num">{dois(i)} <span>/ {dois(itens.length - 1)}</span></p>
+          <div class="operacao__ilustracao"><ArteInterface id={`solucao-${i}`} tipo={[2, 5, 1, 3, 3, 1, 4][i]} /></div>
           <h3 class="operacao__nome">{p.titulo}</h3>
           <p class="operacao__texto-item">{p.texto}</p>
         </li>

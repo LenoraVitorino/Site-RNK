@@ -1,32 +1,23 @@
 ---
-/** Índice navegável: conteúdo nativo em details, arte complementar no desktop. */
 import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
-const artes = ['trafego', 'crm', 'atendimento', 'dados', 'posicionamento'];
+import ArteInterface from './ArteInterface.astro';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 ---
-<section class="secao pilares pilares-editoriais" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
+<section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
-    <header class="secao-indice entra">
-      <p class="rotulo"><span>02 /</span> Para clínicas</p>
+    <header class="pilares__cabeca entra">
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
-      {!copyLiteral && <p>Cinco frentes.<br />Uma operação conectada.</p>}
+      {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
-    <div class="pilares-editoriais__grade">
-      <div class="pilares-editoriais__lista">
-        {cartas.map((p, i) => (
-          <details class="pilar-linha" name="pilares-revena" open={i === 0} data-pilar={i}>
-            <summary><span class="pilar-linha__n">0{i + 1}</span><h3>{p.titulo}</h3><span class="pilar-linha__mais" aria-hidden="true">+</span></summary>
-            <div class="pilar-linha__conteudo"><p>{p.texto}</p></div>
-          </details>
-        ))}
-      </div>
-      <div class="pilares-editoriais__visual" aria-hidden="true">
-        <span class="pilares-editoriais__etiqueta">REVENA / SISTEMA INTEGRADO</span>
-        {artes.map((arte, i) => <img src={`/arte/pilar-${arte}.svg`} alt="" width="600" height="450" loading="lazy" class:list={['pilares-editoriais__arte', i === 0 && 'ativa']} data-pilar-arte={i} />)}
-        <div class="pilares-editoriais__legenda"><span data-pilar-numero>01 / 05</span><span>Marketing · Comercial · Dados</span></div>
-      </div>
+    <div class="features-grade">
+      {cartas.map((p, i) => (
+        <article class="feature-card entra">
+          <div class="feature-card__arte"><ArteInterface id={`pilar-${i}`} tipo={i} /></div>
+          <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+        </article>
+      ))}
     </div>
     <div class="pilares-editoriais__ponte">
       <p>{copyLiteral ? 'A Renke recomenda o protocolo certo para o momento da sua clínica.' : 'Qual é o momento da sua clínica?'}</p>
@@ -34,17 +25,3 @@ const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[
     </div>
   </div>
 </section>
-<script>
-  document.querySelectorAll<HTMLElement>('.pilares-editoriais').forEach((raiz) => {
-    const itens = [...raiz.querySelectorAll<HTMLDetailsElement>('[data-pilar]')];
-    const artes = [...raiz.querySelectorAll<HTMLElement>('[data-pilar-arte]')];
-    const numero = raiz.querySelector('[data-pilar-numero]');
-    itens.forEach((item, i) => item.addEventListener('toggle', () => {
-      if (!item.open) return;
-      // Também mantém a exclusividade em navegadores sem suporte a details[name].
-      itens.forEach((outro) => { if (outro !== item) outro.open = false; });
-      artes.forEach((arte, j) => arte.classList.toggle('ativa', i === j));
-      if (numero) numero.textContent = `0${i + 1} / 05`;
-    }));
-  });
-</script>

@@ -13,17 +13,15 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
-        <p class="rotulo"><span>01 /</span> O método</p>
         <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">Nossa metodologia</h2>
-        {!copyLiteral && (
-          <p class="metodo__verbos" aria-hidden="true">
-            {verbos.map((v) => <span class="metodo__verbo">{v}.</span>)}
-          </p>
-        )}
+        <p class="metodo__verbos">
+          {verbos.map((v) => <span class="metodo__verbo">{v}.<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></span>)}
+        </p>
         <p class="metodo__descricao">
-          Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
-          Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
-          processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+          <span>Utilizamos a metodologia de Revenue Operations</span>{' '}
+          <span>para estruturar a operação de receita. Analisamos cada etapa</span>{' '}
+          <span>da jornada comercial, identificamos oportunidades e</span>{' '}
+          <span>estruturamos processos a partir de dados, CRM e marketing.</span>
         </p>
         {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
       </div>

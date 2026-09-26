@@ -2,18 +2,18 @@
 /** Provas em mosaico editorial. Valores e textos vêm da fonte compartilhada. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
+import ArteInterface from './ArteInterface.astro';
 ---
 <section class="secao resultados-editoriais" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
     <header class="secao-indice entra">
-      <p class="rotulo"><span>04 /</span> Resultados</p>
       <h2 class="titulo" id="resultados-titulo">O que muda quando<br />a operação tem estrutura.</h2>
     </header>
     <ol class="resultados-mosaico" aria-label="Resultados por especialidade">
       {resultados.map((r, i) => (
         <li class:list={['resultado-ficha', i === 0 && 'resultado-ficha--destaque', 'entra']}>
           <div class="resultado-ficha__topo"><h3>{r.especialidade}</h3><span aria-hidden="true">0{i + 1}</span></div>
-          {i === 0 && <div class="resultado-ficha__orbita" aria-hidden="true"><span></span></div>}
+          {i === 0 && <div class="resultado-ficha__ilustracao"><ArteInterface id="resultado-agendamentos" tipo={5} /></div>}
           <p class="resultado-ficha__numero num">{r.numero}</p>
           <p class="resultado-ficha__texto">{r.texto}</p>
         </li>

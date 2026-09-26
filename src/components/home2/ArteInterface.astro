@@ -1,0 +1,65 @@
+---
+/** Ilustrações vetoriais decorativas: interfaces em vidro, sem dados fictícios. */
+interface Props { id: string; tipo: number }
+const { id, tipo } = Astro.props;
+const tinta = `url(#${id}-vidro)`;
+const luz = `url(#${id}-luz)`;
+---
+<svg class="arte-interface" viewBox="0 0 600 450" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={`${id}-vidro`} x1="100" y1="20" x2="460" y2="450" gradientUnits="userSpaceOnUse"><stop stop-color="#c7c7c7" stop-opacity=".2" /><stop offset=".45" stop-color="#656565" stop-opacity=".16" /><stop offset="1" stop-color="#070707" stop-opacity=".6" /></linearGradient>
+    <linearGradient id={`${id}-luz`} x1="120" y1="80" x2="480" y2="400" gradientUnits="userSpaceOnUse"><stop stop-color="#f4f4f4" stop-opacity=".9" /><stop offset="1" stop-color="#aaa" stop-opacity=".12" /></linearGradient>
+    <radialGradient id={`${id}-halo`} cx=".12" cy="0" r="1"><stop stop-color="#e1e1e1" stop-opacity=".46" /><stop offset=".65" stop-color="#aaa" stop-opacity=".05" /><stop offset="1" stop-color="#111" stop-opacity="0" /></radialGradient>
+    <filter id={`${id}-brilho`} x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" /></filter>
+    <filter id={`${id}-grao`}><feTurbulence type="fractalNoise" baseFrequency=".76" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+  <path fill={`url(#${id}-halo)`} d="M0 0h600v450H0z" />
+  {tipo === 0 && <g>
+    <rect x="86" y="80" width="550" height="410" rx="28" stroke="white" stroke-opacity=".15" fill={tinta}/>
+    {[120, 146, 172].map(x => <circle cx={x} cy="109" r="6" fill="white" opacity=".15"/>)}
+    {[184, 280, 376].map((y,i) => <g>
+      {i === 1 && <rect x="116" y={y-30} width="420" height="66" rx="33" stroke="white" stroke-width="3" opacity=".28" filter={`url(#${id}-brilho)`}/>}
+      <rect x="116" y={y-30} width={i === 1 ? 430 : 146} height="62" rx="31" fill={tinta} stroke={i === 1 ? luz : '#ffffff18'} stroke-width="2"/>
+      <path d={`M146 ${y}h${i === 1 ? 270 : 78}`} stroke="white" stroke-opacity={i === 0 ? '.8' : '.25'} stroke-width="7" stroke-linecap="round"/>
+    </g>)}
+  </g>}
+  {tipo === 1 && <g stroke={luz} stroke-width="2">
+    {[100,225,350].map(y => <g><rect x="-50" y={y-44} width="180" height="88" rx="24" fill={tinta}/><path d={`M130 ${y}C245 ${y} 230 225 366 225`} /></g>)}
+    <rect x="360" y="146" width="162" height="162" rx="42" stroke="white" opacity=".22" filter={`url(#${id}-brilho)`}/>
+    <rect x="360" y="146" width="162" height="162" rx="42" fill={tinta}/><rect x="374" y="160" width="134" height="134" rx="32" fill={tinta} stroke-opacity=".5"/>
+    <path d="M421 225h40m-20-20v40" stroke-width="9" stroke-linecap="round" opacity=".6"/>
+    <path d="M522 225h78"/>
+  </g>}
+  {tipo === 2 && <g stroke="white" stroke-opacity=".13" stroke-width="2">
+    {[65,205,345,485].map(x => [0,140,280,420].map(y => <rect x={x} y={y-50} width="125" height="125" rx="32" fill={tinta}/>))}
+    <rect x="345" y="230" width="125" height="125" rx="32" stroke="white" stroke-opacity=".8" filter={`url(#${id}-brilho)`}/>
+    <rect x="345" y="230" width="125" height="125" rx="32" fill={tinta} stroke={luz} stroke-opacity="1"/>
+    <rect x="356" y="241" width="103" height="103" rx="25" stroke={luz} stroke-opacity="1"/>
+    <path d="M395 292h25m-12-12v25" stroke-width="7" stroke-linecap="round" stroke-opacity=".3"/>
+    <path d="m450 327 15 62 13-23 25-11Z" fill="#252525" stroke="#eee" stroke-opacity=".9" stroke-linejoin="round"/>
+  </g>}
+  {tipo === 3 && <g>
+    <rect x="75" y="70" width="452" height="350" rx="26" fill={tinta} stroke={luz} stroke-opacity=".6"/>
+    {[150,220,290,360].map(y => <path d={`M110 ${y}h382`} stroke="white" stroke-opacity=".1"/>)}
+    {[90,142,115,196,226,268].map((h,i) => <rect x={120+i*60} y={376-h} width="32" height={h} rx="9" fill={tinta} stroke={luz} stroke-opacity={.2+i*.12}/>)}
+    <path d="m125 233 63-35 60 14 62-62 61-24 64-29" stroke="#eee" stroke-opacity=".2" stroke-width="10" filter={`url(#${id}-brilho)`}/>
+    <path d="m125 233 63-35 60 14 62-62 61-24 64-29" stroke={luz} stroke-width="2"/>
+  </g>}
+  {tipo === 4 && <g stroke={luz} stroke-width="1.5">
+    <rect x="160" y="42" width="270" height="326" rx="28" fill={tinta} opacity=".4" transform="rotate(-12 295 205)"/>
+    <rect x="160" y="72" width="270" height="326" rx="28" fill={tinta} opacity=".7" transform="rotate(8 295 235)"/>
+    <rect x="160" y="82" width="270" height="326" rx="28" fill={tinta}/>
+    <circle cx="295" cy="211" r="65"/><circle cx="295" cy="211" r="46" opacity=".3"/>
+    <path d="m270 230 25-50 25 50m-40-15h30M213 318h164m-132 24h100" stroke-linecap="round" stroke-width="3"/>
+  </g>}
+  {tipo === 5 && <g>
+    <rect x="102" y="84" width="396" height="312" rx="28" fill={tinta} stroke={luz} stroke-width="2"/>
+    <path d="M102 150h396M184 67v36m232-36v36" stroke={luz} stroke-width="3" stroke-linecap="round"/>
+    {[0,1,2,3,4].map(x => [0,1,2].map(y => <rect x={135+x*68} y={181+y*64} width="46" height="42" rx="11" fill={tinta} stroke="white" stroke-opacity=".12"/>))}
+    <rect x="271" y="245" width="46" height="42" rx="11" fill="#d9d9d9" fill-opacity=".1" stroke="#e6d95c" stroke-opacity=".65"/>
+    <path d="m281 265 9 9 17-19" stroke="#eee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="478" cy="350" r="43" fill="#242424" stroke={luz} stroke-width="2"/>
+    <path d="m460 350 12 12 23-25" stroke="#eee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>}
+  <path fill="#fff" opacity=".055" filter={`url(#${id}-grao)`} d="M0 0h600v450H0z"/>
+</svg>
