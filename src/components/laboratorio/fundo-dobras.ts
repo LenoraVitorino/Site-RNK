@@ -23,11 +23,12 @@ export const ROTEIRO: [string, string][] = [
 export const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo-revena.pilares, .letreiro, #perguntas, #fale, #academy-tools, #sobre, #formulario';
 
 export const TEXTOS_DOBRAS = [
-  TEXTOS, '#protocolo-revena.pilares .titulo', '.pilar__linha', '.pilar__texto', '#fale .titulo', '#fale p', '.ecossistema__cabeca',
+  TEXTOS, '#protocolo-revena.pilares .titulo', '.pilares__cabeca', '.operacao__titulo', '#fale .titulo', '#fale p', '.ecossistema__cabeca',
 ].join(', ');
 
-/** Caixas com fundo próprio: atrás delas o fundo perde brilho (e, no véu, o foco). */
-export const CARTOES = '.produto, .operacao__indice';
+/** Caixas com fundo próprio: atrás delas o fundo perde brilho (e, no véu, o foco).
+ *  Rodada 3: as caixas viraram vidro translúcido e deixam a cena aparecer; nada a escurecer. */
+export const CARTOES = '';
 
 /** Blocos sem texto que também pedem o fundo escuro atrás (os retratos da prova social). */
 export const CAIXAS = '.hero-prova__retratos';

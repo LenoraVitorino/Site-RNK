@@ -1,79 +1,68 @@
 ---
 /**
- * Nossa metodologia: o vídeo vertical e, ao lado, o texto e os três números
- * do briefing. Vale para as duas versões; só os textos mudam
- * (numerosProva.copy / .estudio).
+ * Nossa metodologia: um painel de vidro no molde da seção "Product" da
+ * referência PeachWeb "curious" (Lenora, 26/09/2026: a versão com capítulos
+ * por scroll "não ficou dinâmica"). Em cima, o título à esquerda e a
+ * descrição à direita; embaixo, o sistema conectado ao lado do reel; no pé,
+ * os três números.
  *
- * Refeito em 26/09/2026 (Lenora: "dá um trato" na dobra 2). Referências da
- * curadoria (docs/04-design/curadoria/): pins 12 e 34 (coluna presa e lista
- * que corre) e 11 (números com um fio fino em cima e legenda curta). No
- * desktop o vídeo fica preso à esquerda e, à direita, os capítulos passam um
- * de cada vez: primeiro o título e a descrição, depois cada número, grande. O
- * capítulo no meio da tela acende e ganha um fio amarelo curto; os outros
- * ficam apagados. Rolagem nativa, sem trava. No celular e com movimento
- * reduzido, tudo em fluxo, sem estados.
+ * O sistema conectado segue o pin do diagrama de nós que a Lenora mandou:
+ * dados, CRM e marketing (as três palavras da descrição) entram no R por
+ * fios finos e saem como operação de receita. Pulsos de luz correm nos fios
+ * o tempo todo, devagar: é o movimento da dobra, sem trava de scroll. A
+ * arte é public/arte/metodologia-sistema.svg; os rótulos são HTML por cima.
+ * Vale para as duas versões; só os números mudam (numerosProva).
  */
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 import { numerosProva } from '../../data/home';
+
 const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
+const arquivo = join(process.cwd(), 'public', 'arte', 'metodologia-sistema.svg');
+const sistema = existsSync(arquivo) ? readFileSync(arquivo, 'utf8') : '';
+const nos = ['Dados', 'CRM', 'Marketing'];
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
-  <div class="container oquefaz">
-    <div class="oquefaz__midia entra">
-      <Telefone />
-    </div>
-    <div class="oquefaz__texto">
-      <div class="oquefaz__capitulo oquefaz__capitulo--abre" data-capitulo>
-        <h2 class="titulo caps oquefaz__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
-        <p class="oquefaz__descricao">
-          Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
-          Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
-          processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
-        </p>
-        {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
+  <div class="container">
+    <div class="metodo vidro entra">
+      <div class="metodo__cabeca">
+        <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
+        <div class="metodo__lead">
+          <p class="metodo__descricao">
+            Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+            Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+            processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+          </p>
+          {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
+        </div>
       </div>
-      <ul class="oquefaz__numeros" aria-label="Números da Renke">
-        {numeros.map((n, i) => (
-          <li class="oquefaz__capitulo oquefaz__numero" data-capitulo>
-            <span class="oquefaz__fio" aria-hidden="true"><span></span></span>
-            <p class="oquefaz__valor num">{n.valor.replace(/ /g, ' ')}</p>
-            <p class="oquefaz__legenda">{n.legenda}</p>
+
+      <div class="metodo__palco">
+        <figure class="metodo__sistema" role="img" aria-label="Dados, CRM e marketing entram no método da Renke e saem como operação de receita">
+          <Fragment set:html={sistema} />
+          <ul class="metodo__nos" aria-hidden="true">
+            {nos.map((n, i) => <li class="metodo__no" data-no={i + 1}>{n}</li>)}
+            <li class="metodo__no metodo__no--saida" data-no="4">Operação de receita</li>
+          </ul>
+          <img class="metodo__marca" src="/marca/renke-monograma.png" alt="" width="270" height="270" loading="lazy" aria-hidden="true" />
+        </figure>
+        <div class="metodo__midia">
+          <Telefone />
+        </div>
+      </div>
+
+      <ul class="metodo__numeros" aria-label="Números da Renke">
+        {numeros.map((n) => (
+          <li class="metodo__numero">
+            <p class="metodo__valor num">{n.valor.replace(/ /g, ' ')}</p>
+            <p class="metodo__legenda">{n.legenda}</p>
           </li>
         ))}
       </ul>
     </div>
   </div>
 </section>
-
-<script>
-  // Acende o capítulo cujo centro está mais perto do meio da tela.
-  const secao = document.querySelector<HTMLElement>('[data-metodologia]');
-  if (secao) {
-    const media = matchMedia('(min-width: 1080px) and (prefers-reduced-motion: no-preference)');
-    const caps = [...secao.querySelectorAll<HTMLElement>('[data-capitulo]')];
-    let quadro = 0;
-    const marcar = () => {
-      quadro = 0;
-      if (!media.matches) return;
-      const meio = innerHeight / 2;
-      let melhor = 0, dist = Infinity;
-      caps.forEach((c, i) => {
-        const r = c.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height / 2 - meio);
-        if (d < dist) { dist = d; melhor = i; }
-      });
-      caps.forEach((c, i) => c.classList.toggle('oquefaz__capitulo--ativo', i === melhor));
-    };
-    const ligar = () => {
-      secao.classList.toggle('oquefaz--viva', media.matches);
-      if (!media.matches) caps.forEach((c) => c.classList.remove('oquefaz__capitulo--ativo'));
-      marcar();
-    };
-    addEventListener('scroll', () => { if (!quadro) quadro = requestAnimationFrame(marcar); }, { passive: true });
-    media.addEventListener('change', ligar);
-    ligar();
-  }
-</script>

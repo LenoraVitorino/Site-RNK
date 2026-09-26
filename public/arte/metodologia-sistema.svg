@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+  <g class="fios">
+    <path class="fio" d="M190 60C290 60 284 156 384 156" stroke-opacity=".35"/>
+    <path class="pulso" pathLength="100" d="M190 60C290 60 284 156 384 156" stroke-width="1.5" stroke-opacity="0"/>
+    <path class="fio" d="M190 180C290 180 284 180 380 180" stroke-opacity=".35"/>
+    <path class="pulso" pathLength="100" d="M190 180C290 180 284 180 380 180" stroke-width="1.5" stroke-opacity="0"/>
+    <path class="fio" d="M190 300C290 300 284 204 384 204" stroke-opacity=".35"/>
+    <path class="pulso" pathLength="100" d="M190 300C290 300 284 204 384 204" stroke-width="1.5" stroke-opacity="0"/>
+    <path class="fio" d="M520 180C600 180 605 180 685 180" stroke-opacity=".35"/>
+    <path class="pulso" pathLength="100" d="M520 180C600 180 605 180 685 180" stroke-width="1.5" stroke-opacity="0"/>
+  </g>
+  <g class="no" data-no="1">
+    <rect x="40" y="36" width="150" height="48" rx="10" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="190" cy="60" r="4" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+  </g>
+  <g class="no" data-no="2">
+    <rect x="40" y="156" width="150" height="48" rx="10" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="190" cy="180" r="4" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+  </g>
+  <g class="no" data-no="3">
+    <rect x="40" y="276" width="150" height="48" rx="10" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="190" cy="300" r="4" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+  </g>
+  <g class="centro">
+    <circle cx="450" cy="180" r="84" stroke-width="1" stroke-opacity=".35" stroke-dasharray="2 6"/>
+    <circle cx="450" cy="180" r="70" fill="currentColor" fill-opacity=".06"/>
+    <path class="arco" d="M450 110a70 70 0 0 1 70 70"/>
+  </g>
+  <g class="no" data-no="4">
+    <rect x="685" y="152" width="190" height="56" rx="10" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="685" cy="180" r="4" fill="currentColor" fill-opacity=".1" stroke-width="1"/>
+  </g>
+</svg>

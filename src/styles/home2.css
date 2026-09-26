@@ -442,35 +442,6 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
    como o vídeo dedicado para mobile da referência.
    ============================================================ */
 
-/* Nossa metodologia (Lenora, 21/09): vídeo à esquerda, texto à direita e os
-   três números abaixo da descrição, como a referência. Título na mesma
-   fonte da frase-âncora das perguntas. */
-/* O par vídeo + texto fica centrado no container, com o vídeo na largura
-   dele e colado ao texto por um vão fixo (Lenora, 21/09: o vídeo estava
-   na margem, longe do texto). */
-/* Dobra 2 (26/09/2026): vídeo preso à esquerda e capítulos que passam à
-   direita, um de cada vez (referências: pins 12, 34 e 11). */
-.oquefaz { --tel: min(340px, calc((100svh - 170px) * .5625)); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(40px, 7vw, 120px); row-gap: 32px; align-items: start; }
-.oquefaz__midia .tel { --largura-tel: var(--tel); }
-.oquefaz__texto { display: grid; }
-.oquefaz__capitulo { display: grid; gap: clamp(18px, 2vw, 28px); align-content: center; }
-.oquefaz__texto .oquefaz__titulo { white-space: normal; font-size: clamp(1.9rem, 3.4vw, 3.4rem); line-height: 1.08; letter-spacing: -.055em; font-weight: var(--peso-titulo); }
-.oquefaz__descricao { max-width: 46ch; line-height: 1.65; text-wrap: pretty; color: rgb(242 242 238 / .7); font-size: clamp(16px, 1.15vw, 18px); }
-.oquefaz__numeros { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 28px; }
-/* Número: fio fino em cima (com o traço amarelo do ativo), valor grande e fino, legenda curta. */
-.oquefaz__fio { position: relative; display: block; height: 1px; background: rgb(242 242 238 / .16); }
-.oquefaz__fio span { position: absolute; left: 0; top: 0; width: 28px; height: 1px; background: var(--destaque); transform: scaleX(0); transform-origin: left; transition: transform .8s cubic-bezier(.22, 1, .36, 1); }
-.oquefaz__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 4.2vw, 4.4rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
-.oquefaz__valor .contador { display: inline; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.oquefaz__numeros .oquefaz__legenda { margin: 0; font-size: 15px; line-height: 1.5; color: var(--cinza); max-width: 34ch; }
-/* Viva (desktop): o vídeo fica preso no meio da altura e cada capítulo ocupa meia tela. */
-.oquefaz--viva .oquefaz__midia { position: sticky; top: calc(50svh - var(--tel) * .8889 + 20px); }
-.oquefaz--viva .oquefaz__capitulo { min-height: 56svh; }
-.oquefaz--viva .oquefaz__numeros { margin: 0; gap: 0; }
-.oquefaz--viva .oquefaz__capitulo { opacity: .5; transition: opacity .7s var(--easing-suave); }
-.oquefaz--viva .oquefaz__capitulo--ativo { opacity: 1; }
-.oquefaz--viva .oquefaz__capitulo--ativo .oquefaz__fio span { transform: none; }
-.oquefaz--viva .oquefaz__valor { font-size: clamp(3rem, 5.6vw, 5.8rem); }
 /* Faixa de números de ponta a ponta: números maiores, quatro colunas largas. */
 .secao--numeros { padding-block: clamp(40px, 5vw, 72px) clamp(56px, 7vw, 104px); }
 /* Os três blocos juntos no centro, cada número com a legenda centrada embaixo. */
@@ -478,7 +449,6 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 .secao--numeros .impacto__item { justify-items: center; text-align: center; }
 .secao--numeros .impacto__num { font-size: clamp(2.6rem, 5vw, 5.4rem); }
 .secao--numeros .impacto__legenda { font-size: 16px; }
-.oquefaz__midia { display: grid; justify-items: start; min-width: 0; }
 
 .tel { --largura-tel: min(100%, 360px); width: var(--largura-tel); max-width: 100%; min-width: 0; }
 /* Sem moldura de aparelho: o 9:16 aparece como uma foto vertical. */
@@ -577,52 +547,7 @@ html:not(.js) .esteira__trilho { transform: none; }
    DOBRA 3 · PROTOCOLO REVENA — cabeçalho + cartões, um aberto por vez
    ============================================================ */
 
-.pilares { position: relative; overflow: clip; background: var(--fundo); }   /* clip, não hidden: hidden quebraria o sticky do índice dos pilares */
-.pilares .container { position: relative; }
-.pilares__cabeca { display: grid; gap: 20px; }
-.rotulo--pilula {
-  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
-  background: var(--destaque); color: #000; font-size: 10.5px;
-}
-.rotulo--pilula::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #000; }
-.pilares__titulo { margin-top: 18px; }
 
-.cartas { list-style: none; margin: 0; padding: clamp(40px, 5vw, 64px) 0 0; display: flex; gap: 16px; align-items: stretch; height: clamp(620px, 78vh, 780px); box-sizing: content-box; }
-.carta {
-  position: relative; flex: 1 1 0; min-width: 0; display: grid; grid-template-rows: auto 1fr auto;
-  padding: 22px 20px 24px; background: var(--superficie); border: 1px solid rgb(242 242 238 / .1); border-radius: 16px;
-  overflow: hidden; cursor: pointer;
-  transition: flex-grow .6s var(--easing-suave), margin .6s var(--easing-suave), border-color .6s var(--easing-suave), background-color .3s;
-}
-.carta--aberta { flex-grow: 2.05; margin-block: -28px 0; background: var(--grafite); border-color: rgb(242 242 238 / .2); cursor: default; }
-.carta__n {
-  font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(2.4rem, 3.3vw, 3.3rem); line-height: 1;
-  letter-spacing: -.04em; color: rgb(242 242 238 / .2); transition: opacity .3s;
-}
-.carta__pe { grid-row: 3; align-self: end; display: grid; gap: 12px; font-size: 16px; line-height: 1.2; font-weight: var(--peso-enfase); letter-spacing: -.01em; transition: opacity .3s; }
-.carta__icone { display: block; width: 40px; height: 40px; padding: 9px; box-sizing: border-box; border-radius: 50%; background: rgb(242 242 238 / .08); color: var(--papel); }
-.carta__corpo {
-  position: absolute; inset: 0; display: grid; grid-template-rows: 24% minmax(0, 1fr);
-  opacity: 0; visibility: hidden; transition: opacity .45s var(--easing-suave) .18s, visibility 0s .63s;
-}
-.carta--aberta .carta__n, .carta--aberta .carta__pe { opacity: 0; }
-.carta--aberta .carta__corpo { opacity: 1; visibility: visible; transition-delay: .18s, 0s; }
-.carta__fundo {
-  margin: 0; overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%); mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
-}
-.carta__fundo img { width: 100%; height: 100%; object-fit: cover; object-position: left center; display: block; }
-.carta__conteudo { padding: 2px 24px 0; display: grid; gap: 10px; align-content: start; min-height: 0; }
-.carta__nome { font-size: clamp(1.4rem, 1.9vw, 1.8rem); letter-spacing: -.025em; line-height: 1.1; margin-top: 2px; font-weight: var(--peso-titulo); }
-.carta__conteudo p { margin: 0; font-size: 14px; line-height: 1.45; max-width: 44ch; }
-.carta__icone--plano { padding: 3px; }   /* a arte dos planos já tem margem própria */
-/* O plano que entrega o pilar: etiqueta amarela, a frase do plano e o link. */
-.carta__plano { display: grid; gap: 7px; justify-items: start; margin-top: 4px; padding-top: 12px; border-top: 1px solid rgb(242 242 238 / .12); }
-.carta__etiqueta { display: inline-block; padding: 4px 9px; border-radius: 999px; background: var(--destaque); color: #000; font-size: 10.5px; font-weight: var(--peso-detalhe); letter-spacing: .08em; text-transform: uppercase; }
-.carta__plano p { color: rgb(242 242 238 / .85); }
-.carta__conteudo .link-arrow { font-size: 14px; }
-.pilares__apoio { margin-top: 22px; font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.25rem, 1.8vw, 1.7rem); line-height: 1.25; letter-spacing: -.02em; max-width: none; color: rgb(242 242 238 / .85); }
-.pilares__apoio strong { display: block; margin-top: .3em; font-weight: var(--peso-enfase); color: var(--papel); }
 
 /* ============================================================
    DOBRA 3 (estúdio) · PROTOCOLO REVENA NO PALCO — referência Tres Mares
@@ -681,8 +606,6 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__imagem { position: absolute; inset: 0; background: var(--pp-fundo); will-change: transform; }
 .plano-palco--tom2 .plano-palco__imagem { background: var(--pp-fundo-2); }
 .plano-palco__icone-mob { display: none; }   /* só na pilha do celular */
-/* Traços de fundo do plano: um pouco maiores que a tela, para o parallax não mostrar a borda. */
-.plano-palco__fundo { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; pointer-events: none; user-select: none; }
 .plano-palco__info { position: absolute; z-index: 2; inset: 0; pointer-events: none; will-change: transform, opacity; }
 
 /* Nome em duas linhas desencontradas, por cima do símbolo. */
@@ -719,7 +642,6 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) .plano-palco--tom2 { background: var(--pp-fundo-2); }
 .palcoplanos:not([data-animado]) .plano-palco__imagem { position: static; background: transparent; transform: none !important; }
 .palcoplanos:not([data-animado]) .plano-palco { overflow: hidden; }
-.palcoplanos:not([data-animado]) .plano-palco__fundo { top: 0; height: 100%; opacity: .7; }
 .palcoplanos:not([data-animado]) .plano-palco__info, .palcoplanos:not([data-animado]) .plano-palco__icone-mob { position: relative; z-index: 1; }
 .palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: block; width: min(48vw, 240px); height: auto; margin: 0 auto 24px; }
 .palcoplanos:not([data-animado]) .plano-palco__info { position: static; pointer-events: auto; display: grid; gap: 28px; transform: none !important; opacity: 1 !important; max-width: 620px; margin-inline: auto; }
@@ -814,57 +736,6 @@ html:not(.js) .cortina { margin-top: 0; }
 html:not(.js) .cortina::after { display: none; }
 html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
-/* ---------- Uma operação estruturada (26/09/2026) ----------
-   Palco com a foto da operação; índice de vidro à esquerda, cartão claro com
-   o texto do item ativo à direita (referências: pins 124, 69 e 176). */
-#perguntas { padding-block: var(--esp-secao); }
-.ancora { font-size: clamp(1.8rem, 3vw, 2.75rem); letter-spacing: -.03em; line-height: 1.12; max-width: 30ch; }
-.ancora strong { color: var(--destaque); font-weight: var(--peso-enfase); }
-.operacao__titulo { margin-bottom: clamp(32px, 4vw, 56px); }
-.operacao__palco { position: relative; display: grid; grid-template-columns: minmax(260px, 340px) 1fr; align-items: end; gap: 24px; min-height: clamp(560px, 72svh, 720px); padding: clamp(16px, 1.6vw, 24px); border-radius: 16px; overflow: hidden; isolation: isolate; }
-.operacao__foto { position: absolute; inset: 0; z-index: -2; margin: 0; }
-.operacao__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) brightness(.86); transition: transform 1.6s var(--easing); }
-.js .operacao__palco.entra:not(.visivel) .operacao__foto img { transform: scale(1.05); }
-.operacao__palco::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(0 0 0 / .62) 0%, rgb(0 0 0 / .2) 42%, rgb(0 0 0 / .05) 70%), linear-gradient(0deg, rgb(0 0 0 / .45), transparent 45%); }
-/* Índice: vidro escuro, um item por linha, o ativo claro com a barra que anda. */
-.operacao__indice { align-self: end; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px; border-radius: 12px; background: rgb(10 10 9 / .55); border: 1px solid rgb(242 242 238 / .12); -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); }
-.operacao__aba { position: relative; display: grid; grid-template-columns: 28px 1fr; align-items: baseline; gap: 10px; width: 100%; padding: 12px 12px 14px; background: none; border: 0; border-radius: 8px; color: rgb(242 242 238 / .56); font: inherit; font-size: 14.5px; line-height: 1.35; text-align: left; cursor: pointer; transition: color .4s var(--easing-suave), background-color .4s var(--easing-suave); }
-.operacao__aba:hover { color: rgb(242 242 238 / .86); }
-.operacao__aba[aria-selected="true"] { color: var(--papel); background: rgb(242 242 238 / .06); }
-.operacao__n { font-size: 11px; letter-spacing: .08em; color: rgb(242 242 238 / .4); }
-.operacao__aba[aria-selected="true"] .operacao__n { color: var(--papel); }
-.operacao__progresso { position: absolute; left: 12px; right: 12px; bottom: 6px; height: 1px; background: rgb(242 242 238 / .12); opacity: 0; transition: opacity .4s; }
-.operacao__progresso span { display: block; height: 100%; background: var(--destaque); transform: scaleX(var(--andou, 0)); transform-origin: left; }
-.operacao__aba[aria-selected="true"] .operacao__progresso { opacity: 1; }
-.operacao__aba:focus-visible { outline: 2px solid var(--papel); outline-offset: -2px; }
-/* Cartão claro: só o item ativo, entrando devagar. */
-.operacao__cartoes { position: relative; justify-self: end; width: min(100%, 420px); }
-.operacao__cartao { display: grid; gap: 12px; padding: clamp(22px, 2vw, 30px); border-radius: 12px; background: rgb(10 10 9 / .62); border: 1px solid rgb(242 242 238 / .14); color: var(--papel); -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); }
-.operacao--viva .operacao__cartao { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translate3d(0, 10px, 0); transition: opacity .5s var(--easing-suave), transform .7s var(--easing), visibility 0s .5s; }
-.operacao--viva .operacao__cartoes { display: grid; }
-.operacao--viva .operacao__cartao[data-ativo] { opacity: 1; visibility: visible; transform: none; transition-delay: .08s, .08s, 0s; }
-.operacao__cartao .pergunta__n { font-size: 12px; letter-spacing: .06em; color: var(--papel); }
-.operacao__cartao .pergunta__n span { color: rgb(242 242 238 / .45); }
-.operacao__cartao .pergunta__titulo { font-family: var(--font-titulo); font-size: clamp(1.4rem, 1.8vw, 1.8rem); font-weight: 300; line-height: 1.15; letter-spacing: -.035em; }
-.operacao__cartao p { margin: 0; font-size: 15px; line-height: 1.65; color: rgb(242 242 238 / .74); }
-/* Sem JS: todos os textos, em coluna, sobre a foto. */
-.operacao:not(.operacao--viva) .operacao__cartoes { display: grid; gap: 12px; }
-/* Na copy, a dobra entra presa na cortina: precisa caber numa tela. */
-.cortina > #perguntas { padding-block: clamp(56px, 9vh, 96px); }
-.cortina .operacao__palco { min-height: clamp(420px, 58svh, 600px); }
-@media (max-width: 899.98px) {
-  .operacao__palco { display: block; min-height: 0; padding: 0; border-radius: 0; overflow: visible; }
-  .operacao__palco::before { display: none; }
-  .operacao__foto { position: relative; inset: auto; z-index: 0; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
-  .operacao__indice { display: none; }
-  .operacao__cartoes, .operacao--viva .operacao__cartoes { display: grid; gap: 0; width: 100%; }
-  .operacao--viva .operacao__cartao, .operacao__cartao { grid-area: auto; opacity: 1; visibility: visible; transform: none; padding: 22px 0; border: 0; border-top: 1px solid rgb(242 242 238 / .16); border-radius: 0; background: none; color: var(--papel); -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .operacao__cartao .pergunta__n { color: rgb(242 242 238 / .5); }
-  .operacao__cartao p { color: rgb(242 242 238 / .72); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .operacao__foto img, .operacao--viva .operacao__cartao, .operacao__aba { transition: none; }
-}
 
 /* ---------- Resultados: rótulo lateral e indicadores em linhas ---------- */
 #resultados { background: #e8e7df; color: #161616; padding-block: var(--esp-secao); }
@@ -1113,51 +984,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   #perguntas .ancora--revela { font-size: clamp(1.9rem, 7.5vw, 2.8rem); text-wrap: balance; }
 }
 
-/* ---------- Protocolo Revena: os cinco pilares (26/09/2026) ----------
-   Referência: pins 61 e 114 (Lama Lama). Cada pilar entra grande e, quando o
-   próximo chega, a linha dele gruda no topo, abaixo da anterior: no fim os
-   cinco formam o índice. Rolagem nativa (sticky); o script só marca o ativo. */
-.pilares { background: var(--fundo); }
-.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(40px, 5vw, 72px); }
-.pilares__cabeca .titulo { font-size: clamp(2rem, 3vw, 3rem); }
-.pilares__lista { --linha: 76px; }
-.pilar__linha { margin: 0; font: inherit; }
-.pilar__linha {
-  position: relative; display: grid; grid-template-columns: clamp(48px, 6vw, 88px) minmax(0, 1fr) 36px; align-items: center; gap: clamp(16px, 2vw, 32px);
-  min-height: var(--linha); border-top: 1px solid rgb(242 242 238 / .14);
-}
-.pilar__n { font-size: 12px; letter-spacing: .08em; color: rgb(242 242 238 / .42); transition: color .6s var(--easing-suave); }
-.pilar__titulo { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.35rem, 2.3vw, 2.25rem); line-height: 1.12; letter-spacing: -.035em; color: rgb(242 242 238 / .9); text-wrap: balance; transition: color .6s var(--easing-suave), opacity .6s var(--easing-suave); }
-.pilar__icone { display: block; width: 32px; justify-self: end; color: var(--destaque); opacity: .35; transition: opacity .6s var(--easing-suave); }
-.pilar__icone svg { display: block; width: 100%; height: auto; overflow: visible; }
-.pilar__corpo { padding: clamp(16px, 2vw, 28px) 0 clamp(72px, 14vh, 160px) calc(clamp(48px, 6vw, 88px) + clamp(16px, 2vw, 32px)); }
-.pilar__texto { max-width: 46ch; margin: 0; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.65; color: rgb(242 242 238 / .66); text-wrap: pretty; }
-/* Vivo (desktop, com JS e movimento): linhas presas em escada e o símbolo se desenhando. */
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
-  .pilares--vivo .pilar__linha {
-    position: sticky; top: calc(var(--altura-header) - 14px + var(--i) * var(--linha)); z-index: calc(2 + var(--i));
-    transition: background-color .4s var(--easing-suave);
-  }
-  /* Só a linha presa ganha fundo, para o texto que corre por baixo não colidir. */
-  .pilares--vivo .pilar--preso { background: rgb(0 0 0 / .84); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
-  .pilares--vivo .pilar--preso:first-of-type::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--altura-header); background: rgb(0 0 0 / .84); }
-  .pilares--vivo .pilar__corpo { min-height: 34svh; }
-  .pilares--vivo .pilar__texto { opacity: .35; transform: translate3d(0, 12px, 0); transition: opacity .8s var(--easing-suave), transform 1s var(--easing); }
-  .pilares--vivo :is(.pilar--ativo, .pilar--passado) + .pilar__corpo .pilar__texto { opacity: 1; transform: none; }
-  /* Espaço no fim para os cinco chegarem a empilhar antes de a dobra sair. */
-  .pilares--vivo .pilares__lista { padding-bottom: 18svh; }
-  .pilares--vivo .pilar__icone svg * { stroke-dasharray: 64; stroke-dashoffset: 64; transition: stroke-dashoffset 1.6s var(--easing); }
-  .pilares--vivo .pilar--visto .pilar__icone svg * { stroke-dashoffset: 0; }
-}
-.pilar--ativo .pilar__n { color: var(--destaque); }
-.pilar--ativo .pilar__titulo { color: var(--papel); }
-.pilar--ativo .pilar__icone { opacity: 1; }
-.pilar--passado .pilar__titulo { color: rgb(242 242 238 / .5); }
-.pilar--passado .pilar__icone { opacity: .5; }
-@media (max-width: 899.98px) {
-  .pilar__linha { grid-template-columns: 40px minmax(0, 1fr) 28px; min-height: 64px; }
-  .pilar__corpo { padding: 4px 0 32px 56px; }
-}
 
 /* Guardado: o palco anterior dos pilares (um cartão por tela, dobra presa),
    caso a apresentação volte a ser essa. */
@@ -1225,8 +1051,12 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .ecossistema__cabeca { display: grid; gap: 14px; margin-bottom: clamp(32px, 4vw, 56px); }
 .ecossistema__cabeca .titulo { max-width: 16ch; }
 .ecossistema__grade { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.6vw, 24px); }
-.produto { display: grid; grid-template-rows: auto 1fr; border: 1px solid rgb(242 242 238 / .1); border-radius: 16px; background: rgb(14 14 13 / .72); overflow: hidden; }
-.produto__arte { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0B0B0A; border-bottom: 1px solid rgb(242 242 238 / .08); }
+.produto { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }   /* .vidro no HTML: caixa translúcida, como a referência */
+.produto__arte { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0B0B0A; border-bottom: 1px solid rgb(255 255 255 / .09); }
+/* Arte do Tools: camadas em traço fino sobre o clarão granulado, como as artes dos pilares. */
+.produto__arte--camadas { color: rgb(255 255 255 / .66); background: radial-gradient(90% 80% at 28% 18%, rgb(255 255 255 / .2), rgb(255 255 255 / .04) 55%, transparent 80%), #141413; }
+.produto__arte--camadas::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: soft-light; background: var(--grao-fino); }
+.produto__arte--camadas svg { position: relative; display: block; width: 100%; height: 100%; }
 .produto__arte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8) brightness(.85); transform: scale(1.02); transition: transform 1.2s var(--easing), filter .8s var(--easing-suave); }
 .produto:hover .produto__arte img { transform: scale(1.05); filter: saturate(.9) brightness(.95); }
 /* A sala do estúdio tem neon verde-limão: mais baixo, para o amarelo seguir como detalhe. */
@@ -1264,42 +1094,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
   .produto__arte img, .produto__lista a, .produto__seta { transition: none; }
 }
 
-/* ---------- Conheça a Renke (26/09/2026) ----------
-   Texto à esquerda, foto numa moldura à direita. Presa no desktop: a moldura
-   cresce até a tela inteira por trás do texto e as outras fotos entram de
-   baixo para cima (clip-path pintado pelo script de Sobre.astro). */
-.sobre-janela { position: relative; padding: 0; }
-.sobre-janela__palco { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: hidden; }
-.sobre-janela__grade { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 6vw, 96px); align-items: center; padding-block: clamp(96px, 12vh, 140px); }
-.sobre-janela__texto { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; max-width: 460px; }
-.sobre-janela__texto .sobre__declaracao { font-size: clamp(2.2rem, 3.8vw, 3.6rem); line-height: 1.04; letter-spacing: -.045em; max-width: none; }
-.sobre-janela__descricao { max-width: 38ch; margin: 0; color: rgb(242 242 238 / .72); font-size: clamp(15px, 1.1vw, 17px); line-height: 1.7; text-wrap: pretty; }
-.sobre-janela__molde { aspect-ratio: 4 / 5; max-height: 72svh; width: 100%; justify-self: end; }
-.sobre-janela__fotos { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
-.sobre-janela__foto { position: absolute; inset: 0; margin: 0; overflow: hidden; }
-.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; object-position: var(--foco, 50% 50%); filter: saturate(.78) brightness(.92); will-change: transform; }
-/* Escurece o lado do texto conforme a foto toma a tela. */
-.sobre-janela__veu { position: absolute; inset: 0; pointer-events: none; opacity: var(--sobre-a, 0); background: linear-gradient(90deg, rgb(0 0 0 / .88) 0%, rgb(0 0 0 / .82) 32%, rgb(0 0 0 / .44) 52%, rgb(0 0 0 / .08) 74%), linear-gradient(0deg, rgb(0 0 0 / .55), transparent 30%); }
-.sobre-janela__legenda { position: absolute; right: var(--grid-inset); bottom: 32px; z-index: 2; display: flex; align-items: baseline; gap: 10px; margin: 0; font-size: 13px; color: rgb(242 242 238 / .78); opacity: var(--sobre-a, 0); }
-.sobre-janela__legenda .num { color: var(--papel); font-weight: var(--peso-enfase); }
-.sobre-janela__total { color: rgb(242 242 238 / .45); }
-.sobre-janela__nome { margin-left: 14px; padding-left: 14px; border-left: 1px solid rgb(242 242 238 / .3); }
-/* Presa: a dobra ganha curso (altura no script) e o palco fica na tela. */
-.sobre-janela--presa .sobre-janela__palco { position: sticky; top: 0; height: 100svh; }
-.sobre-janela--presa .sobre-janela__fotos { clip-path: inset(20% 10% 20% 55% round 16px); }
-.sobre-janela--presa .sobre-janela__foto + .sobre-janela__foto { clip-path: inset(100% 0 0 0); }
-/* Em fluxo (celular, movimento reduzido): texto e, embaixo, as fotos numa faixa que rola de lado. */
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__palco { display: flex; flex-direction: column; padding-block: var(--esp-secao); }
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__fotos { order: 2; }
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__grade { display: block; padding: 0 var(--gutter); }
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__molde { display: none; }
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__fotos {
-  position: static; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
-  margin-top: 40px; padding-inline: var(--gutter); scrollbar-width: none;
-}
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__foto { position: relative; inset: auto; flex: 0 0 min(80vw, 420px); aspect-ratio: 4 / 5; border-radius: 12px; scroll-snap-align: start; }
-.sobre-janela:not(.sobre-janela--presa) :is(.sobre-janela__veu, .sobre-janela__legenda) { display: none; }
-.sobre-janela:not(.sobre-janela--presa) .sobre-janela__texto { max-width: 560px; }
 
 /* ---------- Polish 20/09/2026: formulário, prova por números, pendências, letreiro ---------- */
 /* Estados do formulário: erro por campo, nota do canal, status após o envio. */
@@ -1323,3 +1117,139 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 
 
+
+/* ============================================================
+   Rodada 3 (26/09/2026): a referência PeachWeb "curious", fiel.
+   Caixas de vidro (branco a 7 % com desfoque de 28 px e raio 12, como as
+   caixas da referência), dobra 2 no molde do painel "Product", dobra 3 nos
+   cartões "Features", dobra 6 nas caixas "Solutions" e as fotos sempre em
+   moldura. Mapeamento das referências: docs/04-design/curadoria/README.md.
+   ============================================================ */
+.vidro {
+  background: rgb(255 255 255 / .07); border: 1px solid rgb(255 255 255 / .09); border-radius: 12px;
+  -webkit-backdrop-filter: blur(28px); backdrop-filter: blur(28px);
+}
+/* Entrada escalonada: cada cartão chega 90 ms depois do anterior. */
+.entra[style*="--i"].visivel { transition-delay: calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms); }
+/* Grão fino sobre as artes, como o clarão granulado dos cartões da referência. */
+:root { --grao-fino: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
+
+/* ---------- Dobra 2 · Nossa metodologia: painel "Product" ---------- */
+.metodo { display: grid; gap: clamp(32px, 4vw, 56px); padding: clamp(28px, 3.2vw, 48px); }
+.metodo__cabeca { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(24px, 4vw, 64px); align-items: end; }
+.metodo__titulo { white-space: normal; font-size: clamp(2rem, 3.6vw, 3.5rem); }
+.metodo__lead { display: grid; gap: 22px; justify-items: start; }
+.metodo__descricao { max-width: 46ch; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.65; color: rgb(242 242 238 / .78); text-wrap: pretty; }
+.metodo__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(200px, 17vw, 250px); gap: clamp(20px, 2.4vw, 36px); align-items: center; }
+/* O sistema conectado: a arte em traço fino; os rótulos e o R são HTML por cima, nas posições do viewBox (900×360). */
+.metodo__sistema { position: relative; margin: 0; aspect-ratio: 900 / 360; color: rgb(242 242 238 / .7); }
+.metodo__sistema > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.metodo__sistema .fio { opacity: .32; }
+.metodo__sistema .pulso { stroke: var(--papel); stroke-width: 1.4; stroke-dasharray: 7 93; stroke-dashoffset: 100; animation: metodo-pulso 4.6s cubic-bezier(.45, 0, .55, 1) infinite; }
+@keyframes metodo-pulso { to { stroke-dashoffset: 0; } }
+.metodo__nos { list-style: none; margin: 0; padding: 0; }
+.metodo__no {
+  position: absolute; width: 16.7%; height: 13.4%; transform: translate(-50%, -50%);
+  display: grid; place-items: center; padding: 0 6px; border-radius: 10px;
+  background: rgb(12 12 11 / .9); border: 1px solid rgb(242 242 238 / .16);
+  font-size: clamp(11px, 1.05vw, 15px); line-height: 1.1; color: var(--papel); white-space: nowrap; text-align: center;
+}
+.metodo__no[data-no="1"] { left: 12.8%; top: 16.7%; }
+.metodo__no[data-no="2"] { left: 12.8%; top: 50%; }
+.metodo__no[data-no="3"] { left: 12.8%; top: 83.3%; }
+.metodo__no--saida { left: 88.9%; top: 50%; width: 21.2%; height: 15.6%; }
+.metodo__marca { position: absolute; left: 50%; top: 50%; width: 5.2%; height: auto; transform: translate(-50%, -50%); }
+.metodo__midia { justify-self: end; width: 100%; }
+.metodo__midia .tel { --largura-tel: 100%; }
+.metodo__numeros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); }
+.metodo__numero { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid rgb(242 242 238 / .16); }
+.metodo__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.6vw, 3.6rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
+.metodo__legenda { margin: 0; font-size: 14px; color: var(--cinza); }
+@media (max-width: 899.98px) {
+  .metodo { padding: 20px; gap: 32px; }
+  .metodo__cabeca, .metodo__palco { grid-template-columns: 1fr; }
+  .metodo__no { font-size: 10px; border-radius: 6px; padding: 0 4px; }
+  .metodo__no--saida { width: 26%; white-space: normal; }
+  .metodo__midia { justify-self: center; max-width: 280px; }
+  .metodo__numeros { grid-template-columns: 1fr; gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .metodo__sistema .pulso { animation: none; opacity: 0; } }
+
+/* ---------- Dobra 3 · Protocolo Revena: cartões "Features" ---------- */
+.pilares { position: relative; background: var(--fundo); }
+.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 4vw, 56px); }
+.pilares__cartoes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(12px, 1.2vw, 18px); }
+.pilar-cartao { display: grid; grid-template-rows: auto 1fr; padding: 10px; }
+.pilar-cartao__arte {
+  position: relative; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; color: rgb(255 255 255 / .66);
+  background: radial-gradient(90% 80% at 28% 18%, rgb(255 255 255 / .2), rgb(255 255 255 / .04) 55%, transparent 80%), #141413;
+}
+.pilar-cartao__arte::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: soft-light; background: var(--grao-fino); }
+.pilar-cartao__arte svg { position: relative; display: block; width: 100%; height: 100%; }
+.pilar-cartao__corpo { display: grid; gap: 8px; align-content: start; padding: 18px 12px 14px; }
+.pilar-cartao__n { font-size: 11px; letter-spacing: .08em; color: rgb(242 242 238 / .45); }
+.pilar-cartao__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.05rem, 1.25vw, 1.3rem); line-height: 1.2; letter-spacing: -.02em; color: var(--papel); text-wrap: balance; }
+.pilar-cartao__texto { margin: 0; font-size: 14px; line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+/* Em telas médias e no celular a fileira rola de lado (pin Vivid Motion): o cartão cortado na borda sugere o resto. */
+@media (max-width: 1279.98px) {
+  .pilares__cartoes { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; }
+  .pilares__cartoes::-webkit-scrollbar { display: none; }
+  .pilar-cartao { flex: 0 0 min(78vw, 320px); scroll-snap-align: start; }
+}
+
+/* ---------- Dobra 6 · Uma operação estruturada: caixas "Solutions" ---------- */
+#perguntas { padding-block: var(--esp-secao); }
+.ancora { font-size: clamp(1.8rem, 3vw, 2.75rem); letter-spacing: -.03em; line-height: 1.12; max-width: 30ch; }
+.ancora strong { color: var(--destaque); font-weight: var(--peso-enfase); }
+.operacao__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.operacao__texto { position: sticky; top: calc(var(--altura-header) + 24px); min-width: 0; }
+.operacao__titulo { margin: 0; }
+/* Na coluna estreita a frase quebra onde precisar (a regra geral prende cada linha no desktop). */
+#perguntas .operacao__texto .ancora--revela { font-size: clamp(1.8rem, 2.7vw, 2.7rem); }
+#perguntas .operacao__texto .ancora__linha { white-space: normal; }
+.operacao__cartoes { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, 1.2vw, 18px); }
+.operacao__cartao { display: grid; gap: 14px; padding: clamp(24px, 2.4vw, 36px); }
+.operacao__n { margin: 0; font-size: 12px; letter-spacing: .06em; color: var(--papel); }
+.operacao__n span { color: rgb(242 242 238 / .45); }
+.operacao__nome { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.5rem, 2.2vw, 2.1rem); line-height: 1.12; letter-spacing: -.035em; }
+.operacao__foto { margin: 6px 0 4px; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: #0b0b0a; }
+.operacao__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) brightness(.9); }
+.operacao__texto-item { margin: 0; max-width: 52ch; font-size: 15.5px; line-height: 1.65; color: rgb(242 242 238 / .74); }
+/* Na copy, a dobra entra presa na cortina: precisa caber numa tela. */
+.cortina > #perguntas { padding-block: clamp(56px, 9vh, 96px); }
+.cortina .operacao__texto { position: static; }
+@media (max-width: 899.98px) {
+  .operacao__grade { grid-template-columns: 1fr; gap: 28px; }
+  .operacao__texto { position: static; }
+  .operacao__cartao { padding: 20px; }
+}
+
+/* ---------- Conheça a Renke: as fotos numa moldura de vidro ---------- */
+.sobre-janela { position: relative; padding: 0; }
+.sobre-janela__palco { position: relative; min-height: 100svh; display: grid; align-items: center; }
+.sobre-janela__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: center; padding-block: clamp(96px, 12vh, 140px); }
+.sobre-janela__texto { display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; max-width: 460px; }
+.sobre-janela__texto .sobre__declaracao { font-size: clamp(2.2rem, 3.8vw, 3.6rem); line-height: 1.04; letter-spacing: -.045em; max-width: none; }
+.sobre-janela__descricao { max-width: 38ch; margin: 0; color: rgb(242 242 238 / .72); font-size: clamp(15px, 1.1vw, 17px); line-height: 1.7; text-wrap: pretty; }
+.sobre-janela__moldura { position: relative; margin: 0; padding: 10px; width: 100%; }
+.sobre-janela__fotos { position: relative; aspect-ratio: 4 / 3; max-height: 66svh; border-radius: 8px; overflow: hidden; background: #0b0b0a; }
+.sobre-janela__foto { position: absolute; inset: 0; overflow: hidden; }
+.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; object-position: var(--foco, 50% 50%); filter: saturate(.78) brightness(.94); will-change: transform; }
+.sobre-janela--presa .sobre-janela__foto + .sobre-janela__foto { clip-path: inset(100% 0 0 0); }
+.sobre-janela__legenda { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 12px 6px 4px; font-size: 13px; color: rgb(242 242 238 / .78); }
+.sobre-janela__legenda .num { color: var(--papel); font-weight: var(--peso-enfase); }
+.sobre-janela__total { color: rgb(242 242 238 / .45); }
+.sobre-janela__nome { margin-left: 14px; padding-left: 14px; border-left: 1px solid rgb(242 242 238 / .3); }
+/* Presa: a dobra ganha curso (altura no script) e o palco fica na tela enquanto as fotos passam. */
+.sobre-janela--presa .sobre-janela__palco { position: sticky; top: 0; height: 100svh; }
+/* Em fluxo (celular, movimento reduzido): texto e, embaixo, as fotos numa faixa que rola de lado. */
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__palco { min-height: 0; padding-block: var(--esp-secao); }
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__grade { grid-template-columns: 1fr; gap: 40px; padding-block: 0; }
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__moldura { padding: 0; background: none; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__fotos {
+  aspect-ratio: auto; max-height: none; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  background: none; border-radius: 0; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter);
+}
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__foto { position: relative; inset: auto; flex: 0 0 min(80vw, 420px); aspect-ratio: 4 / 5; border-radius: 12px; scroll-snap-align: start; }
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__legenda { display: none; }
+.sobre-janela:not(.sobre-janela--presa) .sobre-janela__texto { max-width: 560px; }

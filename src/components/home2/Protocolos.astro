@@ -1,30 +1,30 @@
 ---
 /**
- * O que a Renke entrega na prática: os cinco pilares do Protocolo Revena.
+ * Protocolo Revena: os cinco pilares em cartões, no molde da seção
+ * "Features" da referência PeachWeb "curious" (Lenora, 26/09/2026: "essa
+ * sessão features está bem legal, aplicar na terceira dobra"), confirmado
+ * pelo pin Vivid Motion (fileira de cartões, cada um com a sua arte).
  *
- * Refeito em 26/09/2026 (Lenora: "dá um trato" na dobra 3, sem cartões de
- * banco de IA). Referência escolhida na curadoria (docs/04-design/curadoria/):
- * pins 61 e 114 (Lama Lama), as etapas que se empilham. Cada pilar entra
- * grande, com o número, o símbolo em amarelo se desenhando e o texto; quando
- * o próximo chega, a linha dele gruda no topo, abaixo da anterior. No fim, os
- * cinco formam o índice do Protocolo. Rolagem nativa (position: sticky), sem
- * trava nova; o script só marca o pilar ativo.
- *
- * Apresentação compartilhada pelas duas versões; os textos vêm dos recortes
- * do estúdio ou da copy integral. Sem JS, no celular e com movimento
- * reduzido: lista simples, nada preso.
+ * Cada cartão: uma arte em traço fino sobre um clarão granulado
+ * (public/arte/pilar-*.svg, monocromática), o número, o título e o texto.
+ * Vidro translúcido por cima da cena do fundo. Sem trava e sem estado por
+ * scroll: os cartões só entram com a rolagem (.entra), um atrás do outro.
+ * Mesma apresentação nas duas versões; os textos vêm dos recortes do
+ * estúdio ou da copy integral. Em telas médias e no celular a fileira rola
+ * de lado, com os cartões cortados na borda sugerindo o resto.
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
 
-const cartas = pilares.map((p, i) => ({
-  ...p,
-  ...(!copyLiteral ? pilaresEstudio[i] : {}),
-  iconeSvg: readFileSync(join(process.cwd(), 'public', 'icones', `pilar-0${i + 1}.svg`), 'utf8'),
-}));
+const ARTES = ['trafego', 'crm', 'atendimento', 'dados', 'posicionamento'];
+const arte = (nome: string) => {
+  const arquivo = join(process.cwd(), 'public', 'arte', `pilar-${nome}.svg`);
+  return existsSync(arquivo) ? readFileSync(arquivo, 'utf8') : '';
+};
+const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}), arte: arte(ARTES[i]) }));
 const dois = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
@@ -33,61 +33,19 @@ const dois = (i: number) => String(i + 1).padStart(2, '0');
       <p class="rotulo">Para clínicas</p>
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
     </header>
-    <!-- Cabeçalhos e textos são irmãos no mesmo container: dentro de um <li>
-         cada, o sticky soltaria no fim do item e a pilha não se formaria. -->
-    <div class="pilares__lista" style={`--n:${cartas.length}`}>
+    <ol class="pilares__cartoes" aria-label="Os cinco pilares do Protocolo Revena">
       {cartas.map((p, i) => (
-        <>
-          <h3 class="pilar__linha" style={`--i:${i}`} data-pilar={i}>
-            <span class="pilar__n num">{dois(i)}</span>
-            <span class="pilar__titulo">{p.titulo}</span>
-            <span class="pilar__icone" aria-hidden="true" set:html={p.iconeSvg} />
-          </h3>
-          <div class="pilar__corpo" data-pilar-corpo={i}>
-            <p class="pilar__texto">{p.texto}</p>
+        <li class="pilar-cartao vidro entra" style={`--i:${i}`}>
+          <div class="pilar-cartao__arte" aria-hidden="true">
+            <Fragment set:html={p.arte} />
           </div>
-        </>
+          <div class="pilar-cartao__corpo">
+            <span class="pilar-cartao__n num">{dois(i)}</span>
+            <h3 class="pilar-cartao__titulo">{p.titulo}</h3>
+            <p class="pilar-cartao__texto">{p.texto}</p>
+          </div>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
-
-<script>
-  // Marca o pilar ativo (o último cujo texto já passou da faixa de 62% da
-  // tela): número e símbolo acendem, os de cima ficam apagados. Só estado.
-  const secao = document.querySelector<HTMLElement>('[data-pilares]');
-  if (secao) {
-    const itens = [...secao.querySelectorAll<HTMLElement>('[data-pilar]')];
-    const corpos = [...secao.querySelectorAll<HTMLElement>('[data-pilar-corpo]')];
-    const media = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
-    let quadro = 0;
-    const marcar = () => {
-      quadro = 0;
-      if (!media.matches) return;
-      // Ativo: o último pilar cujo texto já saiu de baixo da pilha e chegou ao
-      // terço de cima do espaço livre (o limiar desce conforme a pilha cresce).
-      let ativo = -1;
-      corpos.forEach((c, i) => {
-        const base = itens[i].getBoundingClientRect().bottom;
-        if (c.getBoundingClientRect().top < base + (innerHeight - base) * .35) ativo = i;
-      });
-      // Presa: a linha chegou ao seu lugar na escada (o fundo escuro só entra aí).
-      const topo = parseFloat(getComputedStyle(itens[0]).top) || 0;
-      const passo = itens.length > 1 ? (parseFloat(getComputedStyle(itens[1]).top) || 0) - topo : 0;
-      itens.forEach((li, i) => {
-        li.classList.toggle('pilar--ativo', i === ativo);
-        li.classList.toggle('pilar--passado', i < ativo);
-        if (i <= ativo) li.classList.add('pilar--visto');
-        li.classList.toggle('pilar--preso', li.getBoundingClientRect().top <= topo + passo * i + .5);
-      });
-    };
-    const ligar = () => {
-      secao.classList.toggle('pilares--vivo', media.matches);
-      if (!media.matches) itens.forEach((li) => li.classList.remove('pilar--ativo', 'pilar--passado', 'pilar--preso'));
-      marcar();
-    };
-    addEventListener('scroll', () => { if (!quadro) quadro = requestAnimationFrame(marcar); }, { passive: true });
-    media.addEventListener('change', ligar);
-    ligar();
-  }
-</script>

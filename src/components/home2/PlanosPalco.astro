@@ -10,15 +10,8 @@ import { join } from 'node:path';
 import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import Botao from '../ui/Botao.astro';
-import { Image } from 'astro:assets';
-// Fundo de cada plano (26/09, referência Tres Mares): traços finos que vão do
-// caos à ordem, plano a plano. Gerados por scripts/gerar-fundos-palco.py.
-import fundoStart from '../../assets/palco/start.webp';
-import fundoRun from '../../assets/palco/run.webp';
-import fundoScale from '../../assets/palco/scale.webp';
-import fundoCore from '../../assets/palco/core.webp';
-import fundoFull from '../../assets/palco/full.webp';
-const fundos = { start: fundoStart, run: fundoRun, scale: fundoScale, core: fundoCore, full: fundoFull } as const;
+// Sem textura de fundo nos planos (Lenora, 26/09: "não gostei da textura,
+// vamos inserir outra coisa depois"): cada plano fica só no tom liso.
 
 const ordem = ['REVENA START', 'REVENA RUN', 'REVENA SCALE', 'REVENA CORE', 'REVENA FULL'];
 
@@ -100,7 +93,6 @@ const planos = ordem.map((label) => {
       {planos.map((p, i) => (
         <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} >
           <div class="plano-palco__imagem" data-imagem>
-            <Image class="plano-palco__fundo" src={fundos[p.id as keyof typeof fundos]} alt="" widths={[960, 1600, 2400]} sizes="100vw" loading="lazy" decoding="async" aria-hidden="true" />
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>

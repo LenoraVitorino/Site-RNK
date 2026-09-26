@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+  <g class="atend-trilho">
+    <path d="M70 62v176" stroke-width="1" stroke-opacity=".35"/>
+    <circle cx="70" cy="84" r="9" stroke-width="1" stroke-opacity=".4"/>
+    <circle cx="70" cy="84" r="4" fill="currentColor" fill-opacity=".1"/>
+    <circle cx="70" cy="150" r="4" stroke-opacity=".6"/>
+    <circle cx="70" cy="216" r="4" stroke-opacity=".6"/>
+  </g>
+  <g class="atend-balao-1">
+    <path d="M122 62h156a10 10 0 0 1 10 10v24a10 10 0 0 1-10 10H112V72a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="136" cy="84" r="8" stroke-width="1"/>
+    <path d="M136 79.5V84h3.5" stroke-width="1"/>
+    <path d="M154 84h114" stroke-width="1" stroke-opacity=".55"/>
+  </g>
+  <g class="atend-balao-2">
+    <path d="M254 128h156a10 10 0 0 1 10 10v34H254a10 10 0 0 1-10-10v-24a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".1"/>
+    <path d="M262 144h130M262 157h70" stroke-width="1" stroke-opacity=".55"/>
+  </g>
+  <g class="atend-balao-3">
+    <path d="M122 194h190a10 10 0 0 1 10 10v24a10 10 0 0 1-10 10H112v-34a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".06"/>
+    <path d="M130 216h132" stroke-width="1" stroke-opacity=".55"/>
+    <path d="M280 216l4 4 8-8M289 220l8-8"/>
+  </g>
+</svg>

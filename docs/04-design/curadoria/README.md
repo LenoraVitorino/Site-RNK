@@ -1,5 +1,8 @@
 # Curadoria da pasta "Renke": classificação e o que foi aplicado
 
+> 26/09, terceira rodada: a Lenora reprovou a execução desta rodada; o que
+> vale agora está em [rodada-3.md](rodada-3.md).
+
 26/09/2026, segunda rodada. A Lenora pediu:
 
 - analisar referência por referência;
@@ -20,6 +23,8 @@ dobra de destino e risco.
 | [pins-124-195.md](pins-124-195.md) | pins 124 a 195 |
 | [pins-196-264.md](pins-196-264.md) | pins 196 a 264 |
 | [videos.md](videos.md) | os 27 vídeos, pelo movimento |
+| [rodada-3.md](rodada-3.md) | terceira rodada: a referência PeachWeb fiel e o mapeamento por dobra |
+| [cena-peachweb.md](cena-peachweb.md) | a cena da referência extraída (materiais, luzes, efeitos, coreografia) |
 | [../curadoria-pinterest.md](../curadoria-pinterest.md) | primeira rodada: PeachWeb, ClickUp, Vercel |
 
 O número entre parênteses é a posição na pasta, a partir de 0 (o pin mais
