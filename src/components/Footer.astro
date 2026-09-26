@@ -1,6 +1,7 @@
 ---
 import { rodape } from '../data/nav';
 import { existe } from '../data/rotas';
+import { copyLiteral } from '../data/versao';
 ---
 <footer class="footer">
   <div class="container">
@@ -39,7 +40,7 @@ import { existe } from '../data/rotas';
 
     <div class="footer__bottom">
       <p>{rodape.copyright}</p>
-      <p><em>{rodape.assinatura}</em></p>
+      {copyLiteral && <p><em>{rodape.assinatura}</em></p>}
     </div>
   </div>
 </footer>
