@@ -39,9 +39,9 @@ section[id] { scroll-margin-top: 110px; }
 .ecossistema__box { padding: clamp(20px, 4vw, 56px); background: #000; border: 1px solid rgb(242 242 238 / .12); border-radius: 16px; }
 .ecossistema-editorial .ecossistema__cabeca { gap: 24px; }
 .ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.ecossistema-editorial .produto { background: #000; border-color: var(--ref-fio); border-radius: 10px; }
+.ecossistema-editorial .produto { background: #000; border: 1px solid rgb(255 255 255 / .12); border-radius: 10px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 16 / 9; }
-.ecossistema-editorial .produto__corpo { padding: clamp(24px, 3vw, 40px); }
+.ecossistema-editorial .produto__corpo { padding: clamp(24px, 3vw, 40px); background: #000; }
 .ecossistema-editorial .produto__nome { font-size: clamp(28px, 3vw, 40px); }
 .ecossistema-editorial .produto__arte--camadas { background: #000; }
 .conexoes { width: 100%; height: 100%; }

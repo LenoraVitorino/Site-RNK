@@ -1,17 +1,11 @@
 ---
-/** Duas frentes legíveis em paralelo, com arte própria e links sempre acessíveis. */
+/** Duas frentes com arte, apresentação breve e acesso à página de cada produto. */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import Conexoes from './Conexoes.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
-import { menu } from '../../data/nav';
 import foto from '../../assets/sede/estudio.jpg';
-
-const itensDo = (id: string) => {
-  const item = menu.find((m) => 'id' in m && m.id === id);
-  return item && 'grupos' in item ? item.grupos.flatMap((g) => g.itens) : [];
-};
 
 const produtos = [
   {
@@ -20,7 +14,6 @@ const produtos = [
     titulo: 'Renke Academy',
     texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
     rota: '/academy',
-    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy'),
   },
   {
     chave: 'tools',
@@ -28,7 +21,6 @@ const produtos = [
     titulo: 'Renke Tools',
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
     rota: '/tools',
-    itens: itensDo('mm-tecnologia'),
   },
 ];
 ---
@@ -43,7 +35,7 @@ const produtos = [
 
       <div class="ecossistema__paineis entra">
         {produtos.map((p, i) => (
-          <article class:list={['produto', `produto--${p.chave}`, 'vidro', 'produto--aberto']} data-produto={i}>
+          <article class:list={['produto', `produto--${p.chave}`, 'produto--aberto']} data-produto={i}>
             <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
               {p.chave === 'academy' ? (
                 <>
@@ -58,17 +50,6 @@ const produtos = [
               <p class="rotulo">{p.eyebrow}</p>
               <h3 class="produto__nome">{p.titulo}</h3>
               <p class="produto__texto">{p.texto}</p>
-              {p.itens.length > 0 && (
-                <ul class="produto__lista">
-                  {p.itens.map((item) => (
-                    <li>
-                      {existe(item.rota)
-                        ? <a href={item.rota}><span>{item.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a>
-                        : <span class="produto__item">{item.rotulo}</span>}
-                    </li>
-                  ))}
-                </ul>
-              )}
               {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
             </div>
           </article>
