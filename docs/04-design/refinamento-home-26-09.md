@@ -33,7 +33,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 ## Decisões de implementação — ajustes pedidos pela Lenora
 
 - Abertura restaurada ao componente anterior ao refinamento, sem índice numerado, com a cena Peachweb no lugar da variante prata.
-- Metodologia com divisória e seta ascendente à direita de cada verbo. Parágrafo levemente maior (17–20 px), em quatro linhas no desktop e com quebra natural no celular.
+- Metodologia em uma composição compacta: texto e três indicadores na mesma coluna, com o vídeo ao lado ocupando as duas linhas. Divisória e seta ascendente à direita de cada verbo; parágrafo em quatro linhas no desktop e quebra natural no celular. No mobile os indicadores precedem o vídeo, com valores próprios de cada versão preservados.
 - Removidos os rótulos auxiliares numerados das seções.
 - Cinco pilares em cards como Features: três na primeira linha e dois centralizados na segunda; duas colunas no tablet e uma no celular. As duas versões preservam seus textos próprios.
 - Ilustrações SVG próprias de interfaces com vidro, luz suave, grão e traços cinza: aquisição, integração, automação, dados e posicionamento. Não representam um produto funcional nem acrescentam indicadores.

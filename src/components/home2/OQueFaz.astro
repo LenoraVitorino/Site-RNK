@@ -25,10 +25,6 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
         </p>
         {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
       </div>
-      <div class="metodo__midia">
-        <Telefone />
-        <p class="metodo-editorial__legenda">Por dentro do método <span>01:42</span></p>
-      </div>
       <ul class="metodo__numeros" aria-label="Números da Renke">
         {numeros.map((n) => (
           <li class="metodo__numero">
@@ -37,6 +33,10 @@ const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
           </li>
         ))}
       </ul>
+      <div class="metodo__midia">
+        <Telefone />
+        <p class="metodo-editorial__legenda">Por dentro do método <span>01:42</span></p>
+      </div>
     </div>
   </div>
 </section>
