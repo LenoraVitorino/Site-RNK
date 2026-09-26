@@ -36,14 +36,14 @@ section[id] { scroll-margin-top: 110px; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
 
 /* Ecossistema: duas portas de entrada, sem painel invisível sob o teclado. */
-.ecossistema__box { padding: clamp(20px, 4vw, 56px); background: #111110; border: 1px solid rgb(242 242 238 / .12); border-radius: 16px; }
+.ecossistema__box { padding: clamp(20px, 4vw, 56px); background: #000; border: 1px solid rgb(242 242 238 / .12); border-radius: 16px; }
 .ecossistema-editorial .ecossistema__cabeca { gap: 24px; }
 .ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.ecossistema-editorial .produto { background: rgb(19 23 19 / .9); border-color: var(--ref-fio); border-radius: 10px; }
+.ecossistema-editorial .produto { background: #000; border-color: var(--ref-fio); border-radius: 10px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 16 / 9; }
 .ecossistema-editorial .produto__corpo { padding: clamp(24px, 3vw, 40px); }
 .ecossistema-editorial .produto__nome { font-size: clamp(28px, 3vw, 40px); }
-.ecossistema-editorial .produto__arte--camadas { background: #11110f; }
+.ecossistema-editorial .produto__arte--camadas { background: #000; }
 .conexoes { width: 100%; height: 100%; }
 /* O pulso só responde à intenção do visitante. Nenhum autoplay decorativo. */
 .conexoes__sinal { stroke-dashoffset: 0; }
