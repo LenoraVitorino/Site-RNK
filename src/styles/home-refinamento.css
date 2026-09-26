@@ -103,9 +103,6 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Abertura original, com a cena Peachweb escolhida para acompanhar as dobras. */
 .home-refinada .hero__fundo { display: none; }
-.home-refinada .hero__selo { padding: 0; background: none; border: 0; border-radius: 0; font-size: 13px; color: var(--cinza); }
-.home-refinada .hero__selo > span { display: none; }
-.home-refinada .hero__revops { font-weight: 300; }
 .home-refinada .cortina > #perguntas { background: transparent; }
 
 

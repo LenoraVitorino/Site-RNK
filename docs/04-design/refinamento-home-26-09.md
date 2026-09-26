@@ -32,7 +32,7 @@ A mudança dá uma função a cada composição: apresentação ampla, método c
 
 ## Decisões de implementação — ajustes pedidos pela Lenora
 
-- Abertura restaurada ao componente anterior ao refinamento, sem índice numerado, com a cena Peachweb no lugar da variante prata.
+- Abertura recuperada da versão `49123ae`, com selo arredondado no topo, seis espaços circulares para fotos e a legenda “Doutores que confiam na gente”. O bloco aparece mesmo enquanto as fotos aguardam inserção; a contagem só aparece quando preenchida em `src/data/doutores.ts`. Sem índice numerado, com a cena Peachweb preservada.
 - Metodologia em uma composição compacta: texto e três indicadores na mesma coluna, com o vídeo ao lado ocupando as duas linhas. Divisória e seta ascendente à direita de cada verbo; parágrafo em quatro linhas no desktop e quebra natural no celular. No mobile os indicadores precedem o vídeo, com valores próprios de cada versão preservados.
 - Removidos os rótulos auxiliares numerados das seções.
 - Cinco pilares em cards como Features: três na primeira linha e dois centralizados na segunda; duas colunas no tablet e uma no celular. As duas versões preservam seus textos próprios.
