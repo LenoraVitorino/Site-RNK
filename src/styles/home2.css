@@ -321,6 +321,10 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
     transition: background-color .3s var(--easing-suave), border-color .3s var(--easing-suave);
   }
   a.megamenu__destaque:hover { background: rgb(242 242 238 / .08); border-color: rgb(242 242 238 / .24); }
+  /* A foto da sede no alto do cartão: pequena, com a caixa já no tamanho final para o painel não pular. */
+  .megamenu__destaque-foto { display: block; aspect-ratio: 16 / 9; margin: -8px -8px 6px; border-radius: 8px; overflow: hidden; background: #111110; }
+  .megamenu__destaque-foto img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) brightness(.9); transform: scale(1.02); transition: transform 1.2s var(--easing), filter .6s var(--easing-suave); }
+  a.megamenu__destaque:hover .megamenu__destaque-foto img { transform: scale(1.05); filter: saturate(.85) brightness(1); }
   .megamenu__destaque-titulo { font-family: var(--font-titulo); font-size: 20px; font-weight: 400; letter-spacing: -.03em; }
   .megamenu__destaque-texto { font-size: 13.5px; line-height: 1.55; opacity: .7; }
   .megamenu__destaque-acao { margin-top: 6px; font-size: 13px; font-weight: var(--peso-enfase); }
@@ -1225,6 +1229,9 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .produto__arte { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0B0B0A; border-bottom: 1px solid rgb(242 242 238 / .08); }
 .produto__arte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8) brightness(.85); transform: scale(1.02); transition: transform 1.2s var(--easing), filter .8s var(--easing-suave); }
 .produto:hover .produto__arte img { transform: scale(1.05); filter: saturate(.9) brightness(.95); }
+/* A sala do estúdio tem neon verde-limão: mais baixo, para o amarelo seguir como detalhe. */
+.produto--academy .produto__arte img { filter: saturate(.5) brightness(.78); }
+.produto--academy:hover .produto__arte img { filter: saturate(.62) brightness(.86); }
 .produto__selo { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px; border-radius: 999px; background: rgb(10 10 9 / .6); border: 1px solid rgb(242 242 238 / .16); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); font-size: 12px; color: var(--papel); }
 .produto__selo i { width: 6px; height: 6px; border-radius: 50%; background: var(--destaque); }
 .produto__corpo { display: grid; align-content: start; gap: 14px; padding: clamp(24px, 2.4vw, 36px); }
@@ -1270,9 +1277,9 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .sobre-janela__molde { aspect-ratio: 4 / 5; max-height: 72svh; width: 100%; justify-self: end; }
 .sobre-janela__fotos { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
 .sobre-janela__foto { position: absolute; inset: 0; margin: 0; overflow: hidden; }
-.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8); will-change: transform; }
+.sobre-janela__foto img { width: 100%; height: 100%; object-fit: cover; object-position: var(--foco, 50% 50%); filter: saturate(.78) brightness(.92); will-change: transform; }
 /* Escurece o lado do texto conforme a foto toma a tela. */
-.sobre-janela__veu { position: absolute; inset: 0; pointer-events: none; opacity: var(--sobre-a, 0); background: linear-gradient(90deg, rgb(0 0 0 / .82) 0%, rgb(0 0 0 / .55) 38%, rgb(0 0 0 / .1) 70%), linear-gradient(0deg, rgb(0 0 0 / .5), transparent 30%); }
+.sobre-janela__veu { position: absolute; inset: 0; pointer-events: none; opacity: var(--sobre-a, 0); background: linear-gradient(90deg, rgb(0 0 0 / .88) 0%, rgb(0 0 0 / .82) 32%, rgb(0 0 0 / .44) 52%, rgb(0 0 0 / .08) 74%), linear-gradient(0deg, rgb(0 0 0 / .55), transparent 30%); }
 .sobre-janela__legenda { position: absolute; right: var(--grid-inset); bottom: 32px; z-index: 2; display: flex; align-items: baseline; gap: 10px; margin: 0; font-size: 13px; color: rgb(242 242 238 / .78); opacity: var(--sobre-a, 0); }
 .sobre-janela__legenda .num { color: var(--papel); font-weight: var(--peso-enfase); }
 .sobre-janela__total { color: rgb(242 242 238 / .45); }

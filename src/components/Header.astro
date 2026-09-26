@@ -1,12 +1,19 @@
 ---
+import { Image } from 'astro:assets';
 import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
+import cafe from '../assets/sede/cafe.jpg';
+import estudio from '../assets/sede/estudio.jpg';
+import sofa from '../assets/sede/sofa.jpg';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
 
 // Sem "em breve" à mostra (Lenora, 26/09): no menu só entra o que já tem
 // página. Grupo sem itens some; menu sem grupos some (a Tecnologia, por ora);
 // o cartão de destaque só aparece se o destino existir.
+// Fotos da sede nos cartões de destaque (Lenora, 26/09). Pequenas, o amarelo
+// delas fica como detalhe dentro do painel escuro.
+const fotosDestaque = { cafe, estudio, sofa };
 const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
 const itensMenu = menu.flatMap((item) => {
   if (!('grupos' in item)) return existe(item.rota) ? [item] : [];
@@ -67,6 +74,11 @@ const itensMenu = menu.flatMap((item) => {
                   ))}
                   {item.destaque && (
                     <a class="megamenu__destaque" href={item.destaque.rota}>
+                      {item.destaque.foto && (
+                        <span class="megamenu__destaque-foto" aria-hidden="true">
+                          <Image src={fotosDestaque[item.destaque.foto]} alt="" format="webp" quality={64} widths={[320, 640]} sizes="320px" loading="lazy" />
+                        </span>
+                      )}
                       <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
                       <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
                       <span class="megamenu__destaque-acao">{item.destaque.rotulo} <span aria-hidden="true">→</span></span>

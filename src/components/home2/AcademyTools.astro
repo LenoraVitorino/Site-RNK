@@ -6,16 +6,16 @@
  * Referências da curadoria (docs/04-design/curadoria-pinterest.md): pin 122
  * (dois produtos lado a lado, cada um com a lista do que entrega), pin 2 (nó
  * central ligado aos serviços) e pin 125 (educação com um detalhe amarelo).
- * Cada produto ganha uma arte (a foto da sala onde a Renke ensina; a rede que
- * a tecnologia conecta), o texto e a lista do que existe dentro dele, com os
- * nomes do menu. O que ainda não tem página aparece como "em breve".
+ * Cada produto ganha uma arte (a sala do estúdio, com o neon mais baixo; a
+ * rede que a tecnologia conecta), o texto e a lista do que existe dentro
+ * dele, com os nomes do menu. Só entra o que já tem página.
  */
 import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 import { menu } from '../../data/nav';
-import foto from '../../assets/sede/reuniao.jpg';
+import foto from '../../assets/sede/estudio.jpg';
 
 const itensDo = (id: string) => {
   const item = menu.find((m) => 'id' in m && m.id === id);
@@ -63,7 +63,7 @@ const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(
           <div class="produto__arte" aria-hidden="true">
             {p.chave === 'academy' ? (
               <>
-                <Image src={foto} alt="" format="webp" widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 44vw" loading="lazy" />
+                <Image src={foto} alt="" format="webp" quality={64} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 44vw" loading="lazy" />
                 <span class="produto__selo"><i></i>Formação</span>
               </>
             ) : (

@@ -25,8 +25,11 @@ export type NavLink = {
   plano?: string;
 };
 
-/** Cartão de destaque à direita do painel do menu (desktop). Textos já usados no site. */
-export type NavDestaque = { titulo: string; texto: string; rota: string; rotulo: string };
+/**
+ * Cartão de destaque à direita do painel do menu (desktop). Textos já usados
+ * no site; a foto é uma das fotos da sede (chave do mapa em Header.astro).
+ */
+export type NavDestaque = { titulo: string; texto: string; rota: string; rotulo: string; foto?: 'cafe' | 'estudio' | 'sofa' };
 
 export type NavGrupo = {
   titulo: string;
@@ -69,6 +72,7 @@ export const menu: NavItem[] = [
       texto: 'Do anúncio ao retorno do paciente, tudo conectado, tudo rastreado.',
       rota: '/contato',
       rotulo: 'Fale com a gente',
+      foto: 'cafe',
     },
   },
 
@@ -93,6 +97,7 @@ export const menu: NavItem[] = [
       texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
       rota: '/academy',
       rotulo: 'Conhecer',
+      foto: 'estudio',
     },
   },
 
@@ -145,6 +150,7 @@ export const menu: NavItem[] = [
       texto: 'Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam oportunidades por falta de conexão entre marketing, comercial e operação.',
       rota: '/#sobre',
       rotulo: 'Ler mais',
+      foto: 'sofa',
     },
   },
 ];

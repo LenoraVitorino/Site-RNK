@@ -1,6 +1,9 @@
 ---
 /**
  * Conheça a Renke: texto e fotos da sede, compartilhados pelas duas versões.
+ * Fotos com grão da Lenora (26/09, pasta "Site Renke"): operação, café e
+ * equipe. O sofá amarelo ficou no menu, pequeno; em tela cheia o amarelo
+ * tomaria a dobra.
  *
  * Refeito em 26/09/2026 (Lenora: a esteira de fotos ficou institucional
  * demais). Referências da curadoria (docs/04-design/curadoria-pinterest.md):
@@ -16,24 +19,24 @@ import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 import operacao from '../../assets/sede/operacao.jpg';
-import conexao from '../../assets/sede/conexao.jpg';
-import reuniao from '../../assets/sede/reuniao.jpg';
+import cafe from '../../assets/sede/cafe.jpg';
+import equipe from '../../assets/sede/equipe.jpg';
 
 // "Conheça a história" virou "Conheça a Renke" na versão do estúdio (Lenora, 26/09).
 const titulo = copyLiteral ? ['Conheça a história', 'da Renke'] : ['Conheça', 'a Renke'];
 
-const fotos = [
-  { src: operacao, alt: 'Escritório da Renke com estações de trabalho, equipe e sala envidraçada', legenda: 'Operação' },
-  { src: conexao, alt: 'Vista da sala de reunião para a operação da Renke', legenda: 'Sala de reunião' },
-  { src: reuniao, alt: 'Sala de reuniões da Renke com mesa, quadro e tela', legenda: 'Onde o método acontece' },
+const fotos: { src: ImageMetadata; alt: string; legenda: string; foco?: string }[] = [
+  { src: operacao, alt: 'Escritório da Renke com a equipe nas estações de trabalho e o R da marca na parede', legenda: 'Operação' },
+  { src: cafe, alt: 'Área do café da Renke, com o R iluminado na parede e a mesa de reunião', legenda: 'Reunião café', foco: '30% 50%' },
+  { src: equipe, alt: 'A equipe da Renke nas estações de trabalho, com as faixas amarelas do R na parede do fundo', legenda: 'Equipe' },
 ];
 ---
 <section class="secao sobre-janela" id="sobre" aria-labelledby="sobre-titulo" data-sobre>
   <div class="sobre-janela__palco">
     <div class="sobre-janela__fotos" data-sobre-fotos>
       {fotos.map((f, i) => (
-        <figure class="sobre-janela__foto" data-sobre-foto>
-          <Image src={f.src} alt={f.alt} format="webp" widths={[640, 1280, 1920]} sizes="(max-width: 899px) 80vw, 100vw" loading="lazy" />
+        <figure class="sobre-janela__foto" data-sobre-foto style={f.foco && `--foco: ${f.foco}`}>
+          <Image src={f.src} alt={f.alt} format="webp" quality={64} widths={[640, 1280, 1920]} sizes="(max-width: 899px) 80vw, 100vw" loading="lazy" />
         </figure>
       ))}
       <div class="sobre-janela__veu" aria-hidden="true"></div>
