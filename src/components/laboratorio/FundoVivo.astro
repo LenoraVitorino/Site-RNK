@@ -7,11 +7,12 @@
  * Especificação: docs/04-design/fundo-vivo-briefing.md e
  * docs/04-design/referencias-alto-padrao.md.
  */
-interface Props { fundo?: 'prata' | 'veu' | 'particulas' | 'superficie' }
+interface Props { fundo?: 'cena' | 'prata' | 'veu' | 'particulas' | 'superficie' }
 const { fundo } = Astro.props;
 ---
 <canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} aria-hidden="true"></canvas>
 {fundo === 'prata' && <div class="fundo-vivo__grao" aria-hidden="true"></div>}
+{/* A cena traz grão e vinheta do próprio pós-processamento, como a referência. */}
 
 <script>
   const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
@@ -22,10 +23,11 @@ const { fundo } = Astro.props;
   const pedido = new URLSearchParams(location.search).get('fundo');
   const fundo = canvas?.dataset.fundo || (pedido === 'superficie' ? 'superficie' : 'particulas');
   // O véu e a prata não nascem com movimento reduzido: a página fica no preto.
-  const semVeu = (fundo === 'veu' || fundo === 'prata') && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const semVeu = (fundo === 'veu' || fundo === 'prata' || fundo === 'cena') && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (canvas && temWebGL && !semVeu) {
     const carregar = () =>
-      fundo === 'prata' ? import('./fundo-prata')
+      fundo === 'cena' ? import('./fundo-cena')
+      : fundo === 'prata' ? import('./fundo-prata')
       : fundo === 'veu' ? import('./fundo-veu')
       : fundo === 'superficie' ? import('./fundo-superficie')
       : import('./fundo-particulas');

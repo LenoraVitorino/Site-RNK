@@ -65,3 +65,24 @@ passa de ~820 px de CSS (1640 px em 2×), sempre em moldura, qualidade 78.
   objetos coloridos não cabem na base neutra.
 - Nexora (fig. 21): cara de agência; só a ideia das fotos em moldura.
 - O desfoque seguindo o mouse: a Lenora reprovou na rodada 1.
+
+## Retornos da Lenora no mesmo dia (26/09, à tarde)
+
+- **Nossa metodologia** ("ficou uma merda" com o diagrama): virou o painel com
+  os três verbos da descrição em letras grandes, um aceso por vez (pin QClay),
+  o reel à direita e os números no pé. Sem diagrama, sem trava.
+- **Protocolo Revena** ("deveria ter feito como a seção Features"): cabeça
+  centrada, três cartões por linha, arte grande; a sexta célula é a ponte
+  para os planos.
+- **Conheça a Renke** ("horrível", "tira, depois vemos"): fora das páginas; o
+  componente fica no repositório.
+- **Resultados** ("tenebroso, volte como era"): de volta à versão anterior à
+  rodada 2 (commit 24e166b), com o contador e a foto no hover.
+- **Ecossistema** ("forma mais dinâmica; o Tools também tem ferramentas"):
+  dois painéis que se revezam (o aberto mostra tudo; o outro vira aba com o
+  nome em pé), e a lista do Tools mostra as ferramentas mesmo sem página.
+- **Fundo** ("é literalmente EXTRAIR dessa página"): `fundo-cena.ts` carrega
+  os arquivos da própria página de `public/cena/` (modelos, env maps, vídeo
+  de cáusticas) e usa a reserva refeita enquanto eles não estiverem lá. A
+  cópia dos arquivos para o projeto foi barrada pela permissão do Claude
+  Code; ver `public/cena/LEIA-ME.md`.

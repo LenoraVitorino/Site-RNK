@@ -29,7 +29,7 @@ export type NavLink = {
  * Cartão de destaque à direita do painel do menu (desktop). Textos já usados
  * no site; a foto é uma das fotos da sede (chave do mapa em Header.astro).
  */
-export type NavDestaque = { titulo: string; texto: string; rota: string; rotulo: string; foto?: 'cafe' | 'estudio' | 'sofa' };
+export type NavDestaque = { titulo: string; texto: string; rota: string; rotulo: string; foto?: 'cafe' | 'estudio' };
 
 export type NavGrupo = {
   titulo: string;
@@ -145,13 +145,6 @@ export const menu: NavItem[] = [
         ],
       },
     ],
-    destaque: {
-      titulo: 'Conheça a Renke',
-      texto: 'Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam oportunidades por falta de conexão entre marketing, comercial e operação.',
-      rota: '/#sobre',
-      rotulo: 'Ler mais',
-      foto: 'sofa',
-    },
   },
 ];
 

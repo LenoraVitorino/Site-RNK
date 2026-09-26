@@ -1,20 +1,19 @@
 ---
 /**
- * Nossa metodologia: um painel de vidro no molde da seção "Product" da
- * referência PeachWeb "curious" (Lenora, 26/09/2026: a versão com capítulos
- * por scroll "não ficou dinâmica"). Em cima, o título à esquerda e a
- * descrição à direita; embaixo, o sistema conectado ao lado do reel; no pé,
- * os três números.
+ * Nossa metodologia: um painel de vidro (o molde do painel "Product" da
+ * referência PeachWeb "curious") com o reel à direita e, à esquerda, os três
+ * verbos da própria descrição em letras grandes, um aceso por vez:
+ * Analisamos. Identificamos. Estruturamos. É a composição tipográfica do pin
+ * QClay ("Design. Development. Knowledge.") que a Lenora mandou. No pé, os
+ * três números com um fio fino em cima.
  *
- * O sistema conectado segue o pin do diagrama de nós que a Lenora mandou:
- * dados, CRM e marketing (as três palavras da descrição) entram no R por
- * fios finos e saem como operação de receita. Pulsos de luz correm nos fios
- * o tempo todo, devagar: é o movimento da dobra, sem trava de scroll. A
- * arte é public/arte/metodologia-sistema.svg; os rótulos são HTML por cima.
+ * 26/09/2026: a versão com capítulos por scroll "não ficou dinâmica" e a
+ * versão com diagrama "ficou uma merda". Aqui o movimento é a luz passando
+ * pelos verbos, devagar, e o reel; nada de trava e nada de diagrama.
+ * Os verbos são um recorte da descrição e entram só na versão do estúdio;
+ * a copy integral mostra o título grande com o mesmo painel.
  * Vale para as duas versões; só os números mudam (numerosProva).
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import Telefone from '../ui/Telefone.astro';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
@@ -22,39 +21,28 @@ import { copyLiteral } from '../../data/versao';
 import { numerosProva } from '../../data/home';
 
 const numeros = copyLiteral ? numerosProva.copy : numerosProva.estudio;
-const arquivo = join(process.cwd(), 'public', 'arte', 'metodologia-sistema.svg');
-const sistema = existsSync(arquivo) ? readFileSync(arquivo, 'utf8') : '';
-const nos = ['Dados', 'CRM', 'Marketing'];
+const verbos = ['Analisamos', 'Identificamos', 'Estruturamos'];
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
   <div class="container">
-    <div class="metodo vidro entra">
-      <div class="metodo__cabeca">
-        <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">Nossa<br />metodologia</h2>
-        <div class="metodo__lead">
-          <p class="metodo__descricao">
-            Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
-            Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
-            processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+    <div class:list={['metodo', 'vidro', 'entra', copyLiteral && 'metodo--copy']}>
+      <div class="metodo__texto">
+        <h2 class="titulo caps metodo__titulo" id="o-que-fazemos-titulo">Nossa metodologia</h2>
+        {!copyLiteral && (
+          <p class="metodo__verbos" aria-hidden="true" data-verbos>
+            {verbos.map((v, i) => <span class:list={['metodo__verbo', i === 0 && 'metodo__verbo--acesa']} data-verbo={i}>{v}.</span>)}
           </p>
-          {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
-        </div>
+        )}
+        <p class="metodo__descricao">
+          Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+          Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+          processos a partir de dados, CRM&nbsp;e&nbsp;marketing.
+        </p>
+        {existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
       </div>
-
-      <div class="metodo__palco">
-        <figure class="metodo__sistema" role="img" aria-label="Dados, CRM e marketing entram no método da Renke e saem como operação de receita">
-          <Fragment set:html={sistema} />
-          <ul class="metodo__nos" aria-hidden="true">
-            {nos.map((n, i) => <li class="metodo__no" data-no={i + 1}>{n}</li>)}
-            <li class="metodo__no metodo__no--saida" data-no="4">Operação de receita</li>
-          </ul>
-          <img class="metodo__marca" src="/marca/renke-monograma.png" alt="" width="270" height="270" loading="lazy" aria-hidden="true" />
-        </figure>
-        <div class="metodo__midia">
-          <Telefone />
-        </div>
+      <div class="metodo__midia">
+        <Telefone />
       </div>
-
       <ul class="metodo__numeros" aria-label="Números da Renke">
         {numeros.map((n) => (
           <li class="metodo__numero">
@@ -66,3 +54,20 @@ const nos = ['Dados', 'CRM', 'Marketing'];
     </div>
   </div>
 </section>
+
+<script>
+  // A luz passa pelos verbos, um de cada vez, só com a dobra na tela.
+  const bloco = document.querySelector<HTMLElement>('[data-verbos]');
+  if (bloco && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const verbos = [...bloco.querySelectorAll<HTMLElement>('[data-verbo]')];
+    let atual = 0, relogio = 0;
+    const passo = () => {
+      atual = (atual + 1) % verbos.length;
+      verbos.forEach((v, i) => v.classList.toggle('metodo__verbo--acesa', i === atual));
+    };
+    new IntersectionObserver(([e]) => {
+      clearInterval(relogio);
+      if (e.isIntersecting) relogio = setInterval(passo, 2600);
+    }, { threshold: .3 }).observe(bloco);
+  }
+</script>

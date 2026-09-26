@@ -1,17 +1,16 @@
 ---
 /**
  * Protocolo Revena: os cinco pilares em cartões, no molde da seção
- * "Features" da referência PeachWeb "curious" (Lenora, 26/09/2026: "essa
- * sessão features está bem legal, aplicar na terceira dobra"), confirmado
- * pelo pin Vivid Motion (fileira de cartões, cada um com a sua arte).
+ * "Features" da referência PeachWeb "curious" (Lenora, 26/09/2026): título
+ * centrado, três cartões por linha, cada um com uma arte grande em traço
+ * fino sobre um clarão granulado (public/arte/pilar-*.svg), o título e o
+ * texto embaixo. A segunda linha leva os dois últimos pilares e, no lugar do
+ * sexto cartão, a ponte para os planos.
  *
- * Cada cartão: uma arte em traço fino sobre um clarão granulado
- * (public/arte/pilar-*.svg, monocromática), o número, o título e o texto.
  * Vidro translúcido por cima da cena do fundo. Sem trava e sem estado por
  * scroll: os cartões só entram com a rolagem (.entra), um atrás do outro.
  * Mesma apresentação nas duas versões; os textos vêm dos recortes do
- * estúdio ou da copy integral. Em telas médias e no celular a fileira rola
- * de lado, com os cartões cortados na borda sugerindo o resto.
+ * estúdio ou da copy integral. No celular, uma coluna.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -26,6 +25,10 @@ const arte = (nome: string) => {
 };
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}), arte: arte(ARTES[i]) }));
 const dois = (i: number) => String(i + 1).padStart(2, '0');
+// A ponte para os planos, com frases que já existem em cada versão.
+const ponte = copyLiteral
+  ? { frase: 'A Renke recomenda o protocolo certo para o momento da sua clínica.', rotulo: 'Fale com a equipe', rota: '/contato' }
+  : { frase: 'Qual é o momento da sua clínica?', rotulo: 'Ver os planos', rota: '#protocolo-revena' };
 ---
 <section class="secao pilares" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
@@ -46,6 +49,10 @@ const dois = (i: number) => String(i + 1).padStart(2, '0');
           </div>
         </li>
       ))}
+      <li class="pilar-cartao pilar-cartao--ponte entra" style={`--i:${cartas.length}`} aria-label="Próximo passo">
+        <p class="pilar-cartao__frase">{ponte.frase}</p>
+        <a class="link-arrow" href={ponte.rota}>{ponte.rotulo}</a>
+      </li>
     </ol>
   </div>
 </section>

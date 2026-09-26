@@ -38,6 +38,8 @@ export interface Elemento {
   pintar(m: Momento): void;
   /** Ajustes do motor para este fundo; o que faltar usa o padrão. */
   config?: Partial<Config>;
+  /** Quando existir, o motor chama isto no lugar de renderer.render (pós-processamento do elemento). */
+  renderizar?(): void;
 }
 
 export interface Config {
@@ -356,7 +358,8 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       ponteiro: { x: parado ? 0 : ponteiro.ax, y: parado ? 0 : ponteiro.ay },
     });
     renderer.domElement.style.opacity = String(entrada);
-    renderer.render(cena, camera);
+    if (elemento.renderizar) elemento.renderizar();
+    else renderer.render(cena, camera);
   };
 
   // Laço: só roda com alguma dobra transparente na tela e a aba visível.

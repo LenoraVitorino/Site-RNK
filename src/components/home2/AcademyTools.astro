@@ -2,13 +2,14 @@
 /**
  * Ecossistema Renke: Academy e Tools, compartilhado pelas duas versões.
  *
- * Refeito em 26/09/2026 (Lenora: "duas opções soltas na home", sem sentido).
- * Referências da curadoria (docs/04-design/curadoria-pinterest.md): pin 122
- * (dois produtos lado a lado, cada um com a lista do que entrega), pin 2 (nó
- * central ligado aos serviços) e pin 125 (educação com um detalhe amarelo).
- * Cada produto ganha uma arte (a sala do estúdio, com o neon mais baixo; a
- * rede que a tecnologia conecta), o texto e a lista do que existe dentro
- * dele, com os nomes do menu. Só entra o que já tem página.
+ * 26/09/2026 (Lenora: "temos que pensar uma forma mais dinâmica de
+ * apresentar; o Tools também tem ferramentas"). Dois painéis de vidro lado a
+ * lado que se revezam: o aberto mostra a arte, o texto e a lista do que
+ * existe dentro dele; o outro fica estreito, com a arte escurecida e o nome
+ * em pé, e abre ao passar o mouse ou tocar (referência da curadoria, pin
+ * 122: "ao clicar, um produto cresce e o outro vira aba"). A lista do Tools
+ * traz as ferramentas mesmo sem página ainda: nome sem link, sem "em breve".
+ * No celular os dois ficam abertos, um embaixo do outro.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -19,8 +20,7 @@ import { copyLiteral } from '../../data/versao';
 import { menu } from '../../data/nav';
 import foto from '../../assets/sede/estudio.jpg';
 
-// Arte do Tools (rodada 3): camadas em traço fino, na mesma linguagem das
-// artes dos pilares (public/arte/tools-camadas.svg). Sem o arquivo, a rede.
+// Arte do Tools: camadas em traço fino, na mesma linguagem das artes dos pilares.
 const arquivoCamadas = join(process.cwd(), 'public', 'arte', 'tools-camadas.svg');
 const camadas = existsSync(arquivoCamadas) ? readFileSync(arquivoCamadas, 'utf8') : '';
 
@@ -36,7 +36,7 @@ const produtos = [
     titulo: 'Renke Academy',
     texto: 'Método, processos e ferramentas para donos de agências estruturarem uma operação mais eficiente.',
     rota: '/academy',
-    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy' && existe(i.rota)),
+    itens: itensDo('mm-agencias').filter((i) => i.rota !== '/academy'),
   },
   {
     chave: 'tools',
@@ -44,19 +44,11 @@ const produtos = [
     titulo: 'Renke Tools',
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
     rota: '/tools',
-    itens: itensDo('mm-tecnologia').filter((i) => existe(i.rota)),
+    itens: itensDo('mm-tecnologia'),
   },
 ];
-
-// A rede da arte do Tools: o que a Renke conecta (marketing, comercial e operação) em volta do R.
-const nos = [
-  { nome: 'Marketing', x: 104, y: 78 },
-  { nome: 'Comercial', x: 104, y: 242 },
-  { nome: 'Operação', x: 496, y: 160 },
-];
-const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(x + 300) / 2} 160, 300 160`;
 ---
-<section class="secao ecossistema" id="academy-tools" aria-labelledby="ecossistema-titulo">
+<section class="secao ecossistema" id="academy-tools" aria-labelledby="ecossistema-titulo" data-ecossistema>
   <div class="container">
     <header class="ecossistema__cabeca entra">
       {copyLiteral
@@ -64,46 +56,36 @@ const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(
         : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
     </header>
 
-    <div class="ecossistema__grade">
-      {produtos.map((p) => (
-        <article class:list={['produto', `produto--${p.chave}`, 'vidro', 'entra']}>
-          <div class:list={['produto__arte', p.chave === 'tools' && camadas && 'produto__arte--camadas']} aria-hidden="true">
+    <div class="ecossistema__paineis entra">
+      {produtos.map((p, i) => (
+        <article class:list={['produto', `produto--${p.chave}`, 'vidro', i === 0 && 'produto--aberto']} data-produto={i}>
+          <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
             {p.chave === 'academy' ? (
               <>
-                <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 44vw" loading="lazy" />
+                <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 60vw" loading="lazy" />
                 <span class="produto__selo"><i></i>Formação</span>
               </>
-            ) : camadas ? (
-              <Fragment set:html={camadas} />
             ) : (
-              <svg class="rede" viewBox="0 0 600 320" role="presentation">
-                {nos.map((n) => (
-                  <>
-                    <path class="rede__fio" d={curva(n.x, n.y)} pathLength="100" />
-                    <path class="rede__luz" d={curva(n.x, n.y)} pathLength="100" style={`--atraso:${(n.y / 250) * 1.4}s`} />
-                  </>
-                ))}
-                {nos.map((n) => (
-                  <g class="rede__no" transform={`translate(${n.x} ${n.y})`}>
-                    <rect x="-76" y="-23" width="152" height="46" rx="10" />
-                    <text y="6" text-anchor="middle">{n.nome}</text>
-                  </g>
-                ))}
-                <circle class="rede__halo" cx="300" cy="160" r="66" />
-                <circle class="rede__centro" cx="300" cy="160" r="46" />
-                <image href="/marca/renke-monograma.png" x="279" y="139" width="42" height="42" />
-              </svg>
+              <Fragment set:html={camadas} />
             )}
           </div>
-          <div class="produto__corpo">
+          <!-- A aba do painel fechado: o nome em pé; clicar abre. -->
+          <button type="button" class="produto__aba" data-produto-abrir={i} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`produto-miolo-${i}`}>
+            <span class="produto__aba-n num">0{i + 1}</span>
+            <span class="produto__aba-nome">{p.titulo}</span>
+          </button>
+          <div class="produto__corpo" id={`produto-miolo-${i}`}>
             <p class="rotulo">{p.eyebrow}</p>
             <h3 class="produto__nome">{p.titulo}</h3>
             <p class="produto__texto">{p.texto}</p>
-            {/* Só o que já tem página (Lenora, 26/09: nada de "em breve" à mostra). */}
             {p.itens.length > 0 && (
               <ul class="produto__lista">
-                {p.itens.map((i) => (
-                  <li><a href={i.rota}><span>{i.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a></li>
+                {p.itens.map((item) => (
+                  <li>
+                    {existe(item.rota)
+                      ? <a href={item.rota}><span>{item.rotulo}</span><span class="produto__seta" aria-hidden="true">→</span></a>
+                      : <span class="produto__item">{item.rotulo}</span>}
+                  </li>
                 ))}
               </ul>
             )}
@@ -114,3 +96,28 @@ const curva = (x: number, y: number) => `M${x} ${y} C ${(x + 300) / 2} ${y}, ${(
     </div>
   </div>
 </section>
+
+<script>
+  // Um painel aberto por vez no desktop: abre no mouse (com um respiro) e no toque/clique.
+  const secao = document.querySelector<HTMLElement>('[data-ecossistema]');
+  if (secao) {
+    const paineis = [...secao.querySelectorAll<HTMLElement>('[data-produto]')];
+    const largo = matchMedia('(min-width: 900px)');
+    let espera = 0;
+    const abrir = (k: number) => {
+      paineis.forEach((p, i) => {
+        p.classList.toggle('produto--aberto', i === k);
+        p.querySelector('[data-produto-abrir]')?.setAttribute('aria-expanded', String(i === k));
+      });
+    };
+    paineis.forEach((p, i) => {
+      p.querySelector('[data-produto-abrir]')?.addEventListener('click', () => abrir(i));
+      p.addEventListener('pointerenter', (e) => {
+        if (!largo.matches || e.pointerType !== 'mouse') return;
+        clearTimeout(espera);
+        espera = setTimeout(() => abrir(i), 140);
+      });
+      p.addEventListener('pointerleave', () => clearTimeout(espera));
+    });
+  }
+</script>

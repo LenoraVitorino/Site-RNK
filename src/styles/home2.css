@@ -739,43 +739,45 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 /* ---------- Resultados: rótulo lateral e indicadores em linhas ---------- */
 #resultados { background: #e8e7df; color: #161616; padding-block: var(--esp-secao); }
-/* Dobra 7 (26/09/2026): coluna presa com o título e um número por vez; as
-   especialidades passam à direita (referências: pins 46 e 234). */
-.resultados { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(40px, 7vw, 120px); align-items: start; }
-.resultados__fixo { display: grid; gap: clamp(20px, 2.4vw, 32px); align-content: start; }
-.extrato__rotulo { margin: 0; color: #5C5C57; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+.extrato__layout { display: grid; grid-template-columns: 1fr 3fr; column-gap: 24px; border-top: 1px solid #cecec4; padding-top: clamp(32px, 3vw, 48px); }
+.extrato__rotulo { padding-top: 8px; color: #5C5C57; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
+.extrato__conteudo { min-width: 0; }
 .extrato__destaque { color: #4A4B46; font-weight: 600; }
-.resultados__fixo .titulo { max-width: 16ch; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.08; }
-.resultados__placar { display: none; }
-.resultados__lista { list-style: none; margin: 0; padding: 0; }
-.resultados__linha { display: grid; gap: 12px; align-content: start; padding: clamp(24px, 2.6vw, 36px) 0; border-top: 1px solid #cecec4; }
-.resultados__num-linha { margin: 0 0 4px; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1; letter-spacing: -.055em; color: #4A4B46; }
-.extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.25rem, 1.6vw, 1.55rem); letter-spacing: -.035em; line-height: 1.2; }
-.resultados__texto { margin: 0; max-width: 40ch; color: #404040; font-size: 15px; line-height: 1.6; }
-.extrato__acao { margin: 0; }
-/* Vivo (desktop): a coluna fica presa e o placar mostra o número da linha ativa. */
-.resultados--vivo .resultados__fixo { position: sticky; top: calc(var(--altura-header) + 24px); }
-.resultados--vivo .resultados__placar { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid #cecec4; }
-.resultados--vivo .resultados__num-linha { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.resultados--vivo .resultados__linha { min-height: 40svh; align-content: center; transition: color .6s var(--easing-suave); color: #66665F; }
-.resultados--vivo .resultados__linha .resultados__texto { color: #66665F; transition: color .6s var(--easing-suave); }
-.resultados--vivo .resultados__linha--ativa { color: #161616; }
-.resultados--vivo .resultados__linha--ativa .resultados__texto { color: #404040; }
-.resultados--vivo .resultados__lista { padding-bottom: 20svh; }
-.resultados__contagem { margin: 0; font-size: 12px; letter-spacing: .08em; color: #55554F; }
-.resultados__contagem span { color: #161616; }
-/* Os números empilhados na mesma célula; o ativo sobe da linha de base, o que sai sobe e some. */
-.resultados__numeros { display: grid; overflow: hidden; padding-block: .06em; }
-.resultados__num { grid-area: 1 / 1; margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(4rem, 8.4vw, 8.4rem); line-height: .92; letter-spacing: -.065em; color: #2A2A28; white-space: nowrap; transition: transform 1s cubic-bezier(.22, 1, .36, 1), opacity .6s var(--easing-suave); }
-.resultados__num[data-estado="antes"] { transform: translate3d(0, -105%, 0); opacity: 0; }
-.resultados__num[data-estado="depois"] { transform: translate3d(0, 105%, 0); opacity: 0; }
-.resultados__area { margin: 0; font-size: 15px; color: #4A4B46; }
-@media (max-width: 1023.98px) {
-  .resultados { grid-template-columns: minmax(0, 1fr); row-gap: 32px; }
+.extrato__cabeca { margin-bottom: clamp(48px, 5vw, 80px); }
+.extrato__cabeca .titulo { max-width: 19ch; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.08; }
+.extrato { list-style: none; margin: 0; padding: 0; }
+.extrato__linha { border-top: 1px solid #cecec4; }
+.extrato__grade { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: start; padding-block: clamp(32px, 3.6vw, 58px); }
+.extrato__num { margin: 0; font-family: var(--font-titulo); font-weight: 400; color: #4A4B46; font-size: clamp(3.2rem, 5.4vw, 5.2rem); line-height: 1; letter-spacing: -.065em; white-space: nowrap; text-align: right; }
+.contador { font-variant-numeric: tabular-nums; }
+.extrato__texto { display: grid; gap: 14px; max-width: 34ch; }
+.extrato__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.25rem, 1.45vw, 1.45rem); letter-spacing: -.035em; line-height: 1.2; }
+.extrato__texto p { margin: 0; color: #404040; font-size: 15px; line-height: 1.5; }
+.extrato__acao { margin-top: clamp(28px, 4vw, 48px); }
+/* Foto da área no hover (mockup, Lenora 21/09): no canto esquerdo, na coluna
+   do rótulo "Resultados", alinhada ao topo de cada linha. Absoluta em relação
+   à linha, empurrada para a esquerda da coluna de conteúdo. */
+.extrato__slot { display: none; }
+@media (hover: hover) and (min-width: 1024px) {
+  .extrato__linha { position: relative; }
+  /* A coluna do rótulo mede 1/3 da coluna de conteúdo (grade 1fr 3fr, vão de 24 px): a foto encosta na margem esquerda. */
+  /* Moldura maior (Lenora, 21/09): ocupa a coluna do rótulo quase inteira e
+     a altura útil da linha, com um respiro de 8 px em cima e embaixo. */
+  .extrato__slot { display: block; position: absolute; top: 8px; bottom: 8px; left: calc(-100% / 3 - 24px); width: calc(100% / 3 - 8px); pointer-events: none; }
+  .extrato__foto {
+    aspect-ratio: auto; height: 100%; background: #d9d8ce; opacity: 0; transform: translate3d(-10px, 0, 0) scale(.97);
+    transition: opacity .3s var(--easing-suave), transform .5s var(--easing);
+  }
+  .extrato__linha:hover .extrato__foto, .extrato__linha:focus-within .extrato__foto { opacity: 1; transform: none; }
 }
-@media (prefers-reduced-motion: reduce) { .resultados__num { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .extrato__foto { transition: none; } }
 #resultados :focus-visible { outline-color: #161616; }
-
+@media (max-width: 700px) {
+  .extrato__layout { grid-template-columns: 1fr; gap: 28px; }
+  .extrato__cabeca .titulo { font-size: clamp(2rem, 7vw, 2.8rem); }
+  .extrato__grade { grid-template-columns: 1fr; gap: 24px; }
+  .extrato__num { text-align: left; font-size: clamp(4rem, 15vw, 6rem); }
+}
 
 /* ---------- CTA final (painel amarelo com fotos) ---------- */
 
@@ -1044,27 +1046,40 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 }
 .hero-prova__legenda .hero-prova__numero { white-space: nowrap; }
 
-/* ---------- Ecossistema Renke: Academy + Tools (26/09/2026) ----------
-   Dois produtos lado a lado, cada um com arte, texto e a lista do que entrega
-   (referências: pins 122, 2 e 125). */
+/* ---------- Ecossistema Renke: Academy + Tools, dois painéis que se revezam ----------
+   O aberto mostra arte, texto e lista; o outro fica estreito, com a arte
+   escurecida e o nome em pé, e abre no mouse ou no toque (pin 122). */
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .ecossistema__cabeca { display: grid; gap: 14px; margin-bottom: clamp(32px, 4vw, 56px); }
 .ecossistema__cabeca .titulo { max-width: 16ch; }
-.ecossistema__grade { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 1.6vw, 24px); }
-.produto { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }   /* .vidro no HTML: caixa translúcida, como a referência */
+.ecossistema__paineis { display: flex; gap: clamp(14px, 1.4vw, 20px); align-items: stretch; }
+.produto { position: relative; flex: 1 1 0; min-width: 0; display: grid; grid-template-rows: auto 1fr; overflow: hidden; transition: flex-grow .8s var(--easing); }
+.produto--aberto { flex-grow: 2.4; }
 .produto__arte { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0B0B0A; border-bottom: 1px solid rgb(255 255 255 / .09); }
+.produto__arte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.5) brightness(.78); transform: scale(1.02); transition: transform 1.2s var(--easing), filter .8s var(--easing-suave); }
+.produto--aberto:hover .produto__arte img { transform: scale(1.05); filter: saturate(.62) brightness(.86); }
 /* Arte do Tools: camadas em traço fino sobre o clarão granulado, como as artes dos pilares. */
-.produto__arte--camadas { color: rgb(255 255 255 / .66); background: radial-gradient(90% 80% at 28% 18%, rgb(255 255 255 / .2), rgb(255 255 255 / .04) 55%, transparent 80%), #141413; }
+.produto__arte--camadas { color: rgb(255 255 255 / .66); background: radial-gradient(90% 80% at 28% 18%, rgb(255 255 255 / .2), rgb(255 255 255 / .04) 55%, transparent 80%), #141413; transition: color .6s var(--easing-suave); }
 .produto__arte--camadas::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: soft-light; background: var(--grao-fino); }
 .produto__arte--camadas svg { position: relative; display: block; width: 100%; height: 100%; }
-.produto__arte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8) brightness(.85); transform: scale(1.02); transition: transform 1.2s var(--easing), filter .8s var(--easing-suave); }
-.produto:hover .produto__arte img { transform: scale(1.05); filter: saturate(.9) brightness(.95); }
-/* A sala do estúdio tem neon verde-limão: mais baixo, para o amarelo seguir como detalhe. */
-.produto--academy .produto__arte img { filter: saturate(.5) brightness(.78); }
-.produto--academy:hover .produto__arte img { filter: saturate(.62) brightness(.86); }
 .produto__selo { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px; border-radius: 999px; background: rgb(10 10 9 / .6); border: 1px solid rgb(242 242 238 / .16); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); font-size: 12px; color: var(--papel); }
 .produto__selo i { width: 6px; height: 6px; border-radius: 50%; background: var(--destaque); }
-.produto__corpo { display: grid; align-content: start; gap: 14px; padding: clamp(24px, 2.4vw, 36px); }
+/* A aba do painel fechado: cobre o painel, com o nome embaixo; some quando ele abre. */
+.produto__aba {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 10px;
+  padding: 24px; background: linear-gradient(180deg, rgb(0 0 0 / .1), rgb(0 0 0 / .74)); border: 0; color: var(--papel); font: inherit; text-align: left; cursor: pointer;
+  transition: opacity .5s var(--easing-suave);
+}
+.produto--aberto .produto__aba { opacity: 0; pointer-events: none; }
+.produto__aba:focus-visible { outline: 2px solid var(--papel); outline-offset: -4px; }
+.produto__aba-n { font-size: 11px; letter-spacing: .08em; color: rgb(242 242 238 / .6); }
+.produto__aba-nome { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.5rem, 2.2vw, 2.2rem); letter-spacing: -.035em; line-height: 1.05; }
+.produto__corpo { display: grid; align-content: start; gap: 14px; padding: clamp(24px, 2.4vw, 36px); transition: opacity .5s var(--easing-suave) .2s; }
+.produto:not(.produto--aberto) .produto__corpo { opacity: 0; transition-delay: 0s; }
+.produto:not(.produto--aberto) .produto__arte { position: absolute; inset: 0; aspect-ratio: auto; border: 0; }
+.produto:not(.produto--aberto) .produto__arte img { filter: saturate(.3) brightness(.45); }
+.produto:not(.produto--aberto) .produto__arte--camadas { color: rgb(255 255 255 / .3); }
+.produto:not(.produto--aberto) .produto__selo { opacity: 0; }
 .produto__nome { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.7rem, 2.4vw, 2.3rem); letter-spacing: -.04em; line-height: 1.05; }
 .produto__texto { max-width: 44ch; color: rgb(242 242 238 / .68); font-size: 15px; line-height: 1.65; }
 .produto__lista { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid rgb(242 242 238 / .1); }
@@ -1075,25 +1090,20 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .produto__seta { color: rgb(242 242 238 / .45); transition: color .3s, transform .4s var(--easing); }
 .produto__lista a:hover .produto__seta { color: var(--papel); transform: translate(2px, -2px); }
 .produto__item { color: rgb(242 242 238 / .6); }
-.produto__item em { font-style: normal; font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .4); }
 .produto__acao { margin-top: 10px; }
-/* Rede do Tools: fios finos até o R, com um brilho que corre devagar. */
-.rede { width: 100%; height: 100%; }
-.rede__fio { fill: none; stroke: rgb(242 242 238 / .16); stroke-width: 1; }
-.rede__luz { fill: none; stroke: rgb(242 242 238 / .8); stroke-width: 1.2; stroke-linecap: round; stroke-dasharray: 6 94; stroke-dashoffset: 100; animation: rede-corre 4.2s var(--atraso, 0s) cubic-bezier(.45, 0, .55, 1) infinite; }
-@keyframes rede-corre { to { stroke-dashoffset: 0; } }
-.rede__no rect { fill: #121211; stroke: rgb(242 242 238 / .18); }
-.rede__no text { fill: rgb(242 242 238 / .82); font-size: 17px; letter-spacing: -.01em; font-family: var(--font); }
-.rede__centro { fill: #0B0B0A; stroke: rgb(242 242 238 / .3); }
-.rede__halo { fill: none; stroke: rgb(242 242 238 / .08); }
 @media (max-width: 899.98px) {
-  .ecossistema__grade { grid-template-columns: 1fr; }
+  .ecossistema__paineis { flex-direction: column; }
+  .produto, .produto--aberto { flex: none; }
+  .produto__aba { display: none; }
+  .produto:not(.produto--aberto) .produto__corpo { opacity: 1; }
+  .produto:not(.produto--aberto) .produto__arte { position: relative; inset: auto; aspect-ratio: 16 / 9; border-bottom: 1px solid rgb(255 255 255 / .09); }
+  .produto:not(.produto--aberto) .produto__arte img { filter: saturate(.5) brightness(.78); }
+  .produto:not(.produto--aberto) .produto__arte--camadas { color: rgb(255 255 255 / .66); }
+  .produto:not(.produto--aberto) .produto__selo { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .rede__luz { animation: none; opacity: 0; }
-  .produto__arte img, .produto__lista a, .produto__seta { transition: none; }
+  .produto, .produto__aba, .produto__corpo, .produto__arte img, .produto__arte--camadas, .produto__lista a, .produto__seta { transition: none; }
 }
-
 
 /* ---------- Polish 20/09/2026: formulário, prova por números, pendências, letreiro ---------- */
 /* Estados do formulário: erro por campo, nota do canal, status após o envio. */
@@ -1134,68 +1144,53 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 /* Grão fino sobre as artes, como o clarão granulado dos cartões da referência. */
 :root { --grao-fino: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
 
-/* ---------- Dobra 2 · Nossa metodologia: painel "Product" ---------- */
-.metodo { display: grid; gap: clamp(32px, 4vw, 56px); padding: clamp(28px, 3.2vw, 48px); }
-.metodo__cabeca { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(24px, 4vw, 64px); align-items: end; }
-.metodo__titulo { white-space: normal; font-size: clamp(2rem, 3.6vw, 3.5rem); }
-.metodo__lead { display: grid; gap: 22px; justify-items: start; }
-.metodo__descricao { max-width: 46ch; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.65; color: rgb(242 242 238 / .78); text-wrap: pretty; }
-.metodo__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(200px, 17vw, 250px); gap: clamp(20px, 2.4vw, 36px); align-items: center; }
-/* O sistema conectado: a arte em traço fino; os rótulos e o R são HTML por cima, nas posições do viewBox (900×360). */
-.metodo__sistema { position: relative; margin: 0; aspect-ratio: 900 / 360; color: rgb(242 242 238 / .7); }
-.metodo__sistema > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
-.metodo__sistema .fio { opacity: .32; }
-.metodo__sistema .pulso { stroke: var(--papel); stroke-width: 1.4; stroke-dasharray: 7 93; stroke-dashoffset: 100; animation: metodo-pulso 4.6s cubic-bezier(.45, 0, .55, 1) infinite; }
-@keyframes metodo-pulso { to { stroke-dashoffset: 0; } }
-.metodo__nos { list-style: none; margin: 0; padding: 0; }
-.metodo__no {
-  position: absolute; width: 16.7%; height: 13.4%; transform: translate(-50%, -50%);
-  display: grid; place-items: center; padding: 0 6px; border-radius: 10px;
-  background: rgb(12 12 11 / .9); border: 1px solid rgb(242 242 238 / .16);
-  font-size: clamp(11px, 1.05vw, 15px); line-height: 1.1; color: var(--papel); white-space: nowrap; text-align: center;
-}
-.metodo__no[data-no="1"] { left: 12.8%; top: 16.7%; }
-.metodo__no[data-no="2"] { left: 12.8%; top: 50%; }
-.metodo__no[data-no="3"] { left: 12.8%; top: 83.3%; }
-.metodo__no--saida { left: 88.9%; top: 50%; width: 21.2%; height: 15.6%; }
-.metodo__marca { position: absolute; left: 50%; top: 50%; width: 5.2%; height: auto; transform: translate(-50%, -50%); }
-.metodo__midia { justify-self: end; width: 100%; }
+/* ---------- Dobra 2 · Nossa metodologia: painel "Product" ----------
+   Reel à direita; à esquerda, os três verbos da descrição em letras grandes,
+   um aceso por vez (pin QClay); no pé, os três números. */
+.metodo { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 19vw, 280px); grid-template-areas: "texto midia" "numeros midia"; gap: clamp(28px, 3.5vw, 56px) clamp(32px, 5vw, 96px); padding: clamp(28px, 3.2vw, 48px); align-items: end; }
+.metodo__texto { grid-area: texto; display: grid; gap: clamp(20px, 2.4vw, 32px); justify-items: start; align-content: start; }
+/* No estúdio o título vira o rótulo do painel e os verbos são a frase grande; na copy o título fica grande. */
+.metodo h2.metodo__titulo { white-space: normal; font-family: var(--font); font-size: 13px; font-weight: var(--peso-detalhe); letter-spacing: var(--tracking-label); word-spacing: normal; text-transform: uppercase; color: var(--cinza); }
+.metodo--copy h2.metodo__titulo { font-family: var(--font-titulo); font-size: clamp(2rem, 3.6vw, 3.5rem); font-weight: var(--peso-titulo); letter-spacing: -.035em; word-spacing: -.08em; text-transform: none; color: var(--papel); }
+.metodo__verbos { display: grid; margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.4rem, 4.8vw, 4.6rem); line-height: 1.02; letter-spacing: -.045em; word-spacing: -.08em; }
+.metodo__verbo { color: rgb(242 242 238 / .26); transition: color 1.4s var(--easing-suave); }
+.metodo__verbo--acesa { color: var(--papel); }
+.metodo__descricao { max-width: 46ch; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.65; color: rgb(242 242 238 / .74); text-wrap: pretty; }
+.metodo__midia { grid-area: midia; align-self: center; width: 100%; }
 .metodo__midia .tel { --largura-tel: 100%; }
-.metodo__numeros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); }
+.metodo__numeros { grid-area: numeros; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); }
 .metodo__numero { display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid rgb(242 242 238 / .16); }
-.metodo__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.6vw, 3.6rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
+.metodo__valor { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(2.2rem, 3.4vw, 3.4rem); line-height: 1; letter-spacing: -.045em; color: var(--papel); white-space: nowrap; }
 .metodo__legenda { margin: 0; font-size: 14px; color: var(--cinza); }
 @media (max-width: 899.98px) {
-  .metodo { padding: 20px; gap: 32px; }
-  .metodo__cabeca, .metodo__palco { grid-template-columns: 1fr; }
-  .metodo__no { font-size: 10px; border-radius: 6px; padding: 0 4px; }
-  .metodo__no--saida { width: 26%; white-space: normal; }
-  .metodo__midia { justify-self: center; max-width: 280px; }
+  .metodo { grid-template-columns: 1fr; grid-template-areas: "texto" "midia" "numeros"; padding: 22px; gap: 32px; }
+  .metodo__verbos { font-size: clamp(2.2rem, 11vw, 3rem); }
+  .metodo__midia { justify-self: center; max-width: 300px; }
   .metodo__numeros { grid-template-columns: 1fr; gap: 14px; }
 }
-@media (prefers-reduced-motion: reduce) { .metodo__sistema .pulso { animation: none; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .metodo__verbo { color: var(--papel); transition: none; } }
 
-/* ---------- Dobra 3 · Protocolo Revena: cartões "Features" ---------- */
+/* ---------- Dobra 3 · Protocolo Revena: cartões "Features" ----------
+   Como a referência: cabeça centrada, três cartões por linha, arte grande. */
 .pilares { position: relative; background: var(--fundo); }
-.pilares__cabeca { display: grid; gap: 12px; margin-bottom: clamp(32px, 4vw, 56px); }
-.pilares__cartoes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(12px, 1.2vw, 18px); }
-.pilar-cartao { display: grid; grid-template-rows: auto 1fr; padding: 10px; }
+.pilares__cabeca { display: grid; gap: 12px; justify-items: center; text-align: center; margin-bottom: clamp(32px, 4vw, 56px); }
+.pilares__cartoes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.4vw, 20px); }
+.pilar-cartao { display: grid; grid-template-rows: auto 1fr; padding: 12px; }
 .pilar-cartao__arte {
-  position: relative; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; color: rgb(255 255 255 / .66);
+  position: relative; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden; color: rgb(255 255 255 / .66);
   background: radial-gradient(90% 80% at 28% 18%, rgb(255 255 255 / .2), rgb(255 255 255 / .04) 55%, transparent 80%), #141413;
 }
 .pilar-cartao__arte::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .32; mix-blend-mode: soft-light; background: var(--grao-fino); }
 .pilar-cartao__arte svg { position: relative; display: block; width: 100%; height: 100%; }
-.pilar-cartao__corpo { display: grid; gap: 8px; align-content: start; padding: 18px 12px 14px; }
+.pilar-cartao__corpo { display: grid; gap: 8px; align-content: start; padding: 22px 12px 14px; }
 .pilar-cartao__n { font-size: 11px; letter-spacing: .08em; color: rgb(242 242 238 / .45); }
-.pilar-cartao__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.05rem, 1.25vw, 1.3rem); line-height: 1.2; letter-spacing: -.02em; color: var(--papel); text-wrap: balance; }
-.pilar-cartao__texto { margin: 0; font-size: 14px; line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
-/* Em telas médias e no celular a fileira rola de lado (pin Vivid Motion): o cartão cortado na borda sugere o resto. */
-@media (max-width: 1279.98px) {
-  .pilares__cartoes { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 8px; }
-  .pilares__cartoes::-webkit-scrollbar { display: none; }
-  .pilar-cartao { flex: 0 0 min(78vw, 320px); scroll-snap-align: start; }
-}
+.pilar-cartao__titulo { font-family: var(--font-titulo); font-weight: 400; font-size: clamp(1.2rem, 1.5vw, 1.5rem); line-height: 1.2; letter-spacing: -.025em; color: var(--papel); text-wrap: balance; }
+.pilar-cartao__texto { margin: 0; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+/* A sexta célula é a ponte para os planos: sem caixa, só a pergunta e o link. */
+.pilar-cartao--ponte { display: grid; align-content: end; gap: 14px; padding: 12px 24px 28px; }
+.pilar-cartao__frase { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(1.4rem, 2vw, 2rem); line-height: 1.15; letter-spacing: -.035em; color: var(--papel); max-width: 18ch; text-wrap: balance; }
+@media (max-width: 1023.98px) { .pilares__cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639.98px) { .pilares__cartoes { grid-template-columns: 1fr; } .pilar-cartao--ponte { padding: 8px 12px 16px; } }
 
 /* ---------- Dobra 6 · Uma operação estruturada: caixas "Solutions" ---------- */
 #perguntas { padding-block: var(--esp-secao); }

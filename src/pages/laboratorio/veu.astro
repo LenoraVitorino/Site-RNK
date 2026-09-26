@@ -23,7 +23,6 @@ import Resultados from '../../components/home2/Resultados.astro';
 import CtaFinal from '../../components/home2/CtaFinal.astro';
 import AcademyTools from '../../components/home2/AcademyTools.astro';
 import Formulario from '../../components/home2/Formulario.astro';
-import Sobre from '../../components/home2/Sobre.astro';
 import { copyLiteral } from '../../data/versao';
 ---
 <Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu">
@@ -38,6 +37,6 @@ import { copyLiteral } from '../../data/versao';
   <Resultados />
   <CtaFinal />
   <AcademyTools />
-  <Sobre />
+  {/* Conheça a Renke saiu da página (Lenora, 26/09: "tira, depois vemos o que fazer"). */}
   <Formulario />
 </Base2>

@@ -4,7 +4,6 @@ import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
 import cafe from '../assets/sede/cafe.jpg';
 import estudio from '../assets/sede/estudio.jpg';
-import sofa from '../assets/sede/sofa.jpg';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
 
@@ -13,7 +12,7 @@ import Botao from './ui/Botao.astro';
 // o cartão de destaque só aparece se o destino existir.
 // Fotos da sede nos cartões de destaque (Lenora, 26/09). Pequenas, o amarelo
 // delas fica como detalhe dentro do painel escuro.
-const fotosDestaque = { cafe, estudio, sofa };
+const fotosDestaque = { cafe, estudio };
 const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
 const itensMenu = menu.flatMap((item) => {
   if (!('grupos' in item)) return existe(item.rota) ? [item] : [];

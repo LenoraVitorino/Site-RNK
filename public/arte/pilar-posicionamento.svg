@@ -1,26 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
   <g class="posic-radar" stroke-width="1">
-    <circle cx="196" cy="150" r="120" stroke-opacity=".3"/>
-    <circle cx="196" cy="150" r="80" stroke-opacity=".45"/>
-    <circle cx="196" cy="150" r="40" stroke-opacity=".6"/>
-    <path class="posic-varredura" d="M196 30a120 120 0 0 1 120 120" stroke-width="1.25" stroke-opacity=".8"/>
+    <circle cx="196" cy="150" r="108" stroke-opacity=".3"/>
+    <circle cx="196" cy="150" r="72" stroke-opacity=".45"/>
+    <circle cx="196" cy="150" r="36" stroke-opacity=".6"/>
+    <path class="posic-varredura" d="M196 42a108 108 0 0 1 108 108" stroke-width="1.25" stroke-opacity=".8"/>
   </g>
   <g class="posic-concorrentes" fill="currentColor" fill-opacity=".1" stroke-width="1" stroke-opacity=".6">
-    <circle cx="166" cy="168" r="3.5"/>
-    <circle cx="182" cy="142" r="3.5"/>
-    <circle cx="150" cy="152" r="3.5"/>
-    <circle cx="176" cy="184" r="3.5"/>
-    <circle cx="198" cy="126" r="3.5"/>
-    <circle cx="160" cy="124" r="3.5"/>
-    <circle cx="212" cy="170" r="3.5"/>
-    <circle cx="188" cy="158" r="3.5"/>
-    <circle cx="142" cy="176" r="3.5"/>
-    <circle cx="204" cy="146" r="3.5"/>
+    <circle cx="166" cy="168" r="4"/>
+    <circle cx="182" cy="142" r="4"/>
+    <circle cx="150" cy="152" r="4"/>
+    <circle cx="176" cy="184" r="4"/>
+    <circle cx="198" cy="126" r="4"/>
+    <circle cx="160" cy="124" r="4"/>
+    <circle cx="212" cy="170" r="4"/>
+    <circle cx="188" cy="158" r="4"/>
+    <circle cx="142" cy="176" r="4"/>
+    <circle cx="204" cy="146" r="4"/>
   </g>
   <g class="posic-tese">
-    <circle cx="282" cy="100" r="11" stroke-width="1"/>
-    <circle cx="282" cy="100" r="4" fill="currentColor" fill-opacity=".1"/>
-    <path d="M293 100h53" stroke-width="1" stroke-opacity=".7"/>
-    <rect x="348" y="86" width="92" height="28" rx="8" fill="currentColor" fill-opacity=".06"/>
+    <g class="acento">
+      <circle cx="274" cy="105" r="12" stroke-width="1"/>
+      <circle cx="274" cy="105" r="4.5" fill="currentColor" fill-opacity=".1"/>
+    </g>
+    <path d="M286 105h58" stroke-width="1" stroke-opacity=".7"/>
+    <rect x="344" y="89" width="104" height="32" rx="8" fill="currentColor" fill-opacity=".06"/>
   </g>
 </svg>

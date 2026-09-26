@@ -1,6 +1,8 @@
 ---
 /**
- * Laboratório: a home com o anel de fios prateados por trás (26/09/2026).
+
+ * Laboratório: a home com a cena da PeachWeb "curious" refeita com fidelidade
+ * (26/09/2026, Lenora: "extraia fielmente essa referência e aplique").
  * Página de teste, fora dos buscadores e do menu. Mesmas dobras e o mesmo
  * acabamento de /laboratorio/veu (src/styles/laboratorio-alto-padrao.css);
  * muda só o fundo, a partir da cena da PeachWeb que a Lenora escolheu
@@ -24,8 +26,8 @@ import AcademyTools from '../../components/home2/AcademyTools.astro';
 import Formulario from '../../components/home2/Formulario.astro';
 import { copyLiteral } from '../../data/versao';
 ---
-<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu laboratorio-prata">
-  <FundoVivo slot="fundo" fundo="prata" />
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu laboratorio-prata laboratorio-cena">
+  <FundoVivo slot="fundo" fundo="cena" />
   <Hero />
   <OQueFaz />
   <Protocolos />
