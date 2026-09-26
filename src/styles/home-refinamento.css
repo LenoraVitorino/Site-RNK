@@ -109,6 +109,8 @@ section[id] { scroll-margin-top: 110px; }
 
 
 /* Features: cenas próprias de cada serviço, três cards e duas frentes amplas. */
+.pilares-features { padding-bottom: clamp(32px, 3vw, 48px); }
+.pilares-features + .letreiro { padding-top: clamp(24px, 2vw, 32px); padding-bottom: clamp(32px, 4vw, 56px); }
 .pilares-features .pilares__cabeca { margin-bottom: clamp(40px, 6vw, 80px); }
 .pilares__cabeca > p { color: #b6b6b4; font-size: 18px; }
 .features-grade { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
