@@ -226,7 +226,11 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       if (y < de) {
         if (i === 0) return 0;
         const antes = trechos[i - 1][1];
-        return i - 1 + cfg.curva(limita((y - antes) / Math.max(1, de - antes)));
+        const t = limita((y - antes) / Math.max(1, de - antes));
+        // O amortecimento temporal já suaviza o gesto. Aplicar easing também
+        // no percurso contínuo zerava a velocidade a cada centro de seção.
+        const continuo = cfg.continuas.includes(nomes[i - 1]) || cfg.continuas.includes(nomes[i]);
+        return i - 1 + (continuo ? t : cfg.curva(t));
       }
       if (y <= ate) return i;
     }
