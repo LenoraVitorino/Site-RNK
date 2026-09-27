@@ -138,7 +138,8 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__nome { margin: 0; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.15; max-width: none; text-wrap: balance; }
 .operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
-.resultados-editoriais .secao-indice h2 { grid-column: 2; }
+.resultados-editoriais__cabeca { margin-bottom: clamp(32px, 4vw, 56px); }
+.resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
 .resultado-ficha__ilustracao { width: calc(100% + 40px); margin: 20px -20px 0; aspect-ratio: 4 / 3; mask-image: radial-gradient(ellipse, #000 48%, transparent 76%); }
 .resultado-ficha--destaque .resultado-ficha__numero { padding-top: 8px; font-size: clamp(80px, 8vw, 122px); }
 
@@ -150,7 +151,6 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
   .operacao-editorial .operacao__texto { position: static; }
-  .resultados-editoriais .secao-indice h2 { grid-column: 1; }
   .resultado-ficha--destaque { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
   .resultado-ficha--destaque .resultado-ficha__topo { grid-column: 1 / -1; }
   .resultado-ficha__ilustracao { grid-column: 2; grid-row: 2 / span 2; margin: 0; width: 100%; }
