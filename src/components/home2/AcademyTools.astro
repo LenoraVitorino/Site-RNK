@@ -1,11 +1,9 @@
 ---
 /** Duas frentes com arte, apresentação breve e acesso à página de cada produto. */
-import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
-import Conexoes from './Conexoes.astro';
+import MockupProduto from './MockupProduto.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
-import foto from '../../assets/sede/estudio.jpg';
 
 const produtos = [
   {
@@ -37,14 +35,7 @@ const produtos = [
         {produtos.map((p, i) => (
           <article class:list={['produto', `produto--${p.chave}`, 'produto--aberto']} data-produto={i}>
             <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
-              {p.chave === 'academy' ? (
-                <>
-                  <Image src={foto} alt="" format="webp" quality={78} widths={[480, 960, 1440]} sizes="(max-width: 899px) 100vw, 60vw" loading="lazy" />
-                  <span class="produto__selo"><i></i>Formação</span>
-                </>
-              ) : (
-                <Conexoes />
-              )}
+              <MockupProduto produto={p.chave === 'academy' ? 'academy' : 'tools'} />
             </div>
             <div class="produto__corpo" id={`produto-miolo-${i}`}>
               <p class="rotulo">{p.eyebrow}</p>

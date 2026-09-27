@@ -76,3 +76,9 @@ Layout compartilhado entre as duas versões e páginas internas. Conferidos drop
 ### Continuidade do fundo entre segunda e terceira dobras
 
 Os quadros dos pilares e do letreiro agora prolongam o enquadramento iluminado da metodologia. Os pontos anteriores da referência (.250/.300) já encolhiam e apagavam o primeiro objeto antes da entrada do segundo, produzindo a tela preta. As amostras .115/.125 mantêm o objeto visível e animado, com interpolação suave entre as dobras. Conferida a passagem com o final da metodologia e o início dos pilares na mesma tela, além da versão copy no celular. Builds de ambas as versões concluídos.
+
+### Academy e Tools como experiências de produto
+
+Substituída a foto da sede pela prévia de uma área de membros da Academy, com galeria dos cinco cursos existentes: Protocolo Renke, Formação Performa, Treinamento CRM, Rastreamento Avançado e Cultura Pro. O diagrama genérico do Tools deu lugar a um mockup do Renke Connect, com canais de origem e etapas até agendamento, baseado no escopo descrito na estratégia. Não há nomes de pacientes, números de desempenho ou capturas reais inventadas: ambas as peças estão identificadas como prévias conceituais, pois os prints das plataformas ainda não estão no projeto.
+
+Mantidos fundo preto, cinzas neutros, detalhes amarelos e copy dos produtos. As interfaces usam SVG responsivo compartilhado nas duas versões. Builds estudio/copy concluídos; visualização conferida em 1440px e 390px, sem overflow horizontal.
