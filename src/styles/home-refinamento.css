@@ -52,8 +52,8 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Fechamento calmo, preservando o texto e o formulário existente. */
 #fale { background: #121210; color: var(--papel); border-block: 1px solid var(--ref-fio); }
-#fale .chamada { align-items: center; }
-#fale .chamada__numero { color: #858583; font-size: clamp(80px, 12vw, 180px); font-weight: 250; }
+#fale .chamada { grid-template-columns: 1fr; justify-items: center; }
+#fale .chamada__miolo { justify-items: center; text-align: center; }
 #fale .chamada__miolo p { color: #aeaeac; }
 #fale .botao { background: var(--papel); color: #171715; }
 .home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
