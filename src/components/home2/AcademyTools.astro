@@ -38,7 +38,7 @@ const produtos = [
               <p class="rotulo">{p.eyebrow}</p>
               <h3 class="produto__nome">{p.titulo}</h3>
               <p class="produto__texto">{p.texto}</p>
-              {existe(p.rota) && <p class="produto__acao"><Botao href={p.rota} tamanho="sm">Conhecer {p.titulo}</Botao></p>}
+              <p class="produto__acao"><Botao href={existe(p.rota) ? p.rota : '/contato'} tamanho="sm">Conhecer {p.titulo}</Botao></p>
             </div>
           </article>
         ))}
