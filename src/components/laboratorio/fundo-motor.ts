@@ -53,6 +53,7 @@ export interface Config {
   esperarEntrada: () => boolean; // o fade de entrada só começa quando isto for verdade
   pena: number;                  // borda macia da máscara de leitura, em px de CSS (desktop)
   caixas: string;                // blocos sem texto que a máscara protege pela caixa inteira
+  continuas: string[];           // quadros que seguem a rolagem, sem patamar parado na dobra
 }
 
 export interface Contexto {
@@ -175,7 +176,7 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   const quadros = celular ? elemento.quadros.celular : elemento.quadros.desktop;
   const cfg: Config = {
     roteiro: ROTEIRO, transparentes: DOBRAS_TRANSPARENTES, textos: TEXTOS, cartoes: '',
-    tau: .22, curva: suave, saltoMax: 1.2, esperarEntrada: () => true, pena: 90, caixas: '',
+    tau: .22, curva: suave, saltoMax: 1.2, esperarEntrada: () => true, pena: 90, caixas: '', continuas: [],
     ...elemento.config,
   };
 
@@ -192,6 +193,9 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
       // Parado enquanto a dobra ocupa a tela: do topo a 15% da tela até a base a 85%.
       let de = topo - vh * .15, ate = base - vh * .85;
       if (ate < de) de = ate = (de + ate) / 2;   // dobra curta: só o instante em que ela está no meio
+      // Nas dobras contínuas, o quadro é um ponto de passagem no centro,
+      // não uma pose mantida durante toda a leitura dos cartões.
+      if (cfg.continuas.includes(nome)) de = ate = (de + ate) / 2;
       const opaca = !el.matches(cfg.transparentes) && r.height > vh * 1.2;
       return [{ nome, de, ate, topo, opaca, altura: r.height }];
     }).sort((x, y) => x.de - y.de);
