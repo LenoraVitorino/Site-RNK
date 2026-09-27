@@ -4,8 +4,7 @@
 body :is(
   .header, .header__inner, .nav, .nav-toggle, .nav__item,
   .megamenu__inner, .megamenu__destaque, .megamenu__list a, .nav--pendente,
-  .botao, .vidro, .hero__selo, .hero-prova__retrato img,
-  .hero-prova__retrato--vazio, .hero-prova__tooltip,
+  .botao, .vidro, .hero__selo, .hero-prova__tooltip,
   .section, .secao, .faixa, .faixa__numeros > div, .esteira,
   .metodo__numeros, .metodo__numero, .feature-card,
   .pilares-editoriais__ponte, .palcoplanos__ancora, .plano-palco,
@@ -26,7 +25,7 @@ body :is(
 }
 
 /* Alguns contornos eram desenhados como sombras internas. */
-body :is(.botao, .botao__vidro, .hero-prova__retrato--vazio) {
+body :is(.botao, .botao__vidro) {
   box-shadow: none !important;
 }
 body .vidro--realce::before { display: none; }
