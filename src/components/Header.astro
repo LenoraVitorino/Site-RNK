@@ -5,10 +5,11 @@ import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
 
 // Mostrar somente destinos existentes; os cards promocionais estão suspensos.
+const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
 const itensMenu = menu.flatMap((item) => {
-  if (!('grupos' in item)) return existe(item.rota) ? [item] : [];
+  if (!('grupos' in item)) return temPagina(item.rota) ? [item] : [];
   const grupos = item.grupos
-    .map((g) => ({ ...g, itens: g.itens.filter((sub) => existe(sub.rota)) }))
+    .map((g) => ({ ...g, itens: g.itens.filter((sub) => temPagina(sub.rota)) }))
     .filter((g) => g.itens.length);
   if (!grupos.length) return [];
   return [{ ...item, grupos }];
@@ -51,7 +52,7 @@ const itensMenu = menu.flatMap((item) => {
                       <ul class="megamenu__list">
                         {grupo.itens.map((sub) => (
                           <li>
-                            {existe(sub.rota)
+                            {temPagina(sub.rota)
                               ? <a href={sub.rota}>
                                   {sub.plano && <span class="megamenu__plano" aria-hidden="true"><img class="megamenu__plano--escuro" src={`/icones/plano-${sub.plano}-dark.svg`} alt="" width="24" height="24" loading="lazy" /><img class="megamenu__plano--claro" src={`/icones/plano-${sub.plano}-light.svg`} alt="" width="24" height="24" loading="lazy" /></span>}
                                   {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
@@ -68,7 +69,7 @@ const itensMenu = menu.flatMap((item) => {
             </li>
           ) : (
             <li class="nav__item">
-              {existe(item.rota)
+              {temPagina(item.rota)
                 ? <a href={item.rota} class="nav__link" aria-current={item.atual ? 'page' : undefined}>{item.rotulo}</a>
                 : <span class="nav__link nav--pendente">{item.rotulo} <em>em breve</em></span>}
             </li>
@@ -183,6 +184,7 @@ const itensMenu = menu.flatMap((item) => {
     nav.classList.contains('is-open') ? closeNav() : openNav()
   );
   overlay.addEventListener('click', closeNav);
+  nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNav));
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;

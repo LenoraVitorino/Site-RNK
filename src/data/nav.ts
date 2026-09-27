@@ -115,7 +115,18 @@ export const menu: NavItem[] = [
   },
 
   { rotulo: 'Conteúdos', rota: '/blog' },
-  { rotulo: 'Faça Parte', rota: '/faca-parte' },
+  {
+    rotulo: 'A Renke',
+    id: 'mm-renke',
+    grupos: [{
+      titulo: 'A Renke',
+      itens: [
+        { rotulo: 'Sobre', rota: '/#o-que-fazemos' },
+        { rotulo: 'Contato', rota: '/contato' },
+        { rotulo: 'Faça Parte', rota: '/faca-parte' },
+      ],
+    }],
+  },
 ];
 
 /** Ação de conversão no header. Botão, não item de navegação. */
