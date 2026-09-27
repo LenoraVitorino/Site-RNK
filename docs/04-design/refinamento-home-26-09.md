@@ -66,3 +66,9 @@ Nenhum depoimento, retrato de cliente ou indicador novo foi inventado. As diverg
 A seção “Uma operação estruturada muda a forma como sua clínica cresce” mantém o título à esquerda e os benefícios à direita. Os cards agora são pretos, sem contorno, com título e descrição acima de uma ilustração própria — sem desenhos por trás da copy. As cenas mostram origem até consulta, acompanhamento até agendamento, continuidade dos processos e investimento por canal. A versão original conserva seus sete benefícios.
 
 O quadro da cena Peachweb foi antecipado para um ponto em que a forma já está dentro da tela (`.455`); o estado anterior (`.400`) a deixava quase inteira abaixo da área visível. A animação, os materiais e o movimento original continuam ativos. Validado em desktop e celular, com os dois builds de copy e sem transbordamento horizontal.
+
+### Menu compacto e assinatura completa
+
+Dropdowns independentes abaixo dos itens, sem aumentar a caixa do cabeçalho e sem cards promocionais internos. Assinatura completa Renke Studio no lugar do monograma, com contraste adaptado ao fundo. Recuperados os rótulos originais: Home, Para Clínicas, Para Agências, Faça Parte e Contato; os planos voltam a se chamar Protocolo Revena Start/Run/Scale/Core/Full. A ordem atual e os cinco ícones foram preservados, inclusive no celular. Conteúdos e Tecnologia continuam filtrados enquanto não têm páginas; Outras Soluções permanece removido conforme solicitação anterior.
+
+Layout compartilhado entre as duas versões e páginas internas. Conferidos dropdowns em desktop, acordeão em 390px, fechamento por Escape e builds de estudio/copy.

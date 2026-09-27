@@ -1,26 +1,17 @@
 ---
-import { Image } from 'astro:assets';
 import Icone from './ui/Icone.astro';
 import { menu, acaoHeader } from '../data/nav';
-import cafe from '../assets/sede/cafe.jpg';
-import estudio from '../assets/sede/estudio.jpg';
 import { existe } from '../data/rotas';
 import Botao from './ui/Botao.astro';
 
-// Sem "em breve" à mostra (Lenora, 26/09): no menu só entra o que já tem
-// página. Grupo sem itens some; menu sem grupos some (a Tecnologia, por ora);
-// o cartão de destaque só aparece se o destino existir.
-// Fotos da sede nos cartões de destaque (Lenora, 26/09). Pequenas, o amarelo
-// delas fica como detalhe dentro do painel escuro.
-const fotosDestaque = { cafe, estudio };
-const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
+// Mostrar somente destinos existentes; os cards promocionais estão suspensos.
 const itensMenu = menu.flatMap((item) => {
   if (!('grupos' in item)) return existe(item.rota) ? [item] : [];
   const grupos = item.grupos
     .map((g) => ({ ...g, itens: g.itens.filter((sub) => existe(sub.rota)) }))
     .filter((g) => g.itens.length);
   if (!grupos.length) return [];
-  return [{ ...item, grupos, destaque: item.destaque && temPagina(item.destaque.rota) ? item.destaque : undefined }];
+  return [{ ...item, grupos }];
 });
 ---
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -28,7 +19,7 @@ const itensMenu = menu.flatMap((item) => {
 <header class="header" id="header">
   <div class="header__inner">
     <a href="/" class="logo" aria-label="Renke — página inicial">
-      <img class="logo__img" src="/marca/renke-monograma.png" alt="Renke" width="270" height="270" />
+      <img class="logo__img" src="/marca/renke-assinatura.png" alt="Renke" width="299" height="62" />
     </a>
 
     <!-- A ação de conversão fica fora do menu: visível no celular, sem abrir o drawer. -->
@@ -71,18 +62,7 @@ const itensMenu = menu.flatMap((item) => {
                       </ul>
                     </div>
                   ))}
-                  {item.destaque && (
-                    <a class="megamenu__destaque" href={item.destaque.rota}>
-                      {item.destaque.foto && (
-                        <span class="megamenu__destaque-foto" aria-hidden="true">
-                          <Image src={fotosDestaque[item.destaque.foto]} alt="" format="webp" quality={78} widths={[320, 640]} sizes="320px" loading="lazy" />
-                        </span>
-                      )}
-                      <span class="megamenu__destaque-titulo">{item.destaque.titulo}</span>
-                      <span class="megamenu__destaque-texto">{item.destaque.texto}</span>
-                      <span class="megamenu__destaque-acao">{item.destaque.rotulo} <span aria-hidden="true">→</span></span>
-                    </a>
-                  )}
+
                 </div>
               </div>
             </li>
@@ -100,8 +80,7 @@ const itensMenu = menu.flatMap((item) => {
 </header>
 
 <div class="nav-overlay" id="navOverlay" hidden></div>
-<!-- Desktop: escurece a página enquanto o painel do menu está aberto. -->
-<div class="menu-veu" aria-hidden="true"></div>
+
 
 <script>
   /* Desktop: mega-menu no hover e no foco. Mobile: drawer com acordeão. */
@@ -116,14 +95,9 @@ const itensMenu = menu.flatMap((item) => {
   const panelOf = (t: HTMLElement) =>
     document.getElementById(t.getAttribute('aria-controls') || '');
 
-  /* Desktop (Lenora, 26/09, referência ClickUp): o cabeçalho e o painel são
-     uma peça só. Ao abrir, a caixa cresce para baixo até a altura do painel
-     ativo; entre um item e outro ela muda de altura e o conteúdo troca com
-     fade. Fecha ao sair da caixa inteira, com uma folga curta. */
+  // Dropdowns independentes; o cabeçalho mantém sua altura.
   const caixa = header.querySelector<HTMLElement>('.header__inner')!;
   let fechar = 0;
-  const alturaPainel = (panel: HTMLElement) =>
-    (panel.querySelector<HTMLElement>('.megamenu__inner')?.offsetHeight ?? 0);
 
   function openSubmenu(t: HTMLElement) {
     const panel = panelOf(t);
@@ -132,7 +106,6 @@ const itensMenu = menu.flatMap((item) => {
     panel.hidden = false;
     if (DESKTOP.matches) {
       clearTimeout(fechar);
-      header.style.setProperty('--painel-h', `${alturaPainel(panel)}px`);
       header.classList.add('header--menu');
     }
   }
@@ -175,7 +148,7 @@ const itensMenu = menu.flatMap((item) => {
 
     item.addEventListener('focusout', (e) => {
       if (!DESKTOP.matches) return;
-      if (!caixa.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
+      if (!item.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
     });
   });
 
