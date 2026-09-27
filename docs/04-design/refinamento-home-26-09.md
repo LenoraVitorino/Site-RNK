@@ -72,3 +72,7 @@ O quadro da cena Peachweb foi antecipado para um ponto em que a forma já está 
 Dropdowns independentes abaixo dos itens, sem aumentar a caixa do cabeçalho e sem cards promocionais internos. Assinatura completa Renke Studio no lugar do monograma, com contraste adaptado ao fundo. Recuperados os rótulos originais: Home, Para Clínicas, Para Agências, Faça Parte e Contato; os planos voltam a se chamar Protocolo Revena Start/Run/Scale/Core/Full. A ordem atual e os cinco ícones foram preservados, inclusive no celular. Conteúdos e Tecnologia continuam filtrados enquanto não têm páginas; Outras Soluções permanece removido conforme solicitação anterior.
 
 Layout compartilhado entre as duas versões e páginas internas. Conferidos dropdowns em desktop, acordeão em 390px, fechamento por Escape e builds de estudio/copy.
+
+### Continuidade do fundo entre segunda e terceira dobras
+
+Os quadros dos pilares e do letreiro agora prolongam o enquadramento iluminado da metodologia. Os pontos anteriores da referência (.250/.300) já encolhiam e apagavam o primeiro objeto antes da entrada do segundo, produzindo a tela preta. As amostras .115/.125 mantêm o objeto visível e animado, com interpolação suave entre as dobras. Conferida a passagem com o final da metodologia e o início dos pilares na mesma tela, além da versão copy no celular. Builds de ambas as versões concluídos.

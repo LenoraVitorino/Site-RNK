@@ -118,8 +118,11 @@ const DESKTOP: Record<string, Quadro> = {
   hero:        amostra(0),
   // O toro de lá tem outra forma; puxado para dentro da tela para a hero ver o rebordo (17.webp).
   metodologia: amostra(.105, { dz: 2.3 }),
-  pilares:     amostra(.250),
-  letreiro:    amostra(.300, { leitura: .6 }),
+  // Continua o mesmo objeto iluminado na passagem metodologia → pilares.
+  // .250/.300 pertencem ao intervalo escuro da referência: o donut já
+  // encolheu e perdeu a luz, enquanto o segundo modelo ainda está fora da tela.
+  pilares:     amostra(.115, { dz: 2.3 }),
+  letreiro:    amostra(.125, { dz: 2.3, leitura: .6 }),
   // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
   perguntas:   amostra(.455, { leitura: .7 }),
   convite:     amostra(.497, { leitura: .9 }),
