@@ -1,7 +1,6 @@
 ---
-/** Duas frentes com arte, apresentação breve e acesso à página de cada produto. */
+/** Duas frentes com espaço reservado para arte e apresentação breve. */
 import Botao from '../ui/Botao.astro';
-import MockupProduto from './MockupProduto.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 
@@ -34,9 +33,7 @@ const produtos = [
       <div class="ecossistema__paineis entra">
         {produtos.map((p, i) => (
           <article class:list={['produto', `produto--${p.chave}`, 'produto--aberto']} data-produto={i}>
-            <div class:list={['produto__arte', p.chave === 'tools' && 'produto__arte--camadas']} aria-hidden="true">
-              <MockupProduto produto={p.chave === 'academy' ? 'academy' : 'tools'} />
-            </div>
+            <div class="produto__arte" aria-hidden="true"></div>
             <div class="produto__corpo" id={`produto-miolo-${i}`}>
               <p class="rotulo">{p.eyebrow}</p>
               <h3 class="produto__nome">{p.titulo}</h3>
