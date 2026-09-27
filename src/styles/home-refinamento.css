@@ -105,19 +105,27 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .hero__fundo { display: none; }
 /* As duas mensagens usam a mesma escala e ocupam duas linhas. */
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
-.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); align-items: end; gap: 32px clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
+.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: auto auto auto minmax(72px, 1fr); min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 32px clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
 .hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; justify-self: start; margin: 0; }
 .hero--editorial .hero__h1 { grid-column: 1 / -1; min-width: 0; min-height: 2.35em; font-size: clamp(28px, 8.2vw, 132px); font-weight: 500; line-height: 1.06; letter-spacing: -.065em; }
 .hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
 .hero--editorial .hero__revops { margin-left: 0; font-weight: inherit; }
 .hero--editorial .hero__apoio { display: contents; }
-.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 3; justify-self: end; width: 64%; margin: 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
+.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 3; justify-self: start; width: min(100%, 760px); margin: 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
 .hero--editorial .hero__acoes { grid-column: 2; grid-row: 4; margin: 0; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
 .hero--editorial .hero__base { grid-column: 1; grid-row: 4; justify-content: flex-start; }
+@media (prefers-reduced-motion: no-preference) {
+  /* RevOps termina de entrar aos 4,25 s; só então o subtítulo aparece. */
+  .js .hero--editorial .hero__lead { animation: hero-subtitulo-entra .7s var(--easing) 4.25s both; }
+}
+@keyframes hero-subtitulo-entra {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
 @media (max-width: 899.98px) {
-  .hero--editorial .hero__palco { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 16px; }
+  .hero--editorial .hero__palco { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; gap: 32px; padding-top: 16px; }
   .hero--editorial .hero__apoio { display: grid; grid-column: 1; grid-row: auto; max-width: none; gap: 24px; padding: 0; }
   .hero--editorial .hero__base { grid-row: auto; }
   .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; font-size: 16px; }
