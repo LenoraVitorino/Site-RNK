@@ -103,7 +103,7 @@ const FUNCOES = Object.fromEntries(Object.entries(TRILHAS).map(([k, c]) => [k, t
 
 /** Estado da referência no trecho t, mais o que é nosso (leitura). */
 const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
-  const q: Quadro = { leitura: .85 };
+  const q: Quadro = { leitura: .5 };
   for (const k in FUNCOES) q[k] = FUNCOES[k](t);
   return { ...q, ...extra };
 };
@@ -122,10 +122,10 @@ const DESKTOP: Record<string, Quadro> = {
   // .250/.300 pertencem ao intervalo escuro da referência: o donut já
   // encolheu e perdeu a luz, enquanto o segundo modelo ainda está fora da tela.
   pilares:     amostra(.125, { dz: 2.3 }),
-  letreiro:    amostra(.145, { dz: 2.3, leitura: .6 }),
+  letreiro:    amostra(.145, { dz: 2.3, leitura: .4 }),
   // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
-  perguntas:   amostra(.455, { leitura: .7 }),
-  convite:     amostra(.497, { leitura: .9 }),
+  perguntas:   amostra(.455, { leitura: .45 }),
+  convite:     amostra(.497, { leitura: .55 }),
   academy:     amostra(.560),
   sobre:       amostra(.620),
   formulario:  amostra(0),
@@ -557,7 +557,7 @@ function criar(ctx: Contexto): Elemento {
     config: {
       roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
       continuas: ['pilares'],
-      tau: .9, curva: maisSuave, saltoMax: 1, pena: 140,
+      tau: .9, curva: maisSuave, saltoMax: 1, pena: 90,
       esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
     },
     pintar({ q, tempo, dt, parado, ponteiro }) {
