@@ -120,7 +120,8 @@ const DESKTOP: Record<string, Quadro> = {
   metodologia: amostra(.105, { dz: 2.3 }),
   pilares:     amostra(.250),
   letreiro:    amostra(.300, { leitura: .6 }),
-  perguntas:   amostra(.400),
+  // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
+  perguntas:   amostra(.455, { leitura: .7 }),
   convite:     amostra(.497, { leitura: .9 }),
   academy:     amostra(.560),
   sobre:       amostra(.620),

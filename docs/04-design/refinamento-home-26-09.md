@@ -59,3 +59,10 @@ Nenhum depoimento, retrato de cliente ou indicador novo foi inventado. As diverg
 - Cena Peachweb carregada no preview de produção (`data-fundo="cena"`, canvas visível), acompanhando a navegação entre as dobras.
 - Console do preview de produção sem erros ou avisos. O build mantém o aviso de tamanho do chunk Three.js, carregado dinamicamente; esta entrega não mede Core Web Vitals em produção.
 - Movimento reduzido: regras CSS/JS revisadas e fallback dos planos coberto pela suíte; não foi emulado visualmente no navegador desta sessão.
+
+
+### Benefícios e enquadramento do motion
+
+A seção “Uma operação estruturada muda a forma como sua clínica cresce” mantém o título à esquerda e os benefícios à direita. Os cards agora são pretos, sem contorno, com título e descrição acima de uma ilustração própria — sem desenhos por trás da copy. As cenas mostram origem até consulta, acompanhamento até agendamento, continuidade dos processos e investimento por canal. A versão original conserva seus sete benefícios.
+
+O quadro da cena Peachweb foi antecipado para um ponto em que a forma já está dentro da tela (`.455`); o estado anterior (`.400`) a deixava quase inteira abaixo da área visível. A animação, os materiais e o movimento original continuam ativos. Validado em desktop e celular, com os dois builds de copy e sem transbordamento horizontal.

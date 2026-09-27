@@ -1,0 +1,77 @@
+---
+/** Ilustrações conceituais dos benefícios, sem indicadores fictícios. */
+interface Props { tipo: number }
+const { tipo } = Astro.props;
+const id = `beneficio-${tipo}`;
+const painel = `url(#${id}-painel)`;
+const brilho = `url(#${id}-brilho)`;
+---
+<svg class="arte-beneficio" viewBox="0 0 520 250" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={`${id}-painel`} x1="80" y1="20" x2="370" y2="250" gradientUnits="userSpaceOnUse"><stop stop-color="#303030"/><stop offset=".55" stop-color="#191919"/><stop offset="1" stop-color="#121212"/></linearGradient>
+    <radialGradient id={`${id}-brilho`}><stop stop-color="#ddd" stop-opacity=".09"/><stop offset="1" stop-color="#ddd" stop-opacity="0"/></radialGradient>
+    <filter id={`${id}-sombra`} x="-20%" y="-30%" width="150%" height="180%"><feDropShadow dy="12" stdDeviation="10" flood-opacity=".5"/></filter>
+  </defs>
+  <ellipse cx="260" cy="130" rx="250" ry="125" fill={brilho}/>
+  <g class="arte-beneficio__cena">
+  {tipo === 0 && <g>
+    <path d="M172 63C228 63 200 125 258 125M172 125H258M172 187C228 187 200 125 258 125" stroke="#626262" stroke-width="1.5"/>
+    {['Busca','Redes sociais','Indicação'].map((texto,i)=><g transform={`translate(26 ${39+i*62})`}>
+      <rect width="148" height="48" rx="12" fill={painel}/><circle cx="23" cy="24" r="5" fill="#7a7a7a"/><text x="40" y="29">{texto}</text>
+    </g>)}
+    <g filter={`url(#${id}-sombra)`} transform="rotate(-4 360 125)">
+      <rect x="258" y="53" width="228" height="150" rx="18" fill={painel}/>
+      <text x="282" y="85" class="arte-beneficio__titulo">Origem → consulta</text>
+      <path d="M283 112h175M283 140h175" stroke="#393939"/>
+      <text x="283" y="131" class="arte-beneficio__muted">Investimento por paciente</text>
+      <circle cx="289" cy="170" r="4" fill="#e0c85c"/><text x="303" y="175">Retorno identificado</text>
+    </g>
+  </g>}
+  {tipo === 1 && <g transform="rotate(-4 260 125)" filter={`url(#${id}-sombra)`}>
+    <rect x="32" y="31" width="450" height="183" rx="18" fill={painel}/>
+    <text x="57" y="65" class="arte-beneficio__titulo">Cada oportunidade, acompanhada.</text>
+    <path d="M108 126H404" stroke="#555" stroke-width="2"/>
+    {['Contato','Atendimento','Agendamento'].map((texto,i)=><g transform={`translate(${105+i*151} 124)`}>
+      <rect x="-24" y="-24" width="48" height="48" rx="15" fill={i===2?'#363329':'#303030'}/>
+      {i===2?<path d="m-9 0 6 6 13-14" stroke="#e0c85c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>:<circle r="6" fill={i===0?'#aaa':'#777'}/>}
+      <text y="57" text-anchor="middle">{texto}</text>
+    </g>)}
+  </g>}
+  {(tipo === 2 || tipo === 5) && <g>
+    <path d="M115 128H405" stroke="#505050" stroke-width="1.5" stroke-dasharray="4 5"/>
+    {['Equipe','Processo','Continuidade'].map((texto,i)=><g transform={`translate(${34+i*158} ${i===1?40:61})`} filter={`url(#${id}-sombra)`}>
+      <rect width="139" height="146" rx="17" fill={painel}/>
+      <g transform="translate(69 49)" stroke={i===1?'#e0c85c':'#aaa'} stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      {i===0?<><circle cy="-7" r="7"/><path d="M-13 15v-3a13 13 0 0 1 26 0v3M-19-9a6 6 0 0 0 0 12M19-9a6 6 0 0 1 0 12"/></>:i===1?<><path d="M-13-13h26v29h-26zM-7-5H6M-7 2H6M-7 9h7"/></>:<><path d="M-14-3a15 15 0 0 1 27-5l2 4M15-14v10H5M14 5a15 15 0 0 1-27 5l-2-4M-15 16V6h10"/></>}
+      </g>
+      <text x="69" y="104" text-anchor="middle">{texto}</text>
+      <rect x="47" y="121" width="45" height="3" rx="1.5" fill={i===1?'#9c8e48':'#494949'}/>
+    </g>)}
+  </g>}
+  {(tipo === 3 || tipo === 4) && <g transform="rotate(-4 260 125)" filter={`url(#${id}-sombra)`}>
+    <rect x="42" y="26" width="432" height="199" rx="18" fill={painel}/>
+    <text x="66" y="59" class="arte-beneficio__titulo">{tipo===3?'Investimento orientado por retorno':'Indicadores para decidir'}</text>
+    {['Busca','Relacionamento','Campanhas'].map((texto,i)=><g transform={`translate(66 ${88+i*41})`}>
+      <text y="14" class="arte-beneficio__muted">{texto}</text>
+      <rect x="131" width="230" height="19" rx="5" fill="#101010"/>
+      <rect x="131" width={[187,144,93][i]} height="19" rx="5" fill={i===0?'#a69959':i===1?'#696969':'#414141'}/>
+    </g>)}
+  </g>}
+  {tipo === 6 && <g filter={`url(#${id}-sombra)`}>
+    <rect x="64" y="35" width="392" height="180" rx="18" fill={painel}/>
+    <text x="90" y="70" class="arte-beneficio__titulo">Uma visão além da sua clínica</text>
+    {['Mercado','Concorrência','Oportunidades'].map((texto,i)=><g transform={`translate(${132+i*127} 132)`}>
+      <circle r="26" fill="#282828"/><circle r="12" stroke={i===2?'#e0c85c':'#777'} stroke-width="1.5"/><circle r="3" fill={i===2?'#e0c85c':'#aaa'}/><text y="52" text-anchor="middle">{texto}</text>
+    </g>)}
+  </g>}
+  </g>
+</svg>
+<style>
+.arte-beneficio { display: block; width: 100%; height: auto; }
+.arte-beneficio text { font: 400 13px Inter,sans-serif; fill: #c0c0c0; }
+.arte-beneficio .arte-beneficio__titulo { font-size: 15px; fill: #e4e4e4; }
+.arte-beneficio .arte-beneficio__muted { fill: #969696; font-size: 12px; }
+.arte-beneficio__cena { transition: transform .8s ease; transform-origin: center; }
+:global(.operacao__cartao:hover) .arte-beneficio__cena { transform: translateY(-3px); }
+@media(prefers-reduced-motion:reduce) { .arte-beneficio__cena { transition: none; } }
+</style>

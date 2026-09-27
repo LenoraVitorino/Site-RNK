@@ -1,6 +1,6 @@
 ---
 /** Composição Solutions: título fixo e ganhos em cards ilustrados. */
-import ArteInterface from './ArteInterface.astro';
+import ArteBeneficio from './ArteBeneficio.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 
@@ -37,9 +37,9 @@ const entra = copyLiteral ? '' : 'entra';
     <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
       {itens.map((p, i) => (
         <li class:list={['operacao__cartao', entra]} style={`--i:${i}`}>
-          <div class="operacao__ilustracao"><ArteInterface id={`solucao-${i}`} tipo={[2, 5, 1, 3, 3, 1, 4][i]} /></div>
           <h3 class="operacao__nome">{p.titulo}</h3>
           <p class="operacao__texto-item">{p.texto}</p>
+          <div class="operacao__ilustracao"><ArteBeneficio tipo={i} /></div>
         </li>
       ))}
     </ol>
