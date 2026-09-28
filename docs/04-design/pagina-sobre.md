@@ -11,6 +11,14 @@ O slot `casa-time` deixa de existir.
 
 **ES2. Dobras sólidas compartilhadas.** A fundação de tons das internas cria `.int-secao--papel` e `.int-secao--preto` em `paginas2.css`, com os tokens de tinta de cada tom (ver `docs/04-design/ritmo-dobras-internas.md`). O Sobre usa essas classes em S1, S2, S3 e S5, em vez de `sb-dobra--preto` e das cores próprias. Só o grafite de S4 (`sb-dobra--grafite`, #0e0e0e) é exclusivo desta página.
 
+**ES5. Nunca duas dobras sólidas encostadas (28/09/2026, segunda rodada).** Pedido da Lenora: "não deixe dobras seguidas sólidas". A ordem passa de cena → papel → preto → papel → grafite → papel → cena para **cena → papel → cena → papel → cena → papel → cena**. A tese (S2) e a casa (S4) saem das dobras sólidas e vão para a cena:
+- `SobreTese.astro`: `class="secao int-secao sb-tese"`, `data-cena="pilares"`, `data-tom="cena"`, fundo transparente. As linhas continuam em papel, com as futuras a .5 e as lidas a .76 (antes .42 e .72, calibradas para o preto), a ativa em papel e o marcador amarelo de 6px.
+- `SobreCasa.astro`: `class="secao int-secao sb-casa"`, `data-cena="pilares"`, `data-tom="cena"`, fundo transparente. O texto segue em `#bcbcbc`. As setas viram vidro fosco (`rgb(22 22 22 / .55)`, contorno interno de 1px a .1 e `backdrop-filter: blur(14px)`; hover `rgb(46 46 46 / .7)`), legíveis sobre qualquer quadro. A barra do trilho sobe para `rgb(242 242 238 / .3)`.
+- `sobre.css`: saem `.sb-dobra--grafite`, `--sb-grafite` e `--sb-preto`. O grafite deixa de existir.
+- `TEXTOS_INTERNAS` (`fundo-internas.ts`) ganha `.sb-tese__titulo`, `.sb-tese__linha` (um retângulo por linha, para não escurecer o vão entre elas), `.sb-casa__titulo` e `.sb-casa__texto`: a máscara de leitura protege esses textos sobre a cena.
+- O roteiro da cena no Sobre fica hero → pilares → pilares → formulario. O cabeçalho troca sozinho: escuro na cena, claro no papel.
+- Onde este documento fala de S2 em preto ou de S4 em grafite, vale esta emenda.
+
 **ES3. Botão da home.** Quando /sobre existir, `OQueFaz.astro` passa a mostrar "Ver mais sobre a Renke", que já está programado ali. Não edite a home. A verificação confere se o botão ficou bem na composição e relata. A decisão fica com a Lenora.
 
 **ES4. Regras contra travamento** para os agentes: imagens reduzidas antes do Read (≤1400px, no máximo 8), sem laços de espera nem Monitor, e um script Playwright por página, com timeout.
@@ -19,15 +27,15 @@ O slot `casa-time` deixa de existir.
 
 A página funciona como um ensaio de livro de arquitetura, e não como uma página institucional. Os três parágrafos do Sobre viram capítulos, cada um com a sua dobra sólida, alternando papel e preto.
 
-A cena 3D aparece só na abertura e no fecho. No meio, as dobras são opacas e a cena para sozinha, porque o fundo-motor.ts só roda enquanto `main > [data-cena]` está à vista.
+A cena 3D aparece na abertura, na tese, na casa e no fecho (ES5). Nas três dobras papel ela para sozinha, porque o fundo-motor.ts só roda enquanto `main > [data-cena]` está à vista.
 
 | # | Seção | Fundo | Referência principal |
 |---|---|---|---|
 | S0 | Abertura | cena (`data-cena="hero"`) | VSIMDIM, pin 224 (nome gigante) |
 | S1 | "Não somos agência de marketing." | papel `#e7e7e5` | folha que sobe (já existe no sistema) + Snøhetta |
-| S2 | "Começamos com uma tese simples:" | preto `#000` | VSIMDIM (linha ativa) + Snøhetta (título preso) |
+| S2 | "Começamos com uma tese simples:" | cena (`data-cena="pilares"`, ES5) | VSIMDIM (linha ativa) + Snøhetta (título preso) |
 | S3 | "Em quatro anos, validamos essa tese…" | papel | Audo (zigue-zague desencontrado, parallax) |
-| S4 | "Onde a mágica acontece" | grafite `#0e0e0e` | Apparatus (cartões de foto no escuro) |
+| S4 | "Onde a mágica acontece" | cena (`data-cena="pilares"`, ES5) | Apparatus (cartões de foto no escuro) |
 | S5 | "No que acreditamos" | papel | Snøhetta (rótulo à esquerda, texto à direita) |
 | S6 | Fecho | cena (`data-cena="formulario"`) | BlocoCtaFinal atual |
 
@@ -148,7 +156,7 @@ A cena 3D aparece só na abertura e no fecho. No meio, as dobras são opacas e a
 
 ### S2 · A tese
 
-**Arquivo e ancoragem:** `SobreTese.astro`, id `sobre-tese`, classes `secao int-secao sb-dobra--preto sb-tese`, fundo `#000`, sem `data-cena`.
+**Arquivo e ancoragem:** `SobreTese.astro`, id `sobre-tese`, classes `secao int-secao sb-tese`, fundo transparente, `data-cena="pilares"` (ES5; antes `#000`).
 
 **Tom:** leitura lenta. O título fica preso à esquerda com a foto da parede de palavras. O parágrafo da tese vem destrinchado, e a linha que passa pelo centro da tela acende.
 
@@ -230,7 +238,7 @@ A cena 3D aparece só na abertura e no fecho. No meio, as dobras são opacas e a
 
 ### S4 · A casa
 
-**Arquivo e ancoragem:** `SobreCasa.astro`, id `sobre-casa`, classes `secao int-secao sb-dobra--grafite sb-casa`, fundo `#0e0e0e`.
+**Arquivo e ancoragem:** `SobreCasa.astro`, id `sobre-casa`, classes `secao int-secao sb-casa`, fundo transparente, `data-cena="pilares"` (ES5; antes grafite `#0e0e0e`).
 
 **Tom:** o arquivo do estúdio. São os cartões para as fotos que vão chegar, numa fileira que sangra à direita, com rolagem horizontal nativa.
 
@@ -483,8 +491,8 @@ Roda o checklist (f) com Playwright e só relata o que encontrou, sem corrigir.
 
 ## (e) A cena
 
-A cena fica **só na abertura (`hero`) e no fecho (`formulario`)**, via `FundoInterno`: o fundo estático embaixo e a cena no roteiro interno.
-- As quatro dobras do meio são sólidas, sem `data-cena`. Nelas o laço da cena para, e a GPU descansa.
+A cena fica **na abertura (`hero`), na tese e na casa (`pilares`) e no fecho (`formulario`)** (ES5), via `FundoInterno`: o fundo estático embaixo e a cena no roteiro interno.
+- As três dobras papel (S1, S3 e S5) são sólidas, sem `data-cena`. Nelas o laço da cena para, e a GPU descansa. Nunca duas sólidas encostadas.
 - Nenhuma mudança em `fundo-cena.ts`.
 
 ---
@@ -525,7 +533,7 @@ A cena fica **só na abertura (`hero`) e no fecho (`formulario`)**, via `FundoIn
 
 Playwright com `channel: "chrome"`, nos tamanhos 1440×900, 1100×800, 768×1024, 390×844 e 320×640.
 
-4. Fundos na ordem cena → papel → preto → papel → grafite → papel → cena, conferidos pelo `backgroundColor` computado de cada seção.
+4. Fundos na ordem cena → papel → cena → papel → cena → papel → cena (ES5), conferidos pelo `backgroundColor` computado de cada seção.
 5. Toda `.sb-foto` com largura de até 820px, também em 1920 e 2560.
 6. Sem rolagem horizontal na página: `scrollWidth === innerWidth`.
 7. Amarelo `rgb(255, 209, 3)` e `#FFE27A`, inclusive nos pseudo-elementos: só no `.sb-tese__linha.ativa::before`.

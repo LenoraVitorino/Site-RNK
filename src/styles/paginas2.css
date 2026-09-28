@@ -31,7 +31,10 @@
   --int-linha: #0e0e0e; --int-faq: rgb(242 242 238 / .06); --int-foco: var(--papel);
   --int-pilula: rgb(242 242 238 / .1); --int-raio-interno: 12px;
   --int-antes: #070707; --int-antes-texto: #8f8f8b; --int-depois: #141413; --int-depois-texto: #d0d0cc;
-  --int-ficha: var(--int-papel-ficha); --int-ficha-texto: var(--int-papel-texto);
+  /* Na cena as fichas do mosaico são escuras, como no preto: fichas claras
+     empilhadas logo depois de uma dobra papel liam como duas sólidas
+     seguidas (Revena Start, 28/09). */
+  --int-ficha: var(--grafite); --int-ficha-texto: var(--papel);
 }
 
 /* ------------------------------------------------------------------ */

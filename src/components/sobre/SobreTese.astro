@@ -14,6 +14,10 @@
  * - Um único <p>: as cinco linhas são o parágrafo da copy, sem mudar letra.
  *   Os espaços entre os spans ficam no texto (leitor de tela e cópia), mas
  *   não ocupam lugar na grade do parágrafo.
+ * - Na cena (28/09/2026, "não deixe dobras seguidas sólidas"): fundo
+ *   transparente com data-cena="pilares", entre o papel de S1 e o de S3. O
+ *   título e cada linha entram na máscara de leitura (TEXTOS_INTERNAS em
+ *   fundo-internas.ts), que escurece a cena atrás deles.
  * - Amarelo: o marcador de 6px da linha ativa é o único ponto da página.
  * - Os tons esmaecidos só valem com .sb-tese--viva, que o script põe. Sem
  *   JS ou com movimento reduzido, todas as linhas ficam em papel e o
@@ -22,7 +26,7 @@
 import CartaoFoto from './CartaoFoto.astro';
 import { tese, fotos } from '../../data/sobre';
 ---
-<section class="secao int-secao int-secao--preto sb-tese" id="sobre-tese" data-tom="preto" aria-labelledby="sobre-tese-titulo">
+<section class="secao int-secao sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
   <div class="container sb-grade">
     <div class="sb-tese__fixo">
       <h2 class="titulo sb-tese__titulo entra" id="sobre-tese-titulo" style="--i:0">{tese.h2}</h2>
@@ -79,10 +83,11 @@ import { tese, fotos } from '../../data/sobre';
   }
   .sb-tese:not(.sb-tese--viva) .sb-tese__linha:last-child::before { background: var(--amarelo-marca); }
 
-  /* Linha ativa: futuras a .42 (3,6:1 no preto; texto grande pede 3:1),
-     lidas a .72, a ativa em papel. */
-  .sb-tese--viva .sb-tese__linha { color: rgb(242 242 238 / .42); }
-  .sb-tese--viva .sb-tese__linha.lida { color: rgb(242 242 238 / .72); }
+  /* Linha ativa: futuras a .5 e lidas a .76 sobre a cena mascarada (as
+     futuras passam de 3:1, o mínimo do texto grande, mesmo com a cena
+     acesa atrás), a ativa em papel. */
+  .sb-tese--viva .sb-tese__linha { color: rgb(242 242 238 / .5); }
+  .sb-tese--viva .sb-tese__linha.lida { color: rgb(242 242 238 / .76); }
   .sb-tese--viva .sb-tese__linha.ativa { color: var(--papel); }
   .sb-tese--viva .sb-tese__linha.ativa::before { background: var(--amarelo-marca); }
 

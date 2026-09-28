@@ -150,17 +150,23 @@ const herdaTom = (reais: Real[], ctx: ContextoSecao[], i: number) => {
 };
 
 /**
- * O tom de cada seção real, na ordem da página.
- * 1) Âncoras na cena: a primeira, todo ctaFinal/formulário e um único
- *    respiro (a primeira citação estritamente no meio).
- * 2) Entre as âncoras, trechos livres; as herdeiras não entram nem quebram
- *    o trecho.
- * 3) Pesos: etapas e antesDepois em lista puxam papel (+2); produtos e
- *    antesDepois em prosa puxam preto (+3); papel encostado na dobra do
- *    formulário perde 5; repetir a assinatura de uma seção já decidida no
- *    mesmo tom perde 1.
- * 4) Cada trecho alterna papel e preto; das duas partidas vence a de maior
- *    soma, e o empate começa em papel.
+ * O tom de cada seção real, na ordem da página (regra de 28/09/2026, pedido
+ * da Lenora: "não deixe dobras seguidas sólidas").
+ * 1) Âncoras na cena: a primeira (hero) e todo ctaFinal/formulário (fecho).
+ * 2) Unidades: cada seção que não herda, com as herdeiras dela (a mesma
+ *    dobra). Entre as âncoras ficam trechos livres de unidades.
+ * 3) Em cada trecho, sólida e cena alternam, começando por sólida depois da
+ *    âncora: S ◌ S ◌ S. Com número ímpar de unidades o trecho termina em
+ *    sólida antes do fecho; com número par, a última unidade fica na cena
+ *    e encosta no fecho (as duas dobras da cena seguidas ficam junto ao
+ *    fecho, nunca no meio). Assim nunca há duas sólidas encostadas.
+ * 4) As sólidas da página inteira, na ordem e pulando as da cena, alternam
+ *    papel e preto. Pesos: etapas puxam papel (+3) e antesDepois em lista
+ *    também (+2), de modo que as etapas ficam com o papel quando os dois
+ *    disputam; produtos (a caixa preta) e antesDepois em prosa puxam preto (+3);
+ *    papel encostado na dobra do formulário (o cartão claro) perde 5;
+ *    repetir a assinatura de uma sólida anterior no mesmo tom perde 1. Das
+ *    duas partidas vence a de maior soma; o empate começa em papel.
  * 5) As herdeiras repetem o tom da anterior.
  */
 function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
@@ -171,10 +177,8 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
   // 1) Âncoras na cena.
   if (n) tons[0] = 'cena';
   reais.forEach((b, i) => { if (ehFecho(b)) tons[i] = 'cena'; });
-  const respiro = reais.findIndex((b, i) => i > 0 && i < n - 1 && b.tipo === 'texto' && formaTexto(b) === 'citacao');
-  if (respiro > 0) tons[respiro] = 'cena';
 
-  // 2) Trechos livres entre as âncoras.
+  // 2) Trechos livres de unidades entre as âncoras. As herdeiras não entram nem quebram o trecho.
   const trechos: number[][] = [];
   let atual: number[] = [];
   for (let i = 0; i < n; i++) {
@@ -182,6 +186,10 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
     else if (!herda(i)) atual.push(i);
   }
   if (atual.length) trechos.push(atual);
+
+  // 3) Sólida e cena alternam em cada trecho, começando por sólida.
+  const solidas: number[] = [];
+  for (const c of trechos) c.forEach((i, k) => { if (k % 2 === 0) solidas.push(i); else tons[i] = 'cena'; });
 
   // Dobra do formulário = o formulário e as herdeiras dele.
   const dobraForm = new Set<number>();
@@ -192,25 +200,23 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
   });
   const proxima = (i: number) => { let j = i + 1; while (j < n && herda(j)) j++; return j; };
 
-  // 3) Pesos. A repetição só compara com trechos já decididos acima.
+  // 4) Papel ou preto em cada sólida, alternando na sequência das sólidas.
   const peso = (i: number, t: Tom) => {
     const b = reais[i];
     let p = 0;
-    if (t === 'papel' && b.tipo === 'etapas') p += 2;
+    if (t === 'papel' && b.tipo === 'etapas') p += 3;
     if (t === 'papel' && b.tipo === 'antesDepois' && formaAntesDepois(b) === 'lista') p += 2;
     if (t === 'preto' && (b.tipo === 'produtos' || (b.tipo === 'antesDepois' && formaAntesDepois(b) === 'prosa'))) p += 3;
     if (t === 'papel' && (dobraForm.has(i - 1) || dobraForm.has(proxima(i)))) p -= 5;
-    for (let j = 0; j < i; j++) if (tons[j] === t && assinatura(reais[j], ctx[j]) === assinatura(b, ctx[i])) { p -= 1; break; }
     return p;
   };
-
-  // 4) Cada trecho alterna.
-  for (const c of trechos) {
-    const partida = (ini: Tom): Tom[] => c.map((_, k) => (k % 2 === 0 ? ini : ini === 'papel' ? 'preto' : 'papel'));
-    const soma = (t: Tom[]) => c.reduce((a, i, k) => a + peso(i, t[k]), 0);
-    const pa = partida('papel'), pr = partida('preto');
-    (soma(pr) > soma(pa) ? pr : pa).forEach((t, k) => (tons[c[k]] = t));
-  }
+  const partida = (ini: Tom): Tom[] => solidas.map((_, k) => (k % 2 === 0 ? ini : ini === 'papel' ? 'preto' : 'papel'));
+  const soma = (t: Tom[]) => solidas.reduce((a, i, k) => {
+    const repete = solidas.slice(0, k).some((j, m) => t[m] === t[k] && assinatura(reais[j], ctx[j]) === assinatura(reais[i], ctx[i]));
+    return a + peso(i, t[k]) - (repete ? 1 : 0);
+  }, 0);
+  const pa = partida('papel'), pr = partida('preto');
+  (soma(pr) > soma(pa) ? pr : pa).forEach((t, k) => (tons[solidas[k]] = t));
 
   // 5) Herdeiras.
   for (let i = 0; i < n; i++) if (!tons[i]) tons[i] = tons[i - 1] ?? 'cena';
@@ -224,8 +230,8 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
  *    `abertura`.
  * b) Pendências não contam para nada.
  * c) id 'secao-N', contando só as seções renderizadas; o formulário usa 'formulario'.
- * d) cena: só nas seções em tom 'cena'. 'hero' na primeira, 'pilares' no
- *    respiro, 'formulario' no fecho (ctaFinal ou formulário); a herdeira
+ * d) cena: só nas seções em tom 'cena'. 'hero' na primeira, 'pilares' nas
+ *    do meio, 'formulario' no fecho (ctaFinal ou formulário); a herdeira
  *    repete o quadro da anterior. As dobras sólidas não têm cena.
  * e) junta: texto 'solto' ou números sem h2, desde que a seção anterior não
  *    seja hero nem formulário. A anterior recebe colaAbaixo.
@@ -234,10 +240,10 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
  *    (blocos em cartões, etapas ou números em grade), para a página não
  *    emendar dobras de cartões iguais. Um blocos já tipográfico não conta.
  *    Calculada antes do tom e sem depender dele.
- * h) tom: planejarTons(). A cena fica na abertura, no fecho e em no máximo
- *    um respiro; entre eles, dobras sólidas papel e preto alternadas. A
- *    seção que cola (junta) e a régua sob a abertura do Contato herdam o
- *    tom da anterior.
+ * h) tom: planejarTons(). A cena fica na abertura e no fecho; no meio,
+ *    sólida e cena alternam (nunca duas sólidas encostadas), e as sólidas
+ *    alternam papel e preto entre si. A seção que cola (junta) e a régua
+ *    sob a abertura do Contato herdam o tom da anterior.
  */
 export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
   let lista = blocos;
@@ -276,7 +282,7 @@ export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
     c.cena = i === 0 ? 'hero'
       : herdaTom(reais, contextos, i) ? contextos[i - 1].cena
       : ehFecho(reais[i]) ? 'formulario'
-      : 'pilares';                       // o respiro
+      : 'pilares';                       // as dobras da cena no meio
   });
 
   let k = 0;

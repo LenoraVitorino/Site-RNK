@@ -1,6 +1,111 @@
 # Ritmo de dobras sólidas nas páginas internas — especificação (28/09/2026)
 
-Pedido da Lenora em 28/09: mais dobras sólidas (papel e preto) nas internas, alternando com a cena, que fica na abertura, no fecho e em no máximo um respiro no meio.
+Pedido da Lenora em 28/09: mais dobras sólidas (papel e preto) nas internas, alternando com a cena.
+
+## Regra em vigor (28/09/2026, segunda rodada): nunca duas sólidas encostadas
+
+Pedido da Lenora, com a captura do /faca-parte em que a dobra papel "Os 4 valores" colava na dobra preta "Onde a mágica acontece": **"não deixe dobras seguidas sólidas"**. Vale para as internas e para o /sobre, e prevalece sobre o resto deste documento onde houver conflito (a primeira rodada, abaixo, punha a cena só na abertura, no fecho e num respiro).
+
+1. Nunca duas dobras sólidas (papel, preto, grafite) encostadas. Entre duas sólidas há sempre ao menos uma dobra na cena (transparente, com o fundo animado).
+2. A hero e o fecho (ctaFinal/formulário) ficam na cena.
+3. No meio, sólida e cena alternam, começando por sólida depois da hero: S ◌ S ◌ S. Com número ímpar de unidades, o trecho termina em sólida antes do fecho. Com número par, a última unidade fica na cena e encosta no fecho: as duas dobras da cena seguidas ficam junto ao fecho, nunca no meio da página.
+4. As sólidas da página, na ordem e pulando as da cena, alternam papel e preto entre si.
+5. Pesos para escolher a partida (papel ou preto na primeira sólida): etapas em papel +3; antesDepois em lista em papel +2; produtos (a caixa preta) e antesDepois em prosa em preto +3; papel encostado na dobra do formulário (o cartão claro) −5; repetir a assinatura de uma sólida anterior no mesmo tom −1. Vence a maior soma; o empate começa em papel. As etapas passaram de +2 para +3 para ficar com o papel quando disputam com o antesDepois em lista (Revena Full).
+6. Seções que colam (junta) e a régua sob a abertura do Contato herdam o tom da anterior: são a mesma dobra e contam como uma unidade.
+7. As seções na cena no meio recebem `data-cena="pilares"`. O roteiro da cena (`roteiroInterno()` em `fundo-internas.ts`) lê os `main > [data-cena]` na ordem, então passa a ter vários `pilares` seguidos; o motor interpola entre quadros iguais, e nada muda em `fundo-cena.ts`.
+8. As regras de superfície por tom (item (c)) continuam: dentro do papel só superfícies claras, dentro do preto só escuras.
+
+### `planejarTons` em vigor
+
+```ts
+function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
+  const n = reais.length;
+  const tons: (Tom | undefined)[] = new Array(n).fill(undefined);
+  const herda = (i: number) => herdaTom(reais, ctx, i);
+
+  // 1) Âncoras na cena.
+  if (n) tons[0] = 'cena';
+  reais.forEach((b, i) => { if (ehFecho(b)) tons[i] = 'cena'; });
+
+  // 2) Trechos livres de unidades entre as âncoras. As herdeiras não entram nem quebram o trecho.
+  const trechos: number[][] = [];
+  let atual: number[] = [];
+  for (let i = 0; i < n; i++) {
+    if (tons[i] === 'cena') { if (atual.length) trechos.push(atual); atual = []; }
+    else if (!herda(i)) atual.push(i);
+  }
+  if (atual.length) trechos.push(atual);
+
+  // 3) Sólida e cena alternam em cada trecho, começando por sólida.
+  const solidas: number[] = [];
+  for (const c of trechos) c.forEach((i, k) => { if (k % 2 === 0) solidas.push(i); else tons[i] = 'cena'; });
+
+  // Dobra do formulário = o formulário e as herdeiras dele.
+  const dobraForm = new Set<number>();
+  reais.forEach((b, i) => {
+    if (b.tipo !== 'formulario') return;
+    dobraForm.add(i);
+    for (let j = i + 1; j < n && herda(j); j++) dobraForm.add(j);
+  });
+  const proxima = (i: number) => { let j = i + 1; while (j < n && herda(j)) j++; return j; };
+
+  // 4) Papel ou preto em cada sólida, alternando na sequência das sólidas.
+  const peso = (i: number, t: Tom) => {
+    const b = reais[i];
+    let p = 0;
+    if (t === 'papel' && b.tipo === 'etapas') p += 3;
+    if (t === 'papel' && b.tipo === 'antesDepois' && formaAntesDepois(b) === 'lista') p += 2;
+    if (t === 'preto' && (b.tipo === 'produtos' || (b.tipo === 'antesDepois' && formaAntesDepois(b) === 'prosa'))) p += 3;
+    if (t === 'papel' && (dobraForm.has(i - 1) || dobraForm.has(proxima(i)))) p -= 5;
+    return p;
+  };
+  const partida = (ini: Tom): Tom[] => solidas.map((_, k) => (k % 2 === 0 ? ini : ini === 'papel' ? 'preto' : 'papel'));
+  const soma = (t: Tom[]) => solidas.reduce((a, i, k) => {
+    const repete = solidas.slice(0, k).some((j, m) => t[m] === t[k] && assinatura(reais[j], ctx[j]) === assinatura(reais[i], ctx[i]));
+    return a + peso(i, t[k]) - (repete ? 1 : 0);
+  }, 0);
+  const pa = partida('papel'), pr = partida('preto');
+  (soma(pr) > soma(pa) ? pr : pa).forEach((t, k) => (tons[solidas[k]] = t));
+
+  // 5) Herdeiras.
+  for (let i = 0; i < n; i++) if (!tons[i]) tons[i] = tons[i - 1] ?? 'cena';
+  return tons as Tom[];
+}
+```
+
+### Sequência em vigor
+
+◌ = cena, □ = papel, ■ = preto. Entre colchetes, o quadro da cena. Conferida no dev a 1440 e 390 pelo `backgroundColor` computado de cada `main > section` (sem as pendências, que só existem em dev): nenhuma sólida encosta em outra, exceto a seção que cola (junta), que é a mesma dobra.
+
+| Página | Tons | Seções |
+|---|---|---|
+| /academy | ◌■■◌□◌■◌ | hero ◌[hero] · antesDepois prosa ■ · solto (junta) ■ · lista ◌[pilares] · blocos □ · editorial ◌[pilares] · produtos ■ · ctaFinal ◌[formulario] |
+| /contato | ◌◌■◌ | formulário abertura ◌[hero] · régua (herda) ◌[hero] · faq ■ · ficha ◌[pilares] |
+| /academy/cultura-pro | ◌□◌■◌◌□◌ | hero · lista □ · blocos ◌ · tipográfica ■ · antesDepois prosa ◌ · régua (junta) ◌ · editorial □ · ctaFinal ◌ |
+| /faca-parte | ◌□◌■◌◌ | hero · editorial □ · editorial ("No que acreditamos") ◌ · blocos ("Os 4 valores") ■ · editorial ◌ · formulário ◌ |
+| /academy/formacao-performa | ◌□◌■◌◌ | hero · lista □ · blocos ◌ · citação ■ · editorial ◌ · ctaFinal ◌ |
+| /academy/protocolo-renke | ◌□◌■◌ | hero · lista □ · blocos ◌ · editorial ■ · ctaFinal ◌ |
+| /academy/rastreamento-avancado | ◌□◌■◌□◌ | hero · lista □ · blocos ◌ · tipográfica ■ · antesDepois prosa ◌ · editorial □ · ctaFinal ◌ |
+| /studio/revena-core | ◌■◌□◌◌◌ | hero · lista ■ · blocos ◌ · etapas □ · tipográfica ◌ · solto (junta) ◌ · ctaFinal ◌ |
+| /studio/revena-full | ◌■◌□◌■◌ | hero · lista ■ · blocos ◌ · etapas □ · números grade ◌ · antesDepois lista ■ · ctaFinal ◌ |
+| /studio/revena-run | ◌□◌■◌◌◌ | hero · lista □ · blocos ◌ · citação ■ · lista ◌ · solto (junta) ◌ · ctaFinal ◌ |
+| /studio/revena-scale | ◌□◌■◌□◌ | hero · lista □ · blocos ◌ · citação ■ · etapas ◌ · lista □ · ctaFinal ◌ |
+| /studio/revena-start | ◌■◌□◌◌ | hero · lista ■ · blocos ◌ · etapas □ · antesDepois lista ◌ · ctaFinal ◌ |
+| /academy/treinamento-crm | ◌□◌■■◌◌ | hero · lista □ · blocos ◌ · tipográfica ■ · régua (junta) ■ · editorial ◌ · ctaFinal ◌ |
+| /404 | ◌ | sem mudança (`int-erro`, `data-cena="hero"`) |
+| /sobre | ◌□◌□◌□◌ | abertura ◌[hero] · somos □ · tese ◌[pilares] · prova □ · casa ◌[pilares] · cultura □ · fecho ◌[formulario] (ver `pagina-sobre.md`) |
+
+Roteiro da cena: hero → pilares (uma vez por dobra da cena no meio) → formulario. No Contato, hero → hero → pilares.
+
+Observações:
+- No meio, blocos em cartões, etapas, antesDepois em prosa e o mosaico do antesDepois em lista podem cair na cena; eles já tinham desenho próprio sobre a cena (os tokens padrão do `:root` são os da cena). No mosaico da Start, as fichas claras sobre a cena fazem o cabeçalho ficar claro quando passam por baixo dele, o que é o comportamento esperado do camaleão.
+- A citação deixa de ser o respiro obrigatório na cena: ela cai onde a alternância mandar (em preto na Performa, na Run e na Scale).
+
+---
+
+## Primeira rodada (28/09/2026), substituída no ritmo pela regra acima
+
+O que segue continua valendo para tokens, superfícies, componentes e verificação; a função `planejarTons` e a tabela (b) abaixo são as da primeira rodada.
 
 **Arquivos da análise:** `/private/tmp/claude-501/-Users-lenoravitorino-Renke/9b8cb60c-c4b6-4004-a052-a8c61b28e8fa/scratchpad/sobre/tons/`
 - `regra-tons.ts`
@@ -63,7 +168,7 @@ const herdaTom = (reais: Real[], ctx: ContextoSecao[], i: number) => {
 };
 ```
 
-### `planejarTons`
+### `planejarTons` (primeira rodada, substituída)
 
 ```ts
 function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
@@ -166,7 +271,7 @@ if (import.meta.env.DEV) for (const { bloco, secao } of plano)
 
 ---
 
-## (b) Sequência por página
+## (b) Sequência por página (primeira rodada, substituída pela tabela "Sequência em vigor")
 
 Entre colchetes está o quadro da cena. As outras seções são sólidas e não têm `data-cena`.
 
@@ -416,7 +521,7 @@ Minha recomendação é **manter**: a faixa anuncia o ritmo das dobras. A altern
    - O fundo é `rgb(0,0,0)` no preto, `rgb(231,231,229)` no papel e transparente na cena.
    - Não há duas seções sólidas de mesmo tom vizinhas quando a segunda não tem `int-secao--junta` e não é a régua do Contato.
    - `data-cena` aparece só com `tom === 'cena'`.
-   - Há no máximo um `pilares` por página.
+   - (Primeira rodada: no máximo um `pilares` por página. Na regra em vigor, uma por dobra da cena no meio, e nenhuma sólida encosta em outra.)
    - A /404 está idêntica à de hoje.
 3. **Cabeçalho:** rolar até o centro de cada dobra sólida e ler a classe do `header`. Esperado `header--claro` no papel e `header--escuro` no preto e na cena.
 4. **Superfícies:** dentro de `.int-secao--papel` nenhum fundo de filho tem luminância < 110; dentro de `.int-secao--preto`, nenhum > 110. Checar via `getComputedStyle` dos descendentes com fundo não transparente.

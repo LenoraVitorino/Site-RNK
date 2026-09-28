@@ -3,11 +3,12 @@
  * Especificação: docs/04-design/pagina-sobre.md, (b) "sobre.css".
  *
  * Folha de uma página só, importada por src/pages/sobre.astro depois do
- * paginas2.css. Toda classe leva o prefixo sb-. As dobras sólidas papel e
- * preto (S1, S2, S3 e S5) usam .int-secao--papel e .int-secao--preto do
- * paginas2.css (emenda ES2), com os tokens de tinta de cada tom; só o
- * grafite de S4 é desta página. O que é de uma seção só mora no <style>
- * scoped dela, em src/components/sobre/.
+ * paginas2.css. Toda classe leva o prefixo sb-. Ritmo (28/09/2026): cena,
+ * papel, cena, papel, cena, papel, cena. As dobras papel (S1, S3 e S5) usam
+ * .int-secao--papel do paginas2.css (emenda ES2); a tese (S2) e a casa (S4)
+ * ficam na cena, transparentes e com data-cena="pilares". Nunca duas dobras
+ * sólidas encostadas. O que é de uma seção só mora no <style> scoped dela,
+ * em src/components/sobre/.
  */
 
 /* ------------------------------------------------------------------ */
@@ -19,8 +20,6 @@
   --sb-gap: clamp(16px, 2vw, 32px);      /* column-gap da .sb-grade */
   --sb-tinta: #252523;                   /* texto principal sobre o papel */
   --sb-tinta-2: #5f5f5d;                 /* texto secundário sobre o papel (5,2:1) */
-  --sb-preto: #000;
-  --sb-grafite: #0e0e0e;
   --sb-raio-foto: 12px;
   --sb-escala: 1.06;                     /* folga da imagem com paralaxe dentro da moldura */
 }
@@ -43,13 +42,6 @@
 @media (max-width: 599.98px) {
   .sb-grade { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-
-/* ------------------------------------------------------------------ */
-/* Dobra exclusiva: o grafite de S4. O cabeçalho camaleão lê este fundo */
-/* como escuro.                                                         */
-/* ------------------------------------------------------------------ */
-
-.sb-dobra--grafite { background: var(--sb-grafite); color: var(--papel); }
 
 /* ------------------------------------------------------------------ */
 /* Foto (CartaoFoto.astro). Moldura de raio 12, nunca maior que 820px;  */

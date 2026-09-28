@@ -2,9 +2,10 @@
 /**
  * S4 · A casa (docs/04-design/pagina-sobre.md, (a) "S4", com a emenda ES1).
  * O arquivo do estúdio: cartões de foto numa fileira que sangra à direita,
- * com rolagem horizontal nativa, sobre o grafite (#0e0e0e), a única dobra
- * exclusiva desta página. Referência: Apparatus (cartões no escuro, em
- * ritmo de catálogo), sem os fios: a separação é feita por espaço.
+ * com rolagem horizontal nativa, sobre a cena (28/09/2026: saiu o grafite,
+ * para nunca haver duas dobras sólidas encostadas). Referência: Apparatus
+ * (cartões no escuro, em ritmo de catálogo), sem os fios: a separação é
+ * feita por espaço.
  *
  * Cabeça na .sb-grade: H2 nas colunas 1–6, texto nas 1–5 e as setas nas
  * 11–12, no pé da cabeça. O trilho fica fora do .container e começa no
@@ -15,7 +16,9 @@
  * setas do teclado); dentro dele, a ul com role="list". Assim a lista
  * continua lista para o leitor de tela, o que não aconteceria com
  * role="region" na própria ul (desvio consciente da especificação).
- * data-tom="preto": o grafite é uma dobra sólida escura.
+ * data-cena="pilares" e data-tom="cena": fundo transparente. A cabeça
+ * entra na máscara de leitura (TEXTOS_INTERNAS em fundo-internas.ts); as
+ * setas são de vidro fosco, legíveis sobre qualquer quadro da cena.
  *
  * Movimento: sem autoplay, sem trava e sem arrastar por JS. As setas só
  * chamam scrollBy; o resto é a rolagem nativa. Com (hover: none) elas
@@ -31,7 +34,7 @@ const retrato = (proporcao: string) => proporcao === '4 / 5';
 const sizesPaisagem = '(min-width: 1600px) 640px, (min-width: 700px) 40vw, 280px';
 const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 847px) 26vw, 220px';
 ---
-<section class="secao int-secao sb-dobra--grafite sb-casa" id="sobre-casa" data-tom="preto" aria-labelledby="sobre-casa-titulo">
+<section class="secao int-secao sb-casa" id="sobre-casa" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-casa-titulo">
   <div class="container sb-grade sb-casa__cabeca">
     <h2 class="titulo sb-casa__titulo entra" id="sobre-casa-titulo" style="--i:0">{casa.h2}</h2>
     <p class="sb-casa__texto entra" style="--i:1">{casa.texto}</p>
@@ -71,22 +74,26 @@ const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 847px) 26vw, 220px'
   .sb-casa__titulo { grid-row: 1; grid-column: 1 / 7; }
   .sb-casa__texto {
     grid-row: 2; grid-column: 1 / 6; margin-top: 20px; max-width: 44ch;
-    font-size: 18px; line-height: 1.55; color: #bcbcbc;   /* 10,9:1 sobre o grafite */
+    font-size: 18px; line-height: 1.55; color: #bcbcbc;   /* 9:1 ou mais sobre a cena mascarada */
   }
   .sb-casa__setas {
     grid-row: 1 / 3; grid-column: 11 / 13; justify-self: end; align-self: end;
     display: flex; gap: 8px;
   }
 
-  /* ---------- Setas: vidro discreto, 44×44, raio 8 ---------- */
+  /* ---------- Setas: vidro fosco, 44×44, raio 8 ----------
+     Sobre a cena, o desfoque tira o brilho do quadro de trás e a seta
+     fica legível em qualquer ponto do roteiro. */
   .sb-casa__seta {
     display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
-    border: 0; border-radius: 8px; background: rgb(242 242 238 / .07); color: var(--papel);
+    border: 0; border-radius: 8px; color: var(--papel);
+    background: rgb(22 22 22 / .55); box-shadow: inset 0 0 0 1px rgb(242 242 238 / .1);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
     cursor: pointer;
     transition: background-color .4s cubic-bezier(.22, 1, .36, 1), opacity .4s cubic-bezier(.22, 1, .36, 1);
   }
   .sb-casa__seta--anterior :global(svg) { transform: rotate(180deg); }
-  .sb-casa__seta:hover:not([aria-disabled='true']) { background: rgb(242 242 238 / .13); }
+  .sb-casa__seta:hover:not([aria-disabled='true']) { background: rgb(46 46 46 / .7); }
   .sb-casa__seta:focus-visible { outline: 2px solid var(--papel); outline-offset: 3px; }
   .sb-casa__seta[aria-disabled='true'] { opacity: .35; cursor: default; }
   /* Toque: o dedo rola o trilho; as setas saem. */
@@ -99,7 +106,7 @@ const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 847px) 26vw, 220px'
        mais alto; 16px embaixo: respiro entre os cartões e a barra. */
     padding: 6px var(--grid-inset) 16px; scroll-padding-inline: var(--grid-inset);
     overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
-    scrollbar-width: thin; scrollbar-color: rgb(242 242 238 / .22) transparent;
+    scrollbar-width: thin; scrollbar-color: rgb(242 242 238 / .3) transparent;
     /* Snap desligado de propósito (vetado na página; pendência 6):
        scroll-snap-type: x proximity; */
   }
