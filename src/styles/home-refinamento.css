@@ -107,20 +107,21 @@ section[id] { scroll-margin-top: 110px; }
 /* Abertura original, com a cena Peachweb escolhida para acompanhar as dobras. */
 .home-refinada .hero__fundo { display: none; }
 /* As duas mensagens usam a mesma escala e ocupam duas linhas. Selo, título e
-   subtítulo ficam centrados na altura, entre duas faixas livres; a prova social
-   e o botão seguem presos à base. */
+   subtítulo ficam no centro da tela, nos dois eixos, entre duas faixas livres;
+   a prova social e o botão ficam numa linha própria, presos à base. O título
+   também respeita a altura, para sobrar respiro em telas baixas. */
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
-.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(0, 1fr) auto auto auto minmax(72px, 1fr); min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 32px clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
-.hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin: 0; }
-.hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, 8.2vw, 132px); font-weight: 500; line-height: 1.06; letter-spacing: -.065em; }
-.hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
+.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(40px, 1fr) auto auto auto minmax(40px, 1fr) auto; min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 0 clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
+.hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: center; margin: 0 0 clamp(24px, 3.5svh, 40px); }
+.hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, min(8.2vw, 12.5svh), 132px); text-align: center; font-weight: 500; line-height: 1.06; letter-spacing: -.065em; }
+.hero--editorial .hero__mensagem { align-content: start; justify-items: center; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
 .hero--editorial .hero__revops { margin-left: 0; font-weight: inherit; }
 .hero--editorial .hero__apoio { display: contents; }
-.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: start; width: min(100%, 760px); margin: 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
-.hero--editorial .hero__acoes { grid-column: 2; grid-row: 5; margin: 0; }
+.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: center; width: min(100%, 760px); margin: clamp(24px, 3.5svh, 40px) 0 0; text-align: center; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
+.hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
-.hero--editorial .hero__base { grid-column: 1; grid-row: 5; justify-content: flex-start; }
+.hero--editorial .hero__base { grid-column: 1; grid-row: 6; justify-content: flex-start; }
 @media (prefers-reduced-motion: no-preference) {
   /* RevOps termina de entrar aos 4,25 s; só então o subtítulo aparece. */
   .js .hero--editorial .hero__lead { animation: hero-subtitulo-entra .7s var(--easing) 4.25s both; }
@@ -133,7 +134,10 @@ section[id] { scroll-margin-top: 110px; }
   .hero--editorial .hero__palco { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; gap: 32px; padding-top: 16px; }
   .hero--editorial .hero__apoio { display: grid; grid-column: 1; grid-row: auto; max-width: none; gap: 24px; padding: 0; }
   .hero--editorial .hero__palco .hero__selo, .hero--editorial .hero__h1, .hero--editorial .hero__base { grid-row: auto; }
-  .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; font-size: 16px; }
+  .hero--editorial .hero__palco .hero__selo { justify-self: start; margin: 0; }
+  .hero--editorial .hero__h1 { text-align: left; }
+  .hero--editorial .hero__mensagem { justify-items: start; }
+  .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; justify-self: start; width: 100%; max-width: none; margin: 0; font-size: 16px; text-align: left; }
   .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; }
 }
 .home-refinada .cortina > #perguntas { background: transparent; }
