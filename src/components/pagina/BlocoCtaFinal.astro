@@ -57,7 +57,15 @@ const textoLongo = !!bloco.texto && bloco.texto.length > 160;
     .int-cta__miolo { gap: 24px; }
   }
   @media (max-width: 599.98px) {
-    .int-cta__titulo--longo { font-size: 24px; }
+    /* Pergunta e texto longos (Academy): centralizados, viravam colunas de 7 a
+       10 linhas de margem irregular. No celular alinham à esquerda, na margem
+       das outras dobras, e o botão ocupa a largura toda. Os fechos curtos
+       continuam centralizados. */
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) { justify-items: start; text-align: start; }
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) .int-cta__acao { justify-self: stretch; }
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) .int-cta__acao :global(.botao) { width: 100%; justify-content: center; }
+    .int-cta__titulo--longo { font-size: 22px; line-height: 1.24; max-width: none; }
+    .int-cta__texto--longo { font-size: 16px; text-wrap: pretty; }
     /* Os rótulos da Academy passam de 30 caracteres: no celular o botão
        aperta o respiro lateral e, se quebrar, quebra em duas linhas iguais. */
     .int-cta__acao :global(.botao) { padding-inline: 20px; font-size: 15px; }

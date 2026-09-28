@@ -56,8 +56,10 @@ const Lista = bloco.numerada ? 'ol' : 'ul';
   .int-lista__indice { padding-top: .7em; line-height: 1; }
   .int-lista__ponto { width: 6px; height: 6px; margin-top: .62em; border-radius: 50%; background: var(--int-marca); }
 
+  /* Na coluna única do tablet os 34ch deixavam a metade direita vazia. */
   @media (max-width: 899.98px) {
     .int-lista__item { grid-template-columns: 36px minmax(0, 1fr); font-size: 20px; }
+    .int-lista__texto { max-width: 44ch; }
   }
   @media (max-width: 599.98px) {
     .int-lista__item { font-size: 19px; }

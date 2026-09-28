@@ -58,6 +58,10 @@ const [fraseB, fraseC, fraseD] = prova.frases;
     text-wrap: pretty;
   }
 
+  /* C com wrap comum: com pretty, a 320 "Desenvolvemos" ficava sozinha na
+     1ª linha ("Desenvolvemos / tecnologia própria para / ..."). */
+  .sb-prova__frase--c { text-wrap: wrap; }
+
   /* D: a frase de fecho, maior e mais fina, como a última linha do capítulo. */
   .sb-prova__frase--d {
     max-width: 30ch;

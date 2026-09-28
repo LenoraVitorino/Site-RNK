@@ -76,7 +76,9 @@ const comFoto = !!fotos.cultura.foto;
 
   .sb-cultura__link {
     display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 40px;
+    /* Alvo de toque de 44px (OUT-07). A caixa cresce 11px acima do texto;
+       a margem cai de 40 para 29, e o texto fica onde estava. */
+    min-height: 44px; margin-top: 29px;
     font-size: 16px; font-weight: 400; line-height: 1.4; color: var(--sb-tinta);
     text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
     text-decoration-color: rgb(37 37 35 / .4);

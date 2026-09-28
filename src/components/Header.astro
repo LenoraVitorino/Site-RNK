@@ -310,8 +310,14 @@ const itensMenu = menu.flatMap((item) => {
   const tomAbaixo = () => {
     const y = header.offsetHeight + 2;
     let n: Element | null = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
+    // Só os fundos de dobra contam: botões e links (mesmo os de largura
+    // total no celular), cartões e fichas (mais estreitos que 60% da tela)
+    // são pulados, senão o cabeçalho piscava de tom a cada ficha clara ou
+    // botão papel que passava por baixo dele (auditoria mobile, 28/09/2026).
+    const minimo = window.innerWidth * 0.6;
     while (n && n !== document.documentElement) {
-      if (!header.contains(n)) {
+      const dobra = !n.closest('a, button') && n.getBoundingClientRect().width >= minimo;
+      if (!header.contains(n) && dobra) {
         const t = tomDeCor(getComputedStyle(n).backgroundColor);
         if (t) return t;
       }

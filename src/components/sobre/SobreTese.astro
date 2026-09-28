@@ -67,7 +67,12 @@ import { tese, fotos } from '../../data/sobre';
     position: relative; display: block;
     max-width: calc(26ch + 22px); padding-left: 22px;
     color: var(--papel);
-    text-wrap: pretty;
+    /* wrap, e não pretty nem balance (28/09/2026, responsividade): com os
+       dois, "desconectadas," ficava sozinha na linha do meio de 320 a 1024
+       ("Dados soltos, equipes / desconectadas, / decisões no feeling.").
+       A última palavra de cada linha já vem presa pelo middleware
+       (src/lib/sem-viuvas.mjs), então o wrap comum não deixa viúva. */
+    text-wrap: wrap;
     transition: color .8s cubic-bezier(.22, 1, .36, 1);
   }
 
@@ -117,6 +122,18 @@ import { tese, fotos } from '../../data/sobre';
       width: 100%; margin-top: 56px;
       --sb-prop: 3 / 2;
     }
+  }
+
+  /* 600–899.98: 26px, o corpo da frase D da prova. Com os 22px do piso do
+     clamp, a tese ficava miúda perto do H2 de 32px, numa faixa estreita
+     com metade da largura vazia. As quebras continuam as mesmas. */
+  @media (min-width: 600px) and (max-width: 899.98px) {
+    .sb-tese__texto { font-size: 26px; }
+  }
+  /* Abaixo de 360px, 20px: a 22px "desconectadas, decisões" não cabe na
+     medida de 244px e a palavra longa volta a ficar sozinha. */
+  @media (max-width: 359.98px) {
+    .sb-tese__texto { font-size: 20px; }
   }
 
   @media (prefers-reduced-motion: reduce) {

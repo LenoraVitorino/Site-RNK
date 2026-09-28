@@ -70,6 +70,12 @@
   --int-ficha: #efefed; --int-ficha-texto: #252523;
 }
 .int-secao--papel .rotulo { color: var(--int-papel-rotulo); }
+/* Cena seguida do fecho, também na cena: os dois respiros somavam 152px sem
+   troca de tom no celular e no tablet. O fecho encosta um pouco (a pendência
+   só aparece em dev). */
+@media (max-width: 899.98px) {
+  :is(.int-secao[data-tom='cena']:not(.int-cta), .int-secao[data-tom='cena'] + .int-pendencia) + .int-cta[data-tom='cena'] { padding-top: 48px; }
+}
 .int-secao--papel :focus-visible { outline-color: var(--int-foco); }
 /* A caixa preta do Ecossistema vira a própria dobra. */
 :is(.int-secao--papel, .int-secao--preto) .int-caixa { background: none; padding: 0; border-radius: 0; }
@@ -93,6 +99,7 @@
 .int-cabeca { display: grid; gap: 14px; justify-items: start; max-width: 760px; margin-bottom: clamp(32px, 4vw, 56px); }
 .int-cabeca__titulo { max-width: 22ch; }
 .int-cabeca__titulo > span { display: block; }
+.int-cabeca__titulo > span[data-junto] { display: inline; white-space: nowrap; }
 .int-cabeca__apoio { font-size: 18px; line-height: 1.55; color: var(--int-apoio); max-width: 52ch; }
 .int-cabeca--coluna { margin-bottom: 0; }
 .int-cabeca--centro { justify-items: center; text-align: center; margin-inline: auto; }
@@ -133,7 +140,8 @@
   .int-grade-6:is([data-n='2'], [data-n='4']) > *,
   .int-grade-6[data-n='5'] > :nth-child(n+4),
   .int-grade-6:is([data-n='3'], [data-n='6']) > * { grid-column: auto; }
-  .int-grade-6:is([data-n='3'], [data-n='5']) > :last-child { grid-column: 1 / -1; width: calc(50% - 10px); justify-self: center; }
+  /* O último cartão ímpar fica na margem, sob o primeiro: centrado, soltava do grid editorial. */
+  .int-grade-6:is([data-n='3'], [data-n='5']) > :last-child { grid-column: 1 / -1; width: calc(50% - 10px); justify-self: start; }
 }
 @media (max-width: 599.98px) {
   .int-grade-6 { grid-template-columns: minmax(0, 1fr); }

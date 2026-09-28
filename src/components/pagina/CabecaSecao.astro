@@ -22,6 +22,10 @@ interface Props {
 const { id, eyebrow, titulo, apoio, nivel = 'h2', alinhamento = 'esquerda', classe } = Astro.props;
 const Titulo = nivel;
 const linhas = titulo === undefined ? [] : Array.isArray(titulo) ? titulo : [titulo];
+/* Numeral solto ('os 4 pilares') anda com a palavra seguinte: o par vai num
+   span sem quebra (.int-cabeca__titulo [data-junto], paginas2.css). O texto
+   não muda; nas posições ímpares do split ficam os pares. */
+const partes = typeof titulo === 'string' ? titulo.split(/(?<=^|\s)(\d{1,3}\s+[^\s\d]\S*)/) : [];
 ---
 <header
   class:list={[
@@ -35,7 +39,7 @@ const linhas = titulo === undefined ? [] : Array.isArray(titulo) ? titulo : [tit
     <Titulo id={id} class="titulo int-cabeca__titulo">
       {Array.isArray(titulo)
         ? linhas.map((linha, i) => <>{i > 0 && ' '}<span>{linha}</span></>)
-        : titulo}
+        : partes.map((parte, i) => (i % 2 ? <span data-junto>{parte}</span> : parte))}
     </Titulo>
   )}
   {linhas.length > 0 && apoio && <p class="int-cabeca__apoio">{apoio}</p>}

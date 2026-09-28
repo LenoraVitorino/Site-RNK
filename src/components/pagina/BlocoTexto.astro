@@ -39,20 +39,30 @@ const paragrafos = bloco.paragrafos.map((p) => p.replaceAll(' →', ''));
 /* Citação: acima de 90 caracteres visíveis, a escala longa da E3. */
 const semTags = (p: string) => p.replace(/<[^>]+>/g, '');
 const longa = forma === 'citacao' && semTags(paragrafos[0]).length > 90;
-/* A pílula vai colada à última palavra, dentro de um span sem quebra, para
-   nunca descer sozinha para a linha de baixo. A palavra fica dentro das tags
-   que fecham o parágrafo (</strong>, </em>), então o aninhamento se mantém.
-   Se a última palavra tiver tag no meio, a pílula só é acrescentada no fim. */
+/* A pílula vai colada às duas últimas palavras, dentro de um span sem quebra:
+   nem ela nem a última palavra descem sozinhas para a linha de baixo ('em
+   você.', 'operação viva.'). As palavras ficam dentro das tags que fecham o
+   parágrafo (</strong>, </em>), então o aninhamento se mantém. Com tag entre
+   as duas, só a última entra no span; com tag no meio dela, a pílula só é
+   acrescentada no fim. */
 const PILULA = '<span class="int-citacao__pilula" aria-hidden="true"></span>';
+const FIM = [/(\S+[ \t]+\S+?)((?:<\/[a-z]+>)*)$/, /(\S+?)((?:<\/[a-z]+>)*)$/];
 const comPilula = (p: string) => {
-  const m = p.match(/(\S+?)((?:<\/[a-z]+>)*)$/);
-  if (!m || m[1].includes('<')) return p + PILULA;
-  return `${p.slice(0, m.index)}<span class="int-citacao__fim">${m[1]}${PILULA}</span>${m[2]}`;
+  for (const re of FIM) {
+    const m = p.match(re);
+    if (m && !m[1].includes('<')) return `${p.slice(0, m.index)}<span class="int-citacao__fim">${m[1]}${PILULA}</span>${m[2]}`;
+  }
+  return p + PILULA;
 };
 const citacao = forma === 'citacao' ? comPilula(paragrafos[0]) : '';
 
 /* Ficha: cada parágrafo '<strong>Rótulo:</strong> resto' vira dt/dd. */
-const fatos = forma === 'ficha' ? paragrafos.map((p) => partesFicha(p)!) : [];
+/* Intervalos de horário ('08h às 12h', '13h30 às 17h.') ficam inteiros numa
+   linha: o '17h.' não desce sozinho. Só a apresentação muda, o texto é o mesmo. */
+const HORARIO = /(\d{1,2}h\d{0,2} às \d{1,2}h\d{0,2}\.?)/g;
+const fatos = forma === 'ficha'
+  ? paragrafos.map((p) => partesFicha(p)!).map(([r, resto]) => [r, resto.replace(HORARIO, '<span class="int-dados__junto">$1</span>')] as const)
+  : [];
 
 /* Editorial e solto: o parágrafo inteiro em <em> ou entre aspas é citação;
    o inteiro em <strong>, destaque. */
@@ -148,6 +158,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   }
   .int-dados__item { display: grid; gap: 10px; align-content: start; min-width: 0; }
   .int-dados dd { margin: 0; font-size: 16px; line-height: 1.6; color: var(--int-valor); overflow-wrap: break-word; }
+  .int-dados dd :global(.int-dados__junto) { white-space: nowrap; }
   .int-dados dd :global(a) { color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .int-dados dd :global(a:hover) { text-decoration-thickness: 2px; }
 
@@ -160,7 +171,17 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     .int-texto__grade { gap: 28px; }
   }
   @media (max-width: 599.98px) {
+    /* No celular o balance deixava uma palavra sozinha numa linha do meio
+       ('Tecnologia sem / manutenção / degrada.'); o pretty enche as linhas e
+       só cuida do fim, que a pílula já segura. */
+    .int-citacao--manifesto { font-size: 30px; text-wrap: pretty; }
+    .int-citacao--manifesto.int-citacao--longa { font-size: 28px; }
     .int-texto__corpo.int-manifesto > p:not(.int-citacao, .int-destaque) { font-size: 19px; }
     .int-dados { grid-template-columns: minmax(0, 1fr); }
+  }
+  /* Abaixo de 375px a frase-manifesto desce mais um degrau: a 32px ia a 7 linhas. */
+  @media (max-width: 374.98px) {
+    .int-citacao--manifesto { font-size: 28px; }
+    .int-citacao--manifesto.int-citacao--longa { font-size: 26px; }
   }
 </style>

@@ -125,6 +125,11 @@ if (import.meta.env.DEV) {
   .int-blocos__item .int-blocos__texto { max-width: 50ch; font-size: 16px; color: var(--int-corpo); }
   .int-blocos__item .int-blocos__itens li { font-size: 16px; color: var(--int-corpo); }
 
+  /* Com duas colunas de cartões (600 a 1099px) o h3 caía aos 21px do mínimo
+     do clamp, menor que no celular: fica em 23px. */
+  @media (min-width: 600px) and (max-width: 1099.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 23px; }
+  }
   @media (max-width: 899.98px) {
     ol.int-blocos__lista > .int-blocos__item { grid-template-columns: 36px minmax(0, 1fr); }
   }
@@ -132,5 +137,14 @@ if (import.meta.env.DEV) {
   @media (max-width: 599.98px) {
     .int-blocos__cartao .int-h3 { font-size: 25px; }
     .int-blocos__item .int-blocos__texto { max-width: none; }
+  }
+  /* No cartão de 218 a 250px, os 25px deixavam uma palavra sozinha na linha
+     do meio ('Marketing / conectado / ao comercial'); a 23px fica em duas. */
+  @media (max-width: 374.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 23px; }
+  }
+  /* A 320, 'Autorresponsabilidade' só cabe inteira a 22px. */
+  @media (max-width: 359.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 22px; }
   }
 </style>

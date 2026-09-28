@@ -147,8 +147,21 @@ const naPagina = href.startsWith('#');
       padding-bottom: 56px;
     }
     .int-hero__grade { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
-    .int-hero__sub { font-size: 16px; }
+    /* Na coluna única do tablet o apoio passava de 75 caracteres por linha. */
+    .int-hero__sub { font-size: 16px; max-width: 60ch; }
     .int-hero__acoes { grid-column: 1; }
+  }
+
+  /* Celular (28/09/2026). A escala display parava em 40px e ficava perto do
+     h2 das seções (32px): sobe com a tela até 56px, onde encontra os 9.6vw
+     do tablet. A 320 continua em 40px, para '#TEAMRENKE.' caber na coluna. */
+  @media (max-width: 599.98px) {
+    .int-hero--display .int-hero__titulo { font-size: clamp(40px, 12.5vw, 56px); }
+  }
+  /* Abaixo de 375px os 36px da escala padrão deixavam uma palavra sozinha no
+     meio das linhas longas da Academy ('operacional') e o H1 em 9 linhas. */
+  @media (max-width: 374.98px) {
+    .int-hero--padrao .int-hero__titulo { font-size: clamp(28px, 8.8vw, 36px); letter-spacing: -.045em; }
   }
 
   /* Abaixo de 1100px o botão volta às medidas do CTA da abertura da home

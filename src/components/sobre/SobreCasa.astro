@@ -32,7 +32,7 @@ const retrato = (proporcao: string) => proporcao === '4 / 5';
 /* sizes a partir das larguras do CSS abaixo: 3:2 = clamp(280px, 40vw, 640px)
    e 4:5 = clamp(220px, 26vw, 380px). */
 const sizesPaisagem = '(min-width: 1600px) 640px, (min-width: 700px) 40vw, 280px';
-const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 847px) 26vw, 220px';
+const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 900px) 26vw, (min-width: 700px) 22vw, 150px';
 ---
 <section class="secao int-secao sb-casa" id="sobre-casa" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-casa-titulo">
   <div class="container sb-grade sb-casa__cabeca">
@@ -128,9 +128,24 @@ const sizesRetrato = '(min-width: 1462px) 380px, (min-width: 847px) 26vw, 220px'
      3:2 mais o recuo davam quase exatamente a janela (a 1440, 1100 e 768 o
      3º cartão aparecia com 2 a 4px), e a fileira não parecia sangrar. Com
      40vw, o 3º cartão entra cortado na borda direita (120px a 1440). */
-  .sb-casa__cartao--paisagem { width: clamp(280px, 40vw, 640px); }
+  .sb-casa__lista { --sb-casa-l: clamp(280px, 40vw, 640px); }
+  .sb-casa__cartao--paisagem { width: var(--sb-casa-l); }
   /* O 4:5 desce um pouco em relação aos 3:2: o desencontro do catálogo. */
   .sb-casa__cartao--retrato { width: clamp(220px, 26vw, 380px); margin-top: clamp(24px, 4vw, 64px); }
+
+  /* Abaixo de 900px (OUT-02): o 4:5 fica com a altura do 3:2 (8/15 da
+     largura dele) e sem o desencontro. Antes, os retratos, fora da janela,
+     davam ao trilho ~110px a mais que as fotos à vista, e sobrava um vão
+     escuro sob a fileira. O desencontro continua a partir de 900px. */
+  @media (max-width: 899.98px) {
+    .sb-casa__cartao--retrato { width: calc(var(--sb-casa-l) * 8 / 15); margin-top: 0; }
+  }
+  /* Abaixo de 600px, o 3:2 fica em 78vw até 280px: a 320, com 280px, o 2º
+     cartão começava 1px antes da borda e a fileira não mostrava que
+     continua (no toque não há setas). Com 78vw, ele aparece ~30px. */
+  @media (max-width: 599.98px) {
+    .sb-casa__lista { --sb-casa-l: min(280px, 78vw); }
+  }
 
   /* ---------- Hover: a foto assenta (escala e cor), devagar ---------- */
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {

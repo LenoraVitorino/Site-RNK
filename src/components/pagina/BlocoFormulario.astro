@@ -163,6 +163,12 @@ bloco.campos.forEach((c, i) => {
     #formulario.int-formulario--abertura .form-block { gap: 5%; }
   }
 
+  /* No tablet a coluna de 560px da home ficava centrada, 39px para dentro da
+     margem das outras dobras: nas internas ela encosta na margem. */
+  @media (min-width: 600px) and (max-width: 899.98px) {
+    #formulario.int-formulario .form-block { justify-content: start; }
+  }
+
   /* Sub sem palavra sozinha na última linha. */
   .int-formulario .form-block__text p { text-wrap: pretty; }
 

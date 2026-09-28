@@ -71,11 +71,11 @@ const passo = (i: number) => `--i:${Math.min(i, 5)}`;
         <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} />
         <div class="int-antes-depois__lados" role="group" aria-labelledby={secao.tituloId}>
           <article class="int-lado int-lado--antes entra" style="--i:1">
-            <h3 class="int-lado__titulo">{rotuloAntes}</h3>
+            <h3 class="int-lado__titulo" data-quebra="junta">{rotuloAntes}</h3>
             <p class="int-lado__texto">{antes}</p>
           </article>
           <article class="int-lado int-lado--depois entra" style="--i:2">
-            <h3 class="int-lado__titulo">{rotuloDepois}</h3>
+            <h3 class="int-lado__titulo" data-quebra="junta">{rotuloDepois}</h3>
             <p class="int-lado__texto">{depois}</p>
           </article>
         </div>
@@ -134,7 +134,17 @@ const passo = (i: number) => `--i:${Math.min(i, 5)}`;
     .int-antes-depois__topo { flex-direction: column; align-items: start; }
     .int-mosaico { grid-template-columns: minmax(0, 1fr); }
     .int-ficha { min-height: 0; }
-    /* A caixa já dá 20px: com o respiro cheio nos lados, o texto ficava em ~180px a 320. */
-    .int-lado { padding: 20px; }
+    /* No celular a caixa e o lado respiram menos, para os rótulos inteiros
+       ('Rastreamento Avançado') caberem numa linha só. Nas dobras sólidas a
+       caixa já se dissolve (padding 0, paginas2.css). */
+    .int-antes-depois--prosa[data-tom='cena'] .int-caixa { padding-inline: 14px; }
+    .int-lado { padding: 20px 16px; }
+    .int-lado__titulo { font-size: 22px; }
+    /* Dentro da caixa o h2 perde a largura dos dois respiros: uma escala abaixo. */
+    .int-antes-depois--prosa[data-tom='cena'] .int-caixa :global(.int-cabeca__titulo) { font-size: 28px; line-height: 1.1; }
+  }
+  @media (max-width: 374.98px) {
+    .int-lado { padding: 18px 14px; }
+    .int-lado__titulo { font-size: 20px; }
   }
 </style>
