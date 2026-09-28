@@ -1,160 +1,40 @@
 ---
-/**
- * Dobra 1 · palco centralizado em três passos, como a hero da referência.
- *
- *  1. Ao carregar: "Isso não é marketing para clínicas." no centro, com a
- *     seta para baixo.
- *  2. No primeiro gesto de rolar: a frase é riscada e some; "Isso é
- *     RevOps." entra suave, no amarelo original, e segura enquanto o
- *     reflexo atravessa a palavra.
- *  3. Em seguida, sozinho: ele sai e entram título, subtítulo e CTA. Só
- *     então a página rola de verdade.
- *
- * Nada é ligado à posição do scroll: a cena é tocada por tempo, de uma
- * vez. Sem JS ou com menos movimento, tudo nasce no estado final. Copy
- * literal.
- */
+/** Hero compartilhada: frase riscada, transição para RevOps e fundo gráfico próprio. */
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
+import ConfiancaHero from './ConfiancaHero.astro';
+import { totalDoutores } from '../../data/doutores';
 
-const palavras = ['Isso', 'não', 'é'];
-// O lead quebra em duas linhas no desktop, na fronteira das frases.
-// Versão do estúdio: o mesmo lead, enxugado por corte de palavras (saem
-// "você", "quando os números caem" e a repetição de "tudo", que vira "e").
-// Decisão da Lenora em 16/09/2026. A versão copy segue com o lead íntegro.
-const leadCurto =
-  'Sua clínica fatura bem, mas não sabe de onde vem cada real nem onde trava. ' +
-  'Esse é o problema que resolvemos. Do anúncio ao retorno do paciente, tudo conectado e rastreado.';
-const lead = copyLiteral ? hero.lead : leadCurto;
-const marca = copyLiteral ? 'caem. ' : 'trava. ';
-const corte = lead.indexOf(marca) + marca.length;
-const leadLinhas = [lead.slice(0, corte), lead.slice(corte)];
+const lead = copyLiteral ? hero.lead :
+  'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
 ---
-<section class="palco" data-palco aria-label="Apresentação">
-  <div class="palco__fixo">
-    <div class="hero__centro">
-      <div class="hero__cena">
-        <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
-          <span class="tomada tomada--1" aria-hidden="true">
-            {palavras.map((p, i) => <><span class="palavra" style={`--i:${i}`}>{p}</span>{' '}</>)}
-            <span class="palavra riscado" style="--i:3">marketing para clínicas.</span>
-          </span>
-          <span class="tomada tomada--2" aria-hidden="true">
-            <span class="revops"><span class="revops__isso">Isso é</span><span class="revops__marca">RevOps.</span></span>
-          </span>
-        </h1>
-
-        <div class="hero__copy">
-          {copyLiteral ? (
-            <p class="hero__titulo">Revenue Operations estratégico para transformar clínicas médicas em negócios de <span class="brilho">alta performance.</span></p>
-          ) : (
-            <!-- Versão do estúdio: a mesma frase da copy, enxugada para duas
-                 linhas (saem "estratégico" e "médicas"; nenhuma palavra nova). -->
-            <p class="hero__titulo hero__titulo--curto">Revenue Operations para transformar clínicas em negócios de <span class="brilho">alta performance.</span></p>
-          )}
-          <p class="hero__lead">{leadLinhas[0]}<br class="quebra-desktop" />{leadLinhas[1]}</p>
-          <p class="hero__acoes"><Botao href="/contato" class="botao--lg">{hero.cta}</Botao></p>
-        </div>
-      </div>
-
-      <p class="hero__seta" aria-hidden="true"><span>↓</span></p>
-    </div>
-
-    {copyLiteral && (
-      <!-- Barra de prova social só na versão copy. Na do estúdio ela sai por
-           enquanto: os logos dos clientes ainda não chegaram, e a barra com a
-           assinatura da Renke repetida era só um exemplo. -->
-    <div class="hero__confianca">
-      <div class="hero__confianca__inner">
-        <p class="hero__confianca__frase">Doutores que <strong>confiam na Renke</strong></p>
-        <!-- Como a barra da referência: a frase à esquerda, um fio vertical e
-             o carrossel de logos ocupando o resto da largura. Dois grupos
-             idênticos e translateX(-50%) em loop, com máscara nas bordas.
-             Exemplo com a assinatura da Renke em cinza; entram os logos dos
-             clientes (marvee.com.br) quando os arquivos chegarem. -->
-        <div class="hero__clientes">
-        <div class="rolo" aria-label="Logos de clientes (a definir)">
-          <div class="rolo__trilho">
-            {[0, 1].map((copia) => (
-              <ul class="rolo__grupo" aria-hidden={copia === 1 ? 'true' : undefined}>
-                {[1, 2, 3, 4, 5, 6].map(() => (
-                  <li><img src="/marca/renke-assinatura.png" alt="" width="299" height="62" loading="lazy" /></li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-    )}
+<section class="hero" aria-label="Apresentação">
+  <div class="hero__fundo" aria-hidden="true">
+    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" />
+    <span class="hero__brilho"></span>
   </div>
-</section>
 
-<script>
-  /* Cena em três tempos, tocada de uma vez só pelo primeiro gesto de rolar:
-       0  "Isso não é marketing para clínicas."
-       1  "Isso é RevOps." (segura enquanto o reflexo atravessa a palavra)
-       2  título, subtítulo e CTA
-     Do 0 ao 2 é automático; só depois a página rola de verdade. --p
-     continua sendo o que o CSS lê; aqui ele é animado por tempo. */
-  const palco = document.querySelector<HTMLElement>('[data-palco]');
-  const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (palco) {
-    const copy = palco.querySelector<HTMLElement>('.hero__copy');
-    const T_REVOPS = 1900;   // até o RevOps entrar
-    const T_SEGURA = 1500;   // RevOps parado, o reflexo passa uma vez
-    const T_HERO = 1400;     // RevOps sai, título/subtítulo/CTA entram
-    let p = 0, livre = false, comecou = false;
-    const aplica = (v: number) => {
-      p = v;
-      palco.style.setProperty('--p', v.toFixed(4));
-      copy?.classList.toggle('hero__copy--ativo', v >= 0.84);
-    };
-    const anima = (para: number, dur: number) => new Promise<void>((fim) => {
-      const de = p, t0 = performance.now();
-      const quadro = (t: number) => {
-        const k = Math.min(1, (t - t0) / dur);
-        const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-        aplica(de + (para - de) * e);
-        if (k < 1) requestAnimationFrame(quadro); else fim();
-      };
-      requestAnimationFrame(quadro);
-    });
-    const espera = (ms: number) => new Promise<void>((fim) => setTimeout(fim, ms));
-    const toca = async () => {
-      if (comecou) return;
-      comecou = true;
-      palco.classList.add('palco--revops');
-      await anima(0.6, T_REVOPS);
-      await espera(T_SEGURA);
-      await anima(1, T_HERO);
-      livre = true;
-    };
-    const solta = () => { livre = true; comecou = true; palco.classList.add('palco--revops'); aplica(1); };
-    if (semMovimento || scrollY > 8) solta();
-    else {
-      /* A trava só vale com a hero na tela. Se a página já desceu por outro
-         caminho (barra de rolagem, âncora, link), a cena é dada como vista e
-         a roda passa livre; senão o primeiro gesto no meio da página ficaria
-         preso por 5 s sem nada acontecer. */
-      const foraDaTela = () => scrollY > 8;
-      const segura = (e: Event) => {
-        if (livre) return;
-        if (foraDaTela()) { solta(); return; }
-        e.preventDefault();
-        toca();
-      };
-      addEventListener('wheel', segura, { passive: false });
-      addEventListener('touchmove', segura, { passive: false });
-      addEventListener('keydown', (e) => {
-        if (livre) return;
-        if (foraDaTela()) { solta(); return; }
-        if (['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) { e.preventDefault(); toca(); }
-      });
-      addEventListener('scroll', () => { if (!livre && !comecou && foraDaTela()) solta(); }, { passive: true });
-      aplica(0);
-    }
-  }
-</script>
+  <div class="hero__grade">
+    <div class="hero__palco">
+      <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</p>
+      <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
+        <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
+          <span>Isso <span class="hero__risco">não é marketing</span></span>
+          <span><span class="hero__risco hero__risco--segundo">para clínicas.</span></span>
+        </span>
+        <span class="hero__mensagem hero__mensagem--depois" aria-hidden="true">
+          <span>Isso é</span>
+          <span class="hero__revops">RevOps.</span>
+        </span>
+      </h1>
+      <p class="hero__lead">{lead}</p>
+    </div>
+    <div class="hero__base">
+      <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
+      {/* A prova social só aparece com os retratos e o total reais (Lenora, 26/09: esconder o "+ de 00"). */}
+      {totalDoutores !== null && <ConfiancaHero />}
+    </div>
+  </div>
+
+</section>

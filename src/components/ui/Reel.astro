@@ -1,4 +1,5 @@
 ---
+import Icone from './Icone.astro';
 /**
  * Vídeo vertical auto-hospedado.
  *
@@ -42,18 +43,18 @@ const { video, proporcao, titulo } = Astro.props;
     </video>
 
     <button class="reel__toque" type="button" data-reel-toque aria-label="Pausar vídeo">
-      <span class="reel__icone" aria-hidden="true"></span>
+      <span class="reel__icone" aria-hidden="true"><Icone nome="Play" class="reel-play" /><Icone nome="Pause" class="reel-pause" /></span>
     </button>
 
     <button class="reel__som" type="button" data-reel-som aria-pressed="true">
-      <span class="reel__som-icone" aria-hidden="true"></span>
+      <Icone nome="VolumeX" class="reel-muted" size={18} /><Icone nome="Volume2" class="reel-volume" size={18} />
       <span class="reel__som-texto">Ativar som</span>
     </button>
   </div>
 
   <figcaption class="reel__legenda">
     <span class="reel__duracao">{video.duracao}</span>
-    <a href={video.origem} target="_blank" rel="noopener">{video.autor} no Instagram ↗</a>
+    <a href={video.origem} target="_blank" rel="noopener">{video.autor} no Instagram <Icone nome="ArrowUpRight" size={16} /></a>
   </figcaption>
 </figure>
 

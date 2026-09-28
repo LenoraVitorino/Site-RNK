@@ -1,52 +1,108 @@
 ---
 /**
- * Sobre, no desenho da referência: à esquerda a declaração em texto grande
- * (a primeira frase apagada, o resto aceso) e os parágrafos; à direita,
- * "Nossos números" num carrossel com o número gigante em amarelo e a
- * legenda, com setas. Os números são os do briefing (⚠️ D1: "~30" aqui
- * convive com "mais de 140" no texto). Fotos numa faixa abaixo. Copy literal.
+ * Conheça a Renke: texto à esquerda e as fotos da sede numa moldura de vidro
+ * à direita, compartilhado pelas duas versões.
+ *
+ * 26/09/2026, Lenora: as fotos (com o grão que ela mesma aplicou) em tela
+ * cheia pareciam de baixa qualidade; a ampliação numa tela 2× passava do
+ * tamanho do arquivo. Agora a foto nunca sai da moldura (pin QClay: fotos em
+ * ladrilhos dentro da composição, não em tela cheia): ela fica sempre menor
+ * que o original e o grão volta a ler como textura. No desktop a dobra fica
+ * presa por uma tela e meia enquanto as fotos se sucedem por cortina, de
+ * baixo para cima. No celular e com movimento reduzido, texto e fotos em
+ * fluxo, as fotos numa faixa que rola de lado.
  */
-import FotoSlot from '../ui/FotoSlot.astro';
+import { Image } from 'astro:assets';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
-import Numeros from '../ui/Numeros.astro';
+import { copyLiteral } from '../../data/versao';
+import operacao from '../../assets/sede/operacao.jpg';
+import cafe from '../../assets/sede/cafe.jpg';
+import estudio from '../../assets/sede/estudio.jpg';
 
+// "Conheça a história" virou "Conheça a Renke" na versão do estúdio (Lenora, 26/09).
+const titulo = copyLiteral ? ['Conheça a história', 'da Renke'] : ['Conheça', 'a Renke'];
+
+const fotos: { src: ImageMetadata; alt: string; legenda: string; foco?: string }[] = [
+  { src: operacao, alt: 'Escritório da Renke com a equipe nas estações de trabalho e o R da marca na parede', legenda: 'Operação' },
+  { src: cafe, alt: 'Área do café da Renke, com o R iluminado na parede e a mesa de reunião', legenda: 'Reunião café', foco: '30% 50%' },
+  { src: estudio, alt: 'Sala do estúdio da Renke, com a frase "Pense, elabore e surpreenda!" na parede', legenda: 'Estúdio' },
+];
 ---
-<section class="secao" id="sobre">
-  <div class="container sobre">
-    <div class="sobre__texto entra">
-      <p class="rotulo">Sobre</p>
-      <p class="sobre__declaracao">
-        <span class="mudo">A Renke é a primeira assessoria de Revenue Operations para clínicas médicas e odontológicas de alto padrão do mundo.</span>
-        Não somos agência de marketing. Não somos consultoria de gestão.
-      </p>
-      <div class="sobre__paragrafos">
-        <p>
-          Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado
-          de perto, com responsabilidade pelo resultado da última linha do nosso cliente.
+<section class="secao sobre-janela" id="sobre" aria-labelledby="sobre-titulo" data-sobre>
+  <div class="sobre-janela__palco">
+    <div class="container sobre-janela__grade">
+      <div class="sobre-janela__texto">
+        <h2 class="sobre__declaracao" id="sobre-titulo">{titulo[0]}<br />{titulo[1]}</h2>
+        <p class="sobre-janela__descricao">
+          Há mais de quatro anos, percebemos que clínicas com bons resultados ainda perdiam
+          oportunidades por falta de conexão entre marketing, comercial{' '}e{' '}operação.
         </p>
-        <p>
-          Começamos com uma tese simples: o problema das clínicas que faturam bem mas não têm
-          previsibilidade não é marketing. É o que acontece depois do lead. Dados soltos, equipes
-          desconectadas, decisões no feeling. Nenhuma agência resolve isso porque isso não é um problema
-          de marketing. É um problema de negócio.
-        </p>
-        <p>
-          Em quatro anos, validamos essa tese em mais de 140 clínicas. Construímos o Protocolo Revena,
-          metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no
-          longo prazo. Desenvolvemos tecnologia própria para operacionalizar o método. E formamos
-          especialistas que fazem isso, para saúde, todo santo dia.
-        </p>
+        {existe('/sobre') && <div><Botao href="/sobre">Ver mais sobre a Renke</Botao></div>}
       </div>
-      <p><Botao variante="contorno" href={existe('/sobre') ? '/sobre' : '#'} class={existe('/sobre') ? '' : 'nav--pendente'}>Saiba mais</Botao></p>
+      <figure class="sobre-janela__moldura vidro">
+        <div class="sobre-janela__fotos" data-sobre-fotos>
+          {fotos.map((f) => (
+            <div class="sobre-janela__foto" data-sobre-foto style={f.foco && `--foco: ${f.foco}`}>
+              <Image src={f.src} alt={f.alt} format="webp" quality={78} widths={[640, 1280, 1920]} sizes="(max-width: 899px) 80vw, 820px" loading="lazy" />
+            </div>
+          ))}
+        </div>
+        <figcaption class="sobre-janela__legenda">
+          <span class="num" data-sobre-n>01</span><span class="sobre-janela__total">/ 0{fotos.length}</span>
+          <span class="sobre-janela__nome" data-sobre-nome>{fotos[0].legenda}</span>
+        </figcaption>
+      </figure>
     </div>
-
-    <Numeros />
-  </div>
-
-  <div class="container sobre__fotos entra">
-    <FotoSlot rotulo="Foto · nova sede" prop="4 / 3" />
-    <FotoSlot rotulo="Foto · time" prop="4 / 3" />
-    <FotoSlot rotulo="Foto · operação" prop="4 / 3" />
   </div>
 </section>
+
+<script define:vars={{ legendas: fotos.map((f) => f.legenda) }}>
+  const secao = document.querySelector('[data-sobre]');
+  if (secao) {
+    const fotos = [...secao.querySelectorAll('[data-sobre-foto]')];
+    const numero = secao.querySelector('[data-sobre-n]');
+    const nome = secao.querySelector('[data-sobre-nome]');
+    const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
+    const limita = (x) => Math.max(0, Math.min(1, x));
+    const suave = (x) => x * x * (3 - 2 * x);
+    let preso = false, quadro = 0, curso = 0, atual = -1;
+
+    // As fotos se sucedem conforme a dobra presa rola: cada uma entra por
+    // cortina de baixo para cima, e a anterior recua um pouco.
+    const pintar = () => {
+      quadro = 0;
+      if (!preso) return;
+      const p = limita(-secao.getBoundingClientRect().top / (curso || 1));
+      const passo = limita((p - .12) / .76) * (fotos.length - 1);
+      fotos.forEach((f, i) => {
+        if (i === 0) return;
+        const e = suave(limita(passo - (i - 1)));
+        f.style.clipPath = `inset(${(1 - e) * 100}% 0 0 0)`;
+        f.firstElementChild.style.transform = `scale(${1.06 - .06 * e})`;
+      });
+      const i = Math.min(fotos.length - 1, Math.round(passo));
+      if (i !== atual) {
+        atual = i;
+        numero.textContent = String(i + 1).padStart(2, '0');
+        nome.textContent = legendas[i];
+      }
+    };
+    const agendar = () => { if (!quadro) quadro = requestAnimationFrame(pintar); };
+    const medir = () => {
+      preso = !reduzido.matches && innerWidth >= 900 && innerHeight >= 600;
+      secao.classList.toggle('sobre-janela--presa', preso);
+      curso = preso ? innerHeight * 1.5 : 0;
+      secao.style.height = preso ? `${innerHeight + curso}px` : '';
+      if (!preso) {
+        fotos.forEach((f) => { f.style.clipPath = ''; f.firstElementChild.style.transform = ''; });
+        return;
+      }
+      pintar();
+    };
+    addEventListener('scroll', agendar, { passive: true });
+    addEventListener('resize', medir, { passive: true });
+    reduzido.addEventListener('change', medir);
+    medir();
+  }
+</script>

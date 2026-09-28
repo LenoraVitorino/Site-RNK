@@ -253,3 +253,145 @@ Cloudflare a partir de `dist-publico`, uma cópia do `dist` com o vídeo
 leve no lugar do completo). O deploy temporário gera um endereço novo
 a cada vez (`site-renke.<nome>.workers.dev`) e vale por tempo limitado;
 o endereço fixo virá com a conta da Renke na Cloudflare.
+
+## Nome do plano no tamanho da referência (18/09/2026)
+
+`.plano-palco__nome` passou de `clamp(3.4rem, 7.6vw, 7.8rem)` numa caixa de
+`min(66svh, 720px)` para `clamp(3.4rem, 10vw, 10.5rem)` em
+`min(52vw, 80svh, 960px)`: o título da Tres Mares ocupa metade da largura da
+tela, uns 11vw. O nome agora vive só na linha 1 do grid (a faixa livre acima
+dos textos), então em telas baixas ele sobe em vez de encostar no "Momento
+da clínica" (em 1280×720 sobram 100px; em 1440×900, 171px). O ícone perdeu o
+`margin-top` e fica centrado na tela, um pouco abaixo do nome, como na
+referência. Sem mudança no celular.
+
+## Palco dos planos igual à referência (18/09/2026)
+
+A Lenora pediu a dobra **igual** à "Financial solutions" de
+tresmarescapital.com. Refeita a partir do CSS e da timeline GSAP do tema,
+lidos do site em 18/09/2026 (viewport 1440×900):
+
+- Container de `n × 100vh` com o `.sticky` de 100vh preso; base escura
+  (`--grafite`, lá `#2b2b2b`).
+- Âncoras a `5vw` do topo e da esquerda, coluna com `gap .833vw`; fonte
+  `.75vw` medium, opacidade .4 (ativa e hover 1). Sem barra de progresso.
+- Cada plano é um `.content` absoluto de tela cheia: `.plano-palco__imagem`
+  (fundo, depois a foto) e `.plano-palco__info` por cima.
+- Título `.plano-palco__nome`: `50.75vw`, centrado, `mix-blend-mode:
+  multiply`, cinza `#A0A0A0`, linha 1 à esquerda e linha 2 à direita,
+  `10vw`, caixa alta (decisão anterior da Lenora).
+- Texto: coluna de `10vw` a `5vw` do canto inferior esquerdo, `1vw`
+  medium, "Saiba mais" em `1vw`. Dados: coluna de `8.333vw` a `5vw` do canto
+  inferior direito, rótulo `.75vw` caixa alta, valor `.917vw` medium com
+  `.417vw` de respiro, `2.083vw` entre grupos, alinhados à direita.
+- Transição contínua, sem segurada: cada trecho do curso é uma passagem
+  inteira. O que sai: opacidade 1→0, imagem 0→−20%, info 0→−30% sumindo na
+  primeira metade, título sumindo no primeiro quarto. O que entra:
+  `clip-path: inset(100%→0)`, imagem 20%→0, info 30%→0, título aparecendo
+  no último quarto. A âncora troca na metade do trecho.
+- Pré-trecho (a dobra chegando): imagem do primeiro plano −10%→0, info
+  15%→0 aparecendo no último quarto.
+- Snap nos fins de trecho (os "postshow" da referência) 140 ms depois da
+  rolagem parar; clique na âncora desliza até o plano.
+- O cabeçalho some enquanto a dobra está presa (`header--oculto`,
+  `data-hide-header` na referência).
+- Ícone: camada central de `min(39vw, 60svh)`, metades na coreografia do
+  plano ao longo do trecho inteiro.
+
+A abertura com "PROTOCOLO REVENA" por cima do ícone de vidro (pedida por
+print no mesmo dia) foi revertida a pedido dela. Pilha do celular mantida,
+com a marcação nova.
+
+## Nome na frente do ícone (18/09/2026)
+
+Pedido da Lenora: o texto na frente do ícone. Primeira tentativa (ícone
+dentro da dobra, entre o fundo e o info) bugava: o `clip-path` da dobra que
+entra cortava o ícone ao meio e o ícone do plano que sai apagava com a dobra.
+Solução: três camadas sobre as dobras — `.palcoplanos__icones` (z 4, um SVG
+por plano, centrado, sem corte) e `.palcoplanos__nomes` (z 5, um
+`.plano-palco__nome` por plano, opacidade 0 por padrão e ligada pelo script
+só para o plano na tela). Na pilha do celular o nome é o
+`.plano-palco__nome--pilha`, dentro do info; as duas camadas ficam ocultas.
+
+## Ícone inteiro e nome preto (18/09/2026)
+
+Bugs apontados pela Lenora em gravação: o ícone que saía encolhia num
+bloquinho fora do centro e o que entrava chegava em metades, uma delas
+meio transparente. A coreografia das metades saiu de vez (frontmatter,
+`data-coreografia` e o laço das peças). O ícone inteiro faz o que o info
+faz na referência: sai esmaecendo na primeira metade do trecho, subindo 30%
+e encolhendo a 92%; entra esmaecendo na segunda metade, subindo do fundo.
+Na chegada da dobra, o primeiro ícone aparece no último quarto com o info.
+O nome do plano ficou preto (`--grafite`), sem `multiply`, com tracking
+`-.055em` e `word-spacing -.06em`: a Inter fina em caixa alta ficava solta.
+
+## Hero no desenho da referência (18/09/2026)
+
+Print da Lenora (agência "Creatif"): fundo preto com duas curvas escuras e
+um brilho amarelo no pé; à esquerda o rótulo com o quadradinho amarelo e o
+título em três linhas, a primeira em papel e as outras no amarelo original;
+no centro o objeto (por ora o monograma da Renke, com brilho e flutuando;
+entra a arte 3D quando houver); à direita "© 2026", o lead e o segundo
+título "Isso é / RevOps." no mesmo desenho, com o CTA embaixo; no pé, o fio
+e "Role para baixo" (âncora para #o-que-fazemos). Títulos em Inter 300,
+`clamp(2.6rem, 6.4vw, 8rem)`. A cena em três tempos e a trava de rolagem
+saíram; a frase "Revenue Operations para transformar clínicas em negócios
+de alta performance." saiu da hero. A barra de logos da versão copy segue.
+No celular tudo empilha: rótulo, título, objeto, ano, lead, segundo título,
+CTA, fio.
+
+## Cena da hero por tempo (18/09/2026)
+
+No desenho novo, o título à esquerda toca uma cena ao carregar, sem trava
+de rolagem: "Isso não é / marketing / para clínicas." entra; a 0,9 s o
+risco (gradiente de `background-size` 0 → 100%) passa por "marketing" e
+"para clínicas."; a 2,2 s as duas linhas riscadas fecham (dobras em grid,
+`1fr → 0fr`), o "não" se recolhe (`max-width → 0`, com `&nbsp;` dentro
+para o espaço não sumir) e "RevOps." sobe no lugar. Fica "Isso é /
+RevOps.". Sem JS (`html:not(.js)`) ou com menos movimento, o estado final
+direto. O segundo título da direita saiu; lá ficam ano, lead e CTA.
+
+## Sobre: texto fixo + esteira do Método (20/09/2026)
+
+Pedido da Lenora com o print da dobra "Por dentro da Marvee": manter a
+composição (texto à esquerda, fotos à direita) mais perto da esteira de
+metodobr.com, lida do site em 20/09: blocos de 300px com 32px de vão,
+alturas iguais, cada um com uma foto inteira ou um par cartão + meia foto
+(43%), deslizando linearmente para a esquerda enquanto a dobra fica presa.
+Em `Sobre.astro`: coluna de texto fixa (`.sobre-editorial__texto`, rótulo e
+título em cima, descrição, CTA e barra de progresso no pé) e a
+`.sobre-editorial__janela` com o `.sobre-editorial__trilho` de seis blocos
+(`.bloco`): fotos da sede inteiras alternando com cartões escuros que levam
+as legendas ("Onde tudo se conecta", "A operação, de perto", "Espaço para
+construir juntos") e o rótulo "Sede · Blumenau/SC". O script já existente
+prende a dobra e move o trilho pela distância `scrollWidth − clientWidth`
+(ritmo 0,85); agora só no desktop (≥ 900px). No celular o texto fica em
+cima e a esteira em rolagem horizontal comum. Os números seguem embaixo.
+
+### 20/09/2026 — Sobre: esteira full na tela
+
+Pedido da Lenora: sem recuo à esquerda e carrossel ocupando as duas laterais,
+dobra mais alta e blocos mais largos. O palco preso perdeu o padding lateral
+(a esteira parte de x=0 e termina na borda direita); só o texto guarda o
+gutter, por margem própria. Altura da esteira `clamp(480px, 100svh − 176px,
+920px)`; blocos `clamp(280px, 26vw, 400px)` e largos `clamp(380px, 38vw,
+580px)`; texto `clamp(320px, 32vw, 500px)`. Medido em 1440×900 (blocos
+547/374 × 724px, curso 2150px) e 1920×1080 (580/400 × 904px); celular segue
+em rolagem horizontal comum.
+
+### 20/09/2026 — Sobre: texto agrupado no topo
+
+"Deixe os textos no grid corretamente": o `space-between` jogava a descrição
+e o botão para o pé da esteira, com um vazio no meio e o botão cortado em
+telas baixas. Agora rótulo, título, descrição e botão formam um bloco só,
+alinhado ao topo das fotos; a barra de progresso fica sozinha no pé
+(`margin-top: auto`, fora do `__pe`).
+
+### 20/09/2026 — Sobre: texto na coluna 1 do grid
+
+A coluna de texto usava só o gutter; em telas largas ficava fora do container
+(máx. 1600px) que as outras dobras seguem. Agora `--sobre-recuo` é a borda do
+container (`max(gutter, (100vw − largura)/2 + gutter)`) e `--sobre-coluna` é a
+largura da coluna 1 do grid "duo"; a margem direita desconta o vão da esteira,
+então a primeira foto começa na coluna 2. Conferido contra os cartões da
+Academy em 1820, 1440 e 1100px (mesmas bordas).

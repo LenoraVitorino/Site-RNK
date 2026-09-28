@@ -27,7 +27,7 @@ export const contato: Pagina = {
           rotulo: 'Qual o seu interesse?',
           tipo: 'select',
           opcoes: [
-            'Protocolo Revena (para clínicas)',
+            'Revena (para clínicas)',
             'Renke Academy (para agências)',
             'Outro assunto',
           ],

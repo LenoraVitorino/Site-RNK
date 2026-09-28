@@ -1,0 +1,41 @@
+---
+/**
+ * Laboratório: a home com o anel de fios prateados por trás (26/09/2026).
+ * Página de teste, fora dos buscadores e do menu. Mesmas dobras e o mesmo
+ * acabamento de /laboratorio/veu (src/styles/laboratorio-alto-padrao.css);
+ * muda só o fundo, a partir da cena da PeachWeb que a Lenora escolheu
+ * (docs/04-design/curadoria-pinterest.md, seção 1).
+ */
+import Base2 from '../../layouts/Base2.astro';
+import { seo } from '../../data/home';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import '../../styles/laboratorio-alto-padrao.css';
+
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import Perguntas from '../../components/home2/Perguntas.astro';
+import Resultados from '../../components/home2/Resultados.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+import { copyLiteral } from '../../data/versao';
+---
+<Base2 titulo={`Laboratório · ${seo.titulo}`} descricao={seo.descricao} noindex classe="laboratorio-veu laboratorio-prata">
+  <FundoVivo slot="fundo" fundo="prata" />
+  <Hero />
+  <OQueFaz />
+  <Protocolos />
+  <Letreiro />
+  {!copyLiteral && <PlanosPalco />}
+  {copyLiteral && <Planos />}
+  <Perguntas />
+  <Resultados />
+  <CtaFinal />
+  <AcademyTools />
+  {/* Conheça a Renke saiu da página (Lenora, 26/09: "tira, depois vemos o que fazer"). */}
+  <Formulario />
+</Base2>

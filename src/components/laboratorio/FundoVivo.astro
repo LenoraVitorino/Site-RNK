@@ -1,0 +1,52 @@
+---
+/**
+ * Fundo vivo (laboratório, 22/09/2026). Um <canvas> fixo atrás da página;
+ * a cena só carrega depois que o texto pintou, por import dinâmico, e nunca
+ * atrasa a hero. A prop `fundo` fixa o caminho (a página do véu usa 'veu');
+ * sem ela, ?fundo= escolhe entre particulas (padrão) e superficie.
+ * Especificação: docs/04-design/fundo-vivo-briefing.md e
+ * docs/04-design/referencias-alto-padrao.md.
+ */
+interface Props { fundo?: 'cena' | 'prata' | 'veu' | 'particulas' | 'superficie' }
+const { fundo } = Astro.props;
+---
+<canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} aria-hidden="true"></canvas>
+{fundo === 'prata' && <div class="fundo-vivo__grao" aria-hidden="true"></div>}
+{/* A cena traz grão e vinheta do próprio pós-processamento, como a referência. */}
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-fundo-vivo]');
+  const temWebGL = (() => {
+    try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; }
+  })();
+  // Sem a prop, ?fundo= só escolhe entre os dois caminhos da página de fundos.
+  const pedido = new URLSearchParams(location.search).get('fundo');
+  const fundo = canvas?.dataset.fundo || (pedido === 'superficie' ? 'superficie' : 'particulas');
+  // O véu e a prata não nascem com movimento reduzido: a página fica no preto.
+  const semVeu = (fundo === 'veu' || fundo === 'prata' || fundo === 'cena') && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canvas && temWebGL && !semVeu) {
+    const carregar = () =>
+      fundo === 'cena' ? import('./fundo-cena')
+      : fundo === 'prata' ? import('./fundo-prata')
+      : fundo === 'veu' ? import('./fundo-veu')
+      : fundo === 'superficie' ? import('./fundo-superficie')
+      : import('./fundo-particulas');
+    const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas));
+    if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
+    else setTimeout(comecar, 300);
+  }
+</script>
+
+<style>
+  .fundo-vivo {
+    position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh;
+    display: block; pointer-events: none; opacity: 0;
+  }
+  /* Grão e vinheta por cima do anel, como na cena de referência (lá, pós-processamento). */
+  .fundo-vivo__grao {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / .55) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.09'/%3E%3C/svg%3E");
+  }
+</style>

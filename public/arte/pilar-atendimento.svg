@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+  <g class="atend-trilho">
+    <path d="M44 44v212" stroke-width="1" stroke-opacity=".35"/>
+    <g class="acento">
+      <circle cx="44" cy="72" r="11" stroke-width="1" stroke-opacity=".4"/>
+      <circle cx="44" cy="72" r="4.5" fill="currentColor" fill-opacity=".1"/>
+    </g>
+    <circle cx="44" cy="150" r="4.5" stroke-opacity=".6"/>
+    <circle cx="44" cy="228" r="4.5" stroke-opacity=".6"/>
+  </g>
+  <g class="atend-balao-1">
+    <path d="M94 44h208a10 10 0 0 1 10 10v36a10 10 0 0 1-10 10H84V54a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".06"/>
+    <circle cx="114" cy="72" r="10" stroke-width="1"/>
+    <path d="M114 67v5h4" stroke-width="1"/>
+    <path d="M136 72h160" stroke-width="1" stroke-opacity=".55"/>
+  </g>
+  <g class="atend-balao-2">
+    <path d="M230 122h208a10 10 0 0 1 10 10v46H230a10 10 0 0 1-10-10v-36a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".1"/>
+    <path d="M238 142h172M238 158h96" stroke-width="1" stroke-opacity=".55"/>
+  </g>
+  <g class="atend-balao-3">
+    <path d="M94 200h240a10 10 0 0 1 10 10v36a10 10 0 0 1-10 10H84v-46a10 10 0 0 1 10-10z" fill="currentColor" fill-opacity=".06"/>
+    <path d="M104 228h176" stroke-width="1" stroke-opacity=".55"/>
+    <path d="M298 228l5 5 10-10M309 233l10-10"/>
+  </g>
+</svg>
