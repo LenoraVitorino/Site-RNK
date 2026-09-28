@@ -1,0 +1,74 @@
+---
+/**
+ * Bloco 'ctaFinal' das internas. Especificação: docs/04-design/paginas-internas.md, "ctaFinal".
+ *
+ * Preset: a chamada final da home (#fale), uma coluna centralizada sobre a
+ * cena, com título, frase em #aeaeac e o botão papel grande. Sem o id
+ * #fale e sem .secao--amarela: as regras da home presas a eles pintariam
+ * a dobra de amarelo.
+ *
+ * Duas escalas de título: o destaque curto (até 60 caracteres) usa a
+ * escala do #fale; as perguntas longas da Academy (105 a 164 caracteres)
+ * descem para uma escala de frase, mais larga e equilibrada.
+ */
+import Botao from '../ui/Botao.astro';
+import { classesSecao, semSeta, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'ctaFinal'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const titulo = bloco.destaque;
+const longo = !!titulo && titulo.length > 60;
+const textoLongo = !!bloco.texto && bloco.texto.length > 160;
+---
+<section class:list={classesSecao(secao, 'int-cta')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={titulo ? secao.tituloId : undefined}>
+  <div class="container">
+    <div class="int-cta__miolo entra">
+      {titulo && (
+        <h2 id={secao.tituloId} class:list={['titulo int-cta__titulo', longo && 'int-cta__titulo--longo']}>{titulo}</h2>
+      )}
+      {bloco.texto && <p class:list={['int-cta__texto', textoLongo && 'int-cta__texto--longo']}>{bloco.texto}</p>}
+      <div class="int-cta__acao">
+        <Botao href={bloco.rotaCta ?? '/contato'} tamanho="lg">{semSeta(bloco.cta)}</Botao>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Medidas do #fale (home2.css e home-refinamento.css). */
+  .int-cta { padding-block: clamp(80px, 9vw, 144px); }
+  .int-cta__miolo { display: grid; justify-items: center; text-align: center; gap: 28px; }
+  /* Escala do #fale. Os 15ch do #fale quebravam as frases curtas das
+     internas em três linhas com a do meio curta; 22ch com balance deixa
+     'A Renke Academy não é para todo mundo.' e 'Atendemos uma nova clínica
+     por mês.' em duas linhas. */
+  .int-cta__titulo { font-size: clamp(2.2rem, 3.8vw, 3.8rem); max-width: 22ch; text-wrap: balance; }
+  .int-cta__titulo--longo { font-size: clamp(26px, 2.6vw, 38px); line-height: 1.18; max-width: 32ch; text-wrap: balance; }
+  .int-cta__texto { font-size: 17px; line-height: 1.6; color: #aeaeac; max-width: 44ch; }
+  .int-cta__texto--longo { max-width: 56ch; }
+  /* A cor papel do botão (a do #fale) vem da regra global
+     :is(.int-cta__acao, .int-erro__acoes) .botao, em paginas2.css. */
+
+  @media (max-width: 899.98px) {
+    .int-cta__miolo { gap: 24px; }
+  }
+  @media (max-width: 599.98px) {
+    /* Pergunta e texto longos (Academy): centralizados, viravam colunas de 7 a
+       10 linhas de margem irregular. No celular alinham à esquerda, na margem
+       das outras dobras, e o botão ocupa a largura toda. Os fechos curtos
+       continuam centralizados. */
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) { justify-items: start; text-align: start; }
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) .int-cta__acao { justify-self: stretch; }
+    .int-cta__miolo:has(.int-cta__titulo--longo, .int-cta__texto--longo) .int-cta__acao :global(.botao) { width: 100%; justify-content: center; }
+    .int-cta__titulo--longo { font-size: 22px; line-height: 1.24; max-width: none; }
+    .int-cta__texto--longo { font-size: 16px; text-wrap: pretty; }
+    /* Os rótulos da Academy passam de 30 caracteres: no celular o botão
+       aperta o respiro lateral e, se quebrar, quebra em duas linhas iguais. */
+    .int-cta__acao :global(.botao) { padding-inline: 20px; font-size: 15px; }
+    .int-cta__acao :global(.botao__texto) { text-wrap: balance; }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+/**
+ * Bloco 'lista' das internas. Especificação: docs/04-design/paginas-internas.md, "lista".
+ *
+ * Preset Operação/Solutions da home (home-refinamento.css, .operacao-editorial):
+ * título preso à esquerda na grade editorial (.int-grade-2) e, à direita, as
+ * linhas em tipografia, sem cartão (referência do Pinterest 47).
+ * Numerada vira <ol> com o índice '01'…; sem número, <ul> com um ponto.
+ * Marcas são aria-hidden: a ordem vem do próprio <ol>. O fundo do dado é ignorado.
+ * Texto e ponto leem os tokens do tom (--int-tinta, --int-marca): a mesma
+ * lista serve na cena, no papel e no preto (ritmo-dobras-internas.md).
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import { classesSecao, indice2, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'lista'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const Lista = bloco.numerada ? 'ol' : 'ul';
+---
+<section class:list={classesSecao(secao, 'int-lista')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={secao.tituloId}>
+  <div class="container int-grade-2">
+    <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} classe="int-cabeca--coluna int-grade-2__fixo" />
+
+    <Lista class="int-lista__itens" role="list">
+      {bloco.itens.map((item, i) => (
+        <li class="int-lista__item entra" style={`--i:${Math.min(i, 5)}`}>
+          {bloco.numerada
+            ? <span class="int-indice int-lista__indice" aria-hidden="true">{indice2(i + 1)}</span>
+            : <span class="int-lista__ponto" aria-hidden="true"></span>}
+          <span class="int-lista__texto">{item}</span>
+        </li>
+      ))}
+    </Lista>
+  </div>
+</section>
+
+<style>
+  /* Título mais estreito que o padrão da cabeça, como o da Operação (17ch). */
+  .int-lista :global(.int-cabeca__titulo) { max-width: 16ch; }
+
+  .int-lista__itens { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(24px, 2.6vw, 36px); }
+  /* O corpo do texto mora no li: o ponto mede em em a partir dele. */
+  .int-lista__item { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: start; font-size: clamp(20px, 1.8vw, 26px); }
+
+  .int-lista__texto {
+    font-family: var(--font-titulo); font-weight: 300; line-height: 1.3;
+    letter-spacing: -.03em; word-spacing: -.08em; color: var(--int-tinta); max-width: 34ch; text-wrap: pretty;
+  }
+
+  /* As marcas ficam na altura da primeira linha: o índice (11px) no topo
+     das maiúsculas, o ponto no meio da altura-x. */
+  .int-lista__indice { padding-top: .7em; line-height: 1; }
+  .int-lista__ponto { width: 6px; height: 6px; margin-top: .62em; border-radius: 50%; background: var(--int-marca); }
+
+  /* Na coluna única do tablet os 34ch deixavam a metade direita vazia. */
+  @media (max-width: 899.98px) {
+    .int-lista__item { grid-template-columns: 36px minmax(0, 1fr); font-size: 20px; }
+    .int-lista__texto { max-width: 44ch; }
+  }
+  @media (max-width: 599.98px) {
+    .int-lista__item { font-size: 19px; }
+    .int-lista__texto { max-width: none; }
+  }
+</style>

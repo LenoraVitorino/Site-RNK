@@ -26,7 +26,7 @@ const nome = (label: string) => {
 };
 const icone = (label: string) => {
   const arq = `plano-${label.replace('REVENA ', '').toLowerCase()}-dark.svg`;
-  return existsSync(join(process.cwd(), 'public', 'icones', arq)) ? `/icones/${arq}` : null;
+  return existsSync(join(__RAIZ__, 'public', 'icones', arq)) ? `/icones/${arq}` : null;
 };
 const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
 ---

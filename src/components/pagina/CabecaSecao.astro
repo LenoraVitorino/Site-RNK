@@ -1,0 +1,46 @@
+---
+/**
+ * Cabeça de seção padrão das internas: rótulo (eyebrow), título e apoio.
+ * Especificação: docs/04-design/paginas-internas.md, "Fundação", item 3.
+ * Os estilos são globais (.int-cabeca em src/styles/paginas2.css) e leem os
+ * tokens do tom da seção (--int-apoio etc.): a cabeça não tem tom próprio.
+ *
+ * `titulo` como lista vira uma linha (span display:block) por item, com
+ * espaço real entre elas para o leitor de tela não juntar as palavras.
+ * Sem título, só o rótulo.
+ */
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  titulo?: string | string[];
+  apoio?: string;
+  nivel?: 'h1' | 'h2';
+  alinhamento?: 'esquerda' | 'centro';
+  classe?: string;
+}
+
+const { id, eyebrow, titulo, apoio, nivel = 'h2', alinhamento = 'esquerda', classe } = Astro.props;
+const Titulo = nivel;
+const linhas = titulo === undefined ? [] : Array.isArray(titulo) ? titulo : [titulo];
+/* Numeral solto ('os 4 pilares') anda com a palavra seguinte: o par vai num
+   span sem quebra (.int-cabeca__titulo [data-junto], paginas2.css). O texto
+   não muda; nas posições ímpares do split ficam os pares. */
+const partes = typeof titulo === 'string' ? titulo.split(/(?<=^|\s)(\d{1,3}\s+[^\s\d]\S*)/) : [];
+---
+<header
+  class:list={[
+    'int-cabeca entra',
+    alinhamento === 'centro' && 'int-cabeca--centro',
+    classe,
+  ]}
+>
+  {eyebrow && <p class="rotulo">{eyebrow}</p>}
+  {linhas.length > 0 && (
+    <Titulo id={id} class="titulo int-cabeca__titulo">
+      {Array.isArray(titulo)
+        ? linhas.map((linha, i) => <>{i > 0 && ' '}<span>{linha}</span></>)
+        : partes.map((parte, i) => (i % 2 ? <span data-junto>{parte}</span> : parte))}
+    </Titulo>
+  )}
+  {linhas.length > 0 && apoio && <p class="int-cabeca__apoio">{apoio}</p>}
+</header>

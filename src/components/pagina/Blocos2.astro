@@ -1,0 +1,58 @@
+---
+/**
+ * Despachante das páginas internas (27/09/2026): calcula o contexto de cada
+ * seção (planejarSecoes, em contexto.ts) e chama o componente do tipo.
+ * Especificação: docs/04-design/paginas-internas.md, "Fundação", item 6.
+ *
+ * Nada envolve as seções: o Header liga header--caixa por main > :first-child
+ * e .trilhos > * só posiciona filhos diretos. Por isso o tom (secao.tom) vai
+ * dentro do ContextoSecao: cada componente aplica data-tom={secao.tom} na
+ * própria <section>, e classesSecao() já põe int-secao--papel ou
+ * int-secao--preto nas dobras sólidas (docs/04-design/ritmo-dobras-internas.md).
+ */
+import type { Bloco } from '../../data/paginas/tipos';
+import { planejarSecoes } from './contexto';
+import BlocoHero from './BlocoHero.astro';
+import BlocoLista from './BlocoLista.astro';
+import BlocoProdutos from './BlocoProdutos.astro';
+import BlocoBlocos from './BlocoBlocos.astro';
+import BlocoEtapas from './BlocoEtapas.astro';
+import BlocoAntesDepois from './BlocoAntesDepois.astro';
+import BlocoTexto from './BlocoTexto.astro';
+import BlocoNumeros from './BlocoNumeros.astro';
+import BlocoFaq from './BlocoFaq.astro';
+import BlocoFormulario from './BlocoFormulario.astro';
+import BlocoCtaFinal from './BlocoCtaFinal.astro';
+import BlocoPendencia from './BlocoPendencia.astro';
+
+interface Props {
+  blocos: Bloco[];
+  /** Rota da página, para o rótulo da hero (rotuloDaRota). */
+  rota?: string;
+}
+
+const { blocos, rota } = Astro.props;
+const plano = planejarSecoes(blocos, rota);
+
+// Abertura e fecho ficam sempre na cena; se um deles sair, a regra de tons quebrou.
+if (import.meta.env.DEV) for (const { bloco, secao } of plano)
+  if (secao && ['hero', 'ctaFinal', 'formulario'].includes(bloco.tipo) && secao.tom !== 'cena')
+    console.warn(`[Blocos2] ${bloco.tipo} em ${secao.id} saiu da cena (tom ${secao.tom}).`);
+---
+{plano.map(({ bloco, secao }) => {
+  if (bloco.tipo === 'pendencia') return <BlocoPendencia bloco={bloco} />;
+  if (!secao) return null;
+  switch (bloco.tipo) {
+    case 'hero': return <BlocoHero bloco={bloco} secao={secao} />;
+    case 'lista': return <BlocoLista bloco={bloco} secao={secao} />;
+    case 'produtos': return <BlocoProdutos bloco={bloco} secao={secao} />;
+    case 'blocos': return <BlocoBlocos bloco={bloco} secao={secao} />;
+    case 'etapas': return <BlocoEtapas bloco={bloco} secao={secao} />;
+    case 'antesDepois': return <BlocoAntesDepois bloco={bloco} secao={secao} />;
+    case 'texto': return <BlocoTexto bloco={bloco} secao={secao} />;
+    case 'numeros': return <BlocoNumeros bloco={bloco} secao={secao} />;
+    case 'faq': return <BlocoFaq bloco={bloco} secao={secao} />;
+    case 'formulario': return <BlocoFormulario bloco={bloco} secao={secao} />;
+    case 'ctaFinal': return <BlocoCtaFinal bloco={bloco} secao={secao} />;
+  }
+})}

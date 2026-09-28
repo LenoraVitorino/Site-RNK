@@ -31,7 +31,15 @@ body {
 }
 img, video { max-width: 100%; display: block; }
 a { color: inherit; }
-h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; font-weight: var(--peso-titulo); line-height: 1.05; }
+/* Quebras (28/09/2026, "sem palavras sozinhas"): títulos equilibrados e
+   texto corrido com a última linha cuidada, no site todo. O espaço
+   inseparável entre as duas últimas palavras vem do middleware
+   (src/lib/sem-viuvas.mjs). Regras de componente que pedem outro
+   comportamento (balance num parágrafo, nowrap numa linha) continuam
+   valendo, porque têm classe e vencem estas. */
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+p, li, dd, dt, figcaption, blockquote { text-wrap: pretty; }
 /* Uma família só, a Inter: títulos finos (peso 260), corpo em 400 e os
    destaques em 500. Menos ruído para uma página com muito texto. */
 .titulo, .ancora, .plano__nome, .cartao h2, .esteira__numero b, .painel-dados__num {
@@ -53,7 +61,9 @@ html { scrollbar-color: rgb(242 242 238 / .22) #000; }
 /* Títulos em caixa normal: .caps fica no HTML por compatibilidade, sem efeito. */
 .caps { text-transform: none; }
 .rotulo {
-  font-size: 11px; font-weight: var(--peso-detalhe); letter-spacing: var(--tracking-label);
+  /* 12px é o piso de leitura; o tracking de .11em dá o mesmo espaçamento
+     (1,32px) que os .12em de antes, a 11px. */
+  font-size: 12px; font-weight: var(--peso-detalhe); letter-spacing: .11em;
   text-transform: uppercase; color: var(--cinza);
 }
 .rotulo--marca { color: var(--texto); }
@@ -64,6 +74,9 @@ html { scrollbar-color: rgb(242 242 238 / .22) #000; }
 /* Escala menor (Lenora, 26/09: "tá tudo gigante na tela"), perto da Vercel:
    títulos de dobra até 56px, apoio até 20px, corpo em 16px. */
 h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.035em; line-height: 1.04; }
+/* A 320px, 32px deixava títulos curtos ("No que acreditamos", "Perguntas
+   frequentes") com uma palavra por linha na medida de 266px. */
+@media (max-width: 359.98px) { h2.titulo, .titulo { font-size: 1.75rem; } }
 .secao { padding-block: var(--esp-secao); }
 .secao--escura { background: var(--fundo); color: var(--papel); }
 .secao--escura .rotulo { color: rgb(242 242 238 / .6); }
@@ -149,6 +162,9 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
   transition: text-decoration-thickness .15s;
 }
 .link-arrow:hover { text-decoration-thickness: 2px; }
+/* Alvo de toque de 44px sem mudar o desenho: a caixa do link cresce 10px
+   para cima e para baixo e a margem negativa devolve o espaço (linha de 24px). */
+a.link-arrow { padding-block: 10px; margin-block: -10px; }
 .nav--pendente { display: inline-flex; align-items: center; gap: 6px; color: rgb(242 242 238 / .62); cursor: default; }
 .nav--pendente em { font-style: normal; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
 .header--claro .nav--pendente, .header--amarelo .nav--pendente { color: rgb(22 22 22 / .62); }
@@ -250,7 +266,7 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 }
 .nav__trigger[aria-expanded="true"] .nav__caret { transform: rotate(-135deg) translateY(-2px); opacity: 1; }
 .megamenu { padding-bottom: 8px; }
-.megamenu__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(242 242 238 / .5); font-weight: var(--peso-enfase); margin: 12px 0 6px; }
+.megamenu__title { font-size: 12px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .5); font-weight: var(--peso-enfase); margin: 12px 0 6px; }
 .megamenu__list { list-style: none; margin: 0 0 12px; padding: 0; }
 .megamenu__list a {
   display: flex; align-items: center; min-height: var(--alvo); padding: 8px 0 8px 12px;
@@ -368,7 +384,7 @@ h2.titulo, .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); letter-spacing: -.03
 .secao--painel .foto { background: rgb(242 242 238 / .1); }
 .foto__legenda {
   position: absolute; left: 14px; bottom: 12px;
-  font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--cinza); opacity: .8;
+  font-size: 12px; letter-spacing: .11em; text-transform: uppercase; color: var(--cinza); opacity: .8;
 }
 .secao--escura .foto { background: rgb(242 242 238 / .08); }
 .secao--escura .foto__legenda { color: rgb(242 242 238 / .6); }
@@ -569,7 +585,14 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos__titulo { font-size: clamp(15px, 1.4vw, 22px); letter-spacing: -.035em; line-height: 1.2; margin: 0; font-weight: 400; color: rgb(22 22 22 / .62); }
 .palcoplanos__manifesto { max-width: 25ch; font-family: var(--font-titulo); font-size: clamp(1.7rem, 3.2vw, 3.4rem); font-weight: var(--peso-titulo); line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
 .palcoplanos__manifesto [data-palavra] { display: inline-block; }
-@media (max-width: 599.98px) { .palcoplanos__intro { min-height: 70svh; padding-block: 88px; } .palcoplanos__manifesto { font-size: clamp(1.7rem, 6.6vw, 2.45rem); max-width: 22ch; } }
+/* Abaixo de 900px (pilha, sem o palco animado) a abertura não reserva mais
+   70–76% da tela para um rótulo e quatro linhas, e segue a margem esquerda
+   da página, como o resto da home (28/09/2026). */
+@media (max-width: 899.98px) {
+  .palcoplanos:not([data-animado]) .palcoplanos__intro { min-height: 0; padding-block: 96px 72px; }
+  .palcoplanos:not([data-animado]) .palcoplanos__cabeca { justify-items: start; text-align: left; gap: 24px; }
+}
+@media (max-width: 599.98px) { .palcoplanos:not([data-animado]) .palcoplanos__intro { padding-block: 72px 56px; } .palcoplanos__manifesto { font-size: clamp(1.7rem, 6.6vw, 2.45rem); max-width: 22ch; } }
 .palcoplanos__apoio {
   margin: 0; max-width: 34ch; text-align: right;
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); font-size: clamp(1.1rem, 1.5vw, 1.45rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pp-suave);
@@ -652,6 +675,16 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin-left: .6em; }
 .palcoplanos:not([data-animado]) .plano-palco__texto { position: static; width: auto; text-align: left; gap: 14px; }
 .palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
+/* Na pilha do celular e do tablet, ícone e texto na margem esquerda da
+   página, como a abertura (28/09/2026). */
+@media (max-width: 899.98px) {
+  /* O desenho ocupa ~60% do quadro do SVG (1080 com ~20% de sobra de cada
+     lado): a margem negativa põe a borda do desenho na margem do texto. */
+  .palcoplanos:not([data-animado]) .plano-palco__icone-mob { margin: 0 0 24px calc(min(48vw, 240px) * -.2); }
+  .palcoplanos:not([data-animado]) .plano-palco__info { margin-inline: 0; }
+  /* "Saiba mais" não tem fundo: o recuo de 16px desalinhava o texto. */
+  .palcoplanos:not([data-animado]) .plano-palco__texto .botao { margin-left: -16px; }
+}
 @media (min-width: 900px) and (max-height: 700px) {
   .palcoplanos[data-animado] .plano-palco__texto { top: 4vh; }
   .palcoplanos[data-animado] .plano-palco__nome { font-size: 8vw; width: 47vw; }
@@ -836,10 +869,11 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 .footer { background: var(--fundo); color: var(--papel); padding-block: 64px 28px; margin-top: 0; border-top: 1px solid var(--grade); }
 .footer__grid { display: grid; gap: 32px; }
-.footer__title { font-size: 11px; letter-spacing: var(--tracking-label); text-transform: uppercase; font-weight: var(--peso-enfase); color: rgb(242 242 238 / .6); margin-bottom: 12px; }
+.footer__title { font-size: 12px; letter-spacing: .11em; text-transform: uppercase; font-weight: var(--peso-enfase); color: rgb(242 242 238 / .6); margin-bottom: 12px; }
 .footer__col ul { list-style: none; margin: 0; padding: 0; }
 .footer__col li { font-size: 14px; }
-.footer__col a { display: inline-flex; align-items: center; min-height: 2.25rem; color: var(--papel); text-decoration: none; }
+/* Alvo de toque de 44px; a margem negativa mantém o ritmo de 36px da lista. */
+.footer__col a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; margin-block: -4px; color: var(--papel); text-decoration: none; }
 .footer__col a:hover { text-decoration: underline; text-underline-offset: 4px; }
 .footer__contact li { color: rgb(242 242 238 / .7); line-height: 1.5; margin-bottom: 12px; }
 .footer__bottom { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgb(242 242 238 / .18); font-size: 13px; color: rgb(242 242 238 / .7); }
@@ -849,6 +883,10 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
    RESPONSIVO
    ============================================================ */
 
+/* Tablet: duas colunas, em vez de quatro blocos empilhados à esquerda. */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px 32px; }
+}
 @media (min-width: 900px) {
   .footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1.3fr; }
 }

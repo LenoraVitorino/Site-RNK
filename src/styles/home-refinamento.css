@@ -63,6 +63,9 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #50504e; }
 .home-refinada .form-card .botao { background: #252523; color: #f4f4f2; border-color: #252523; }
 .home-refinada .form-card :focus-visible { outline-color: #252523; }
+/* Depois do envio: status e 'Copiar mensagem' nos tons do cartão claro. */
+.home-refinada .form-card .form-card__status { background: rgb(37 37 35 / .06); border-color: transparent; color: #252523; }
+.home-refinada .form-card .form-card__copiar { color: #252523; }
 
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }
@@ -261,4 +264,89 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   #formulario .form-block { grid-template-columns: minmax(0, 560px); gap: 32px; }
   #formulario .form-card { max-width: none; }
+}
+
+/* ============================================================
+   Celular e tablet da home (28/09/2026, "adapte ao mobile e deixe com a
+   responsividade excelente… sem palavras sozinhas"). Tudo com seletor
+   próprio da home: as internas reaproveitam hero--editorial, feature-card,
+   operacao-editorial e o id #formulario. Vale igual para estudio e copy.
+   ============================================================ */
+
+/* Abertura: sem a tela cheia abaixo de 900px. O conteúdo ficava no topo e
+   sobrava um vão escuro de 266px (390) a 424px (768) antes da dobra seguinte. */
+@media (max-width: 899.98px) {
+  .hero--editorial:has(.hero__mensagem) { min-height: 0; }
+}
+/* O H1 era menor que os H2 no celular (28–32px contra 34–35px), porque a
+   frase "Isso não é marketing" tinha de caber numa linha só. Ela passa a
+   quebrar ("Isso / não é marketing / para clínicas.") numa altura
+   reservada de três linhas, e "Isso é RevOps." fica centrado nessa altura,
+   como na regra de base: o mesmo respiro para o selo e para o texto. */
+@media (max-width: 599.98px) {
+  .hero--editorial .hero__h1:has(.hero__mensagem) { font-size: clamp(36px, 11vw, 48px); min-height: 3.25em; }
+  .hero--editorial .hero__h1 .hero__mensagem { align-content: center; }
+  .hero--editorial .hero__h1 .hero__mensagem > span { white-space: normal; }
+}
+
+/* Método: botões do vídeo com alvo de toque de 44px; legenda dos números
+   numa linha só, com a coluna dos valores do tamanho do maior valor. */
+.metodo-editorial .tel__botao { width: 44px; height: 44px; }
+@media (max-width: 599.98px) {
+  .metodo-editorial .metodo__numeros { grid-template-columns: max-content minmax(0, 1fr); column-gap: 16px; }
+  .metodo-editorial .metodo__numero { grid-column: 1 / -1; grid-template-columns: subgrid; }
+  .metodo-editorial .metodo__legenda { white-space: nowrap; }
+}
+
+/* Pilares: no celular o texto do cartão perde o recuo duplo (16px do
+   cartão + 12px do texto), para "seu posicionamento" caber junto. */
+@media (max-width: 599.98px) {
+  [data-pilares] .feature-card__texto { padding: 20px 4px 8px; }
+}
+@media (max-width: 359.98px) {
+  [data-pilares] .feature-card h3 { font-size: 23px; }
+}
+
+/* Ganhos: duas colunas no tablet, como os resultados; na copy, com sete
+   ganhos, o último ocupa a linha inteira. */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  #perguntas .operacao__cartoes { grid-template-columns: 1fr 1fr; gap: 20px; }
+  #perguntas .operacao__cartao:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* Planos da copy: número em 12px, o piso de leitura. Sem foto ainda, o
+   espaço reservado sai abaixo de 900px (eram cinco retângulos vazios
+   seguidos); volta sozinho quando a foto entrar. */
+#planos .plano__num { font-size: 12px; letter-spacing: .07em; }
+@media (max-width: 899.98px) {
+  #planos .plano__foto:not(:has(img)) { display: none; }
+}
+
+/* Chamada final e formulário: os botões ficam numa linha só. */
+@media (max-width: 479.98px) {
+  #fale .botao--lg { padding: 14px 22px; }
+  #fale .botao__texto { white-space: nowrap; }
+  #academy-tools ~ #formulario .form-card { padding: 20px; }
+  #academy-tools ~ #formulario .form-card .botao { padding-inline: 16px; }
+  #academy-tools ~ #formulario .form-card .botao__texto { white-space: nowrap; }
+}
+
+/* Academy e Tools: abaixo de 900px a arte vazia sai (eram dois retângulos
+   pretos sem nada) e os produtos deixam de ser uma caixa dentro da caixa:
+   ficam como duas entradas separadas por um fio, dentro da caixa única. */
+@media (max-width: 899.98px) {
+  .ecossistema-editorial .produto__arte:empty { display: none; }
+  .ecossistema-editorial .ecossistema__paineis { gap: 0; }
+  .ecossistema-editorial .produto { border: 0; border-top: 1px solid rgb(242 242 238 / .12); border-radius: 0; background: transparent; }
+  .ecossistema-editorial .produto__corpo { padding: 28px 0 32px; background: transparent; }
+  .ecossistema-editorial .produto:last-child .produto__corpo { padding-bottom: 0; }
+  .ecossistema-editorial .produto__acao .botao__texto { white-space: nowrap; }
+}
+@media (max-width: 479.98px) {
+  .ecossistema-editorial .produto__acao .botao { padding-inline: 16px; font-size: 14px; }
+}
+/* Abaixo de 360px a seta sai, como no Contato do cabeçalho: sem ela
+   "Conhecer Renke Academy" cabe numa linha dentro da caixa. */
+@media (max-width: 359.98px) {
+  .ecossistema-editorial .produto__acao .botao__icone { display: none; }
 }

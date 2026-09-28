@@ -1,0 +1,150 @@
+---
+/**
+ * Bloco 'blocos' das internas: cartões tipográficos em grade.
+ * Especificação: docs/04-design/paginas-internas.md, "blocos".
+ *
+ * Preset: a grade dos Features da home (.features-grade/.feature-card,
+ * home-refinamento.css:144-154): 6 colunas, gap 16, cartão #0e0e0e de raio 18,
+ * h3 de 21–29px em peso 350 e texto de 15px #b6b6b6, 14px abaixo do título.
+ * Sem a área de arte. Os cartões da mesma linha dividem as linhas da grade
+ * (subgrid): títulos e textos começam na mesma altura, e o cartão tem a altura
+ * do conteúdo, sem vazio no meio.
+ *
+ * A quantidade decide o span (.int-grade-6[data-n], paginas2.css): 2 → 3+3,
+ * 3 → 2+2+2, 4 → 2×2, 5 → 3+2, 6 → 2+2+2 duas vezes. A flag `largo` fica
+ * ignorada, e `fundo` também. A cabeça vai à esquerda, na régua das outras
+ * dobras: a cabeça centrada é própria dos pilares da home.
+ *
+ * Variante 'tipografica' (secao.variante, marcada em planejarSecoes quando o
+ * bloco vem logo depois de outra seção de cartões): os mesmos itens sem cartão,
+ * na grade editorial da lista (título preso à esquerda, pin 47), para a página
+ * não emendar três dobras de cartões iguais.
+ *
+ * Tom (ritmo-dobras-internas.md): o cartão, o texto e o Check só leem tokens
+ * (--int-cartao, --int-cartao-texto/--int-corpo, --int-check); o h3 e o índice
+ * herdam. Em papel, fichas #efefed com h3 #252523 e texto #50504e; em preto,
+ * cartões #161616 com texto #b6b6b6.
+ *
+ * Lista: ul (ou ol, se numerado) com role='list' e um li por item; o li é o
+ * item da grade e, na variante de cartões, o próprio cartão.
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import Icone from '../ui/Icone.astro';
+import { classesSecao, indice2, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'blocos'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const tipografica = secao.variante === 'tipografica';
+const Lista = bloco.numerado ? 'ol' : 'ul';
+
+// Hifenização só onde uma palavra não cabe na coluna do celular
+// ('Autorresponsabilidade', a 320px): .int-h3--longa, em paginas2.css.
+const palavraLonga = (s: string) => s.split(/\s+/).some((p) => [...p].length >= 16);
+
+// O Media.astro depende do site.css, que não entra nas internas; nenhum dado
+// usa `media` hoje. Se aparecer, fica o aviso em dev em vez de um visual quebrado.
+if (import.meta.env.DEV) {
+  for (const item of bloco.itens) {
+    if (item.media) console.warn(`[BlocoBlocos] mídia "${item.media}" em "${item.titulo}" não é renderizada nas internas.`);
+  }
+}
+---
+<section class:list={classesSecao(secao, 'int-blocos', tipografica && 'int-blocos--tipografica')} id={secao.id} data-tom={secao.tom} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class:list={['container', tipografica && 'int-grade-2']}>
+    <CabecaSecao
+      id={secao.tituloId}
+      eyebrow={bloco.eyebrow}
+      titulo={bloco.h2}
+      apoio={bloco.sub}
+      classe={[tipografica && 'int-cabeca--coluna int-grade-2__fixo', bloco.grande && 'int-cabeca--grande'].filter(Boolean).join(' ') || undefined}
+    />
+    <Lista
+      class:list={tipografica ? 'int-blocos__lista' : ['int-grade-6', bloco.numerado && 'int-blocos__grade--numerada']}
+      data-n={tipografica ? undefined : bloco.itens.length}
+      role="list"
+    >
+      {bloco.itens.map((item, i) => (
+        <li class:list={[tipografica ? 'int-blocos__item' : 'int-cartao int-blocos__cartao', 'entra']} style={`--i:${Math.min(i, 5)}`}>
+          {bloco.numerado && <span class="int-indice int-blocos__indice" aria-hidden="true">{indice2(i + 1)}</span>}
+          <h3 class:list={['int-h3', palavraLonga(item.titulo) && 'int-h3--longa']}>{item.titulo}</h3>
+          {(item.texto || item.itens?.length) && (
+            <div class="int-blocos__pe">
+              {item.texto && <p class="int-blocos__texto">{item.texto}</p>}
+              {item.itens && item.itens.length > 0 && (
+                <ul class="int-blocos__itens">
+                  {item.itens.map((linha) => (
+                    <li><Icone nome="Check" size={16} class="int-blocos__check" /><span>{linha}</span></li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </li>
+      ))}
+    </Lista>
+  </div>
+</section>
+
+<style>
+  /* Cartões: cada um ocupa 2 linhas da grade (3 com o índice) e as divide
+     com os vizinhos. O gap de 14px é o do .feature-card p da home. */
+  .int-blocos__cartao {
+    display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 14px;
+    align-content: start;
+  }
+  .int-blocos__grade--numerada > .int-blocos__cartao { grid-row: span 3; }
+  .int-blocos__cartao > .int-blocos__indice { margin-bottom: 6px; }
+
+  .int-blocos__pe { display: grid; gap: 14px; align-content: start; }
+  .int-blocos__texto {
+    max-width: 48ch;
+    font-size: 15px; line-height: 1.65; color: var(--int-cartao-texto);
+  }
+
+  /* Itens internos (nenhuma página usa hoje): Check discreto, sem amarelo. */
+  .int-blocos__itens { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .int-blocos__itens li {
+    display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px; align-items: start;
+    font-size: 15px; line-height: 1.65; color: var(--int-cartao-texto);
+  }
+  .int-blocos__itens :global(.int-blocos__check) { margin-top: .25em; color: var(--int-check); }
+
+  /* Variante tipográfica: a coluna da lista (BlocoLista), com título e texto
+     em vez da linha única. Índice numa coluna de 48px, na altura das
+     maiúsculas do título; sem índice, o item ocupa a coluna toda. */
+  .int-blocos--tipografica :global(.int-cabeca__titulo) { max-width: 16ch; }
+  .int-blocos__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; }
+  .int-blocos__item { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 12px; align-items: start; }
+  ol.int-blocos__lista > .int-blocos__item { grid-template-columns: 48px minmax(0, 1fr); }
+  ol.int-blocos__lista > .int-blocos__item > :not(.int-blocos__indice) { grid-column: 2; }
+  .int-blocos__item > .int-blocos__indice { grid-row: 1; line-height: 1; padding-top: .8em; }
+  .int-blocos__item .int-blocos__texto { max-width: 50ch; font-size: 16px; color: var(--int-corpo); }
+  .int-blocos__item .int-blocos__itens li { font-size: 16px; color: var(--int-corpo); }
+
+  /* Com duas colunas de cartões (600 a 1099px) o h3 caía aos 21px do mínimo
+     do clamp, menor que no celular: fica em 23px. */
+  @media (min-width: 600px) and (max-width: 1099.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 23px; }
+  }
+  @media (max-width: 899.98px) {
+    ol.int-blocos__lista > .int-blocos__item { grid-template-columns: 36px minmax(0, 1fr); }
+  }
+  /* No celular, o h3 do .feature-card da home vai a 25px. */
+  @media (max-width: 599.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 25px; }
+    .int-blocos__item .int-blocos__texto { max-width: none; }
+  }
+  /* No cartão de 218 a 250px, os 25px deixavam uma palavra sozinha na linha
+     do meio ('Marketing / conectado / ao comercial'); a 23px fica em duas. */
+  @media (max-width: 374.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 23px; }
+  }
+  /* A 320, 'Autorresponsabilidade' só cabe inteira a 22px. */
+  @media (max-width: 359.98px) {
+    .int-blocos__cartao .int-h3 { font-size: 22px; }
+  }
+</style>

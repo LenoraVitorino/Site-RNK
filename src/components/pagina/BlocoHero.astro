@@ -1,0 +1,173 @@
+---
+/**
+ * Hero das internas (27/09/2026). Especificação: docs/04-design/paginas-internas.md,
+ * "hero" e emendas E5 (rótulo) e E6 (realce em tom duplo).
+ *
+ * É o hero editorial da home (Hero.astro + .hero--editorial, em
+ * home-refinamento.css) em versão estática e mais baixa: a mesma régua
+ * (.container), a mesma grade de duas colunas, o título em cima e o apoio
+ * e o CTA na base. Sem selo, sem prova social, sem risco nem troca de frase.
+ *
+ * - Rótulo (E5): texto que já existe na navegação, vindo de rotuloDaRota().
+ * - Realce (E6, pin 62): a hierarquia vem do tom, não da cor. As outras
+ *   linhas ficam em cinza e a do realce em papel; sem realce, tudo em papel.
+ *   Nada de amarelo no H1.
+ * - Escala: 'display' quando todas as linhas têm até 20 caracteres (os cinco
+ *   Revena e Faça Parte); a padrão nas demais (Academy), com linhas longas.
+ * - O H1 não leva .entra: pinta no primeiro quadro e é o LCP.
+ * - `centro` é ignorado: todos os heróis alinham à esquerda, como a home.
+ * - O CTA é marcado direto com as classes do botão (e não com o Botao.astro,
+ *   que fixa ArrowUpRight): âncora na página ('#formulario') leva ArrowDown.
+ */
+import Icone from '../ui/Icone.astro';
+import { classesSecao, semSeta, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'hero'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const { titulo, realce, sub, cta } = bloco;
+const escala = titulo.every((linha) => linha.length <= 20) ? 'display' : 'padrao';
+const temRealce = typeof realce === 'number' && realce >= 0 && realce < titulo.length;
+const href = bloco.rotaCta ?? '/contato';
+const naPagina = href.startsWith('#');
+---
+<section
+  class:list={classesSecao(secao, 'int-hero', `int-hero--${escala}`, !sub && 'int-hero--sem-sub')}
+  id={secao.id}
+  data-cena={secao.cena}
+  data-tom={secao.tom}
+  aria-labelledby={secao.tituloId}
+>
+  <div class="container int-hero__grade">
+    <div class="int-hero__cabeca">
+      {secao.rotulo && <p class="rotulo">{secao.rotulo}</p>}
+      <h1 id={secao.tituloId} class="titulo int-hero__titulo">
+        {titulo.map((linha, i) => (
+          <>{i > 0 && ' '}<span class:list={['int-hero__linha', temRealce && i !== realce && 'int-hero__linha--apagada']}>{linha}</span></>
+        ))}
+      </h1>
+    </div>
+    {sub && <p class="int-hero__sub entra" style="--i:1">{sub}</p>}
+    {cta && (
+      <p class="int-hero__acoes entra" style="--i:2">
+        <a class="botao botao--lg" href={href}>
+          <span class="botao__texto">{semSeta(cta)}</span>
+          <Icone nome={naPagina ? 'ArrowDown' : 'ArrowUpRight'} class={`botao__icone${naPagina ? ' int-hero__seta-baixo' : ''}`} size={20} />
+        </a>
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  /* Dobra: mais baixa que a da home (100svh), com o conteúdo assentado na base. */
+  .int-hero {
+    display: grid;
+    align-content: end;
+    min-height: min(86svh, 920px);
+    padding-top: calc(var(--altura-header) + clamp(48px, 8vh, 96px));
+    padding-bottom: clamp(56px, 7vw, 104px);
+  }
+
+  /* A grade da .hero--editorial: título na largura toda, apoio e CTA na base. */
+  .int-hero__grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px);
+    column-gap: clamp(32px, 4vw, 64px);
+    row-gap: clamp(28px, 3.2vw, 48px);
+    align-items: end;
+  }
+  /* Com folga, a coluna do CTA cresce até caber o rótulo numa linha só (os
+     da Academy passam de 35 caracteres); abaixo disso o botão quebra, como
+     o da home. */
+  @media (min-width: 1100px) {
+    .int-hero__grade { grid-template-columns: minmax(0, 1fr) minmax(clamp(240px, 28vw, 340px), max-content); }
+  }
+
+  /* Rótulo e título andam juntos, no respiro da cabeça de seção da home. */
+  .int-hero__cabeca {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: clamp(18px, 2vw, 28px);
+    justify-items: start;
+    min-width: 0;
+  }
+
+  .int-hero__titulo {
+    max-width: 24ch;
+    font-size: clamp(36px, 6.2vw, 64px);
+    font-weight: 300;
+    line-height: 1.06;
+    letter-spacing: -.05em;
+    word-spacing: -.08em;
+    text-wrap: balance;
+    overflow-wrap: break-word;   /* rede de segurança: há linhas de 66 caracteres */
+    color: var(--papel);
+  }
+  .int-hero--display .int-hero__titulo {
+    max-width: none;
+    font-size: clamp(40px, 9.6vw, 120px);
+    line-height: 1.02;
+    letter-spacing: -.06em;
+  }
+  .int-hero__linha { display: block; }
+  .int-hero__linha--apagada { color: var(--cinza); }
+
+  /* Apoio: os valores do .hero__lead da abertura editorial. */
+  .int-hero__sub {
+    grid-column: 1;
+    max-width: 760px;
+    font-size: clamp(16px, 1.4vw, 20px);
+    line-height: 1.5;
+    letter-spacing: -.015em;
+    color: rgb(242 242 238 / .78);
+    text-wrap: pretty;
+  }
+
+  .int-hero__acoes {
+    grid-column: 2;
+    justify-self: start;
+    align-self: end;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .int-hero--sem-sub .int-hero__acoes { grid-column: 1; }
+  .int-hero__acoes .botao { max-width: 100%; white-space: normal; }
+
+  /* A seta para baixo desliza para baixo; a diagonal segue o icones.css. */
+  .int-hero__acoes a.botao:hover :global(.int-hero__seta-baixo) { transform: translateY(2px); }
+
+  @media (max-width: 899.98px) {
+    .int-hero {
+      min-height: auto;
+      padding-top: calc(var(--altura-header) + 40px);
+      padding-bottom: 56px;
+    }
+    .int-hero__grade { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+    /* Na coluna única do tablet o apoio passava de 75 caracteres por linha. */
+    .int-hero__sub { font-size: 16px; max-width: 60ch; }
+    .int-hero__acoes { grid-column: 1; }
+  }
+
+  /* Celular (28/09/2026). A escala display parava em 40px e ficava perto do
+     h2 das seções (32px): sobe com a tela até 56px, onde encontra os 9.6vw
+     do tablet. A 320 continua em 40px, para '#TEAMRENKE.' caber na coluna. */
+  @media (max-width: 599.98px) {
+    .int-hero--display .int-hero__titulo { font-size: clamp(40px, 12.5vw, 56px); }
+  }
+  /* Abaixo de 375px os 36px da escala padrão deixavam uma palavra sozinha no
+     meio das linhas longas da Academy ('operacional') e o H1 em 9 linhas. */
+  @media (max-width: 374.98px) {
+    .int-hero--padrao .int-hero__titulo { font-size: clamp(28px, 8.8vw, 36px); letter-spacing: -.045em; }
+  }
+
+  /* Abaixo de 1100px o botão volta às medidas do CTA da abertura da home
+     (15px), para os rótulos longos da Academy não passarem de duas linhas
+     na coluna estreita do tablet nem a 320px. */
+  @media (max-width: 1099.98px) {
+    .int-hero__acoes .botao { padding: .8rem 1.3rem; font-size: 15px; }
+  }
+</style>

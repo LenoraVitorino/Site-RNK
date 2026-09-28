@@ -1,0 +1,61 @@
+---
+/**
+ * Foto do Sobre numa moldura de raio 12 (docs/04-design/pagina-sobre.md,
+ * (b) "CartaoFoto.astro"). O CSS mora em src/styles/sobre.css (.sb-foto).
+ *
+ * - Com foto: figure.sb-foto > div.sb-foto__miolo > <Image> em webp, com
+ *   três larguras e object-position vindo do foco do slot.
+ * - Sem foto e com `reservar`: cartão de grão na mesma proporção, com
+ *   aria-hidden; a nota do slot só aparece em dev.
+ * - Sem foto e sem `reservar`: não renderiza nada.
+ *
+ * O componente pai dá a largura por um wrapper próprio; o cartão ocupa 100%
+ * dele. Ninguém passa `class` para cá.
+ */
+import { Image } from 'astro:assets';
+import type { SlotFoto } from '../../data/sobre';
+
+interface Props {
+  slot: SlotFoto;
+  /** Atributo sizes da imagem, calculado pelo pai a partir da coluna que ela ocupa. */
+  sizes: string;
+  /** Amplitude da paralaxe em px (até 24; negativa sobe enquanto a página desce). */
+  paralaxe?: number;
+  /** Tom do cartão de grão: 'escuro' (padrão) nas dobras escuras, 'claro' no papel. */
+  tom?: 'escuro' | 'claro';
+  /** Só a foto do LCP (S1): loading eager e fetchpriority high. */
+  eager?: boolean;
+}
+
+const { slot, sizes, paralaxe, tom = 'escuro', eager = false } = Astro.props;
+const estilo = `--prop: ${slot.proporcao}`;
+const dev = import.meta.env.DEV;
+---
+{slot.foto ? (
+  <figure class="sb-foto" style={estilo} data-paralaxe={paralaxe} data-slot={slot.id}>
+    <div class="sb-foto__miolo">
+      <Image
+        src={slot.foto}
+        alt={slot.alt}
+        format="webp"
+        quality={78}
+        widths={[640, 1280, 1760]}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding={eager ? 'sync' : 'async'}
+        style={slot.foco ? `object-position: ${slot.foco}` : undefined}
+      />
+    </div>
+  </figure>
+) : slot.reservar ? (
+  <figure
+    class:list={['sb-foto', 'sb-foto--vazia', tom === 'claro' && 'sb-foto--claro']}
+    style={estilo}
+    data-paralaxe={paralaxe}
+    data-slot={slot.id}
+    aria-hidden="true"
+  >
+    {dev && <figcaption class="sb-foto__nota">{slot.nota}</figcaption>}
+  </figure>
+) : null}

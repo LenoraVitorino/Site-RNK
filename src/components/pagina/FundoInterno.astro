@@ -1,0 +1,10 @@
+---
+/**
+ * Fundo das internas: o fundo estático (.int-fundo, em paginas2.css) por
+ * baixo, para quem tem movimento reduzido ou não tem WebGL, e a cena da
+ * home por cima, no roteiro interno (fundo-internas.ts), sem a minhoca.
+ */
+import FundoVivo from '../laboratorio/FundoVivo.astro';
+---
+<div class="int-fundo" aria-hidden="true"></div>
+<FundoVivo fundo="cena" roteiro="interna" />

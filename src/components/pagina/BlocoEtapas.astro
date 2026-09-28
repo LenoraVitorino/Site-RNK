@@ -1,0 +1,109 @@
+---
+/**
+ * Bloco 'etapas' das internas. Especificação: docs/04-design/paginas-internas.md,
+ * emenda E1 (pin MyDNA), que substitui o painel com régua do mapeamento "etapas".
+ *
+ * Linhas numeradas grandes, empilhadas: cada etapa é um cartão da home
+ * (a linha do tom, --int-linha; raio 18, sem borda e sem sombra) com o
+ * numeral fino à esquerda, a duração no lugar da data, acima do nome, e a
+ * descrição à direita.
+ * A cabeça (h2 em linhas) fica à esquerda, no topo da seção; não há painel.
+ *
+ * Variações: 4 ou 5 etapas, duração numérica ('10 dias') ou em texto
+ * ('Opcional'), ambas como o mesmo rótulo; fechamento opcional (o Full não
+ * tem); eyebrow opcional. A flag `fundo` é ignorada.
+ *
+ * Movimento: .entra em cada linha (--i até 4) e no fechamento. Os números
+ * são estáticos: o contador existe só no método da home.
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import { classesSecao, indice2, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'etapas'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const titulo = bloco.h2.length > 0 ? bloco.h2 : undefined;
+---
+<section class:list={classesSecao(secao, 'int-etapas')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={titulo ? secao.tituloId : undefined}>
+  <div class="container">
+    {(titulo || bloco.eyebrow) && <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} />}
+    <ol class="int-etapas__lista" role="list">
+      {bloco.etapas.map((etapa, i) => (
+        <li class="int-cartao int-etapa entra" style={`--i:${Math.min(i, 4)}`}>
+          <span class="int-etapa__n" aria-hidden="true">{indice2(Number(etapa.n) || i + 1)}</span>
+          <div class="int-etapa__cabeca">
+            <p class="rotulo int-etapa__duracao">{etapa.duracao}</p>
+            <h3 class="int-etapa__nome">{etapa.nome}</h3>
+          </div>
+          <p class="int-etapa__descricao">{etapa.descricao}</p>
+        </li>
+      ))}
+    </ol>
+    {bloco.fechamento && <p class="int-etapas__fechamento entra">{bloco.fechamento}</p>}
+  </div>
+</section>
+
+<style>
+  /* Pilha de linhas: vão pequeno, como as caixas do pin. */
+  .int-etapas__lista { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+
+  /* Linha: numeral | duração + nome | descrição. O padding é o mesmo
+     de todo cartão escuro (--int-cartao-pad), coerente com blocos e produtos. */
+  .int-etapa {
+    display: grid;
+    grid-template-columns: minmax(88px, .32fr) minmax(0, 1fr) minmax(0, 1.15fr);
+    column-gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+    min-width: 0;
+    padding: var(--int-cartao-pad);
+    /* Vence o fundo de .int-cartao: #0e0e0e na cena, #161616 em preto, #f4f4f2 em papel. */
+    background: var(--int-linha);
+  }
+
+  /* Numeral fino na escala dos números da home, na tinta do tom e sem amarelo. */
+  .int-etapa__n {
+    font-family: var(--font-titulo);
+    font-size: clamp(44px, 4.6vw, 68px);
+    font-weight: 300;
+    line-height: .9;
+    letter-spacing: -.06em;
+    font-variant-numeric: tabular-nums;
+    color: var(--int-tinta);
+  }
+
+  /* A duração ocupa o lugar da data do pin: rótulo pequeno acima do nome. */
+  .int-etapa__cabeca { display: grid; gap: 12px; justify-items: start; min-width: 0; }
+  .int-etapa__nome {
+    max-width: 16ch;
+    font-family: var(--font-titulo);
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -.04em;
+    color: var(--int-tinta);
+    overflow-wrap: break-word;
+  }
+
+  .int-etapa__descricao { max-width: 50ch; font-size: 16px; line-height: 1.65; color: var(--int-corpo); }
+
+  .int-etapas__fechamento {
+    max-width: 62ch;
+    margin-top: clamp(32px, 4vw, 56px);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--int-corpo);
+  }
+
+  /* Tablet e celular: numeral | duração + nome; a descrição desce e ocupa a linha. */
+  @media (max-width: 899.98px) {
+    .int-etapa { grid-template-columns: auto minmax(0, 1fr); row-gap: 20px; }
+    .int-etapa__descricao { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 599.98px) {
+    .int-etapa__n { font-size: 36px; }
+  }
+</style>

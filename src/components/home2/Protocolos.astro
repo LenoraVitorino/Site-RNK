@@ -15,7 +15,7 @@ const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[
       {cartas.map((p, i) => (
         <article class="feature-card entra">
           <div class="feature-card__arte"><ArtePilar tipo={i} /></div>
-          <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+          <div class="feature-card__texto"><h3 data-quebra="junta">{p.titulo}</h3><p>{p.texto}</p></div>
         </article>
       ))}
     </div>

@@ -1,0 +1,230 @@
+/*
+ * Páginas internas no sistema da home (27/09/2026).
+ * Especificação: docs/04-design/paginas-internas.md, seção "Fundação".
+ *
+ * Folha global, importada só por src/layouts/Pagina.astro e pelo 404. Vem
+ * depois de home2.css e home-refinamento.css (da Base2) e só acrescenta:
+ * toda classe nova leva o prefixo int-. O que é de um componente só mora
+ * no <style> scoped dele, em src/components/pagina/.
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tokens, copiados dos presets. A home continua com os literais dela.  */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --int-cartao: #0e0e0e; --int-cartao-raio: 18px;
+  --int-caixa: #000; --int-caixa-raio: 16px;
+  --int-painel: rgb(10 10 10 / .58); --int-painel-raio: 16px;
+  --int-papel: #e7e7e5; --int-papel-ficha: #efefed; --int-papel-texto: #252523; --int-papel-rotulo: #5f5f5d;
+  --int-apoio: #b6b6b4; --int-corpo: #bcbcbc; --int-cartao-texto: #b6b6b6; --int-mudo: #aaa;
+  --int-indice: rgb(242 242 238 / .45);
+  --int-gap-cartoes: 16px;
+  --int-cartao-pad: clamp(24px, 2.4vw, 32px); /* padding de todo cartão escuro: .int-cartao, linhas de etapas, lados do antesDepois */
+  --int-junta: clamp(24px, 3vw, 40px);
+  --int-topo-fixo: calc(var(--altura-header) + 56px);
+  /* Tinta por tom (28/09/2026). Estes são os valores da cena, o padrão; as
+     dobras sólidas (.int-secao--papel e .int-secao--preto, abaixo) os
+     redefinem. Os componentes leem só os tokens, nunca a classe do tom. */
+  --int-tinta: var(--papel); --int-cinza: var(--cinza); --int-valor: rgb(242 242 238 / .88);
+  --int-marca: rgb(242 242 238 / .4); --int-check: rgb(242 242 238 / .5);
+  --int-linha: #0e0e0e; --int-faq: rgb(242 242 238 / .06); --int-foco: var(--papel);
+  --int-pilula: rgb(242 242 238 / .1); --int-raio-interno: 12px;
+  --int-antes: #070707; --int-antes-texto: #8f8f8b; --int-depois: #141413; --int-depois-texto: #d0d0cc;
+  /* Na cena as fichas do mosaico são escuras, como no preto: fichas claras
+     empilhadas logo depois de uma dobra papel liam como duas sólidas
+     seguidas (Revena Start, 28/09). */
+  --int-ficha: var(--grafite); --int-ficha-texto: var(--papel);
+}
+
+/* ------------------------------------------------------------------ */
+/* Ritmo. Toda seção: class="secao int-secao int-{tipo}". O .secao já  */
+/* dá padding-block var(--esp-secao).                                   */
+/* ------------------------------------------------------------------ */
+
+.int-secao { position: relative; }
+.int-secao--junta { padding-top: var(--int-junta); }
+.int-secao--cola-abaixo { padding-bottom: var(--int-junta); }
+
+/* Tons (28/09/2026): planejarTons() em contexto.ts. Cena = transparente;
+   preto e papel são dobras sólidas que redefinem os tokens. Regra: dentro
+   de papel só há superfícies claras; dentro de preto, só escuras (o
+   cabeçalho camaleão lê o fundo sob ele). */
+.int-secao--preto {
+  background: var(--fundo); color: var(--papel);
+  --int-cartao: var(--grafite); --int-linha: var(--grafite); --int-faq: var(--grafite);
+  --int-raio-interno: var(--int-cartao-raio);
+  --int-antes: #0e0e0e; --int-depois: var(--grafite);
+  --int-ficha: var(--grafite); --int-ficha-texto: var(--papel);
+}
+.int-secao--papel {
+  background: var(--int-papel); color: var(--int-papel-texto);
+  --int-tinta: #252523; --int-cinza: #5f5f5d; --int-valor: #252523;
+  --int-corpo: #50504e; --int-apoio: #50504e; --int-cartao-texto: #50504e;
+  --int-mudo: #5f5f5d; --int-indice: #5f5f5d;
+  --int-marca: rgb(37 37 35 / .55); --int-check: rgb(37 37 35 / .6);
+  --int-cartao: #efefed; --int-linha: #f4f4f2; --int-faq: #efefed;
+  --int-foco: #262624; --int-pilula: #262624;
+  --int-raio-interno: var(--int-cartao-raio);
+  --int-antes: #efefed; --int-antes-texto: #626260; --int-depois: #f4f4f2; --int-depois-texto: #252523;
+  --int-ficha: #efefed; --int-ficha-texto: #252523;
+}
+.int-secao--papel .rotulo { color: var(--int-papel-rotulo); }
+/* Cena seguida do fecho, também na cena: os dois respiros somavam 152px sem
+   troca de tom no celular e no tablet. O fecho encosta um pouco (a pendência
+   só aparece em dev). */
+@media (max-width: 899.98px) {
+  :is(.int-secao[data-tom='cena']:not(.int-cta), .int-secao[data-tom='cena'] + .int-pendencia) + .int-cta[data-tom='cena'] { padding-top: 48px; }
+}
+.int-secao--papel :focus-visible { outline-color: var(--int-foco); }
+/* A caixa preta do Ecossistema vira a própria dobra. */
+:is(.int-secao--papel, .int-secao--preto) .int-caixa { background: none; padding: 0; border-radius: 0; }
+/* Régua sem título logo depois da abertura do Contato: lê como prova sob o
+   título, a 128px do cartão, e não fica solta entre dois vãos de seção. */
+/* O script do formulário pode ficar entre as duas seções. */
+:is(.int-formulario--abertura, .int-formulario--abertura + script) + .int-numeros--regua:not(:has(.int-cabeca)) { padding-top: 0; }
+
+/* Movimento de entrada (.entra, da Base2). O foco do teclado revela o bloco,
+   mesmo abaixo da faixa que o observador usa; com movimento reduzido, nada
+   sobe nem esmaece: tudo já nasce no lugar. */
+.js .entra:focus-within { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js .entra, .entra.visivel { opacity: 1; transform: none; transition: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Cabeça de seção (CabecaSecao.astro). O eyebrow é sempre p.rotulo.    */
+/* ------------------------------------------------------------------ */
+
+.int-cabeca { display: grid; gap: 14px; justify-items: start; max-width: 760px; margin-bottom: clamp(32px, 4vw, 56px); }
+.int-cabeca__titulo { max-width: 22ch; }
+.int-cabeca__titulo > span { display: block; }
+.int-cabeca__titulo > span[data-junto] { display: inline; white-space: nowrap; }
+.int-cabeca__apoio { font-size: 18px; line-height: 1.55; color: var(--int-apoio); max-width: 52ch; }
+.int-cabeca--coluna { margin-bottom: 0; }
+.int-cabeca--centro { justify-items: center; text-align: center; margin-inline: auto; }
+.int-cabeca--grande .int-cabeca__titulo { font-size: clamp(2.4rem, 4.4vw, 4rem); }
+
+/* ------------------------------------------------------------------ */
+/* Grade editorial (preset Operação): título preso à esquerda.          */
+/* ------------------------------------------------------------------ */
+
+.int-grade-2 { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); gap: 9%; align-items: start; }
+.int-grade-2__direita { grid-column: 2; }
+@media (min-width: 900px) {
+  .int-grade-2__fixo { position: sticky; top: var(--int-topo-fixo); }
+}
+@media (max-width: 1099.98px) {
+  .int-grade-2 { gap: 5%; }
+}
+@media (max-width: 899.98px) {
+  .int-grade-2 { grid-template-columns: 1fr; gap: 36px; }
+  .int-grade-2__direita { grid-column: auto; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Grade de cartões (preset Features): 6 colunas; a quantidade de itens */
+/* (data-n) decide o span, como a home (3 → 2+2+2, 5 → 3+2...).         */
+/* ------------------------------------------------------------------ */
+
+.int-grade-6 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--int-gap-cartoes); list-style: none; margin: 0; padding: 0; }
+.int-grade-6 > * { grid-column: span 2; min-width: 0; }
+.int-grade-6[data-n='1'] > * { grid-column: span 6; }
+.int-grade-6:is([data-n='2'], [data-n='4']) > * { grid-column: span 3; }
+.int-grade-6[data-n='5'] > :nth-child(n+4) { grid-column: span 3; }
+.int-grade-6:is([data-n='3'], [data-n='6']) > * { grid-column: span 2; }
+@media (max-width: 1099.98px) {
+  .int-grade-6 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .int-grade-6 > *,
+  .int-grade-6[data-n='1'] > *,
+  .int-grade-6:is([data-n='2'], [data-n='4']) > *,
+  .int-grade-6[data-n='5'] > :nth-child(n+4),
+  .int-grade-6:is([data-n='3'], [data-n='6']) > * { grid-column: auto; }
+  /* O último cartão ímpar fica na margem, sob o primeiro: centrado, soltava do grid editorial. */
+  .int-grade-6:is([data-n='3'], [data-n='5']) > :last-child { grid-column: 1 / -1; width: calc(50% - 10px); justify-self: start; }
+}
+@media (max-width: 599.98px) {
+  .int-grade-6 { grid-template-columns: minmax(0, 1fr); }
+  .int-grade-6:is([data-n='3'], [data-n='5']) > :last-child { width: 100%; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Superfícies. Nenhuma tem border ou box-shadow: o "fio fino" não      */
+/* existe na home, e o sem-contornos.css não precisa mudar.             */
+/* ------------------------------------------------------------------ */
+
+.int-cartao { background: var(--int-cartao); border-radius: var(--int-cartao-raio); padding: var(--int-cartao-pad); }
+.int-caixa { background: var(--int-caixa); border-radius: var(--int-caixa-raio); padding: clamp(20px, 4vw, 56px); }
+/* Nunca .entra no painel nem num ancestral dele: opacidade < 1 quebra o backdrop-filter. */
+.int-painel {
+  max-width: 1196px; margin-inline: auto; padding: clamp(20px, 3vw, 40px);
+  border-radius: var(--int-painel-raio); background: var(--int-painel);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.int-ficha { background: var(--int-ficha); border-radius: 10px; padding: clamp(22px, 2.5vw, 36px); color: var(--int-ficha-texto); }
+
+/* ------------------------------------------------------------------ */
+/* Tipografia utilitária. O home2.css zera as margens de p: o espaço    */
+/* vem sempre do gap do contêiner. O texto vindo de set:html só é       */
+/* estilizado por .int-rico, .int-manifesto e .int-citacao.             */
+/* ------------------------------------------------------------------ */
+
+.int-indice { font-size: 11px; letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--int-indice); }
+/* Sem hifenização automática: ela partia 'conec-tado' e 'comer-cial' em
+   colunas estreitas. Só o título de uma palavra longa ('Autorresponsabilidade')
+   leva .int-h3--longa e pode partir. */
+.int-h3 { font-size: clamp(21px, 2vw, 29px); font-weight: 350; line-height: 1.2; letter-spacing: -.04em; hyphens: manual; overflow-wrap: break-word; }
+.int-h3--longa { hyphens: auto; }
+
+.int-rico { display: grid; gap: 20px; }
+.int-rico > p:not(.int-citacao, .int-destaque) { font-size: clamp(16px, 1.3vw, 18px); line-height: 1.65; color: var(--int-corpo); max-width: 56ch; }
+.int-rico strong { font-weight: 500; color: var(--int-tinta); }
+.int-rico a { color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.int-rico a:hover { text-decoration-thickness: 2px; }
+
+.int-manifesto > p:not(.int-citacao, .int-destaque) { font-size: clamp(20px, 1.8vw, 26px); font-weight: 300; line-height: 1.5; letter-spacing: -.02em; color: var(--int-cinza); }
+.int-manifesto strong { font-weight: inherit; color: var(--int-tinta); }
+
+.int-citacao {
+  font-family: var(--font-titulo); font-weight: 300; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.18;
+  letter-spacing: -.035em; word-spacing: -.08em; color: var(--int-tinta); max-width: 28ch; text-wrap: balance;
+}
+.int-citacao :is(em, strong) { font-style: normal; font-weight: inherit; }
+.int-citacao--centro { font-size: clamp(28px, 3.2vw, 46px); line-height: 1.15; letter-spacing: -.045em; max-width: 30ch; margin-inline: auto; text-align: center; }
+
+/* O -.02em é o mesmo do manifesto: sem ele, o destaque fino em 26px ficava
+   mais aberto que os títulos ao lado. */
+.int-destaque { font-size: clamp(20px, 1.8vw, 26px); font-weight: 300; line-height: 1.35; letter-spacing: -.02em; color: var(--int-tinta); max-width: 56ch; text-wrap: balance; }
+.int-destaque strong { font-weight: inherit; }
+
+/* ------------------------------------------------------------------ */
+/* Botão papel das chamadas finais (ctaFinal e 404), como o #fale da    */
+/* home: o fundo papel vence o hover amarelo do .botao.                 */
+/* ------------------------------------------------------------------ */
+
+:is(.int-cta__acao, .int-erro__acoes) .botao { background: var(--papel); color: #171715; }
+
+/* ------------------------------------------------------------------ */
+/* Fundo estático (FundoInterno.astro): fica no lugar da cena com      */
+/* movimento reduzido ou sem WebGL. O canvas vem depois no DOM, também  */
+/* em z-index 0, é opaco e o cobre quando a cena roda.                  */
+/* ------------------------------------------------------------------ */
+
+.int-fundo {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(70% 55% at 50% 108%, rgb(242 242 238 / .07), transparent 70%), #090907;
+}
+.int-fundo::after { content: ''; position: absolute; inset: 0; background: var(--grao-fino); opacity: .14; mix-blend-mode: soft-light; }
+
+/* ------------------------------------------------------------------ */
+/* Formulário. A regra clara da home só cobre input e select.           */
+/* ------------------------------------------------------------------ */
+
+.home-refinada .form-card .field textarea { background: #f4f4f2; color: #252523; min-height: 120px; padding: 12px 14px; resize: vertical; }
+
+/* ------------------------------------------------------------------ */
+/* Pendência: recado para o time, só em dev.                            */
+/* ------------------------------------------------------------------ */
+
+.int-pendencia { padding-block: 12px; }
+.int-pendencia p { max-width: 760px; font-size: 13px; line-height: 1.5; padding: 12px 16px; border-radius: 8px; background: rgb(255 209 3 / .1); color: #e8dfb8; }

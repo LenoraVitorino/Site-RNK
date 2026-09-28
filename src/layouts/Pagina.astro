@@ -1,11 +1,15 @@
 ---
 /**
- * Casca das páginas internas: mesma base da home, com o conteúdo vindo de uma
- * lista de blocos em src/data/paginas/.
+ * Casca das páginas internas no sistema da home (27/09/2026): Base2 com o
+ * body .home-refinada, a cena ao fundo (FundoInterno) e os blocos de
+ * src/data/paginas/ desenhados pelo despachante (Blocos2).
+ * Especificação: docs/04-design/paginas-internas.md. O índice lateral da
+ * página saiu em 28/09/2026, a pedido da Lenora.
  */
-import Base from './Base.astro';
-import Blocos from '../components/pagina/Blocos.astro';
-import '../styles/pagina.css';
+import Base2 from './Base2.astro';
+import FundoInterno from '../components/pagina/FundoInterno.astro';
+import Blocos2 from '../components/pagina/Blocos2.astro';
+import '../styles/paginas2.css';
 import type { Pagina } from '../data/paginas/tipos';
 
 interface Props {
@@ -14,6 +18,7 @@ interface Props {
 
 const { pagina } = Astro.props;
 ---
-<Base titulo={pagina.titulo} descricao={pagina.descricao}>
-  <Blocos blocos={pagina.blocos} />
-</Base>
+<Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada">
+  <FundoInterno slot="fundo" />
+  <Blocos2 blocos={pagina.blocos} rota={pagina.rota} />
+</Base2>

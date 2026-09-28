@@ -15,7 +15,8 @@ const canal = whatsapp ? 'WhatsApp' : 'e-mail';
 <section class="secao" id="formulario" aria-labelledby="formulario-titulo">
   <div class="container form-block">
     <div class="form-block__text entra">
-      <h2 class="titulo caps" id="formulario-titulo">{formulario.titulo}</h2>
+      {/* data-quebra="livre": com o &nbsp; do fim, o balance deixava "transformar" sozinho numa linha a 320px. */}
+      <h2 class="titulo caps" id="formulario-titulo" data-quebra="livre">{formulario.titulo}</h2>
       <p>{formulario.texto}</p>
     </div>
     <form class="form-card entra" novalidate data-form-contato data-email={rodape.email} data-whatsapp={whatsapp}>

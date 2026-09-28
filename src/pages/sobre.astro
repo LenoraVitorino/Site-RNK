@@ -1,0 +1,51 @@
+---
+/**
+ * Sobre a Renke (28/09/2026). Especificação: docs/04-design/pagina-sobre.md.
+ *
+ * Um ensaio de livro de arquitetura. Ritmo (28/09/2026, "não deixe dobras
+ * seguidas sólidas"): cena, papel, cena, papel, cena, papel, cena. A cena
+ * 3D fica na abertura (hero), na tese e na casa (pilares) e no fecho
+ * (formulario); nas três dobras papel ela para sozinha, porque o
+ * fundo-motor só roda enquanto um `main > [data-cena]` está à vista. Por
+ * isso toda seção é filha direta do <main>.
+ *
+ * Sem índice lateral (saiu de todas as páginas em 28/09/2026). O /sobre quebra de propósito a regra "no
+ * máximo uma dobra clara por página" (pedido 1 de 28/09).
+ *
+ * Todo o texto vem de src/data/sobre.ts, igual nas duas versões.
+ */
+import Base2 from '../layouts/Base2.astro';          // primeiro: a ordem do CSS depende disso
+import FundoInterno from '../components/pagina/FundoInterno.astro';
+import BlocoCtaFinal from '../components/pagina/BlocoCtaFinal.astro';
+import type { ContextoSecao } from '../components/pagina/contexto';
+import SobreAbertura from '../components/sobre/SobreAbertura.astro';
+import SobreManifesto from '../components/sobre/SobreManifesto.astro';
+import SobreTese from '../components/sobre/SobreTese.astro';
+import SobreProva from '../components/sobre/SobreProva.astro';
+import SobreCasa from '../components/sobre/SobreCasa.astro';
+import SobreCultura from '../components/sobre/SobreCultura.astro';
+import '../styles/paginas2.css';
+import '../styles/sobre.css';
+import { seo, fecho } from '../data/sobre';
+
+/** O fecho é um BlocoCtaFinal comum, de volta à cena, no quadro do formulário. */
+const secaoFecho: ContextoSecao = {
+  id: 'sobre-fecho', tituloId: 'sobre-fecho-titulo', indice: 6,
+  cena: 'formulario', tom: 'cena', junta: false, colaAbaixo: false, primeira: false,
+};
+---
+<Base2 titulo={seo.titulo} descricao={seo.descricao} classe="home-refinada pg-sobre">
+  <FundoInterno slot="fundo" />
+  <SobreAbertura />
+  <SobreManifesto />
+  <SobreTese />
+  <SobreProva />
+  <SobreCasa />
+  <SobreCultura />
+  <BlocoCtaFinal bloco={fecho} secao={secaoFecho} />
+</Base2>
+
+<script>
+  import { iniciarParalaxe } from '../components/sobre/paralaxe';
+  iniciarParalaxe();
+</script>

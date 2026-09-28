@@ -15,7 +15,10 @@
   .header .nav { display: contents; }
   .header .nav__list { grid-column: 2; grid-row: 1; gap: 4px; }
   .header .nav__item { position: relative; }
-  .header .nav__link { padding: 10px 12px; font-size: 14px; }
+  .header .nav__link { padding: 10px 12px; font-size: 14px; min-height: 44px; }
+  /* Alvos de 44px também no desktop (tablet deitado é toque); a caixa tem 64px. */
+  .header .logo { min-height: 44px; }
+  .header .header__acao .botao { min-height: 44px; }
   .header .megamenu, .header .megamenu[hidden] { position: absolute; inset: 100% auto auto 0; width: max-content; min-width: 260px; max-width: min(340px, 90vw); padding: 16px 0 0; background: none; z-index: 110; }
   .header .megamenu__inner { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 0; padding: 22px 24px; background: #101010; border: 0; border-radius: 14px; box-shadow: 0 16px 36px rgb(0 0 0 / .2); }
   .header--claro .megamenu__inner { background: #f2f2ee; }
@@ -25,12 +28,21 @@
   .header .megamenu__list a { min-height: 44px; padding: 10px; margin-inline: -10px; white-space: nowrap; font-size: 14px; }
 }
 @media (max-width: 1023.98px) {
+  /* Celular e tablet (28/09/2026, auditoria mobile): a caixa passa 16px de
+     cada lado da coluna de texto, para o logo e o menu ficarem na mesma
+     margem do conteúdo; o fundo fica quase opaco, porque aqui não há
+     desfoque (ele prenderia o drawer) e o texto que rola por baixo
+     aparecia através da caixa. */
+  .header { padding-inline: max(8px, calc(var(--grid-inset) - 16px)); --cab-bg: rgb(8 8 8 / .96); }
+  .header--claro { --cab-bg: rgb(242 242 238 / .97); }
+  .header .header__inner { display: flex; gap: 10px; padding-inline: 16px; }
+  .header .logo { min-height: 44px; }
   .header .logo__img { width: 100px; }
-  .header .header__inner { display: flex; gap: 10px; }
   .header .header__acao { margin-left: auto; }
-  .header .header__acao .botao { font-size: 13px; padding: 10px 12px; }
+  .header .header__acao .botao { font-size: 13px; padding: 10px 12px; min-height: 44px; }
   .header .nav-toggle { display: grid; flex: none; }
-  .header .nav { display: block; position: fixed; inset: var(--altura-header) 0 0 auto; width: min(88vw, 360px); background: #0a0a0a; padding: 20px 24px 48px; overflow-y: auto; transform: translateX(100%); visibility: hidden; }
+  /* O drawer começa 8px abaixo da caixa (que termina em 14 + 64 = 78px). */
+  .header .nav { display: block; position: fixed; inset: calc(var(--altura-header) - 6px) 0 0 auto; width: min(88vw, 360px); background: #0a0a0a; padding: 20px 24px 48px; overflow-y: auto; transform: translateX(100%); visibility: hidden; }
   .header .nav.is-open { transform: none; visibility: visible; }
   .header .nav__list { display: block; }
   .header .megamenu { position: static; min-width: 0; padding: 0 0 12px; }
@@ -40,4 +52,78 @@
   .header--claro .nav { background: var(--papel); }
   .header--amarelo .nav { background: var(--amarelo); }
   .nav-overlay:not([hidden]) { display: block !important; }
+}
+/* Abaixo de 360px a fileira (logo, Contato e menu) não cabia na caixa: o
+   botão do menu saía da tela. Sem a seta do Contato e com vãos de 8px, ela
+   cabe com folga; o rótulo não muda. */
+@media (max-width: 359.98px) {
+  .header .header__inner { gap: 8px; }
+  .header .header__acao .botao { padding-inline: 14px; }
+  .header .header__acao .botao .botao__icone { display: none; }
+}
+
+/* ── Movimento do menu (desktop) ──────────────────────────────────────────
+   Uma pílula só desliza entre os itens do topo; o painel abre com mola
+   suave, vindo do lado de onde o cursor chegou; os itens entram em cascata
+   e um realce acompanha o cursor dentro do painel, com a seta surgindo. */
+.nav__realce, .megamenu__realce { display: none; }
+.header .megamenu__rotulo { min-width: 0; }
+.header .megamenu__seta { display: none; }
+@media (min-width: 1024px) {
+  .header { --mola: cubic-bezier(.16, 1, .3, 1); --realce-topo: rgb(242 242 238 / .08); --realce-painel: rgb(242 242 238 / .06); }
+  .header--claro { --realce-topo: rgb(22 22 22 / .07); --realce-painel: rgb(22 22 22 / .055); }
+  .header--amarelo { --realce-topo: rgb(22 22 22 / .08); --realce-painel: rgb(22 22 22 / .08); }
+
+  .header .nav__list { position: relative; z-index: 1; }
+  .header .nav__realce {
+    display: block; position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none;
+    width: var(--w, 0); height: var(--h, 0); border-radius: 8px; background: var(--realce-topo);
+    transform: translate3d(var(--x, 0), var(--y, 0), 0); opacity: 0;
+    transition: transform .45s var(--mola), width .45s var(--mola), height .45s var(--mola), opacity .25s ease, background-color .4s ease;
+  }
+  .header .nav__realce.is-visivel { opacity: 1; }
+  .header.tem-realce .nav__link:hover, .header.tem-realce .nav__trigger[aria-expanded="true"] { background: transparent; }
+
+  /* Painel: o invólucro só mostra/esconde; o movimento fica na caixa. */
+  .header .megamenu, .header .megamenu[hidden] { display: block; transform: none; opacity: 1; transition: visibility 0s; }
+  .header .megamenu[hidden] { visibility: hidden; pointer-events: none; transition: visibility 0s .22s; }
+  .header .megamenu__inner {
+    position: relative; transform-origin: 40px 0; animation: none;
+    transition: opacity .3s ease, transform .55s var(--mola), background-color .4s ease;
+  }
+  .header .megamenu[hidden] .megamenu__inner { opacity: 0; transform: translate3d(0, -10px, 0) scale(.96); transition: opacity .18s ease, transform .22s ease-in; }
+  .header .megamenu[hidden][data-de="direita"] .megamenu__inner { transform: translate3d(28px, -4px, 0) scale(.98); }
+  .header .megamenu[hidden][data-de="esquerda"] .megamenu__inner { transform: translate3d(-28px, -4px, 0) scale(.98); }
+
+  /* Cascata: título e itens sobem um a um ao abrir; ao fechar somem juntos. */
+  .header .megamenu__title, .header .megamenu__list li { transition: opacity .35s ease calc(70ms + var(--i, -1) * 38ms), transform .5s var(--mola) calc(70ms + var(--i, -1) * 38ms); }
+  .header .megamenu[hidden] :is(.megamenu__title, .megamenu__list li) { opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity .12s ease, transform 0s .2s; }
+  .header .megamenu__list li { position: relative; z-index: 1; }
+
+  .header .megamenu__realce {
+    display: block; position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none;
+    width: var(--w, 0); height: var(--h, 0); border-radius: 8px; background: var(--realce-painel);
+    transform: translate3d(var(--x, 0), var(--y, 0), 0); opacity: 0;
+    transition: transform .4s var(--mola), width .4s var(--mola), height .4s var(--mola), opacity .2s ease;
+  }
+  .header .megamenu__realce.is-visivel { opacity: 1; }
+  .header.tem-realce .megamenu__list a:hover, .header.tem-realce .megamenu__list a:focus-visible { background: transparent; }
+
+  .header .megamenu__list a { display: flex; align-items: center; width: calc(100% + 20px); }
+  .header .megamenu__rotulo { transition: transform .4s var(--mola); }
+  .header .megamenu__seta { display: block; flex: none; margin-left: auto; padding-left: 16px; box-sizing: content-box; opacity: 0; transform: translate3d(-8px, 0, 0); transition: opacity .25s ease, transform .4s var(--mola); }
+  .header .megamenu__list a:is(:hover, :focus-visible) .megamenu__rotulo { transform: translate3d(3px, 0, 0); }
+  .header .megamenu__list a:is(:hover, :focus-visible) .megamenu__seta { opacity: .75; transform: none; }
+
+  /* Reposicionar sem animar (primeira aparição, troca de lado do painel). */
+  .header .mm-salto, .header .mm-salto .megamenu__inner { transition: none !important; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .header .nav__realce, .header .megamenu__realce { transition: opacity .2s ease; }
+  .header .megamenu__inner, .header .megamenu[hidden] .megamenu__inner,
+  .header .megamenu[hidden][data-de] .megamenu__inner { transform: none; transition: opacity .2s ease; }
+  .header .megamenu__title, .header .megamenu__list li,
+  .header .megamenu[hidden] :is(.megamenu__title, .megamenu__list li) { transform: none; transition: opacity .2s ease; }
+  .header .megamenu__rotulo, .header .megamenu__seta,
+  .header .megamenu__list a:is(:hover, :focus-visible) :is(.megamenu__rotulo, .megamenu__seta) { transform: none; transition: opacity .2s ease; }
 }
