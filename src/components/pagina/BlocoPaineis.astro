@@ -1,0 +1,81 @@
+---
+/**
+ * Bloco 'paineis' das internas (Academy, 28/09/2026). Referência: a grade de
+ * serviços da bigdigital.energy, enviada pela Lenora.
+ *
+ * Quatro painéis numa linha (2×2 no tablet, pilha no celular): ícone de linha no canto superior esquerdo,
+ * índice (01…) no direito, título grande e uma frase curta assentados na base.
+ * Cartões pretos no padrão dos Features da home (#0e0e0e, título claro,
+ * texto #b6b6b6), com o fundo subindo um tom de um painel para o outro, como
+ * na referência. A seção puxa o preto (peso em planejarTons, contexto.ts).
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import Icone from '../ui/Icone.astro';
+import { classesSecao, indice2, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'paineis'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+---
+<section class:list={classesSecao(secao, 'int-paineis')} id={secao.id} data-tom={secao.tom} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <CabecaSecao id={secao.tituloId} titulo={bloco.h2} />
+    <ol class="int-paineis__grade" role="list">
+      {bloco.itens.map((item, i) => (
+        <li class="int-painel entra" style={`--i:${Math.min(i, 5)}`}>
+          <div class="int-painel__topo">
+            <Icone nome={item.icone} size={32} class="int-painel__icone" />
+            <span class="int-painel__indice num" aria-hidden="true">{indice2(i + 1)}</span>
+          </div>
+          <div class="int-painel__base">
+            <h3 class="int-painel__titulo">{item.titulo}</h3>
+            <p class="int-painel__texto">{item.texto}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .int-paineis__grade {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+  }
+  /* Cada painel ocupa 3 linhas da grade (topo, título, texto) e as divide com
+     os vizinhos (subgrid): títulos e textos começam na mesma altura, tenha o
+     título uma linha ou duas. */
+  .int-painel {
+    display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 14px;
+    justify-self: stretch; width: 100%;
+    padding: clamp(22px, 2vw, 32px);
+    border-radius: 18px; background: #0e0e0e; color: #f2f2ee;
+  }
+  .int-painel:nth-child(2) { background: #121212; }
+  .int-painel:nth-child(3) { background: #161616; }
+  .int-painel:nth-child(4) { background: #1b1b1a; }
+
+  .int-painel__topo { display: flex; justify-content: space-between; align-items: start; margin-bottom: clamp(48px, 4.4vw, 72px); }
+  .int-painel__topo :global(.int-painel__icone) { color: #f2f2ee; opacity: .85; }
+  .int-painel__indice { font-size: 15px; letter-spacing: .02em; color: #8a8a88; }
+
+  /* A base some da caixa: título e texto viram as linhas 2 e 3 do subgrid. */
+  .int-painel__base { display: contents; }
+  .int-painel__titulo {
+    margin: 0; font-family: var(--font-titulo); font-weight: 300;
+    font-size: clamp(24px, 1.9vw, 30px); line-height: 1.1; letter-spacing: -.035em; color: #f2f2ee;
+    text-wrap: balance;
+  }
+  .int-painel__texto { margin: 0; max-width: 40ch; font-size: 15px; line-height: 1.55; color: #b6b6b6; text-wrap: pretty; }
+
+  @media (max-width: 1099.98px) {
+    .int-paineis__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 599.98px) {
+    .int-paineis__grade { grid-template-columns: minmax(0, 1fr); }
+    .int-painel__topo { margin-bottom: 40px; }
+  }
+</style>

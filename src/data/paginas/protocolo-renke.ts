@@ -1,7 +1,9 @@
 import type { Pagina } from './tipos';
 
 /**
- * Copy literal de docs/03-copy/protocolo-renke.md
+ * Base: docs/03-copy/protocolo-renke.md, no padrão da página da Academy
+ * (28/09/2026): hero curto, cartões pretos no lugar da lista, sem rótulos
+ * pequenos, sem a dobra "A tese" e sem aspas, "+" ou "=" no texto.
  * ⚠️ O preço (R$7k) não vai para o site, conforme o próprio documento.
  * Notas SEO não especificadas no briefing — o title abaixo é a sugestão a validar.
  */
@@ -9,87 +11,65 @@ export const protocoloRenke: Pagina = {
   rota: '/academy/protocolo-renke',
   titulo: 'Protocolo Renke | O sistema operacional de uma agência de RevOps lucrativa',
   descricao:
-    'Tudo que a Renke construiu operando +140 projetos, documentado e transferido para você aplicar no seu nicho.',
+    'Tudo que a Renke construiu operando +140 projetos, documentado e transferido para você aplicar no seu negócio.',
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['O sistema operacional inteiro de uma operação de RevOps lucrativa.', 'Aberto para você modelar.'],
-      realce: 1,
-      sub: 'O Protocolo Renke é o flagship da Renke Academy. Tudo que a Renke construiu em 4 anos operando +140 projetos, documentado e transferido para você aplicar no seu nicho. Posicionamento, produtos, processos, ferramentas, venda, entrega, precificação, gestão de equipe. Sem filtro.',
-      cta: 'Quero o sistema operacional da Renke →',
+      titulo: ['Protocolo Renke'],
+      semRotulo: true,
+      sub: 'Tudo que a Renke construiu em quatro anos de operação, documentado para você aplicar no seu negócio.',
+      cta: 'Fale com a equipe',
     },
     {
-      tipo: 'lista',
-      eyebrow: 'Para quem é',
-      h2: 'Se você é dono de agência e...',
-      fundo: 'alt',
+      tipo: 'paineis',
+      h2: 'Para donos de agência que buscam',
       itens: [
-        'Tá preso no operacional e não consegue sair',
-        'Cobra pouco, entrega muito, e mesmo assim perde cliente',
-        'Quer parar de escalar com mais gente e começar a escalar com mais valor',
-        'Sente que construiu uma prisão em vez de um negócio',
-        'Quer um modelo com menos loucura e mais lucro',
+        { icone: 'Workflow', titulo: 'Operação independente', texto: 'Uma operação que roda sem depender de você no dia a dia.' },
+        { icone: 'BadgeCheck', titulo: 'Preço à altura da entrega', texto: 'Cobrar pelo valor que entrega e manter os clientes por mais tempo.' },
+        { icone: 'TrendingUp', titulo: 'Escala com valor', texto: 'Crescer pelo valor entregue, não pelo tamanho da equipe.' },
+        { icone: 'Target', titulo: 'Mais lucro, menos caos', texto: 'Um negócio com rotina mais leve e margem de verdade.' },
       ],
     },
     {
       tipo: 'blocos',
-      eyebrow: '100% dos bastidores da Renke',
       h2: 'O que você recebe',
       itens: [
         {
           titulo: 'Posicionamento',
           texto:
-            'Como sair de "agência genérica" e criar um posicionamento que atrai clientes de alto ticket. Como a Renke se diferenciou num mercado comoditizado.',
+            'Como sair do modelo genérico e criar um posicionamento que atrai clientes de alto ticket. Como a Renke se diferenciou num mercado comoditizado.',
         },
         {
           titulo: 'Modelo comercial',
           texto:
-            'Como vender projetos de R$20k–R$40k e recorrências de R$6.5k–R$15k/mês. Processo de venda consultiva, precificação por valor, qualificação de clientes.',
+            'Como vender projetos de R$20k a R$40k e recorrências de R$6,5k a R$15k por mês, com venda consultiva, precificação por valor e qualificação de clientes.',
         },
         {
           titulo: 'Operação',
           texto:
-            'Como entregar com poucos clientes e margem alta. Estrutura de squads, rotinas semanais, rituais de gestão, distribuição de contas.',
+            'Como entregar com poucos clientes e margem alta. Estrutura de squads, rotinas semanais, rituais de gestão e distribuição de contas.',
         },
         {
-          titulo: 'Gestão de Equipe',
-          texto:
-            'Como montar uma equipe enxuta que opera sem depender de você. Cultura, processos, autonomia.',
+          titulo: 'Gestão de equipe',
+          texto: 'Como montar uma equipe enxuta que opera sem depender de você. Cultura, processos e autonomia.',
         },
         {
-          titulo: 'Método de Entrega',
+          titulo: 'Método de entrega',
           texto:
-            'O Protocolo Revena traduzido para você aplicar: diagnóstico, implementação, acompanhamento. Como entregar resultado real e reter cliente por anos.',
+            'O Protocolo Revena traduzido para você aplicar: diagnóstico, implementação e acompanhamento. Como entregar resultado real e reter clientes por anos.',
         },
         {
           titulo: 'Documentos reais',
           texto:
-            'Templates, playbooks, scripts, modelos de proposta, estruturas de relatório. Tudo que usamos hoje, não versões diluídas.',
+            'Templates, playbooks, scripts, modelos de proposta e estruturas de relatório. O que usamos hoje, sem versões diluídas.',
         },
       ],
     },
     {
-      tipo: 'texto',
-      eyebrow: 'A tese',
-      fundo: 'alt',
-      paragrafos: [
-        '<em>"Você não abriu uma agência para ter uma vida pior do que tinha antes dela."</em>',
-        'O mercado ensinou que crescer = mais clientes + mais equipe. Isso é uma armadilha. Quanto mais clientes, mais caos, mais rotatividade, menos margem, menos qualidade de vida.',
-        'O modelo Renke inverte: <strong>poucos clientes + entrega sofisticada + precificação por valor = escala vertical sem caos.</strong> Menos clientes, mais lucro, mais controle, mais liberdade.',
-        '<em>"Não é mentoria de quem parou de fazer. É o blueprint de quem faz isso todo dia."</em>',
-      ],
-    },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'Seção 5 · Prova social — estrutura definida ("o que as agências dizem", "o que as clínicas dizem"), mas os depoimentos ainda não foram coletados.',
-    },
-    {
       tipo: 'ctaFinal',
-      destaque: 'O Protocolo Renke não é para todo mundo.',
-      texto:
-        'É para quem tá pronto para matar o próprio negócio e reconstruir o modelo do zero, mas com inteligência e estrutura. Se quer só "mais dicas de marketing", não é para você. Se quer um sistema operacional completo para transformar sua agência, você está no momento certo.',
-      cta: 'Quero conhecer o Protocolo Renke →',
+      destaque: 'Um sistema operacional completo para a sua agência.',
+      texto: 'Posicionamento, vendas, entrega, precificação e gestão, documentados a partir da operação da Renke.',
+      cta: 'Quero conhecer o Protocolo Renke',
     },
   ],
 };

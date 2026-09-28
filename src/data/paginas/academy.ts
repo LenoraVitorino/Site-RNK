@@ -9,136 +9,115 @@ export const academy: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Seus clientes trocam de agência todo ano.', 'O problema não é a entrega. É o modelo.'],
-      realce: 1,
-      sub: 'O mercado joga de 2 maneiras. O jogo antigo está matando agências e frustrando clientes. O jogo novo está criando operações lucrativas com poucos clientes e responsabilidade real pelo resultado. A Renke Academy ensina o jogo novo.',
-      cta: 'Quero conhecer a Academy →',
+      titulo: ['Renke Academy'],
+      semRotulo: true,
+      sub: 'Aprenda a metodologia para conectar marketing, comercial e dados em uma única operação.',
+      cta: 'Fale com a equipe',
     },
     {
       tipo: 'antesDepois',
-      h2: 'Dois jogos. Você escolhe qual jogar.',
+      h2: 'O valor da sua entrega está além do marketing.',
       fundo: 'alt',
-      rotulos: ['O jogo antigo', 'O jogo novo'],
+      rotulos: ['O modelo tradicional', 'O modelo RevOps'],
       linhas: [
         [
-          'Cliente contrata agência pro tráfego, outra pro conteúdo, alguém implementa um CRM que ninguém usa, e todo mundo decide no feeling. Cada peça solta, nenhuma conversa com a outra. O dono do negócio trabalha cada vez mais sem ver o dinheiro voltar. Troca de agência todo ano achando que o problema é a agência. E a agência? Cobra pouco, entrega muito, perde o cliente mesmo assim, e começa tudo de novo com outro.',
-          'Os negócios que estão crescendo com consistência já operam com RevOps. Marketing, comercial e dados como um sistema só. Faturamento previsível. E as agências que operam esse modelo? Poucos clientes, ticket alto, retenção real, margem de verdade. Funciona em saúde, em serviços, em qualquer negócio onde o cliente investe em marketing e precisa de previsibilidade.',
+          'Mais clientes, mais entregas, mais pessoas envolvidas. Tráfego de um lado, conteúdo de outro, comercial separado e decisões baseadas no feeling. A agência entrega cada vez mais, mas continua presa a projetos, escopo e ticket.',
+          'Uma operação integrada de marketing, comercial e dados. Menos dispersão, mais controle sobre a receita e uma entrega que gera valor contínuo para o cliente. É esse modelo que a Renke aplica há quatro anos em mais de 140 clínicas.',
         ],
       ],
     },
     {
       tipo: 'texto',
-      fundo: 'alt',
+      h2: 'Um novo modelo de entrega.',
       paragrafos: [
-        'A Renke validou esse modelo em <strong>+140 clínicas</strong>. Com metodologia própria (Studio), tecnologia que operacionaliza tudo (Tools), e formação para quem quer aplicar esse jogo no nicho que quiser (Academy).',
-        '<em>"Se você continua jogando o jogo antigo, está competindo num mercado que está morrendo."</em>',
+        'Aprenda a estruturar processos, tecnologia e operação para ampliar o valor da sua entrega e assumir uma atuação mais estratégica com seus clientes.',
+      ],
+      topicos: [
+        { icone: 'Compass', texto: 'Metodologia própria' },
+        { icone: 'Cpu', texto: 'Tecnologia aplicada' },
+        { icone: 'Workflow', texto: 'Operação na prática' },
       ],
     },
     {
-      tipo: 'lista',
-      eyebrow: 'Para quem é',
-      h2: 'Se você é dono de agência e...',
+      tipo: 'paineis',
+      h2: 'Para donos de agência que buscam',
       itens: [
-        'Está preso no modelo "faz tudo para todo mundo" e quer criar um posicionamento real',
-        'Entrega resultado pro cliente mas não consegue provar com dados (e cobra pouco por isso)',
-        'Quer parar de ser executor de tarefa e virar parceiro estratégico do cliente',
-        'Busca um modelo onde poucos clientes + ticket alto = operação lucrativa sem caos',
-        'Quer entender RevOps na prática e oferecer isso como serviço de alto valor',
+        { icone: 'Target', titulo: 'Posicionamento real', texto: 'Sair do modelo que atende todo mundo e se tornar referência no seu nicho.' },
+        { icone: 'Handshake', titulo: 'Parceria estratégica', texto: 'Provar resultado com dados e deixar de ser executor para decidir junto com o cliente.' },
+        { icone: 'TrendingUp', titulo: 'Operação lucrativa', texto: 'Menos clientes, ticket mais alto e uma operação que cresce sem caos.' },
+        { icone: 'Layers', titulo: 'RevOps como serviço', texto: 'Entender RevOps na prática e oferecer ao cliente um serviço de alto valor.' },
       ],
     },
     {
       tipo: 'blocos',
-      eyebrow: 'O que você acessa',
-      h2: 'Tudo que a Renke usa para operar, aberto para você modelar',
+      h2: 'A estrutura por trás da operação',
       fundo: 'alt',
       largo: true,
       itens: [
         {
-          titulo: 'Metodologia Revena completa',
-          texto:
-            'O framework que usamos para operar o Studio. Como nos posicionamos, como vendemos, como entregamos, como precificamos, como gerimos. O sistema operacional inteiro, não um resumo.',
+          titulo: 'Método Revena',
+          texto: 'O framework completo que orienta posicionamento, vendas, entrega, precificação e gestão.',
         },
         {
           titulo: 'Processos reais de operação',
           texto:
-            'Playbooks, scripts, fluxos de automação, modelos de relatório, rotinas semanais. Não é template genérico. É o que usamos hoje, com 30 clínicas ativas.',
+            'Playbooks, scripts, fluxos de automação, modelos de relatório e rotinas de operação. Estruturados a partir do que aplicamos diariamente nas clínicas.',
         },
         {
-          titulo: 'Stack técnica documentada',
+          titulo: 'Tecnologia e integrações',
           texto:
-            'Ferramentas, configurações de CRM, modelos de rastreamento, lógica de integração. Operação real, não teoria.',
+            'Ferramentas, configurações de CRM, rastreamento e integrações documentadas para reproduzir a operação na prática.',
         },
         {
           titulo: 'Comunidade de operadores',
           texto:
-            'Acesso a outros donos de agência que estão implementando o mesmo modelo. Troca real entre quem faz.',
+            'Acesso a uma rede de profissionais que estão implementando o modelo, compartilhando aprendizados, desafios e resultados.',
         },
-      ],
-    },
-    {
-      tipo: 'texto',
-      eyebrow: 'A tese',
-      h2: 'O mercado te ensinou errado',
-      paragrafos: [
-        'O modelo tradicional de agência: muitos clientes, ticket baixo, equipe grande, margem pequena, cliente que troca de agência todo ano. <strong>Escalar assim é cavar sua cova.</strong>',
-        'O modelo Renke: poucos clientes, entrega sofisticada, responsabilidade pelo resultado de receita, precificação por valor, não por hora. <strong>Menos clientes, mais lucro, mais controle.</strong>',
-        '<em>"Você não abriu uma agência para ter uma vida pior do que tinha antes dela."</em>',
       ],
     },
     {
       tipo: 'produtos',
-      eyebrow: 'Produtos',
-      h2: 'Nossos Cursos',
-      sub: 'Trilha completa ou módulos independentes',
+      h2: 'Nossos cursos',
+      sub: 'Trilha completa ou módulos independentes.',
       fundo: 'alt',
       itens: [
         {
           titulo: 'Protocolo Renke',
-          texto:
-            'O sistema operacional inteiro de uma operação de RevOps lucrativa. Posicionamento, venda, entrega, precificação, gestão de equipe. 100% dos bastidores abertos para você modelar no seu nicho.',
+          texto: 'O modelo completo de uma operação de RevOps, dos bastidores à gestão.',
           rota: '/academy/protocolo-renke',
-          cta: 'Saiba Mais',
+          cta: 'Conheça o curso',
         },
         {
           titulo: 'Formação Performa',
-          texto: 'De executor reativo para estrategista de performance. Sistema de pensamento, não curso de botão.',
+          texto: 'Desenvolva uma visão estratégica de performance para tomar decisões além da execução.',
           rota: '/academy/formacao-performa',
-          cta: 'Saiba Mais',
+          cta: 'Conheça o curso',
         },
         {
           titulo: 'Treinamento de CRM',
-          texto:
-            'Uma nova linha de receita para sua agência: implementação de CRM como serviço de alto valor. Método testado em 200+ projetos.',
+          texto: 'Aprenda a estruturar e implementar CRM como uma nova frente de serviço e receita.',
           rota: '/academy/treinamento-crm',
-          cta: 'Saiba Mais',
+          cta: 'Conheça o curso',
         },
         {
           titulo: 'Rastreamento Avançado',
-          texto:
-            'Prove retorno real de WhatsApp e formulários sem depender de software terceiro. Recebe tudo pronto, instala e entrega.',
+          texto: 'Aprenda a estruturar rastreamento de WhatsApp e formulários para medir o retorno real das ações.',
           rota: '/academy/rastreamento-avancado',
-          cta: 'Saiba Mais',
+          cta: 'Conheça o curso',
         },
         {
           titulo: 'Cultura Pro',
-          texto:
-            'Cultura organizacional para agências, ensinada por quem tem certificação GPTW. Os erros e acertos reais da Renke.',
+          texto: 'Método e experiência prática para estruturar cultura, gestão e desenvolvimento de equipes.',
           rota: '/academy/cultura-pro',
-          cta: 'Saiba Mais',
+          cta: 'Conheça o curso',
         },
       ],
     },
     {
-      tipo: 'pendencia',
-      o_que:
-        'ClickUp On Track e CRM Sheets aparecem no sitemap e na hierarquia de produtos, mas não estão nesta lista nem têm copy.',
-    },
-    {
       tipo: 'ctaFinal',
-      destaque: 'A Renke Academy não é para todo mundo.',
-      texto:
-        'É para quem quer parar de ser agência genérica e construir uma operação com posicionamento, método e margem real.',
-      cta: 'Falar com a equipe →',
+      destaque: 'Um novo modelo para quem quer ir além da entrega.',
+      texto: 'Tudo o que a Renke aplica para construir uma operação mais estruturada, valiosa e rentável.',
+      cta: 'Veja como funciona',
     },
   ],
 };

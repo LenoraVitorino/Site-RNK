@@ -126,7 +126,7 @@ export const rotuloDaRota = (rota?: string): string | undefined => {
 
 const ehSolto = (b: Bloco) => b.tipo === 'texto' && formaTexto(b) === 'solto';
 /** Seções desenhadas em cartões: blocos, etapas e números em grade. */
-const ehCartoes = (b: Bloco) => b.tipo === 'blocos' || b.tipo === 'etapas' || (b.tipo === 'numeros' && !!b.grade);
+const ehCartoes = (b: Bloco) => b.tipo === 'blocos' || b.tipo === 'etapas' || b.tipo === 'paineis' || (b.tipo === 'numeros' && !!b.grade);
 
 /* ------------------------------------------------------------------ */
 /* Tons (28/09/2026)                                                    */
@@ -206,7 +206,7 @@ function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
     let p = 0;
     if (t === 'papel' && b.tipo === 'etapas') p += 3;
     if (t === 'papel' && b.tipo === 'antesDepois' && formaAntesDepois(b) === 'lista') p += 2;
-    if (t === 'preto' && (b.tipo === 'produtos' || (b.tipo === 'antesDepois' && formaAntesDepois(b) === 'prosa'))) p += 3;
+    if (t === 'preto' && (b.tipo === 'produtos' || b.tipo === 'paineis' || (b.tipo === 'antesDepois' && formaAntesDepois(b) === 'prosa'))) p += 3;
     if (t === 'papel' && (dobraForm.has(i - 1) || dobraForm.has(proxima(i)))) p -= 5;
     return p;
   };

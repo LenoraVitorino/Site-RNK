@@ -82,11 +82,6 @@ export const revenaCore: Pagina = {
         '<strong>Você recebe:</strong> relatório de marketing + relatório comercial toda semana. Check-in mensal com o gestor. Alinhamentos com sua própria equipe. Suporte via WhatsApp em horário comercial.',
       ],
     },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'Seção 7 · Resultados — decisão sugerida no briefing: depoimentos como componente global em todas as páginas (D11).',
-    },
     ctaProtocolo,
   ],
 };

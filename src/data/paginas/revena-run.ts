@@ -75,11 +75,6 @@ export const revenaRun: Pagina = {
         '<strong>Quem cuida disso:</strong> uma equipe enxuta e focada só em manter sua operação saudável. Sem excesso, sem complexidade.',
       ],
     },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'Seção de Resultados — o documento de copy do Run não traz a tabela Operação → Resultado que Start e Full receberam.',
-    },
     ctaProtocolo,
   ],
 };

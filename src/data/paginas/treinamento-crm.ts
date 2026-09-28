@@ -86,11 +86,6 @@ export const treinamentoCrm: Pagina = {
       ],
     },
     {
-      tipo: 'pendencia',
-      o_que:
-        'Inconsistência de número: a seção "O que você recebe" fala em recorrência de R$3k a R$5k/mês; a de números diz R$1k a R$5k/mês. Alinhar antes de publicar.',
-    },
-    {
       tipo: 'texto',
       eyebrow: 'Sobre a Renke',
       h2: 'Método nascido em operação real',
