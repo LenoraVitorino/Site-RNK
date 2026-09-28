@@ -227,7 +227,11 @@ section[id] { scroll-margin-top: 110px; }
   font-weight: 300; letter-spacing: -.055em; word-spacing: normal;
   text-transform: none; color: var(--papel);
 }
-.metodo__titulo > span { display: block; }
+/* Título numa linha só (quebra equilibrada se não couber); a segunda parte
+   ("Renke faz", "metodologia") em medium. */
+.metodo-editorial h2.metodo__titulo { text-wrap: balance; }
+.metodo__titulo > span { display: inline; }
+.metodo__titulo > span:last-child { font-weight: 500; }
 .metodo-editorial .metodo__descricao { max-width: 56ch; margin: 0; font-size: clamp(16px, 1.3vw, 18px); line-height: 1.65; color: #bcbcbc; }
 .metodo__descricao > span { display: inline; }
 .metodo-editorial .metodo__midia { grid-area: midia; width: 100%; max-width: none; align-self: start; justify-self: stretch; }
@@ -245,11 +249,8 @@ section[id] { scroll-margin-top: 110px; }
 /* Dobra preta sólida (28/09/2026): cobre a cena entre a hero e os pilares. No
    preto a caixa de vidro perde o sentido e vira a própria dobra, como nas
    internas (.int-secao--preto .int-caixa); o conteúdo passa a alinhar com o
-   container, na mesma margem da hero. A dobra ocupa uma tela (até 960px). */
-.home-refinada #o-que-fazemos {
-  display: grid; align-content: center; min-height: min(100svh, 960px);
-  background: var(--fundo); padding-block: var(--esp-secao);
-}
+   container, na mesma margem da hero. */
+.home-refinada #o-que-fazemos { background: var(--fundo); padding-block: clamp(64px, 7vw, 112px); }
 .home-refinada .metodo-editorial {
   max-width: none; padding: 0; border-radius: 0; background: none;
   -webkit-backdrop-filter: none; backdrop-filter: none;
