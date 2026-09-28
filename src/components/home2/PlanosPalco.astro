@@ -25,7 +25,7 @@ const nome = (label: string) => { const n = chave(label); return n[0].toUpperCas
    unificado numa forma só, entram com os mesmos nomes. */
 type Peca = { formas: string; ouro: boolean };
 const pecas = (label: string): Peca[] => {
-  const arq = join(process.cwd(), 'public', 'icones', `plano-${chave(label)}-light.svg`);
+  const arq = join(__RAIZ__, 'public', 'icones', `plano-${chave(label)}-light.svg`);
   if (!existsSync(arq)) return [];
   const svg = readFileSync(arq, 'utf8');
   const lados: Record<'ouro' | 'papel', string[]> = { ouro: [], papel: [] };

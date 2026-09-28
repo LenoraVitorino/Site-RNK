@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { fileURLToPath } from 'node:url';
 
 /**
  * Domínio pelo qual o dev server será acessado de fora — o hostname do túnel
@@ -8,6 +9,15 @@ import { defineConfig } from 'astro/config';
  *   PREVIEW_HOST=preview.renkestudio.com.br npm run dev
  */
 const preview = process.env.PREVIEW_HOST?.trim().replace(/^https?:\/\//, '') || '';
+
+/**
+ * Raiz do projeto, gravada como constante de build (`__RAIZ__`). Os componentes
+ * que leem o disco (ícones em public/, páginas em src/pages) usam essa
+ * constante em vez de process.cwd(): assim tanto faz de que pasta o comando
+ * foi rodado — antes, `astro dev --root` chamado de outra pasta quebrava com
+ * "ENOENT: scandir .../src/pages".
+ */
+const raiz = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   // TODO(D10): confirmar o domínio definitivo — o sitemap usa renke.com.br,
@@ -28,6 +38,8 @@ export default defineConfig({
   },
 
   vite: {
+    define: { __RAIZ__: JSON.stringify(raiz) },
+
     server: {
       // O Vite recusa requisição cujo cabeçalho Host ele não conhece — é uma
       // proteção contra rebinding de DNS, não um capricho. O túnel chega com o
