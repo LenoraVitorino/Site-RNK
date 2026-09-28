@@ -278,23 +278,43 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .metodo-editorial .metodo__valor { color: #252523; font-weight: 300; }
 .home-refinada .metodo-editorial .metodo__legenda { color: #5f5f5d; }
 .home-refinada #o-que-fazemos :focus-visible { outline-color: #252523; }
+/* Moldura das fotos da sede: chanfro pequeno, eco do painel; a foto passa
+   devagar dentro da moldura durante a rolagem (sem JS, só onde houver
+   scroll-driven animations e sem movimento reduzido). */
+.metodo__foto { display: none; position: relative; margin: 0; overflow: hidden; background: #d9d9d7;
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
+.metodo__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.metodo__foto--esq img { object-position: 30% 50%; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .metodo__foto img { height: 116%; margin-top: -8%; animation: metodo-foto-deriva linear both; animation-timeline: view(); animation-range: cover; }
+    .metodo__foto--dir img { animation-direction: reverse; }
+  }
+}
+@keyframes metodo-foto-deriva { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
 /* No desktop (teste de 28/09, referência Aura), na grade de 12 colunas do site
    (a mesma do /sobre): título no alto à esquerda (1–4), vídeo no centro (5–8),
    subtítulo embaixo à direita (9–12) e um número só no canto inferior esquerdo.
    Texto e apresentação somem da árvore de caixas para os filhos irem à grade. */
 @media (min-width: 1000px) {
   .home-refinada .metodo-editorial {
-    grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr; grid-template-areas: none;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; grid-template-areas: none;
     column-gap: clamp(16px, 2vw, 32px); row-gap: 48px; align-items: stretch;
   }
   .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__apresentacao) { display: contents; }
   .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 4; grid-row: 1; align-self: start; }
   .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }   /* "O que a" / "Renke faz" na coluna estreita */
-  .home-refinada .metodo-editorial .metodo__numeros { grid-column: 1 / span 4; grid-row: 2; align-self: end; margin: 0; }
+  .home-refinada .metodo-editorial .metodo__numeros { grid-column: 1 / span 4; grid-row: 3; align-self: end; margin: 0; }
   .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 14px; }
   .home-refinada .metodo-editorial .metodo__legenda { max-width: 11ch; padding-bottom: .35em; white-space: normal; font-size: 13px; }
-  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 3; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
-  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; justify-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: seis linhas; encostado no limite direito da grade, espelhando o título */
+  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 4; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
+  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 2 / 4; align-self: end; justify-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: seis linhas; encostado no limite direito da grade, espelhando o título */
+  /* Fotos da sede nos vãos: à esquerda, retrato pequeno entre o título e o
+     número; à direita, paisagem no alto, espelhando o título. Composição em
+     diagonal com o vídeo no meio. */
+  .home-refinada .metodo-editorial .metodo__foto { display: block; }
+  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 2 / span 2; grid-row: 2; align-self: center; aspect-ratio: 4 / 5; }
+  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 10 / -1; grid-row: 1; align-self: start; aspect-ratio: 4 / 3; }
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
