@@ -14,6 +14,9 @@
  * ('GPTW:', '1ª semana:'), o sinal sai da escala grande e fica só para o
  * leitor de tela, como os valores da home, que não levam pontuação. O texto
  * do DOM continua idêntico ao dado. A flag `fundo` é ignorada.
+ *
+ * Tons (ritmo-dobras-internas.md): valor e palavra em --int-tinta; legenda,
+ * nota e cartão já seguem --int-mudo, --int-apoio e --int-cartao.
  */
 import CabecaSecao from './CabecaSecao.astro';
 import { classesSecao, indice2, partesNumero, type BlocoDe, type ContextoSecao } from './contexto';
@@ -34,6 +37,7 @@ const iNota = Math.min(n, 5);
   class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua')}
   id={secao.id}
   data-cena={secao.cena}
+  data-tom={secao.tom}
   aria-labelledby={titulo ? secao.tituloId : undefined}
 >
   <div class="container">
@@ -87,7 +91,7 @@ const iNota = Math.min(n, 5);
   .int-regua__valor {
     display: block; font-family: var(--font-titulo); font-weight: 300;
     font-size: clamp(28px, 2.8vw, 42px); line-height: 1.05; letter-spacing: -.045em;
-    font-variant-numeric: tabular-nums; color: var(--papel); text-wrap: balance;
+    font-variant-numeric: tabular-nums; color: var(--int-tinta); text-wrap: balance;
     overflow-wrap: break-word;
   }
   .int-regua__legenda { display: block; font-size: 14px; line-height: 1.5; color: var(--int-mudo); max-width: 24ch; }
@@ -102,7 +106,7 @@ const iNota = Math.min(n, 5);
   .int-numeros__palavra {
     margin-top: auto; padding-top: 24px;
     font-family: var(--font-titulo); font-weight: 300; font-size: clamp(24px, 2.4vw, 34px);
-    line-height: 1.1; letter-spacing: -.04em; color: var(--papel);
+    line-height: 1.1; letter-spacing: -.04em; color: var(--int-tinta);
     overflow-wrap: break-word;
   }
   .int-numeros__nota { margin-top: 32px; font-size: 18px; line-height: 1.55; color: var(--int-apoio); max-width: 56ch; }

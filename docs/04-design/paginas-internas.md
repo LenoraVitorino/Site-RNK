@@ -94,6 +94,14 @@ Pagina.astro recebe a rota por `pagina.rota`.
 Fica o tom duplo da síntese (pin 62): as outras linhas em cinza e a linha do realce em papel. Sem
 amarelo no H1.
 
+**E7. Ritmo de dobras sólidas (28/09/2026)**
+Especificação: `docs/04-design/ritmo-dobras-internas.md`, que prevalece sobre este documento no que
+toca a cena, o papel e o ritmo. A cena fica na abertura, no fecho e em no máximo um respiro; entre
+eles, dobras sólidas papel e preto alternadas (`planejarTons` em `contexto.ts`, campo `tom` do
+ContextoSecao, classes `int-secao--papel` e `int-secao--preto`). Os componentes leem os tokens de
+tinta de `paginas2.css` (`--int-tinta`, `--int-linha`, `--int-faq`…) e aplicam `data-tom`. Saem a
+dobra papel fixa do antesDepois em lista e o `tom="claro"` da CabecaSecao.
+
 
 ## Resumo
 

@@ -4,8 +4,9 @@
  * emenda E1 (pin MyDNA), que substitui o painel com régua do mapeamento "etapas".
  *
  * Linhas numeradas grandes, empilhadas: cada etapa é um cartão da home
- * (#0e0e0e, raio 18, sem borda e sem sombra) com o numeral fino à esquerda,
- * a duração no lugar da data, acima do nome, e a descrição à direita.
+ * (a linha do tom, --int-linha; raio 18, sem borda e sem sombra) com o
+ * numeral fino à esquerda, a duração no lugar da data, acima do nome, e a
+ * descrição à direita.
  * A cabeça (h2 em linhas) fica à esquerda, no topo da seção; não há painel.
  *
  * Variações: 4 ou 5 etapas, duração numérica ('10 dias') ou em texto
@@ -26,7 +27,7 @@ interface Props {
 const { bloco, secao } = Astro.props;
 const titulo = bloco.h2.length > 0 ? bloco.h2 : undefined;
 ---
-<section class:list={classesSecao(secao, 'int-etapas')} id={secao.id} data-cena={secao.cena} aria-labelledby={titulo ? secao.tituloId : undefined}>
+<section class:list={classesSecao(secao, 'int-etapas')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={titulo ? secao.tituloId : undefined}>
   <div class="container">
     {(titulo || bloco.eyebrow) && <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} />}
     <ol class="int-etapas__lista" role="list">
@@ -58,9 +59,11 @@ const titulo = bloco.h2.length > 0 ? bloco.h2 : undefined;
     align-items: start;
     min-width: 0;
     padding: var(--int-cartao-pad);
+    /* Vence o fundo de .int-cartao: #0e0e0e na cena, #161616 em preto, #f4f4f2 em papel. */
+    background: var(--int-linha);
   }
 
-  /* Numeral fino na escala dos números da home, em papel e sem amarelo. */
+  /* Numeral fino na escala dos números da home, na tinta do tom e sem amarelo. */
   .int-etapa__n {
     font-family: var(--font-titulo);
     font-size: clamp(44px, 4.6vw, 68px);
@@ -68,7 +71,7 @@ const titulo = bloco.h2.length > 0 ? bloco.h2 : undefined;
     line-height: .9;
     letter-spacing: -.06em;
     font-variant-numeric: tabular-nums;
-    color: var(--papel);
+    color: var(--int-tinta);
   }
 
   /* A duração ocupa o lugar da data do pin: rótulo pequeno acima do nome. */
@@ -80,7 +83,7 @@ const titulo = bloco.h2.length > 0 ? bloco.h2 : undefined;
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -.04em;
-    color: var(--papel);
+    color: var(--int-tinta);
     overflow-wrap: break-word;
   }
 

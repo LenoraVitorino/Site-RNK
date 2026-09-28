@@ -5,7 +5,10 @@
  * Especificação: docs/04-design/paginas-internas.md, "Fundação", item 6.
  *
  * Nada envolve as seções: o Header liga header--caixa por main > :first-child
- * e .trilhos > * só posiciona filhos diretos.
+ * e .trilhos > * só posiciona filhos diretos. Por isso o tom (secao.tom) vai
+ * dentro do ContextoSecao: cada componente aplica data-tom={secao.tom} na
+ * própria <section>, e classesSecao() já põe int-secao--papel ou
+ * int-secao--preto nas dobras sólidas (docs/04-design/ritmo-dobras-internas.md).
  */
 import type { Bloco } from '../../data/paginas/tipos';
 import { planejarSecoes } from './contexto';
@@ -30,6 +33,11 @@ interface Props {
 
 const { blocos, rota } = Astro.props;
 const plano = planejarSecoes(blocos, rota);
+
+// Abertura e fecho ficam sempre na cena; se um deles sair, a regra de tons quebrou.
+if (import.meta.env.DEV) for (const { bloco, secao } of plano)
+  if (secao && ['hero', 'ctaFinal', 'formulario'].includes(bloco.tipo) && secao.tom !== 'cena')
+    console.warn(`[Blocos2] ${bloco.tipo} em ${secao.id} saiu da cena (tom ${secao.tom}).`);
 ---
 {plano.map(({ bloco, secao }) => {
   if (bloco.tipo === 'pendencia') return <BlocoPendencia bloco={bloco} />;

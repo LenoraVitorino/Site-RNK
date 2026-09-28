@@ -8,10 +8,14 @@
  *   Ecossistema (AcademyTools.astro + home-refinamento.css, "Ecossistema"),
  *   com dois lados em 1fr 1fr. O antes fica apagado; o depois, um tom acima,
  *   no #141413 da arte do Ecossistema. Os rótulos viram os h3 dos lados.
- * - 'lista' (Revena Start e Full): o mosaico papel dos Resultados
+ * - 'lista' (Revena Start e Full): o mosaico dos Resultados
  *   (Resultados.astro + home-refinamento.css, "Resultados"), sem ficha de
- *   destaque grafite: as linhas não têm hierarquia entre si. É a única dobra
- *   clara da página; sem cena, o cabeçalho camaleão vira 'claro' sozinho.
+ *   destaque grafite: as linhas não têm hierarquia entre si.
+ *
+ * O tom vem de planejarTons() (ritmo-dobras-internas.md): a prosa cai em
+ * preto e a caixa se dissolve na dobra; a lista cai em papel (Full) ou em
+ * preto (Start, mosaico escuro: fichas #161616). As cores saem só dos
+ * tokens do tom (--int-antes, --int-depois, --int-ficha e afins).
  *
  * Tudo estático: sem hover, sem expandir por clique, sem vermelho/verde.
  */
@@ -26,7 +30,7 @@ interface Props {
 
 const { bloco, secao } = Astro.props;
 const forma = formaAntesDepois(bloco);
-const papel = forma === 'lista';
+const lista = forma === 'lista';
 const [rotuloAntes, rotuloDepois] = bloco.rotulos;
 // A prosa sempre tem uma linha só (é a condição de formaAntesDepois).
 const [antes, depois] = bloco.linhas[0] ?? ['', ''];
@@ -34,16 +38,17 @@ const [antes, depois] = bloco.linhas[0] ?? ['', ''];
 const passo = (i: number) => `--i:${Math.min(i, 5)}`;
 ---
 <section
-  class:list={classesSecao(secao, 'int-antes-depois', `int-antes-depois--${forma}`, papel && 'int-secao--papel')}
+  class:list={classesSecao(secao, 'int-antes-depois', `int-antes-depois--${forma}`)}
   id={secao.id}
   data-cena={secao.cena}
+  data-tom={secao.tom}
   aria-labelledby={secao.tituloId}
 >
   <div class="container">
-    {papel ? (
+    {lista ? (
       <>
         <div class="int-antes-depois__topo">
-          <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} tom="claro" classe="int-cabeca--coluna" />
+          <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} classe="int-cabeca--coluna" />
           {/* Sem <span> nos rótulos: a home apaga .rotulo > span (home-refinamento.css). */}
           <p class="rotulo int-antes-depois__legenda entra" style="--i:1">
             {rotuloAntes} <Icone nome="ArrowRight" size={14} class="int-antes-depois__seta" /> {rotuloDepois}
@@ -80,27 +85,29 @@ const passo = (i: number) => `--i:${Math.min(i, 5)}`;
 </section>
 
 <style>
-  /* ---------- Prosa: caixa preta do Ecossistema, dois lados ---------- */
+  /* ---------- Prosa: caixa preta do Ecossistema, dois lados ----------
+     O antes fica apagado e o depois um tom acima, nas cores do tom. */
   .int-antes-depois__lados { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .int-lado { min-width: 0; padding: var(--int-cartao-pad); border-radius: 12px; }
-  .int-lado--antes { background: #070707; color: #8f8f8b; }
-  .int-lado--depois { background: #141413; color: #d0d0cc; }
+  .int-lado { min-width: 0; padding: var(--int-cartao-pad); border-radius: var(--int-raio-interno); }
+  .int-lado--antes { background: var(--int-antes); color: var(--int-antes-texto); }
+  .int-lado--depois { background: var(--int-depois); color: var(--int-depois-texto); }
   .int-lado__titulo {
     font-family: var(--font-titulo); font-size: clamp(24px, 2.4vw, 34px); font-weight: 300;
     line-height: 1.1; letter-spacing: -.04em; word-spacing: -.08em; color: inherit;
   }
-  .int-lado--depois .int-lado__titulo { color: var(--papel); }
+  .int-lado--depois .int-lado__titulo { color: var(--int-tinta); }
   .int-lado__texto { margin-top: 20px; max-width: 52ch; font-size: 16px; line-height: 1.7; }
 
-  /* ---------- Lista: mosaico papel dos Resultados ---------- */
+  /* ---------- Lista: mosaico dos Resultados (papel ou preto) ---------- */
   .int-antes-depois__topo {
     display: flex; justify-content: space-between; align-items: end; gap: 24px;
     margin-bottom: clamp(32px, 4vw, 56px);
   }
   .int-antes-depois__legenda { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; margin: 0; }
   .int-antes-depois__legenda :global(.int-antes-depois__seta) { flex-shrink: 0; }
-  /* Como .resultados-editoriais__cabeca .titulo: entrelinha 1.12 e quebra equilibrada. */
-  .int-antes-depois__topo :global(.int-cabeca__titulo) { line-height: 1.12; text-wrap: balance; }
+  /* Como .resultados-editoriais__cabeca .titulo: entrelinha 1.12, quebra equilibrada
+     e medida de 24ch (antes vinha do .int-cabeca--claro). */
+  .int-antes-depois__topo :global(.int-cabeca__titulo) { max-width: 24ch; line-height: 1.12; text-wrap: balance; }
 
   .int-mosaico { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
   .int-ficha { display: flex; flex-direction: column; min-width: 0; min-height: 220px; }
@@ -112,7 +119,7 @@ const passo = (i: number) => `--i:${Math.min(i, 5)}`;
   .int-ficha__texto {
     margin: 0; margin-top: auto; padding-top: 40px; max-width: 24ch;
     font-size: clamp(19px, 1.6vw, 24px); font-weight: 300; line-height: 1.3; letter-spacing: -.02em;
-    color: var(--int-papel-texto);
+    color: var(--int-ficha-texto);
   }
 
   @media (max-width: 1099.98px) {

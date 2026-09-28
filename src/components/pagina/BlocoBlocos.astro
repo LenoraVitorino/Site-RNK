@@ -20,6 +20,11 @@
  * na grade editorial da lista (título preso à esquerda, pin 47), para a página
  * não emendar três dobras de cartões iguais.
  *
+ * Tom (ritmo-dobras-internas.md): o cartão, o texto e o Check só leem tokens
+ * (--int-cartao, --int-cartao-texto/--int-corpo, --int-check); o h3 e o índice
+ * herdam. Em papel, fichas #efefed com h3 #252523 e texto #50504e; em preto,
+ * cartões #161616 com texto #b6b6b6.
+ *
  * Lista: ul (ou ol, se numerado) com role='list' e um li por item; o li é o
  * item da grade e, na variante de cartões, o próprio cartão.
  */
@@ -48,7 +53,7 @@ if (import.meta.env.DEV) {
   }
 }
 ---
-<section class:list={classesSecao(secao, 'int-blocos', tipografica && 'int-blocos--tipografica')} id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+<section class:list={classesSecao(secao, 'int-blocos', tipografica && 'int-blocos--tipografica')} id={secao.id} data-tom={secao.tom} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class:list={['container', tipografica && 'int-grade-2']}>
     <CabecaSecao
       id={secao.tituloId}
@@ -106,7 +111,7 @@ if (import.meta.env.DEV) {
     display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 10px; align-items: start;
     font-size: 15px; line-height: 1.65; color: var(--int-cartao-texto);
   }
-  .int-blocos__itens :global(.int-blocos__check) { margin-top: .25em; color: rgb(242 242 238 / .5); }
+  .int-blocos__itens :global(.int-blocos__check) { margin-top: .25em; color: var(--int-check); }
 
   /* Variante tipográfica: a coluna da lista (BlocoLista), com título e texto
      em vez da linha única. Índice numa coluna de 48px, na altura das

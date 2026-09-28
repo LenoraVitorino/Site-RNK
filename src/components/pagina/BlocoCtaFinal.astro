@@ -24,7 +24,7 @@ const titulo = bloco.destaque;
 const longo = !!titulo && titulo.length > 60;
 const textoLongo = !!bloco.texto && bloco.texto.length > 160;
 ---
-<section class:list={classesSecao(secao, 'int-cta')} id={secao.id} data-cena={secao.cena} aria-labelledby={titulo ? secao.tituloId : undefined}>
+<section class:list={classesSecao(secao, 'int-cta')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={titulo ? secao.tituloId : undefined}>
   <div class="container">
     <div class="int-cta__miolo entra">
       {titulo && (

@@ -15,17 +15,21 @@ export type BlocoDe<T extends Bloco['tipo']> = Extract<Bloco, { tipo: T }>;
 /** Quadros da cena usados nas internas (fundo-internas.ts). */
 export type Cena = 'hero' | 'pilares' | 'formulario';
 
+/** Tom da seção: 'cena' é transparente (leva data-cena); 'papel' e 'preto' são dobras sólidas. */
+export type Tom = 'cena' | 'papel' | 'preto';
+
 export interface ContextoSecao {
   id: string;          // 'secao-3' (o formulário usa 'formulario')
   tituloId: string;    // 'secao-3-titulo'
   indice: number;      // posição entre as seções renderizadas, a partir de 0
-  cena?: Cena;         // vira data-cena; ausente = seção opaca (papel)
+  cena?: Cena;         // vira data-cena; só quando tom === 'cena' (nas dobras sólidas fica undefined)
   junta: boolean;      // cola na seção anterior
   colaAbaixo: boolean; // a seção seguinte cola nesta
   primeira: boolean;   // indice === 0
   abertura?: string[]; // só formulario: linhas do H1 herdadas do hero curto
   rotulo?: string;     // só hero: rótulo acima do H1, vindo da navegação
   variante?: 'tipografica'; // só blocos: logo depois de outra seção de cartões, sai sem cartão
+  tom: Tom;            // vira data-tom; papel e preto também ganham int-secao--{tom}
 }
 
 /** Uma entrada do plano: a pendência não tem seção (e some em produção). */
@@ -68,7 +72,7 @@ export const partesFicha = (p: string): [string, string] | null => {
 /* Formas                                                               */
 /* ------------------------------------------------------------------ */
 
-/** 'prosa' (caixa escura com dois lados) ou 'lista' (mosaico papel). */
+/** 'prosa' (caixa com dois lados) ou 'lista' (mosaico de fichas). */
 export const formaAntesDepois = (b: BlocoDe<'antesDepois'>): 'prosa' | 'lista' =>
   b.linhas.length === 1 && b.linhas[0][0].length + b.linhas[0][1].length > 240 ? 'prosa' : 'lista';
 
@@ -102,9 +106,10 @@ export const partesNumero = (item: string): [string, string] => {
 /* Seções                                                               */
 /* ------------------------------------------------------------------ */
 
-/** Classes da <section> raiz de todo bloco. */
+/** Classes da <section> raiz de todo bloco. As dobras sólidas levam int-secao--papel ou int-secao--preto. */
 export const classesSecao = (secao: ContextoSecao, ...extras: (string | false | null | undefined)[]) =>
-  ['secao', 'int-secao', secao.junta && 'int-secao--junta', secao.colaAbaixo && 'int-secao--cola-abaixo', ...extras];
+  ['secao', 'int-secao', secao.junta && 'int-secao--junta', secao.colaAbaixo && 'int-secao--cola-abaixo',
+   secao.tom !== 'cena' && `int-secao--${secao.tom}`, ...extras];
 
 /**
  * Rótulo da hero, com um texto que JÁ EXISTE na navegação (nav.ts).
@@ -131,9 +136,97 @@ export const tituloDe = (b: Bloco): string | undefined => {
 };
 
 const ehSolto = (b: Bloco) => b.tipo === 'texto' && formaTexto(b) === 'solto';
-const ehPapel = (b: Bloco) => b.tipo === 'antesDepois' && formaAntesDepois(b) === 'lista';
-/** Seções desenhadas em cartões escuros: blocos, etapas e números em grade. */
+/** Seções desenhadas em cartões: blocos, etapas e números em grade. */
 const ehCartoes = (b: Bloco) => b.tipo === 'blocos' || b.tipo === 'etapas' || (b.tipo === 'numeros' && !!b.grade);
+
+/* ------------------------------------------------------------------ */
+/* Tons (28/09/2026)                                                    */
+/* Especificação: docs/04-design/ritmo-dobras-internas.md, item (a).    */
+/* ------------------------------------------------------------------ */
+
+type Real = Exclude<Bloco, { tipo: 'pendencia' }>;
+/** O fecho da página fica sempre na cena. */
+const ehFecho = (b: Real) => b.tipo === 'ctaFinal' || b.tipo === 'formulario';
+/** Forma visível da seção: duas seções de mesma assinatura no mesmo tom se repetem. */
+const assinatura = (b: Real, c: ContextoSecao) =>
+  b.tipo === 'texto' ? `texto:${formaTexto(b)}`
+  : b.tipo === 'antesDepois' ? `antesDepois:${formaAntesDepois(b)}`
+  : b.tipo === 'blocos' ? `blocos:${c.variante ?? 'cartoes'}`
+  : b.tipo === 'numeros' ? `numeros:${b.grade ? 'grade' : 'regua'}`
+  : b.tipo;
+/** Herda o tom da anterior: cola nela (junta) ou é a régua sem h2 sob a abertura do Contato (fusão). */
+const herdaTom = (reais: Real[], ctx: ContextoSecao[], i: number) => {
+  const b = reais[i];
+  return i > 0 && (ctx[i].junta || (b.tipo === 'numeros' && !b.h2 && !!ctx[i - 1].abertura));
+};
+
+/**
+ * O tom de cada seção real, na ordem da página.
+ * 1) Âncoras na cena: a primeira, todo ctaFinal/formulário e um único
+ *    respiro (a primeira citação estritamente no meio).
+ * 2) Entre as âncoras, trechos livres; as herdeiras não entram nem quebram
+ *    o trecho.
+ * 3) Pesos: etapas e antesDepois em lista puxam papel (+2); produtos e
+ *    antesDepois em prosa puxam preto (+3); papel encostado na dobra do
+ *    formulário perde 5; repetir a assinatura de uma seção já decidida no
+ *    mesmo tom perde 1.
+ * 4) Cada trecho alterna papel e preto; das duas partidas vence a de maior
+ *    soma, e o empate começa em papel.
+ * 5) As herdeiras repetem o tom da anterior.
+ */
+function planejarTons(reais: Real[], ctx: ContextoSecao[]): Tom[] {
+  const n = reais.length;
+  const tons: (Tom | undefined)[] = new Array(n).fill(undefined);
+  const herda = (i: number) => herdaTom(reais, ctx, i);
+
+  // 1) Âncoras na cena.
+  if (n) tons[0] = 'cena';
+  reais.forEach((b, i) => { if (ehFecho(b)) tons[i] = 'cena'; });
+  const respiro = reais.findIndex((b, i) => i > 0 && i < n - 1 && b.tipo === 'texto' && formaTexto(b) === 'citacao');
+  if (respiro > 0) tons[respiro] = 'cena';
+
+  // 2) Trechos livres entre as âncoras.
+  const trechos: number[][] = [];
+  let atual: number[] = [];
+  for (let i = 0; i < n; i++) {
+    if (tons[i] === 'cena') { if (atual.length) trechos.push(atual); atual = []; }
+    else if (!herda(i)) atual.push(i);
+  }
+  if (atual.length) trechos.push(atual);
+
+  // Dobra do formulário = o formulário e as herdeiras dele.
+  const dobraForm = new Set<number>();
+  reais.forEach((b, i) => {
+    if (b.tipo !== 'formulario') return;
+    dobraForm.add(i);
+    for (let j = i + 1; j < n && herda(j); j++) dobraForm.add(j);
+  });
+  const proxima = (i: number) => { let j = i + 1; while (j < n && herda(j)) j++; return j; };
+
+  // 3) Pesos. A repetição só compara com trechos já decididos acima.
+  const peso = (i: number, t: Tom) => {
+    const b = reais[i];
+    let p = 0;
+    if (t === 'papel' && b.tipo === 'etapas') p += 2;
+    if (t === 'papel' && b.tipo === 'antesDepois' && formaAntesDepois(b) === 'lista') p += 2;
+    if (t === 'preto' && (b.tipo === 'produtos' || (b.tipo === 'antesDepois' && formaAntesDepois(b) === 'prosa'))) p += 3;
+    if (t === 'papel' && (dobraForm.has(i - 1) || dobraForm.has(proxima(i)))) p -= 5;
+    for (let j = 0; j < i; j++) if (tons[j] === t && assinatura(reais[j], ctx[j]) === assinatura(b, ctx[i])) { p -= 1; break; }
+    return p;
+  };
+
+  // 4) Cada trecho alterna.
+  for (const c of trechos) {
+    const partida = (ini: Tom): Tom[] => c.map((_, k) => (k % 2 === 0 ? ini : ini === 'papel' ? 'preto' : 'papel'));
+    const soma = (t: Tom[]) => c.reduce((a, i, k) => a + peso(i, t[k]), 0);
+    const pa = partida('papel'), pr = partida('preto');
+    (soma(pr) > soma(pa) ? pr : pa).forEach((t, k) => (tons[c[k]] = t));
+  }
+
+  // 5) Herdeiras.
+  for (let i = 0; i < n; i++) if (!tons[i]) tons[i] = tons[i - 1] ?? 'cena';
+  return tons as Tom[];
+}
 
 /**
  * O plano da página: cada bloco com o contexto da sua seção.
@@ -142,14 +235,20 @@ const ehCartoes = (b: Bloco) => b.tipo === 'blocos' || b.tipo === 'etapas' || (b
  *    `abertura`.
  * b) Pendências não contam para nada.
  * c) id 'secao-N', contando só as seções renderizadas; o formulário usa 'formulario'.
- * d) cena: a primeira é 'hero'; a última transparente, 'formulario'; as
- *    outras transparentes, 'pilares'; a dobra papel não tem cena.
+ * d) cena: só nas seções em tom 'cena'. 'hero' na primeira, 'pilares' no
+ *    respiro, 'formulario' no fecho (ctaFinal ou formulário); a herdeira
+ *    repete o quadro da anterior. As dobras sólidas não têm cena.
  * e) junta: texto 'solto' ou números sem h2, desde que a seção anterior não
- *    seja hero, formulário nem a dobra papel. A anterior recebe colaAbaixo.
+ *    seja hero nem formulário. A anterior recebe colaAbaixo.
  * f) primeira = índice 0. O rótulo da rota vai só para a hero.
  * g) variante 'tipografica': blocos logo depois de outra seção de cartões
  *    (blocos em cartões, etapas ou números em grade), para a página não
  *    emendar dobras de cartões iguais. Um blocos já tipográfico não conta.
+ *    Calculada antes do tom e sem depender dele.
+ * h) tom: planejarTons(). A cena fica na abertura, no fecho e em no máximo
+ *    um respiro; entre eles, dobras sólidas papel e preto alternadas. A
+ *    seção que cola (junta) e a régua sob a abertura do Contato herdam o
+ *    tom da anterior.
  */
 export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
   let lista = blocos;
@@ -163,17 +262,14 @@ export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
     }
   }
 
-  const reais = lista.filter((b): b is Exclude<Bloco, { tipo: 'pendencia' }> => b.tipo !== 'pendencia');
-  const ultimaTransparente = reais.reduce((u, b, i) => (ehPapel(b) ? u : i), -1);
+  const reais = lista.filter((b): b is Real => b.tipo !== 'pendencia');
   const contextos = reais.map((b, i): ContextoSecao => {
     const id = b.tipo === 'formulario' ? 'formulario' : `secao-${i + 1}`;
-    const cena: Cena | undefined =
-      i === 0 ? 'hero' : ehPapel(b) ? undefined : i === ultimaTransparente ? 'formulario' : 'pilares';
     const anterior = reais[i - 1];
-    const junta = !!anterior && anterior.tipo !== 'hero' && anterior.tipo !== 'formulario' && !ehPapel(anterior)
+    const junta = !!anterior && anterior.tipo !== 'hero' && anterior.tipo !== 'formulario'
       && (ehSolto(b) || (b.tipo === 'numeros' && !b.h2));
     return {
-      id, tituloId: `${id}-titulo`, indice: i, cena, junta, colaAbaixo: false, primeira: i === 0,
+      id, tituloId: `${id}-titulo`, indice: i, cena: undefined, tom: 'cena', junta, colaAbaixo: false, primeira: i === 0,
       ...(b.tipo === 'formulario' && abertura ? { abertura } : {}),
       ...(b.tipo === 'hero' && rotuloDaRota(rota) ? { rotulo: rotuloDaRota(rota) } : {}),
     };
@@ -182,6 +278,16 @@ export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
   reais.forEach((b, i) => {
     const anterior = reais[i - 1];
     if (b.tipo === 'blocos' && anterior && ehCartoes(anterior) && !contextos[i - 1].variante) contextos[i].variante = 'tipografica';
+  });
+
+  const tons = planejarTons(reais, contextos);
+  contextos.forEach((c, i) => {
+    c.tom = tons[i];
+    if (c.tom !== 'cena') return;
+    c.cena = i === 0 ? 'hero'
+      : herdaTom(reais, contextos, i) ? contextos[i - 1].cena
+      : ehFecho(reais[i]) ? 'formulario'
+      : 'pilares';                       // o respiro
   });
 
   let k = 0;

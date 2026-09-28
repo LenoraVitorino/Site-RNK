@@ -8,6 +8,8 @@
  * <details> nativo, pergunta à esquerda e um Plus que gira 45° quando abre.
  * A primeira pergunta nasce aberta. Sem JS, sem chevron, sem fio.
  * A altura animada é só aprimoramento (interpolate-size + ::details-content).
+ * Caixa, texto e foco leem os tokens do tom (--int-faq, --int-tinta,
+ * --int-foco): translúcida na cena, grafite no preto, #efefed no papel.
  */
 import CabecaSecao from './CabecaSecao.astro';
 import Icone from '../ui/Icone.astro';
@@ -20,7 +22,7 @@ interface Props {
 
 const { bloco, secao } = Astro.props;
 ---
-<section class:list={classesSecao(secao, 'int-faq')} id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+<section class:list={classesSecao(secao, 'int-faq')} id={secao.id} data-cena={secao.cena} data-tom={secao.tom} aria-labelledby={secao.tituloId}>
   <div class="container int-grade-2">
     <CabecaSecao id={secao.tituloId} titulo={bloco.h2} classe="int-cabeca--coluna int-grade-2__fixo" />
 
@@ -41,9 +43,9 @@ const { bloco, secao } = Astro.props;
 <style>
   .int-faq__lista { display: grid; gap: 8px; }
 
-  .int-faq__item { border-radius: 16px; background: rgb(242 242 238 / .06); interpolate-size: allow-keywords; }
+  .int-faq__item { border-radius: 16px; background: var(--int-faq); interpolate-size: allow-keywords; }
   /* O foco vai na caixa inteira, não só na linha da pergunta. */
-  .int-faq__item:has(.int-faq__resumo:focus-visible) { outline: 2px solid var(--papel); outline-offset: 3px; }
+  .int-faq__item:has(.int-faq__resumo:focus-visible) { outline: 2px solid var(--int-foco); outline-offset: 3px; }
 
   .int-faq__resumo {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -53,9 +55,9 @@ const { bloco, secao } = Astro.props;
   .int-faq__resumo::marker { content: ''; }
   .int-faq__resumo:focus-visible { outline: none; }
 
-  .int-faq__pergunta { font-size: clamp(17px, 1.4vw, 20px); font-weight: 400; line-height: 1.35; letter-spacing: -.02em; color: var(--papel); text-wrap: pretty; }
+  .int-faq__pergunta { font-size: clamp(17px, 1.4vw, 20px); font-weight: 400; line-height: 1.35; letter-spacing: -.02em; color: var(--int-tinta); text-wrap: pretty; }
 
-  .int-faq__icone { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; color: var(--papel); transition: transform .45s var(--easing); }
+  .int-faq__icone { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; color: var(--int-tinta); transition: transform .45s var(--easing); }
   .int-faq__item[open] .int-faq__icone { transform: rotate(45deg); }
 
   .int-faq__resposta { max-width: 60ch; padding: 0 24px 24px; font-size: 16px; line-height: 1.65; color: var(--int-apoio); }

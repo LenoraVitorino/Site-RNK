@@ -14,6 +14,9 @@
  *   A seção cola na anterior (secao.junta, calculado no despachante).
  *
  * O texto vem dos dados via set:html, só sem a seta final (' →').
+ *
+ * Tons (ritmo-dobras-internas.md): as cores saem dos tokens do tom
+ * (--int-tinta, --int-valor, --int-pilula), nunca da classe da seção.
  */
 import CabecaSecao from './CabecaSecao.astro';
 import {
@@ -58,6 +61,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`)}
   id={secao.id}
   data-cena={secao.cena}
+  data-tom={secao.tom}
   aria-labelledby={titulo && forma !== 'citacao' ? secao.tituloId : undefined}
 >
   {forma === 'citacao' ? (
@@ -93,18 +97,19 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   .int-citacao--manifesto {
     max-width: 22ch; margin: 0;
     font-size: clamp(32px, 4.4vw, 64px); font-weight: 300; line-height: 1.08;
-    letter-spacing: -.05em; word-spacing: -.08em; color: var(--papel);
+    letter-spacing: -.05em; word-spacing: -.08em; color: var(--int-tinta);
     text-align: left;
   }
   .int-citacao--manifesto.int-citacao--longa { max-width: 26ch; font-size: clamp(28px, 3.4vw, 50px); }
 
   /* Pílula no fim da frase, com o único ponto amarelo em repouso das internas.
-     Ela vem no set:html, por isso os seletores :global(). */
+     Ela vem no set:html, por isso os seletores :global(). O fundo segue o tom
+     (--int-pilula): véu claro na cena e no preto, grafite no papel. */
   .int-citacao--manifesto :global(.int-citacao__fim) { white-space: nowrap; }
   .int-citacao--manifesto :global(.int-citacao__pilula) {
     display: inline-flex; align-items: center; justify-content: center;
     width: 1.35em; height: .8em; margin-left: .25em; vertical-align: .08em;
-    border-radius: 999px; background: rgb(242 242 238 / .1);
+    border-radius: 999px; background: var(--int-pilula);
   }
   .int-citacao--manifesto :global(.int-citacao__pilula)::before { content: ''; width: .22em; height: .22em; border-radius: 50%; background: #FFD103; }
 
@@ -123,7 +128,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     gap: clamp(28px, 3vw, 40px) clamp(24px, 3vw, 48px); margin: 0;
   }
   .int-dados__item { display: grid; gap: 10px; align-content: start; min-width: 0; }
-  .int-dados dd { margin: 0; font-size: 16px; line-height: 1.6; color: rgb(242 242 238 / .88); overflow-wrap: break-word; }
+  .int-dados dd { margin: 0; font-size: 16px; line-height: 1.6; color: var(--int-valor); overflow-wrap: break-word; }
   .int-dados dd :global(a) { color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .int-dados dd :global(a:hover) { text-decoration-thickness: 2px; }
 

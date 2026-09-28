@@ -10,6 +10,9 @@
  * chegarem prints reais. Nada de Botao por cartão (seriam cinco botões de
  * conversão na mesma tela): o link sublinhado da home basta.
  *
+ * Tom (ritmo-dobras-internas.md): os cartões (--int-cartao) e o texto
+ * (--int-cartao-texto) seguem o tom; o nome e o link herdam a cor da seção.
+ *
  * A ordem dos dados é a da trilha (a sub fala em trilha): por isso ol e o
  * índice 01–0N no topo, que é aria-hidden. Sem página pronta (existe()), o
  * cartão fica sem link; nenhum destino é inventado.
@@ -25,7 +28,7 @@ interface Props {
 
 const { bloco, secao } = Astro.props;
 ---
-<section class:list={classesSecao(secao, 'int-produtos')} id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+<section class:list={classesSecao(secao, 'int-produtos')} id={secao.id} data-tom={secao.tom} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container">
     <div class="int-caixa">
       <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} apoio={bloco.sub} />
@@ -53,12 +56,14 @@ const { bloco, secao } = Astro.props;
   /* O li é só o item da grade: o cartão ocupa a altura toda da linha. */
   .int-produtos li { display: flex; }
 
-  /* Dentro da .int-caixa (raio 16), o cartão fecha em 12, como o .int-lado do
-     antesDepois: o raio de dentro nunca passa o de fora. */
+  /* Raio do tom (--int-raio-interno): na cena, dentro da .int-caixa (raio 16),
+     o cartão fecha em 12, como o .int-lado do antesDepois, porque o raio de
+     dentro nunca passa o de fora; nas dobras sólidas a caixa se dissolve na
+     própria dobra e o cartão volta aos 18 dos outros. */
   .int-produto {
     display: flex; flex-direction: column; flex: 1; min-width: 0;
     min-height: clamp(260px, 22vw, 320px);
-    border-radius: 12px;
+    border-radius: var(--int-raio-interno);
   }
   .int-produto__nome {
     margin-top: 28px; font-size: clamp(24px, 2.2vw, 32px); font-weight: 300;
