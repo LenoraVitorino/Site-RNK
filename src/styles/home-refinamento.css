@@ -262,7 +262,8 @@ section[id] { scroll-margin-top: 110px; }
     100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
     var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
   background: #e7e7e5; color: #252523;
-  padding-block: clamp(64px, 7vw, 112px);
+  --metodo-respiro: clamp(48px, 5vw, 80px);   /* respiro curto: a dobra cabe numa tela */
+  padding-block: var(--metodo-respiro);
 }
 .home-refinada #o-que-fazemos > .container {
   max-width: calc(var(--largura) - 2 * var(--metodo-recuo));
@@ -292,8 +293,8 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__numeros { grid-column: 1 / span 4; grid-row: 2; align-self: end; margin: 0; }
   .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 14px; }
   .home-refinada .metodo-editorial .metodo__legenda { max-width: 11ch; padding-bottom: .35em; white-space: normal; font-size: 13px; }
-  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 3; width: min(100%, 420px); justify-self: center; align-self: center; }
-  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: o parágrafo em seis linhas */
+  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 3; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
+  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; justify-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: seis linhas; encostado no limite direito da grade, espelhando o título */
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
