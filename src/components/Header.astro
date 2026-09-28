@@ -34,6 +34,9 @@ const itensMenu = menu.flatMap((item) => {
 <Icone nome="Menu" class="nav-icone-menu" /><Icone nome="X" class="nav-icone-fechar" />
     </button>
 
+    <!-- Desktop: pílula única que desliza até o item sob o cursor ou com o painel aberto. -->
+    <span class="nav__realce" aria-hidden="true"></span>
+
     <nav class="nav" id="navPrincipal" aria-label="Navegação principal">
       <ul class="nav__list">
         {itensMenu.map((item) =>
@@ -46,16 +49,18 @@ const itensMenu = menu.flatMap((item) => {
               </button>
               <div class="megamenu" id={item.id} hidden>
                 <div class="megamenu__inner">
+                  <span class="megamenu__realce" aria-hidden="true"></span>
                   {item.grupos.map((grupo) => (
                     <div class="megamenu__coluna">
                       <p class="megamenu__title">{grupo.titulo}</p>
                       <ul class="megamenu__list">
-                        {grupo.itens.map((sub) => (
-                          <li>
+                        {grupo.itens.map((sub, i) => (
+                          <li style={`--i: ${i}`}>
                             {temPagina(sub.rota)
                               ? <a href={sub.rota}>
                                   {sub.plano && <span class="megamenu__plano" aria-hidden="true"><img class="megamenu__plano--escuro" src={`/icones/plano-${sub.plano}-dark.svg`} alt="" width="24" height="24" loading="lazy" /><img class="megamenu__plano--claro" src={`/icones/plano-${sub.plano}-light.svg`} alt="" width="24" height="24" loading="lazy" /></span>}
-                                  {sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}
+                                  <span class="megamenu__rotulo">{sub.rotulo}{sub.sufixo && <em> {sub.sufixo}</em>}</span>
+                                  <Icone nome="ArrowRight" class="megamenu__seta" size={16} />
                                 </a>
                               : <span class="nav--pendente">{sub.rotulo} <em>em breve</em></span>}
                           </li>
@@ -100,15 +105,55 @@ const itensMenu = menu.flatMap((item) => {
   const caixa = header.querySelector<HTMLElement>('.header__inner')!;
   let fechar = 0;
 
+  // Pílula e realce: posicionados por variáveis CSS; na primeira aparição
+  // saltam para o lugar sem animar e só então aparecem.
+  const realceTopo = header.querySelector<HTMLElement>('.nav__realce')!;
+  const expandido = () => triggers.find((x) => x.getAttribute('aria-expanded') === 'true') || null;
+  header.classList.add('tem-realce');
+
+  function posiciona(realce: HTMLElement, x: number, y: number, w: number, h: number) {
+    const surgindo = !realce.classList.contains('is-visivel');
+    if (surgindo) realce.classList.add('mm-salto');
+    realce.style.setProperty('--x', `${x}px`);
+    realce.style.setProperty('--y', `${y}px`);
+    realce.style.setProperty('--w', `${w}px`);
+    realce.style.setProperty('--h', `${h}px`);
+    if (surgindo) { void realce.offsetWidth; realce.classList.remove('mm-salto'); }
+    realce.classList.add('is-visivel');
+  }
+
+  let alvoTopo: HTMLElement | null = null;
+  function moveTopo(el: HTMLElement | null) {
+    alvoTopo = el;
+    if (!el || !DESKTOP.matches) { realceTopo.classList.remove('is-visivel'); return; }
+    const r = el.getBoundingClientRect();
+    const c = caixa.getBoundingClientRect();
+    posiciona(realceTopo, r.left - c.left - caixa.clientLeft, r.top - c.top - caixa.clientTop, r.width, r.height);
+  }
+
   function openSubmenu(t: HTMLElement) {
     const panel = panelOf(t);
     if (!panel) return;
-    t.setAttribute('aria-expanded', 'true');
-    panel.hidden = false;
     if (DESKTOP.matches) {
+      // O painel novo entra do lado de onde o cursor veio; o anterior sai pelo outro.
+      const i = triggers.indexOf(t as HTMLButtonElement);
+      const anterior = expandido();
+      const j = anterior && anterior !== t ? triggers.indexOf(anterior) : -1;
+      if (panel.hidden) {
+        panel.classList.add('mm-salto');
+        panel.dataset.de = j < 0 ? 'cima' : j < i ? 'direita' : 'esquerda';
+        void panel.offsetWidth;
+        panel.classList.remove('mm-salto');
+      }
+      const painelAnterior = anterior && anterior !== t ? panelOf(anterior) : null;
+      if (painelAnterior) painelAnterior.dataset.de = j < i ? 'esquerda' : 'direita';
+      closeAllSubmenus(t);
       clearTimeout(fechar);
       header.classList.add('header--menu');
+      moveTopo(t);
     }
+    t.setAttribute('aria-expanded', 'true');
+    panel.hidden = false;
   }
 
   function closeSubmenu(t: HTMLElement) {
@@ -116,7 +161,11 @@ const itensMenu = menu.flatMap((item) => {
     if (!panel) return;
     t.setAttribute('aria-expanded', 'false');
     panel.hidden = true;
-    if (!triggers.some((x) => x.getAttribute('aria-expanded') === 'true')) header.classList.remove('header--menu');
+    panel.querySelector('.megamenu__realce')?.classList.remove('is-visivel');
+    if (!expandido()) {
+      header.classList.remove('header--menu');
+      if (!sobreLista && alvoTopo === t) moveTopo(null);
+    }
   }
 
   const closeAllSubmenus = (except?: HTMLElement) =>
@@ -131,7 +180,6 @@ const itensMenu = menu.flatMap((item) => {
       // Desktop: o hover já abre o painel, então o clique nunca fecha — se
       // alternasse, clicar no item sob o cursor fecharia o menu recém-aberto.
       if (DESKTOP.matches) {
-        closeAllSubmenus(trigger);
         openSubmenu(trigger);
         return;
       }
@@ -143,13 +191,46 @@ const itensMenu = menu.flatMap((item) => {
 
     trigger.addEventListener('mouseenter', () => {
       if (!DESKTOP.matches) return;
-      closeAllSubmenus(trigger);
       openSubmenu(trigger);
     });
 
     item.addEventListener('focusout', (e) => {
       if (!DESKTOP.matches) return;
       if (!item.contains(e.relatedTarget as Node)) closeSubmenu(trigger);
+    });
+  });
+
+  // A pílula segue o cursor pelos itens do topo e volta ao painel aberto ao sair.
+  const lista = nav.querySelector<HTMLElement>('.nav__list')!;
+  let sobreLista = false;
+  nav.querySelectorAll<HTMLElement>('.nav__link').forEach((link) => {
+    link.addEventListener('mouseenter', () => { if (DESKTOP.matches) moveTopo(link); });
+    link.addEventListener('focus', () => { if (DESKTOP.matches) moveTopo(link); });
+  });
+  lista.addEventListener('mouseenter', () => { sobreLista = true; });
+  lista.addEventListener('mouseleave', () => { sobreLista = false; moveTopo(expandido()); });
+  lista.addEventListener('focusout', (e) => {
+    if (!lista.contains(e.relatedTarget as Node)) moveTopo(expandido());
+  });
+
+  // Dentro do painel, um realce desliza até o item sob o cursor ou com foco.
+  document.querySelectorAll<HTMLElement>('.megamenu__inner').forEach((inner) => {
+    const realce = inner.querySelector<HTMLElement>('.megamenu__realce');
+    if (!realce) return;
+    // Soma os deslocamentos até a caixa (o li é posicionado), sem ler transformações.
+    const leva = (a: HTMLElement) => {
+      if (!DESKTOP.matches) return;
+      let x = 0, y = 0, n: HTMLElement | null = a;
+      while (n && n !== inner) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent as HTMLElement | null; }
+      posiciona(realce, x, y, a.offsetWidth, a.offsetHeight);
+    };
+    inner.querySelectorAll<HTMLElement>('.megamenu__list a').forEach((a) => {
+      a.addEventListener('mouseenter', () => leva(a));
+      a.addEventListener('focus', () => leva(a));
+    });
+    inner.addEventListener('mouseleave', () => realce.classList.remove('is-visivel'));
+    inner.addEventListener('focusout', (e) => {
+      if (!inner.contains(e.relatedTarget as Node)) realce.classList.remove('is-visivel');
     });
   });
 
@@ -206,6 +287,7 @@ const itensMenu = menu.flatMap((item) => {
 
   const onBreakpoint = () => {
     closeAllSubmenus();
+    moveTopo(null);
     if (DESKTOP.matches) closeNav();
   };
   DESKTOP.addEventListener('change', onBreakpoint);

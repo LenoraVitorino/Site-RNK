@@ -41,3 +41,69 @@
   .header--amarelo .nav { background: var(--amarelo); }
   .nav-overlay:not([hidden]) { display: block !important; }
 }
+
+/* ── Movimento do menu (desktop) ──────────────────────────────────────────
+   Uma pílula só desliza entre os itens do topo; o painel abre com mola
+   suave, vindo do lado de onde o cursor chegou; os itens entram em cascata
+   e um realce acompanha o cursor dentro do painel, com a seta surgindo. */
+.nav__realce, .megamenu__realce { display: none; }
+.header .megamenu__rotulo { min-width: 0; }
+.header .megamenu__seta { display: none; }
+@media (min-width: 1024px) {
+  .header { --mola: cubic-bezier(.16, 1, .3, 1); --realce-topo: rgb(242 242 238 / .08); --realce-painel: rgb(242 242 238 / .06); }
+  .header--claro { --realce-topo: rgb(22 22 22 / .07); --realce-painel: rgb(22 22 22 / .055); }
+  .header--amarelo { --realce-topo: rgb(22 22 22 / .08); --realce-painel: rgb(22 22 22 / .08); }
+
+  .header .nav__list { position: relative; z-index: 1; }
+  .header .nav__realce {
+    display: block; position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none;
+    width: var(--w, 0); height: var(--h, 0); border-radius: 8px; background: var(--realce-topo);
+    transform: translate3d(var(--x, 0), var(--y, 0), 0); opacity: 0;
+    transition: transform .45s var(--mola), width .45s var(--mola), height .45s var(--mola), opacity .25s ease, background-color .4s ease;
+  }
+  .header .nav__realce.is-visivel { opacity: 1; }
+  .header.tem-realce .nav__link:hover, .header.tem-realce .nav__trigger[aria-expanded="true"] { background: transparent; }
+
+  /* Painel: o invólucro só mostra/esconde; o movimento fica na caixa. */
+  .header .megamenu, .header .megamenu[hidden] { display: block; transform: none; opacity: 1; transition: visibility 0s; }
+  .header .megamenu[hidden] { visibility: hidden; pointer-events: none; transition: visibility 0s .22s; }
+  .header .megamenu__inner {
+    position: relative; transform-origin: 40px 0; animation: none;
+    transition: opacity .3s ease, transform .55s var(--mola), background-color .4s ease;
+  }
+  .header .megamenu[hidden] .megamenu__inner { opacity: 0; transform: translate3d(0, -10px, 0) scale(.96); transition: opacity .18s ease, transform .22s ease-in; }
+  .header .megamenu[hidden][data-de="direita"] .megamenu__inner { transform: translate3d(28px, -4px, 0) scale(.98); }
+  .header .megamenu[hidden][data-de="esquerda"] .megamenu__inner { transform: translate3d(-28px, -4px, 0) scale(.98); }
+
+  /* Cascata: título e itens sobem um a um ao abrir; ao fechar somem juntos. */
+  .header .megamenu__title, .header .megamenu__list li { transition: opacity .35s ease calc(70ms + var(--i, -1) * 38ms), transform .5s var(--mola) calc(70ms + var(--i, -1) * 38ms); }
+  .header .megamenu[hidden] :is(.megamenu__title, .megamenu__list li) { opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity .12s ease, transform 0s .2s; }
+  .header .megamenu__list li { position: relative; z-index: 1; }
+
+  .header .megamenu__realce {
+    display: block; position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none;
+    width: var(--w, 0); height: var(--h, 0); border-radius: 8px; background: var(--realce-painel);
+    transform: translate3d(var(--x, 0), var(--y, 0), 0); opacity: 0;
+    transition: transform .4s var(--mola), width .4s var(--mola), height .4s var(--mola), opacity .2s ease;
+  }
+  .header .megamenu__realce.is-visivel { opacity: 1; }
+  .header.tem-realce .megamenu__list a:hover, .header.tem-realce .megamenu__list a:focus-visible { background: transparent; }
+
+  .header .megamenu__list a { display: flex; align-items: center; width: calc(100% + 20px); }
+  .header .megamenu__rotulo { transition: transform .4s var(--mola); }
+  .header .megamenu__seta { display: block; flex: none; margin-left: auto; padding-left: 16px; box-sizing: content-box; opacity: 0; transform: translate3d(-8px, 0, 0); transition: opacity .25s ease, transform .4s var(--mola); }
+  .header .megamenu__list a:is(:hover, :focus-visible) .megamenu__rotulo { transform: translate3d(3px, 0, 0); }
+  .header .megamenu__list a:is(:hover, :focus-visible) .megamenu__seta { opacity: .75; transform: none; }
+
+  /* Reposicionar sem animar (primeira aparição, troca de lado do painel). */
+  .header .mm-salto, .header .mm-salto .megamenu__inner { transition: none !important; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .header .nav__realce, .header .megamenu__realce { transition: opacity .2s ease; }
+  .header .megamenu__inner, .header .megamenu[hidden] .megamenu__inner,
+  .header .megamenu[hidden][data-de] .megamenu__inner { transform: none; transition: opacity .2s ease; }
+  .header .megamenu__title, .header .megamenu__list li,
+  .header .megamenu[hidden] :is(.megamenu__title, .megamenu__list li) { transform: none; transition: opacity .2s ease; }
+  .header .megamenu__rotulo, .header .megamenu__seta,
+  .header .megamenu__list a:is(:hover, :focus-visible) :is(.megamenu__rotulo, .megamenu__seta) { transform: none; transition: opacity .2s ease; }
+}
