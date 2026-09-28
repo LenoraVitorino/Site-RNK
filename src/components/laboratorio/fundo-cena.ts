@@ -103,7 +103,7 @@ const FUNCOES = Object.fromEntries(Object.entries(TRILHAS).map(([k, c]) => [k, t
 
 /** Estado da referência no trecho t, mais o que é nosso (leitura). */
 const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
-  const q: Quadro = { leitura: .85 };
+  const q: Quadro = { leitura: .5 };
   for (const k in FUNCOES) q[k] = FUNCOES[k](t);
   return { ...q, ...extra };
 };
@@ -111,20 +111,24 @@ const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
 /**
  * Quadros por dobra: trechos escolhidos da folha da referência (hero → 0,
  * seção Product → metodologia, Features → pilares, Solutions → perguntas e
- * convite, Pricing → academy). O formulário fecha voltando ao toro do hero,
- * mais ao fundo e mais escuro.
+ * convite, Pricing → academy). O formulário retoma a cena da abertura,
+ * com o mesmo enquadramento e iluminação para o background permanecer visível.
  */
 const DESKTOP: Record<string, Quadro> = {
   hero:        amostra(0),
   // O toro de lá tem outra forma; puxado para dentro da tela para a hero ver o rebordo (17.webp).
   metodologia: amostra(.105, { dz: 2.3 }),
-  pilares:     amostra(.250),
-  letreiro:    amostra(.300, { leitura: .6 }),
-  perguntas:   amostra(.400),
-  convite:     amostra(.497, { leitura: .9 }),
+  // Continua o mesmo objeto iluminado na passagem metodologia → pilares.
+  // .250/.300 pertencem ao intervalo escuro da referência: o donut já
+  // encolheu e perdeu a luz, enquanto o segundo modelo ainda está fora da tela.
+  pilares:     amostra(.125, { dz: 2.3, cry: 1.38, drx: 4.38, drz: 1.48 }),
+  letreiro:    amostra(.145, { dz: 2.3, cry: 1.15, drx: 4.62, drz: 1.76, leitura: .4 }),
+  // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
+  perguntas:   amostra(.455, { leitura: .45 }),
+  convite:     amostra(.497, { leitura: .55 }),
   academy:     amostra(.560),
   sobre:       amostra(.620),
-  formulario:  amostra(0, { dz: -14.5, dsx: .70, dsy: .82, dsz: .71, l1i: 4, l3i: 3, si: 0, pz: -60, leitura: .85 }),
+  formulario:  amostra(0),
 };
 const QUADROS = { desktop: DESKTOP, celular: DESKTOP };
 
@@ -182,7 +186,8 @@ const DONUT_FRAG_SULCO = /* glsl */ `
 #include <opaque_fragment>
 `;
 
-const MINHOCA_VERT_CABECA = /* glsl */ `uniform float uTempo;`;
+const MINHOCA_VERT_CABECA = /* glsl */ `uniform float uTempo;
+`;
 const MINHOCA_VERT_POS = /* glsl */ `
 vec3 transformed = position + vec3(0., .05 * sin(uv.x * 18.85 - uTempo * .5), .035 * cos(uv.x * 12.57 + uTempo * .4));
 `;
@@ -551,7 +556,8 @@ function criar(ctx: Contexto): Elemento {
     quadros: QUADROS,
     config: {
       roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
-      tau: .9, curva: maisSuave, saltoMax: 1, pena: 140,
+      continuas: ['metodologia', 'pilares', 'letreiro'],
+      tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
       esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
     },
     pintar({ q, tempo, dt, parado, ponteiro }) {

@@ -4,12 +4,11 @@ import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
-import { totalDoutores } from '../../data/doutores';
 
 const lead = copyLiteral ? hero.lead :
   'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
 ---
-<section class="hero" aria-label="Apresentação">
+<section class="hero hero--editorial" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
     <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" />
     <span class="hero__brilho"></span>
@@ -28,12 +27,13 @@ const lead = copyLiteral ? hero.lead :
           <span class="hero__revops">RevOps.</span>
         </span>
       </h1>
-      <p class="hero__lead">{lead}</p>
-    </div>
-    <div class="hero__base">
-      <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
-      {/* A prova social só aparece com os retratos e o total reais (Lenora, 26/09: esconder o "+ de 00"). */}
-      {totalDoutores !== null && <ConfiancaHero />}
+      <div class="hero__apoio">
+        <p class="hero__lead">{lead}</p>
+        <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
+      </div>
+      <div class="hero__base">
+        <ConfiancaHero />
+      </div>
     </div>
   </div>
 

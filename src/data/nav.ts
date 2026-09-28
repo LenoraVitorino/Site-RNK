@@ -1,19 +1,6 @@
-/**
- * Estrutura do menu principal.
- * Ver docs/02-arquitetura/sitemap.md
- *
- * "Home" saiu: a assinatura no header já leva à raiz, e o item ocupava espaço
- * sem oferecer destino novo.
- *
- * "Outras Soluções" (Site Institucional, Identidade Visual) saiu em 20/09/2026:
- * é entrega de agência, e a Renke não quer ser lida como agência (Lenora).
- *
- * "Conteúdos", "Contato" e "Faça Parte" eram três itens soltos no fim. Viraram:
- * um grupo "A Renke" (Sobre · Cases · Conteúdos · Faça Parte) e o Contato
- * promovido a botão, que é o que ele de fato é — a ação de conversão.
- *
- * Isso também resolve a D7: "Sobre" e "Cases" estavam fora do menu apesar de
- * serem os pilares de E-E-A-T declarados no briefing.
+/** Menu com os rótulos originais da copy. Destinos sem página são filtrados no Header.
+ * Os ícones e a sequência atual dos planos Revena foram preservados.
+ * Outras Soluções permanece removido conforme pedido anterior.
  */
 
 export type NavLink = {
@@ -41,19 +28,20 @@ export type NavItem =
   | { rotulo: string; id: string; grupos: NavGrupo[]; destaque?: NavDestaque };
 
 export const menu: NavItem[] = [
+  { rotulo: 'Home', rota: '/' },
   {
     rotulo: 'Para Clínicas',
     id: 'mm-clinicas',
     grupos: [
       {
-        titulo: 'Revena',
+        titulo: 'Protocolo Revena',
         itens: [
           // Mesma escada do palco (Lenora, 26/09): Start, Run, Scale, Core, Full.
-          { rotulo: 'Revena Start', rota: '/studio/revena-start', plano: 'start' },
-          { rotulo: 'Revena Run', rota: '/studio/revena-run', plano: 'run' },
-          { rotulo: 'Revena Scale', rota: '/studio/revena-scale', plano: 'scale' },
-          { rotulo: 'Revena Core', rota: '/studio/revena-core', plano: 'core' },
-          { rotulo: 'Revena Full', rota: '/studio/revena-full', plano: 'full' },
+          { rotulo: 'Protocolo Revena Start', rota: '/studio/revena-start', plano: 'start' },
+          { rotulo: 'Protocolo Revena Run', rota: '/studio/revena-run', plano: 'run' },
+          { rotulo: 'Protocolo Revena Scale', rota: '/studio/revena-scale', plano: 'scale' },
+          { rotulo: 'Protocolo Revena Core', rota: '/studio/revena-core', plano: 'core' },
+          { rotulo: 'Protocolo Revena Full', rota: '/studio/revena-full', plano: 'full' },
         ],
       },
       {
@@ -126,30 +114,23 @@ export const menu: NavItem[] = [
     },
   },
 
+  { rotulo: 'Conteúdos', rota: '/blog' },
   {
     rotulo: 'A Renke',
     id: 'mm-renke',
-    grupos: [
-      {
-        titulo: 'A empresa',
-        itens: [
-          { rotulo: 'Sobre', rota: '/sobre' },
-          { rotulo: 'Cases', rota: '/cases' },
-        ],
-      },
-      {
-        titulo: 'Mais',
-        itens: [
-          { rotulo: 'Conteúdos', rota: '/blog' },
-          { rotulo: 'Faça Parte', rota: '/faca-parte' },
-        ],
-      },
-    ],
+    grupos: [{
+      titulo: 'A Renke',
+      itens: [
+        { rotulo: 'Sobre', rota: '/#o-que-fazemos' },
+        { rotulo: 'Contato', rota: '/contato' },
+        { rotulo: 'Faça Parte', rota: '/faca-parte' },
+      ],
+    }],
   },
 ];
 
 /** Ação de conversão no header. Botão, não item de navegação. */
-export const acaoHeader = { rotulo: 'Fale com a gente', rota: '/contato' };
+export const acaoHeader = { rotulo: 'Contato', rota: '/contato' };
 
 export const rodape = {
   links: [

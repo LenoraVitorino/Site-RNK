@@ -1,0 +1,120 @@
+---
+/** Cenas conceituais do serviço, sem métricas ou dados de pacientes fictícios. */
+interface Props { tipo: number }
+const { tipo } = Astro.props;
+const id = `frente-${tipo}`;
+const painel = `url(#${id}-painel)`;
+const bloco = `url(#${id}-bloco)`;
+const sombra = `url(#${id}-sombra)`;
+---
+<svg class="arte-pilar" viewBox="0 0 480 360" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={`${id}-painel`} x1="100" y1="45" x2="330" y2="310" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#303030"/><stop offset=".45" stop-color="#191919"/><stop offset="1" stop-color="#101010"/>
+    </linearGradient>
+    <linearGradient id={`${id}-bloco`} x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#3b3b3b"/><stop offset="1" stop-color="#202020"/>
+    </linearGradient>
+    <radialGradient id={`${id}-luz`}><stop stop-color="#aaa" stop-opacity=".12"/><stop offset="1" stop-color="#aaa" stop-opacity="0"/></radialGradient>
+    <filter id={`${id}-sombra`} x="-30%" y="-30%" width="170%" height="190%"><feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#000" flood-opacity=".65"/></filter>
+    <linearGradient id={`${id}-linha`}><stop stop-color="#626262"/><stop offset="1" stop-color="#dedede"/></linearGradient>
+  </defs>
+  <ellipse cx="242" cy="175" rx="220" ry="160" fill={`url(#${id}-luz)`}/>
+
+  {tipo === 0 && <g transform="translate(0 5) rotate(-9 240 180)">
+    <g opacity=".5"><rect x="72" y="70" width="328" height="239" rx="18" fill="#151515" transform="rotate(-5 240 190)"/></g>
+    <g filter={sombra}>
+      <rect x="70" y="54" width="334" height="238" rx="18" fill={painel}/>
+      <text x="94" y="88" class="arte-pilar__label">Jornada do paciente</text>
+      <circle cx="378" cy="83" r="3" fill="#8b8b8b"/>
+      <path d="M108 155H357" stroke="#494949" stroke-width="2" stroke-dasharray="3 5"/>
+      {[['Marketing',108],['Comercial',232],['Paciente',356]].map(([label,x],i)=><g>
+        <rect x={Number(x)-25} y="128" width="50" height="50" rx="14" fill={bloco}/>
+        {i===0 ? <path d="m98 149 20-7v21l-20-7Zm4 10 3 7" stroke="#c8c8c8" stroke-width="2" stroke-linejoin="round"/>
+          : i===1 ? <path d="M221 144h23v16h-15l-7 5v-21Z" stroke="#c8c8c8" stroke-width="2" stroke-linejoin="round"/>
+          : <g stroke="#e3ca55" stroke-width="2"><circle cx="356" cy="146" r="5"/><path d="M347 163v-3a9 9 0 0 1 18 0v3"/></g>}
+        <text x={x} y="201" text-anchor="middle" class="arte-pilar__small">{label}</text>
+      </g>)}
+      <rect x="92" y="220" width="290" height="46" rx="11" fill="#111"/>
+      <circle cx="115" cy="243" r="5" fill="#d6be52"/>
+      <text x="132" y="249" class="arte-pilar__label">Do primeiro contato à consulta</text>
+    </g>
+  </g>}
+
+  {tipo === 1 && <g transform="rotate(-8 240 180)">
+    <rect x="70" y="82" width="345" height="223" rx="18" fill="#151515" transform="rotate(5 240 180)"/>
+    <g filter={sombra}>
+      <rect x="53" y="54" width="370" height="246" rx="18" fill={painel}/>
+      <text x="76" y="88" class="arte-pilar__label">Sua operação, organizada</text>
+      <g fill="#6b6b6b"><circle cx="381" cy="82" r="2"/><circle cx="389" cy="82" r="2"/><circle cx="397" cy="82" r="2"/></g>
+      {['Contato','Agendado','Retorno'].map((label,i)=><g transform={`translate(${75+i*111} 111)`}>
+        <circle cx="4" cy="7" r="3" fill={i===1?'#d6be52':'#777'}/>
+        <text x="15" y="12" class="arte-pilar__small">{label}</text>
+        {[0,1].map(row=><g transform={`translate(0 ${28+row*67})`}>
+          <rect width="98" height="58" rx="9" fill={i===1&&row===0?bloco:'#222'}/>
+          <circle cx="17" cy="19" r="7" fill="#484848"/>
+          <path d="M32 17h46M32 24h28" stroke="#747474" stroke-width="3" stroke-linecap="round"/>
+          <rect x="11" y="37" width="53" height="8" rx="4" fill="#3c3c3c"/>
+          {i===1&&row===0&&<path d="m75 39 4 4 7-8" stroke="#d6be52" stroke-width="2"/>}
+        </g>)}
+      </g>)}
+    </g>
+    <g filter={sombra}><rect x="246" y="265" width="159" height="43" rx="12" fill={bloco}/><circle cx="265" cy="286" r="4" fill="#d6be52"/><text x="279" y="291" class="arte-pilar__small">Jornada conectada</text></g>
+  </g>}
+
+  {tipo === 2 && <g transform="rotate(-7 240 180)">
+    <g filter={sombra}>
+      <rect x="83" y="47" width="300" height="263" rx="20" fill={painel}/>
+      <circle cx="109" cy="78" r="4" fill="#d6be52"/><text x="124" y="84" class="arte-pilar__label">Atendimento em movimento</text>
+      <path d="M113 130v121" stroke="#464646" stroke-width="2" stroke-dasharray="3 5"/>
+      {['Consulta confirmada','Lembrete enviado','Follow-up programado'].map((label,i)=><g transform={`translate(0 ${i*61})`}>
+        <circle cx="113" cy="131" r="12" fill="#303030"/>
+        <path d={i===2?'M113 124v7l5 3':'m108 131 4 4 7-8'} stroke={i===2?'#d6be52':'#aaa'} stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="138" y="109" width="216" height="46" rx="11" fill={i===1?bloco:'#202020'}/>
+        <text x="154" y="137" class="arte-pilar__label">{label}</text>
+      </g>)}
+    </g>
+    <g filter={sombra}><rect x="280" y="284" width="137" height="41" rx="12" fill={bloco}/><path d="m300 295-6 10h7l-2 9 9-13h-8l3-6" fill="#d6be52"/><text x="317" y="310" class="arte-pilar__small">Fluxo ativo</text></g>
+  </g>}
+
+  {tipo === 3 && <g transform="rotate(-6 240 180)">
+    <g filter={sombra}>
+      <rect x="56" y="52" width="370" height="243" rx="18" fill={painel}/>
+      <text x="79" y="85" class="arte-pilar__label">Clareza para a próxima decisão</text>
+      <rect x="78" y="105" width="204" height="162" rx="12" fill="#141414"/>
+      <text x="95" y="130" class="arte-pilar__small">Faturamento por canal</text>
+      {[0,1,2].map(i=><path d={`M96 ${163+i*36}h164`} stroke="#292929"/>)}
+      <path d="m98 224 30-18 29 7 34-42 29 6 34-27" stroke={`url(#${id}-linha)`} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="254" cy="150" r="5" fill="#d6be52"/>
+      <text x="302" y="124" class="arte-pilar__small">Agendamento</text>
+      <path d="M303 143h94" stroke="#333" stroke-width="7" stroke-linecap="round"/><path d="M303 143h62" stroke="#aaa" stroke-width="7" stroke-linecap="round"/>
+      <text x="302" y="180" class="arte-pilar__small">Comparecimento</text>
+      <path d="M303 199h94" stroke="#333" stroke-width="7" stroke-linecap="round"/><path d="M303 199h76" stroke="#777" stroke-width="7" stroke-linecap="round"/>
+      <rect x="298" y="225" width="108" height="30" rx="8" fill={bloco}/><text x="352" y="245" text-anchor="middle" class="arte-pilar__small">Plano de ação</text>
+    </g>
+  </g>}
+
+  {tipo === 4 && <g transform="rotate(-7 240 180)">
+    <rect x="92" y="60" width="230" height="248" rx="18" fill="#1a1a1a" transform="rotate(-9 240 180)"/>
+    <g filter={sombra}>
+      <rect x="110" y="53" width="233" height="246" rx="16" fill={painel}/>
+      <text x="132" y="83" class="arte-pilar__small">POSICIONAMENTO</text>
+      <path d="M306 74v14m-7-7h14" stroke="#d6be52" stroke-width="2"/>
+      <text x="131" y="134" class="arte-pilar__headline">Sua clínica.</text>
+      <text x="131" y="166" class="arte-pilar__headline">Sua diferença.</text>
+      <text x="133" y="192" class="arte-pilar__small">Estratégia antes</text>
+      <text x="133" y="209" class="arte-pilar__small">da mídia.</text>
+      <rect x="132" y="227" width="82" height="47" rx="9" fill="#313131"/><rect x="222" y="227" width="44" height="47" rx="9" fill="#444"/><rect x="274" y="227" width="44" height="47" rx="9" fill="#222"/>
+    </g>
+    <g filter={sombra} transform="rotate(8 351 220)">
+      <rect x="291" y="186" width="141" height="124" rx="14" fill={bloco}/>
+      {['Mercado','Diferencial','Mensagem'].map((label,i)=><g transform={`translate(306 ${214+i*32})`}><path d="m0-3 4 4 7-8" stroke={i===1?'#d6be52':'#aaa'} stroke-width="1.8" stroke-linecap="round"/><text x="23" y="2" class="arte-pilar__label">{label}</text></g>)}
+    </g>
+  </g>}
+</svg>
+<style>
+  .arte-pilar { display: block; width: 100%; height: 100%; overflow: visible; }
+  .arte-pilar__label { font: 500 14px Inter, sans-serif; fill: #d1d1d1; letter-spacing: -.2px; }
+  .arte-pilar__small { font: 400 12px Inter, sans-serif; fill: #999; }
+  .arte-pilar__headline { font: 500 27px Inter, sans-serif; fill: #e4e4e4; letter-spacing: -1px; }
+</style>

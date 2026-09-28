@@ -1,67 +1,70 @@
 import type { Pagina } from './tipos';
-import { analiseDeMercado } from './comuns';
+import { ctaProtocolo } from './comuns';
 
-/** Copy atualizada pelo PR #5, adaptada aos blocos existentes. Base: docs/03-copy/revena-core.md */
+/** Copy literal de docs/03-copy/revena-core.md */
 export const revenaCore: Pagina = {
   rota: '/studio/revena-core',
-  titulo: "Revena Core | Marketing + comercial + dados integrados para clínicas",
+  titulo: 'Protocolo Revena Core | Marketing + comercial + dados integrados para clínicas',
   descricao:
     'Um time operando marketing, comercial e dados da sua clínica toda semana. Custo por paciente real, não custo por clique.',
   blocos: [
     {
       tipo: 'hero',
-      titulo: ["Revena Core"],
-      sub: "Marketing, comercial e dados operados por um time dedicado, com acompanhamento contínuo e decisões orientadas por receita.",
-      cta: "Conheça o Core",
+      titulo: ['Revena Core'],
+      centro: true,
+      sub: 'Marketing, comercial e dados operados por um time dedicado, com acompanhamento contínuo e decisões orientadas por receita.',
+      cta: 'Conheça o Core',
     },
     {
       tipo: 'lista',
-      eyebrow: 'Para quem é',
-      h2: "Ideal para clínicas que:",
+      h2: 'Ideal para clínicas que:',
       fundo: 'alt',
-      itens: ["Faturam acima de R$300k/mês","Já possuem marketing, comercial e dados estruturados, mas ainda desconectados","Precisam de uma operação integrada para orientar decisões e prioridades","Já implementaram o Revena Start ou Full"],
+      numerada: true,
+      itens: [
+        'Faturam acima de R$300k/mês',
+        'Já possuem marketing, comercial e dados estruturados, mas ainda desconectados',
+        'Precisam de uma operação integrada para orientar decisões e prioridades',
+        'Já implementaram o Revena Start ou Full',
+      ],
     },
     {
       tipo: 'blocos',
-      eyebrow: 'Nossa solução',
-      h2: "O que o Core faz",
+      h2: 'O que o Core faz',
+      sub: 'Reúne marketing, comercial e dados num time só, operando sua clínica toda semana.',
       largo: true,
       itens: [
         {
           titulo: 'Marketing que funciona de verdade',
-          itens: ["Anúncios e páginas otimizados pelo paciente que fecha","Estratégia baseada em dados reais","Roteiros produzidos em cima de anatomias validadas"],
+          texto: 'Anúncios e páginas otimizados pelo paciente que fecha, com estratégia baseada em dados reais.',
         },
         {
           titulo: 'Gestão comercial com método',
-          itens: ["Recuperação de orçamentos parados","Acompanhamento semanal do processo comercial","Dados de fechamento conectados ao marketing"],
+          texto: 'Recuperação de orçamentos parados e acompanhamento semanal do processo comercial.',
         },
         {
           titulo: 'Tecnologia própria rodando',
-          itens: ["Rastreamento de origem","Confirmações e follow-ups automáticos","Tudo integrado"],
+          texto: 'Rastreamento de origem, confirmações e follow-ups automáticos, tudo integrado.',
         },
         {
           titulo: 'Dados que viram decisão',
-          itens: ["Painéis com custo por paciente","Performance por canal","Indicadores por procedimento","Relatórios semanais"],
+          texto: 'Painéis e relatórios semanais com custo por paciente, canal e procedimento.',
         },
       ],
     },
-    analiseDeMercado,
     {
       tipo: 'etapas',
-      eyebrow: 'Como funciona',
-      h2: ["Etapas do Core"],
+      h2: ['Etapas do Core'],
       etapas: [
-        { n: '1', duracao: '45 dias', nome: 'Estruturação', descricao: "Posicionamento, rastreamento, operação comercial, dados e metas estruturados." },
-        { n: '2', duracao: '90 dias', nome: 'Laboratório', descricao: "Testes de canais, criativos e abordagens para identificar o que gera resultado para a clínica." },
-        { n: '3', duracao: '180 dias', nome: 'Performance', descricao: "Escala do que funciona, otimização contínua e abertura de novos canais quando fizer sentido." },
-        { n: '4', duracao: "12 meses", nome: "Operação contínua", descricao: "Otimização constante com um time que conhece a operação e evolui a estratégia continuamente." },
+        { n: '1', duracao: '45 dias', nome: 'Estruturação', descricao: 'Posicionamento, rastreamento, operação comercial, dados e metas estruturados.' },
+        { n: '2', duracao: '90 dias', nome: 'Laboratório', descricao: 'Testes de canais, criativos e abordagens para identificar o que gera resultado para a clínica.' },
+        { n: '3', duracao: '180 dias', nome: 'Performance', descricao: 'Escala do que funciona, otimização contínua e abertura de novos canais quando fizer sentido.' },
+        { n: '4', duracao: '12 meses', nome: 'Operação contínua', descricao: 'Otimização constante com um time que conhece a operação e evolui a estratégia continuamente.' },
       ],
       fechamento:
-        "Cada etapa prepara a próxima. Por isso, o Core parte de uma operação estruturada antes de buscar performance.",
+        'Cada etapa prepara a próxima. Por isso, o Core parte de uma operação estruturada antes de buscar performance.',
     },
     {
       tipo: 'blocos',
-      eyebrow: 'Cadência',
       h2: 'O que acontece toda semana na sua clínica',
       numerado: true,
       fundo: 'alt',
@@ -74,18 +77,16 @@ export const revenaCore: Pagina = {
     {
       tipo: 'texto',
       fundo: 'alt',
-      paragrafos: ["A Renke não manda relatório mensal e some. Toda semana, 3 camadas de análise se cruzam.","<strong>Você recebe:</strong> relatório de marketing + relatório comercial toda semana. Check-in mensal com o gestor. Alinhamentos com sua própria equipe. Suporte via WhatsApp em horário comercial."],
+      paragrafos: [
+        'A Renke não manda relatório mensal e some. Toda semana, 3 camadas de análise se cruzam.',
+        '<strong>Você recebe:</strong> relatório de marketing + relatório comercial toda semana. Check-in mensal com o gestor. Alinhamentos com sua própria equipe. Suporte via WhatsApp em horário comercial.',
+      ],
     },
     {
       tipo: 'pendencia',
       o_que:
         'Seção 7 · Resultados — decisão sugerida no briefing: depoimentos como componente global em todas as páginas (D11).',
     },
-    {
-      tipo: 'ctaFinal',
-      destaque: "Atendemos uma nova clínica por mês.",
-      texto: "Cada projeto começa com um diagnóstico próprio e acompanhamento dedicado em toda a implementação. Sem templates. Sem terceirização.",
-      cta: "Agende uma conversa",
-    },
+    ctaProtocolo,
   ],
 };
