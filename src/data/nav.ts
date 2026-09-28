@@ -121,7 +121,7 @@ export const menu: NavItem[] = [
     grupos: [{
       titulo: 'A Renke',
       itens: [
-        { rotulo: 'Sobre', rota: '/#o-que-fazemos' },
+        { rotulo: 'Sobre', rota: '/sobre' },
         { rotulo: 'Contato', rota: '/contato' },
         { rotulo: 'Faça Parte', rota: '/faca-parte' },
       ],
@@ -139,6 +139,7 @@ export const rodape = {
     { rotulo: 'Para Agências', rota: '/academy' },
     { rotulo: 'Tecnologia', rota: '/tools' },
     { rotulo: 'Conteúdos', rota: '/blog' },
+    { rotulo: 'Sobre', rota: '/sobre' },
     { rotulo: 'Faça Parte', rota: '/faca-parte' },
   ],
   redes: [
