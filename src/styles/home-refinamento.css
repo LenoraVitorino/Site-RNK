@@ -293,7 +293,7 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 14px; }
   .home-refinada .metodo-editorial .metodo__legenda { max-width: 11ch; padding-bottom: .35em; white-space: normal; font-size: 13px; }
   .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 3; width: min(100%, 420px); justify-self: center; align-self: center; }
-  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; max-width: 40ch; font-size: 16px; }
+  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: o parágrafo em seis linhas */
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
