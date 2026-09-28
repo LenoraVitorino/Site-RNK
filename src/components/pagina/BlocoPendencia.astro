@@ -1,0 +1,24 @@
+---
+/**
+ * Pendência: recado para o time, não conteúdo. Só existe em dev; em
+ * produção nenhum nó entra no HTML. Sem .secao e sem data-cena: o
+ * despachante a ignora em todos os cálculos.
+ * Estilo global .int-pendencia (src/styles/paginas2.css).
+ */
+import type { BlocoDe, ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'pendencia'>;
+  secao?: ContextoSecao;
+}
+
+const { bloco } = Astro.props;
+const dev = import.meta.env.DEV;
+---
+{dev && (
+  <section class="int-pendencia">
+    <div class="container">
+      <p>Falta copy: {bloco.o_que}</p>
+    </div>
+  </section>
+)}

@@ -13,7 +13,7 @@ export const facaParte: Pagina = {
       realce: 1,
       sub: 'A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão no Brasil. Aqui, a gente conecta marketing, comercial e dados em um sistema só. E faz isso com um time enxuto, autônomo e obcecado por resultado. Se você quer trabalhar com propósito, liberdade e evolução constante: esse é o lugar.',
       cta: 'Deixe seu currículo ↓',
-      rotaCta: '#curriculo',
+      rotaCta: '#formulario',
     },
     {
       tipo: 'pendencia',

@@ -63,6 +63,9 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #50504e; }
 .home-refinada .form-card .botao { background: #252523; color: #f4f4f2; border-color: #252523; }
 .home-refinada .form-card :focus-visible { outline-color: #252523; }
+/* Depois do envio: status e 'Copiar mensagem' nos tons do cartão claro. */
+.home-refinada .form-card .form-card__status { background: rgb(37 37 35 / .06); border-color: transparent; color: #252523; }
+.home-refinada .form-card .form-card__copiar { color: #252523; }
 
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }

@@ -1,0 +1,77 @@
+---
+/**
+ * Bloco 'produtos' das internas: o catálogo da Academy.
+ * Especificação: docs/04-design/paginas-internas.md, "produtos".
+ *
+ * Preset: a caixa preta do Ecossistema (.ecossistema__box, home-refinamento.css:39)
+ * envolvendo a cabeça e a grade 3+2 dos Features (.features-grade/.feature-card,
+ * home-refinamento.css:144-154), com os cartões no tom do .feature-card.
+ * A área de arte 4/3 do Ecossistema não entra: a home a deixou vazia até
+ * chegarem prints reais. Nada de Botao por cartão (seriam cinco botões de
+ * conversão na mesma tela): o link sublinhado da home basta.
+ *
+ * A ordem dos dados é a da trilha (a sub fala em trilha): por isso ol e o
+ * índice 01–0N no topo, que é aria-hidden. Sem página pronta (existe()), o
+ * cartão fica sem link; nenhum destino é inventado.
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import { classesSecao, indice2, semSeta, type BlocoDe, type ContextoSecao } from './contexto';
+import { existe } from '../../data/rotas';
+
+interface Props {
+  bloco: BlocoDe<'produtos'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+---
+<section class:list={classesSecao(secao, 'int-produtos')} id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <div class="int-caixa">
+      <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={bloco.h2} apoio={bloco.sub} />
+      <ol class="int-grade-6" data-n={bloco.itens.length} role="list">
+        {bloco.itens.map((item, i) => (
+          <li class="entra" style={`--i:${Math.min(i, 5)}`}>
+            <article class="int-cartao int-produto">
+              <span class="int-indice" aria-hidden="true">{indice2(i + 1)}</span>
+              <h3 class="int-produto__nome">{item.titulo}</h3>
+              <p class="int-produto__texto">{item.texto}</p>
+              {existe(item.rota) && (
+                <p class="int-produto__acao">
+                  <a class="link-arrow" href={item.rota}>{semSeta(item.cta)}<span class="visually-hidden">: {item.titulo}</span></a>
+                </p>
+              )}
+            </article>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* O li é só o item da grade: o cartão ocupa a altura toda da linha. */
+  .int-produtos li { display: flex; }
+
+  /* Dentro da .int-caixa (raio 16), o cartão fecha em 12, como o .int-lado do
+     antesDepois: o raio de dentro nunca passa o de fora. */
+  .int-produto {
+    display: flex; flex-direction: column; flex: 1; min-width: 0;
+    min-height: clamp(260px, 22vw, 320px);
+    border-radius: 12px;
+  }
+  .int-produto__nome {
+    margin-top: 28px; font-size: clamp(24px, 2.2vw, 32px); font-weight: 300;
+    line-height: 1.1; letter-spacing: -.04em; overflow-wrap: break-word;
+  }
+  .int-produto__texto {
+    margin-top: 14px; max-width: 44ch;
+    font-size: 15px; line-height: 1.65; color: var(--int-cartao-texto);
+  }
+  /* O link desce para o pé do cartão, alinhado entre os vizinhos da linha. */
+  .int-produto__acao { margin-top: auto; padding-top: 28px; }
+
+  @media (max-width: 599.98px) {
+    .int-produto { min-height: 0; }
+  }
+</style>

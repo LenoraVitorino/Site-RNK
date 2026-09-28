@@ -1,0 +1,174 @@
+---
+/**
+ * Bloco 'formulario' das internas. Especificação:
+ * docs/04-design/paginas-internas.md, "formulario".
+ *
+ * Preset: o formulário da home (home2/Formulario.astro), com as mesmas
+ * classes (.form-block, .form-card, .field…) e o mesmo id #formulario, que
+ * puxa as regras da home: colunas de 400 e 460 centralizadas e o cartão claro
+ * sob .home-refinada. Há um só formulário por página.
+ *
+ * Com secao.abertura (Contato), o título do hero curto vira o h1 da coluna de
+ * texto e a seção ocupa a primeira dobra: título à esquerda, campos à direita
+ * (referência do Pinterest 205).
+ *
+ * O envio é o de formulario-envio.ts: a mensagem abre no WhatsApp (quando
+ * rodape.whatsapp está preenchido) ou no e-mail do visitante. Nada vai para a
+ * URL do site: o form usa method="dialog", que fora de um <dialog> não envia
+ * nada, então nem sem JS os dados caem na query string.
+ *
+ * A microcopy de interface ('Selecione', 'Copiar mensagem', o aviso do canal)
+ * é a da home, copiada aqui, sem importar o Formulario.astro.
+ */
+import { rodape } from '../../data/nav';
+import type { Campo } from '../../data/paginas/tipos';
+import Botao from '../ui/Botao.astro';
+import { classesSecao, semSeta, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'formulario'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const temTitulo = !!(secao.abertura || bloco.h2);
+const whatsapp = (rodape.whatsapp ?? '').replace(/\D/g, '');
+const canal = whatsapp ? 'WhatsApp' : 'e-mail';
+const email = bloco.email ?? rodape.email;
+
+/* Um e-mail seguido de um telefone formam a dupla da home (.form-card__duo). */
+const grupos: Campo[][] = [];
+bloco.campos.forEach((c, i) => {
+  const anterior = bloco.campos[i - 1];
+  if (c.tipo === 'tel' && anterior?.tipo === 'email') grupos[grupos.length - 1].push(c);
+  else grupos.push([c]);
+});
+---
+<section
+  class:list={classesSecao(secao, 'int-formulario', secao.abertura && 'int-formulario--abertura')}
+  id={secao.id}
+  data-cena={secao.cena}
+  aria-labelledby={temTitulo ? secao.tituloId : undefined}
+>
+  <div class="container form-block">
+    <div class="form-block__text entra" style="--i:0">
+      {secao.abertura
+        ? <h1 id={secao.tituloId} class="titulo int-formulario__h1">{secao.abertura.map((l, i) => <>{i > 0 && ' '}<span>{l}</span></>)}</h1>
+        : bloco.h2 && <h2 id={secao.tituloId} class="titulo">{bloco.h2}</h2>}
+      {bloco.sub && <p>{bloco.sub}</p>}
+      {bloco.email && <p><a class="link-arrow int-formulario__email" href={`mailto:${bloco.email}`}>{bloco.email}</a></p>}
+    </div>
+
+    <form
+      class="form-card entra"
+      style="--i:1"
+      method="dialog"
+      novalidate
+      data-form-pagina
+      data-email={email}
+      data-whatsapp={whatsapp}
+    >
+      {grupos.map((grupo) => {
+        const campos = grupo.map((c) => {
+          const id = `campo-${c.id}`;
+          const erro = `${id}-erro`;
+          return (
+            <label class="field">
+              <span class="field__label">{c.rotulo}</span>
+              {c.tipo === 'textarea' ? (
+                <textarea id={id} name={c.id} rows="4" autocomplete={c.autocomplete} required={c.obrigatorio} aria-describedby={erro}></textarea>
+              ) : c.tipo === 'select' ? (
+                <select id={id} name={c.id} autocomplete={c.autocomplete} required={c.obrigatorio} aria-describedby={erro}>
+                  <option value="" selected disabled>Selecione</option>
+                  {c.opcoes?.map((o) => <option value={o}>{o}</option>)}
+                </select>
+              ) : (
+                <input
+                  id={id}
+                  name={c.id}
+                  type={c.tipo}
+                  autocomplete={c.autocomplete}
+                  inputmode={c.tipo === 'tel' ? 'tel' : undefined}
+                  required={c.obrigatorio}
+                  aria-describedby={erro}
+                />
+              )}
+              <span class="field__erro" id={erro} hidden></span>
+            </label>
+          );
+        });
+        return grupo.length > 1 ? <div class="form-card__duo">{campos}</div> : campos;
+      })}
+      <Botao type="submit" bloco>{semSeta(bloco.botao)}</Botao>
+      <p class="form-card__status" role="status" aria-live="polite" data-status></p>
+      <button type="button" class="form-card__copiar link-arrow" data-copiar hidden>Copiar mensagem</button>
+      {/* Com bloco.email o endereço já está em link na coluna de texto: o aviso
+          fica só com a primeira frase, para o e-mail não se repetir na dobra. */}
+      {bloco.email
+        ? <p class="form-card__aviso">A mensagem abre no seu {canal}, pronta para revisar e enviar.</p>
+        : <p class="form-card__aviso">A mensagem abre no seu {canal}, pronta para revisar e enviar. Ou escreva para <a href={`mailto:${email}`}>{email}</a>.</p>}
+    </form>
+  </div>
+</section>
+
+<script>
+  import './formulario-envio';
+</script>
+
+<style>
+  /* Abertura do Contato: título e formulário na primeira dobra. O id entra no
+     seletor porque o padding de #formulario na home tem peso de id. */
+  #formulario.int-formulario--abertura {
+    padding-top: calc(var(--altura-header) + clamp(40px, 6vw, 88px));
+    padding-bottom: var(--esp-secao);
+    min-height: 100svh;
+    display: grid;
+    align-content: center;
+  }
+
+  /* H1 da abertura. Precisa vencer o .form-block__text .titulo da home. */
+  .int-formulario .form-block__text .int-formulario__h1 {
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -.05em;
+  }
+  .int-formulario__h1 > span { display: block; }
+
+  /* O e-mail ao lado do título, em papel como os links sublinhados da home. */
+  .int-formulario .form-block__text .int-formulario__email { color: var(--papel); }
+
+  /* Textarea: sem a folga de linha de base embaixo e com a entrelinha de
+     texto corrido. O fundo claro vem do paginas2.css. */
+  .int-formulario .form-card .field textarea {
+    display: block;
+    line-height: 1.5;
+  }
+
+  /* Abertura do Contato a partir de 900px: a grade editorial das internas
+     (.int-grade-2), no lugar das colunas centradas da home. O texto começa
+     na margem do container e o cartão, na coluna direita das outras dobras. */
+  @media (min-width: 900px) {
+    #formulario.int-formulario--abertura .form-block {
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+      justify-content: stretch;
+      gap: 9%;
+    }
+    #formulario.int-formulario--abertura .form-card {
+      width: 100%;
+      max-width: 460px;
+    }
+  }
+  @media (min-width: 900px) and (max-width: 1099.98px) {
+    #formulario.int-formulario--abertura .form-block { gap: 5%; }
+  }
+
+  /* Sub sem palavra sozinha na última linha. */
+  .int-formulario .form-block__text p { text-wrap: pretty; }
+
+  /* Campo inválido no cartão claro: a borda da home é para o cartão escuro e
+     some aqui. Um fio grafite marca o campo e o erro ganha o tom do texto. */
+  .int-formulario .form-card .field--invalido :is(input, select, textarea) {
+    box-shadow: inset 0 0 0 1px #252523;
+  }
+  .int-formulario .form-card .field__erro { color: #252523; }
+</style>

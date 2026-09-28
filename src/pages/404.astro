@@ -5,26 +5,59 @@
  *
  * Deliberadamente sobre: header e rodapé completos, para quem caiu aqui ter
  * o menu inteiro à mão em vez de um beco sem saída.
+ *
+ * Na casca da home (27/09/2026): Base2 + paginas2.css + a cena ao fundo,
+ * numa dobra só, centrada e de altura cheia, no preset da chamada final.
+ * Sem o numeral '404' gigante: a Lenora tirou o numeral decorativo da
+ * chamada da home. Especificação: docs/04-design/paginas-internas.md, "404".
  */
-import Base from '../layouts/Base.astro';
+import Base2 from '../layouts/Base2.astro';
+import FundoInterno from '../components/pagina/FundoInterno.astro';
 import Botao from '../components/ui/Botao.astro';
+import '../styles/paginas2.css';
 ---
-<Base
+<Base2
   titulo="Página não encontrada | Renke Studio"
   descricao="A página que você procurava não existe ou mudou de endereço."
+  classe="home-refinada"
 >
-  <section class="section section--hero erro">
-    <div class="container erro__caixa">
-      <p class="eyebrow">Erro 404</p>
-      <h1 class="erro__titulo">Esse endereço não existe.</h1>
-      <p class="erro__lead">
-        A página pode ter mudado de lugar, ou o link que te trouxe até aqui está errado.
-        O menu acima leva a tudo que existe no site.
-      </p>
-      <div class="erro__acoes">
-        <Botao variante="brilho" href="/">Voltar para a home</Botao>
-        <Botao variante="contorno" href="/contato">Falar com a gente</Botao>
+  <FundoInterno slot="fundo" />
+  <section class="secao int-secao int-erro" id="secao-1" data-cena="hero" aria-labelledby="secao-1-titulo">
+    <div class="container">
+      <div class="int-erro__miolo">
+        <p class="rotulo">Erro 404</p>
+        <h1 class="titulo int-erro__titulo" id="secao-1-titulo">Esse endereço não existe.</h1>
+        <p class="int-erro__lead entra" style="--i:1">
+          A página pode ter mudado de lugar, ou o link que te trouxe até aqui está errado.
+          O menu acima leva a tudo que existe no site.
+        </p>
+        <div class="int-erro__acoes entra" style="--i:2">
+          <Botao href="/" tamanho="lg">Voltar para a home</Botao>
+          <a class="link-arrow" href="/contato">Falar com a gente</a>
+        </div>
       </div>
     </div>
   </section>
-</Base>
+</Base2>
+
+<style>
+  .int-erro {
+    display: grid; place-items: center; min-height: 100svh;
+    padding-top: var(--altura-header); padding-bottom: clamp(56px, 7vw, 96px);
+  }
+  .int-erro > .container { width: 100%; }
+  .int-erro__miolo {
+    display: grid; justify-items: center; text-align: center; gap: 24px;
+    max-width: 640px; margin-inline: auto;
+  }
+  /* Escala do título do #fale. */
+  .int-erro__titulo { font-size: clamp(2.2rem, 3.8vw, 3.8rem); max-width: 15ch; }
+  .int-erro__lead { font-size: 17px; line-height: 1.6; color: #aeaeac; max-width: 44ch; }
+  .int-erro__acoes { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px; }
+  /* A cor papel do botão (a do #fale) vem da regra global
+     :is(.int-cta__acao, .int-erro__acoes) .botao, em paginas2.css. */
+
+  @media (max-width: 599.98px) {
+    .int-erro__acoes { flex-direction: column; gap: 20px; }
+  }
+</style>

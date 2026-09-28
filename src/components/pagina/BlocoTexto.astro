@@ -1,0 +1,142 @@
+---
+/**
+ * Bloco 'texto' das internas. Especificação: docs/04-design/paginas-internas.md,
+ * "texto" e emenda E3.
+ *
+ * A forma sai de formaTexto() (contexto.ts):
+ * - citacao: frase-manifesto enorme à esquerda (pin Hikari), com a pílula e o
+ *   único ponto amarelo em repouso das internas. Performa, Run e Scale.
+ * - ficha: grade editorial com a cabeça à esquerda e dl rótulo/valor à
+ *   direita (pin 201). Contato, 'Renke Studio'.
+ * - editorial: grade editorial da Operação, sem sticky, com o texto na coluna
+ *   direita. Com 3+ parágrafos ou alguma citação, vira manifesto (pin 187).
+ * - solto: a mesma grade, com a coluna esquerda vazia e o texto em manifesto.
+ *   A seção cola na anterior (secao.junta, calculado no despachante).
+ *
+ * O texto vem dos dados via set:html, só sem a seta final (' →').
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import {
+  classesSecao, ehCitacao, ehDestaque, formaTexto, partesFicha,
+  type BlocoDe, type ContextoSecao,
+} from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'texto'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const forma = formaTexto(bloco);
+const titulo = bloco.h2;
+const paragrafos = bloco.paragrafos.map((p) => p.replaceAll(' →', ''));
+
+/* Citação: acima de 90 caracteres visíveis, a escala longa da E3. */
+const semTags = (p: string) => p.replace(/<[^>]+>/g, '');
+const longa = forma === 'citacao' && semTags(paragrafos[0]).length > 90;
+/* A pílula vai colada à última palavra, dentro de um span sem quebra, para
+   nunca descer sozinha para a linha de baixo. A palavra fica dentro das tags
+   que fecham o parágrafo (</strong>, </em>), então o aninhamento se mantém.
+   Se a última palavra tiver tag no meio, a pílula só é acrescentada no fim. */
+const PILULA = '<span class="int-citacao__pilula" aria-hidden="true"></span>';
+const comPilula = (p: string) => {
+  const m = p.match(/(\S+?)((?:<\/[a-z]+>)*)$/);
+  if (!m || m[1].includes('<')) return p + PILULA;
+  return `${p.slice(0, m.index)}<span class="int-citacao__fim">${m[1]}${PILULA}</span>${m[2]}`;
+};
+const citacao = forma === 'citacao' ? comPilula(paragrafos[0]) : '';
+
+/* Ficha: cada parágrafo '<strong>Rótulo:</strong> resto' vira dt/dd. */
+const fatos = forma === 'ficha' ? paragrafos.map((p) => partesFicha(p)!) : [];
+
+/* Editorial e solto: o parágrafo inteiro em <em> ou entre aspas é citação;
+   o inteiro em <strong>, destaque. */
+const classeDe = (p: string) => (ehCitacao(p) ? 'int-citacao' : ehDestaque(p) ? 'int-destaque' : undefined);
+const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some(ehCitacao);
+---
+<section
+  class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`)}
+  id={secao.id}
+  data-cena={secao.cena}
+  aria-labelledby={titulo && forma !== 'citacao' ? secao.tituloId : undefined}
+>
+  {forma === 'citacao' ? (
+    <div class="container">
+      <p class:list={['int-citacao int-citacao--manifesto entra', longa && 'int-citacao--longa']} set:html={citacao} />
+    </div>
+  ) : (
+    <div class="container int-grade-2 int-texto__grade">
+      {(titulo || bloco.eyebrow) && (
+        <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} classe="int-cabeca--coluna" />
+      )}
+      {forma === 'ficha' ? (
+        <dl class="int-dados int-grade-2__direita entra" style="--i:1">
+          {fatos.map(([rotulo, resto]) => (
+            <div class="int-dados__item">
+              <dt class="rotulo">{rotulo}</dt>
+              <dd set:html={resto} />
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <div class:list={['int-rico int-texto__corpo int-grade-2__direita entra', manifesto && 'int-manifesto']} style="--i:1">
+          {paragrafos.map((p) => <p class={classeDe(p)} set:html={p} />)}
+        </div>
+      )}
+    </div>
+  )}
+</section>
+
+<style>
+  /* ---------- Citação: manifesto à esquerda (E3, pin Hikari) ---------- */
+
+  .int-citacao--manifesto {
+    max-width: 22ch; margin: 0;
+    font-size: clamp(32px, 4.4vw, 64px); font-weight: 300; line-height: 1.08;
+    letter-spacing: -.05em; word-spacing: -.08em; color: var(--papel);
+    text-align: left;
+  }
+  .int-citacao--manifesto.int-citacao--longa { max-width: 26ch; font-size: clamp(28px, 3.4vw, 50px); }
+
+  /* Pílula no fim da frase, com o único ponto amarelo em repouso das internas.
+     Ela vem no set:html, por isso os seletores :global(). */
+  .int-citacao--manifesto :global(.int-citacao__fim) { white-space: nowrap; }
+  .int-citacao--manifesto :global(.int-citacao__pilula) {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.35em; height: .8em; margin-left: .25em; vertical-align: .08em;
+    border-radius: 999px; background: rgb(242 242 238 / .1);
+  }
+  .int-citacao--manifesto :global(.int-citacao__pilula)::before { content: ''; width: .22em; height: .22em; border-radius: 50%; background: #FFD103; }
+
+  /* ---------- Editorial e solto: texto na coluna direita ---------- */
+
+  /* Parágrafo comum em pretty; a citação e o destaque ficam no balance global. */
+  .int-texto__corpo > p:not(.int-citacao, .int-destaque) { text-wrap: pretty; }
+  /* A escala da citação e do destaque é global (.int-citacao e .int-destaque
+     em paginas2.css); aqui fica só o respiro da citação entre os parágrafos. */
+  .int-texto__corpo > .int-citacao { margin-block: 12px; }
+
+  /* ---------- Ficha: rótulo e valor em duas colunas (pin 201) ---------- */
+
+  .int-dados {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 40px) clamp(24px, 3vw, 48px); margin: 0;
+  }
+  .int-dados__item { display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .int-dados dd { margin: 0; font-size: 16px; line-height: 1.6; color: rgb(242 242 238 / .88); overflow-wrap: break-word; }
+  .int-dados dd :global(a) { color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .int-dados dd :global(a:hover) { text-decoration-thickness: 2px; }
+
+  /* Entre 900 e 1280 a coluna direita tem de 450 a 520px: em duas colunas, o
+     e-mail e o CEP quebram no meio. A ficha passa a uma coluna nessa faixa. */
+  @media (min-width: 900px) and (max-width: 1279.98px) {
+    .int-dados { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 899.98px) {
+    .int-texto__grade { gap: 28px; }
+  }
+  @media (max-width: 599.98px) {
+    .int-texto__corpo.int-manifesto > p:not(.int-citacao, .int-destaque) { font-size: 19px; }
+    .int-dados { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

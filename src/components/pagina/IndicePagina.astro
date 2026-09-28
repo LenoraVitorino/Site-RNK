@@ -1,0 +1,140 @@
+---
+/**
+ * Índice lateral da página (emenda E4, pin MyDNA): uma coluna fixa de
+ * números à esquerda, com um fio na seção atual.
+ * Especificação: docs/04-design/paginas-internas.md, "Emendas", E4.
+ *
+ * A lista vem de indiceDaPagina() (contexto.ts), o mesmo cálculo do
+ * despachante: só seções com h2, sem a primeira, e só com 4 ou mais.
+ * Aparece a partir de 1280px com ponteiro fino. Some sobre a primeira
+ * dobra, sobre a dobra papel e sobre o rodapé (só com JS; o foco do
+ * teclado sempre o revela). A seção atual e o sumiço
+ * vêm de IntersectionObserver, sem listener de scroll.
+ */
+import type { ItemIndice } from './contexto';
+
+interface Props {
+  itens: ItemIndice[];
+}
+
+const { itens } = Astro.props;
+---
+{itens.length > 0 && (
+  <nav class="int-indice-pagina int-indice-pagina--oculto" aria-label="Nesta página" data-indice-pagina>
+    <ol role="list">
+      {itens.map((item) => (
+        <li>
+          <a href={`#${item.id}`} data-alvo={item.id}>
+            <span class="int-indice-pagina__fio" aria-hidden="true"></span>
+            <span class="int-indice-pagina__n">{item.numero}</span>
+            <span class="visually-hidden">{item.titulo}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-indice-pagina]');
+  const medida = matchMedia('(min-width: 1280px) and (hover: hover)');
+  if (nav) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[data-alvo]')];
+    const ids = new Set(links.map((a) => a.dataset.alvo));
+
+    // Cada dobra aponta para o item do índice que ela continua (a seção
+    // sem título herda o da anterior), ou para null, que esconde o índice.
+    const destino = new Map<Element, string | null>();
+    let ultimo: string | null = null;
+    document.querySelectorAll<HTMLElement>('main > section').forEach((s, i) => {
+      if (i === 0 || s.classList.contains('int-secao--papel')) { destino.set(s, null); return; }
+      if (ids.has(s.id)) ultimo = s.id;
+      destino.set(s, ultimo);
+    });
+    const rodape = document.querySelector('.footer');
+    if (rodape) destino.set(rodape, null);
+
+    const marcar = (id: string | null) => {
+      for (const a of links) {
+        if (id && a.dataset.alvo === id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      }
+    };
+
+    // Duas leituras: a linha do meio da tela diz qual é a seção atual; a
+    // faixa ocupada pelo índice diz se há papel, hero ou rodapé por baixo.
+    const naFaixa = new Set<Element>();
+    let atual: string | null = null;
+    const aplicar = () => {
+      const oculto = !atual || [...naFaixa].some((el) => destino.get(el) === null);
+      nav.classList.toggle('int-indice-pagina--oculto', oculto);
+      marcar(atual);
+    };
+
+    let observadores: IntersectionObserver[] = [];
+    const montar = () => {
+      observadores.forEach((o) => o.disconnect());
+      observadores = [];
+      naFaixa.clear();
+      if (!medida.matches) return;
+      const r = nav.getBoundingClientRect();
+      const linha = new IntersectionObserver((entradas) => {
+        for (const e of entradas) if (e.isIntersecting) atual = destino.get(e.target) ?? null;
+        aplicar();
+      }, { rootMargin: '-50% 0px -50% 0px' });
+      const faixa = new IntersectionObserver((entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting) naFaixa.add(e.target);
+          else naFaixa.delete(e.target);
+        }
+        aplicar();
+      }, { rootMargin: `${-Math.max(0, Math.round(r.top))}px 0px ${-Math.max(0, Math.round(innerHeight - r.bottom))}px 0px` });
+      destino.forEach((_, el) => { linha.observe(el); faixa.observe(el); });
+      observadores = [linha, faixa];
+    };
+
+    montar();
+    medida.addEventListener('change', montar);
+    let espera = 0;
+    addEventListener('resize', () => { clearTimeout(espera); espera = window.setTimeout(montar, 200); }, { passive: true });
+  }
+</script>
+
+<style>
+  .int-indice-pagina { display: none; }
+
+  @media (min-width: 1280px) and (hover: hover) {
+    .int-indice-pagina {
+      display: block; position: fixed; z-index: 2;
+      left: max(20px, calc(var(--grid-inset) - 88px)); top: 50%; transform: translateY(-50%);
+      transition: opacity .4s var(--easing-suave);
+    }
+  }
+  /* Só com JS: sem ele o índice fica visível e estático. O foco do teclado
+     o revela, para nenhum link receber foco invisível. */
+  :global(.js) .int-indice-pagina--oculto { opacity: 0; pointer-events: none; }
+  .int-indice-pagina:focus-within { opacity: 1; pointer-events: auto; }
+
+  ol { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+
+  a {
+    display: inline-flex; align-items: center; gap: 8px; padding-block: 2px;
+    font-size: 11px; line-height: 1; letter-spacing: .04em; font-variant-numeric: tabular-nums;
+    color: rgb(242 242 238 / .55); text-decoration: none; /* cerca de 5,7:1 sobre o preto */
+    transition: color .5s var(--easing-suave);
+  }
+  a:hover { color: rgb(242 242 238 / .8); }
+  a[aria-current='true'] { color: var(--papel); }
+
+  /* O fio ocupa sempre o lugar: os números não andam quando a seção muda. */
+  .int-indice-pagina__fio {
+    width: 14px; height: 1px; background: rgb(242 242 238 / .55);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform .5s var(--easing-suave);
+  }
+  a[aria-current='true'] .int-indice-pagina__fio { transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .int-indice-pagina, a, .int-indice-pagina__fio { transition: none; }
+  }
+</style>

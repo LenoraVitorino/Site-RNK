@@ -6,11 +6,13 @@
  * sem ela, ?fundo= escolhe entre particulas (padrão) e superficie.
  * Especificação: docs/04-design/fundo-vivo-briefing.md e
  * docs/04-design/referencias-alto-padrao.md.
+ * A prop `roteiro` (só a cena) escolhe o roteiro das páginas internas
+ * (fundo-internas.ts); sem ela, o atributo não sai e vale o da home.
  */
-interface Props { fundo?: 'cena' | 'prata' | 'veu' | 'particulas' | 'superficie' }
-const { fundo } = Astro.props;
+interface Props { fundo?: 'cena' | 'prata' | 'veu' | 'particulas' | 'superficie'; roteiro?: 'home' | 'interna' }
+const { fundo, roteiro } = Astro.props;
 ---
-<canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} aria-hidden="true"></canvas>
+<canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} data-roteiro={roteiro} aria-hidden="true"></canvas>
 {fundo === 'prata' && <div class="fundo-vivo__grao" aria-hidden="true"></div>}
 {/* A cena traz grão e vinheta do próprio pós-processamento, como a referência. */}
 
@@ -31,7 +33,7 @@ const { fundo } = Astro.props;
       : fundo === 'veu' ? import('./fundo-veu')
       : fundo === 'superficie' ? import('./fundo-superficie')
       : import('./fundo-particulas');
-    const comecar = () => carregar().then(({ iniciar }) => iniciar(canvas)).catch((erro) => { canvas.hidden = true; console.warn('Fundo vivo indisponível; mantendo a composição estática.', erro); });
+    const comecar = () => carregar().then(({ iniciar }) => (iniciar as (c: HTMLCanvasElement, roteiro?: string) => void)(canvas, canvas.dataset.roteiro)).catch((erro) => { canvas.hidden = true; console.warn('Fundo vivo indisponível; mantendo a composição estática.', erro); });
     if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
     else setTimeout(comecar, 300);
   }

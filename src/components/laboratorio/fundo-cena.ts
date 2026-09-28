@@ -36,6 +36,10 @@ import {
 } from 'postprocessing';
 import { iniciar as iniciarMotor, maisSuave, type Contexto, type Elemento, type Quadro } from './fundo-motor';
 import { CAIXAS, CARTOES, ROTEIRO, TEXTOS_DOBRAS, TRANSPARENTES } from './fundo-dobras';
+import { roteiroInterno, TEXTOS_INTERNAS } from './fundo-internas';
+
+/** 'home' (padrão) ou 'interna': as páginas internas usam o roteiro genérico de fundo-internas.ts. */
+export type Roteiro = 'home' | 'interna';
 
 /** Os arquivos extraídos da página (public/cena/LEIA-ME.md). */
 const ARQUIVOS = {
@@ -131,6 +135,14 @@ const DESKTOP: Record<string, Quadro> = {
   formulario:  amostra(0),
 };
 const QUADROS = { desktop: DESKTOP, celular: DESKTOP };
+/**
+ * Internas: os mesmos quadros, com a máscara de leitura mais forte no
+ * 'pilares'. Na home ele só passa atrás de cartões opacos; nas internas o
+ * brilho do objeto cai na coluna direita da grade editorial, sobre texto
+ * corrido cinza.
+ */
+const INTERNAS: Record<string, Quadro> = { ...DESKTOP, pilares: { ...DESKTOP.pilares, leitura: .85 } };
+const QUADROS_INTERNAS = { desktop: INTERNAS, celular: INTERNAS };
 
 /* ------------------------------------------------------------------ */
 /* Geometria própria: shaders do donut e da minhoca                     */
@@ -368,7 +380,8 @@ async function carregarEnvMap(pmrem: PMREMGenerator, url: string): Promise<Textu
   return env;
 }
 
-function criar(ctx: Contexto): Elemento {
+function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
+  const interna = roteiro === 'interna';
   const { renderer, cena, camera, celular } = ctx;
   renderer.toneMapping = NoToneMapping;   // o ToneMappingEffect faz o ACES
 
@@ -482,7 +495,8 @@ function criar(ctx: Contexto): Elemento {
     if (f.status === 'fulfilled') { literalMinhoca.envMap = f.value; minhocaMaterial.envMap = f.value; minhocaMaterial.needsUpdate = true; }
     pmrem.dispose();
     carregarModelo(ARQUIVOS.donut, donutObj, pivo, literalDonut, VELOCIDADE.donut).catch(() => {});
-    carregarModelo(ARQUIVOS.minhoca, minhoca, minhocaReserva, literalMinhoca, VELOCIDADE.minhoca).catch(() => {});
+    // Nas internas a minhoca não é baixada: ela só entra depois de t = .356, fora dos quadros usados.
+    if (!interna) carregarModelo(ARQUIVOS.minhoca, minhoca, minhocaReserva, literalMinhoca, VELOCIDADE.minhoca).catch(() => {});
   });
 
   // Plano de fundo.
@@ -553,13 +567,19 @@ function criar(ctx: Contexto): Elemento {
   const GRAU = Math.PI / 180;
 
   return {
-    quadros: QUADROS,
-    config: {
-      roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
-      continuas: ['metodologia', 'pilares', 'letreiro'],
-      tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
-      esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
-    },
+    quadros: interna ? QUADROS_INTERNAS : QUADROS,
+    config: interna
+      ? {
+        // Internas: seções lidas do DOM (data-cena), sem espera na entrada (a hero delas é estática).
+        roteiro: roteiroInterno(), transparentes: 'main > [data-cena]', textos: TEXTOS_INTERNAS, cartoes: '', caixas: '',
+        continuas: [], tau: .45, curva: maisSuave, saltoMax: 1, pena: 90, esperarEntrada: () => true,
+      }
+      : {
+        roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
+        continuas: ['metodologia', 'pilares', 'letreiro'],
+        tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
+        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
+      },
     pintar({ q, tempo, dt, parado, ponteiro }) {
       dtQuadro = dt;
       uTempo.value = parado ? 0 : tempo;
@@ -607,4 +627,5 @@ function criar(ctx: Contexto): Elemento {
   };
 }
 
-export const iniciar = (canvas: HTMLCanvasElement) => iniciarMotor(canvas, criar);
+export const iniciar = (canvas: HTMLCanvasElement, roteiro: Roteiro = 'home') =>
+  iniciarMotor(canvas, (ctx) => criar(ctx, roteiro === 'interna' ? 'interna' : 'home'));

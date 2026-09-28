@@ -1,0 +1,129 @@
+---
+/**
+ * Bloco 'numeros' das internas. Especificação: docs/04-design/paginas-internas.md, "numeros".
+ *
+ * Duas formas, as duas sem contador e sem amarelo:
+ * - Régua (padrão: Treinamento CRM, Cultura Pro, Contato): a régua de
+ *   números do método da home, valor light grande e legenda curta embaixo;
+ *   no celular, linhas 'valor | legenda', como o .metodo__numero.
+ * - Grade (`grade: true`, Revena Full): cartões do Features com a estrutura
+ *   da ficha de Resultados, índice no topo e a palavra no pé.
+ *
+ * partesNumero() só divide a frase: as duas spans, com o espaço real entre
+ * elas, somam o item tal como está nos dados. Quando o valor termina em ':'
+ * ('GPTW:', '1ª semana:'), o sinal sai da escala grande e fica só para o
+ * leitor de tela, como os valores da home, que não levam pontuação. O texto
+ * do DOM continua idêntico ao dado. A flag `fundo` é ignorada.
+ */
+import CabecaSecao from './CabecaSecao.astro';
+import { classesSecao, indice2, partesNumero, type BlocoDe, type ContextoSecao } from './contexto';
+
+interface Props {
+  bloco: BlocoDe<'numeros'>;
+  secao: ContextoSecao;
+}
+
+const { bloco, secao } = Astro.props;
+const titulo = bloco.h2;
+const n = bloco.itens.length;
+/* A nota que começa com aspas é uma fala (Cultura Pro): vira citação. */
+const notaCitacao = !!bloco.nota && /^["“”«]/.test(bloco.nota.trim());
+const iNota = Math.min(n, 5);
+---
+<section
+  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua')}
+  id={secao.id}
+  data-cena={secao.cena}
+  aria-labelledby={titulo ? secao.tituloId : undefined}
+>
+  <div class="container">
+    {titulo && <CabecaSecao id={secao.tituloId} titulo={titulo} />}
+
+    {bloco.grade ? (
+      <ol class="int-numeros__grade" role="list">
+        {bloco.itens.map((item, i) => (
+          <li class="int-cartao int-numeros__cartao entra" style={`--i:${Math.min(i, 4)}`}>
+            <span class="int-indice" aria-hidden="true">{indice2(i + 1)}</span>
+            <span class="int-numeros__palavra">{item}</span>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <ul class="int-regua" role="list" style={`--n:${Math.min(n, 4)}`}>
+        {bloco.itens.map((item, i) => {
+          const [valor, legenda] = partesNumero(item);
+          return (
+            <li class="int-regua__item entra" style={`--i:${Math.min(i, 4)}`}>
+              <span class="int-regua__valor">{valor.endsWith(':')
+                ? <>{valor.slice(0, -1)}<span class="visually-hidden">:</span></>
+                : valor}</span>
+              {legenda && <>{' '}<span class="int-regua__legenda">{legenda}</span></>}
+            </li>
+          );
+        })}
+      </ul>
+    )}
+
+    {bloco.nota && (
+      bloco.grade
+        ? <p class="int-numeros__nota entra" style={`--i:${iNota}`}>{bloco.nota}</p>
+        : notaCitacao
+          ? <p class="int-citacao int-regua__nota entra" style={`--i:${iNota}`}>{bloco.nota}</p>
+          : <p class="int-cabeca__apoio int-regua__nota entra" style={`--i:${iNota}`}>{bloco.nota}</p>
+    )}
+  </div>
+</section>
+
+<style>
+  /* ---------- Régua: a dos números do método, sem contador ---------- */
+  .int-regua {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 48px); align-items: start;
+  }
+  /* Cada item ocupa duas linhas da grade (valor, legenda) em subgrid: quando
+     um valor quebra em duas linhas, as legendas da fileira seguem juntas. */
+  .int-regua__item { min-width: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 12px; }
+  .int-regua__valor {
+    display: block; font-family: var(--font-titulo); font-weight: 300;
+    font-size: clamp(28px, 2.8vw, 42px); line-height: 1.05; letter-spacing: -.045em;
+    font-variant-numeric: tabular-nums; color: var(--papel); text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+  .int-regua__legenda { display: block; font-size: 14px; line-height: 1.5; color: var(--int-mudo); max-width: 24ch; }
+  .int-regua__nota { margin-top: clamp(40px, 5vw, 72px); }
+
+  /* ---------- Grade: cartões do Features com a ficha de Resultados ---------- */
+  .int-numeros__grade {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--int-gap-cartoes);
+  }
+  .int-numeros__cartao { display: flex; flex-direction: column; min-width: 0; min-height: clamp(150px, 13vw, 190px); }
+  .int-numeros__palavra {
+    margin-top: auto; padding-top: 24px;
+    font-family: var(--font-titulo); font-weight: 300; font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1.1; letter-spacing: -.04em; color: var(--papel);
+    overflow-wrap: break-word;
+  }
+  .int-numeros__nota { margin-top: 32px; font-size: 18px; line-height: 1.55; color: var(--int-apoio); max-width: 56ch; }
+
+  @media (max-width: 899.98px) {
+    .int-regua { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .int-numeros__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  /* No celular a régua vira linhas 'valor | legenda', como o .metodo__numero. */
+  @media (max-width: 599.98px) {
+    .int-regua { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .int-regua__item { grid-row: auto; grid-template-rows: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: baseline; gap: 12px; }
+    .int-regua__valor { font-size: 26px; }
+    /* Dois cartões por linha até 360px: a palavra inteira ('Experiência')
+       cabe sem hifenizar com um respiro interno menor. */
+    .int-numeros__cartao { padding: 20px; min-height: 140px; }
+    .int-numeros__palavra { font-size: 21px; }
+  }
+  @media (max-width: 359.98px) {
+    .int-numeros__grade { grid-template-columns: minmax(0, 1fr); }
+    .int-numeros__cartao { padding: 24px; }
+    .int-numeros__palavra { font-size: 24px; }
+  }
+</style>
