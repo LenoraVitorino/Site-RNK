@@ -246,21 +246,54 @@ section[id] { scroll-margin-top: 110px; }
 .metodo__valor-reserva, .metodo__valor-contagem { grid-area: 1 / 1; }
 .metodo__valor-reserva { visibility: hidden; }
 .metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 12px; line-height: 1.45; color: #aaa; }
-/* Dobra preta sólida (28/09/2026): cobre a cena entre a hero e os pilares. No
-   preto a caixa de vidro perde o sentido e vira a própria dobra, como nas
-   internas (.int-secao--preto .int-caixa); o conteúdo passa a alinhar com o
-   container, na mesma margem da hero. */
-.home-refinada #o-que-fazemos { background: var(--fundo); padding-block: clamp(64px, 7vw, 112px); }
+/* Dobra papel (28/09/2026, referência Hikari): painel cinza-claro com cantos
+   chanfrados, recuado das bordas da tela, a cena aparece no recuo. Mesmo
+   papel das internas (#e7e7e5, texto #252523). A caixa de vidro vira a
+   própria dobra; o container desconta o recuo para o conteúdo seguir na
+   margem da hero. No papel o número fica em grafite (a regra dos tokens:
+   amarelo nunca como texto sobre claro). */
+.home-refinada #o-que-fazemos {
+  --metodo-recuo: clamp(8px, 1.25vw, 20px);
+  --metodo-chanfro: clamp(14px, 1.5vw, 24px);
+  margin-inline: var(--metodo-recuo);
+  /* Cantos em corte diagonal (chanfro), não arredondados. */
+  clip-path: polygon(
+    var(--metodo-chanfro) 0, calc(100% - var(--metodo-chanfro)) 0, 100% var(--metodo-chanfro),
+    100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
+    var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
+  background: #e7e7e5; color: #252523;
+  padding-block: clamp(64px, 7vw, 112px);
+}
+.home-refinada #o-que-fazemos > .container {
+  max-width: calc(var(--largura) - 2 * var(--metodo-recuo));
+  padding-inline: max(16px, calc(var(--gutter) - var(--metodo-recuo)));
+}
 .home-refinada .metodo-editorial {
   max-width: none; padding: 0; border-radius: 0; background: none;
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-/* No desktop, a grade de 12 colunas do site (a mesma do /sobre): texto nas
-   colunas 1–7, vídeo nas 10–12, duas colunas de respiro entre eles. */
+.home-refinada .metodo-editorial h2.metodo__titulo { color: #252523; }
+.home-refinada .metodo-editorial .metodo__descricao { color: #50504e; }
+.home-refinada .metodo-editorial .metodo__valor { color: #252523; font-weight: 300; }
+.home-refinada .metodo-editorial .metodo__legenda { color: #5f5f5d; }
+.home-refinada #o-que-fazemos :focus-visible { outline-color: #252523; }
+/* No desktop (teste de 28/09, referência Aura), na grade de 12 colunas do site
+   (a mesma do /sobre): título no alto à esquerda (1–4), vídeo no centro (5–8),
+   subtítulo embaixo à direita (9–12) e um número só no canto inferior esquerdo.
+   Texto e apresentação somem da árvore de caixas para os filhos irem à grade. */
 @media (min-width: 1000px) {
-  .home-refinada .metodo-editorial { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-areas: none; column-gap: clamp(16px, 2vw, 32px); }
-  .home-refinada .metodo-editorial .metodo__texto { grid-column: 1 / span 7; grid-row: 1; }
-  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 10 / -1; grid-row: 1; }
+  .home-refinada .metodo-editorial {
+    grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr; grid-template-areas: none;
+    column-gap: clamp(16px, 2vw, 32px); row-gap: 48px; align-items: stretch;
+  }
+  .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__apresentacao) { display: contents; }
+  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 4; grid-row: 1; align-self: start; }
+  .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }   /* "O que a" / "Renke faz" na coluna estreita */
+  .home-refinada .metodo-editorial .metodo__numeros { grid-column: 1 / span 4; grid-row: 2; align-self: end; margin: 0; }
+  .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 14px; }
+  .home-refinada .metodo-editorial .metodo__legenda { max-width: 11ch; padding-bottom: .35em; white-space: normal; font-size: 13px; }
+  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 3; width: min(100%, 420px); justify-self: center; align-self: center; }
+  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; max-width: 40ch; font-size: 16px; }
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
