@@ -59,7 +59,7 @@ em pílula dentro do texto. Substitui a citação centrada, porque a regra da ho
 - Movimento: `.entra` no bloco inteiro, sem palavra a palavra.
 - A validação de amarelo aceita esse ponto como exceção.
 
-**E4. Índice lateral da página → pin MyDNA (índice vertical à esquerda com marcador na seção atual)**
+**E4. Índice lateral da página → pin MyDNA (índice vertical à esquerda com marcador na seção atual)** — *removida em 28/09/2026 a pedido da Lenora ("tirar isso em todas as páginas"): o componente IndicePagina e o cálculo indiceDaPagina saíram do código.*
 Novo componente `src/components/pagina/IndicePagina.astro`, feito na fundação e usado por
 Pagina.astro, depois das seções (a lista vem do mesmo cálculo do despachante):
 - Só aparece a partir de 1280px de largura, com `@media (hover: hover)`, e só em páginas com 4 ou mais

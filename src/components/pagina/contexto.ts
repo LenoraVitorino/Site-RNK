@@ -2,10 +2,10 @@
  * Contrato das seções das páginas internas (27/09/2026).
  * Especificação: docs/04-design/paginas-internas.md, seção "Fundação".
  *
- * Tipos e helpers puros, sem DOM. O despachante (Blocos2.astro) e o índice
- * lateral (IndicePagina.astro) usam o mesmo cálculo, planejarSecoes(), para
- * que ids, cenas e títulos nunca divirjam. Os componentes de bloco só leem
- * o ContextoSecao que recebem.
+ * Tipos e helpers puros, sem DOM. O despachante (Blocos2.astro) calcula as
+ * seções com planejarSecoes(), para que ids, cenas e tons nunca divirjam.
+ * Os componentes de bloco só leem o ContextoSecao que recebem.
+ * O índice lateral da página saiu em 28/09/2026 (pedido da Lenora).
  */
 import type { Bloco } from '../../data/paginas/tipos';
 
@@ -122,17 +122,6 @@ export const rotuloDaRota = (rota?: string): string | undefined => {
   if (rota.startsWith('/academy/')) return 'Renke Academy';
   if (rota === '/faca-parte') return 'A Renke';
   return undefined;
-};
-
-/** Título (h2) do bloco, quando há; linhas juntas por espaço. O hero devolve o h1. */
-export const tituloDe = (b: Bloco): string | undefined => {
-  switch (b.tipo) {
-    case 'hero': return b.titulo.join(' ');
-    case 'etapas': return b.h2.join(' ');
-    case 'ctaFinal': return b.destaque;
-    case 'pendencia': return undefined;
-    default: return b.h2;
-  }
 };
 
 const ehSolto = (b: Bloco) => b.tipo === 'texto' && formaTexto(b) === 'solto';
@@ -292,20 +281,4 @@ export function planejarSecoes(blocos: Bloco[], rota?: string): EntradaPlano[] {
 
   let k = 0;
   return lista.map((b) => (b.tipo === 'pendencia' ? { bloco: b } : { bloco: b, secao: contextos[k++] }) as EntradaPlano);
-}
-
-/** Uma entrada do índice lateral (IndicePagina.astro). */
-export interface ItemIndice { id: string; titulo: string; numero: string }
-
-/**
- * Seções com título (h2) depois da primeira, na ordem da página. O índice
- * só aparece com 4 ou mais; abaixo disso, a lista volta vazia.
- */
-export function indiceDaPagina(plano: EntradaPlano[]): ItemIndice[] {
-  const itens = plano
-    .filter((e): e is Extract<EntradaPlano, { secao: ContextoSecao }> => !!e.secao && !e.secao.primeira)
-    .map((e) => ({ id: e.secao.id, titulo: tituloDe(e.bloco) }))
-    .filter((e): e is { id: string; titulo: string } => !!e.titulo)
-    .map((e, i) => ({ ...e, numero: indice2(i + 1) }));
-  return itens.length >= 4 ? itens : [];
 }
