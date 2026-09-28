@@ -106,6 +106,8 @@ export type Bloco =
       paragrafos: string[];
       fundo?: 'alt' | 'escuro';
       centro?: boolean;
+      /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */
+      selo?: 'gptw';
     }
   | {
       tipo: 'numeros';

@@ -18,7 +18,9 @@
  * Tons (ritmo-dobras-internas.md): as cores saem dos tokens do tom
  * (--int-tinta, --int-valor, --int-pilula), nunca da classe da seção.
  */
+import { Image } from 'astro:assets';
 import CabecaSecao from './CabecaSecao.astro';
+import seloGptw from '../../assets/selos/gptw-2025.png';
 import {
   classesSecao, ehCitacao, ehDestaque, formaTexto, partesFicha,
   type BlocoDe, type ContextoSecao,
@@ -70,9 +72,20 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     </div>
   ) : (
     <div class="container int-grade-2 int-texto__grade">
-      {(titulo || bloco.eyebrow) && (
+      {(titulo || bloco.eyebrow) && (bloco.selo ? (
+        <div class="int-texto__lado">
+          <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} classe="int-cabeca--coluna" />
+          {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não ornamento. */}
+          <Image
+            class="int-texto__selo entra" style="--i:1"
+            src={seloGptw}
+            alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
+            widths={[120, 240, 360]} sizes="120px" format="webp" quality={90} loading="lazy"
+          />
+        </div>
+      ) : (
         <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} classe="int-cabeca--coluna" />
-      )}
+      ))}
       {forma === 'ficha' ? (
         <dl class="int-dados int-grade-2__direita entra" style="--i:1">
           {fatos.map(([rotulo, resto]) => (
@@ -92,6 +105,12 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
 </section>
 
 <style>
+  /* ---------- Selo de certificação sob o título (Faça Parte, GPTW) ---------- */
+
+  .int-texto__lado { display: grid; justify-items: start; gap: clamp(28px, 3vw, 44px); }
+  /* O <img> vem do componente Image, fora do escopo deste arquivo: :global() dentro do lado. */
+  .int-texto__lado :global(.int-texto__selo) { display: block; width: clamp(88px, 7.6vw, 116px); height: auto; }
+
   /* ---------- Citação: manifesto à esquerda (E3, pin Hikari) ---------- */
 
   .int-citacao--manifesto {

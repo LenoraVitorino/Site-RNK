@@ -24,6 +24,8 @@ export const facaParte: Pagina = {
       tipo: 'texto',
       h2: 'Somos GPTW: um ótimo lugar para trabalhar e evoluir.',
       fundo: 'alt',
+      // Selo extraído do site atual (renkestudio.com.br/faca-parte), 28/09/2026.
+      selo: 'gptw',
       paragrafos: [
         'Receber o selo Great Place to Work é reflexo de um compromisso diário com o bem-estar e o desenvolvimento de cada pessoa do time. Aqui, suas ideias são ouvidas, seu crescimento é levado a sério e o ambiente é leve, criativo e humano.',
         '<strong>Não é só um selo. É como a gente opera todo dia.</strong>',
