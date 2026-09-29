@@ -1,0 +1,21 @@
+---
+/**
+ * O R da parede da sede: o R da marca esticado na horizontal e desenhado
+ * como uma faixa de espessura constante (fita adesiva na parede). Haste à
+ * esquerda até o chão, barra longa no alto, barriga com cantos arredondados
+ * na ponta direita, barra do meio voltando à haste e a perna inclinada
+ * saindo de baixo da curva. Proporções tiradas da foto do salão (28/09/2026):
+ * faixa ≈ 1/4 da altura da barriga, largura ≈ 1,8 × a altura total.
+ *
+ * Cor = currentColor. Os traços têm pathLength="1" para quem quiser
+ * desenhá-los com stroke-dashoffset.
+ */
+interface Props { class?: string }
+const { class: classe } = Astro.props;
+---
+<svg class:list={['r-parede', classe]} viewBox="0 0 1000 560" fill="none" aria-hidden="true" focusable="false">
+  <path class="r-parede__traco" pathLength="1" stroke="currentColor" stroke-width="44" stroke-linejoin="miter"
+    d="M22 560 V22 H928 A50 50 0 0 1 978 72 V150 A50 50 0 0 1 928 200 H22" />
+  <path class="r-parede__traco r-parede__perna" pathLength="1" stroke="currentColor" stroke-width="44"
+    d="M820 200 L968 560" />
+</svg>
