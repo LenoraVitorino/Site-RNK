@@ -180,10 +180,10 @@ const movimentos = [
   <circle cx={NOVA.x} cy={NOVA.y} r="7" class="mercado__nova-anel" pathLength="1" transform={`rotate(-90 ${NOVA.x} ${NOVA.y})`} />
   <circle cx={NOVA.x} cy={NOVA.y} r="3.5" class="mercado__nova" />
 
-  {/* Sua clínica: poço, chip e miolo, como no mapa de posicionamento. */}
+  {/* Sua clínica: poço, chip e miolo amarelo, como um "você está aqui". */}
   <circle cx={SUA.x} cy={SUA.y} r="14" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
   <circle cx={SUA.x} cy={SUA.y} r="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-  <circle cx={SUA.x} cy={SUA.y} r="3" class="mercado__sua-miolo" />
+  <circle cx={SUA.x} cy={SUA.y} r="3" class="a-destaque" />
   <text x={SUA.x + 22} y={SUA.y + 4.5} class="mercado__sua mercado__rotulo">Sua clínica</text>
 
   {/* Movimentos: a lista que flutua sobre o mapa. */}
@@ -215,7 +215,7 @@ const movimentos = [
                 </g>
               )}
               {icone === 'alta' && (
-                <g class="a-icone mercado__icone" transform={`translate(${cx - 7} ${cy - 7}) scale(.5833)`}>
+                <g class="a-icone mercado__icone mercado__icone--alta" transform={`translate(${cx - 7} ${cy - 7}) scale(.5833)`}>
                   <path d="M22 7 13.5 15.5 8.5 10.5 2 17" /><path d="M16 7h6v6" />
                 </g>
               )}
@@ -245,7 +245,6 @@ const movimentos = [
   .mercado__nova { fill: #ecece8; stroke: #171717; stroke-width: 2.5; paint-order: stroke; }
   .mercado__nova-anel { fill: none; stroke: #ecece8; stroke-opacity: .7; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
   .mercado__liga { fill: none; stroke: #ffffff; stroke-opacity: .28; }
-  .mercado__sua-miolo { fill: #d6d6d1; }
   .mercado__sua { font-size: 13px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
 
   .mercado__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
@@ -256,6 +255,9 @@ const movimentos = [
   .mercado__glifo-ponto { fill: #8a8a85; }
   .mercado__glifo-ponto--novo { fill: #ecece8; }
   .mercado .mercado__icone { stroke: #9d9d98; stroke-width: 2.4; }
+  /* A procura em alta na Zona norte é o que faz dela um espaço aberto: o
+     ícone repete o amarelo do ponto do mapa. */
+  .mercado .mercado__icone--alta { stroke: var(--destaque, #FFD103); }
   .mercado__mov { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
   .mercado__mov--novo { fill: #ecece8; }
   .mercado__onde { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }

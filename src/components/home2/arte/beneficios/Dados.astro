@@ -142,7 +142,8 @@ const RX = QX + 4, RY = QY + 9;
   .dados__aba--aberta { fill: #ecece8; }
   .dados__mini { fill: none; stroke: #ffffff; stroke-opacity: .28; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
   .dados__mini--aberta { stroke: #ecece8; stroke-opacity: .85; }
-  .dados__sublinhado { fill: #ecece8; }
+  /* O sublinhado da aba aberta é o segundo acento amarelo, além do cursor. */
+  .dados__sublinhado { fill: var(--destaque, #FFD103); }
   .dados__divisa { fill: #ffffff; fill-opacity: .06; }
   .dados__grade { fill: #ffffff; fill-opacity: .045; }
   .dados__linha { fill: none; stroke: #ecece8; stroke-opacity: .8; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }

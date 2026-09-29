@@ -134,7 +134,8 @@ const RX = indic.c + 12, RY = indic.y + 4;
   .investimento__canal--foco { fill: #ecece8; }
   .investimento__ponto { fill: #ffffff; fill-opacity: .12; }
   .investimento__ponto--aceso { fill: #8a8a85; fill-opacity: 1; }
-  .investimento__ponto--foco { fill: #ecece8; }
+  /* O sinal de potencial do canal escolhido é o segundo acento amarelo. */
+  .investimento__ponto--foco { fill: var(--destaque, #FFD103); }
   .investimento__marca { fill: none; stroke: #ffffff; stroke-opacity: .08; }
   .investimento__marca--maior { stroke-opacity: .16; }
   .investimento__marca-antes { fill: none; stroke: #ffffff; stroke-opacity: .4; stroke-dasharray: 2 2; }

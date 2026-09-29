@@ -121,10 +121,14 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
   {/* Follow-up: a pílula flutua sobre o laço. */}
   <rect x={PX} y={PY} width={PW} height={PH} rx={PH / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} filter={`url(#${p}-sombra)`} />
   <rect x={PX + 20} y={PY + 0.5} width={PW - 40} height="1" fill={`url(#${p}-fio-h)`} />
-  <g class="a-icone conversao__icone" transform={`translate(${PX + 13} ${PY + 7}) scale(.5833)`}>
-    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-    <path d="M21 3v5h-5" />
-  </g>
+  {/* O ícone fica amarelo quando o follow-up age: por baixo, a versão
+      cinza; por cima, a amarela, que se apaga e acende no laço. */}
+  {['', ' conversao__icone--laco'].map((extra) => (
+    <g class={`a-icone conversao__icone${extra}`} transform={`translate(${PX + 13} ${PY + 7}) scale(.5833)`}>
+      <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+      <path d="M21 3v5h-5" />
+    </g>
+  ))}
   <text x={PX + 33} y={PY + 18.5} class="a-rotulo conversao__laco-nome">Follow-up</text>
 
   {/* Agendado: o destino, com o anel de ancoragem onde o laço chega. */}
@@ -149,6 +153,8 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
   .conversao .conversao__rotulo { font-size: 14px; fill: #9d9d98; }
   .conversao .conversao__rotulo--fim { fill: #ecece8; }
   .conversao .conversao__icone { stroke: #b9b9b4; stroke-width: 2.4; }
+  /* O ícone do follow-up, que resgata o contato, é um dos acentos amarelos. */
+  .conversao .conversao__icone--laco { stroke: var(--destaque, #FFD103); }
   .conversao .conversao__icone-fim { stroke: #ecece8; stroke-width: 1.68; }
   .conversao .conversao__laco-nome { font-size: 13px; fill: #d6d6d1; }
   .conversao__apagado { fill: #3a3a38; }
@@ -161,17 +167,18 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
 
   /* Movimento, em laço de 12 s (tempos do ciclo):
      0–0,6 s   repouso na pose final (ponto amarelo aceso);
-     0,6–1,0   o ponto amarelo se apaga;
+     0,6–1,0   o ponto amarelo e o ícone do follow-up se apagam;
      0,9–3,0   o primeiro ponto atravessa o fluxo e some sob Agendado;
      1,3–3,1   o segundo ponto segue o fluxo e cai na perda de
                Atendimento, perdendo a cor; para um instante embaixo;
-     3,4–5,2   o follow-up o pega: ele recupera a cor, corre pelo laço e
-               sobe até Agendado;
+     3,4–5,2   o follow-up o pega (o ícone acende em amarelo): ele
+               recupera a cor, corre pelo laço e sobe até Agendado;
      5,2–5,7   o ponto amarelo acende.
      O resto (≈ 57% do ciclo) é repouso. */
   .conversao__ponto--direto { animation: conversao-direto 12s var(--a-vai-vem) .4s infinite both; }
   .conversao__ponto--resgate { animation: conversao-resgate 12s var(--a-vai-vem) .4s infinite both; }
   .conversao__acende { animation: conversao-acende 12s var(--a-vai-vem) .4s infinite both; }
+  .conversao__icone--laco { animation: conversao-resgata 12s var(--a-vai-vem) .4s infinite both; }
 
   @keyframes conversao-direto {
     0%, 7.49% { stroke-dashoffset: -100; opacity: 0; }
@@ -191,6 +198,13 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
     32% { opacity: 1; }
     43.33% { stroke-dashoffset: -100; opacity: 1; }
     43.34%, 100% { stroke-dashoffset: -100; opacity: 0; }
+  }
+  /* O ícone do follow-up se apaga com o ponto de Agendado e acende quando
+     pega o contato perdido, junto com a volta da cor do ponto. */
+  @keyframes conversao-resgata {
+    0%, 5% { opacity: 1; }
+    8.33%, 28.33% { opacity: 0; }
+    32%, 100% { opacity: 1; }
   }
   @keyframes conversao-acende {
     0%, 5% { opacity: 1; }

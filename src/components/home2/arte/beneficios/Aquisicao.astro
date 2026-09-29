@@ -48,7 +48,7 @@ const CX = 424, CY = 125;
   {canais.map(({ rotulo, icone, y }) => (
     <g>
       <rect x="60" y={y - 16} width="144" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-      <g class="a-icone aquisicao__icone" transform={`translate(76 ${y - 8}) scale(.6667)`}>
+      <g class:list={['a-icone', 'aquisicao__icone', { 'aquisicao__icone--foco': icone === 'busca' }]} transform={`translate(76 ${y - 8}) scale(.6667)`}>
         {icone === 'busca' && <>
           <circle cx="11" cy="11" r="7" />
           <path d="m20 20-3.5-3.5" />
@@ -83,6 +83,8 @@ const CX = 424, CY = 125;
 <style>
   .aquisicao .aquisicao__rotulo { font-size: 14px; }
   .aquisicao .aquisicao__icone { stroke-width: 2.1; stroke: #9d9d98; }
+  /* A lupa da Busca, o canal da faixa mais grossa, é o acento amarelo. */
+  .aquisicao .aquisicao__icone--foco { stroke: var(--destaque, #FFD103); }
   .aquisicao .aquisicao__icone--chegada { stroke-width: 1.68; stroke: #ecece8; }
   .aquisicao .aquisicao__chegada { font-size: 14px; fill: #ecece8; }
 

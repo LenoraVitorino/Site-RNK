@@ -52,13 +52,10 @@ const moldes = [
 ];
 ---
 <g class="replicavel">
-  {/* Conectores (entram direto na borda das cópias), o pulso do laço e o
-      anel de ancoragem na borda do poço. */}
+  {/* Conectores (entram direto na borda das cópias) e o pulso do laço. */}
   <path class="replicavel__ramo" d="M208 125H228" />
   {copias.map(({ y }) => <path class="replicavel__ramo" d={ramo(y, 228)} />)}
   <path class="replicavel__pulso" d={ramo(195)} pathLength="100" />
-  <circle class="replicavel__anel" cx="208" cy="125" r="3.5" />
-  <circle class="replicavel__miolo" cx="208" cy="125" r="1.25" />
 
   {/* Vagas tracejadas (por baixo das cópias) e os destinos. */}
   {copias.map(({ y, destino, quando }, i) => (
@@ -66,11 +63,17 @@ const moldes = [
       <rect class="replicavel__vaga" x={CX + 0.5} y={y - CH / 2 + 0.5} width={CW - 1} height={CH - 1} rx="7" />
       <text x={CX + CW + 16} y={y - 3} class="replicavel__destino">{destino}</text>
       <text x={CX + CW + 16} y={y + 13} class:list={['replicavel__quando', i === 2 && 'replicavel__quando--agora']}>{quando}</text>
+      {/* A cópia mais nova está no ar: ponto amarelo pendurado antes do "agora". */}
+      {i === 2 && <circle cx={CX + CW + 8} cy={y + 9} r="2.25" class="a-destaque replicavel__agora-ponto" />}
     </g>
   ))}
 
   {/* Matriz: o poço onde o processo validado está encaixado. */}
   <rect x={M.x - 8} y={M.y - 8} width={M.w + 16} height={M.h + 16} rx="22" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  {/* Anel de ancoragem na borda do poço: a saída do processo validado, com
+      o miolo amarelo. */}
+  <circle class="replicavel__anel" cx="208" cy="125" r="3.5" />
+  <circle class="a-destaque" cx="208" cy="125" r="1.75" />
 
   {/* O cartão do processo e as suas cópias exatas. */}
   {moldes.map(({ k, x, y, s }) => (
@@ -105,7 +108,6 @@ const moldes = [
   .replicavel__ramo { fill: none; stroke: #ffffff; stroke-opacity: .16; }
   .replicavel__vaga { fill: none; stroke: #ffffff; stroke-opacity: .24; stroke-dasharray: 2 3; }
   .replicavel__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
-  .replicavel__miolo { fill: #d6d6d1; }
   .replicavel__titulo { font-size: 13.5px; font-weight: 500; letter-spacing: -.01em; fill: #ecece8; }
   .replicavel__divisa { fill: #ffffff; fill-opacity: .06; }
   .replicavel__trilha { fill: none; stroke: #ffffff; stroke-opacity: .14; }
@@ -129,15 +131,15 @@ const moldes = [
      0,8–1,2   a última cópia ("agora") sai da vaga, que fica tracejada;
      1,4–2,6   um pulso sai da matriz e desce pelo ramo dela;
      2,5–3,5   a cópia é carimbada: aparece descendo 4 unidades;
-     3,2–3,8   o "agora" volta.
+     3,2–3,8   o "agora" volta, com o ponto amarelo.
      O resto (≈ 75% do ciclo) é repouso. O 0% de cada keyframe é a pose
      final. */
-  .replicavel__copia-2, .replicavel__quando--agora, .replicavel__pulso {
+  .replicavel__copia-2, .replicavel__quando--agora, .replicavel__agora-ponto, .replicavel__pulso {
     animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
     animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
   }
   .replicavel__copia-2 { animation-name: replicavel-carimbo; transform-box: fill-box; }
-  .replicavel__quando--agora { animation-name: replicavel-agora; transform-box: fill-box; }
+  .replicavel__quando--agora, .replicavel__agora-ponto { animation-name: replicavel-agora; transform-box: fill-box; }
   .replicavel__pulso { animation-name: replicavel-pulso; }
 
   @keyframes replicavel-carimbo {
