@@ -140,14 +140,18 @@ export const rodape = {
     { rotulo: 'Para Agências', rota: '/academy' },
     { rotulo: 'Tecnologia', rota: '/tools' },
     { rotulo: 'Conteúdos', rota: '/blog' },
+  ],
+  /** A coluna "A Renke" do rodapé (29/09/2026), com o nome do grupo do menu. */
+  renke: [
     { rotulo: 'Sobre', rota: '/sobre' },
     { rotulo: 'Faça Parte', rota: '/faca-parte' },
     { rotulo: 'Contato', rota: '/contato' },
   ],
+  /** Rota '#': sem endereço ainda, o ícone não aparece no rodapé. */
   redes: [
-    { rotulo: 'Instagram', rota: 'https://instagram.com/renkestudio' },
-    { rotulo: 'LinkedIn', rota: '#' },
-    { rotulo: 'YouTube', rota: '#' },
+    { rotulo: 'Instagram', rota: 'https://instagram.com/renkestudio', icone: 'instagram' },
+    { rotulo: 'LinkedIn', rota: '#', icone: 'linkedin' },
+    { rotulo: 'YouTube', rota: '#', icone: 'youtube' },
   ],
   endereco: [
     'R. Benjamin Constant, 2364',
@@ -156,8 +160,6 @@ export const rodape = {
   ],
   email: 'contato@renkestudio.com.br',
   cnpj: '37.079.656/0001-51',   // contato.md (bloco Informações)
-  /** Frase sob a marca, só na versão estudio (29/09/2026): a definição do Sobre, curta. */
-  frase: 'Revenue Operations para clínicas médicas e odontológicas de alto padrão.',
   /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
   whatsapp: '',
   copyright: '© 2026 Grupo RNK. Todos os direitos reservados.',

@@ -7,7 +7,8 @@
  *   números do método da home, valor light grande e legenda curta embaixo;
  *   no celular, linhas 'valor | legenda', como o .metodo__numero.
  * - Régua compacta (`compacto: true`, Contato, 29/09/2026): os mesmos
- *   cartões, baixos, com valor e legenda lado a lado.
+ *   cartões, pequenos e quase quadrados (valor em cima, legenda embaixo),
+ *   alinhados à esquerda. No celular viram linhas baixas.
  * - Grade (`grade: true`, Revena Full): cartões do Features com a estrutura
  *   da ficha de Resultados, índice no topo e a palavra no pé.
  *
@@ -122,15 +123,21 @@ const iNota = Math.min(n, 5);
   }
   .int-regua__nota { margin-top: clamp(40px, 5vw, 72px); }
 
-  /* Régua compacta (Contato): o cartão da altura da informação. Valor e
-     legenda na mesma linha, alinhados pela base; menos respiro interno. */
+  /* Régua compacta (Contato): cartões de até 220px, quase quadrados, em vez
+     de faixas que atravessavam a página. A fileira fica no centro da página
+     e, em cada cartão, valor e legenda juntos no meio. */
+  .int-numeros--compacto .int-regua {
+    grid-template-columns: repeat(var(--n, 3), minmax(0, 220px));
+    justify-content: center; gap: 12px;
+  }
   .int-numeros--compacto .int-regua__item {
     grid-row: auto; grid-template-rows: none;
-    display: flex; align-items: baseline; gap: 14px;
-    padding: 20px 24px; border-radius: 14px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    aspect-ratio: 11 / 10; padding: 24px; border-radius: 16px;
+    text-align: center;
   }
-  .int-numeros--compacto .int-regua__valor { font-size: clamp(24px, 1.9vw, 30px); flex: none; }
-  .int-numeros--compacto .int-regua__legenda { font-size: 14px; max-width: none; }
+  .int-numeros--compacto .int-regua__valor { font-size: clamp(28px, 2.4vw, 36px); }
+  .int-numeros--compacto .int-regua__legenda { font-size: 14px; max-width: none; text-wrap: balance; }
 
   /* ---------- Grade: cartões do Features com a ficha de Resultados ---------- */
   .int-numeros__grade {
@@ -160,8 +167,14 @@ const iNota = Math.min(n, 5);
     .int-regua__item { grid-row: auto; grid-template-rows: none; row-gap: 6px; }
     .int-regua__valor { font-size: 28px; }
     .int-regua__legenda { max-width: 32ch; }
-    .int-numeros--compacto .int-regua__item { padding: 16px 20px; }
-    .int-numeros--compacto .int-regua__valor { font-size: 24px; }
+    /* No celular três quadrados não cabem: linhas baixas, valor e legenda lado a lado. */
+    .int-numeros--compacto .int-regua { grid-template-columns: minmax(0, 1fr); }
+    .int-numeros--compacto .int-regua__item {
+      aspect-ratio: auto; flex-direction: row; align-items: baseline;
+      justify-content: start; gap: 14px; padding: 16px 20px; text-align: start;
+    }
+    .int-numeros--compacto .int-regua__valor { font-size: 24px; flex: none; }
+    .int-numeros--compacto .int-regua__legenda { max-width: none; }
     /* Dois cartões por linha até 360px: a palavra inteira ('Experiência')
        cabe sem hifenizar com um respiro interno menor. */
     .int-numeros__cartao { padding: 20px; min-height: 140px; }

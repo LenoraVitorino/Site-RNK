@@ -878,25 +878,31 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .footer__contact li { color: rgb(242 242 238 / .7); line-height: 1.5; margin-bottom: 12px; }
 .footer__bottom { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgb(242 242 238 / .18); font-size: 13px; color: rgb(242 242 238 / .7); }
 .footer__bottom p { margin: 0; }
-/* 29/09/2026: a marca com a frase curta embaixo; o e-mail em link; as redes
-   numa linha só, dentro da coluna de contato. */
-.footer__frase { margin: 20px 0 0; max-width: 30ch; font-size: 14px; line-height: 1.55; color: rgb(242 242 238 / .6); text-wrap: pretty; }
+/* 29/09/2026: os ícones das redes sob a marca (alvo de 44px, o ícone de
+   20px na margem do logo) e o e-mail em link. */
+.footer__col .footer__redes { display: flex; gap: 4px; margin: 20px 0 0 -12px; }
+.footer__col .footer__redes a { justify-content: center; width: 44px; height: 44px; margin: 0; color: rgb(242 242 238 / .7); transition: color .4s cubic-bezier(.22, 1, .36, 1); }
+.footer__col .footer__redes a:hover { color: var(--papel); }
 .footer__contact li { margin-bottom: 16px; }
 .footer__contact a { color: var(--papel); }
-.footer__redes { display: flex; flex-wrap: wrap; gap: 0 20px; }
 
 /* ============================================================
    RESPONSIVO
    ============================================================ */
 
 /* Tablet: duas colunas, em vez de quatro blocos empilhados à esquerda. */
+/* Celular: as duas colunas de links lado a lado; marca e contato na largura toda. */
+@media (max-width: 599.98px) {
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px 24px; }
+  .footer__marca, .footer__contato { grid-column: 1 / -1; }
+}
 @media (min-width: 600px) and (max-width: 899.98px) {
-  .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px 32px; }
+  .footer__grid { grid-template-columns: 1fr 1fr 1.4fr; gap: 40px 32px; }
   .footer__marca { grid-column: 1 / -1; }
 }
 @media (min-width: 900px) {
   .footer { padding-block: clamp(72px, 7vw, 112px) 32px; }
-  .footer__grid { grid-template-columns: 2fr 1fr 1.3fr; gap: 48px; }
+  .footer__grid { grid-template-columns: 1.8fr 1fr 1fr 1.3fr; gap: 48px; }
   .footer__bottom { margin-top: clamp(56px, 6vw, 96px); }
 }
 
