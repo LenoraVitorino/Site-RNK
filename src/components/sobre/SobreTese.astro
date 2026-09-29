@@ -2,8 +2,8 @@
 /**
  * S2 · A tese (docs/04-design/pagina-sobre.md, (a) "S2").
  * Leitura lenta: o título preso à esquerda com a foto da parede de
- * palavras (Snøhetta); o parágrafo da tese destrinchado em cinco linhas, e
- * a linha que passa pelo centro da tela acende (VSIMDIM).
+ * palavras (Snøhetta); a tese destrinchada em cinco passos, e o passo que
+ * passa pelo centro da tela acende (VSIMDIM).
  *
  * - A partir de 900px: .sb-tese__fixo nas colunas 1–5 (título e, 32px
  *   abaixo, a foto 4:5 nas colunas 1–4) e as linhas nas colunas 7–12. O
@@ -11,9 +11,10 @@
  * - Abaixo de 900px: sem sticky. O .sb-tese__fixo vira display: contents
  *   e a ordem passa a ser título, linhas e foto 3:2 na largura toda. A
  *   linha ativa continua valendo.
- * - Um único <p>: as cinco linhas são o parágrafo da copy, sem mudar letra.
- *   Os espaços entre os spans ficam no texto (leitor de tela e cópia), mas
- *   não ocupam lugar na grade do parágrafo.
+ * - Cada passo (.sb-tese__linha) é a afirmação e, na versão estudio, uma
+ *   frase de apoio menor logo abaixo (29/09/2026). Na versão copy só há a
+ *   afirmação: as cinco linhas do parágrafo da copy, sem mudar letra. O
+ *   mesmo componente e os mesmos estilos servem às duas.
  * - Na cena (28/09/2026, "não deixe dobras seguidas sólidas"): fundo
  *   transparente com data-cena="pilares", entre o papel de S1 e o de S3. O
  *   título e cada linha entram na máscara de leitura (TEXTOS_INTERNAS em
@@ -34,11 +35,14 @@ import { tese, fotos } from '../../data/sobre';
         <CartaoFoto slot={fotos.tese} sizes="(min-width: 1440px) 380px, (min-width: 900px) 27vw, 92vw" paralaxe={14} />
       </div>
     </div>
-    <p class="sb-tese__texto">
-      {tese.linhas.map((linha, i) => (
-        <>{i > 0 && ' '}<span class="sb-tese__linha">{linha}</span></>
+    <div class="sb-tese__texto">
+      {tese.passos.map((passo) => (
+        <div class="sb-tese__linha">
+          <p class="sb-tese__frase">{passo.frase}</p>
+          {passo.apoio && <p class="sb-tese__apoio">{passo.apoio}</p>}
+        </div>
       ))}
-    </p>
+    </div>
   </div>
 </section>
 
@@ -75,6 +79,21 @@ import { tese, fotos } from '../../data/sobre';
     text-wrap: wrap;
     transition: color .8s cubic-bezier(.22, 1, .36, 1);
   }
+  .sb-tese__frase { margin: 0; }
+
+  /* A frase de apoio: corpo de leitura, fino, num cinza que acompanha o
+     estado do passo um tom abaixo da afirmação. Os alfas mínimos (.6) dão
+     mais de 4,5:1 sobre a cena mascarada, o mínimo do texto pequeno. */
+  .sb-tese__apoio {
+    margin: 14px 0 0;
+    max-width: 38ch;
+    font-family: var(--font);
+    font-size: clamp(15px, 1.15vw, 17px); font-weight: 300;
+    line-height: 1.55; letter-spacing: 0;
+    color: rgb(242 242 238 / .72);
+    text-wrap: pretty;
+    transition: color .8s cubic-bezier(.22, 1, .36, 1);
+  }
 
   /* O marcador: 6×6, redondo, o único amarelo da página. Parado na linha 5
      enquanto o script não assume (sem JS ou com movimento reduzido). Apagado,
@@ -95,6 +114,9 @@ import { tese, fotos } from '../../data/sobre';
   .sb-tese--viva .sb-tese__linha.lida { color: rgb(242 242 238 / .76); }
   .sb-tese--viva .sb-tese__linha.ativa { color: var(--papel); }
   .sb-tese--viva .sb-tese__linha.ativa::before { background: var(--amarelo-marca); }
+  .sb-tese--viva .sb-tese__apoio { color: rgb(242 242 238 / .6); }
+  .sb-tese--viva .lida .sb-tese__apoio { color: rgb(242 242 238 / .66); }
+  .sb-tese--viva .ativa .sb-tese__apoio { color: rgb(242 242 238 / .8); }
 
   /* Coluna presa: só com altura para caber título e foto sem cortar. O fim
      do parágrafo ganha folga (30vh em vez de 10vh) para a linha 5 chegar ao
@@ -115,7 +137,7 @@ import { tese, fotos } from '../../data/sobre';
     .sb-tese__titulo { grid-column: 1 / -1; grid-row: 1; }
     .sb-tese__texto {
       grid-column: 1 / -1; grid-row: 2;
-      gap: 28px; padding-block: 0; margin-top: 40px;
+      gap: 40px; padding-block: 0; margin-top: 40px;
     }
     .sb-tese__foto {
       grid-column: 1 / -1; grid-row: 3;
@@ -137,7 +159,7 @@ import { tese, fotos } from '../../data/sobre';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .sb-tese__linha, .sb-tese__linha::before { transition: none; }
+    .sb-tese__linha, .sb-tese__linha::before, .sb-tese__apoio { transition: none; }
   }
 </style>
 

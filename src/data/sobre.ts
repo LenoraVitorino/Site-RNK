@@ -88,20 +88,50 @@ export const somos = {
 /* S2 · A tese                                                          */
 /* ------------------------------------------------------------------ */
 
-export const tese = {
+/** Um passo da tese: a afirmação e, na versão estudio, a frase de apoio. */
+export interface PassoTese {
+  frase: string;
+  apoio?: string;
+}
+
+export const tese: { h2: string; passos: PassoTese[] } = {
   h2: 'Começamos com uma tese simples:',   // home.md:199; briefing:949
-  /**
-   * O parágrafo da tese destrinchado em cinco linhas, sem mudar nenhuma
-   * letra. A minúscula da 1ª linha é a continuação literal do título.
-   * Fonte: home.md:199-202.
-   */
-  linhas: [
-    'o problema das clínicas que faturam bem mas não têm previsibilidade não é marketing.',
-    'É o que acontece depois do lead.',
-    'Dados soltos, equipes desconectadas, decisões no feeling.',
-    'Nenhuma agência resolve isso porque isso não é um problema de marketing.',
-    'É um problema de negócio.',
-  ] as const,
+  passos: copyLiteral
+    /**
+     * O parágrafo da tese destrinchado em cinco linhas, sem mudar nenhuma
+     * letra. A minúscula da 1ª linha é a continuação literal do título.
+     * Fonte: home.md:199-202.
+     */
+    ? [
+        { frase: 'o problema das clínicas que faturam bem mas não têm previsibilidade não é marketing.' },
+        { frase: 'É o que acontece depois do lead.' },
+        { frase: 'Dados soltos, equipes desconectadas, decisões no feeling.' },
+        { frase: 'Nenhuma agência resolve isso porque isso não é um problema de marketing.' },
+        { frase: 'É um problema de negócio.' },
+      ]
+    /** Revisão de 29/09/2026: cinco afirmações, cada uma com a sua frase de apoio. */
+    : [
+        {
+          frase: 'Clínicas podem faturar bem sem ter previsibilidade.',
+          apoio: 'Crescimento de receita não significa, necessariamente, uma operação previsível.',
+        },
+        {
+          frase: 'O lead é só o começo da operação.',
+          apoio: 'A maior parte das perdas acontece entre a entrada da oportunidade e o fechamento.',
+        },
+        {
+          frase: 'Dados precisam estar conectados à operação.',
+          apoio: 'Informações dispersas dificultam entender a performance e identificar onde a receita está sendo perdida.',
+        },
+        {
+          frase: 'Marketing e comercial precisam operar juntos.',
+          apoio: 'Quando cada área trabalha com processos e informações diferentes, a operação perde eficiência.',
+        },
+        {
+          frase: 'Previsibilidade é uma questão de negócio.',
+          apoio: 'Receita previsível exige processos, dados e decisões integrados ao longo de toda a operação.',
+        },
+      ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -113,9 +143,15 @@ export const prova = {
   h2: { antes: 'Em quatro anos, validamos essa tese em mais de ', realce: '140 clínicas', depois: '.' },   // home.md:204
   /** B, C e D, na ordem de leitura. Fonte: home.md:204-207; briefing:951. */
   frases: [
-    'Construímos o Protocolo Revena, metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no longo prazo.',
-    'Desenvolvemos tecnologia própria para operacionalizar o método.',
-    'E formamos especialistas que fazem isso, para saúde, todo santo dia.',
+    copyLiteral
+      ? 'Construímos o Protocolo Revena, metodologia proprietária que estrutura a operação de receita do zero e a mantém funcionando no longo prazo.'
+      : 'A experiência deu origem ao Protocolo Revena, metodologia proprietária para estruturar, operar e evoluir a receita das clínicas.',   // revisão de 29/09/2026
+    copyLiteral
+      ? 'Desenvolvemos tecnologia própria para operacionalizar o método.'
+      : 'Desenvolvemos tecnologia própria para traduzir o método em ferramentas e processos aplicáveis à operação.',   // revisão de 29/09/2026
+    copyLiteral
+      ? 'E formamos especialistas que fazem isso, para saúde, todo santo dia.'
+      : 'E formamos especialistas preparados para operar esse modelo no setor de saúde.',   // revisão de 29/09/2026
   ] as const,
 };
 
