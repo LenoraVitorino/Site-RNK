@@ -1,0 +1,159 @@
+---
+/**
+ * Implementamos um CRM: um painel de pipeline com um poço rebaixado dividido
+ * em três colunas por fios finos (Novo, Em contato, Agendado) e
+ * cartõezinhos de oportunidade em fio fino. Em laço, um cartão de "Em
+ * contato" sobe um pouco, desliza até "Agendado", assenta e ganha um visto.
+ * Pose estática = pose final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Painel 328 × 172 (x 36 a 364, y 64 a 236). Um poço só (x 48 a 352, y 100
+   a 224, raio 12) com três colunas de 96 e vão de 8; os fios que dividem as
+   colunas passam no meio dos vãos. Os cartões ficam a 6 da borda da coluna
+   (raio 12 − 6 = 6, cantos concêntricos) e têm 84 × 40. O micro do
+   cabeçalho e os rótulos das colunas alinham com o anel de avatar dos
+   cartões (coluna + 16). */
+const colunas = [
+  { x: 48, rotulo: 'Novo' },
+  { x: 152, rotulo: 'Em contato' },
+  { x: 256, rotulo: 'Agendado' },
+];
+const SLOT = [132, 178];
+const cartoes = [
+  { c: 0, s: 0, b: [36, 22] },
+  { c: 0, s: 1, b: [28, 18] },
+  { c: 1, s: 0, b: [32, 20] },
+  { c: 2, s: 0, b: [30, 24] },
+];
+/* O cartão que anda: nasce no segundo lugar de "Em contato" e assenta no
+   segundo lugar de "Agendado", 104 à direita. */
+const MX = colunas[2].x + 6, MY = SLOT[1], DX = 104;
+const W = 84;
+---
+<g class="crm">
+  <defs>
+    {/* Fio vertical que nasce e morre no escuro (divisão das colunas). */}
+    <linearGradient id={`${p}-fio-v`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    {/* Sombra curta do cartão enquanto ele está no ar. */}
+    <filter id={`${p}-no-ar`} x="-20%" y="-30%" width="140%" height="190%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity=".6" />
+    </filter>
+  </defs>
+  <rect width="400" height="300" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Painel e cabeçalho. */}
+  <rect x="36" y="64" width="328" height="172" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x="56" y="64.5" width="288" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x="64" y="86" class="a-micro">Pipeline</text>
+  <g class="crm__menu">
+    <circle cx="322.5" cy="82" r="1.5" /><circle cx="328.5" cy="82" r="1.5" /><circle cx="334.5" cy="82" r="1.5" />
+  </g>
+
+  {/* Um poço só, dividido em três colunas por fios que somem nas pontas. */}
+  <rect x="48" y="100" width="304" height="124" rx="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x="148" y="108" width="1" height="108" fill={`url(#${p}-fio-v)`} />
+  <rect x="252" y="108" width="1" height="108" fill={`url(#${p}-fio-v)`} />
+  {colunas.map(({ x, rotulo }) => (
+    <text x={x + 16} y="121" class="a-rotulo crm__coluna">{rotulo}</text>
+  ))}
+
+  {/* Cartões que ficam parados; recuam para o agendado ser o foco. */}
+  {cartoes.map(({ c, s, b }) => {
+    const x = colunas[c].x + 6, y = SLOT[s];
+    return (
+      <g class="crm__cartao">
+        <rect x={x} y={y} width={W} height="40" rx="6" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+        <circle class="crm__avatar" cx={x + 17} cy={y + 20} r="7" />
+        <rect x={x + 32} y={y + 14} width={b[0]} height="4" rx="2" class="crm__barra" />
+        <rect x={x + 32} y={y + 22} width={b[1]} height="4" rx="2" class="crm__barra crm__barra--2" />
+      </g>
+    );
+  })}
+
+  {/* A vaga que o cartão deixou em "Em contato". */}
+  <rect class="crm__vaga" x={MX - DX + 0.5} y={MY + 0.5} width={W - 1} height="39" rx="5.5" />
+
+  {/* Cópia do cartão em "Em contato", só para o fade cruzado da volta. */}
+  <g class="crm__fantasma">
+    <rect x={MX - DX} y={MY} width={W} height="40" rx="6" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <circle class="crm__avatar crm__avatar--foco" cx={MX - DX + 17} cy={MY + 20} r="7" />
+    <rect x={MX - DX + 32} y={MY + 14} width="28" height="4" rx="2" class="crm__barra crm__barra--foco" />
+    <rect x={MX - DX + 32} y={MY + 22} width="16" height="4" rx="2" class="crm__barra crm__barra--foco-2" />
+  </g>
+
+  {/* O cartão em foco, já agendado, com o visto. */}
+  <g class="crm__movel">
+    <g class="crm__ergue">
+      <rect class="crm__sombra" x={MX} y={MY} width={W} height="40" rx="6" fill="#000000" filter={`url(#${p}-no-ar)`} />
+      <rect x={MX} y={MY} width={W} height="40" rx="6" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      <circle class="crm__avatar crm__avatar--foco" cx={MX + 17} cy={MY + 20} r="7" />
+      <rect x={MX + 32} y={MY + 14} width="28" height="4" rx="2" class="crm__barra crm__barra--foco" />
+      <rect x={MX + 32} y={MY + 22} width="16" height="4" rx="2" class="crm__barra crm__barra--foco-2" />
+      <path class="a-destaque-traco crm__visto" d={`M${MX + 66.5} ${MY + 20.5}l2.5 2.5l5-5.5`} pathLength="1" />
+    </g>
+  </g>
+</g>
+
+<style>
+  .crm__menu { fill: #7c7c78; }
+  .crm .crm__coluna { font-size: 13px; fill: #9d9d98; }
+  /* Os cartões parados recuam; o foco é o cartão agendado. */
+  .crm__cartao { opacity: .72; }
+  .crm__avatar { fill: none; stroke: #ffffff; stroke-opacity: .18; }
+  .crm__avatar--foco { stroke-opacity: .42; }
+  .crm__barra { fill: #ffffff; fill-opacity: .11; }
+  .crm__barra--2 { fill-opacity: .06; }
+  .crm__barra--foco { fill-opacity: .24; }
+  .crm__barra--foco-2 { fill-opacity: .1; }
+  .crm .crm__visto { stroke-width: 1.4; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .crm__vaga { fill: none; stroke: #ffffff; stroke-opacity: .09; stroke-dasharray: 2 4; }
+  .crm__sombra { opacity: 0; }
+
+  /* Movimento, em laço de 10 s: o cartão agendado some enquanto a cópia
+     reaparece em "Em contato" (fade cruzado); os dois trocam de lugar sem
+     se ver. O cartão sobe 2, com uma sombra curta, desliza 104 até
+     "Agendado" em 1,4 s, assenta e o visto se desenha. O movimento acaba em
+     38% do ciclo; o resto é repouso. O 0% de cada keyframe é a pose final. */
+  .crm__movel, .crm__ergue { transform-box: fill-box; }
+  .crm__movel, .crm__ergue, .crm__sombra, .crm__fantasma, .crm__visto {
+    animation-duration: 10s; animation-delay: .6s; animation-iteration-count: infinite;
+    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
+  }
+  .crm__movel { animation-name: crm-desliza; }
+  .crm__ergue { animation-name: crm-ergue; }
+  .crm__sombra { animation-name: crm-sombra; }
+  .crm__fantasma { opacity: 0; animation-name: crm-fantasma; }
+  .crm__visto { animation-name: crm-visto; }
+
+  @keyframes crm-desliza {
+    0% { transform: translateX(0); opacity: 1; }
+    8% { transform: translateX(0); opacity: 0; }
+    8.1% { transform: translateX(-104px); opacity: 0; }
+    8.2%, 14% { transform: translateX(-104px); opacity: 1; }
+    28%, 100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes crm-ergue {
+    0%, 12% { transform: translateY(0); }
+    16%, 26% { transform: translateY(-2px); }
+    30%, 100% { transform: translateY(0); }
+  }
+  @keyframes crm-sombra {
+    0%, 12% { opacity: 0; }
+    16%, 26% { opacity: 1; }
+    31%, 100% { opacity: 0; }
+  }
+  @keyframes crm-fantasma {
+    0% { opacity: 0; }
+    8%, 10% { opacity: 1; }
+    10.1%, 100% { opacity: 0; }
+  }
+  @keyframes crm-visto {
+    0%, 8% { stroke-dashoffset: 0; }
+    8.1%, 30% { stroke-dashoffset: 1; }
+    38%, 100% { stroke-dashoffset: 0; }
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+/**
+ * Construímos seu posicionamento: um mapa em dois eixos de fio fino
+ * (Generalista ↔ Especialista, Acessível ↔ Exclusivo). Os concorrentes são
+ * anéis vazados, juntos num quadrante; "Sua clínica" é um chip redondo com
+ * miolo amarelo, dentro de um círculo tracejado que marca a brecha no
+ * quadrante livre, com a pílula do nome ao lado. Marcas de registro fecham o
+ * quadro. Na entrada, os anéis aparecem em cascata e o marcador sai do meio
+ * do grupo até a brecha pela diagonal do mapa, deixando um rastro pontilhado.
+ * Pose estática = pose final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Cruz dos eixos no centro. A cena cabe na área segura (x 80 a 560): no
+   celular o cartão vira 4:3 e o SVG é recortado ao centro. */
+const CX = 320, CY = 180;
+/* Marcador: parte do meio do grupo (M0) e assenta na brecha (M1). Os dois
+   estão na mesma reta a 45° que passa pela cruz, então o rastro cruza a
+   origem exatamente: a diagonal do mapa. */
+const M0 = { x: 236, y: 264 };
+const M1 = { x: 388, y: 112 };
+/* Concorrentes: uma nuvem em volta de M0, em duas camadas irregulares (22 a
+   30 entre vizinhos), todos do mesmo tamanho. Fica um vão no meio, de onde
+   o marcador sai, e um corredor livre na diagonal por onde ele passa. */
+const concorrentes = [
+  [211, 221], [233, 234], [214, 246], [183, 255], [264, 264],
+  [210, 271], [285, 282], [252, 286], [226, 291], [196, 297],
+];
+/* Marcas de registro nos cantos do quadro, de x 104 a 536 (a área segura
+   menos a margem de 24). */
+const cantos = [[104, 40], [536, 40], [104, 320], [536, 320]];
+---
+<g class="posicionamento">
+  <defs>
+    {/* Eixo vertical: nasce e morre no escuro, como o fio-h. */}
+    <linearGradient id={`${p}-fio-v`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".14" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    {/* O rastro aparece junto com o marcador: a máscara se desenha na mesma curva. */}
+    <mask id={`${p}-rastro`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
+      <path class="posicionamento__revela" d={`M${M0.x} ${M0.y}L${M1.x} ${M1.y}`} pathLength="1" />
+    </mask>
+  </defs>
+
+  <rect width="640" height="360" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Eixos e rótulos, em cata-vento: cada um no quadrante vazio ao lado da
+      sua ponta, a 12 do quadro e a 12 do eixo. */}
+  <rect x="104" y={CY - 0.5} width="432" height="1" fill={`url(#${p}-fio-h)`} />
+  <rect x={CX - 0.5} y="40" width="1" height="280" fill={`url(#${p}-fio-v)`} />
+  <text x="116" y={CY - 12} class="a-micro posicionamento__eixo">Generalista</text>
+  <text x="524" y={CY + 21} text-anchor="end" class="a-micro posicionamento__eixo">Especialista</text>
+  <text x={CX - 12} y="57" text-anchor="end" class="a-micro posicionamento__eixo">Exclusivo</text>
+  <text x={CX + 12} y="312" class="a-micro posicionamento__eixo">Acessível</text>
+
+  {cantos.map(([x, y]) => <path class="posicionamento__registro" d={`M${x - 4} ${y}H${x + 4}M${x} ${y - 4}V${y + 4}`} />)}
+
+  {/* Brecha: o espaço livre em volta do lugar da clínica. */}
+  <circle class="posicionamento__brecha" cx={M1.x} cy={M1.y} r="36" />
+
+  {/* Rastro do marcador, do meio do grupo até a brecha. */}
+  <path class="posicionamento__rastro" d={`M${M0.x} ${M0.y}L${M1.x} ${M1.y}`} mask={`url(#${p}-rastro)`} />
+
+  {/* Concorrentes. */}
+  {concorrentes.map(([x, y], i) => (
+    <circle class="posicionamento__concorrente" cx={x} cy={y} r="5" style={`--i:${i}`} />
+  ))}
+
+  {/* Sua clínica: um chip redondo (soquete e chip, como os chips das
+      outras cenas) com o miolo amarelo. */}
+  <g class="posicionamento__marcador">
+    <g class="posicionamento__viagem">
+      <circle cx={M1.x} cy={M1.y} r="16" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+      <circle cx={M1.x} cy={M1.y} r="11" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      <circle class="a-destaque posicionamento__miolo" cx={M1.x} cy={M1.y} r="2.5" />
+    </g>
+  </g>
+  {/* Pílula do nome: a 12 da brecha, com a borda direita no quadro. */}
+  <g class="posicionamento__legenda">
+    <rect x="436" y={M1.y - 16} width="100" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+    <text x="486" y={M1.y + 4.5} text-anchor="middle" class="a-rotulo posicionamento__nome">Sua clínica</text>
+  </g>
+</g>
+
+<style>
+  .posicionamento .posicionamento__eixo { font-size: 11.5px; }
+  .posicionamento__brecha { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-dasharray: 2 4; }
+  .posicionamento__registro { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .posicionamento__rastro { fill: none; stroke: #ffffff; stroke-opacity: .2; stroke-dasharray: 2 4; }
+  .posicionamento__revela { fill: none; stroke: #ffffff; stroke-width: 6; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .posicionamento__concorrente { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .posicionamento .posicionamento__nome { font-size: 13px; fill: #ecece8; }
+
+  /* Movimento (entrada, uma vez): os concorrentes aparecem em cascata, com o
+     marcador entre eles; a brecha se acende; o marcador sai do meio do grupo
+     e assenta na brecha em 1,8 s, com o rastro se desenhando junto (mesma
+     duração e mesma curva); por fim, a pílula e o miolo amarelo. */
+  .posicionamento__concorrente { animation: posicionamento-surge 1.2s var(--a-entra) calc(.3s + var(--i) * .12s) both; }
+  .posicionamento__marcador { animation: posicionamento-surge 1.2s var(--a-entra) .6s both; }
+  .posicionamento__brecha { animation: posicionamento-surge 1.6s var(--a-entra) 1.4s both; }
+  .posicionamento__viagem { animation: posicionamento-viaja 1.8s var(--a-vai-vem) 2s both; }
+  .posicionamento__revela { animation: posicionamento-revela 1.8s var(--a-vai-vem) 2s both; }
+  .posicionamento__legenda { animation: posicionamento-legenda 1.4s var(--a-entra) 3.4s both; }
+  .posicionamento__miolo { animation: posicionamento-surge 1.4s var(--a-entra) 3.6s both; }
+  @keyframes posicionamento-surge { from { opacity: 0; } }
+  @keyframes posicionamento-viaja { from { transform: translate(-152px, 152px); } }
+  @keyframes posicionamento-revela { from { stroke-dashoffset: 1; } }
+  @keyframes posicionamento-legenda { from { opacity: 0; transform: translateX(-6px); } }
+</style>

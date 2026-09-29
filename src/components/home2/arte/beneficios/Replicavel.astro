@@ -1,0 +1,128 @@
+---
+/**
+ * Crescimento replicável: o cartão-matriz "Processo validado", encaixado num
+ * poço, com um checklist de três passos marcados, e duas cópias com a mesma
+ * estrutura, em fio mais apagado, abertas em leque horizontal e ligadas à
+ * matriz por um fio tracejado. Na entrada, as cópias saem de trás da matriz e
+ * depois os vistos delas se desenham. Pose estática = pose final; o movimento
+ * só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Cartões de 112 × 120 no mesmo Y. A matriz fica num poço de 128 × 136
+   (vão de 8, cantos concêntricos: 14 + 8 = 22); do poço à primeira cópia e
+   entre as cópias, o mesmo vão de 32. O conjunto vai de x 52 a 468. Dentro
+   do cartão: cabeçalho de 32 (barra e sinal no meio dele, em y 16), fio, e
+   três passos a cada 24, com 12 de folga em cima e 13 embaixo. */
+const W = 112, H = 120, Y = 60;
+const MATRIZ = 60;
+const copias = [
+  { x: 212, n: 1 },
+  { x: 356, n: 2 },
+];
+/* Passos do checklist: centro do anel (em relação ao alto do cartão) e
+   comprimento da barra. */
+const passos = [
+  { y: 52, w: 52 },
+  { y: 76, w: 36 },
+  { y: 100, w: 44 },
+];
+/* Altura do fio tracejado que sai do poço e desce em cada cópia. */
+const BUS = 32;
+const cx = (x: number) => x + W / 2;
+/* Vistos das cópias: depois que elas assentam e o fio aparece, em cascata
+   (a primeira cópia e depois a segunda). */
+const atraso = (n: number, j: number) => `animation-delay: ${(2.2 + (n - 1) * 0.36 + j * 0.12).toFixed(2)}s`;
+---
+<g class="replicavel">
+  <defs>
+    {/* Cópias: superfície e fio um tom abaixo da matriz. */}
+    <linearGradient id={`${p}-sup-copia`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#161616" /><stop offset="1" stop-color="#111111" />
+    </linearGradient>
+    <linearGradient id={`${p}-fio-copia`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff" stop-opacity=".11" /><stop offset="1" stop-color="#ffffff" stop-opacity=".04" />
+    </linearGradient>
+  </defs>
+
+  {/* Fio tracejado que sai da matriz, corre acima dos cartões e desce em cada
+      cópia. Os anéis vêm no fim, por cima das bordas. */}
+  <g class="replicavel__elo">
+    <path class="replicavel__fio" d={`M${cx(MATRIZ)} ${Y}V${BUS + 12}A12 12 0 0 1 ${cx(MATRIZ) + 12} ${BUS}H${cx(356) - 12}A12 12 0 0 1 ${cx(356)} ${BUS + 12}V${Y}M${cx(212)} ${BUS}V${Y}`} />
+  </g>
+
+  {/* Cópias primeiro (atrás), a de mais longe por baixo. */}
+  {[...copias].reverse().map(({ x, n }) => (
+    <g class:list={['replicavel__copia', `replicavel__copia--${n}`]}>
+      <rect x={x} y={Y} width={W} height={H} rx="14" fill={`url(#${p}-sup-copia)`} stroke={`url(#${p}-fio-copia)`} />
+      <rect x={x + 16} y={Y + 13.5} width="36" height="5" rx="2.5" class="replicavel__barra" />
+      <circle cx={x + W - 18} cy={Y + 16} r="2.25" class="replicavel__sinal-base" />
+      <rect x={x + 1} y={Y + 32} width={W - 2} height="1" fill={`url(#${p}-fio-h)`} />
+      {passos.map(({ y, w }, j) => (
+        <g>
+          <circle cx={x + 24} cy={Y + y} r="7" class="replicavel__passo" />
+          <path class="replicavel__visto" d={`M${x + 21} ${Y + y}l2 2 4-4`} pathLength="1" style={atraso(n, j)} />
+          <rect x={x + 40} y={Y + y - 2.5} width={w} height="5" rx="2.5" class="replicavel__barra" />
+        </g>
+      ))}
+    </g>
+  ))}
+
+  {/* Matriz, por cima, com o sinal amarelo de validada. */}
+  <g class="replicavel__matriz">
+    <rect x={MATRIZ - 8} y={Y - 8} width={W + 16} height={H + 16} rx="22" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+    <rect x={MATRIZ} y={Y} width={W} height={H} rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={MATRIZ + 16} y={Y + 13.5} width="36" height="5" rx="2.5" class="replicavel__barra" />
+    <circle cx={MATRIZ + W - 18} cy={Y + 16} r="2.25" class="a-destaque" />
+    <rect x={MATRIZ + 1} y={Y + 32} width={W - 2} height="1" fill={`url(#${p}-fio-h)`} />
+    {passos.map(({ y, w }) => (
+      <g>
+        <circle cx={MATRIZ + 24} cy={Y + y} r="7" class="replicavel__passo" />
+        <path class="replicavel__visto" d={`M${MATRIZ + 21} ${Y + y}l2 2 4-4`} />
+        <rect x={MATRIZ + 40} y={Y + y - 2.5} width={w} height="5" rx="2.5" class="replicavel__barra" />
+      </g>
+    ))}
+  </g>
+
+  {/* Anéis de ancoragem: na borda do poço da matriz e no alto das cópias. */}
+  <g class="replicavel__elo">
+    {[[cx(MATRIZ), Y - 8], ...copias.map(({ x }) => [cx(x), Y])].map(([a, b]) => (
+      <g>
+        <circle class="replicavel__anel" cx={a} cy={b} r="3.5" />
+        <circle class="replicavel__miolo" cx={a} cy={b} r="1.25" />
+      </g>
+    ))}
+  </g>
+
+  <text x={cx(MATRIZ)} y={Y + H + 32} text-anchor="middle" class="a-rotulo replicavel__rotulo">Processo validado</text>
+</g>
+
+<style>
+  .replicavel__fio { stroke: #ffffff; stroke-opacity: .22; stroke-dasharray: 2 4; }
+  .replicavel__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .replicavel__miolo { fill: #d6d6d1; }
+  .replicavel__barra { fill: #ffffff; fill-opacity: .12; }
+  .replicavel__sinal-base { fill: #ffffff; fill-opacity: .07; }
+  .replicavel__passo { fill: none; stroke: #ffffff; stroke-opacity: .22; }
+  .replicavel__visto { fill: none; stroke: #ecece8; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .replicavel__copia .replicavel__barra { fill-opacity: .07; }
+  .replicavel__copia .replicavel__passo { stroke-opacity: .12; }
+  .replicavel__copia .replicavel__visto { stroke: #7c7c78; }
+  .replicavel .replicavel__rotulo { font-size: 14px; fill: #ecece8; }
+
+  /* Movimento (entrada, uma vez): as cópias saem juntas de trás da matriz,
+     num gesto só, como uma pilha que se abre em leque: a de mais longe anda
+     o dobro, então a abertura é proporcional o tempo todo. A curva de ida e
+     volta começa e termina devagar (a de entrada lançaria os cartões de uma
+     vez). Quando elas assentam, o fio aparece e os vistos das cópias se
+     desenham, um a um. */
+  .replicavel__copia--1 { animation: replicavel-abre-1 1.8s var(--a-vai-vem) .4s both; }
+  .replicavel__copia--2 { animation: replicavel-abre-2 1.8s var(--a-vai-vem) .4s both; }
+  .replicavel__elo { animation: replicavel-surge 1.2s var(--a-entra) 1.9s both; }
+  .replicavel__copia .replicavel__visto { stroke-dasharray: 1; animation: replicavel-risca 1.2s var(--a-entra) both; }
+  @keyframes replicavel-abre-1 { from { transform: translateX(-152px); } }
+  @keyframes replicavel-abre-2 { from { transform: translateX(-296px); } }
+  @keyframes replicavel-surge { from { opacity: 0; } }
+  @keyframes replicavel-risca { from { stroke-dashoffset: 1; } }
+</style>

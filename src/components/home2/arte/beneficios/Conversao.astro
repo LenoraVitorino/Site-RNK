@@ -1,0 +1,118 @@
+---
+/**
+ * Mais conversão: uma trilha de quatro etapas (Contato, Atendimento,
+ * Avaliação, Agendamento), com nós pequenos aninhados ligados por um fio e
+ * um fio de progresso mais claro por cima. A oportunidade é uma pílula
+ * flutuante, só com a pessoa e um visto apagado, presa à etapa atual por um
+ * fio com anel de ancoragem. Em laço, a pílula avança de etapa em etapa, o
+ * progresso acompanha e, no Agendamento, o visto acende em amarelo. Pose
+ * estática = pose final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Etapas a 120 de distância (o passo dos chips da Jornada), no eixo TY. Nó:
+   soquete 40 (raio 14) e chip 28 (raio 8); o vão de 6 deixa os cantos
+   concêntricos. */
+const TY = 144;
+const etapas = [
+  { x: 80, rotulo: 'Contato' },
+  { x: 200, rotulo: 'Atendimento' },
+  { x: 320, rotulo: 'Avaliação' },
+  { x: 440, rotulo: 'Agendamento', foco: true },
+];
+/* Oportunidade: pílula de 64 × 32 centrada sobre a etapa atual, com o fio
+   de 24 até o soquete. Sem barras de "texto": a pessoa (o mesmo ícone do
+   Paciente da Jornada) e o visto bastam, e a cena não repete o cartão do
+   CRM. Ícone de 16 a 14 da borda; visto a 16 da borda direita. */
+const CX = 440, CW = 64, CH = 32, CY = TY - 20 - 24 - CH;
+const cx0 = CX - CW / 2;
+---
+<g class="conversao">
+  <rect width="520" height="250" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Trilha e, por cima, o progresso. */}
+  <path class="conversao__trilha" d={`M80 ${TY}H440`} />
+  <path class="conversao__progresso" d={`M80 ${TY}H440`} pathLength="1" />
+
+  {etapas.map(({ x, rotulo, foco }) => (
+    <g class:list={['conversao__etapa', { 'conversao__etapa--foco': foco }]}>
+      <rect x={x - 20} y={TY - 20} width="40" height="40" rx="14" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+      <rect x={x - 14} y={TY - 14} width="28" height="28" rx="8" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      <rect x={x - 8} y={TY - 13.5} width="16" height="1" fill={`url(#${p}-fio-h)`} />
+      <circle cx={x} cy={TY} r="2.25" class="conversao__ponto" />
+      <text x={x} y={TY + 44} text-anchor="middle" class="a-rotulo conversao__rotulo">{rotulo}</text>
+    </g>
+  ))}
+
+  {/* Oportunidade: pílula flutuante com a pessoa e o visto; o fio com o
+      anel de ancoragem a prende à etapa. O visto apagado fica por baixo do
+      amarelo, que só acende na chegada. */}
+  <g class="conversao__oportunidade">
+    <g class="conversao__avanca">
+      <path class="conversao__haste" d={`M${CX} ${CY + CH}V${TY - 20}`} />
+      <rect x={cx0} y={CY} width={CW} height={CH} rx={CH / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} filter={`url(#${p}-sombra)`} />
+      <rect x={cx0 + 16} y={CY + 0.5} width="32" height="1" fill={`url(#${p}-fio-h)`} />
+      <g class="a-icone conversao__pessoa" transform={`translate(${cx0 + 14} ${CY + 8}) scale(.6667)`}>
+        <circle cx="12" cy="8" r="5" />
+        <path d="M20 21a8 8 0 0 0-16 0" />
+      </g>
+      <path class="conversao__visto-base" d={`M${cx0 + 40.5} ${CY + 16.5}l2.5 2.5l5-5.5`} />
+      <path class="a-destaque-traco conversao__visto" d={`M${cx0 + 40.5} ${CY + 16.5}l2.5 2.5l5-5.5`} />
+      <circle class="conversao__anel" cx={CX} cy={CY + CH} r="3.5" />
+      <circle class="conversao__miolo" cx={CX} cy={CY + CH} r="1.25" />
+    </g>
+  </g>
+</g>
+
+<style>
+  .conversao__trilha { fill: none; stroke: #ffffff; stroke-opacity: .1; }
+  .conversao__progresso { fill: none; stroke: #ffffff; stroke-opacity: .55; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .conversao__ponto { fill: #7c7c78; }
+  .conversao__etapa--foco .conversao__ponto { fill: #ecece8; }
+  .conversao .conversao__rotulo { font-size: 14px; }
+  .conversao .conversao__etapa--foco .conversao__rotulo { fill: #ecece8; }
+  .conversao__haste { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .conversao .conversao__pessoa { stroke-width: 2.1; stroke: #ecece8; }
+  .conversao__visto-base { fill: none; stroke: #ffffff; stroke-opacity: .2; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .conversao .conversao__visto { stroke-width: 1.4; }
+  .conversao__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .conversao__miolo { fill: #d6d6d1; }
+
+  /* Movimento, em laço de 12 s: da pose final (pílula no Agendamento, visto
+     aceso), a pílula e o progresso somem devagar (0,5 s), a pílula
+     reaparece no Contato (0,5 s) e avança uma etapa por vez (1 s cada, com
+     pausa de 0,3 s em cada etapa); o progresso acompanha e, na chegada, o
+     visto apagado acende em amarelo. O movimento ocupa cerca de 40% do ciclo; o resto é repouso. O
+     atraso de 1,2 s deixa ver a cena pronta antes de ela recomeçar. */
+  .conversao__oportunidade { animation: conversao-some 12s var(--a-vai-vem) 1.2s infinite both; }
+  .conversao__avanca { animation: conversao-avanca 12s var(--a-vai-vem) 1.2s infinite both; }
+  .conversao__progresso { animation: conversao-progresso 12s var(--a-vai-vem) 1.2s infinite both; }
+  .conversao__visto { animation: conversao-visto 12s var(--a-vai-vem) 1.2s infinite both; }
+  @keyframes conversao-some {
+    0% { opacity: 1; }
+    4.17% { opacity: 0; }
+    8.33%, 100% { opacity: 1; }
+  }
+  @keyframes conversao-avanca {
+    0%, 4.17% { transform: translateX(0); }
+    4.25%, 8.33% { transform: translateX(-360px); }
+    16.67%, 19.17% { transform: translateX(-240px); }
+    27.5%, 30% { transform: translateX(-120px); }
+    38.33%, 100% { transform: translateX(0); }
+  }
+  @keyframes conversao-progresso {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    4.17% { stroke-dashoffset: 0; opacity: 0; }
+    4.25% { stroke-dashoffset: 1; opacity: 0; }
+    5%, 8.33% { stroke-dashoffset: 1; opacity: 1; }
+    16.67%, 19.17% { stroke-dashoffset: .6667; }
+    27.5%, 30% { stroke-dashoffset: .3333; }
+    38.33%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes conversao-visto {
+    0% { opacity: 1; }
+    4.17%, 36.67% { opacity: 0; }
+    40.83%, 100% { opacity: 1; }
+  }
+</style>

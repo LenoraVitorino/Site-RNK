@@ -1,0 +1,147 @@
+---
+/**
+ * Automatizamos o seu atendimento: um painel com o interruptor "Automático"
+ * ligado e quatro passos em sequência (Confirmação, Lembrete, Follow-up,
+ * Avaliação), cada um num chip pequeno, ligados por um fio vertical. Os três
+ * primeiros estão feitos; a Avaliação é o passo atual. Em laço, o progresso
+ * desce pelo fio e os vistos se desenham em cascata. Pose estática = pose
+ * final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Painel 272 × 228 (x 64 a 336, y 36 a 264). Cabeçalho centrado em y 60,
+   com o fio divisor em y 84. Passos a cada 40, a partir de y 112; chips de
+   28 (raio 8) com o centro em x 96. O poço do passo atual (raio 12) deixa
+   4 de folga em volta do chip, cantos concêntricos, e fica a 14 do painel
+   dos três lados, a mesma folga entre o divisor e o primeiro chip. A coluna
+   de estado (x 304) espelha o eixo dos chips dentro do poço e passa pelo
+   botão do interruptor. */
+const passos = [
+  { y: 112, rotulo: 'Confirmação', icone: 'confirmacao' },
+  { y: 152, rotulo: 'Lembrete', icone: 'lembrete' },
+  { y: 192, rotulo: 'Follow-up', icone: 'followup' },
+  { y: 232, rotulo: 'Avaliação', icone: 'avaliacao', atual: true },
+];
+const CX = 96, SX = 304, HY = 60;
+const Y0 = passos[0].y, Y3 = passos[3].y;
+---
+<g class="automacao">
+  <rect width="400" height="300" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Painel, cabeçalho e interruptor ligado. */}
+  <rect x="64" y="36" width="272" height="228" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x="84" y="36.5" width="232" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x={CX - 14} y={HY + 4} class="a-micro">Atendimento</text>
+  <text x={SX - 30} y={HY + 4.5} text-anchor="end" class="a-rotulo automacao__chave-rotulo">Automático</text>
+  <rect x={SX - 19.5} y={HY - 7.5} width="27" height="15" rx="7.5" class="automacao__trilho" />
+  <circle cx={SX} cy={HY} r="5.5" class="automacao__botao" />
+  <rect x="64" y="84" width="272" height="1" fill={`url(#${p}-fio-h)`} />
+
+  {/* Passo atual num poço rebaixado. */}
+  <rect x={CX - 18} y={Y3 - 18} width={SX - CX + 36} height="36" rx="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+
+  {/* Fio que liga os passos e, por cima, o progresso (só aparece nos vãos
+     entre os chips). */}
+  <path class="automacao__trilha" d={`M${CX} ${Y0}V${Y3}`} />
+  <path class="automacao__progresso" d={`M${CX} ${Y0}V${Y3}`} pathLength="1" />
+
+  {passos.map(({ y, rotulo, icone, atual }) => (
+    <g class:list={['automacao__passo', { 'automacao__passo--atual': atual }]}>
+      <rect x={CX - 14} y={y - 14} width="28" height="28" rx="8" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      <g class="a-icone automacao__icone" transform={`translate(${CX - 8} ${y - 8}) scale(.6667)`}>
+        {icone === 'confirmacao' && <>
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+          <path d="m9 16 2 2 4-4" />
+        </>}
+        {icone === 'lembrete' && <>
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+        </>}
+        {icone === 'followup' && <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />}
+        {icone === 'avaliacao' && <path d="M11.5 2.3a.5.5 0 0 1 1 0l2.3 4.7a2.1 2.1 0 0 0 1.6 1.2l5.2.7a.5.5 0 0 1 .3.9l-3.8 3.7a2.1 2.1 0 0 0-.6 1.9l.9 5.1a.5.5 0 0 1-.8.6l-4.6-2.4a2.1 2.1 0 0 0-2 0L6.4 21a.5.5 0 0 1-.8-.6l.9-5.1a2.1 2.1 0 0 0-.6-1.9L2.2 9.8a.5.5 0 0 1 .3-.9l5.2-.8a2.1 2.1 0 0 0 1.6-1.2z" />}
+      </g>
+      <text x={CX + 30} y={y + 4.5} class="a-rotulo automacao__rotulo">{rotulo}</text>
+    </g>
+  ))}
+
+  {/* Estado: visto fino nos feitos; no passo atual, um anel com o miolo amarelo. */}
+  {passos.filter((s) => !s.atual).map(({ y }, i) => (
+    <path class={`automacao__visto automacao__visto--${i + 1}`} d={`M${SX - 5} ${y}l3 3l7-7`} pathLength="1" />
+  ))}
+  <circle cx={SX} cy={Y3} r="5.5" class="automacao__anel" />
+  <circle cx={SX} cy={Y3} r="2" class="a-destaque automacao__miolo" />
+</g>
+
+<style>
+  .automacao .automacao__chave-rotulo { font-size: 13px; fill: #9d9d98; }
+  /* Interruptor ligado, mas quieto: o foco da cena é o passo atual. */
+  .automacao__trilho { fill: #2c2c2a; stroke: #ffffff; stroke-opacity: .1; }
+  .automacao__botao { fill: #a9a9a4; }
+  .automacao__trilha { fill: none; stroke: #ffffff; stroke-opacity: .1; }
+  .automacao .automacao__icone { stroke-width: 2.1; stroke: #9d9d98; }
+  .automacao .automacao__passo--atual .automacao__icone { stroke: #ecece8; }
+  .automacao .automacao__rotulo { font-size: 13px; fill: #b9b9b4; }
+  .automacao .automacao__passo--atual .automacao__rotulo { fill: #ecece8; }
+  .automacao__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+
+  .automacao__progresso { fill: none; stroke: #ffffff; stroke-opacity: .6; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .automacao__visto {
+    fill: none; stroke: #9d9d98; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1 2; stroke-dashoffset: 0;
+  }
+
+  /* Movimento, em laço de 11 s: o progresso e os vistos somem juntos (0 a
+     5,5%) e voltam em cascata. O primeiro visto se desenha, o progresso desce
+     pelo vão até o passo seguinte (desacelera ao encostar no chip), o
+     próximo visto se desenha, e assim até a Avaliação, cujo miolo acende.
+     O movimento acaba em 38% do ciclo; o resto é repouso. O fio vai de
+     centro a centro (120 de comprimento): os vãos visíveis estão em 12–22%,
+     45–55% e 78–88% dele. */
+  .automacao__progresso, .automacao__visto, .automacao__miolo {
+    animation-duration: 11s; animation-delay: .6s; animation-iteration-count: infinite;
+    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
+  }
+  .automacao__progresso { animation-name: automacao-desce; }
+  .automacao__visto--1 { animation-name: automacao-visto-1; }
+  .automacao__visto--2 { animation-name: automacao-visto-2; }
+  .automacao__visto--3 { animation-name: automacao-visto-3; }
+  .automacao__miolo { animation-name: automacao-acende; }
+
+  @keyframes automacao-desce {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    5.5% { stroke-dashoffset: 0; opacity: 0; }
+    5.6% { stroke-dashoffset: .88; opacity: 1; }
+    12% { stroke-dashoffset: .88; }
+    16.5% { stroke-dashoffset: .78; }
+    20% { stroke-dashoffset: .55; }
+    24.5% { stroke-dashoffset: .45; }
+    28% { stroke-dashoffset: .22; }
+    32.5% { stroke-dashoffset: .12; }
+    32.6%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes automacao-visto-1 {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    5.5% { stroke-dashoffset: 0; opacity: 0; }
+    5.6%, 7.5% { stroke-dashoffset: 1; opacity: 1; }
+    12%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes automacao-visto-2 {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    5.5% { stroke-dashoffset: 0; opacity: 0; }
+    5.6%, 15.5% { stroke-dashoffset: 1; opacity: 1; }
+    20%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes automacao-visto-3 {
+    0% { stroke-dashoffset: 0; opacity: 1; }
+    5.5% { stroke-dashoffset: 0; opacity: 0; }
+    5.6%, 23.5% { stroke-dashoffset: 1; opacity: 1; }
+    28%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes automacao-acende {
+    0% { opacity: 1; }
+    5.5%, 31.5% { opacity: 0; }
+    38%, 100% { opacity: 1; }
+  }
+</style>

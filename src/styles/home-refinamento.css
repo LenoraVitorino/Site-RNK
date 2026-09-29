@@ -451,6 +451,12 @@ section[id] { scroll-margin-top: 110px; }
   #perguntas .operacao__cartoes { grid-template-columns: 1fr 1fr; gap: 20px; }
   #perguntas .operacao__cartao:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+/* No celular a ilustração do ganho ocupa a largura toda do cartão (entra no
+   recuo de 20px dos lados): as cenas já têm margem própria de ~48 unidades,
+   e os rótulos crescem uns 14%. */
+@media (max-width: 599.98px) {
+  #perguntas .operacao__ilustracao { width: calc(100% + 40px); margin-inline: -20px; }
+}
 
 /* Planos da copy: número em 12px, o piso de leitura. Sem foto ainda, o
    espaço reservado sai abaixo de 900px (eram cinco retângulos vazios

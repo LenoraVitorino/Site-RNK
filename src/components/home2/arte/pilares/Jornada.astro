@@ -1,0 +1,112 @@
+---
+/**
+ * Vamos além do tráfego pago: três chips aninhados (Anúncio, Comercial,
+ * Paciente) numa mesma linha, ligados por um conector fino com anéis de
+ * ancoragem, e uma cota embaixo, "Do primeiro contato à consulta", que mede
+ * a jornada inteira. Um segmento claro percorre o conector e, ao chegar, o
+ * sinal do chip Paciente acende. Pose estática = pose final; o movimento só
+ * parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Três chips no mesmo eixo Y, a 120 de distância. Soquete 72 (raio 20) e
+   chip 56 (raio 12): o vão de 8 entre os dois deixa os cantos concêntricos. */
+const Y = 108;
+const chips = [
+  { x: 80, rotulo: 'Anúncio', icone: 'anuncio' },
+  { x: 200, rotulo: 'Comercial', icone: 'conversa' },
+  { x: 320, rotulo: 'Paciente', icone: 'pessoa', foco: true },
+];
+/* Anéis de ancoragem: nas bordas dos soquetes, onde o conector encosta. */
+const aneis = [116, 164, 236, 284];
+---
+<g class="jornada">
+  <rect width="400" height="300" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Linha de base que nasce e morre no escuro, passando pelos três chips. */}
+  <rect x="24" y={Y - 0.5} width="352" height="1" fill={`url(#${p}-fio-h)`} />
+
+  {/* Conectores entre os chips. */}
+  <path class="jornada__conector" d={`M116 ${Y}H164M236 ${Y}H284`} />
+
+  {/* Segmento que percorre a jornada: nasce sob o Anúncio e some sob o Paciente. */}
+  <path class="jornada__percurso" d={`M80 ${Y}H320`} pathLength="100" />
+
+  {chips.map(({ x, rotulo, icone, foco }) => (
+    <g class:list={['jornada__chip', { 'jornada__chip--foco': foco }]}>
+      <rect x={x - 36} y={Y - 36} width="72" height="72" rx="20" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+      <rect x={x - 28} y={Y - 28} width="56" height="56" rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      {/* Aresta de cima do chip, um fio de luz que some nas pontas. */}
+      <rect x={x - 18} y={Y - 27.5} width="36" height="1" fill={`url(#${p}-fio-h)`} />
+      {/* Ícone na grade de 24, reduzido a 20. */}
+      <g class="a-icone jornada__icone" transform={`translate(${x - 10} ${Y - 10}) scale(.8333)`}>
+        {icone === 'anuncio' && <>
+          <path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14" />
+          <path d="M8 6v8" />
+        </>}
+        {icone === 'conversa' && <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />}
+        {icone === 'pessoa' && <>
+          <circle cx="12" cy="8" r="5" />
+          <path d="M20 21a8 8 0 0 0-16 0" />
+        </>}
+      </g>
+      <text x={x} y={Y + 60} text-anchor="middle" class="a-rotulo jornada__rotulo">{rotulo}</text>
+    </g>
+  ))}
+
+  {aneis.map((x) => (
+    <g>
+      <circle class="jornada__anel" cx={x} cy={Y} r="3.5" />
+      <circle class="jornada__miolo" cx={x} cy={Y} r="1.25" />
+    </g>
+  ))}
+
+  {/* Sinal do chip Paciente: base apagada e o ponto amarelo por cima. */}
+  <circle cx="339" cy="89" r="2.25" class="jornada__sinal-base" />
+  <circle cx="339" cy="89" r="2.25" class="a-destaque jornada__sinal" />
+
+  {/* Cota da jornada inteira, de soquete a soquete, interrompida pela pílula. */}
+  <path class="jornada__cota" d="M44.5 207v10M44 212H92M308 212H356M355.5 207v10" />
+  <rect x="92" y="196" width="216" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <text x="200" y="216.5" text-anchor="middle" class="a-rotulo jornada__pilula">Do primeiro contato à consulta</text>
+</g>
+
+<style>
+  .jornada__conector { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .jornada__cota { fill: none; stroke: #ffffff; stroke-opacity: .1; }
+  .jornada__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .jornada__miolo { fill: #d6d6d1; }
+  .jornada .jornada__icone { stroke-width: 1.68; stroke: #9d9d98; }
+  .jornada .jornada__chip--foco .jornada__icone { stroke: #ecece8; }
+  .jornada .jornada__rotulo { font-size: 13px; fill: #b9b9b4; }
+  .jornada .jornada__chip--foco .jornada__rotulo { fill: #ecece8; }
+  .jornada .jornada__pilula { font-size: 13px; fill: #9d9d98; }
+  .jornada__sinal-base { fill: #ffffff; fill-opacity: .1; }
+
+  /* Movimento: um segmento claro e curto (8% do caminho) sai de trás do
+     Anúncio, entra no Comercial, reaparece do outro lado e entra no Paciente,
+     em 2,2 s; cada trecho visível tem a sua curva, então ele desacelera ao
+     encostar em cada chip. O sinal apaga na partida e acende devagar na
+     chegada. Depois, repouso. Ciclo de 9 s. O caminho vai de centro a centro
+     (x 80 a 320): 15% e 85% são as bordas dos soquetes das pontas, 35% e 65%
+     as do Comercial. O vão de 192 no tracejado impede que o traço se repita. */
+  .jornada__percurso {
+    fill: none; stroke: #ffffff; stroke-opacity: .75; stroke-linecap: round;
+    stroke-dasharray: 8 192; stroke-dashoffset: -100;
+    animation: jornada-percorre 9s var(--a-vai-vem) .6s infinite both;
+  }
+  .jornada__sinal { animation: jornada-acende 9s var(--a-vai-vem) .6s infinite both; }
+  @keyframes jornada-percorre {
+    0% { stroke-dashoffset: -7; }
+    11% { stroke-dashoffset: -35; }
+    13.5% { stroke-dashoffset: -57; }
+    24.5%, 100% { stroke-dashoffset: -85; }
+  }
+  @keyframes jornada-acende {
+    0% { opacity: 1; }
+    8%, 24% { opacity: 0; }
+    38%, 100% { opacity: 1; }
+  }
+</style>

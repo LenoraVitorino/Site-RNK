@@ -1,0 +1,90 @@
+---
+/**
+ * Laboratório das ilustrações (28/09/2026): uma cena por página, no cartão
+ * com as medidas reais do desktop de 1600px e do celular de 390px, para
+ * fotografar e comparar. Fora dos buscadores e do menu.
+ *
+ * ?foto põe as cenas em movimento desde o carregamento; ?t=2400 congela
+ * todas as animações nesse instante (em ms), para fotografar um quadro exato.
+ */
+import Base2 from '../../../layouts/Base2.astro';
+import ArtePilar from '../../../components/home2/ArtePilar.astro';
+import ArteBeneficio from '../../../components/home2/ArteBeneficio.astro';
+import { pilares, perguntas } from '../../../data/home';
+import { pilaresEstudio } from '../../../data/pilares-estudio';
+
+export function getStaticPaths() {
+  return [
+    ...[0, 1, 2, 3, 4].map((i) => ({ params: { cena: `pilar-${i}` } })),
+    ...[0, 1, 2, 3, 4, 5, 6].map((i) => ({ params: { cena: `beneficio-${i}` } })),
+  ];
+}
+
+const { cena } = Astro.params;
+const [grupo, n] = cena.split('-');
+const tipo = Number(n);
+const ehPilar = grupo === 'pilar';
+const texto = ehPilar ? { ...pilares[tipo], ...pilaresEstudio[tipo] } : perguntas[tipo];
+const larga = ehPilar && tipo >= 3;
+const larguraDesktop = ehPilar ? (larga ? 636 : 419) : 633;
+---
+<Base2 titulo={`Laboratório · ilustração ${cena}`} descricao="Laboratório das ilustrações" noindex classe="home-refinada laboratorio-ilustracao">
+  <div class="lab">
+    <p class="lab__nome">{cena} · desktop {larguraDesktop}px · celular 324px</p>
+    <div class="lab__linha">
+      {[larguraDesktop, 324].map((largura, i) => (
+        ehPilar ? (
+          <article class="lab-pilar" style={`width:${largura}px`}>
+            <div class="lab-pilar__arte" style={`aspect-ratio:${larga && i === 0 ? '16 / 9' : '4 / 3'}`}><ArtePilar tipo={tipo} /></div>
+            <div class="lab-pilar__texto"><h3>{texto.titulo}</h3><p>{texto.texto}</p></div>
+          </article>
+        ) : (
+          <article class="lab-beneficio" style={`width:${largura}px; padding:${i === 0 ? '44px' : '24px 20px'}`}>
+            <h3>{texto.titulo}</h3>
+            <p>{texto.texto}</p>
+            <div class="lab-beneficio__arte"><ArteBeneficio tipo={tipo} /></div>
+          </article>
+        )
+      ))}
+    </div>
+  </div>
+</Base2>
+
+<style>
+  :global(body.laboratorio-ilustracao) { background: #000; }
+  :global(body.laboratorio-ilustracao .header), :global(body.laboratorio-ilustracao .footer), :global(astro-dev-toolbar) { display: none !important; }
+  .lab { padding: 32px; }
+  .lab__nome { margin: 0 0 20px; font-size: 12px; letter-spacing: .08em; color: #777; }
+  .lab__linha { display: flex; gap: 40px; align-items: flex-start; }
+  .lab-pilar { flex: none; padding: 16px; border-radius: 18px; background: #0e0e0e; }
+  .lab-pilar__arte { overflow: hidden; border-radius: 12px; background: #0e0e0e; }
+  .lab-pilar__texto { padding: 20px 12px 16px; }
+  .lab-pilar h3 { margin: 0; font-size: 29px; font-weight: 350; line-height: 1.2; letter-spacing: -.04em; }
+  .lab-pilar p { color: #b6b6b6; font-size: 15px; line-height: 1.65; margin: 14px 0 0; }
+  .lab-beneficio { flex: none; border-radius: 18px; background: rgb(12 12 12 / .93); }
+  .lab-beneficio h3 { margin: 0; font-size: 34px; font-weight: 300; line-height: 1.15; letter-spacing: -.035em; }
+  .lab-beneficio p { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; max-width: 48ch; }
+  .lab-beneficio__arte { margin-top: 26px; }
+</style>
+
+<script>
+  /* Modos de foto (o Chromium headless não dispara IntersectionObserver):
+     ?foto  põe todas as cenas e blocos em cena desde o carregamento;
+     ?t=2400 faz o mesmo e congela todas as animações nesse instante (ms). */
+  const busca = new URLSearchParams(location.search);
+  const t = busca.get('t');
+  if (busca.has('foto') || t !== null) {
+    const forca = () => {
+      document.querySelectorAll('svg.arte').forEach((a) => a.classList.add('em-cena'));
+      document.querySelectorAll('.entra').forEach((a) => a.classList.add('visivel'));
+    };
+    forca();
+    new MutationObserver(() => document.querySelectorAll('svg.arte:not(.em-cena)').forEach((a) => a.classList.add('em-cena')))
+      .observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    if (t !== null) {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        for (const anim of document.getAnimations()) { anim.pause(); anim.currentTime = Number(t); }
+      }));
+    }
+  }
+</script>

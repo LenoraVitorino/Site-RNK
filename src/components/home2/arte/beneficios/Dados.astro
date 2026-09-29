@@ -1,0 +1,119 @@
+---
+/**
+ * Decisões baseadas em dados: um funil em barras verticais (Leads, Contato,
+ * Avaliação, Agendado, Compareceu), de fio fino e preenchimento que some na
+ * base. Na maior queda, entre Avaliação e Agendado, o pedaço que falta fica
+ * marcado por um contorno tracejado, com a pílula "Ponto de perda" presa a
+ * ele por um fio. Na entrada, as barras sobem da linha de base em cascata e
+ * depois a anotação aparece. Pose estática = pose final; o movimento só
+ * parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Barras de 32 a cada 92 (centros em x 76 a 444) sobre a linha de base em
+   y 196; o topo tem raio 8. A maior queda (44) fica entre Avaliação e
+   Agendado; as outras são de 20, 20 e 8. */
+const B = 196, L = 32, R = 8;
+const barras = [
+  { rotulo: 'Leads', x: 76, h: 128 },
+  { rotulo: 'Contato', x: 168, h: 108 },
+  { rotulo: 'Avaliação', x: 260, h: 88 },
+  { rotulo: 'Agendado', x: 352, h: 44 },
+  { rotulo: 'Compareceu', x: 444, h: 36 },
+].map((b, i) => ({ ...b, topo: B - b.h, atraso: (0.4 + i * 0.14).toFixed(2) }));
+
+/* Contorno de barra aberto embaixo (para o fio; com Z, para o fundo). */
+const contorno = (x: number, topo: number, base = B) => {
+  const e = x - L / 2, d = x + L / 2;
+  return `M${e} ${base}V${topo + R}A${R} ${R} 0 0 1 ${e + R} ${topo}H${d - R}A${R} ${R} 0 0 1 ${d} ${topo + R}V${base}`;
+};
+
+/* O pedaço que falta em Agendado: do topo dele até o nível de Avaliação. */
+const perda = barras[3], antes = barras[2];
+const PX = perda.x;
+---
+<g class="dados">
+  <defs>
+    {/* Fundo das barras: superfície opaca que desce ao tom do cartão na base. */}
+    <linearGradient id={`${p}-barra`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#1f1f1f" /><stop offset="1" stop-color="#101010" />
+    </linearGradient>
+    {/* As barras nascem da linha de base: nada aparece abaixo dela. */}
+    <clipPath id={`${p}-base`}>
+      <rect x="0" y="0" width="520" height={B} />
+    </clipPath>
+  </defs>
+
+  <rect width="520" height="250" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Barras do funil. */}
+  <g clip-path={`url(#${p}-base)`}>
+    {barras.map(({ x, topo, atraso }) => (
+      <g class="dados__barra" style={`--atraso:${atraso}s`}>
+        <path d={`${contorno(x, topo)}Z`} fill={`url(#${p}-barra)`} />
+        <path d={contorno(x, topo)} fill="none" stroke={`url(#${p}-fio)`} />
+        {/* Aresta de cima, um fio de luz que some nas pontas, como nos chips. */}
+        <rect x={x - 10} y={topo + 0.5} width="20" height="1" fill={`url(#${p}-fio-h)`} />
+      </g>
+    ))}
+  </g>
+
+  {/* Linha de base que nasce e morre no escuro. */}
+  <rect x="40" y={B - 0.5} width="440" height="1" fill={`url(#${p}-fio-h)`} />
+
+  {barras.map(({ rotulo, x }) => (
+    <text x={x} y={B + 24} text-anchor="middle" class="a-rotulo dados__rotulo">{rotulo}</text>
+  ))}
+
+  {/* A perda: guia no nível de Avaliação e o pedaço que falta, tracejados. */}
+  <g class="dados__perda">
+    <path class="a-tracejado dados__tracejado" d={`M${antes.x + L / 2 + 4} ${antes.topo + 0.5}H${PX - L / 2 - 4}`} />
+    <path class="a-tracejado dados__tracejado" d={contorno(PX, antes.topo, perda.topo)} />
+  </g>
+
+  {/* Fio da anotação, do pedaço que falta até a pílula. */}
+  <path class="dados__fio" d={`M${PX} ${antes.topo}V72`} pathLength="1" />
+  <g class="dados__ancora">
+    <circle class="dados__anel" cx={PX} cy={antes.topo} r="3.5" />
+    <circle class="dados__miolo" cx={PX} cy={antes.topo} r="1.25" />
+  </g>
+
+  {/* Pílula de anotação com o ponto amarelo: a mesma construção do "Espaço
+      aberto" de Oportunidades de mercado (ponto a 18 da borda, texto a 30,
+      folga de 18 à direita). */}
+  <g class="dados__nota">
+    <rect x={PX - 74} y="40" width="148" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+    <circle cx={PX - 74 + 18} cy="56" r="2.25" class="a-destaque dados__ponto" />
+    <text x={PX - 74 + 30} y="61" class="a-rotulo dados__nota-texto">Ponto de perda</text>
+  </g>
+</g>
+
+<style>
+  .dados .dados__rotulo { font-size: 14px; }
+  .dados .dados__nota-texto { font-size: 14px; fill: #ecece8; }
+  /* O pedaço que falta é o conceito da cena: tracejado um pouco mais firme
+     que o comum, para ainda se ler no cartão do celular. */
+  .dados .dados__tracejado { stroke-opacity: .24; stroke-dasharray: 2 3; }
+  .dados__fio { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-dasharray: 1; }
+  .dados__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .dados__miolo { fill: #d6d6d1; }
+
+  /* Movimento (entrada, uma vez): as barras sobem da linha de base em
+     cascata (1,4 s cada, 140 ms entre elas); depois o pedaço que falta
+     aparece, o fio sobe até a pílula, a pílula assenta e o ponto acende. */
+  .dados__barra {
+    transform-box: fill-box;
+    animation: dados-sobe 1.4s var(--a-entra) var(--atraso) both;
+  }
+  .dados__perda { animation: dados-aparece 1.2s var(--a-entra) 1.9s both; }
+  .dados__fio { animation: dados-traca 1s var(--a-entra) 2.3s both; }
+  .dados__ancora { animation: dados-aparece 1s var(--a-entra) 2.2s both; }
+  .dados__nota { animation: dados-assenta 1.2s var(--a-entra) 2.7s both; }
+  .dados__ponto { animation: dados-aparece 1.2s var(--a-entra) 3.3s both; }
+
+  @keyframes dados-sobe { from { transform: translateY(calc(100% + 2px)); } }
+  @keyframes dados-aparece { from { opacity: 0; } }
+  @keyframes dados-traca { from { stroke-dashoffset: 1; } }
+  @keyframes dados-assenta { from { opacity: 0; transform: translateY(4px); } }
+</style>

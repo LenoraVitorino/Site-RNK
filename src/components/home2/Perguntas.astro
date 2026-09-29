@@ -1,13 +1,15 @@
 ---
-/** Composição Solutions: título fixo e ganhos em cards ilustrados. */
+/**
+ * Composição Solutions: título fixo e ganhos em cards ilustrados. As duas
+ * versões mostram os sete ganhos (28/09/2026, Lenora: "volte com todas as
+ * opções que tinha"); a do estúdio tinha ficado só com quatro desde 26/09.
+ */
 import ArteBeneficio from './ArteBeneficio.astro';
 import Selo from '../ui/Selo.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 
-
-
-const itens = copyLiteral ? perguntas : perguntas.filter((p) => !('excedente' in p && p.excedente));
+const itens = perguntas;
 const entra = copyLiteral ? '' : 'entra';
 
 ---

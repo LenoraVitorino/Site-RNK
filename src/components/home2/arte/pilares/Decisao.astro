@@ -1,0 +1,106 @@
+---
+/**
+ * Dizemos o que fazer todo mês: um painel "Relatório do mês" com um gráfico
+ * de linha fina (área que some no preto, meses de julho a setembro) e, ao
+ * lado, "Próximos passos", uma lista curta com caixinhas marcadas. Na
+ * entrada, a linha se desenha, a área aparece, o ponto final acende e o
+ * último visto se desenha. Pose estática = pose final; o movimento só parte
+ * dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Painel 432 × 216 (x 104 a 536, y 72 a 288), dentro da área segura do
+   recorte 4:3 (x 80 a 560) com folga de 24. À esquerda, o poço do gráfico
+   (x 120 a 332, y 116 a 272); à direita, a lista (x 352 a 520). As linhas
+   de grade ficam a 16 do alto do poço e a 54 uma da outra (y 132, 186 e
+   240; a última é a base da área), e cada item da lista fica na altura de
+   uma delas. */
+const GRADE = [132, 186, 240];
+const BASE = GRADE[2];
+const meses = [
+  { x: 152, rotulo: 'Jul' },
+  { x: 226, rotulo: 'Ago' },
+  { x: 300, rotulo: 'Set', atual: true },
+];
+/* Pontos da linha; a curva passa por eles (Catmull-Rom em cúbicas). Sobe
+   devagar, hesita no meio e ganha fôlego no último mês. */
+const pts: [number, number][] = [
+  [136, 226], [160, 221], [184, 211], [208, 214], [232, 200],
+  [256, 191], [280, 172], [300, 150],
+];
+const curva = (() => {
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i - 1] ?? pts[i], b = pts[i], c = pts[i + 1], e = pts[i + 2] ?? c;
+    const c1 = [b[0] + (c[0] - a[0]) / 6, b[1] + (c[1] - a[1]) / 6];
+    const c2 = [c[0] - (e[0] - b[0]) / 6, c[1] - (e[1] - b[1]) / 6];
+    d += `C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${c[0]} ${c[1]}`;
+  }
+  return d;
+})();
+const [FX, FY] = pts[pts.length - 1];
+const passos = [
+  { rotulo: 'Ajustar verba por canal' },
+  { rotulo: 'Reativar pacientes' },
+  { rotulo: 'Revisar a agenda', ultimo: true },
+];
+---
+<g class="decisao">
+  <rect width="640" height="360" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Painel. */}
+  <rect x="104" y="72" width="432" height="216" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x="124" y="72.5" width="392" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x="120" y="100" class="a-micro decisao__micro">Relatório do mês</text>
+  <text x="352" y="100" class="a-micro decisao__micro">Próximos passos</text>
+
+  {/* Gráfico num poço rebaixado. */}
+  <rect x="120" y="116" width="212" height="156" rx="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  {GRADE.map((y) => <path class="decisao__grade" d={`M136 ${y + 0.5}H316`} />)}
+  <path class="decisao__area" d={`${curva}L${FX} ${BASE}L136 ${BASE}Z`} fill={`url(#${p}-area)`} />
+  <path class="decisao__queda" d={`M${FX + 0.5} ${FY + 6}V${BASE}`} />
+  <path class="decisao__linha" d={curva} pathLength="1" />
+  <circle class="a-destaque decisao__ponto" cx={FX} cy={FY} r="3" />
+  {meses.map(({ x, rotulo, atual }) => (
+    <text x={x} y="260" text-anchor="middle" class:list={['a-micro', 'decisao__micro', { 'decisao__mes--atual': atual }]}>{rotulo}</text>
+  ))}
+
+  {/* Próximos passos, cada um na altura de uma linha de grade. */}
+  {passos.map(({ rotulo, ultimo }, i) => {
+    const y = GRADE[i];
+    return (
+      <g class="decisao__passo">
+        <rect x="352.5" y={y - 7.5} width="15" height="15" rx="4.5" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+        <path class:list={['decisao__visto', { 'decisao__visto--ultimo': ultimo }]} d={`M356 ${y}l2.8 2.8l5.2-5.6`} pathLength="1" />
+        <text x="380" y={y + 4.5} class="a-rotulo decisao__rotulo">{rotulo}</text>
+      </g>
+    );
+  })}
+</g>
+
+<style>
+  .decisao__grade { fill: none; stroke: #ffffff; stroke-opacity: .06; }
+  .decisao__queda { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-dasharray: 2 4; }
+  .decisao__linha { fill: none; stroke: #ffffff; stroke-opacity: .7; stroke-linecap: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  /* Micro um pouco maior que o comum: no celular a cena larga encolhe mais. */
+  .decisao .decisao__micro { font-size: 11.5px; }
+  .decisao .decisao__mes--atual { fill: #b9b9b4; }
+  .decisao .decisao__rotulo { font-size: 13px; fill: #b9b9b4; }
+  .decisao__visto {
+    fill: none; stroke: #9d9d98; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1 2; stroke-dashoffset: 0;
+  }
+
+  /* Movimento, uma vez, na entrada: a linha se desenha da esquerda para a
+     direita (1,8 s) num traço cadenciado, que acelera e freia (a curva de
+     entrada dispararia no começo); quando ela chega, a área e o fio de queda
+     aparecem, o ponto final acende devagar e, por último, o visto de
+     "Revisar a agenda" se desenha. */
+  .decisao__linha { animation: decisao-desenha 1.8s var(--a-vai-vem) .4s both; }
+  .decisao__area, .decisao__queda { animation: decisao-aparece 1.4s var(--a-entra) 1.9s both; }
+  .decisao__ponto { animation: decisao-aparece 1.2s var(--a-entra) 2.1s both; }
+  .decisao__visto--ultimo { animation: decisao-desenha 1.2s var(--a-entra) 2.5s both; }
+  @keyframes decisao-desenha { from { stroke-dashoffset: 1; } }
+  @keyframes decisao-aparece { from { opacity: 0; } }
+</style>

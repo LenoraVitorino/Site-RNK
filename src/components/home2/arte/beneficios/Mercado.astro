@@ -1,0 +1,119 @@
+---
+/**
+ * Oportunidades de mercado: três órbitas concêntricas em semicírculo que
+ * nascem da linha de baixo, com a pílula "Sua clínica" no centro. Os
+ * concorrentes são anéis pequenos sobre as órbitas; no alto da órbita do
+ * meio, entre dois deles, um trecho tracejado com a pílula "Espaço aberto"
+ * marca a oportunidade (o ponto focal). A órbita de dentro e a de fora giram
+ * muito devagar, em sentidos contrários, levando os seus concorrentes; a do
+ * meio, com o espaço aberto, fica parada. Pose estática = pose final; o
+ * movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Centro das órbitas (no meio da pílula de baixo) e raios, com vão de 40. */
+const OX = 260, OY = 200;
+const R = [96, 136, 176];
+/* Ponto da órbita de raio r no ângulo a (graus, sentido anti-horário a
+   partir da direita). */
+const pt = (r: number, a: number) => {
+  const t = (a * Math.PI) / 180;
+  return [+(OX + r * Math.cos(t)).toFixed(2), +(OY - r * Math.sin(t)).toFixed(2)];
+};
+const arco = (r: number, a1: number, a2: number) => {
+  const [x1, y1] = pt(r, a1), [x2, y2] = pt(r, a2);
+  return `M${x1} ${y1}A${r} ${r} 0 0 0 ${x2} ${y2}`;
+};
+/* Espaço aberto: o trecho da órbita do meio entre os dois concorrentes que
+   o cercam (36° e 144°). A pílula cobre o alto (de 58° a 122°) e o
+   tracejado aparece dos dois lados. */
+const ABRE = 36, FECHA = 144;
+/* Concorrentes das órbitas que giram. Na pose final, cada órbita mostra um
+   só, do lado em que ele desce para a linha de baixo (o de dentro gira no
+   sentido anti-horário e o de fora no horário): nos primeiros quarenta
+   segundos ninguém sobe para o espaço aberto. Os de ângulo negativo ou
+   acima de 180° começam escondidos sob a linha e sobem pelo outro lado,
+   para a órbita não ficar vazia. */
+const dentro = [154, -26];
+const fora = [24, 192];
+/* Pílulas: "Espaço aberto" (144 × 32; ponto a 18 da borda e texto a 30,
+   como a pílula "Ponto de perda" de Decisões baseadas em dados) e "Sua
+   clínica" (128 × 32, num poço de 160 × 48; cantos concêntricos,
+   16 + 8 = 24). */
+const PA = { x: OX - 72, y: OY - R[1] - 16 };
+const PC = { x: OX - 64, y: OY - 16 };
+---
+<g class="mercado">
+  <defs>
+    {/* Cada órbita é mais clara no alto e some ao chegar à linha de baixo. */}
+    {R.map((r, i) => (
+      <linearGradient id={`${p}-orbita-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1={OY - r} x2="0" y2={OY + 12}>
+        <stop stop-color="#ffffff" stop-opacity=".15" />
+        <stop offset=".7" stop-color="#ffffff" stop-opacity=".07" />
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+      </linearGradient>
+    ))}
+    {/* Os concorrentes que giram se apagam ao descer para a linha de baixo. */}
+    <linearGradient id={`${p}-desce`} gradientUnits="userSpaceOnUse" x1="0" y1={OY - 44} x2="0" y2={OY - 8}>
+      <stop stop-color="#ffffff" /><stop offset="1" stop-color="#000000" />
+    </linearGradient>
+    <mask id={`${p}-horizonte`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
+      <rect width="520" height="250" fill={`url(#${p}-desce)`} />
+    </mask>
+  </defs>
+
+  {/* Linha de baixo, que nasce e morre no escuro. */}
+  <rect x="36" y={OY - 0.5} width="448" height="1" fill={`url(#${p}-fio-h)`} />
+
+  {/* Órbitas de dentro e de fora, inteiras; a do meio aberta no alto. */}
+  <circle cx={OX} cy={OY} r={R[2]} stroke={`url(#${p}-orbita-2)`} />
+  <circle cx={OX} cy={OY} r={R[0]} stroke={`url(#${p}-orbita-0)`} />
+  <path d={arco(R[1], -12, ABRE)} stroke={`url(#${p}-orbita-1)`} />
+  <path d={arco(R[1], FECHA, 192)} stroke={`url(#${p}-orbita-1)`} />
+  <path class="mercado__aberto" d={arco(R[1], ABRE, FECHA)} />
+
+  {/* Os dois concorrentes que cercam o espaço aberto ficam parados. */}
+  {[ABRE, FECHA].map((a) => { const [x, y] = pt(R[1], a); return <circle class="mercado__no" cx={x} cy={y} r="4.5" />; })}
+  <g mask={`url(#${p}-horizonte)`}>
+    <g class="mercado__giro mercado__giro--dentro">
+      {dentro.map((a) => { const [x, y] = pt(R[0], a); return <circle class="mercado__no" cx={x} cy={y} r="4.5" />; })}
+    </g>
+    <g class="mercado__giro mercado__giro--fora">
+      {fora.map((a) => { const [x, y] = pt(R[2], a); return <circle class="mercado__no" cx={x} cy={y} r="4.5" />; })}
+    </g>
+  </g>
+
+  {/* Espaço aberto: o foco da cena, com o ponto amarelo. */}
+  <rect x={PA.x} y={PA.y} width="144" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <circle cx={PA.x + 18} cy={PA.y + 16} r="2.25" class="a-destaque" />
+  <text x={PA.x + 30} y={PA.y + 21} class="a-rotulo mercado__aberto-rotulo">Espaço aberto</text>
+
+  {/* Sua clínica, encaixada num poço, na origem das órbitas. */}
+  <rect x={PC.x - 16} y={PC.y - 8} width="160" height="48" rx="24" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x={PC.x} y={PC.y} width="128" height="32" rx="16" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={OX - 24} y={PC.y + 0.5} width="48" height="1" fill={`url(#${p}-fio-h)`} />
+  <g class="a-icone mercado__icone" transform={`translate(${PC.x + 16} ${OY - 8}) scale(.6667)`}>
+    <path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0" />
+    <circle cx="12" cy="10" r="3" />
+  </g>
+  <text x={PC.x + 40} y={OY + 5} class="a-rotulo mercado__clinica">Sua clínica</text>
+</g>
+
+<style>
+  .mercado__aberto { stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 2 4; }
+  .mercado .mercado__no { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .32; }
+  .mercado .mercado__icone { stroke-width: 2.1; stroke: #9d9d98; }
+  .mercado .mercado__clinica { font-size: 14px; fill: #b9b9b4; }
+  .mercado .mercado__aberto-rotulo { font-size: 14px; fill: #ecece8; }
+
+  /* Movimento: a órbita de dentro e a de fora giram sem parar, muito devagar
+     (180 s e 240 s por volta, uns 4 por segundo) e em sentidos contrários,
+     levando os concorrentes: o mercado se mexe. Eles se apagam antes de
+     chegar à linha de baixo e voltam do outro lado. A do meio, com o espaço
+     aberto, fica parada. */
+  .mercado__giro { transform-box: view-box; transform-origin: 260px 200px; }
+  .mercado__giro--dentro { animation: mercado-gira 180s linear infinite reverse; }
+  .mercado__giro--fora { animation: mercado-gira 240s linear infinite; }
+  @keyframes mercado-gira { to { transform: rotate(360deg); } }
+</style>

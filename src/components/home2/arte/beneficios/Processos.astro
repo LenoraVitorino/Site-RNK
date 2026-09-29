@@ -1,0 +1,89 @@
+---
+/**
+ * Processos que funcionam: no centro, o chip do processo (soquete e chip
+ * aninhados, com o ícone de fluxo, sem rótulo: o título do cartão já diz o
+ * que ele é, e a cena fica simétrica); nos cantos, quatro pílulas (Recepção,
+ * Comercial, Gestão, Pós-venda), cada uma com um anel de ancoragem e um
+ * conector fino de canto arredondado até a lateral do chip. Ao fundo, uma
+ * grade apagada e uma linha que some nas pontas. Em laço, um segmento curto
+ * percorre cada conector até o chip, em cascata. Pose estática = pose final;
+ * o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Chip no centro: soquete 80 (raio 22) e chip 64 (raio 14), vão de 8. */
+const CX = 260, CY = 124;
+/* Pílulas de 104 × 32, centradas em x 116 e 404, y 40 e 208. Os conectores
+   descem (ou sobem) da pílula e dobram com raio 12 até o chip, entrando 16
+   acima ou abaixo do centro; todos correm sobre linhas da grade de 16, que
+   passa pelo centro do chip. Cada caminho vai do centro da pílula ao centro
+   do chip: as pontas ficam escondidas, e o segmento nasce e some sob eles. */
+const pilulas = [
+  { rotulo: 'Recepção', x: 116, y: 40, d: 'M116 40V96C116 102.6 121.4 108 128 108H260' },
+  { rotulo: 'Comercial', x: 404, y: 40, d: 'M404 40V96C404 102.6 398.6 108 392 108H260' },
+  { rotulo: 'Pós-venda', x: 404, y: 208, d: 'M404 208V152C404 145.4 398.6 140 392 140H260' },
+  { rotulo: 'Gestão', x: 116, y: 208, d: 'M116 208V152C116 145.4 121.4 140 128 140H260' },
+];
+---
+<g class="processos">
+  <defs>
+    {/* Grade de linhas apagada, de 16, com linhas no centro do chip. */}
+    <pattern id={`${p}-grade`} width="16" height="16" patternUnits="userSpaceOnUse" x={CX - 0.5} y={CY - 0.5}>
+      <path d="M16 .5H0M.5 0V16" fill="none" stroke="#ffffff" stroke-opacity=".04" />
+    </pattern>
+  </defs>
+
+  <rect x="40" y="0" width="440" height="250" fill={`url(#${p}-grade)`} mask={`url(#${p}-esmaece)`} />
+  <rect x="24" y={CY - 0.5} width="472" height="1" fill={`url(#${p}-fio-h)`} />
+
+  {/* Conectores e, por cima, o segmento que percorre cada um. */}
+  {pilulas.map(({ d }) => <path class="processos__conector" d={d} />)}
+  {pilulas.map(({ d }, i) => <path class="processos__percurso" d={d} pathLength="100" style={`--i:${i}`} />)}
+
+  {pilulas.map(({ rotulo, x, y }) => (
+    <g>
+      <rect x={x - 52} y={y - 16} width="104" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+      <text x={x} y={y + 5} text-anchor="middle" class="a-rotulo processos__rotulo">{rotulo}</text>
+      <circle class="processos__anel" cx={x} cy={y < CY ? y + 16 : y - 16} r="3.5" />
+      <circle class="processos__miolo" cx={x} cy={y < CY ? y + 16 : y - 16} r="1.25" />
+    </g>
+  ))}
+
+  {/* Chip do processo, com o fim do fluxo marcado. */}
+  <rect x={CX - 40} y={CY - 40} width="80" height="80" rx="22" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x={CX - 32} y={CY - 32} width="64" height="64" rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={CX - 22} y={CY - 31.5} width="44" height="1" fill={`url(#${p}-fio-h)`} />
+  {/* Ícone de fluxo na grade de 24, em tamanho natural (24 num chip de 64,
+      a mesma proporção dos ícones de 20 nos chips de 56). */}
+  <g class="a-icone processos__icone" transform={`translate(${CX - 12} ${CY - 12})`}>
+    <rect width="8" height="8" x="3" y="3" rx="2" />
+    <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+    <rect width="8" height="8" x="13" y="13" rx="2" />
+  </g>
+  <circle cx={CX + 5} cy={CY + 5} r="1.5" class="a-destaque" />
+</g>
+
+<style>
+  .processos__conector { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .processos__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .processos__miolo { fill: #d6d6d1; }
+  .processos .processos__rotulo { font-size: 14px; }
+  .processos .processos__icone { stroke: #ecece8; stroke-width: 1.4; }
+
+  /* Movimento, em laço de 8 s: um segmento claro e curto sai de cada
+     pílula, passa pelo anel, dobra a esquina e some sob o chip, em 1,8 s,
+     um conector depois do outro no sentido do relógio (0,3 s entre eles,
+     para cada chegada se ler sozinha). Depois, repouso.
+     O caminho vai de centro a centro: até 8% ele está sob a pílula e, a
+     partir de 80,7%, sob o chip. O vão de 192 impede que o traço se repita. */
+  .processos__percurso {
+    fill: none; stroke: #ffffff; stroke-opacity: .75; stroke-linecap: round;
+    stroke-dasharray: 8 192; stroke-dashoffset: -100;
+    animation: processos-percorre 8s var(--a-vai-vem) calc(.6s + var(--i) * .3s) infinite both;
+  }
+  @keyframes processos-percorre {
+    0% { stroke-dashoffset: 0; }
+    22.5%, 100% { stroke-dashoffset: -81; }
+  }
+</style>
