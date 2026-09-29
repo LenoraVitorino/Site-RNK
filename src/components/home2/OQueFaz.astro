@@ -1,19 +1,13 @@
 ---
 /**
- * Método editorial (28/09, referência Cine Casero / Awwwards): no alto, uma
- * faixa de cabeçalho — título, parágrafo e o número — sob um fio; embaixo,
- * a galeria em escada com o vídeo no centro e as fotos da sede diminuindo
- * para as bordas, na mesma linha de base. Por trás da galeria passa a faixa
- * amarela do R da parede do salão, que só aparece nos vãos e sobe numa curva
- * na margem direita. Textos por versão.
+ * Método editorial (28/09, referência Aura): vídeo no centro, título no alto
+ * à esquerda, parágrafo embaixo à direita e um número só, grande e subindo,
+ * no canto inferior esquerdo. O R da parede da sede, em faixa grossa, ocupa o
+ * vão do meio para a direita: a haste fica atrás do vídeo; barra, barriga e
+ * perna aparecem na coluna da direita, acima do parágrafo. Textos por versão.
  */
-import { Image } from 'astro:assets';
 import Telefone from '../ui/Telefone.astro';
 import Selo from '../ui/Selo.astro';
-import cafe from '../../assets/sede/cafe.jpg';
-import equipe from '../../assets/sede/equipe.jpg';
-import operacao from '../../assets/sede/operacao.jpg';
-import salaVidro from '../../assets/sede/sala-vidro.jpg';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
@@ -21,13 +15,18 @@ import { numerosProva } from '../../data/home';
 
 const SOBRE_NA_HOME = false;
 
-// Só o primeiro número, na ponta direita do cabeçalho.
+// Só o primeiro número, grande, no canto inferior esquerdo.
 const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0, 1).map(n => {
   const [, prefixo, valor, sufixo] = n.valor.match(/^(.*?)(\d+)(.*)$/)!;
   return { ...n, prefixo, alvo: Number(valor), sufixo };
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
+  {/* O R da parede do salão, em faixa grossa, no vão do meio para a direita (só desktop). */}
+  <svg class="metodo__r" viewBox="0 0 1000 500" fill="none" aria-hidden="true" focusable="false">
+    <path class="metodo__r-traco" pathLength="1" d="M868 32 A100 100 0 0 1 968 132 V192 A100 100 0 0 1 868 292 H32 M868 32 H32 V500" />
+    <path class="metodo__r-traco metodo__r-perna" pathLength="1" d="M760 292 L880 500" />
+  </svg>
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -61,24 +60,8 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
           </ul>
         </div>
       </div>
-      {/* Galeria em escada: fotos da sede (só desktop) em volta do vídeo. */}
-      <div class="metodo__galeria">
-        <span class="metodo__faixa" aria-hidden="true"></span>
-        <figure class="metodo__foto metodo__foto--p metodo__foto--esq">
-          <Image src={equipe} alt="Salão da sede da Renke, com o time nas estações de trabalho" format="webp" quality={72} widths={[240, 480]} sizes="200px" loading="lazy" />
-        </figure>
-        <figure class="metodo__foto metodo__foto--m metodo__foto--esq metodo__foto--cafe">
-          <Image src={cafe} alt="Área do café da Renke, com o R iluminado na parede" format="webp" quality={72} widths={[320, 640]} sizes="300px" loading="lazy" />
-        </figure>
-        <div class="metodo__midia">
-          <Telefone />
-        </div>
-        <figure class="metodo__foto metodo__foto--m metodo__foto--dir">
-          <Image src={operacao} alt="Escritório da Renke com a equipe nas estações de trabalho e o R da marca na parede" format="webp" quality={72} widths={[320, 640]} sizes="300px" loading="lazy" />
-        </figure>
-        <figure class="metodo__foto metodo__foto--p metodo__foto--dir">
-          <Image src={salaVidro} alt="Sala de reunião com divisória de vidro e palavras em amarelo na parede" format="webp" quality={72} widths={[240, 480]} sizes="200px" loading="lazy" />
-        </figure>
+      <div class="metodo__midia">
+        <Telefone />
       </div>
     </div>
   </div>
