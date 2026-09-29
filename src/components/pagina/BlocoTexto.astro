@@ -104,26 +104,28 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     </div>
   ) : bloco.selo ? (
     /* Com selo (Faça Parte, GPTW, 29/09/2026): dobra clara, sem foto, com
-       grão leve andando devagar. No centro, o título grande com o selo
-       pequeno na 1ª linha, o texto, os botões e os pilares logo abaixo. */
+       grão leve andando devagar. No centro, o título; abaixo, o selo no
+       início do subtítulo; os botões e os pilares perto, num bloco só. */
     <>
       <div class="container int-gptw">
         <div class="int-gptw__miolo">
-          <div class="int-gptw__cabeca entra">
-            {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não
-                ornamento. Dentro da 1ª linha do título, antes da 1ª palavra: anda
-                com o texto centrado. alt vazio: o texto logo abaixo já diz a
-                certificação, e o nome do selo não deve entrar no título. */}
-            <h2 id={secao.tituloId} class="titulo int-gptw__titulo">
-              <Image
-                class="int-gptw__selo"
-                src={seloGptw}
-                alt=""
-                widths={[48, 96, 144]} sizes="48px" format="webp" quality={90} loading="eager"
-              />{realceAntes}{bloco.realce && titulo?.endsWith(bloco.realce) && <span class="int-gptw__realce">{bloco.realce}</span>}
-            </h2>
+          <h2 id={secao.tituloId} class="titulo int-gptw__titulo entra">
+            {realceAntes}{bloco.realce && titulo?.endsWith(bloco.realce) && <span class="int-gptw__realce">{bloco.realce}</span>}
+          </h2>
+          {/* O selo no início do subtítulo, na altura das duas linhas do texto:
+              credencial junto do que ela comprova, sem disputar com o título.
+              Selo oficial nas cores da marca GPTW, sem filtro. */}
+          <div class="int-gptw__apoio entra" style="--i:1">
+            <Image
+              class="int-gptw__selo"
+              src={seloGptw}
+              alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
+              widths={[48, 96, 144]} sizes="48px" format="webp" quality={90} loading="lazy"
+            />
+            <div class="int-gptw__textos">
+              {paragrafos.map((p) => <p class:list={['int-gptw__texto', classeDe(p)]} set:html={p} />)}
+            </div>
           </div>
-          {paragrafos.map((p) => <p class:list={['int-gptw__texto entra', classeDe(p)]} style="--i:1" set:html={p} />)}
           {bloco.acoes && (
             <div class="int-gptw__acoes entra" style="--i:2">
               {bloco.acoes.map((acao, i) => (
@@ -205,7 +207,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   /* overflow: o grão passa das bordas e não pode criar rolagem lateral. */
   .int-texto--gptw {
     position: relative; overflow: hidden; isolation: isolate;
-    padding-block: clamp(112px, 12vw, 176px);
+    padding-block: clamp(84px, 9vw, 132px) clamp(112px, 12vw, 176px);   /* em cima, ~25% menos */
     background: #f7f6f2;   /* branco quente, mais claro que o papel das outras dobras */
   }
 
@@ -221,24 +223,29 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   .int-gptw { display: grid; }
   .int-gptw__miolo { display: grid; justify-items: center; text-align: center; }
 
-  /* O título no centro; o selo pequeno na 1ª linha, antes da 1ª palavra,
-     na altura das maiúsculas. */
-  .int-gptw__titulo :global(.int-gptw__selo) {
-    display: inline-block; width: auto; height: .78em;
-    margin-right: .28em; vertical-align: -.04em;
-  }
+  /* O título: grande, mas numa escala que quebra em duas linhas parelhas
+     no desktop ("Um lugar para trabalhar / e evoluir." fica desigual). */
   .int-gptw__titulo {
-    margin: 0; max-width: 16ch;
-    font-size: clamp(40px, 5.6vw, 84px); font-weight: 280; line-height: 1.02; letter-spacing: -.05em;
+    margin: 0; max-width: 14ch;
+    font-size: clamp(40px, 5vw, 76px); font-weight: 280; line-height: 1.03; letter-spacing: -.05em;
     color: var(--int-tinta); text-wrap: balance;
   }
+
+  /* Selo e subtítulo lado a lado, o bloco centrado e o texto alinhado à
+     esquerda, com o selo na altura das duas linhas. */
+  .int-gptw__apoio {
+    display: flex; align-items: center; gap: clamp(16px, 1.6vw, 22px);
+    margin-top: clamp(24px, 2.4vw, 32px); text-align: start;
+  }
+  .int-gptw__apoio :global(.int-gptw__selo) { display: block; flex: none; width: clamp(38px, 3vw, 44px); height: auto; }
+  .int-gptw__textos { display: grid; gap: 12px; }
   .int-gptw__texto {
-    margin: clamp(24px, 2.4vw, 32px) 0 0; max-width: 64ch;   /* duas linhas no desktop */
-    font-size: clamp(17px, 1.4vw, 19px); line-height: 1.6; color: var(--int-apoio); text-wrap: balance;
+    margin: 0; max-width: 50ch;
+    font-size: clamp(16px, 1.3vw, 18px); line-height: 1.6; color: var(--int-apoio); text-wrap: pretty;
   }
 
   /* Botões: o principal em preto, o secundário só com borda fina. */
-  .int-gptw__acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: clamp(32px, 3vw, 44px); }
+  .int-gptw__acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: clamp(28px, 2.6vw, 36px); }
   .int-gptw__acoes :global(.botao.int-gptw__principal) { background: #1c1c1a; color: var(--papel); border-color: #1c1c1a; }
   .int-gptw__acoes :global(.botao.int-gptw__principal:hover) { background: #2e2e2b; border-color: #2e2e2b; color: var(--papel); }
   /* A borda do secundário é uma sombra interna: o sem-contornos.css zera
@@ -249,7 +256,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   /* Os pilares logo abaixo dos botões, numa faixa curta sob um fio. */
   .int-gptw__indicadores {
     list-style: none; justify-self: center; width: min(100%, 760px);
-    margin: clamp(48px, 5vw, 72px) 0 0; padding: 24px 0 0;
+    margin: clamp(40px, 4vw, 56px) 0 0; padding: 22px 0 0;
     display: flex; flex-wrap: wrap; justify-content: center; gap: 12px clamp(28px, 4vw, 56px);
     border-top: 1px solid rgb(28 28 26 / .14);
     font-size: 15px; font-weight: 400; line-height: 1.3; color: #1c1c1a;
@@ -258,8 +265,9 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   .int-gptw__indicadores :global(svg) { flex: none; color: #1c1c1a; }
 
   @media (max-width: 599.98px) {
-    .int-texto--gptw { padding-top: 88px; }
-    .int-gptw__miolo, .int-gptw__cabeca { justify-items: start; text-align: start; }
+    .int-texto--gptw { padding-top: 72px; }
+    .int-gptw__miolo { justify-items: start; text-align: start; }
+    .int-gptw__apoio { align-items: flex-start; }
     .int-gptw__acoes { flex-direction: column; align-self: stretch; width: 100%; }
     .int-gptw__acoes :global(.botao) { width: 100%; }
     .int-gptw__indicadores { flex-direction: column; align-items: flex-start; justify-self: stretch; }
