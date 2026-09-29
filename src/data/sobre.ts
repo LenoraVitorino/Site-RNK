@@ -180,10 +180,11 @@ export const cultura = {
   frase: copyLiteral
     /** Recorte literal do começo do 2º parágrafo (faca-parte.ts:38). */
     ? 'Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas.'
-    : 'Nossa filosofia é simples: uma empresa forte é construída por pessoas que têm espaço para crescer, autonomia para agir e responsabilidade pelo que constroem.',   // revisão de 29/09/2026
+    : 'Uma empresa forte é construída por pessoas com espaço para crescer, autonomia para agir e responsabilidade pelo que constroem.',   // revisão de 29/09/2026
   /** Só os títulos dos quatro valores (faca-parte.ts:43-51). */
   valores: ['Liberdade', 'Autorresponsabilidade', 'Conexão', 'Evolução'] as const,
-  link: { rotulo: 'Faça Parte', rota: '/faca-parte' },   // rótulo do nav.ts
+  /** Só na versão copy: na estudio a dobra fecha nos valores, sem CTA (29/09/2026). */
+  link: copyLiteral ? { rotulo: 'Faça Parte', rota: '/faca-parte' } : undefined,   // rótulo do nav.ts
 };
 
 /* ------------------------------------------------------------------ */

@@ -5,7 +5,7 @@
  *
  * 29/09/2026 (nas duas versões): uma coluna só, no centro da página. O H2
  * pequeno em cima (antes ficava sozinho à esquerda), a frase, os valores
- * separados por pontos finos e o link. O selo #TEAMRENKE só existe na
+ * separados por pontos finos e, só na versão copy, o link Faça Parte. O selo #TEAMRENKE só existe na
  * versão copy (cultura.rotulo); na estudio saiu. Abaixo de 600px o texto
  * alinha à esquerda, para a frase longa não virar uma coluna centrada.
  *
@@ -35,10 +35,12 @@ const comFoto = !!fotos.cultura.foto;
       <ul class="sb-cultura__valores" role="list">
         {cultura.valores.map((v) => <li>{v}</li>)}
       </ul>
-      <a class="sb-cultura__link" href={cultura.link.rota}>
-        <span>{cultura.link.rotulo}</span>
-        <Icone nome="ArrowUpRight" size={16} />
-      </a>
+      {cultura.link && (
+        <a class="sb-cultura__link" href={cultura.link.rota}>
+          <span>{cultura.link.rotulo}</span>
+          <Icone nome="ArrowUpRight" size={16} />
+        </a>
+      )}
     </div>
     {comFoto && (
       <div class="sb-cultura__foto entra" style="--i:2">
