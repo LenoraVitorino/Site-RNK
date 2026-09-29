@@ -1,6 +1,11 @@
 import type { Pagina } from './tipos';
+import { copyLiteral } from '../versao';
 
-/** Copy literal de docs/03-copy/contato.md */
+/**
+ * Copy literal de docs/03-copy/contato.md. A versão estudio (padrão) tira o
+ * bloco "Informações · Grupo RNK", que repetia endereço, e-mail e redes do
+ * rodapé logo abaixo (29/09/2026); a VERSAO=copy mantém.
+ */
 export const contato: Pagina = {
   rota: '/contato',
   titulo: 'Contato | Renke — Revenue Operations, Academy e Soluções Digitais',
@@ -67,16 +72,11 @@ export const contato: Pagina = {
         },
       ],
     },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'O schema declara FAQ com 5 perguntas, mas só 4 foram transcritas. Falta uma. E o telefone/WhatsApp não foi informado, apesar de o rodapé e o sitemap preverem.',
-    },
-    {
-      tipo: 'texto',
+    ...(copyLiteral ? [{
+      tipo: 'texto' as const,
       eyebrow: 'Informações',
       h2: 'Grupo RNK',
-      fundo: 'alt',
+      fundo: 'alt' as const,
       paragrafos: [
         '<strong>Endereço:</strong> R. Benjamin Constant, 2364 · Sala Térrea, Escola Agrícola · Blumenau/SC · CEP 89035-100',
         '<strong>E-mail:</strong> <a href="mailto:contato@renkestudio.com.br">contato@renkestudio.com.br</a>',
@@ -84,6 +84,6 @@ export const contato: Pagina = {
         '<strong>Horário de atendimento:</strong> segunda a sexta, 08h às 12h | 13h30 às 17h. Sábados e domingos sem atendimento.',
         '<strong>Redes:</strong> <a href="https://instagram.com/renkestudio">Instagram</a> · LinkedIn · YouTube',
       ],
-    },
+    }] : []),
   ],
 };
