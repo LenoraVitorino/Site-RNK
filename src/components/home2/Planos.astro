@@ -29,12 +29,13 @@ const icone = (label: string) => {
   return existsSync(join(__RAIZ__, 'public', 'icones', arq)) ? `/icones/${arq}` : null;
 };
 const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
+import SeloRevena from '../ui/SeloRevena.astro';
 ---
 <section class="planos" id="planos" data-planos aria-label="Os planos do Protocolo Revena">
   <div class="planos__fixo">
     <div class="planos__trilho" data-planos-trilho>
       <div class="planos__abre">
-        <p class="rotulo">Protocolo Revena</p>
+        <SeloRevena class="rotulo" tom="escuro">Protocolo Revena</SeloRevena>
         <h2 class="planos__titulo">
           Estruturamos sua operação do zero e operamos juntos no longo prazo.
           <strong>Qual é o momento da sua clínica?</strong>

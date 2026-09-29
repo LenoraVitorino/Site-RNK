@@ -1,0 +1,46 @@
+---
+/**
+ * Selo "Protocolo Revena": pílula arredondada como o selo da hero, com a
+ * marca numa bolinha escura à esquerda. Sombra suave saindo para baixo e para
+ * a esquerda, a partir da bolinha (referência "View more", espelhada).
+ * tom="claro" sobre papel (palco dos planos); tom="escuro" sobre o painel.
+ */
+import LogoRevena from './LogoRevena.astro';
+
+interface Props {
+  tag?: 'h2' | 'p';
+  id?: string;
+  class?: string;
+  tom?: 'claro' | 'escuro';
+}
+const { tag: Tag = 'p', id, class: classe, tom = 'claro' } = Astro.props;
+---
+<Tag class:list={['selo-revena', `selo-revena--${tom}`, classe]} id={id}>
+  <span class="selo-revena__marca" aria-hidden="true"><LogoRevena /></span>
+  <span class="selo-revena__texto"><slot /></span>
+</Tag>
+
+<style>
+  .selo-revena {
+    display: inline-flex; align-items: center; gap: 14px;
+    margin: 0; padding: 6px 24px 6px 6px; border-radius: 999px;
+    font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 1.2;
+    letter-spacing: -.01em; text-transform: none; white-space: nowrap;
+  }
+  .selo-revena--claro {
+    background: #fff; color: #252523;
+    box-shadow: 0 0 0 1px rgb(22 22 22 / .07), -16px 22px 44px -22px rgb(22 22 22 / .32);
+  }
+  .selo-revena--escuro {
+    background: rgb(15 17 17 / .85); color: var(--papel);
+    box-shadow: 0 0 0 1px rgb(242 242 238 / .1), -16px 22px 44px -22px rgb(0 0 0 / .7);
+  }
+  .selo-revena__marca {
+    display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #3a3a3a, #121212 72%);
+    /* Anel claro e o brilho escuro caindo da bolinha, como na referência. */
+    box-shadow: 0 0 0 3px rgb(255 255 255 / .55), -6px 12px 26px -6px rgb(22 22 22 / .5);
+  }
+  .selo-revena--escuro .selo-revena__marca { box-shadow: 0 0 0 3px rgb(242 242 238 / .08), -6px 12px 26px -6px rgb(0 0 0 / .8); }
+  .selo-revena__marca :global(svg) { width: 56%; height: 56%; }
+</style>

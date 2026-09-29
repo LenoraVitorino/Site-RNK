@@ -1,0 +1,22 @@
+---
+/**
+ * Marca do Protocolo Revena, redesenhada em vetor a partir do PNG (28/09/2026):
+ * quatro divisas com as pontas voltadas para o centro, formando um X aberto.
+ * As de cima e de baixo em branco, as das laterais em amarelo. Cada divisa são
+ * duas barras a 45° com cantos levemente arredondados; as quatro são a mesma
+ * divisa girada de 90 em 90 graus.
+ */
+interface Props { class?: string }
+const { class: classe } = Astro.props;
+
+// Uma divisa (a de cima): duas barras de 118,8 × 34 que se juntam na ponta (V).
+const divisa = `
+  <rect x="-59.4" y="-17" width="118.8" height="34" rx="5" transform="translate(-46 -84) rotate(45)" />
+  <rect x="-59.4" y="-17" width="118.8" height="34" rx="5" transform="translate(46 -84) rotate(-45)" />`;
+---
+<svg class:list={['logo-revena', classe]} viewBox="-150 -150 300 300" aria-hidden="true" focusable="false">
+  <g fill="#FFFFFF" set:html={divisa} />
+  <g fill="#FFFFFF" transform="rotate(180)" set:html={divisa} />
+  <g style="fill: var(--destaque, #FFD103)" transform="rotate(90)" set:html={divisa} />
+  <g style="fill: var(--destaque, #FFD103)" transform="rotate(270)" set:html={divisa} />
+</svg>
