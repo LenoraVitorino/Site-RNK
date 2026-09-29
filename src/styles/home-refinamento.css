@@ -346,11 +346,11 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 4; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
   .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 9 / -1; grid-row: 3; align-self: start; max-width: none; padding: 20px 0 0 max(0px, calc(100% - 34ch)); font-size: 16px; }   /* fio na coluna inteira; o texto em 34ch (seis linhas) encostado no limite direito */
   /* Fotos da sede nos vãos, presas à grade: à esquerda, retângulo vertical
-     (colunas 2–4, colada ao vídeo) entre o título e o número; à direita, retângulo horizontal
+     (colunas 1–3, na margem do título) entre o título e o número; à direita, retângulo horizontal
      (colunas 9–12) no alto, espelhando o título. Diagonal com o vídeo no meio. */
   .home-refinada .metodo-editorial .metodo__foto { display: block; }
-  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 2 / span 3; grid-row: 2; align-self: stretch; min-height: 0; }   /* 3 colunas, colada ao vídeo; ocupa a faixa do meio inteira */
-  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; aspect-ratio: 3 / 2; }   /* desce até a base da faixa do meio, alinhada à base da foto do café; 1/3 não estica a linha do título */
+  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 1 / span 3; grid-row: 2; align-self: stretch; min-height: 0; }   /* colunas 1–3, na margem do título; ocupa a faixa do meio inteira */
+  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 9 / -1; grid-row: 2; align-self: start; aspect-ratio: 3 / 2; }   /* topo alinhado ao da foto do café, sobre a barra do meio do R */
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
