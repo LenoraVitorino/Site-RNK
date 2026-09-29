@@ -1,206 +1,163 @@
 ---
 /**
- * Construímos seu posicionamento: o mapa do mercado em dois eixos, aberto
- * como uma prancha de estudo, com réguas finas. Os concorrentes se amontoam
- * no quadrante acessível e generalista, cada um com a etiqueta do que
- * comunica ("Promoção", "Preço baixo"...). O quadrante oposto é território
- * livre, hachurado como numa planta, e segue além das bordas do cartão. A
- * clínica saiu do meio do grupo (fica o anel do lugar antigo e o rastro) e
- * assentou nele; sobre o mapa, a chamada com a tese dela. Na entrada, as
- * etiquetas aparecem em cascata, o marcador atravessa o mapa numa curva e a
- * tese sobe. Pose estática = pose final; o movimento só parte dela.
+ * Construímos seu posicionamento: a análise de concorrência, como uma
+ * tabela de verdade. Três clínicas da região (anônimas), com o que cada uma
+ * comunica e onde investe. As mensagens delas estão grifadas juntas, com a
+ * nota "Todos falam de preço"; logo abaixo, a linha hachurada da brecha,
+ * "Ninguém fala de resultado". Sobre ela, a tese da clínica, com o ponto
+ * amarelo. Na entrada, as linhas aparecem em cascata, o grifo se desenha, a
+ * brecha aparece e a tese sobe. Pose estática = pose final; o movimento só
+ * parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Cruz dos eixos em (264, 200), à esquerda do centro: sobra mais mapa para
-   a brecha. Os eixos seguem até as bordas e se apagam nelas; os rótulos
-   ficam nos dois quadrantes vazios. O essencial cabe na área segura do
-   celular (x 80 a 560). */
-const EX = 264, EY = 200;
-/* Concorrentes: cada um é uma etiqueta do que comunica (pílula de 24 com o
-   ponto do concorrente a 12 da borda e o texto em Inter 13 a 22; largura
-   medida + 34), amontoadas em zigue-zague irregular. */
-const etiquetas = [
-  { x: 96, y: 214, fala: 'Promoção', w: 96 },
-  { x: 136, y: 248, fala: 'Preço baixo', w: 106 },
-  { x: 104, y: 282, fala: 'Pacote', w: 76 },
-  { x: 120, y: 316, fala: 'Parcelamento', w: 118 },
-];
-/* A clínica: sai de G (no meio do grupo) e assenta em M, na brecha. */
-const G = { x: 212, y: 294 };
-const M = { x: 428, y: 144 };
-/* O marcador anda com dois <g> aninhados: X numa curva que corre na
-   primeira metade e Y numa que corre na segunda, então ele sai do grupo na
-   horizontal e sobe até a brecha. As duas partem devagar (nada de arranque)
-   e assentam amortecidas. O rastro é a mesma curva, amostrada. */
-const curvaX = [.35, .15, .2, 1], curvaY = [.65, 0, .35, 1];
-const bezier = ([ax, ay, bx, by]: number[]) => (t: number) => {
-  let lo = 0, hi = 1, s = t;
-  for (let i = 0; i < 40; i++) {
-    s = (lo + hi) / 2;
-    const x = 3 * (1 - s) ** 2 * s * ax + 3 * (1 - s) * s * s * bx + s ** 3;
-    if (x < t) lo = s; else hi = s;
-  }
-  return 3 * (1 - s) ** 2 * s * ay + 3 * (1 - s) * s * s * by + s ** 3;
+/* Janela: canto em (96, 28), segue além do viewBox pela direita e por
+   baixo. Cabeçalho de 44. Conteúdo a 24 da borda (x 120), dentro da área
+   segura do celular (x 80 a 560). */
+const WX = 96, WY = 28;
+/* Colunas: "Concorrente", "Comunica" e "Investe em". Linhas de 40 a
+   partir de y 112. Pílulas de 24 (raio 12), largura = texto medido em
+   Inter 13 / 500 mais 12 de cada lado. A coluna "Investe em" começa no
+   mesmo eixo do cartão da tese (x 396). */
+const C0 = 120, C1 = 216, C2 = 396;
+const L0 = 112, LH = 40;
+const largura: Record<string, number> = {
+  'Preço baixo': 72.5, Pacotes: 49.5, 'Promoção': 62.7, Instagram: 61.6, Google: 44,
 };
-const fx = bezier(curvaX), fy = bezier(curvaY);
-const rastro = 'M' + Array.from({ length: 49 }, (_, k) => {
-  const t = k / 48;
-  return `${(G.x + (M.x - G.x) * fx(t)).toFixed(1)} ${(G.y + (M.y - G.y) * fy(t)).toFixed(1)}`;
-}).join('L');
-/* Brecha: o quadrante exclusivo e especialista, a 24 dos eixos, hachurado
-   e seguindo além da borda de cima e da direita. A tese é uma chamada
-   presa ao marcador por um fio curto, dentro da brecha. */
-const BX = 288, BY = 176, BR = 20;
-const brecha = `M${BX} -24V${BY - BR}A${BR} ${BR} 0 0 0 ${BX + BR} ${BY}H672V-24Z`;
-const TW = 232, TH = 56, TX = M.x - TW / 2, TY = 56;
-/* Réguas: marcas de 4 a cada 32, contadas a partir da cruz. */
-const reguaH = Array.from({ length: 19 }, (_, i) => 24 + i * 32).filter((x) => x !== EX).map((x) => `M${x + 0.5} ${EY - 2}v4`).join('');
-const reguaV = Array.from({ length: 11 }, (_, i) => 8 + i * 32).filter((y) => y !== EY).map((y) => `M${EX - 2} ${y + 0.5}h4`).join('');
+const pilula = (t: string) => Math.round(largura[t] + 24);
+const linhas = [
+  { nome: 'Clínica A', fala: 'Preço baixo', canal: 'Instagram' },
+  { nome: 'Clínica B', fala: 'Pacotes', canal: 'Google' },
+  { nome: 'Clínica C', fala: 'Promoção', canal: 'Instagram' },
+];
+const centro = (i: number) => L0 + LH * i + LH / 2;
+/* Grifo: um contorno só em volta das três mensagens, a 5 das pílulas
+   (raio concêntrico 17). */
+const G = { x: C1 - 5, y: centro(0) - 17, w: pilula('Preço baixo') + 10, h: centro(2) - centro(0) + 34 };
+/* Desenhado como path (e não rect) para o pathLength valer em todo
+   navegador; começa no alto, à esquerda, e corre no sentido horário. */
+const grifo = (() => {
+  const x = G.x + 0.5, y = G.y + 0.5, w = G.w - 1, h = G.h - 1, r = 16.5;
+  return `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
+})();
+/* Brecha: a linha que falta na tabela, hachurada e tracejada. */
+const B = { x: 108, y: 270, w: 420, h: 40 };
+/* Tese: o cartão pousado sobre o fim da brecha, centrado na altura dela
+   (o alto dele na linha de base de "Todos falam de preço"), no eixo da
+   coluna "Investe em" e a 16 da borda da área segura. */
+const T = { x: C2, y: 248, w: 148, h: 84 };
 ---
 <g class="posicionamento">
   <defs>
-    <linearGradient id={`${p}-fio-v`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".14" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    {/* As réguas somem nas pontas, como os eixos. */}
-    <linearGradient id={`${p}-some-h`} gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="616" y2="0">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".45" stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    <linearGradient id={`${p}-some-v`} gradientUnits="userSpaceOnUse" x1="0" y1="12" x2="0" y2="348">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    <mask id={`${p}-regua-h`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
-      <rect width="640" height="360" fill={`url(#${p}-some-h)`} />
-    </mask>
-    <mask id={`${p}-regua-v`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
-      <rect width="640" height="360" fill={`url(#${p}-some-v)`} />
-    </mask>
-    {/* Hachura da brecha, a 45°, e a máscara que a abre em volta do nome. */}
+    {/* Hachura da brecha (a mesma do espaço aberto do Mercado), vazada em
+        volta dos textos. */}
     <pattern id={`${p}-hachura`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width=".8" height="6" fill="#ffffff" fill-opacity=".065" />
+      <rect width=".8" height="6" fill="#ffffff" fill-opacity=".08" />
     </pattern>
-    <mask id={`${p}-vazado`} maskUnits="userSpaceOnUse" x="0" y="-40" width="700" height="260">
-      <rect x="0" y="-40" width="700" height="260" fill="#ffffff" />
-      <rect x={BX + 8} y={BY - 30} width="60" height="22" rx="4" fill="#000000" />
-    </mask>
-    {/* O rastro aparece junto com o marcador. */}
-    <mask id={`${p}-rastro`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
-      <path class="posicionamento__revela" d={rastro} pathLength="1" />
+    <mask id={`${p}-vazado`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
+      <rect width="640" height="360" fill="#ffffff" />
+      <rect x={C0 - 4} y={B.y + 9} width="52" height="22" rx="4" fill="#000000" />
+      <rect x={C1 - 4} y={B.y + 9} width="170" height="22" rx="4" fill="#000000" />
     </mask>
   </defs>
 
-  {/* Eixos, réguas e rótulos. */}
-  <rect x="24" y={EY - 0.5} width="592" height="1" fill={`url(#${p}-fio-h)`} />
-  <rect x={EX - 0.5} y="12" width="1" height="336" fill={`url(#${p}-fio-v)`} />
-  <path class="posicionamento__regua" d={reguaH} mask={`url(#${p}-regua-h)`} />
-  <path class="posicionamento__regua" d={reguaV} mask={`url(#${p}-regua-v)`} />
-  <text x="96" y={EY - 12} class="posicionamento__eixo">Generalista</text>
-  <text x="544" y={EY + 22} text-anchor="end" class="posicionamento__eixo">Especialista</text>
-  <text x={EX - 12} y="40" text-anchor="end" class="posicionamento__eixo">Exclusivo</text>
-  <text x={EX + 12} y="340" class="posicionamento__eixo">Acessível</text>
+  {/* Janela do produto, recortada pela borda. */}
+  <rect x={WX} y={WY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={WX + 16} y={WY + 0.5} width="400" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x={C0} y="55" class="posicionamento__trilha">Posicionamento</text>
+  <text x="225" y="55" class="posicionamento__barra">/</text>
+  <text x="237" y="55" class="posicionamento__titulo">Análise de concorrência</text>
+  <text x={T.x + T.w} y="55" text-anchor="end" class="posicionamento__quando">Atualizada hoje</text>
+  <rect x={WX} y={WY + 44} width="600" height="1" class="posicionamento__divisa" />
 
-  {/* A brecha: território livre, além das bordas. */}
-  <g class="posicionamento__brecha">
-    <path d={brecha} fill={`url(#${p}-hachura)`} mask={`url(#${p}-vazado)`} />
-    <path d={brecha} class="posicionamento__brecha-borda" />
-    <text x={BX + 16} y={BY - 14} class="posicionamento__brecha-nome">Brecha</text>
-  </g>
+  {/* Cabeçalho da tabela. */}
+  <text x={C0} y="96.5" class="posicionamento__coluna">Concorrente</text>
+  <text x={C1} y="96.5" class="posicionamento__coluna">Comunica</text>
+  <text x={C2} y="96.5" class="posicionamento__coluna">Investe em</text>
+  <rect x={WX} y={L0} width="600" height="1" class="posicionamento__divisa" />
 
   {/* Concorrentes. */}
-  {etiquetas.map(({ x, y, fala, w }, i) => (
-    <g class="posicionamento__surge" style={`--i:${i}`}>
-      <rect x={x} y={y} width={w} height="24" rx="12" class="posicionamento__etiqueta" />
-      <circle cx={x + 12} cy={y + 12} r="3" class="posicionamento__ponto" />
-      <text x={x + 22} y={y + 16.5} class="posicionamento__fala">{fala}</text>
-    </g>
-  ))}
-
-  {/* Onde a clínica estava, e o caminho até a brecha. */}
-  <circle class="posicionamento__antes" cx={G.x} cy={G.y} r="9" />
-  <path class="posicionamento__rastro" d={rastro} mask={`url(#${p}-rastro)`} />
-
-  {/* Sua clínica. */}
-  <g class="posicionamento__marcador">
-    <g class="posicionamento__anda-x">
-      <g class="posicionamento__anda-y">
-        <circle cx={M.x} cy={M.y} r="14" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
-        <circle cx={M.x} cy={M.y} r="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-        <circle cx={M.x} cy={M.y} r="3" class="posicionamento__miolo" />
-        <circle cx={M.x} cy={M.y} r="3" class="a-destaque posicionamento__acende" />
+  {linhas.map(({ nome, fala, canal }, i) => {
+    const c = centro(i);
+    return (
+      <g class="posicionamento__linha" style={`--i:${i}`}>
+        {i > 0 && <rect x={WX} y={L0 + LH * i} width="600" height="1" class="posicionamento__divisa posicionamento__divisa--fina" />}
+        <text x={C0} y={c + 4.8} class="posicionamento__nome">{nome}</text>
+        <rect x={C1} y={c - 12} width={pilula(fala)} height="24" rx="12" class="posicionamento__pilula" />
+        <text x={C1 + pilula(fala) / 2} y={c + 4.5} text-anchor="middle" class="posicionamento__pilula-texto">{fala}</text>
+        {/* O canal é contexto: fica um tom abaixo das mensagens. */}
+        <rect x={C2} y={c - 12} width={pilula(canal)} height="24" rx="12" class="posicionamento__pilula posicionamento__pilula--canal" />
+        <text x={C2 + pilula(canal) / 2} y={c + 4.5} text-anchor="middle" class="posicionamento__pilula-texto posicionamento__pilula-texto--canal">{canal}</text>
       </g>
-    </g>
+    );
+  })}
+
+  {/* O padrão: as três mensagens grifadas juntas. */}
+  <path d={grifo} pathLength="1" class="posicionamento__grifo" />
+  <text x={C1} y={T.y} class="posicionamento__nota">Todos falam de preço</text>
+
+  {/* A brecha. */}
+  <g class="posicionamento__brecha">
+    <rect x={B.x} y={B.y} width={B.w} height={B.h} rx="10" fill={`url(#${p}-hachura)`} mask={`url(#${p}-vazado)`} />
+    <rect x={B.x + 0.5} y={B.y + 0.5} width={B.w - 1} height={B.h - 1} rx="10" class="posicionamento__brecha-borda" />
+    <text x={C0} y={B.y + 24.5} class="posicionamento__brecha-nome">Brecha</text>
+    <text x={C1} y={B.y + 24.8} class="posicionamento__brecha-frase">Ninguém fala de resultado</text>
   </g>
 
-  {/* A tese, sobre o mapa. */}
+  {/* A tese, sobre a brecha. */}
   <g class="posicionamento__tese">
-    <rect x={TX} y={TY} width={TW} height={TH} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
-    <rect x={TX} y={TY} width={TW} height={TH} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <rect x={TX + 20} y={TY + 0.5} width={TW - 40} height="1" fill={`url(#${p}-fio-h)`} />
-    <text x={TX + 14} y={TY + 21} class="posicionamento__nome">Sua clínica</text>
-    <text x={TX + 14} y={TY + 41} class="posicionamento__frase">Referência em resultado natural</text>
-    <path class="posicionamento__fio" d={`M${M.x + 0.5} ${TY + TH + 1}V${M.y - 15}`} />
+    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={T.x + 20} y={T.y + 0.5} width={T.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
+    <circle cx={T.x + 18} cy={T.y + 21.5} r="3" class="a-destaque posicionamento__ponto" />
+    <text x={T.x + 28} y={T.y + 26} class="posicionamento__tese-nome">Sua tese</text>
+    <text x={T.x + 14} y={T.y + 52} class="posicionamento__tese-frase">Referência em</text>
+    <text x={T.x + 14} y={T.y + 72} class="posicionamento__tese-frase">resultado natural</text>
   </g>
 </g>
 
 <style>
-  .posicionamento__eixo { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
-  .posicionamento__regua { fill: none; stroke: #ffffff; stroke-opacity: .18; }
-  .posicionamento__brecha-borda { fill: #ffffff; fill-opacity: .015; stroke: #ffffff; stroke-opacity: .1; }
-  .posicionamento__brecha-nome { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
-  .posicionamento__etiqueta { fill: #ffffff; fill-opacity: .045; stroke: #ffffff; stroke-opacity: .09; }
-  .posicionamento__ponto { fill: #6b6b67; }
-  .posicionamento__fala { font-size: 13px; fill: #a3a39e; letter-spacing: -.005em; }
-  .posicionamento__antes { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 2 3; }
-  .posicionamento__rastro { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 2 4; }
-  .posicionamento__revela { fill: none; stroke: #ffffff; stroke-width: 8; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
-  .posicionamento__miolo { fill: #8a8a85; }
-  .posicionamento__nome { font-size: 11.5px; font-weight: 500; fill: #8a8a85; }
-  .posicionamento__frase { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .posicionamento__fio { fill: none; stroke: #ffffff; stroke-opacity: .28; }
+  /* Corpos pensados para o cartão largo recortado no celular. */
+  .posicionamento__trilha { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
+  .posicionamento__barra { font-size: 13px; fill: #4d4d49; }
+  .posicionamento__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .posicionamento__quando { font-size: 11.5px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .posicionamento__divisa { fill: #ffffff; fill-opacity: .06; }
+  .posicionamento__divisa--fina { fill-opacity: .04; }
+  /* Hierarquia: o que cada clínica comunica é o assunto (pílulas claras,
+     grifadas); nomes e canais ficam um tom abaixo. */
+  .posicionamento__coluna { font-size: 12.5px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
+  .posicionamento__nome { font-size: 13px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
+  .posicionamento__pilula { fill: #ffffff; fill-opacity: .05; stroke: #ffffff; stroke-opacity: .09; }
+  .posicionamento__pilula--canal { fill-opacity: .03; stroke-opacity: .06; }
+  .posicionamento__pilula-texto { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
+  .posicionamento__pilula-texto--canal { fill: #8a8a85; }
+  .posicionamento__grifo { fill: none; stroke: #ecece8; stroke-opacity: .5; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .posicionamento__nota { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
+  .posicionamento__brecha-borda { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 3 3; }
+  .posicionamento__brecha-nome { font-size: 13px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
+  .posicionamento__brecha-frase { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.005em; }
+  .posicionamento__tese-nome { font-size: 12.5px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
+  .posicionamento__tese-frase { font-size: 15px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
 
   /* Movimento, uma vez, na entrada:
-     0,3–1,7 s  as etiquetas dos concorrentes aparecem em cascata (fade e
-                4 de subida), com a clínica entre elas;
-     1,2–2,2    a brecha aparece;
-     1,9–4,1    a clínica sai do grupo e atravessa até a brecha, numa
-                curva que parte devagar; o rastro se desenha atrás dela e
-                fica o anel do lugar antigo;
-     3,9–4,5    o miolo acende em amarelo;
-     4,0–5,0    a tese sobe 8 com fade.
+     0,3–1,6 s  as três linhas de concorrentes aparecem em cascata (fade e
+                4 de subida);
+     1,7–2,6    o grifo se desenha em volta das mensagens;
+     2,4–3,0    a nota "Todos falam de preço" aparece;
+     2,9–3,8    a brecha aparece;
+     3,7–4,7    a tese sobe 8 com fade;
+     4,4–4,9    o ponto amarelo acende.
      Depois, nada se move. */
-  .posicionamento__surge { animation: posicionamento-surge 1s var(--a-entra) calc(.3s + var(--i) * .14s) both; }
-  .posicionamento__marcador { animation: posicionamento-aparece .6s var(--a-entra) .9s both; }
-  .posicionamento__brecha { animation: posicionamento-aparece 1s var(--a-entra) 1.2s both; }
-  .posicionamento__anda-x { animation: posicionamento-anda-x 2.2s cubic-bezier(.35, .15, .2, 1) 1.9s both; }
-  .posicionamento__anda-y { animation: posicionamento-anda-y 2.2s cubic-bezier(.65, 0, .35, 1) 1.9s both; }
-  .posicionamento__revela { animation: posicionamento-revela 2.2s linear 1.9s both; }
-  .posicionamento__antes { animation: posicionamento-aparece .8s var(--a-entra) 2.1s both; }
-  .posicionamento__acende { animation: posicionamento-aparece .6s var(--a-entra) 3.9s both; }
-  .posicionamento__tese { animation: posicionamento-sobe 1s var(--a-entra) 4s both; }
+  .posicionamento__linha { animation: posicionamento-surge 1s var(--a-entra) calc(.3s + var(--i) * .16s) both; }
+  .posicionamento__grifo { animation: posicionamento-desenha .9s var(--a-vai-vem) 1.7s both; }
+  .posicionamento__nota { animation: posicionamento-aparece .6s var(--a-entra) 2.4s both; }
+  .posicionamento__brecha { animation: posicionamento-aparece .9s var(--a-entra) 2.9s both; }
+  .posicionamento__tese { animation: posicionamento-sobe 1s var(--a-entra) 3.7s both; }
+  .posicionamento__ponto { animation: posicionamento-aparece .5s var(--a-entra) 4.4s both; }
   @keyframes posicionamento-surge { from { opacity: 0; transform: translateY(4px); } }
+  @keyframes posicionamento-desenha { from { stroke-dashoffset: 1; } }
   @keyframes posicionamento-aparece { from { opacity: 0; } }
   @keyframes posicionamento-sobe { from { opacity: 0; transform: translateY(8px); } }
-  /* Deslocamento de G até M. */
-  @keyframes posicionamento-anda-x { from { transform: translateX(-216px); } }
-  @keyframes posicionamento-anda-y { from { transform: translateY(150px); } }
-  /* Quanto do rastro já foi percorrido a cada 1/12 do tempo, calculado pela
-     mesma curva do marcador (comprimento acumulado, scratchpad
-     v2pos/trajeto.py). */
-  @keyframes posicionamento-revela {
-    0% { stroke-dashoffset: 1; }
-    8.33% { stroke-dashoffset: .957; }
-    16.67% { stroke-dashoffset: .871; }
-    25% { stroke-dashoffset: .727; }
-    33.33% { stroke-dashoffset: .569; }
-    41.67% { stroke-dashoffset: .434; }
-    50% { stroke-dashoffset: .297; }
-    58.33% { stroke-dashoffset: .173; }
-    66.67% { stroke-dashoffset: .093; }
-    75% { stroke-dashoffset: .045; }
-    83.33% { stroke-dashoffset: .018; }
-    91.67% { stroke-dashoffset: .004; }
-    100% { stroke-dashoffset: 0; }
-  }
 </style>
