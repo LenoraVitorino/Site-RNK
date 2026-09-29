@@ -22,6 +22,8 @@ import { Image } from 'astro:assets';
 import CabecaSecao from './CabecaSecao.astro';
 import Icone from '../ui/Icone.astro';
 import seloGptw from '../../assets/selos/gptw-2025.png';
+import fotoEquipe from '../../assets/sede/equipe.jpg';
+import Botao from '../ui/Botao.astro';
 import {
   classesSecao, ehCitacao, ehDestaque, formaTexto, partesFicha,
   type BlocoDe, type ContextoSecao,
@@ -56,6 +58,8 @@ const comPilula = (p: string) => {
   return p + PILULA;
 };
 const citacao = forma === 'citacao' ? comPilula(paragrafos[0]) : '';
+/* Palco do selo: o título sem a palavra em destaque, que vai num span. */
+const realceAntes = bloco.realce && titulo?.endsWith(bloco.realce) ? titulo.slice(0, -bloco.realce.length) : titulo;
 
 /* Ficha: cada parágrafo '<strong>Rótulo:</strong> resto' vira dt/dd. */
 /* Intervalos de horário ('08h às 12h', '13h30 às 17h.') ficam inteiros numa
@@ -100,21 +104,40 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
       </ul>
     </div>
   ) : bloco.selo ? (
-    /* Com selo (Faça Parte, GPTW, 29/09/2026): o selo bem pequeno no canto
-       superior esquerdo e o título e o texto centrados na dobra. */
-    <div class="container int-texto__selada">
-      {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não ornamento. */}
-      <Image
-        class="int-texto__selo entra"
-        src={seloGptw}
-        alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
-        widths={[48, 96, 144]} sizes="48px" format="webp" quality={90} loading="lazy"
-      />
-      <div class="int-texto__centro">
-        <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} alinhamento="centro" />
-        <div class="int-texto__centro-corpo entra" style="--i:1">
-          {paragrafos.map((p) => <p class={classeDe(p)} set:html={p} />)}
+    /* Com selo (Faça Parte, GPTW, 29/09/2026): um palco com a foto do time,
+       dessaturada, sob vinheta escura e grão; no centro, o selo, o título com
+       uma palavra em destaque, o texto e os botões; no pé, os indicadores. */
+    <div class="container">
+      <div class="int-gptw">
+        <Image class="int-gptw__foto" src={fotoEquipe} alt="" widths={[800, 1400, 2200]} sizes="(min-width: 1560px) 1440px, 94vw" format="webp" quality={80} loading="lazy" />
+        <span class="int-gptw__veu" aria-hidden="true"></span>
+        <div class="int-gptw__miolo">
+          {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não ornamento. */}
+          <Image
+            class="int-gptw__selo entra"
+            src={seloGptw}
+            alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
+            widths={[56, 112, 168]} sizes="56px" format="webp" quality={90} loading="lazy"
+          />
+          <h2 id={secao.tituloId} class="titulo int-gptw__titulo entra" style="--i:1">
+            {realceAntes}{bloco.realce && titulo?.endsWith(bloco.realce) && <span class="int-gptw__realce">{bloco.realce}</span>}
+          </h2>
+          {paragrafos.map((p) => <p class:list={['int-gptw__texto entra', classeDe(p)]} style="--i:2" set:html={p} />)}
+          {bloco.acoes && (
+            <div class="int-gptw__acoes entra" style="--i:3">
+              {bloco.acoes.map((acao, i) => (
+                <Botao href={acao.rota} class={i === 0 ? 'int-gptw__principal' : 'int-gptw__secundario'}>{acao.rotulo}</Botao>
+              ))}
+            </div>
+          )}
         </div>
+        {bloco.indicadores && (
+          <ul class="int-gptw__indicadores entra" style="--i:4" role="list">
+            {bloco.indicadores.map((ind) => (
+              <li><Icone nome={ind.icone} size={18} />{ind.texto}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   ) : (
@@ -176,27 +199,73 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     .int-texto__item-icone { width: 40px; height: 40px; }
   }
 
-  /* ---------- Com selo: selo no canto, título e texto no centro (Faça Parte, GPTW) ---------- */
+  /* ---------- Com selo: o palco do GPTW (Faça Parte) ---------- */
 
-  .int-texto__selada { position: relative; }
-  /* O <img> vem do componente Image, fora do escopo deste arquivo: :global(). */
-  .int-texto__selada :global(.int-texto__selo) {
-    position: absolute; top: 0; left: var(--gutter, 24px);
-    display: block; width: clamp(36px, 2.8vw, 44px); height: auto;
+  /* O palco: cantos de 20px, a foto do time por baixo, sem sombra. */
+  .int-gptw {
+    position: relative; overflow: hidden; isolation: isolate;
+    display: grid; grid-template-rows: 1fr auto;
+    min-height: clamp(540px, 64vh, 700px);
+    border-radius: 20px; background: #0e0e0c; color: var(--papel);
   }
-  /* Título numa linha e o texto em duas, logo abaixo: a cabeça perde a
-     margem de baixo das internas, senão o vão chegava a 80px. */
-  .int-texto__centro { display: grid; justify-items: center; text-align: center; max-width: 960px; margin-inline: auto; }
-  .int-texto__centro :global(.int-cabeca) { margin-bottom: 0; max-width: none; }
-  .int-texto__centro :global(.int-cabeca__titulo) { max-width: none; text-wrap: balance; }
-  .int-texto__centro-corpo { display: grid; gap: 16px; margin-top: 20px; max-width: 72ch; }
-  .int-texto__centro-corpo p { margin: 0; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.6; color: var(--int-apoio); text-wrap: balance; }
-  .int-texto__centro-corpo p.int-destaque { font-size: clamp(18px, 1.5vw, 21px); color: var(--int-tinta); }
-  /* No celular o selo entra no fluxo, acima do título, e o texto alinha à esquerda. */
+  /* A foto quase sem cor: o amarelo das paredes não pode dominar a dobra. */
+  .int-gptw :global(.int-gptw__foto) {
+    position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 45%;
+    filter: saturate(.3) brightness(.82) contrast(1.04);
+  }
+  /* Vinheta escura nas bordas e embaixo, e grão fino por cima (SVG inline). */
+  .int-gptw__veu {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(60% 55% at 50% 46%, rgb(14 14 12 / .72) 0%, rgb(14 14 12 / .5) 70%, rgb(14 14 12 / 0) 100%),
+      radial-gradient(120% 95% at 50% 45%, rgb(14 14 12 / .2) 0%, rgb(14 14 12 / .5) 60%, rgb(14 14 12 / .9) 100%),
+      linear-gradient(180deg, rgb(14 14 12 / 0) 60%, rgb(14 14 12 / .8) 100%);
+  }
+  .int-gptw__veu::after {
+    content: ''; position: absolute; inset: 0; opacity: .14; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  .int-gptw__miolo {
+    display: grid; justify-items: center; align-content: center; text-align: center;
+    padding: clamp(64px, 8vw, 112px) clamp(24px, 5vw, 64px) clamp(40px, 5vw, 64px);
+  }
+  .int-gptw :global(.int-gptw__selo) { display: block; width: 52px; height: auto; margin-bottom: clamp(24px, 2.6vw, 36px); }
+  /* O título em papel a 72% e a palavra em destaque em papel pleno. */
+  .int-gptw__titulo {
+    margin: 0; max-width: 18ch;
+    font-size: clamp(38px, 5vw, 72px); font-weight: 280; line-height: 1.04; letter-spacing: -.045em;
+    color: rgb(242 242 238 / .72); text-wrap: balance;
+  }
+  .int-gptw__realce { color: var(--papel); }
+  .int-gptw__texto {
+    margin: 24px 0 0; max-width: 46ch;
+    font-size: clamp(16px, 1.3vw, 18px); line-height: 1.6; color: rgb(242 242 238 / .78); text-wrap: balance;
+  }
+  .int-gptw__acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px; }
+  .int-gptw__acoes :global(.botao.int-gptw__principal) { background: var(--papel); color: #171715; border-color: var(--papel); }
+  .int-gptw__acoes :global(.botao.int-gptw__secundario) {
+    background: rgb(242 242 238 / .06); color: var(--papel); border-color: rgb(242 242 238 / .3);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .int-gptw__acoes :global(.botao.int-gptw__secundario:hover) { background: rgb(242 242 238 / .12); border-color: rgb(242 242 238 / .6); color: var(--papel); }
+
+  /* Os indicadores no pé do palco, separados do miolo por um fio. */
+  .int-gptw__indicadores {
+    list-style: none; margin: 0 clamp(24px, 5vw, 64px); padding: 22px 0 26px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 12px clamp(28px, 4vw, 56px);
+    border-top: 1px solid rgb(242 242 238 / .14);
+    font-size: 14px; line-height: 1.3; letter-spacing: .01em; color: rgb(242 242 238 / .8);
+  }
+  .int-gptw__indicadores li { display: inline-flex; align-items: center; gap: 10px; }
+  .int-gptw__indicadores :global(svg) { flex: none; opacity: .85; }
+
   @media (max-width: 599.98px) {
-    .int-texto__selada :global(.int-texto__selo) { position: static; margin-bottom: 28px; width: 36px; }
-    .int-texto__centro, .int-texto__centro :global(.int-cabeca) { justify-items: start; text-align: start; }
-    .int-texto__centro-corpo p { text-wrap: pretty; }
+    .int-gptw { min-height: 0; border-radius: 16px; }
+    .int-gptw__acoes { flex-direction: column; align-self: stretch; width: 100%; }
+    .int-gptw__acoes :global(.botao) { width: 100%; }
+    .int-gptw__indicadores { flex-direction: column; align-items: flex-start; margin-inline: 24px; }
   }
 
   /* ---------- Citação: manifesto à esquerda (E3, pin Hikari) ---------- */

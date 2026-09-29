@@ -25,6 +25,7 @@ export const facaParte: Pagina = {
     {
       tipo: 'texto',
       h2: copyLiteral ? 'Somos GPTW: um ótimo lugar para trabalhar e evoluir.' : 'Um lugar para trabalhar e evoluir.',
+      realce: copyLiteral ? undefined : 'evoluir.',
       fundo: 'alt',
       // Selo extraído do site atual (renkestudio.com.br/faca-parte), 28/09/2026.
       selo: 'gptw',
@@ -34,8 +35,17 @@ export const facaParte: Pagina = {
             '<strong>Não é só um selo. É como a gente opera todo dia.</strong>',
           ]
         : [   // revisão de 29/09/2026
-            'Somos GPTW. Um reconhecimento ao ambiente que construímos, com desenvolvimento, autonomia e espaço para cada pessoa crescer.',
+            'Certificados pelo Great Place To Work. Um ambiente de desenvolvimento, autonomia e espaço para cada pessoa crescer.',
           ],
+      acoes: copyLiteral ? undefined : [
+        { rotulo: 'Conheça nossa cultura', rota: '/sobre#sobre-cultura' },
+        { rotulo: 'Ver oportunidades', rota: '#formulario' },
+      ],
+      indicadores: copyLiteral ? undefined : [
+        { icone: 'Compass', texto: 'Autonomia' },
+        { icone: 'TrendingUp', texto: 'Desenvolvimento' },
+        { icone: 'Users', texto: 'Pessoas em primeiro lugar' },
+      ],
     },
     copyLiteral
       ? {

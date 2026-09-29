@@ -125,6 +125,12 @@ export type Bloco =
        * nome e uma frase curta.
        */
       lista?: { icone: 'Compass' | 'Sparkles' | 'TrendingUp'; titulo: string; texto: string }[];
+      /** Com `selo`: a palavra do h2 que fica em destaque (tom pleno; o resto do título em tom mais baixo). */
+      realce?: string;
+      /** Com `selo`: botões sob o texto; o 1º é o principal. */
+      acoes?: { rotulo: string; rota: string }[];
+      /** Com `selo`: indicadores curtos com ícone, no pé do palco. */
+      indicadores?: { icone: 'Compass' | 'TrendingUp' | 'Users'; texto: string }[];
       /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */
       selo?: 'gptw';
     }
