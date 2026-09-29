@@ -356,7 +356,7 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
   .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-top: 22px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
-  .home-refinada .metodo-editorial .metodo__numero { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 14px; }   /* legenda por cima, o número embaixo: fica estreito, longe da perna */
+  .home-refinada .metodo-editorial .metodo__numero { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }   /* número em cima, legenda embaixo: fica estreito, longe da perna */
   .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
   .home-refinada .metodo-editorial .metodo__legenda { max-width: none; padding-bottom: 0; white-space: nowrap; font-size: 11px; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
 }
