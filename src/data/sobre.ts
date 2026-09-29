@@ -160,9 +160,13 @@ export const prova = {
 /* ------------------------------------------------------------------ */
 
 export const casa = {
-  h2: 'Onde a mágica acontece',   // src/data/paginas/faca-parte.ts:55
+  h2: copyLiteral
+    ? 'Onde a mágica acontece'    // src/data/paginas/faca-parte.ts:55
+    : 'Onde a Renke opera',       // revisão de 29/09/2026
   /** Pendência: "híbrida" aqui × "100% remoto" em contato.ts:66. */
-  texto: 'Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.',   // faca-parte.ts:57
+  texto: copyLiteral
+    ? 'Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.'   // faca-parte.ts:57
+    : 'Trabalhamos de forma híbrida, combinando operação remota com uma base física para encontros presenciais, reuniões e troca próxima com o time.',   // revisão de 29/09/2026
   /** Microcopy nova 3: rótulos de acessibilidade do trilho e das setas. */
   rotuloTrilho: 'Fotos da sede',
   rotuloAnterior: 'Foto anterior',
@@ -176,8 +180,10 @@ export const casa = {
 export const cultura = {
   rotulo: '#TEAMRENKE',            // faca-parte.ts:34
   h2: 'No que acreditamos',        // faca-parte.ts:35
-  /** Recorte literal do começo do 2º parágrafo (faca-parte.ts:38). */
-  frase: 'Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas.',
+  frase: copyLiteral
+    /** Recorte literal do começo do 2º parágrafo (faca-parte.ts:38). */
+    ? 'Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas.'
+    : 'Nossa filosofia é simples: uma empresa forte é construída por pessoas que têm espaço para crescer, autonomia para agir e responsabilidade pelo que constroem.',   // revisão de 29/09/2026
   /** Só os títulos dos quatro valores (faca-parte.ts:43-51). */
   valores: ['Liberdade', 'Autorresponsabilidade', 'Conexão', 'Evolução'] as const,
   link: { rotulo: 'Faça Parte', rota: '/faca-parte' },   // rótulo do nav.ts
