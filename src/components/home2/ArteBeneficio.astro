@@ -7,6 +7,7 @@
  */
 import '../../styles/ilustracoes.css';
 import Defs from './arte/Defs.astro';
+import Movimento from './arte/Movimento.astro';
 import Aquisicao from './arte/beneficios/Aquisicao.astro';
 import Conversao from './arte/beneficios/Conversao.astro';
 import Processos from './arte/beneficios/Processos.astro';
@@ -21,12 +22,13 @@ const cenas = [Aquisicao, Conversao, Processos, Investimento, Dados, Replicavel,
 const Cena = cenas[tipo];
 const p = `beneficio-${tipo}`;
 ---
-{Cena && (
+{Cena && (<>
   <svg class:list={['arte', 'arte-beneficio', `arte-beneficio--${tipo}`]} viewBox="0 0 520 250" fill="none" aria-hidden="true" focusable="false">
     <Defs p={p} />
     <g class="arte-beneficio__cena"><Cena p={p} /></g>
   </svg>
-)}
+  <Movimento />
+</>)}
 <style>
   .arte-beneficio { height: auto; }
   .arte-beneficio__cena { transition: transform .9s var(--a-entra); }

@@ -1,0 +1,26 @@
+---
+/**
+ * Liga o movimento das cenas quando elas entram na tela e pausa quando saem
+ * (29/09/2026). Com movimento reduzido, ou sem IntersectionObserver, a cena
+ * fica na pose final.
+ *
+ * Este componente fica FORA do <svg>, ao lado dele: o Astro 5 imprime o
+ * <script> no lugar onde o componente é usado, e um <script> dentro de um
+ * SVG não roda no navegador (era o que acontecia quando ele morava em
+ * Defs.astro: as cenas nunca saíam do primeiro quadro). O Astro imprime o
+ * script uma vez só por página, mesmo com várias cenas.
+ */
+---
+<script>
+  const artes = document.querySelectorAll<SVGSVGElement>('svg.arte');
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (artes.length && 'IntersectionObserver' in window && !reduzido) {
+    const obs = new IntersectionObserver(
+      (entradas) => { for (const e of entradas) e.target.classList.toggle('em-cena', e.isIntersecting); },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.3 },
+    );
+    artes.forEach((a) => obs.observe(a));
+  } else {
+    artes.forEach((a) => a.classList.add('em-cena'));
+  }
+</script>

@@ -13,6 +13,7 @@
  */
 import '../../styles/ilustracoes.css';
 import Defs from './arte/Defs.astro';
+import Movimento from './arte/Movimento.astro';
 import Jornada from './arte/pilares/Jornada.astro';
 import Crm from './arte/pilares/Crm.astro';
 import Automacao from './arte/pilares/Automacao.astro';
@@ -26,7 +27,7 @@ const Cena = cenas[tipo];
 const p = `pilar-${tipo}`;
 const larga = tipo >= 3;
 ---
-{Cena && (
+{Cena && (<>
   <svg
     class:list={['arte', 'arte-pilar', `arte-pilar--${tipo}`]}
     viewBox={larga ? '0 0 640 360' : '0 0 400 300'}
@@ -36,4 +37,5 @@ const larga = tipo >= 3;
     <Defs p={p} />
     <Cena p={p} />
   </svg>
-)}
+  <Movimento />
+</>)}

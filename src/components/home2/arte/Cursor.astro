@@ -1,0 +1,48 @@
+---
+/**
+ * Cursor de colega, no molde do Figma (29/09/2026): seta amarela e etiqueta
+ * amarela com o nome em grafite, como o cursor de outra pessoa trabalhando
+ * na mesma tela. A ponta da seta fica em (0, 0); a cena posiciona e move o
+ * cursor pelo <g> que o envolve. O cursor é o detalhe de cor da cena que o
+ * usa: nessa cena, outro amarelo só se for mínimo (um ponto, um visto ou o
+ * anel do avatar da mesma pessoa).
+ * O clique é a seta encolher de leve (classe a-cursor__seta, animada pela
+ * cena), nunca uma onda ou um brilho.
+ */
+interface Props { nome?: string; lado?: 'direita' | 'esquerda' }
+const { nome = 'Renke', lado = 'direita' } = Astro.props;
+
+/* Largura do nome em Inter 11,5, peso 500 (medida no navegador). Nomes fora
+   da tabela usam a média de 6,2 por letra. A etiqueta tem 8 de folga de
+   cada lado, arredondada para a grade de meio. */
+const medidas: Record<string, number> = { 'Recepção': 54.3, 'Renke': 33.6, 'Você': 27.6 };
+const texto = medidas[nome] ?? nome.length * 6.2;
+const largura = Math.round((texto + 16) * 2) / 2;
+const ALTURA = 19;
+/* A etiqueta nasce junto da base da seta, 18 abaixo da ponta: à direita,
+   começa em x 11; à esquerda, termina em x 4, logo sob a ponta de baixo da
+   seta. */
+const x = lado === 'direita' ? 11 : 4 - largura;
+const y = 18;
+/* Sombra curta, só para o cursor descolar da interface embaixo. O id vem
+   do nome: a mesma cena desenhada duas vezes repete uma definição igual. */
+const sombra = `a-cursor-sombra-${nome.normalize('NFD').replace(/[^A-Za-z]/g, '').toLowerCase()}`;
+---
+<defs>
+  <filter id={sombra} x="-40%" y="-40%" width="180%" height="200%" color-interpolation-filters="sRGB">
+    <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" flood-color="#000000" flood-opacity=".55" />
+  </filter>
+</defs>
+<g class="a-cursor" filter={`url(#${sombra})`}>
+  <g transform={`translate(${x} ${y})`}>
+    <rect class="a-cursor__etiqueta" width={largura} height={ALTURA} rx={ALTURA / 2} />
+    <text class="a-cursor__nome" x={largura / 2} y="13" text-anchor="middle">{nome}</text>
+  </g>
+  {/* Seta de ponta fina, simétrica na diagonal, com os cantos levemente
+      arredondados pelo contorno escuro que a separa do que está embaixo. */}
+  <path
+    class="a-cursor__seta"
+    d="M0 0L17.6 6.5L10 10L6.5 17.6Z"
+    stroke-width="1.2" stroke-linejoin="round"
+  />
+</g>

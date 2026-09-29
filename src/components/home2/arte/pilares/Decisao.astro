@@ -1,33 +1,42 @@
 ---
 /**
- * Dizemos o que fazer todo mês: um painel "Relatório do mês" com um gráfico
- * de linha fina (área que some no preto, meses de julho a setembro) e, ao
- * lado, "Próximos passos", uma lista curta com caixinhas marcadas. Na
- * entrada, a linha se desenha, a área aparece, o ponto final acende e o
- * último visto se desenha. Pose estática = pose final; o movimento só parte
- * dela.
+ * Dizemos o que fazer todo mês: o relatório do mês como documento. Atrás,
+ * os relatórios de julho e agosto aparecem só pela borda de cima; na
+ * frente, a página de setembro, com o título grande, as abas dos
+ * indicadores e o gráfico de comparecimento, sangrando pela direita e por
+ * baixo. Sobre ela, o cartão "Plano de ação" de outubro, com os três passos
+ * marcados. Na entrada, a linha se desenha, o ponto de agora acende, o
+ * plano sobe e os passos se marcam em cascata. Pose estática = pose final;
+ * o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Painel 432 × 216 (x 104 a 536, y 72 a 288), dentro da área segura do
-   recorte 4:3 (x 80 a 560) com folga de 24. À esquerda, o poço do gráfico
-   (x 120 a 332, y 116 a 272); à direita, a lista (x 352 a 520). As linhas
-   de grade ficam a 16 do alto do poço e a 54 uma da outra (y 132, 186 e
-   240; a última é a base da área), e cada item da lista fica na altura de
-   uma delas. */
-const GRADE = [132, 186, 240];
-const BASE = GRADE[2];
-const meses = [
-  { x: 152, rotulo: 'Jul' },
-  { x: 226, rotulo: 'Ago' },
-  { x: 300, rotulo: 'Set', atual: true },
+/* Pilha: cada página anterior sobe 20 e recua 16 para a direita; todas
+   seguem além da borda direita. Na faixa de 20 que aparece, o nome do mês
+   fica centrado. A da frente começa em (104, 56) e sangra por baixo.
+   Conteúdo a 24 da borda: coluna de x 128 a 536 (536 = limite da área
+   segura do celular menos 24). */
+const PX = 104, PY = 56;
+const atras = [
+  { x: 136, y: 16, mes: 'Julho' },
+  { x: 120, y: 36, mes: 'Agosto' },
 ];
-/* Pontos da linha; a curva passa por eles (Catmull-Rom em cúbicas). Sobe
-   devagar, hesita no meio e ganha fôlego no último mês. */
+/* Abas dos indicadores: medidas em Inter 13 (ativa 500, as outras 400),
+   com vão de 24. */
+const abas = [
+  { x: 128, nome: 'Comparecimento', largura: 105.9, ativa: true },
+  { x: 258, nome: 'Custo por agendamento', largura: 146.6 },
+  { x: 429, nome: 'Faturamento', largura: 76.7 },
+];
+/* Linha do gráfico: um ponto por semana, de julho a setembro. Anda de lado
+   com as oscilações de uma agenda de verdade, dá um salto quando o plano do
+   mês entra (x 268 a 324) e segue subindo devagar até agora. Do x 352 em
+   diante ela passa acima do cartão do plano. Curva por Catmull-Rom. */
 const pts: [number, number][] = [
-  [136, 226], [160, 221], [184, 211], [208, 214], [232, 200],
-  [256, 191], [280, 172], [300, 150],
+  [128, 292], [156, 288], [184, 280], [212, 284], [240, 270],
+  [268, 259], [296, 236], [324, 218], [352, 206], [380, 200],
+  [408, 203], [436, 193], [464, 190], [492, 191], [520, 182],
 ];
 const curva = (() => {
   let d = `M${pts[0][0]} ${pts[0][1]}`;
@@ -40,67 +49,104 @@ const curva = (() => {
   return d;
 })();
 const [FX, FY] = pts[pts.length - 1];
-const passos = [
-  { rotulo: 'Ajustar verba por canal' },
-  { rotulo: 'Reativar pacientes' },
-  { rotulo: 'Revisar a agenda', ultimo: true },
-];
+/* Plano de ação: 184 × 122, pousado no canto de baixo da coluna, abaixo do
+   ponto de agora. Cabeçalho de 34 e passos a cada 24 (Inter 13). */
+const CX = 352, CY = 224, CW = 184, CH = 122;
+const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar pacientes'];
 ---
 <g class="decisao">
-  <rect width="640" height="360" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+  <defs>
+    <linearGradient id={`${p}-folha`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#181818" /><stop offset="1" stop-color="#121212" />
+    </linearGradient>
+  </defs>
 
-  {/* Painel. */}
-  <rect x="104" y="72" width="432" height="216" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-  <rect x="124" y="72.5" width="392" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x="120" y="100" class="a-micro decisao__micro">Relatório do mês</text>
-  <text x="352" y="100" class="a-micro decisao__micro">Próximos passos</text>
-
-  {/* Gráfico num poço rebaixado. */}
-  <rect x="120" y="116" width="212" height="156" rx="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
-  {GRADE.map((y) => <path class="decisao__grade" d={`M136 ${y + 0.5}H316`} />)}
-  <path class="decisao__area" d={`${curva}L${FX} ${BASE}L136 ${BASE}Z`} fill={`url(#${p}-area)`} />
-  <path class="decisao__queda" d={`M${FX + 0.5} ${FY + 6}V${BASE}`} />
-  <path class="decisao__linha" d={curva} pathLength="1" />
-  <circle class="a-destaque decisao__ponto" cx={FX} cy={FY} r="3" />
-  {meses.map(({ x, rotulo, atual }) => (
-    <text x={x} y="260" text-anchor="middle" class:list={['a-micro', 'decisao__micro', { 'decisao__mes--atual': atual }]}>{rotulo}</text>
+  {/* Relatórios anteriores: só a borda de cima aparece. */}
+  {atras.map(({ x, y, mes }, i) => (
+    <g class="decisao__atras" style={`opacity:${i === 0 ? .7 : .9}`}>
+      <rect x={x} y={y} width="600" height="400" rx="16" fill={`url(#${p}-folha)`} stroke={`url(#${p}-fio)`} />
+      <text x={x + 20} y={y + 14.5} class="decisao__mes-atras">{mes}</text>
+    </g>
   ))}
 
-  {/* Próximos passos, cada um na altura de uma linha de grade. */}
-  {passos.map(({ rotulo, ultimo }, i) => {
-    const y = GRADE[i];
-    return (
-      <g class="decisao__passo">
-        <rect x="352.5" y={y - 7.5} width="15" height="15" rx="4.5" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-        <path class:list={['decisao__visto', { 'decisao__visto--ultimo': ultimo }]} d={`M356 ${y}l2.8 2.8l5.2-5.6`} pathLength="1" />
-        <text x="380" y={y + 4.5} class="a-rotulo decisao__rotulo">{rotulo}</text>
-      </g>
-    );
-  })}
+  {/* Setembro, na frente. */}
+  <rect x={PX} y={PY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={PX + 16} y={PY + 0.5} width="420" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x="128" y="100" class="decisao__titulo">Setembro</text>
+  <circle cx="415" cy="96" r="2.5" class="decisao__estado" />
+  <text x="424" y="100" class="decisao__enviado">Enviado</text>
+  <text x="536" y="100" text-anchor="end" class="decisao__quando">seg, 09:00</text>
+
+  {/* Abas dos indicadores; a ativa tem o fio de baixo. */}
+  {abas.map(({ x, nome, ativa }) => (
+    <text x={x} y="140" class:list={['decisao__aba', { 'decisao__aba--ativa': ativa }]}>{nome}</text>
+  ))}
+  <rect x={PX} y="152" width="600" height="1" class="decisao__divisa" />
+  <rect x="128" y="151" width={abas[0].largura} height="2" rx="1" class="decisao__sublinha" />
+
+  {/* Gráfico: a grade fica na coluna do conteúdo. */}
+  {[228, 276, 324].map((y) => <rect x="128" y={y} width="408" height="1" class="decisao__grade" />)}
+  <path class="decisao__area" d={`${curva}L${FX} 380L128 380Z`} fill={`url(#${p}-area)`} />
+  <path class="decisao__linha" d={curva} pathLength="1" />
+  <g class="decisao__agora">
+    <circle cx={FX} cy={FY} r="5.5" class="decisao__agora-anel" />
+    <circle cx={FX} cy={FY} r="2.5" class="a-destaque" />
+  </g>
+
+  {/* Plano de ação de outubro, sobre a página. */}
+  <g class="decisao__plano">
+    <rect x={CX} y={CY} width={CW} height={CH} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={CX} y={CY} width={CW} height={CH} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={CX + 20} y={CY + 0.5} width={CW - 40} height="1" fill={`url(#${p}-fio-h)`} />
+    <text x={CX + 14} y={CY + 22} class="decisao__plano-titulo">Plano de ação</text>
+    <text x={CX + CW - 14} y={CY + 22} text-anchor="end" class="decisao__quando">Outubro</text>
+    <rect x={CX} y={CY + 34} width={CW} height="1" class="decisao__divisa" />
+    {passos.map((passo, i) => {
+      const y = CY + 54 + i * 24;
+      return (
+        <g>
+          <rect x={CX + 14.5} y={y - 6.5} width="13" height="13" rx="4" class="decisao__caixa" />
+          <path class="decisao__visto" style={`--i:${i}`} d={`M${CX + 18} ${y}l2.3 2.3l4.4-4.8`} pathLength="1" />
+          <text x={CX + 37} y={y + 4.5} class="decisao__passo">{passo}</text>
+        </g>
+      );
+    })}
+  </g>
 </g>
 
 <style>
-  .decisao__grade { fill: none; stroke: #ffffff; stroke-opacity: .06; }
-  .decisao__queda { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-dasharray: 2 4; }
-  .decisao__linha { fill: none; stroke: #ffffff; stroke-opacity: .7; stroke-linecap: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
-  /* Micro um pouco maior que o comum: no celular a cena larga encolhe mais. */
-  .decisao .decisao__micro { font-size: 11.5px; }
-  .decisao .decisao__mes--atual { fill: #b9b9b4; }
-  .decisao .decisao__rotulo { font-size: 13px; fill: #b9b9b4; }
-  .decisao__visto {
-    fill: none; stroke: #9d9d98; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 1 2; stroke-dashoffset: 0;
-  }
+  /* Corpos pensados para o cartão largo recortado no celular (escala ≈ .68):
+     rótulos em 13 e secundários em 11,5. */
+  .decisao__mes-atras { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
+  .decisao__titulo { font-size: 32px; font-weight: 300; fill: #efefeb; letter-spacing: -.03em; }
+  .decisao__estado { fill: #8a8a85; }
+  .decisao__enviado { font-size: 11.5px; font-weight: 500; fill: #b9b9b4; }
+  .decisao__quando { font-size: 11.5px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .decisao__aba { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
+  .decisao__aba--ativa { font-weight: 500; fill: #ecece8; }
+  .decisao__divisa { fill: #ffffff; fill-opacity: .06; }
+  .decisao__sublinha { fill: #ecece8; }
+  .decisao__grade { fill: #ffffff; fill-opacity: .04; }
+  .decisao__linha { fill: none; stroke: #ffffff; stroke-opacity: .72; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .decisao__agora-anel { fill: #161616; stroke: #ecece8; stroke-width: 1.2; }
+  .decisao__plano-titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .decisao__caixa { fill: #1d1d1d; stroke: #ffffff; stroke-opacity: .2; }
+  .decisao__visto { fill: none; stroke: #d6d6d1; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .decisao__passo { font-size: 13px; fill: #b9b9b4; letter-spacing: -.005em; }
 
-  /* Movimento, uma vez, na entrada: a linha se desenha da esquerda para a
-     direita (1,8 s) num traço cadenciado, que acelera e freia (a curva de
-     entrada dispararia no começo); quando ela chega, a área e o fio de queda
-     aparecem, o ponto final acende devagar e, por último, o visto de
-     "Revisar a agenda" se desenha. */
+  /* Movimento, uma vez, na entrada:
+     0,4–2,2 s  a linha se desenha da esquerda para a direita;
+     2,1–3,5    quando ela chega, a área aparece por baixo;
+     2,1–2,7    o ponto de agora acende;
+     2,3–3,3    o plano de outubro sobe 8 com fade;
+     3,0–4,0    os três passos se marcam em cascata.
+     Depois, nada se move. */
   .decisao__linha { animation: decisao-desenha 1.8s var(--a-vai-vem) .4s both; }
-  .decisao__area, .decisao__queda { animation: decisao-aparece 1.4s var(--a-entra) 1.9s both; }
-  .decisao__ponto { animation: decisao-aparece 1.2s var(--a-entra) 2.1s both; }
-  .decisao__visto--ultimo { animation: decisao-desenha 1.2s var(--a-entra) 2.5s both; }
+  .decisao__area { animation: decisao-aparece 1.4s var(--a-entra) 2.1s both; }
+  .decisao__agora { animation: decisao-aparece .6s var(--a-entra) 2.1s both; }
+  .decisao__plano { animation: decisao-sobe 1s var(--a-entra) 2.3s both; }
+  .decisao__visto { animation: decisao-desenha .5s var(--a-vai-vem) calc(3s + var(--i) * .25s) both; }
   @keyframes decisao-desenha { from { stroke-dashoffset: 1; } }
   @keyframes decisao-aparece { from { opacity: 0; } }
+  @keyframes decisao-sobe { from { opacity: 0; transform: translateY(8px); } }
 </style>
