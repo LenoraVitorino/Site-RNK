@@ -52,11 +52,6 @@ export const contato: Pagina = {
       itens: ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação'],
     },
     {
-      tipo: 'pendencia',
-      o_que:
-        '"6 anos de operação" conflita com "4 anos" usado no restante do site (D1). E os logos de clientes e parceiros desta seção ainda não foram autorizados.',
-    },
-    {
       tipo: 'faq',
       h2: 'Perguntas frequentes',
       perguntas: [
