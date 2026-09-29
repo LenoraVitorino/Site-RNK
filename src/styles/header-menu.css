@@ -139,3 +139,16 @@
 .header .header__acao .botao:hover { background: var(--papel); color: var(--grafite); border-color: var(--papel) !important; transform: none; filter: none; }
 .header:is(.header--claro, .header--amarelo) .header__acao .botao { background: transparent; color: var(--grafite); border-color: rgb(22 22 22 / .35) !important; }
 .header:is(.header--claro, .header--amarelo) .header__acao .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite) !important; }
+
+/* Cabeçalho mais alto e arejado no desktop (28/09/2026, "muito fino, deixe
+   elegante"): caixa de 80px, mais respiro nas laterais, logo e itens um pouco
+   maiores e mais espaçados. A altura total (14 + 80 + 14) vira a
+   --altura-header que o resto do layout usa. */
+@media (min-width: 1024px) {
+  :root { --altura-header: 108px; }
+  .header .header__inner { min-height: 80px; padding: 14px 16px 14px 28px; border-radius: 18px; gap: 24px; }
+  .header .logo__img { width: 150px; }
+  .header .nav__list { gap: 10px; }
+  .header .nav__link { padding: 12px 16px; font-size: 15px; letter-spacing: .005em; }
+  .header .header__acao .botao { min-height: 48px; padding-inline: 22px; font-size: 15px; }
+}
