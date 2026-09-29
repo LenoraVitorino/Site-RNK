@@ -119,6 +119,12 @@ export type Bloco =
       respiro?: boolean;
       /** Tópicos curtos com ícone (nome Lucide de Icone.astro), numa linha centralizada abaixo das duas colunas. */
       topicos?: { icone: 'Compass' | 'Cpu' | 'Workflow'; texto: string }[];
+      /**
+       * Lista de crenças (Faça Parte, 29/09/2026): o título e o 1º parágrafo
+       * (como subtítulo) à esquerda; à direita, um item por linha, com ícone,
+       * nome e uma frase curta.
+       */
+      lista?: { icone: 'Compass' | 'Sparkles' | 'TrendingUp'; titulo: string; texto: string }[];
       /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */
       selo?: 'gptw';
     }

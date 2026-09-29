@@ -81,6 +81,24 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     <div class="container">
       <p class:list={['int-citacao int-citacao--manifesto entra', longa && 'int-citacao--longa']} set:html={citacao} />
     </div>
+  ) : bloco.lista ? (
+    /* Lista de crenças (Faça Parte, 29/09/2026): título e subtítulo à
+       esquerda, um item por linha à direita, com ícone num círculo de fio
+       fino. O mesmo desenho da cultura do Sobre. */
+    <div class="container int-grade-2 int-texto__grade int-texto__crencas">
+      <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} apoio={semTags(paragrafos[0] ?? '')} classe="int-cabeca--coluna" />
+      <ul class="int-texto__lista int-grade-2__direita entra" style="--i:1" role="list">
+        {bloco.lista.map((item) => (
+          <li class="int-texto__item">
+            <span class="int-texto__item-icone" aria-hidden="true"><Icone nome={item.icone} size={18} /></span>
+            <span class="int-texto__item-texto">
+              <strong>{item.titulo}</strong>
+              <span>{item.texto}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   ) : bloco.selo ? (
     /* Com selo (Faça Parte, GPTW, 29/09/2026): o selo bem pequeno no canto
        superior esquerdo e o título e o texto centrados na dobra. */
@@ -130,6 +148,34 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
 </section>
 
 <style>
+  /* ---------- Lista de crenças (Faça Parte) ---------- */
+
+  .int-texto__crencas { align-items: center; }
+  .int-texto__lista { list-style: none; margin: 0; padding: 0; }
+  .int-texto__item {
+    display: flex; align-items: center; gap: 20px; padding-block: 22px;
+    border-top: 1px solid color-mix(in srgb, var(--int-tinta) 12%, transparent);
+  }
+  .int-texto__item:last-child { border-bottom: 1px solid color-mix(in srgb, var(--int-tinta) 12%, transparent); }
+  .int-texto__item-icone {
+    display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%;
+    color: var(--int-tinta);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--int-tinta) 16%, transparent);
+  }
+  .int-texto__item-texto { display: grid; gap: 4px; }
+  .int-texto__item-texto strong {
+    font-family: var(--font-titulo); font-size: clamp(20px, 1.8vw, 26px); font-weight: 300;
+    line-height: 1.2; letter-spacing: -.02em; color: var(--int-tinta);
+  }
+  .int-texto__item-texto span { font-size: 15px; line-height: 1.5; color: var(--int-apoio); }
+  @media (max-width: 899.98px) {
+    .int-texto__lista { margin-top: 40px; }
+  }
+  @media (max-width: 599.98px) {
+    .int-texto__item { gap: 16px; padding-block: 18px; }
+    .int-texto__item-icone { width: 40px; height: 40px; }
+  }
+
   /* ---------- Com selo: selo no canto, título e texto no centro (Faça Parte, GPTW) ---------- */
 
   .int-texto__selada { position: relative; }

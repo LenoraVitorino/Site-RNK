@@ -38,15 +38,28 @@ export const facaParte: Pagina = {
             '<strong>Reconhecimento que faz parte da nossa cultura.</strong>',
           ],
     },
-    {
-      tipo: 'texto',
-      eyebrow: '#TEAMRENKE',
-      h2: 'No que acreditamos',
-      paragrafos: [
-        'Liberdade com autorresponsabilidade. Criatividade com método. Evolução pessoal como parte do trabalho, não como extra.',
-        'Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas. Um ambiente que te ajuda a ampliar seu nível de felicidade por meio do trabalho, com pessoas plurais que compartilham uma mesma visão: fazer diferente, com excelência.',
-      ],
-    },
+    copyLiteral
+      ? {
+          tipo: 'texto',
+          eyebrow: '#TEAMRENKE',
+          h2: 'No que acreditamos',
+          paragrafos: [
+            'Liberdade com autorresponsabilidade. Criatividade com método. Evolução pessoal como parte do trabalho, não como extra.',
+            'Nossa filosofia não é um time que constrói a empresa. É uma empresa que constrói pessoas. Um ambiente que te ajuda a ampliar seu nível de felicidade por meio do trabalho, com pessoas plurais que compartilham uma mesma visão: fazer diferente, com excelência.',
+          ],
+        }
+      : {   // revisão de 29/09/2026: sem o #TEAMRENKE, três crenças em lista
+          tipo: 'texto',
+          h2: 'No que acreditamos',
+          paragrafos: [
+            'Uma empresa que constrói pessoas com autonomia, troca e espaço para fazer diferente, com excelência.',
+          ],
+          lista: [
+            { icone: 'Compass', titulo: 'Liberdade', texto: 'Com autorresponsabilidade.' },
+            { icone: 'Sparkles', titulo: 'Criatividade', texto: 'Com método.' },
+            { icone: 'TrendingUp', titulo: 'Evolução', texto: 'Como parte do trabalho.' },
+          ],
+        },
     {
       tipo: 'blocos',
       h2: 'Os 4 valores',
