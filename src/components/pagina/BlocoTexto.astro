@@ -184,8 +184,12 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     position: absolute; top: 0; left: var(--gutter, 24px);
     display: block; width: clamp(36px, 2.8vw, 44px); height: auto;
   }
-  .int-texto__centro { display: grid; justify-items: center; text-align: center; max-width: 760px; margin-inline: auto; }
-  .int-texto__centro-corpo { display: grid; gap: 16px; margin-top: 24px; max-width: 58ch; }
+  /* Título numa linha e o texto em duas, logo abaixo: a cabeça perde a
+     margem de baixo das internas, senão o vão chegava a 80px. */
+  .int-texto__centro { display: grid; justify-items: center; text-align: center; max-width: 960px; margin-inline: auto; }
+  .int-texto__centro :global(.int-cabeca) { margin-bottom: 0; max-width: none; }
+  .int-texto__centro :global(.int-cabeca__titulo) { max-width: none; text-wrap: balance; }
+  .int-texto__centro-corpo { display: grid; gap: 16px; margin-top: 20px; max-width: 72ch; }
   .int-texto__centro-corpo p { margin: 0; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.6; color: var(--int-apoio); text-wrap: balance; }
   .int-texto__centro-corpo p.int-destaque { font-size: clamp(18px, 1.5vw, 21px); color: var(--int-tinta); }
   /* No celular o selo entra no fluxo, acima do título, e o texto alinha à esquerda. */

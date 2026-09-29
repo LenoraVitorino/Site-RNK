@@ -35,7 +35,6 @@ export const facaParte: Pagina = {
           ]
         : [   // revisão de 29/09/2026
             'Somos GPTW. Um reconhecimento ao ambiente que construímos, com desenvolvimento, autonomia e espaço para cada pessoa crescer.',
-            '<strong>Reconhecimento que faz parte da nossa cultura.</strong>',
           ],
     },
     copyLiteral
