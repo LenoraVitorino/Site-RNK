@@ -109,7 +109,7 @@ export const tese: { h2: string; passos: PassoTese[] } = {
         { frase: 'Nenhuma agência resolve isso porque isso não é um problema de marketing.' },
         { frase: 'É um problema de negócio.' },
       ]
-    /** Revisão de 29/09/2026: cinco afirmações, cada uma com a sua frase de apoio. */
+    /** Revisão de 29/09/2026: quatro afirmações, cada uma com a sua frase de apoio. */
     : [
         {
           frase: 'Clínicas podem faturar bem sem ter previsibilidade.',
@@ -120,12 +120,8 @@ export const tese: { h2: string; passos: PassoTese[] } = {
           apoio: 'A maior parte das perdas acontece entre a entrada da oportunidade e o fechamento.',
         },
         {
-          frase: 'Dados precisam estar conectados à operação.',
-          apoio: 'Informações dispersas dificultam entender a performance e identificar onde a receita está sendo perdida.',
-        },
-        {
-          frase: 'Marketing e comercial precisam operar juntos.',
-          apoio: 'Quando cada área trabalha com processos e informações diferentes, a operação perde eficiência.',
+          frase: 'Marketing, comercial e dados precisam operar juntos.',
+          apoio: 'Quando cada área trabalha com processos e informações diferentes, fica difícil entender a performance e identificar onde a receita está sendo perdida.',
         },
         {
           frase: 'Previsibilidade é uma questão de negócio.',
