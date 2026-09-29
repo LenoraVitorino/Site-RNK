@@ -350,7 +350,7 @@ section[id] { scroll-margin-top: 110px; }
      (colunas 9–12) no alto, espelhando o título. Diagonal com o vídeo no meio. */
   .home-refinada .metodo-editorial .metodo__foto { display: block; }
   .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 2 / span 3; grid-row: 2; align-self: stretch; min-height: 0; }   /* 3 colunas, colada ao vídeo; ocupa a faixa do meio inteira */
-  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 9 / -1; grid-row: 1 / 3; align-self: start; aspect-ratio: 3 / 2; }   /* 1/3: não estica a linha do título */
+  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 9 / -1; grid-row: 1 / 3; align-self: end; aspect-ratio: 3 / 2; }   /* desce até a base da faixa do meio, alinhada à base da foto do café; 1/3 não estica a linha do título */
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
