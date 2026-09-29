@@ -71,7 +71,7 @@ const classeDe = (p: string) => (ehCitacao(p) ? 'int-citacao' : ehDestaque(p) ? 
 const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some(ehCitacao);
 ---
 <section
-  class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`)}
+  class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`, bloco.respiro && 'int-texto--respiro')}
   id={secao.id}
   data-cena={secao.cena}
   data-tom={secao.tom}
@@ -157,6 +157,12 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
   /* A escala da citação e do destaque é global (.int-citacao e .int-destaque
      em paginas2.css); aqui fica só o respiro da citação entre os parágrafos. */
   .int-texto__corpo > .int-citacao { margin-block: 12px; }
+
+  /* Respiro: dobra de texto curto com a altura das vizinhas (Performa). */
+  .int-texto--respiro {
+    display: grid; align-content: center;
+    min-height: min(80svh, 720px); padding-block: clamp(120px, 11vw, 190px);
+  }
 
   /* ---------- Tópicos: linha centralizada abaixo do texto (Academy) ---------- */
 

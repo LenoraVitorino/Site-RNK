@@ -89,7 +89,8 @@ export type Bloco =
   | {
       tipo: 'paineis';
       h2: string;
-      itens: { icone: 'Target' | 'Handshake' | 'TrendingUp' | 'Layers' | 'Workflow' | 'BadgeCheck' | 'Users'; titulo: string; texto: string }[];
+      /** `titulo` são as duas linhas do título, na quebra definida: todos os painéis com a mesma diagramação. */
+      itens: { icone: 'Target' | 'Handshake' | 'TrendingUp' | 'Layers' | 'Workflow' | 'BadgeCheck' | 'Users'; titulo: [string, string]; texto: string }[];
     }
   | {
       tipo: 'etapas';
@@ -114,6 +115,8 @@ export type Bloco =
       paragrafos: string[];
       fundo?: 'alt' | 'escuro';
       centro?: boolean;
+      /** Mais respiro em cima e embaixo, para dobras de texto curto (Performa, 28/09). */
+      respiro?: boolean;
       /** Tópicos curtos com ícone (nome Lucide de Icone.astro), numa linha centralizada abaixo das duas colunas. */
       topicos?: { icone: 'Compass' | 'Cpu' | 'Workflow'; texto: string }[];
       /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */

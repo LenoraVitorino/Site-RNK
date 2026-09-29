@@ -24,10 +24,10 @@ export const protocoloRenke: Pagina = {
       tipo: 'paineis',
       h2: 'Para donos de agência que buscam',
       itens: [
-        { icone: 'Workflow', titulo: 'Operação independente', texto: 'Uma operação que roda sem depender de você no dia a dia.' },
-        { icone: 'BadgeCheck', titulo: 'Preço à altura da entrega', texto: 'Cobrar pelo valor que entrega e manter os clientes por mais tempo.' },
-        { icone: 'TrendingUp', titulo: 'Escala com valor', texto: 'Crescer pelo valor entregue, não pelo tamanho da equipe.' },
-        { icone: 'Target', titulo: 'Mais lucro, menos caos', texto: 'Um negócio com rotina mais leve e margem de verdade.' },
+        { icone: 'Workflow', titulo: ['Operação', 'independente'], texto: 'Uma operação que roda sem depender de você no dia a dia.' },
+        { icone: 'BadgeCheck', titulo: ['Preço à altura', 'da entrega'], texto: 'Cobrar pelo valor que entrega e manter os clientes por mais tempo.' },
+        { icone: 'TrendingUp', titulo: ['Escala', 'com valor'], texto: 'Crescer pelo valor entregue, não pelo tamanho da equipe.' },
+        { icone: 'Target', titulo: ['Mais lucro,', 'menos caos'], texto: 'Um negócio com rotina mais leve e margem de verdade.' },
       ],
     },
     {

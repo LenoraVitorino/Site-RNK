@@ -42,10 +42,10 @@ export const academy: Pagina = {
       tipo: 'paineis',
       h2: 'Para donos de agência que buscam',
       itens: [
-        { icone: 'Target', titulo: 'Posicionamento real', texto: 'Sair do modelo que atende todo mundo e se tornar referência no seu nicho.' },
-        { icone: 'Handshake', titulo: 'Parceria estratégica', texto: 'Provar resultado com dados e deixar de ser executor para decidir junto com o cliente.' },
-        { icone: 'TrendingUp', titulo: 'Operação lucrativa', texto: 'Menos clientes, ticket mais alto e uma operação que cresce sem caos.' },
-        { icone: 'Layers', titulo: 'RevOps como serviço', texto: 'Entender RevOps na prática e oferecer ao cliente um serviço de alto valor.' },
+        { icone: 'Target', titulo: ['Posicionamento', 'real'], texto: 'Sair do modelo que atende todo mundo e se tornar referência no seu nicho.' },
+        { icone: 'Handshake', titulo: ['Parceria', 'estratégica'], texto: 'Provar resultado com dados e deixar de ser executor para decidir junto com o cliente.' },
+        { icone: 'TrendingUp', titulo: ['Operação', 'lucrativa'], texto: 'Menos clientes, ticket mais alto e uma operação que cresce sem caos.' },
+        { icone: 'Layers', titulo: ['RevOps como', 'serviço'], texto: 'Entender RevOps na prática e oferecer ao cliente um serviço de alto valor.' },
       ],
     },
     {

@@ -12,8 +12,8 @@
  * - Realce (E6, pin 62): a hierarquia vem do tom, não da cor. As outras
  *   linhas ficam em cinza e a do realce em papel; sem realce, tudo em papel.
  *   Nada de amarelo no H1.
- * - Escala: 'display' quando todas as linhas têm até 20 caracteres (os cinco
- *   Revena e Faça Parte); a padrão nas demais (Academy), com linhas longas.
+ * - Escala: 'display' quando todas as linhas têm até 22 caracteres (os nomes
+ *   de produto: Revena, Academy e cursos, Faça Parte); a padrão nas demais.
  * - O H1 não leva .entra: pinta no primeiro quadro e é o LCP.
  * - `centro` é ignorado: todos os heróis alinham à esquerda, como a home.
  * - O CTA é marcado direto com as classes do botão (e não com o Botao.astro,
@@ -29,7 +29,9 @@ interface Props {
 
 const { bloco, secao } = Astro.props;
 const { titulo, realce, sub, cta } = bloco;
-const escala = titulo.every((linha) => linha.length <= 20) ? 'display' : 'padrao';
+// Até 22 caracteres: cabe o nome mais longo dos produtos ('Rastreamento Avançado',
+// 21), para todos os heróis de produto saírem na mesma escala (28/09).
+const escala = titulo.every((linha) => linha.length <= 22) ? 'display' : 'padrao';
 const temRealce = typeof realce === 'number' && realce >= 0 && realce < titulo.length;
 const href = bloco.rotaCta ?? '/contato';
 const naPagina = href.startsWith('#');
