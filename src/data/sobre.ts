@@ -52,7 +52,7 @@ const frase1 =
 
 export const seo = {
   /** Microcopy nova 1: montagem de títulos existentes. */
-  titulo: 'Sobre a Renke | Renke Studio',
+  titulo: 'Sobre a Renke | Grupo RNK',
   /** A 1ª frase do §1, literal, sem o negrito. */
   descricao: frase1.replace(/<\/?strong>/g, ''),
 };
