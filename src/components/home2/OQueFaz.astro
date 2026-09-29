@@ -2,8 +2,8 @@
 /**
  * Método editorial (28/09, referência Aura): vídeo no centro; à esquerda, o
  * título no alto e o parágrafo embaixo; à direita, o R da parede da sede
- * completo, em faixa grossa, descendo até a borda de baixo do painel, com o
- * número grande subindo no vão entre a haste e a perna. Textos por versão.
+ * esticado, em faixa grossa, no alto da coluna (a haste atrás do vídeo), e o
+ * número grande subindo embaixo. Textos por versão.
  */
 import Telefone from '../ui/Telefone.astro';
 import Selo from '../ui/Selo.astro';
@@ -21,6 +21,12 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
+  {/* O R da parede do salão, esticado como a fita, em faixa grossa, já formado:
+      ocupa o alto da coluna da direita; a haste fica atrás do vídeo (só desktop). */}
+  <svg class="metodo__r" viewBox="0 0 1000 500" fill="none" aria-hidden="true" focusable="false">
+    <path d="M868 32 A100 100 0 0 1 968 132 V192 A100 100 0 0 1 868 292 H32 M868 32 H32 V500" />
+    <path d="M760 292 L880 500" />
+  </svg>
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -53,15 +59,6 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
             ))}
           </ul>
         </div>
-      </div>
-      {/* O R da parede do salão, completo: ocupa a coluna da direita, com a haste e
-          a perna descendo até a borda de baixo do painel, como a fita chegando
-          ao chão. O número mora no vão entre a haste e a perna (só desktop). */}
-      <div class="metodo__r-lugar" aria-hidden="true">
-        <svg class="metodo__r" viewBox="0 0 520 1000" preserveAspectRatio="xMinYMin slice" fill="none" focusable="false">
-          <path d="M26 1000 V26 H404 A90 90 0 0 1 494 116 V166 A90 90 0 0 1 404 256 H26" />
-          <path d="M330 256 L613 1000" />
-        </svg>
       </div>
       <div class="metodo__midia">
         <Telefone />

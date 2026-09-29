@@ -43,6 +43,8 @@ section[id] { scroll-margin-top: 110px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 4 / 3; border-radius: 14px; }
 .ecossistema-editorial .produto__corpo { padding: 30px 8px 12px; background: #000; }
 .ecossistema-editorial .produto__nome { font-size: clamp(28px, 3vw, 40px); }
+/* Selo do público no canto superior esquerdo do quadro da imagem. */
+.ecossistema-editorial .produto__selo-bu { position: absolute; top: clamp(14px, 1.4vw, 20px); left: clamp(14px, 1.4vw, 20px); z-index: 2; }
 /* Nome da BU como a logo secundária (R + BU), na altura de uma linha do título. */
 .produto__marca { display: block; width: auto; height: clamp(26px, 2.4vw, 36px); max-width: 100%; }
 .ecossistema-editorial .produto__arte--camadas { background: #000; }
@@ -192,7 +194,7 @@ section[id] { scroll-margin-top: 110px; }
 /* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
    Ecossistema, logo depois, encosta mais. */
 .home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
-.home-refinada #academy-tools { padding-top: clamp(40px, 4vw, 64px); }
+.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px); }   /* e menos respiro antes do formulário */
 .cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
 .resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
 .resultados-editoriais__cabeca .titulo { margin-inline: auto; }
@@ -305,9 +307,9 @@ section[id] { scroll-margin-top: 110px; }
    - vídeo no centro (colunas 5–8), a peça principal, na altura da tela;
    - título no alto à esquerda (1–4), com o selo por cima;
    - o parágrafo embaixo à esquerda (1–4), sob um fio fino, na linha de base do vídeo;
-   - à direita, o R da parede do salão completo, já formado, em faixa grossa,
-     com a haste e a perna até a borda de baixo do painel; o número único,
-     grande e fino, subindo de 0 ao valor, mora no vão entre a haste e a perna.
+   - à direita, o R da parede do salão esticado, já formado, em faixa grossa,
+     no alto da coluna (a haste atrás do vídeo), e embaixo o número único,
+     grande e fino, subindo de 0 ao valor, sob um fio.
    Ruído leve sobre o fundo e o R, não sobre vídeo e textos. */
 .metodo__r { display: none; }
 .home-refinada #o-que-fazemos .tel__moldura, .home-refinada #o-que-fazemos .tel__tela { border-radius: 8px; }
@@ -319,15 +321,14 @@ section[id] { scroll-margin-top: 110px; }
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: .16; mix-blend-mode: multiply;
   }
-  /* O R: a coluna da direita inteira (9–12, todas as linhas), da altura do topo
-     do vídeo até a borda de baixo do painel (desce pelo respiro de baixo);
-     avança pela margem direita. O viewBox é alto e fica preso ao topo
-     (slice): o que sobra da haste e da perna é cortado pelo painel. */
-  .home-refinada .metodo-editorial .metodo__r-lugar { position: relative; grid-column: 9 / -1; grid-row: 1 / -1; z-index: 0; }
+  /* O R: caixa do meio do painel (puxada para a esquerda, atrás do vídeo) até
+     perto da margem direita, presa ao alto do conteúdo; a perna termina acima
+     do número. */
   .home-refinada #o-que-fazemos .metodo__r {
-    display: block; position: absolute; left: 0; top: 0; bottom: calc(-1 * var(--metodo-respiro));
-    width: calc(100% + var(--gutter) - var(--metodo-recuo) - 24px); height: auto; overflow: visible;
-    color: var(--destaque); stroke: currentColor; stroke-width: 52; stroke-linejoin: miter;
+    display: block; position: absolute; z-index: 0; pointer-events: none;
+    left: 38.5%; right: clamp(72px, 7vw, 120px); top: calc(var(--metodo-respiro) + 24px);   /* haste e canto de cima escondidos atrás do vídeo */
+    aspect-ratio: 1000 / 500; width: auto; height: auto;
+    color: var(--destaque); stroke: currentColor; stroke-width: 64; stroke-linejoin: miter;
   }
   .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; }
   .home-refinada .metodo-editorial {
@@ -343,12 +344,11 @@ section[id] { scroll-margin-top: 110px; }
     width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); max-width: none;
   }
   /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
-  /* Parágrafo embaixo à esquerda, sob um fio; o número à direita, dentro do R,
-     no vão entre a haste e a perna, sem fio (o próprio R o emoldura). */
+  /* Parágrafo embaixo à esquerda e número embaixo à direita, os dois sob um fio. */
   .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; grid-row: 4; align-self: end; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
-  .home-refinada .metodo-editorial .metodo__descricao::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: rgb(37 37 35 / .24); }
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: rgb(37 37 35 / .24); }
   .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
-  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-left: clamp(80px, 6vw, 96px); }
+  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-top: 22px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
   .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 18px; }
   .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
@@ -375,12 +375,21 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Contato: texto e formulário próximos, centralizados na mesma composição. */
 #formulario { padding-block: clamp(40px, 4vw, 64px); }
-#formulario .form-block { grid-template-columns: minmax(0, 400px) minmax(0, 460px); justify-content: center; gap: clamp(32px, 4vw, 56px); }
+/* Na grade de 12 do site (28/09): texto nas colunas 1–5, na margem esquerda;
+   formulário nas colunas 8–12, na margem direita. */
+#formulario .form-block { grid-template-columns: repeat(12, minmax(0, 1fr)); justify-content: stretch; column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; }
+#formulario .form-block__text { grid-column: 1 / span 5; }
+#formulario .form-card { grid-column: 8 / -1; max-width: none; }
+@media (min-width: 900px) {
+  #formulario .form-block { align-items: start; }   /* selo e cartão começam na mesma linha */
+  .home-refinada #formulario { padding-top: clamp(32px, 3vw, 48px); }
+}
 #formulario .form-block__text { gap: 24px; }
 #formulario .form-block__text .titulo { max-width: none; }
 #formulario .form-card { justify-self: stretch; }
 @media (max-width: 899.98px) {
   #formulario .form-block { grid-template-columns: minmax(0, 560px); gap: 32px; }
+  #formulario :is(.form-block__text, .form-card) { grid-column: auto; }
   #formulario .form-card { max-width: none; }
 }
 

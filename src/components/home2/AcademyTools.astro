@@ -15,7 +15,7 @@ const produtos = [
   },
   {
     chave: 'tools',
-    eyebrow: 'Tecnologia',
+    eyebrow: copyLiteral ? 'Tecnologia' : 'Tecnologia para sua clínica',
     titulo: 'Renke Tools',
     texto: 'Tecnologias proprietárias que transformam nossa metodologia em ferramentas para acelerar resultados.',
     rota: '/tools',
@@ -37,8 +37,9 @@ const medidasMarca: Record<string, [number, number]> = { studio: [773, 150], aca
         {produtos.map((p, i) => (
           <article class:list={['produto', `produto--${p.chave}`, 'produto--aberto']} data-produto={i}>
             <div class="produto__arte" aria-hidden="true"></div>
+            {/* O público de cada frente, como selo no canto do quadro da imagem. */}
+            <Selo class="produto__selo-bu">{p.eyebrow}</Selo>
             <div class="produto__corpo" id={`produto-miolo-${i}`}>
-              <p class="rotulo">{p.eyebrow}</p>
               <h3 class="produto__nome"><img class="produto__marca" src={`/marca/bu-${p.chave}-escuro.png`} alt={p.titulo} width={medidasMarca[p.chave][0]} height={medidasMarca[p.chave][1]} loading="lazy" /></h3>
               <p class="produto__texto">{p.texto}</p>
               <p class="produto__acao"><Botao href={existe(p.rota) ? p.rota : '/contato'} tamanho="sm">Conhecer {p.titulo}</Botao></p>
