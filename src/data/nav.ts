@@ -135,12 +135,14 @@ export const acaoHeader = { rotulo: 'Contato', rota: '/contato' };
 export const rodape = {
   links: [
     { rotulo: 'Home', rota: '/' },
-    { rotulo: 'Para Clínicas', rota: '/studio' },
+    // Sem página /studio: aponta para o Protocolo Revena na home (29/09/2026).
+    { rotulo: 'Para Clínicas', rota: '/#protocolo-revena' },
     { rotulo: 'Para Agências', rota: '/academy' },
     { rotulo: 'Tecnologia', rota: '/tools' },
     { rotulo: 'Conteúdos', rota: '/blog' },
     { rotulo: 'Sobre', rota: '/sobre' },
     { rotulo: 'Faça Parte', rota: '/faca-parte' },
+    { rotulo: 'Contato', rota: '/contato' },
   ],
   redes: [
     { rotulo: 'Instagram', rota: 'https://instagram.com/renkestudio' },
@@ -153,6 +155,9 @@ export const rodape = {
     'Blumenau/SC · CEP 89035-100',
   ],
   email: 'contato@renkestudio.com.br',
+  cnpj: '37.079.656/0001-51',   // contato.md (bloco Informações)
+  /** Frase sob a marca, só na versão estudio (29/09/2026): a definição do Sobre, curta. */
+  frase: 'Revenue Operations para clínicas médicas e odontológicas de alto padrão.',
   /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
   whatsapp: '',
   copyright: '© 2026 Grupo RNK. Todos os direitos reservados.',

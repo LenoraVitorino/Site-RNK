@@ -1,45 +1,53 @@
 ---
+/**
+ * Rodapé (29/09/2026): três colunas. A marca (com a frase curta, só na
+ * versão estudio), os links e o contato, que reúne e-mail, endereço e as
+ * redes com página. Embaixo, o copyright e o CNPJ (e, na versão copy, a
+ * assinatura). O layout é o mesmo nas duas versões.
+ */
 import { rodape } from '../data/nav';
 import { existe } from '../data/rotas';
 import { copyLiteral } from '../data/versao';
+
+/* Um link com âncora vale se a página dele existe ('/#protocolo-revena' → '/'). */
+const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
+const redes = rodape.redes.filter((r) => r.rota && r.rota !== '#');
 ---
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
-      <div class="footer__col">
+      <div class="footer__col footer__marca">
         <img class="logo__img logo__img--rodape" src="/marca/grupo-rnk-branco.png" alt="Grupo RNK" width="875" height="120" />
+        {!copyLiteral && <p class="footer__frase">{rodape.frase}</p>}
       </div>
 
       <nav class="footer__col" aria-label="Links do rodapé">
         <p class="footer__title">Links</p>
         <ul>
           {/* Sem "em breve" à mostra (Lenora, 26/09): só o que já tem página. */}
-          {rodape.links.filter((l) => existe(l.rota)).map((l) => (
+          {rodape.links.filter((l) => temPagina(l.rota)).map((l) => (
             <li><a href={l.rota}>{l.rotulo}</a></li>
           ))}
         </ul>
       </nav>
 
       <div class="footer__col">
-        <p class="footer__title">Siga-nos</p>
-        <ul>
-          {rodape.redes.filter((r) => r.rota && r.rota !== '#').map((r) => (
-            <li><a href={r.rota} rel="noopener">{r.rotulo}</a></li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="footer__col">
         <p class="footer__title">Contato</p>
         <ul class="footer__contact">
+          <li><a href={`mailto:${rodape.email}`}>{rodape.email}</a></li>
           <li>{rodape.endereco.map((linha, i) => <>{i > 0 && <br />}{linha}</>)}</li>
-          <li>{rodape.email}</li>
+          {redes.length > 0 && (
+            <li class="footer__redes">
+              {redes.map((r) => <a href={r.rota} rel="noopener">{r.rotulo}</a>)}
+            </li>
+          )}
         </ul>
       </div>
     </div>
 
     <div class="footer__bottom">
       <p>{rodape.copyright}</p>
+      <p>CNPJ {rodape.cnpj}</p>
       {copyLiteral && <p><em>{rodape.assinatura}</em></p>}
     </div>
   </div>
