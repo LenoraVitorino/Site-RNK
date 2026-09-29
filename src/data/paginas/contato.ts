@@ -41,11 +41,6 @@ export const contato: Pagina = {
       itens: ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação'],
     },
     {
-      tipo: 'pendencia',
-      o_que:
-        '"6 anos de operação" conflita com "4 anos" usado no restante do site (D1). E os logos de clientes e parceiros desta seção ainda não foram autorizados.',
-    },
-    {
       tipo: 'faq',
       h2: 'Perguntas frequentes',
       perguntas: [
@@ -66,11 +61,6 @@ export const contato: Pagina = {
           r: 'Blumenau, SC. Mas operamos 100% remoto com clientes de todo o Brasil.',
         },
       ],
-    },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'O schema declara FAQ com 5 perguntas, mas só 4 foram transcritas. Falta uma. E o telefone/WhatsApp não foi informado, apesar de o rodapé e o sitemap preverem.',
     },
     {
       tipo: 'texto',

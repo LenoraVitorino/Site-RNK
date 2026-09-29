@@ -16,11 +16,6 @@ export const facaParte: Pagina = {
       rotaCta: '#formulario',
     },
     {
-      tipo: 'pendencia',
-      o_que:
-        'Foto do time e depoimentos em vídeo estão desatualizados — o briefing pede regravar com colaboradores ativos. E aqui a frase é "primeira assessoria no Brasil", enquanto a home diz "do mundo" (D5).',
-    },
-    {
       tipo: 'texto',
       h2: 'Somos GPTW: um ótimo lugar para trabalhar e evoluir.',
       fundo: 'alt',
@@ -59,11 +54,6 @@ export const facaParte: Pagina = {
         'Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.',
         'R. Benjamin Constant, 2364 · Sala Térrea, Escola Agrícola · Blumenau/SC · CEP 89035-100',
       ],
-    },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'Endereço a confirmar: a copy de /faca-parte traz placeholder e o de /contato traz o da Escola Agrícola. Fotos da nova sede também estão pendentes.',
     },
     {
       tipo: 'formulario',

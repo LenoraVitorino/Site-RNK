@@ -1,7 +1,9 @@
 import type { Pagina } from './tipos';
 
 /**
- * Copy literal de docs/03-copy/formacao-performa.md
+ * Base: docs/03-copy/formacao-performa.md, no padrão da página da Academy
+ * (28/09/2026): hero curto, cartões pretos no lugar da lista, sem rótulos
+ * pequenos, sem a dobra da citação e sem aspas no texto.
  * Notas SEO não especificadas no briefing — title e descrição abaixo são sugestão a validar.
  */
 export const formacaoPerforma: Pagina = {
@@ -12,76 +14,57 @@ export const formacaoPerforma: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['De executor reativo', 'para estrategista de performance'],
-      realce: 1,
-      sub: 'A Formação Performa é um sistema de pensamento estratégico para quem já opera tráfego mas quer parar de apertar botão e começar a pensar como estrategista.',
-      cta: 'Quero conhecer a Formação Performa →',
+      titulo: ['Formação Performa'],
+      semRotulo: true,
+      sub: 'De executor reativo para estrategista de performance: um sistema de pensamento estratégico para quem já opera tráfego.',
+      cta: 'Fale com a equipe',
     },
     {
-      tipo: 'lista',
-      eyebrow: 'Para quem é',
-      h2: 'Se você...',
-      fundo: 'alt',
+      tipo: 'paineis',
+      h2: 'Para gestores de tráfego que buscam',
       itens: [
-        'Faz tráfego mas não tem muita segurança nas decisões estratégicas',
-        'Sabe que poderia entregar mais resultado para o cliente que confiou em você',
-        'Sabe otimizar, mas não tem método para pensar na estratégia por trás do tráfego',
-        'Quer conectar o que faz no gerenciador com o resultado real do cliente',
-        'Gera resultado mas não prova valor para o cliente',
-        'Quer subir de nível: de gestor de tráfego para estrategista de performance',
+        { icone: 'Target', titulo: ['Segurança', 'nas decisões'], texto: 'Método para pensar a estratégia por trás do tráfego, não só otimizar.' },
+        { icone: 'TrendingUp', titulo: ['Resultado', 'de negócio'], texto: 'Conectar o que acontece no gerenciador com o resultado do cliente.' },
+        { icone: 'BadgeCheck', titulo: ['Prova', 'de valor'], texto: 'Mostrar ao cliente, com dados, o valor da sua entrega.' },
+        { icone: 'Layers', titulo: ['Visão de', 'estrategista'], texto: 'Sair da gestão de tráfego e liderar a estratégia de performance.' },
       ],
     },
     {
       tipo: 'blocos',
-      eyebrow: 'Na Formação Performa você aprende...',
       h2: 'O que você recebe',
       largo: true,
       itens: [
         {
           titulo: 'Framework estratégico',
-          texto:
-            'Como pensar antes de executar. Análise de concorrência, definição de canais, estruturação de funis, alocação de verba baseada em dados reais.',
+          texto: 'Análise de mercado, definição de canais, estruturação de funis e alocação de verba baseada em dados.',
         },
         {
-          titulo: 'Otimização por resultado, não por métrica de vaidade',
-          texto:
-            'Como parar de olhar para CPL e começar a otimizar por avanço de funil, agendamento e venda.',
+          titulo: 'Otimização por resultado',
+          texto: 'Aprenda a otimizar pelo avanço do funil, agendamento e venda, não apenas por métricas de mídia.',
         },
         {
           titulo: 'Visão consultiva',
-          texto:
-            'Como conversar com o cliente sobre estratégia, não só sobre relatório. Como se posicionar como parceiro, não como executor.',
+          texto: 'Aprenda a discutir estratégia com o cliente e transformar dados em decisões.',
         },
         {
           titulo: 'Integração com comercial',
-          texto:
-            'Como usar os dados do comercial para melhorar as campanhas. O circuito que separa gestores medianos de estrategistas.',
+          texto: 'Use os dados da operação comercial para orientar campanhas e melhorar a performance.',
         },
       ],
     },
     {
       tipo: 'texto',
-      centro: true,
-      fundo: 'alt',
-      paragrafos: [
-        '<em>"Não é curso de botão. É sistema de pensamento estratégico. Quem sai daqui pensa diferente antes de abrir o gerenciador."</em>',
-      ],
-    },
-    {
-      tipo: 'texto',
-      eyebrow: 'Sobre a Renke',
       h2: 'Quem está por trás da Formação',
+      respiro: true,
       paragrafos: [
-        'A Formação Performa nasce da operação da Renke Studio. Não é teoria emprestada de livro gringo. É o sistema que roda há 4 anos com clínicas de alto ticket, validado com verba real, resultado real e cliente real cobrando no WhatsApp todo dia.',
+        'A Formação Performa nasce de quatro anos de operação da Renke Studio em clínicas de alto ticket. Um modelo construído na prática, validado em operações reais e aprimorado continuamente com dados e resultados.',
       ],
     },
     {
       tipo: 'ctaFinal',
-      destaque:
-        'Você vai continuar otimizando CPL enquanto o cliente cancela... ou vai aprender a pensar como estrategista?',
-      texto:
-        'A Formação Performa é para quem quer parar de reagir e começar a liderar a estratégia. Framework, visão consultiva, integração com comercial e um sistema de pensamento que muda como você opera.',
-      cta: 'Quero sair do modo executor →',
+      destaque: 'De executor a estrategista de performance.',
+      texto: 'Framework, visão consultiva e integração com o comercial para ampliar o impacto da sua operação.',
+      cta: 'Conheça a Performa →',
     },
   ],
 };
