@@ -1,6 +1,10 @@
 import type { Pagina } from './tipos';
+import { copyLiteral } from '../versao';
 
-/** Copy literal de docs/03-copy/faca-parte.md */
+/**
+ * Copy literal de docs/03-copy/faca-parte.md. A versão estudio (padrão) tem
+ * o topo revisto em 29/09/2026; a VERSAO=copy mantém o original.
+ */
 export const facaParte: Pagina = {
   rota: '/faca-parte',
   titulo: 'Faça Parte | Renke — Trabalhe com RevOps, saúde e tecnologia',
@@ -9,10 +13,13 @@ export const facaParte: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Faça parte do', '#TEAMRENKE.'],
+      // Na estudio a quebra é só tipográfica: "Faça parte da Renke." em duas linhas, a 2ª em realce.
+      titulo: copyLiteral ? ['Faça parte do', '#TEAMRENKE.'] : ['Faça parte', 'da Renke.'],
       realce: 1,
-      sub: 'A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão no Brasil. Aqui, a gente conecta marketing, comercial e dados em um sistema só. E faz isso com um time enxuto, autônomo e obcecado por resultado. Se você quer trabalhar com propósito, liberdade e evolução constante: esse é o lugar.',
-      cta: 'Deixe seu currículo ↓',
+      sub: copyLiteral
+        ? 'A Renke é a primeira assessoria de Revenue Operations para clínicas de alto padrão no Brasil. Aqui, a gente conecta marketing, comercial e dados em um sistema só. E faz isso com um time enxuto, autônomo e obcecado por resultado. Se você quer trabalhar com propósito, liberdade e evolução constante: esse é o lugar.'
+        : 'Uma operação de Revenue Operations para clínicas de alto padrão, construída por pessoas que valorizam autonomia, responsabilidade e evolução.',
+      cta: copyLiteral ? 'Deixe seu currículo ↓' : 'Envie seu currículo →',
       rotaCta: '#formulario',
     },
     {
