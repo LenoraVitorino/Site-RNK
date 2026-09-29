@@ -1,159 +1,296 @@
 ---
 /**
- * Implementamos um CRM: um painel de pipeline com um poço rebaixado dividido
- * em três colunas por fios finos (Novo, Em contato, Agendado) e
- * cartõezinhos de oportunidade em fio fino. Em laço, um cartão de "Em
- * contato" sobe um pouco, desliza até "Agendado", assenta e ganha um visto.
- * Pose estática = pose final; o movimento só parte dela.
+ * Implementamos um CRM: a janela do pipeline, recortada pela direita e por
+ * baixo, com cartões de verdade (procedimento, canal e quando). A
+ * "Recepção" acabou de arrastar a Harmonização de "Em contato" para
+ * "Agendado": o cartão assentou com o visto e o horário marcado, e o cursor
+ * dela descansa logo abaixo. Em laço, a cena volta um passo e repete o
+ * gesto: o cursor entra, pega o cartão, arrasta e solta. Pose estática =
+ * pose final; o movimento só parte dela.
  */
+import Cursor from '../Cursor.astro';
+
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Painel 328 × 172 (x 36 a 364, y 64 a 236). Um poço só (x 48 a 352, y 100
-   a 224, raio 12) com três colunas de 96 e vão de 8; os fios que dividem as
-   colunas passam no meio dos vãos. Os cartões ficam a 6 da borda da coluna
-   (raio 12 − 6 = 6, cantos concêntricos) e têm 84 × 40. O micro do
-   cabeçalho e os rótulos das colunas alinham com o anel de avatar dos
-   cartões (coluna + 16). */
+/* Janela: canto em (24, 32), segue além do viewBox pela direita e por
+   baixo. Cabeçalho de 44. Colunas de 140 com vão de 12 (x 36, 188, 340); a
+   terceira é cortada pela borda e se apaga nela. Cartões de 140 × 64, raio
+   9, em passos de 72 a partir de y 112; conteúdo a 12 da borda. */
+const WX = 24, WY = 32;
+const COL = [36, 188, 340];
+const SLOT = [112, 184, 256];
+const CW = 140, CH = 64;
+/* Largura do canal em Inter 10,5 / 500, mais 7 de folga de cada lado. */
+const larguraCanal: Record<string, number> = { Instagram: 49.8, 'Indicação': 48.4, Google: 35.5, Site: 18.9 };
+const pilula = (canal: string) => Math.round(larguraCanal[canal] + 14);
+
+/* Estado de cada coluna num glifo de progresso: metade, três quartos e
+   cheio com visto. */
 const colunas = [
-  { x: 48, rotulo: 'Novo' },
-  { x: 152, rotulo: 'Em contato' },
-  { x: 256, rotulo: 'Agendado' },
+  { x: COL[0], nome: 'Em contato', estado: 'meio' },
+  { x: COL[1], nome: 'Agendado', estado: 'quase' },
+  { x: COL[2], nome: 'Atendido', estado: 'feito' },
 ];
-const SLOT = [132, 178];
-const cartoes = [
-  { c: 0, s: 0, b: [36, 22] },
-  { c: 0, s: 1, b: [28, 18] },
-  { c: 1, s: 0, b: [32, 20] },
-  { c: 2, s: 0, b: [30, 24] },
+type Cartao = { c: number; s: number; titulo: string; canal: string; quando: string; visto?: boolean };
+const fixos: Cartao[] = [
+  { c: 0, s: 0, titulo: 'Fios de PDO', canal: 'Instagram', quando: 'há 5 h' },
+  { c: 1, s: 0, titulo: 'Retorno', canal: 'Site', quando: 'sex, 09:30', visto: true },
+  { c: 2, s: 0, titulo: 'Laser', canal: 'Site', quando: 'ter' },
+  { c: 2, s: 1, titulo: 'Peeling', canal: 'Google', quando: 'seg' },
 ];
-/* O cartão que anda: nasce no segundo lugar de "Em contato" e assenta no
-   segundo lugar de "Agendado", 104 à direita. */
-const MX = colunas[2].x + 6, MY = SLOT[1], DX = 104;
-const W = 84;
+/* Os de baixo de "Em contato" sobem uma vaga quando o cartão sai. */
+const sobem: Cartao[] = [
+  { c: 0, s: 1, titulo: 'Avaliação', canal: 'Indicação', quando: 'há 1 h' },
+  { c: 0, s: 2, titulo: 'Consulta', canal: 'Google', quando: 'ontem' },
+];
+
+/* O cartão que anda: assenta no segundo lugar de "Agendado" (pose final) e
+   parte do segundo lugar de "Em contato", 152 à esquerda. */
+const MX = COL[1], MY = SLOT[1];
+/* Cursor: descansa em (288, 254), logo abaixo do cartão, com a etiqueta
+   na faixa vazia de "Agendado". */
+const RX = 288, RY = 254;
 ---
 <g class="crm">
   <defs>
-    {/* Fio vertical que nasce e morre no escuro (divisão das colunas). */}
-    <linearGradient id={`${p}-fio-v`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    <linearGradient id={`${p}-cartao`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#222222" /><stop offset="1" stop-color="#1b1b1b" />
     </linearGradient>
-    {/* Sombra curta do cartão enquanto ele está no ar. */}
-    <filter id={`${p}-no-ar`} x="-20%" y="-30%" width="140%" height="190%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity=".6" />
-    </filter>
+    {/* A terceira coluna se apaga na borda: o quadro continua além dela. */}
+    <linearGradient id={`${p}-apaga`} gradientUnits="userSpaceOnUse" x1="336" y1="0" x2="400" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".62" /><stop offset="1" stop-color="#ffffff" stop-opacity=".08" />
+    </linearGradient>
+    <mask id={`${p}-borda`} maskUnits="userSpaceOnUse" x="320" y="0" width="200" height="400">
+      <rect x="320" y="0" width="200" height="400" fill={`url(#${p}-apaga)`} />
+    </mask>
   </defs>
-  <rect width="400" height="300" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
 
-  {/* Painel e cabeçalho. */}
-  <rect x="36" y="64" width="328" height="172" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-  <rect x="56" y="64.5" width="288" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x="64" y="86" class="a-micro">Pipeline</text>
-  <g class="crm__menu">
-    <circle cx="322.5" cy="82" r="1.5" /><circle cx="328.5" cy="82" r="1.5" /><circle cx="334.5" cy="82" r="1.5" />
+  {/* Janela do produto, recortada pela borda. */}
+  <rect x={WX} y={WY} width="460" height="320" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={WX + 16} y={WY + 0.5} width="340" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x="44" y="59" class="crm__trilha">Comercial</text>
+  <text x="113" y="59" class="crm__barra">/</text>
+  <text x="125" y="59" class="crm__titulo">Pipeline</text>
+  {/* Quem está no quadro agora: duas pessoas, em silhueta; a da frente
+      (a Recepção) tem o anel da cor do cursor dela, como nos editores
+      compartilhados. */}
+  <g class="crm__equipe">
+    <circle cx="348" cy="54" r="11" class="crm__avatar" />
+    <circle cx="348" cy="51.5" r="3" class="crm__silhueta" />
+    <path d="M342 61.5a6 6 0 0 1 12 0" class="crm__silhueta" />
+    <circle cx="370" cy="54" r="12.5" class="crm__recorte" />
+    <circle cx="370" cy="54" r="11" class="crm__avatar crm__avatar--rec" />
+    <circle cx="370" cy="51.5" r="3" class="crm__silhueta crm__silhueta--rec" />
+    <path d="M364 61.5a6 6 0 0 1 12 0" class="crm__silhueta crm__silhueta--rec" />
   </g>
+  <rect x={WX} y={WY + 44} width="460" height="1" class="crm__divisa" />
 
-  {/* Um poço só, dividido em três colunas por fios que somem nas pontas. */}
-  <rect x="48" y="100" width="304" height="124" rx="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
-  <rect x="148" y="108" width="1" height="108" fill={`url(#${p}-fio-v)`} />
-  <rect x="252" y="108" width="1" height="108" fill={`url(#${p}-fio-v)`} />
-  {colunas.map(({ x, rotulo }) => (
-    <text x={x + 16} y="121" class="a-rotulo crm__coluna">{rotulo}</text>
+  {/* Cabeçalho das colunas: glifo de estado e nome. */}
+  {colunas.map(({ x, nome, estado }) => (
+    <g class:list={['crm__cabeca', { 'crm__apagada': estado === 'feito' }]} mask={estado === 'feito' ? `url(#${p}-borda)` : undefined}>
+      <circle cx={x + 10} cy="96" r="5.5" class="crm__estado" />
+      {estado === 'meio' && <path d={`M${x + 10} 93a3 3 0 0 1 0 6z`} class="crm__estado-cheio" />}
+      {estado === 'quase' && <path d={`M${x + 10} 96v-3a3 3 0 1 1 -3 3z`} class="crm__estado-cheio" />}
+      {estado === 'feito' && <>
+        <circle cx={x + 10} cy="96" r="5.5" class="crm__estado-cheio" />
+        <path d={`M${x + 7.6} 96.2l1.7 1.7l3.1-3.4`} class="crm__estado-visto" />
+      </>}
+      <text x={x + 22} y="100" class="crm__coluna">{nome}</text>
+    </g>
   ))}
 
-  {/* Cartões que ficam parados; recuam para o agendado ser o foco. */}
-  {cartoes.map(({ c, s, b }) => {
-    const x = colunas[c].x + 6, y = SLOT[s];
-    return (
-      <g class="crm__cartao">
-        <rect x={x} y={y} width={W} height="40" rx="6" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-        <circle class="crm__avatar" cx={x + 17} cy={y + 20} r="7" />
-        <rect x={x + 32} y={y + 14} width={b[0]} height="4" rx="2" class="crm__barra" />
-        <rect x={x + 32} y={y + 22} width={b[1]} height="4" rx="2" class="crm__barra crm__barra--2" />
+  {/* Cartões. */}
+  {[fixos, sobem].map((lista, i) => (
+    <g class={i === 1 ? 'crm__sobe' : undefined}>
+      {lista.map(({ c, s, titulo, canal, quando, visto }) => {
+        const x = COL[c], y = SLOT[s];
+        return (
+          <g class:list={['crm__cartao', { 'crm__apagada': c === 2 }]} mask={c === 2 ? `url(#${p}-borda)` : undefined}>
+            <rect x={x} y={y} width={CW} height={CH} rx="9" fill={`url(#${p}-cartao)`} stroke={`url(#${p}-fio)`} />
+            <text x={x + 12} y={y + 24} class="crm__nome">{titulo}</text>
+            <rect x={x + 12} y={y + 36} width={pilula(canal)} height="18" rx="9" class="crm__canal" />
+            <text x={x + 12 + pilula(canal) / 2} y={y + 48.5} text-anchor="middle" class="crm__canal-nome">{canal}</text>
+            <text x={x + CW - 12} y={y + 48.5} text-anchor="end" class="crm__quando">{quando}</text>
+            {visto && <g class="crm__visto-fixo">
+              <circle cx={x + CW - 18} cy={y + 20} r="6" />
+              <path d={`M${x + CW - 20.5} ${y + 20}l1.8 1.8l3.2-3.6`} />
+            </g>}
+          </g>
+        );
+      })}
+    </g>
+  ))}
+
+  {/* O cartão arrastado, já em "Agendado". */}
+  <g class="crm__movel">
+    <g class="crm__arco">
+      <g class="crm__some">
+        <g class="crm__ergue">
+          <rect class="crm__sombra" x={MX} y={MY} width={CW} height={CH} rx="9" fill="#000000" filter={`url(#${p}-sombra)`} />
+          <rect x={MX} y={MY} width={CW} height={CH} rx="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+          <rect x={MX + 20} y={MY + 0.5} width={CW - 40} height="1" fill={`url(#${p}-fio-h)`} />
+          <text x={MX + 12} y={MY + 24} class="crm__nome crm__nome--foco">Harmonização</text>
+          <rect x={MX + 12} y={MY + 36} width={pilula('Google')} height="18" rx="9" class="crm__canal" />
+          <text x={MX + 12 + pilula('Google') / 2} y={MY + 48.5} text-anchor="middle" class="crm__canal-nome">Google</text>
+          <text x={MX + CW - 12} y={MY + 48.5} text-anchor="end" class="crm__quando crm__antes">há 2 h</text>
+          <text x={MX + CW - 12} y={MY + 48.5} text-anchor="end" class="crm__quando crm__quando--foco crm__depois">qui, 14:00</text>
+          <circle class="crm__visto-anel" cx={MX + CW - 18} cy={MY + 20} r="6" />
+          <path class="crm__visto" d={`M${MX + CW - 20.5} ${MY + 20}l1.8 1.8l3.2-3.6`} pathLength="1" />
+        </g>
       </g>
-    );
-  })}
-
-  {/* A vaga que o cartão deixou em "Em contato". */}
-  <rect class="crm__vaga" x={MX - DX + 0.5} y={MY + 0.5} width={W - 1} height="39" rx="5.5" />
-
-  {/* Cópia do cartão em "Em contato", só para o fade cruzado da volta. */}
-  <g class="crm__fantasma">
-    <rect x={MX - DX} y={MY} width={W} height="40" rx="6" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <circle class="crm__avatar crm__avatar--foco" cx={MX - DX + 17} cy={MY + 20} r="7" />
-    <rect x={MX - DX + 32} y={MY + 14} width="28" height="4" rx="2" class="crm__barra crm__barra--foco" />
-    <rect x={MX - DX + 32} y={MY + 22} width="16" height="4" rx="2" class="crm__barra crm__barra--foco-2" />
+    </g>
   </g>
 
-  {/* O cartão em foco, já agendado, com o visto. */}
-  <g class="crm__movel">
-    <g class="crm__ergue">
-      <rect class="crm__sombra" x={MX} y={MY} width={W} height="40" rx="6" fill="#000000" filter={`url(#${p}-no-ar)`} />
-      <rect x={MX} y={MY} width={W} height="40" rx="6" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-      <circle class="crm__avatar crm__avatar--foco" cx={MX + 17} cy={MY + 20} r="7" />
-      <rect x={MX + 32} y={MY + 14} width="28" height="4" rx="2" class="crm__barra crm__barra--foco" />
-      <rect x={MX + 32} y={MY + 22} width="16" height="4" rx="2" class="crm__barra crm__barra--foco-2" />
-      <path class="a-destaque-traco crm__visto" d={`M${MX + 66.5} ${MY + 20.5}l2.5 2.5l5-5.5`} pathLength="1" />
+  {/* Cursor da Recepção, descansando depois de soltar o cartão. */}
+  <g class="crm__cursor">
+    <g class="crm__cursor-x">
+      <g class="crm__cursor-y">
+        <g transform={`translate(${RX} ${RY})`}><Cursor nome="Recepção" /></g>
+      </g>
     </g>
   </g>
 </g>
 
 <style>
-  .crm__menu { fill: #7c7c78; }
-  .crm .crm__coluna { font-size: 13px; fill: #9d9d98; }
-  /* Os cartões parados recuam; o foco é o cartão agendado. */
-  .crm__cartao { opacity: .72; }
-  .crm__avatar { fill: none; stroke: #ffffff; stroke-opacity: .18; }
-  .crm__avatar--foco { stroke-opacity: .42; }
-  .crm__barra { fill: #ffffff; fill-opacity: .11; }
-  .crm__barra--2 { fill-opacity: .06; }
-  .crm__barra--foco { fill-opacity: .24; }
-  .crm__barra--foco-2 { fill-opacity: .1; }
-  .crm .crm__visto { stroke-width: 1.4; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
-  .crm__vaga { fill: none; stroke: #ffffff; stroke-opacity: .09; stroke-dasharray: 2 4; }
+  .crm__trilha { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
+  .crm__barra { font-size: 13px; fill: #4d4d49; }
+  .crm__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .crm__divisa { fill: #ffffff; fill-opacity: .06; }
+  .crm__avatar { fill: #262626; stroke: #ffffff; stroke-opacity: .1; }
+  .crm__avatar--rec { fill: #2a2a2a; stroke: var(--destaque, #FFD103); stroke-opacity: 1; stroke-width: 1.2; }
+  .crm__recorte { fill: #1b1b1b; }
+  .crm__silhueta { fill: none; stroke: #6f6f6b; stroke-width: 1.2; stroke-linecap: round; }
+  .crm__silhueta--rec { stroke: #b9b9b4; }
+  .crm__coluna { font-size: 12.5px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
+  .crm__estado { fill: none; stroke: #8a8a85; stroke-width: 1.2; }
+  .crm__estado-cheio { fill: #8a8a85; }
+  .crm__estado-visto { fill: none; stroke: #1a1a1a; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .crm__nome { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.01em; }
+  .crm__nome--foco { fill: #ecece8; }
+  .crm__canal { fill: #ffffff; fill-opacity: .045; stroke: #ffffff; stroke-opacity: .08; }
+  .crm__canal-nome { font-size: 10.5px; font-weight: 500; fill: #a3a39e; }
+  .crm__quando { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .crm__quando--foco { fill: #b9b9b4; }
+  .crm__visto-fixo circle, .crm__visto-anel { fill: none; stroke: #ffffff; stroke-opacity: .22; }
+  .crm__visto-fixo path, .crm__visto { fill: none; stroke: #8a8a85; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .crm__visto-anel { stroke-opacity: .5; }
+  .crm__visto { stroke: #ecece8; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .crm__cartao { opacity: .74; }
   .crm__sombra { opacity: 0; }
+  .crm__antes { opacity: 0; }
 
-  /* Movimento, em laço de 10 s: o cartão agendado some enquanto a cópia
-     reaparece em "Em contato" (fade cruzado); os dois trocam de lugar sem
-     se ver. O cartão sobe 2, com uma sombra curta, desliza 104 até
-     "Agendado" em 1,4 s, assenta e o visto se desenha. O movimento acaba em
-     38% do ciclo; o resto é repouso. O 0% de cada keyframe é a pose final. */
-  .crm__movel, .crm__ergue { transform-box: fill-box; }
-  .crm__movel, .crm__ergue, .crm__sombra, .crm__fantasma, .crm__visto {
-    animation-duration: 10s; animation-delay: .6s; animation-iteration-count: infinite;
+  /* Movimento, em laço de 12 s (tempos do ciclo), um passo de cada vez:
+     0–0,8 s   repouso na pose final;
+     0,8–1,2   a cena volta um passo: cursor e cartão somem;
+     1,25–1,7  os cartões de baixo de "Em contato" descem uma vaga;
+     1,65–2,05 o cartão reaparece no lugar dele, ainda sem o visto;
+     2,0–3,0   o cursor entra por baixo, numa curva, até o cartão;
+     3,0–3,2   clique (a seta encolhe e volta);
+     3,1–3,4   o cartão levanta, com sombra e 2° de inclinação; os de baixo
+               sobem para fechar a vaga (3,25–3,85);
+     3,4–4,8   arrasto de 152 até "Agendado", num arco leve;
+     4,8–5,1   o cartão assenta; o horário troca e o visto se desenha;
+     5,25–5,75 o cursor se afasta um pouco e descansa.
+     O resto (≈ 59% do ciclo) é repouso. O 0% de cada keyframe é a pose
+     final. */
+  .crm__movel, .crm__arco, .crm__some, .crm__ergue, .crm__sombra, .crm__sobe,
+  .crm__antes, .crm__depois, .crm__visto, .crm__visto-anel,
+  .crm__cursor, .crm__cursor-x, .crm__cursor-y, .crm :global(.a-cursor__seta) {
+    animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
     animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
   }
-  .crm__movel { animation-name: crm-desliza; }
+  .crm__ergue { transform-box: fill-box; transform-origin: 50% 50%; }
+  .crm__movel { animation-name: crm-movel; }
+  .crm__arco { animation-name: crm-arco; }
+  .crm__some { animation-name: crm-some; }
   .crm__ergue { animation-name: crm-ergue; }
   .crm__sombra { animation-name: crm-sombra; }
-  .crm__fantasma { opacity: 0; animation-name: crm-fantasma; }
+  .crm__sobe { animation-name: crm-sobe; }
+  .crm__antes { animation-name: crm-antes; }
+  .crm__depois { animation-name: crm-depois; }
   .crm__visto { animation-name: crm-visto; }
+  .crm__visto-anel { animation-name: crm-visto-anel; }
+  .crm__cursor { animation-name: crm-cursor; }
+  .crm__cursor-x { animation-name: crm-cursor-x; }
+  .crm__cursor-y { animation-name: crm-cursor-y; }
+  .crm :global(.a-cursor__seta) { animation-name: crm-clique; }
 
-  @keyframes crm-desliza {
-    0% { transform: translateX(0); opacity: 1; }
-    8% { transform: translateX(0); opacity: 0; }
-    8.1% { transform: translateX(-104px); opacity: 0; }
-    8.2%, 14% { transform: translateX(-104px); opacity: 1; }
-    28%, 100% { transform: translateX(0); opacity: 1; }
+  @keyframes crm-movel {
+    0%, 10% { transform: translateX(0); }
+    10.01%, 28.33% { transform: translateX(-152px); }
+    40%, 100% { transform: translateX(0); }
+  }
+  @keyframes crm-arco {
+    0%, 28.33% { transform: translateY(0); }
+    34.17% { transform: translateY(-6px); }
+    40%, 100% { transform: translateY(0); }
+  }
+  @keyframes crm-some {
+    0%, 6.67% { opacity: 1; }
+    10%, 13.75% { opacity: 0; }
+    17.08%, 100% { opacity: 1; }
   }
   @keyframes crm-ergue {
-    0%, 12% { transform: translateY(0); }
-    16%, 26% { transform: translateY(-2px); }
-    30%, 100% { transform: translateY(0); }
+    0%, 25.83% { transform: none; }
+    28.33%, 40% { transform: scale(1.03) rotate(2deg); }
+    42.5%, 100% { transform: none; }
   }
   @keyframes crm-sombra {
-    0%, 12% { opacity: 0; }
-    16%, 26% { opacity: 1; }
-    31%, 100% { opacity: 0; }
+    0%, 25.83% { opacity: 0; }
+    28.33%, 40% { opacity: 1; }
+    42.5%, 100% { opacity: 0; }
   }
-  @keyframes crm-fantasma {
-    0% { opacity: 0; }
-    8%, 10% { opacity: 1; }
-    10.1%, 100% { opacity: 0; }
+  @keyframes crm-sobe {
+    0%, 10.42% { transform: translateY(0); }
+    14.17%, 27.08% { transform: translateY(72px); }
+    32.08%, 100% { transform: translateY(0); }
+  }
+  @keyframes crm-antes {
+    0%, 10% { opacity: 0; }
+    10.01%, 41.67% { opacity: 1; }
+    45%, 100% { opacity: 0; }
+  }
+  @keyframes crm-depois {
+    0%, 10% { opacity: 1; }
+    10.01%, 41.67% { opacity: 0; }
+    45%, 100% { opacity: 1; }
   }
   @keyframes crm-visto {
-    0%, 8% { stroke-dashoffset: 0; }
-    8.1%, 30% { stroke-dashoffset: 1; }
-    38%, 100% { stroke-dashoffset: 0; }
+    0%, 10% { stroke-dashoffset: 0; }
+    10.01%, 42.5% { stroke-dashoffset: 1; }
+    46.67%, 100% { stroke-dashoffset: 0; }
+  }
+  @keyframes crm-visto-anel {
+    0%, 10% { opacity: 1; }
+    10.01%, 41.67% { opacity: 0; }
+    45%, 100% { opacity: 1; }
+  }
+  @keyframes crm-cursor {
+    0%, 6.67% { opacity: 1; }
+    10% { opacity: 0; }
+    10.01%, 100% { opacity: 1; }
+  }
+  /* Entrada em curva: o X corre no começo e o Y vai por igual. O arrasto e
+     o arco usam os mesmos tempos do cartão, para a mão não descolar dele. */
+  @keyframes crm-cursor-x {
+    0%, 10% { transform: translateX(0); }
+    10.01%, 16.67% { transform: translateX(-228px); animation-timing-function: cubic-bezier(.25, .6, .3, 1); }
+    25%, 28.33% { transform: translateX(-156px); }
+    40%, 43.75% { transform: translateX(-4px); }
+    47.92%, 100% { transform: translateX(0); }
+  }
+  @keyframes crm-cursor-y {
+    0%, 10% { transform: translateY(0); }
+    10.01%, 16.67% { transform: translateY(82px); animation-timing-function: cubic-bezier(.55, 0, .35, 1); }
+    25%, 28.33% { transform: translateY(-40px); }
+    34.17% { transform: translateY(-46px); }
+    40%, 43.75% { transform: translateY(-40px); }
+    47.92%, 100% { transform: translateY(0); }
+  }
+  @keyframes crm-clique {
+    0%, 25% { transform: scale(1); }
+    25.83% { transform: scale(.88); }
+    26.67%, 100% { transform: scale(1); }
   }
 </style>

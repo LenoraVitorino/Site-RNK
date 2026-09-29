@@ -34,6 +34,12 @@
 :where(.arte) .a-destaque { fill: var(--destaque, #FFD103); }
 :where(.arte) .a-destaque-traco { fill: none; stroke: var(--destaque, #FFD103); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
+/* Cursor de colega (arte/Cursor.astro): seta e etiqueta amarelas, o nome
+   em grafite; o contorno escuro da seta a separa do que está embaixo. */
+:where(.arte) .a-cursor__etiqueta { fill: var(--destaque, #FFD103); }
+:where(.arte) .a-cursor__nome { font-size: 11.5px; font-weight: 500; letter-spacing: -.005em; fill: #161616; }
+:where(.arte) .a-cursor__seta { fill: var(--destaque, #FFD103); stroke: #0b0b0b; transform-box: fill-box; transform-origin: 0 0; }
+
 /* Pausa geral: nada se move enquanto a cena não está na tela. */
 .js .arte:not(.em-cena) * { animation-play-state: paused !important; }
 

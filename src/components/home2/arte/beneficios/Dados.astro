@@ -1,119 +1,225 @@
 ---
 /**
- * Decisões baseadas em dados: um funil em barras verticais (Leads, Contato,
- * Avaliação, Agendado, Compareceu), de fio fino e preenchimento que some na
- * base. Na maior queda, entre Avaliação e Agendado, o pedaço que falta fica
- * marcado por um contorno tracejado, com a pílula "Ponto de perda" presa a
- * ele por um fio. Na entrada, as barras sobem da linha de base em cascata e
- * depois a anotação aparece. Pose estática = pose final; o movimento só
- * parte dela.
+ * Decisões baseadas em dados: o painel de indicadores, com três abas
+ * (Custo por agendamento, Comparecimento, Retorno por canal), cada uma com
+ * o seu minigráfico, e o gráfico grande do comparecimento, que cai de um
+ * mês para o outro. "Você" passou o cursor pelo gráfico, com a mira
+ * vertical acompanhando, parou na queda e abriu o detalhe: "Ponto de perda
+ * · comparecimento", com a ação sugerida, "Confirmar na véspera". Em laço,
+ * a cena volta um passo e repete a leitura. Pose estática = pose final; o
+ * movimento só parte dela.
  */
+import Cursor from '../Cursor.astro';
+
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Barras de 32 a cada 92 (centros em x 76 a 444) sobre a linha de base em
-   y 196; o topo tem raio 8. A maior queda (44) fica entre Avaliação e
-   Agendado; as outras são de 20, 20 e 8. */
-const B = 196, L = 32, R = 8;
-const barras = [
-  { rotulo: 'Leads', x: 76, h: 128 },
-  { rotulo: 'Contato', x: 168, h: 108 },
-  { rotulo: 'Avaliação', x: 260, h: 88 },
-  { rotulo: 'Agendado', x: 352, h: 44 },
-  { rotulo: 'Compareceu', x: 444, h: 36 },
-].map((b, i) => ({ ...b, topo: B - b.h, atraso: (0.4 + i * 0.14).toFixed(2) }));
-
-/* Contorno de barra aberto embaixo (para o fio; com Z, para o fundo). */
-const contorno = (x: number, topo: number, base = B) => {
-  const e = x - L / 2, d = x + L / 2;
-  return `M${e} ${base}V${topo + R}A${R} ${R} 0 0 1 ${e + R} ${topo}H${d - R}A${R} ${R} 0 0 1 ${d} ${topo + R}V${base}`;
+/* Curva monótona (sem passar do ponto nos vales e picos), como os gráficos
+   de produto: controles a um terço de cada vão, na inclinação de
+   Fritsch–Carlson. */
+type Ponto = [number, number];
+const r1 = (n: number) => Math.round(n * 10) / 10;
+const curva = (pts: Ponto[]) => {
+  const n = pts.length, dx: number[] = [], s: number[] = [], m: number[] = [];
+  for (let i = 0; i < n - 1; i++) { dx[i] = pts[i + 1][0] - pts[i][0]; s[i] = (pts[i + 1][1] - pts[i][1]) / dx[i]; }
+  m[0] = s[0]; m[n - 1] = s[n - 2];
+  for (let i = 1; i < n - 1; i++) {
+    m[i] = s[i - 1] * s[i] <= 0 ? 0 : (3 * (dx[i - 1] + dx[i])) / ((2 * dx[i] + dx[i - 1]) / s[i - 1] + (dx[i] + 2 * dx[i - 1]) / s[i]);
+  }
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < n - 1; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], h = dx[i] / 3;
+    d += `C${r1(x0 + h)} ${r1(y0 + m[i] * h)} ${r1(x1 - h)} ${r1(y1 - m[i + 1] * h)} ${x1} ${y1}`;
+  }
+  return d;
 };
 
-/* O pedaço que falta em Agendado: do topo dele até o nível de Avaliação. */
-const perda = barras[3], antes = barras[2];
-const PX = perda.x;
+/* Gráfico: de x 24 a 496, topo em 78 (o mesmo do detalhe, onde a mira
+   começa) e base em 204 (meses em 226). O comparecimento anda estável e
+   cai no fim de julho; o ponto de perda fica no fim da queda, em
+   (240, 152). Depois dela a linha corre entre 147 e 155: abaixo do
+   detalhe (que termina em 138) e acima da etiqueta do cursor (179 a 198),
+   que assim não encosta na base nem nos meses. */
+const G0 = 78, GB = 204;
+const QX = 240, QY = 152;
+const dados: Ponto[] = [
+  [24, 106], [52, 102], [80, 103], [108, 97], [136, 98], [164, 95], [190, 98], [210, 106],
+  [QX, QY], [268, 150], [296, 151], [324, 147], [352, 149], [384, 154], [416, 151], [444, 152], [472, 148], [496, 150],
+];
+const LINHA = curva(dados);
+const AREA = `${LINHA}V${GB}H24Z`;
+const meses = [{ nome: 'jun', x: 83 }, { nome: 'jul', x: 201 }, { nome: 'ago', x: 319 }, { nome: 'set', x: 437 }];
+
+/* Abas: rótulo de 13 e minigráfico de 64 × 12 embaixo; 28 entre elas. A
+   do meio (Comparecimento) está aberta e repete a forma do gráfico. As
+   outras duas vão bem: o custo desce devagar e o retorno sobe. */
+const mini = (pts: Ponto[], x: number, y: number) => {
+  const xs = pts.map((q) => q[0]), ys = pts.map((q) => q[1]);
+  const [a, b, c, e] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  return curva(pts.map(([px, py]) => [r1(x + ((px - a) / (b - a)) * 64), r1(y + ((py - c) / (e - c)) * 12)] as Ponto));
+};
+const abas = [
+  { nome: 'Custo por agendamento', x: 24, w: 148.5, pts: [[0, 2], [2, 2.8], [3, 2.5], [5, 4.6], [6, 4.3], [8, 6]] as Ponto[] },
+  { nome: 'Comparecimento', x: 201, w: 105.9, pts: [[0, 3], [2, 2], [4, 2.4], [5, 3.2], [6, 10], [7, 9.4], [9, 9.8]] as Ponto[], aberta: true },
+  { nome: 'Retorno por canal', x: 335, w: 109.2, pts: [[0, 8], [2, 7.4], [4, 7.8], [5, 5.6], [7, 4], [8, 2.6]] as Ponto[] },
+];
+
+/* Detalhe: 240 × 60, à direita da mira, sobre o vazio que a queda deixa.
+   Linha do título de 32 e linha da ação de 28, com a divisória entre elas
+   em coordenada inteira. */
+const TX = 252, TY = 78, TW = 240, TH = 60;
+/* Cursor: descansa logo abaixo do ponto de perda, com a etiqueta entre a
+   linha e a base do gráfico. */
+const RX = QX + 4, RY = QY + 9;
 ---
 <g class="dados">
   <defs>
-    {/* Fundo das barras: superfície opaca que desce ao tom do cartão na base. */}
-    <linearGradient id={`${p}-barra`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#1f1f1f" /><stop offset="1" stop-color="#101010" />
+    {/* O gráfico nasce do escuro na borda esquerda: é um recorte de uma
+        série que vem de antes. */}
+    <linearGradient id={`${p}-nasce`} gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="80" y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset="1" stop-color="#ffffff" />
     </linearGradient>
-    {/* As barras nascem da linha de base: nada aparece abaixo dela. */}
-    <clipPath id={`${p}-base`}>
-      <rect x="0" y="0" width="520" height={B} />
-    </clipPath>
+    <mask id={`${p}-grafico`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
+      <rect x="0" y="0" width="520" height="250" fill={`url(#${p}-nasce)`} />
+    </mask>
   </defs>
 
-  <rect width="520" height="250" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
-
-  {/* Barras do funil. */}
-  <g clip-path={`url(#${p}-base)`}>
-    {barras.map(({ x, topo, atraso }) => (
-      <g class="dados__barra" style={`--atraso:${atraso}s`}>
-        <path d={`${contorno(x, topo)}Z`} fill={`url(#${p}-barra)`} />
-        <path d={contorno(x, topo)} fill="none" stroke={`url(#${p}-fio)`} />
-        {/* Aresta de cima, um fio de luz que some nas pontas, como nos chips. */}
-        <rect x={x - 10} y={topo + 0.5} width="20" height="1" fill={`url(#${p}-fio-h)`} />
-      </g>
-    ))}
-  </g>
-
-  {/* Linha de base que nasce e morre no escuro. */}
-  <rect x="40" y={B - 0.5} width="440" height="1" fill={`url(#${p}-fio-h)`} />
-
-  {barras.map(({ rotulo, x }) => (
-    <text x={x} y={B + 24} text-anchor="middle" class="a-rotulo dados__rotulo">{rotulo}</text>
+  {/* Abas dos indicadores. */}
+  {abas.map(({ nome, x, w, pts, aberta }) => (
+    <g>
+      <text x={x} y="30" class:list={['dados__aba', { 'dados__aba--aberta': aberta }]}>{nome}</text>
+      <path d={mini(pts, x, 40)} class:list={['dados__mini', { 'dados__mini--aberta': aberta }]} />
+      {aberta && <rect x={x} y="62" width={w} height="2" rx="1" class="dados__sublinhado" />}
+    </g>
   ))}
+  <rect x="24" y="63.5" width="472" height="1" class="dados__divisa" />
 
-  {/* A perda: guia no nível de Avaliação e o pedaço que falta, tracejados. */}
-  <g class="dados__perda">
-    <path class="a-tracejado dados__tracejado" d={`M${antes.x + L / 2 + 4} ${antes.topo + 0.5}H${PX - L / 2 - 4}`} />
-    <path class="a-tracejado dados__tracejado" d={contorno(PX, antes.topo, perda.topo)} />
+  {/* Gráfico: grade apagada, área e linha. */}
+  <g mask={`url(#${p}-grafico)`}>
+    {[108, 140, 172].map((y) => <rect x="24" y={y} width="472" height="1" class="dados__grade" />)}
+    <path d={AREA} fill={`url(#${p}-area)`} />
+    <path d={LINHA} class="dados__linha" />
+  </g>
+  <rect x="24" y={GB} width="472" height="1" fill={`url(#${p}-fio-h)`} />
+  {meses.map(({ nome, x }) => <text x={x} y="226" text-anchor="middle" class="dados__mes">{nome}</text>)}
+
+  {/* Mira vertical e o ponto de perda marcado. */}
+  <g class="dados__mira">
+    <rect x={QX - 0.5} y={G0} width="1" height={GB - G0} class="dados__mira-fio" />
+  </g>
+  <g class="dados__marca">
+    <circle cx={QX} cy={QY} r="4.5" class="dados__marca-anel" />
   </g>
 
-  {/* Fio da anotação, do pedaço que falta até a pílula. */}
-  <path class="dados__fio" d={`M${PX} ${antes.topo}V72`} pathLength="1" />
-  <g class="dados__ancora">
-    <circle class="dados__anel" cx={PX} cy={antes.topo} r="3.5" />
-    <circle class="dados__miolo" cx={PX} cy={antes.topo} r="1.25" />
+  {/* Detalhe do ponto, com a ação sugerida. */}
+  <g class="dados__detalhe">
+    <rect x={TX} y={TY} width={TW} height={TH} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={TX} y={TY} width={TW} height={TH} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={TX + 20} y={TY + 0.5} width={TW - 40} height="1" fill={`url(#${p}-fio-h)`} />
+    <text x={TX + 16} y={TY + 21} class="dados__detalhe-titulo">Ponto de perda <tspan class="dados__detalhe-onde">· comparecimento</tspan></text>
+    <rect x={TX} y={TY + 32} width={TW} height="1" class="dados__divisa" />
+    {/* Sino de lembrete (Lucide), 13 × 13, no meio da linha da ação. */}
+    <g class="a-icone dados__icone" transform={`translate(${TX + 16} ${TY + 40}) scale(.5417)`}>
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </g>
+    <text x={TX + 36} y={TY + 51} class="dados__acao">Confirmar na véspera</text>
+    <path d={`M${TX + TW - 26} ${TY + 46.5}h8m-3 -3l3 3l-3 3`} class="dados__seta" />
   </g>
 
-  {/* Pílula de anotação com o ponto amarelo: a mesma construção do "Espaço
-      aberto" de Oportunidades de mercado (ponto a 18 da borda, texto a 30,
-      folga de 18 à direita). */}
-  <g class="dados__nota">
-    <rect x={PX - 74} y="40" width="148" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-    <circle cx={PX - 74 + 18} cy="56" r="2.25" class="a-destaque dados__ponto" />
-    <text x={PX - 74 + 30} y="61" class="a-rotulo dados__nota-texto">Ponto de perda</text>
+  {/* Cursor de quem está lendo o painel. */}
+  <g class="dados__cursor">
+    <g class="dados__cursor-x">
+      <g class="dados__cursor-y">
+        <g transform={`translate(${RX} ${RY})`}><Cursor nome="Você" /></g>
+      </g>
+    </g>
   </g>
 </g>
 
 <style>
-  .dados .dados__rotulo { font-size: 14px; }
-  .dados .dados__nota-texto { font-size: 14px; fill: #ecece8; }
-  /* O pedaço que falta é o conceito da cena: tracejado um pouco mais firme
-     que o comum, para ainda se ler no cartão do celular. */
-  .dados .dados__tracejado { stroke-opacity: .24; stroke-dasharray: 2 3; }
-  .dados__fio { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-dasharray: 1; }
-  .dados__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
-  .dados__miolo { fill: #d6d6d1; }
+  .dados__aba { font-size: 13px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
+  .dados__aba--aberta { fill: #ecece8; }
+  .dados__mini { fill: none; stroke: #ffffff; stroke-opacity: .28; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+  .dados__mini--aberta { stroke: #ecece8; stroke-opacity: .85; }
+  .dados__sublinhado { fill: #ecece8; }
+  .dados__divisa { fill: #ffffff; fill-opacity: .06; }
+  .dados__grade { fill: #ffffff; fill-opacity: .045; }
+  .dados__linha { fill: none; stroke: #ecece8; stroke-opacity: .8; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .dados__mes { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .dados__mira-fio { fill: #ffffff; fill-opacity: .24; }
+  .dados__marca-anel { fill: #0e0e0e; stroke: #ecece8; stroke-width: 1.5; }
+  .dados__detalhe-titulo { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .dados__detalhe-onde { font-weight: 400; fill: #8a8a85; }
+  .dados .dados__icone { stroke: #b9b9b4; stroke-width: 2.6; }
+  .dados__acao { font-size: 13px; fill: #d6d6d1; letter-spacing: -.005em; }
+  .dados__seta { fill: none; stroke: #8a8a85; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
 
-  /* Movimento (entrada, uma vez): as barras sobem da linha de base em
-     cascata (1,4 s cada, 140 ms entre elas); depois o pedaço que falta
-     aparece, o fio sobe até a pílula, a pílula assenta e o ponto acende. */
-  .dados__barra {
-    transform-box: fill-box;
-    animation: dados-sobe 1.4s var(--a-entra) var(--atraso) both;
+  /* Movimento, em laço de 12 s (tempos do ciclo):
+     0–0,6 s   repouso na pose final;
+     0,6–1,0   a cena volta um passo: detalhe, marca, mira e cursor somem;
+     1,1–2,1   o cursor entra por baixo, numa curva, até o começo do
+               gráfico; a mira aparece junto dele (1,8–2,1);
+     2,1–3,9   o cursor percorre o gráfico e a mira acompanha, até a queda;
+     3,9–4,1   clique; a marca aparece (4,0–4,3);
+     4,2–4,7   o detalhe sobe;
+     4,6–5,0   o cursor se afasta um pouco e descansa.
+     O resto (≈ 63% do ciclo) é repouso. O 0% de cada keyframe é a pose
+     final. */
+  .dados__mira, .dados__marca, .dados__detalhe,
+  .dados__cursor, .dados__cursor-x, .dados__cursor-y, .dados :global(.a-cursor__seta) {
+    animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
+    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
   }
-  .dados__perda { animation: dados-aparece 1.2s var(--a-entra) 1.9s both; }
-  .dados__fio { animation: dados-traca 1s var(--a-entra) 2.3s both; }
-  .dados__ancora { animation: dados-aparece 1s var(--a-entra) 2.2s both; }
-  .dados__nota { animation: dados-assenta 1.2s var(--a-entra) 2.7s both; }
-  .dados__ponto { animation: dados-aparece 1.2s var(--a-entra) 3.3s both; }
+  .dados__mira { animation-name: dados-mira; }
+  .dados__marca { animation-name: dados-marca; }
+  .dados__detalhe { animation-name: dados-detalhe; }
+  .dados__cursor { animation-name: dados-cursor; }
+  .dados__cursor-x { animation-name: dados-cursor-x; }
+  .dados__cursor-y { animation-name: dados-cursor-y; }
+  .dados :global(.a-cursor__seta) { animation-name: dados-clique; }
 
-  @keyframes dados-sobe { from { transform: translateY(calc(100% + 2px)); } }
-  @keyframes dados-aparece { from { opacity: 0; } }
-  @keyframes dados-traca { from { stroke-dashoffset: 1; } }
-  @keyframes dados-assenta { from { opacity: 0; transform: translateY(4px); } }
+  /* A mira anda com a ponta do cursor (mesmos tempos e mesma curva). */
+  @keyframes dados-mira {
+    0%, 5% { transform: translateX(0); opacity: 1; }
+    8.33% { transform: translateX(0); opacity: 0; }
+    8.34%, 15% { transform: translateX(-168px); opacity: 0; }
+    17.5% { transform: translateX(-168px); opacity: 1; }
+    32.5%, 100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes dados-marca {
+    0%, 5% { opacity: 1; }
+    8.33%, 33.33% { opacity: 0; }
+    35.83%, 100% { opacity: 1; }
+  }
+  @keyframes dados-detalhe {
+    0%, 5% { transform: translateY(0); opacity: 1; }
+    8.33%, 35% { transform: translateY(4px); opacity: 0; }
+    39.17%, 100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes dados-cursor {
+    0%, 5% { opacity: 1; }
+    8.33%, 9.17% { opacity: 0; }
+    13.33%, 100% { opacity: 1; }
+  }
+  @keyframes dados-cursor-x {
+    0%, 8.33% { transform: translateX(0); }
+    8.34%, 9.17% { transform: translateX(-204px); animation-timing-function: cubic-bezier(.25, .6, .3, 1); }
+    17.5% { transform: translateX(-172px); }
+    32.5%, 38.33% { transform: translateX(-4px); }
+    41.67%, 100% { transform: translateX(0); }
+  }
+  @keyframes dados-cursor-y {
+    0%, 8.33% { transform: translateY(0); }
+    8.34%, 9.17% { transform: translateY(125px); animation-timing-function: cubic-bezier(.55, 0, .35, 1); }
+    17.5% { transform: translateY(-43px); }
+    25% { transform: translateY(-50px); }
+    32.5%, 38.33% { transform: translateY(-9px); }
+    41.67%, 100% { transform: translateY(0); }
+  }
+  @keyframes dados-clique {
+    0%, 32.5% { transform: scale(1); }
+    33.33% { transform: scale(.88); }
+    34.17%, 100% { transform: scale(1); }
+  }
 </style>

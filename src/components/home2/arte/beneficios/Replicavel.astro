@@ -1,128 +1,161 @@
 ---
 /**
- * Crescimento replicável: o cartão-matriz "Processo validado", encaixado num
- * poço, com um checklist de três passos marcados, e duas cópias com a mesma
- * estrutura, em fio mais apagado, abertas em leque horizontal e ligadas à
- * matriz por um fio tracejado. Na entrada, as cópias saem de trás da matriz e
- * depois os vistos delas se desenham. Pose estática = pose final; o movimento
- * só parte dela.
+ * Crescimento replicável: à esquerda, o processo que deu certo, um cartão
+ * encaixado num poço ("Jornada de avaliação", com as três etapas numa
+ * trilha vertical) e o selo "Validado" por cima do canto. Dele sai um
+ * conector que se abre em três e chega a três cópias exatas do cartão, em
+ * miniatura, cada uma no seu destino e no seu tempo: Nova unidade (em
+ * março), Nova especialidade (em julho) e Novo time (agora). Em laço, a
+ * última cópia sai da vaga, um pulso desce pelo ramo dela e a cópia é
+ * carimbada de novo. Pose estática = pose final; o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Cartões de 112 × 120 no mesmo Y. A matriz fica num poço de 128 × 136
-   (vão de 8, cantos concêntricos: 14 + 8 = 22); do poço à primeira cópia e
-   entre as cópias, o mesmo vão de 32. O conjunto vai de x 52 a 468. Dentro
-   do cartão: cabeçalho de 32 (barra e sinal no meio dele, em y 16), fio, e
-   três passos a cada 24, com 12 de folga em cima e 13 embaixo. */
-const W = 112, H = 120, Y = 60;
-const MATRIZ = 60;
+/* Matriz: poço de 184 × 136 (x 24, y 57) e cartão de 168 × 120, vão de 8,
+   cantos concêntricos (14 + 8 = 22). O eixo da cena é y 125. */
+const M = { x: 32, y: 65, w: 168, h: 120 };
+/* Etapas do processo, numa trilha vertical (x 52), a cada 19, a partir de
+   13,5 abaixo da divisória. O eixo do cartão (y 125) cai entre a primeira
+   e a segunda etapa: o conector entra nas cópias entre duas linhas, sem
+   quase-encontro com um ponto. */
+const etapas = [
+  { y: 115.5, nome: 'Primeiro contato' },
+  { y: 134.5, nome: 'Agendamento' },
+  { y: 153.5, nome: 'Avaliação' },
+];
+/* Cópias: o mesmo cartão em escala .5 (84 × 60), em x 272, com os centros
+   em y 55, 125 e 195. A vaga tracejada tem a mesma forma e fica por baixo:
+   só aparece quando a cópia sai. O destino fica ao lado, a 16. */
+const CX = 272, CW = M.w / 2, CH = M.h / 2;
 const copias = [
-  { x: 212, n: 1 },
-  { x: 356, n: 2 },
+  { y: 55, destino: 'Nova unidade', quando: 'em março' },
+  { y: 125, destino: 'Nova especialidade', quando: 'em julho' },
+  { y: 195, destino: 'Novo time', quando: 'agora' },
 ];
-/* Passos do checklist: centro do anel (em relação ao alto do cartão) e
-   comprimento da barra. */
-const passos = [
-  { y: 52, w: 52 },
-  { y: 76, w: 36 },
-  { y: 100, w: 44 },
+/* Conectores: o tronco sai do anel na borda do poço (x 208) e se abre em
+   x 228; os ramos de cima e de baixo dobram duas vezes (raio 12) pelo
+   x 240 e chegam à vaga em x 272. */
+const ramo = (y: number, de = 208) => {
+  if (y === 125) return `M${de} 125H${CX}`;
+  const s = y < 125 ? -1 : 1;
+  return `M${de} 125H228C234.6 125 240 ${125 + s * 5.4} 240 ${125 + s * 12}V${y - s * 12}C240 ${y - s * 5.4} 245.4 ${y} 252 ${y}H${CX}`;
+};
+/* Selo "Validado": pílula de 92 × 24 pendurada no canto de baixo do
+   cartão (centrada na borda, y 185), alinhada à direita com o poço. */
+const SELO = { x: 116, y: 173, w: 92, h: 24 };
+/* O cartão é desenhado uma vez por posição: na matriz (escala 1) e nas
+   cópias (escala .5, com o fio em 2 para continuar com 1 unidade). */
+const moldes = [
+  { k: 'matriz', x: M.x, y: M.y, s: 1 },
+  ...copias.map(({ y }, i) => ({ k: `copia copia-${i}`, x: CX, y: y - CH / 2, s: 0.5 })),
 ];
-/* Altura do fio tracejado que sai do poço e desce em cada cópia. */
-const BUS = 32;
-const cx = (x: number) => x + W / 2;
-/* Vistos das cópias: depois que elas assentam e o fio aparece, em cascata
-   (a primeira cópia e depois a segunda). */
-const atraso = (n: number, j: number) => `animation-delay: ${(2.2 + (n - 1) * 0.36 + j * 0.12).toFixed(2)}s`;
 ---
 <g class="replicavel">
-  <defs>
-    {/* Cópias: superfície e fio um tom abaixo da matriz. */}
-    <linearGradient id={`${p}-sup-copia`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#161616" /><stop offset="1" stop-color="#111111" />
-    </linearGradient>
-    <linearGradient id={`${p}-fio-copia`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#ffffff" stop-opacity=".11" /><stop offset="1" stop-color="#ffffff" stop-opacity=".04" />
-    </linearGradient>
-  </defs>
+  {/* Conectores (entram direto na borda das cópias), o pulso do laço e o
+      anel de ancoragem na borda do poço. */}
+  <path class="replicavel__ramo" d="M208 125H228" />
+  {copias.map(({ y }) => <path class="replicavel__ramo" d={ramo(y, 228)} />)}
+  <path class="replicavel__pulso" d={ramo(195)} pathLength="100" />
+  <circle class="replicavel__anel" cx="208" cy="125" r="3.5" />
+  <circle class="replicavel__miolo" cx="208" cy="125" r="1.25" />
 
-  {/* Fio tracejado que sai da matriz, corre acima dos cartões e desce em cada
-      cópia. Os anéis vêm no fim, por cima das bordas. */}
-  <g class="replicavel__elo">
-    <path class="replicavel__fio" d={`M${cx(MATRIZ)} ${Y}V${BUS + 12}A12 12 0 0 1 ${cx(MATRIZ) + 12} ${BUS}H${cx(356) - 12}A12 12 0 0 1 ${cx(356)} ${BUS + 12}V${Y}M${cx(212)} ${BUS}V${Y}`} />
-  </g>
-
-  {/* Cópias primeiro (atrás), a de mais longe por baixo. */}
-  {[...copias].reverse().map(({ x, n }) => (
-    <g class:list={['replicavel__copia', `replicavel__copia--${n}`]}>
-      <rect x={x} y={Y} width={W} height={H} rx="14" fill={`url(#${p}-sup-copia)`} stroke={`url(#${p}-fio-copia)`} />
-      <rect x={x + 16} y={Y + 13.5} width="36" height="5" rx="2.5" class="replicavel__barra" />
-      <circle cx={x + W - 18} cy={Y + 16} r="2.25" class="replicavel__sinal-base" />
-      <rect x={x + 1} y={Y + 32} width={W - 2} height="1" fill={`url(#${p}-fio-h)`} />
-      {passos.map(({ y, w }, j) => (
-        <g>
-          <circle cx={x + 24} cy={Y + y} r="7" class="replicavel__passo" />
-          <path class="replicavel__visto" d={`M${x + 21} ${Y + y}l2 2 4-4`} pathLength="1" style={atraso(n, j)} />
-          <rect x={x + 40} y={Y + y - 2.5} width={w} height="5" rx="2.5" class="replicavel__barra" />
-        </g>
-      ))}
+  {/* Vagas tracejadas (por baixo das cópias) e os destinos. */}
+  {copias.map(({ y, destino, quando }, i) => (
+    <g>
+      <rect class="replicavel__vaga" x={CX + 0.5} y={y - CH / 2 + 0.5} width={CW - 1} height={CH - 1} rx="7" />
+      <text x={CX + CW + 16} y={y - 3} class="replicavel__destino">{destino}</text>
+      <text x={CX + CW + 16} y={y + 13} class:list={['replicavel__quando', i === 2 && 'replicavel__quando--agora']}>{quando}</text>
     </g>
   ))}
 
-  {/* Matriz, por cima, com o sinal amarelo de validada. */}
-  <g class="replicavel__matriz">
-    <rect x={MATRIZ - 8} y={Y - 8} width={W + 16} height={H + 16} rx="22" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
-    <rect x={MATRIZ} y={Y} width={W} height={H} rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <rect x={MATRIZ + 16} y={Y + 13.5} width="36" height="5" rx="2.5" class="replicavel__barra" />
-    <circle cx={MATRIZ + W - 18} cy={Y + 16} r="2.25" class="a-destaque" />
-    <rect x={MATRIZ + 1} y={Y + 32} width={W - 2} height="1" fill={`url(#${p}-fio-h)`} />
-    {passos.map(({ y, w }) => (
-      <g>
-        <circle cx={MATRIZ + 24} cy={Y + y} r="7" class="replicavel__passo" />
-        <path class="replicavel__visto" d={`M${MATRIZ + 21} ${Y + y}l2 2 4-4`} />
-        <rect x={MATRIZ + 40} y={Y + y - 2.5} width={w} height="5" rx="2.5" class="replicavel__barra" />
-      </g>
-    ))}
-  </g>
+  {/* Matriz: o poço onde o processo validado está encaixado. */}
+  <rect x={M.x - 8} y={M.y - 8} width={M.w + 16} height={M.h + 16} rx="22" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
 
-  {/* Anéis de ancoragem: na borda do poço da matriz e no alto das cópias. */}
-  <g class="replicavel__elo">
-    {[[cx(MATRIZ), Y - 8], ...copias.map(({ x }) => [cx(x), Y])].map(([a, b]) => (
-      <g>
-        <circle class="replicavel__anel" cx={a} cy={b} r="3.5" />
-        <circle class="replicavel__miolo" cx={a} cy={b} r="1.25" />
+  {/* O cartão do processo e as suas cópias exatas. */}
+  {moldes.map(({ k, x, y, s }) => (
+    <g class:list={k.split(' ').map((c) => `replicavel__${c}`)}>
+      <g transform={`translate(${x} ${y}) scale(${s})`}>
+        <rect width={M.w} height={M.h} rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} class="replicavel__cartao" />
+        <rect x="20" y="0.5" width={M.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
+        <text x="16" y="24" class="replicavel__titulo">Jornada de avaliação</text>
+        <rect x="1" y="37" width={M.w - 2} height="1" class="replicavel__divisa" />
+        {etapas.slice(0, -1).map(({ y: ey }, i) => (
+          <path class="replicavel__trilha" d={`M20 ${ey - M.y + 5}V${etapas[i + 1].y - M.y - 5}`} />
+        ))}
+        {etapas.map(({ y: ey, nome }, i) => (
+          <>
+            <circle cx="20" cy={ey - M.y} r="3" class:list={['replicavel__no', i === etapas.length - 1 && 'replicavel__no--fim']} />
+            <text x="32" y={ey - M.y + 4.5} class="replicavel__etapa">{nome}</text>
+          </>
+        ))}
       </g>
-    ))}
-  </g>
+    </g>
+  ))}
 
-  <text x={cx(MATRIZ)} y={Y + H + 32} text-anchor="middle" class="a-rotulo replicavel__rotulo">Processo validado</text>
+  {/* Selo "Validado": flutua sobre o canto do cartão, com a sombra. */}
+  <rect x={SELO.x} y={SELO.y} width={SELO.w} height={SELO.h} rx={SELO.h / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} filter={`url(#${p}-sombra)`} />
+  <rect x={SELO.x + 16} y={SELO.y + 0.5} width={SELO.w - 32} height="1" fill={`url(#${p}-fio-h)`} />
+  <path class="a-destaque-traco replicavel__selo-visto" d={`M${SELO.x + 12} ${SELO.y + 12.2}l2.6 2.6l5.2-5.6`} />
+  <text x={SELO.x + 27} y={SELO.y + 16.5} class="replicavel__selo">Validado</text>
+
 </g>
 
 <style>
-  .replicavel__fio { stroke: #ffffff; stroke-opacity: .22; stroke-dasharray: 2 4; }
+  .replicavel__ramo { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .replicavel__vaga { fill: none; stroke: #ffffff; stroke-opacity: .24; stroke-dasharray: 2 3; }
   .replicavel__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
   .replicavel__miolo { fill: #d6d6d1; }
-  .replicavel__barra { fill: #ffffff; fill-opacity: .12; }
-  .replicavel__sinal-base { fill: #ffffff; fill-opacity: .07; }
-  .replicavel__passo { fill: none; stroke: #ffffff; stroke-opacity: .22; }
-  .replicavel__visto { fill: none; stroke: #ecece8; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-  .replicavel__copia .replicavel__barra { fill-opacity: .07; }
-  .replicavel__copia .replicavel__passo { stroke-opacity: .12; }
-  .replicavel__copia .replicavel__visto { stroke: #7c7c78; }
-  .replicavel .replicavel__rotulo { font-size: 14px; fill: #ecece8; }
+  .replicavel__titulo { font-size: 13.5px; font-weight: 500; letter-spacing: -.01em; fill: #ecece8; }
+  .replicavel__divisa { fill: #ffffff; fill-opacity: .06; }
+  .replicavel__trilha { fill: none; stroke: #ffffff; stroke-opacity: .14; }
+  .replicavel__no { fill: none; stroke: #9d9d98; stroke-width: 1.2; }
+  .replicavel__no--fim { fill: #d6d6d1; stroke: none; }
+  .replicavel__etapa { font-size: 12.5px; letter-spacing: -.005em; fill: #b9b9b4; }
+  /* Nas cópias (escala .5), os fios dobram para continuar com 1 unidade. */
+  .replicavel__copia .replicavel__cartao, .replicavel__copia .replicavel__trilha { stroke-width: 2; }
+  .replicavel__copia .replicavel__no { stroke-width: 2.4; }
+  .replicavel__destino { font-size: 13px; letter-spacing: -.005em; fill: #d6d6d1; }
+  .replicavel__quando { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .replicavel__selo { font-size: 13px; font-weight: 500; letter-spacing: -.005em; fill: #d6d6d1; }
+  .replicavel .replicavel__selo-visto { stroke-width: 1.5; }
+  .replicavel__pulso {
+    fill: none; stroke: #ecece8; stroke-width: 1.5; stroke-linecap: round;
+    stroke-dasharray: 10 190; stroke-dashoffset: -112;
+  }
 
-  /* Movimento (entrada, uma vez): as cópias saem juntas de trás da matriz,
-     num gesto só, como uma pilha que se abre em leque: a de mais longe anda
-     o dobro, então a abertura é proporcional o tempo todo. A curva de ida e
-     volta começa e termina devagar (a de entrada lançaria os cartões de uma
-     vez). Quando elas assentam, o fio aparece e os vistos das cópias se
-     desenham, um a um. */
-  .replicavel__copia--1 { animation: replicavel-abre-1 1.8s var(--a-vai-vem) .4s both; }
-  .replicavel__copia--2 { animation: replicavel-abre-2 1.8s var(--a-vai-vem) .4s both; }
-  .replicavel__elo { animation: replicavel-surge 1.2s var(--a-entra) 1.9s both; }
-  .replicavel__copia .replicavel__visto { stroke-dasharray: 1; animation: replicavel-risca 1.2s var(--a-entra) both; }
-  @keyframes replicavel-abre-1 { from { transform: translateX(-152px); } }
-  @keyframes replicavel-abre-2 { from { transform: translateX(-296px); } }
-  @keyframes replicavel-surge { from { opacity: 0; } }
-  @keyframes replicavel-risca { from { stroke-dashoffset: 1; } }
+  /* Movimento, em laço de 12 s (tempos do ciclo):
+     0–0,8 s   repouso na pose final;
+     0,8–1,2   a última cópia ("agora") sai da vaga, que fica tracejada;
+     1,4–2,6   um pulso sai da matriz e desce pelo ramo dela;
+     2,5–3,5   a cópia é carimbada: aparece descendo 4 unidades;
+     3,2–3,8   o "agora" volta.
+     O resto (≈ 75% do ciclo) é repouso. O 0% de cada keyframe é a pose
+     final. */
+  .replicavel__copia-2, .replicavel__quando--agora, .replicavel__pulso {
+    animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
+    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
+  }
+  .replicavel__copia-2 { animation-name: replicavel-carimbo; transform-box: fill-box; }
+  .replicavel__quando--agora { animation-name: replicavel-agora; transform-box: fill-box; }
+  .replicavel__pulso { animation-name: replicavel-pulso; }
+
+  @keyframes replicavel-carimbo {
+    0%, 6.67% { opacity: 1; transform: none; }
+    10% { opacity: 0; transform: none; }
+    10.01%, 20.83% { opacity: 0; transform: translateY(-4px); animation-timing-function: var(--a-entra); }
+    29.17%, 100% { opacity: 1; transform: none; }
+  }
+  @keyframes replicavel-agora {
+    0%, 6.67% { opacity: 1; transform: none; }
+    10% { opacity: 0; transform: none; }
+    10.01%, 26.67% { opacity: 0; transform: translateY(3px); animation-timing-function: var(--a-entra); }
+    31.67%, 100% { opacity: 1; transform: none; }
+  }
+  /* Pulso: em repouso, o traço fica além do fim do caminho, com folga para
+     a ponta redonda não aparecer; parte de antes do começo, sob o anel. */
+  @keyframes replicavel-pulso {
+    0%, 11.66% { stroke-dashoffset: 12; }
+    21.67%, 100% { stroke-dashoffset: -112; }
+  }
 </style>
