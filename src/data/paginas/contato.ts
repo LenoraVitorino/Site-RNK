@@ -49,7 +49,12 @@ export const contato: Pagina = {
     {
       tipo: 'numeros',
       fundo: 'alt',
-      itens: ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação'],
+      compacto: true,
+      // Na estudio, o R$42M da home (home.ts) no lugar dos "6 anos de operação",
+      // que conflitavam com os "quatro anos" do resto do site.
+      itens: copyLiteral
+        ? ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação']
+        : ['+140 clínicas atendidas', '+650 alunos no Academy', 'R$42M em faturamento gerado'],
     },
     {
       tipo: 'faq',

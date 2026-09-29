@@ -130,6 +130,8 @@ export type Bloco =
       nota?: string;
       /** Grade numerada (01, 02…) em vez da fileira de chips. */
       grade?: boolean;
+      /** Régua compacta: cartões baixos, valor e legenda lado a lado (só valores curtos, como no Contato). */
+      compacto?: boolean;
       fundo?: 'alt' | 'escuro';
     }
   | { tipo: 'faq'; h2: string; perguntas: Pergunta[]; fundo?: 'alt' | 'escuro' }

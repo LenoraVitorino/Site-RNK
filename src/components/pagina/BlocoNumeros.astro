@@ -6,6 +6,8 @@
  * - Régua (padrão: Treinamento CRM, Cultura Pro, Contato): a régua de
  *   números do método da home, valor light grande e legenda curta embaixo;
  *   no celular, linhas 'valor | legenda', como o .metodo__numero.
+ * - Régua compacta (`compacto: true`, Contato, 29/09/2026): os mesmos
+ *   cartões, baixos, com valor e legenda lado a lado.
  * - Grade (`grade: true`, Revena Full): cartões do Features com a estrutura
  *   da ficha de Resultados, índice no topo e a palavra no pé.
  *
@@ -34,7 +36,7 @@ const notaCitacao = !!bloco.nota && /^["“”«]/.test(bloco.nota.trim());
 const iNota = Math.min(n, 5);
 ---
 <section
-  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua')}
+  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua', !bloco.grade && bloco.compacto && 'int-numeros--compacto')}
   id={secao.id}
   data-cena={secao.cena}
   data-tom={secao.tom}
@@ -120,6 +122,16 @@ const iNota = Math.min(n, 5);
   }
   .int-regua__nota { margin-top: clamp(40px, 5vw, 72px); }
 
+  /* Régua compacta (Contato): o cartão da altura da informação. Valor e
+     legenda na mesma linha, alinhados pela base; menos respiro interno. */
+  .int-numeros--compacto .int-regua__item {
+    grid-row: auto; grid-template-rows: none;
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 20px 24px; border-radius: 14px;
+  }
+  .int-numeros--compacto .int-regua__valor { font-size: clamp(24px, 1.9vw, 30px); flex: none; }
+  .int-numeros--compacto .int-regua__legenda { font-size: 14px; max-width: none; }
+
   /* ---------- Grade: cartões do Features com a ficha de Resultados ---------- */
   .int-numeros__grade {
     list-style: none; margin: 0; padding: 0;
@@ -148,6 +160,8 @@ const iNota = Math.min(n, 5);
     .int-regua__item { grid-row: auto; grid-template-rows: none; row-gap: 6px; }
     .int-regua__valor { font-size: 28px; }
     .int-regua__legenda { max-width: 32ch; }
+    .int-numeros--compacto .int-regua__item { padding: 16px 20px; }
+    .int-numeros--compacto .int-regua__valor { font-size: 24px; }
     /* Dois cartões por linha até 360px: a palavra inteira ('Experiência')
        cabe sem hifenizar com um respiro interno menor. */
     .int-numeros__cartao { padding: 20px; min-height: 140px; }
