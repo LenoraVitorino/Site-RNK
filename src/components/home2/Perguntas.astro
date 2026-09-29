@@ -1,6 +1,7 @@
 ---
 /** Composição Solutions: título fixo e ganhos em cards ilustrados. */
 import ArteBeneficio from './ArteBeneficio.astro';
+import Selo from '../ui/Selo.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 
@@ -23,13 +24,17 @@ const entra = copyLiteral ? '' : 'entra';
       ) : (
         <!-- A frase do print da Lenora (19/09), em duas linhas, com a tinta
              palavra a palavra do Protocolo Revena. -->
-        <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
-          {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
-            <span class="ancora__linha">
-              {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
-            </span>
-          ))}
-        </h2>
+        <>
+          <Selo class="cabeca-dobra__selo">O que muda na sua clínica</Selo>
+          <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
+            {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
+              <span class="ancora__linha">
+                {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
+              </span>
+            ))}
+          </h2>
+          <p class="cabeca-dobra__apoio">Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.</p>
+        </>
       )}
 
     </div>

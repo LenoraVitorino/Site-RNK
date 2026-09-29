@@ -54,14 +54,14 @@ const planos = ordem.map((label) => {
     pecas: pecas(label),
   };
 });
-import SeloRevena from '../ui/SeloRevena.astro';
+import Selo from '../ui/Selo.astro';
 ---
 <section class="palcoplanos" id="protocolo-revena" aria-labelledby="protocolo-revena-titulo" data-palcoplanos style={`--n:${planos.length}`}>
   <!-- Introdução da dobra, antes do palco, como o bloco de texto que antecede
        a "Financial solutions" da referência. -->
   <div class="palcoplanos__intro">
     <div class="container palcoplanos__cabeca">
-      <SeloRevena tag="h2" class="palcoplanos__titulo" id="protocolo-revena-titulo" tom="claro">Protocolo Revena</SeloRevena>
+      <Selo tag="h2" class="palcoplanos__titulo" id="protocolo-revena-titulo" tom="claro" marca="revena">Protocolo Revena</Selo>
       <p class="palcoplanos__manifesto" data-revena-revela>
         {'Estruturamos sua operação do zero e operamos juntos no longo prazo. Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
           <><span data-palavra>{palavra}</span>{' '}</>

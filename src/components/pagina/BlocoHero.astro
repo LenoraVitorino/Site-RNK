@@ -21,6 +21,7 @@
  */
 import Icone from '../ui/Icone.astro';
 import { classesSecao, semSeta, type BlocoDe, type ContextoSecao } from './contexto';
+import Selo from '../ui/Selo.astro';
 
 interface Props {
   bloco: BlocoDe<'hero'>;
@@ -43,7 +44,7 @@ const naPagina = href.startsWith('#');
 >
   <div class="container int-hero__grade">
     <div class="int-hero__cabeca">
-      {secao.rotulo && <p class="rotulo">{secao.rotulo}</p>}
+      {secao.rotulo && <Selo marca={/revena/i.test(secao.rotulo) ? 'revena' : 'estrela'}>{secao.rotulo}</Selo>}
       <h1 id={secao.tituloId} class="titulo int-hero__titulo">
         {titulo.map((linha, i) => (
           <>{i > 0 && ' '}<span class:list={['int-hero__linha', temRealce && i !== realce && 'int-hero__linha--apagada']}>{linha}</span></>

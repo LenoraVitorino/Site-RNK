@@ -3,11 +3,15 @@
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 import ArteInterface from './ArteInterface.astro';
+import Selo from '../ui/Selo.astro';
+import { copyLiteral } from '../../data/versao';
 ---
 <section class="secao resultados-editoriais" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
     <header class="resultados-editoriais__cabeca entra">
+      {!copyLiteral && <Selo class="cabeca-dobra__selo">Resultados por especialidade</Selo>}
       <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem estrutura.</h2>
+      {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
     </header>
     <ol class="resultados-mosaico" aria-label="Resultados por especialidade">
       {resultados.map((r, i) => (

@@ -175,8 +175,17 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__nome { margin: 0; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.15; max-width: none; text-wrap: balance; }
 .operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
-.resultados-editoriais__cabeca { margin-bottom: clamp(32px, 4vw, 56px); }
+.resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
 .resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
+/* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
+   de duas linhas. Nos Resultados, centrada. */
+:is(#perguntas, #resultados) .cabeca-dobra__selo { margin-bottom: clamp(20px, 2.4vw, 32px); }   /* vence o margin:0 do componente */
+.cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
+.resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
+.resultados-editoriais__cabeca .titulo { margin-inline: auto; }
+.resultados-editoriais .cabeca-dobra__apoio { color: #50504e; }
+/* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
+#perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
 .resultado-ficha__ilustracao { width: calc(100% + 40px); margin: 20px -20px 0; aspect-ratio: 4 / 3; mask-image: radial-gradient(ellipse, #000 48%, transparent 76%); }
 .resultado-ficha--destaque .resultado-ficha__numero { padding-top: 8px; font-size: clamp(80px, 8vw, 122px); }
 

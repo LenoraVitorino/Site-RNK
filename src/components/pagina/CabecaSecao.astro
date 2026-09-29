@@ -26,6 +26,7 @@ const linhas = titulo === undefined ? [] : Array.isArray(titulo) ? titulo : [tit
    span sem quebra (.int-cabeca__titulo [data-junto], paginas2.css). O texto
    não muda; nas posições ímpares do split ficam os pares. */
 const partes = typeof titulo === 'string' ? titulo.split(/(?<=^|\s)(\d{1,3}\s+[^\s\d]\S*)/) : [];
+import Selo from '../ui/Selo.astro';
 ---
 <header
   class:list={[
@@ -34,7 +35,7 @@ const partes = typeof titulo === 'string' ? titulo.split(/(?<=^|\s)(\d{1,3}\s+[^
     classe,
   ]}
 >
-  {eyebrow && <p class="rotulo">{eyebrow}</p>}
+  {eyebrow && <Selo marca={/revena/i.test(eyebrow) ? 'revena' : 'estrela'}>{eyebrow}</Selo>}
   {linhas.length > 0 && (
     <Titulo id={id} class="titulo int-cabeca__titulo">
       {Array.isArray(titulo)
