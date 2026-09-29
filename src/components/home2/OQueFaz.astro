@@ -1,9 +1,9 @@
 ---
 /**
  * Método editorial (28/09, referência Aura): vídeo no centro; à esquerda, o
- * título no alto e o parágrafo embaixo; à direita, o R da parede da sede
- * esticado, em faixa grossa, no alto da coluna (a haste atrás do vídeo), e o
- * número grande subindo embaixo. Textos por versão.
+ * título no alto e o parágrafo embaixo; à direita, o número grande subindo
+ * embaixo. Por trás, o R da parede da sede ocupando a dobra inteira, em
+ * faixa grossa, passando pelos vazios. Textos por versão.
  */
 import Telefone from '../ui/Telefone.astro';
 import Selo from '../ui/Selo.astro';
@@ -21,6 +21,15 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
+  {/* O R da parede do salão ocupando a dobra inteira, já formado, sem a haste:
+      as barras de cima e do meio vêm da borda esquerda do painel (como a fita que
+      sai de trás da coluna), a barriga ocupa o canto superior direito, a barra do
+      meio passa no centro vertical, por trás do vídeo, e a perna desce até o
+      canto de baixo à direita (só desktop). */}
+  <svg class="metodo__r" viewBox="0 0 1560 885" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+    <path vector-effect="non-scaling-stroke" d="M-60 44 H1360 A140 140 0 0 1 1500 184 V302 A140 140 0 0 1 1360 442 H-60" />
+    <path vector-effect="non-scaling-stroke" d="M1300 442 L1560 943" />
+  </svg>
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -55,13 +64,6 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
         </div>
       </div>
       <div class="metodo__midia">
-        {/* O R da parede do salão, esticado como a fita, já formado, preso ao vídeo:
-            nasce colado à esquerda dele, passa por trás e se abre à direita; a haste
-            e a perna descem até a borda de baixo do painel (só desktop). */}
-        <svg class="metodo__r" viewBox="0 0 1000 500" fill="none" aria-hidden="true" focusable="false">
-          <path d="M868 32 A100 100 0 0 1 968 132 V192 A100 100 0 0 1 868 292 H32 M868 32 H32 V1400" />
-          <path d="M760 292 L1394 1400" />
-        </svg>
         <Telefone />
       </div>
     </div>

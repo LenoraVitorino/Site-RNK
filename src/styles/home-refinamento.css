@@ -307,9 +307,8 @@ section[id] { scroll-margin-top: 110px; }
    - vídeo no centro (colunas 5–8), a peça principal, na altura da tela;
    - título no alto à esquerda (1–4), com o selo por cima;
    - o parágrafo embaixo à esquerda (1–4), sob um fio fino, na linha de base do vídeo;
-   - à direita, o R da parede do salão esticado, já formado, em faixa grossa,
-     no alto da coluna (a haste atrás do vídeo), e embaixo o número único,
-     grande e fino, subindo de 0 ao valor, sob um fio.
+   - à direita, embaixo, o número único, grande e fino, subindo de 0 ao valor;
+   - por trás de tudo, o R da parede do salão ocupando a dobra inteira.
    Ruído leve sobre o fundo e o R, não sobre vídeo e textos. */
 .metodo__r { display: none; }
 .home-refinada #o-que-fazemos .tel__moldura, .home-refinada #o-que-fazemos .tel__tela { border-radius: 8px; }
@@ -321,17 +320,15 @@ section[id] { scroll-margin-top: 110px; }
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: .16; mix-blend-mode: multiply;
   }
-  /* O R mora dentro do vídeo (que fica no centro exato do painel): começa
-     colado à esquerda dele, com a haste visível no vão entre o título e o
-     vídeo, e vai até perto da margem direita do painel. overflow visível: a
-     haste e a perna seguem até a borda de baixo, onde o painel corta. */
+  /* O R ocupa o painel inteiro, por trás do conteúdo (e sob o ruído): o
+     viewBox tem a proporção do painel a 1600px e estica com ele; a faixa
+     mantém a espessura (non-scaling-stroke). Traçado pelos vazios, sem a
+     haste: as barras vêm da borda esquerda, a de cima acima do selo e a do
+     meio no centro vertical; barriga no canto superior direito; perna ao
+     lado do número. */
   .home-refinada #o-que-fazemos .metodo__r {
-    --r-haste: 62px; --r-folga: clamp(64px, 6vw, 110px);
-    display: block; position: absolute; z-index: -1; pointer-events: none; overflow: visible;
-    left: calc(-1 * var(--r-haste) - 8px); top: 10px;
-    width: calc(50vw + 50% + var(--r-haste) + 8px - var(--metodo-recuo) - var(--r-folga));
-    height: auto; aspect-ratio: 1000 / 500;
-    color: var(--destaque); stroke: currentColor; stroke-width: 64; stroke-linejoin: miter;
+    display: block; position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
+    color: var(--destaque); stroke: currentColor; stroke-width: 88px; stroke-linejoin: miter;   /* faixa grossa, como a fita da parede */
   }
   .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; isolation: isolate; }
   /* Profundidade no vídeo, como a bolinha dos selos: anel claro e sombra caindo para baixo e para a esquerda. */
@@ -351,7 +348,8 @@ section[id] { scroll-margin-top: 110px; }
   /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
   /* Parágrafo embaixo à esquerda e número embaixo à direita, os dois sob um fio. */
   .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; grid-row: 4; align-self: end; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
-  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 auto auto 0; width: min(100%, 300px); height: 1px; background: rgb(37 37 35 / .24); }   /* fios curtos: não cruzam a haste nem a perna do R */
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 auto auto 0; width: 100%; height: 1px; background: rgb(37 37 35 / .24); }
+  .home-refinada .metodo-editorial .metodo__numeros::before { width: min(100%, 280px); }   /* fio curto: a perna do R passa ao lado */
   .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
   .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-top: 22px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
