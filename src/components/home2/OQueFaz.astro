@@ -21,12 +21,6 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
-  {/* O R da parede do salão, esticado como a fita, em faixa grossa, já formado:
-      ocupa o alto da coluna da direita; a haste fica atrás do vídeo (só desktop). */}
-  <svg class="metodo__r" viewBox="0 0 1000 500" fill="none" aria-hidden="true" focusable="false">
-    <path d="M868 32 A100 100 0 0 1 968 132 V192 A100 100 0 0 1 868 292 H32 M868 32 H32 V500" />
-    <path d="M760 292 L880 500" />
-  </svg>
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -61,6 +55,13 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
         </div>
       </div>
       <div class="metodo__midia">
+        {/* O R da parede do salão, esticado como a fita, já formado, preso ao vídeo:
+            nasce colado à esquerda dele, passa por trás e se abre à direita; a haste
+            e a perna descem até a borda de baixo do painel (só desktop). */}
+        <svg class="metodo__r" viewBox="0 0 1000 500" fill="none" aria-hidden="true" focusable="false">
+          <path d="M868 32 A100 100 0 0 1 968 132 V192 A100 100 0 0 1 868 292 H32 M868 32 H32 V1400" />
+          <path d="M760 292 L1394 1400" />
+        </svg>
         <Telefone />
       </div>
     </div>
