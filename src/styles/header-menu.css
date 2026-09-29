@@ -127,3 +127,15 @@
   .header .megamenu__rotulo, .header .megamenu__seta,
   .header .megamenu__list a:is(:hover, :focus-visible) :is(.megamenu__rotulo, .megamenu__seta) { transform: none; transition: opacity .2s ease; }
 }
+
+/* CTA do cabeçalho mais sutil (28/09/2026): só contorno fino; no hover a
+   caixa se preenche devagar. Exceção explícita à regra sem contornos
+   (sem-contornos.css), por isso o !important na cor da borda. */
+.header .header__acao .botao {
+  background: transparent; background-image: none; box-shadow: none; filter: none;
+  color: var(--papel); border-color: rgb(242 242 238 / .45) !important;
+  transition: background-color .5s var(--easing-suave), color .5s var(--easing-suave), border-color .5s var(--easing-suave);
+}
+.header .header__acao .botao:hover { background: var(--papel); color: var(--grafite); border-color: var(--papel) !important; transform: none; filter: none; }
+.header:is(.header--claro, .header--amarelo) .header__acao .botao { background: transparent; color: var(--grafite); border-color: rgb(22 22 22 / .35) !important; }
+.header:is(.header--claro, .header--amarelo) .header__acao .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite) !important; }

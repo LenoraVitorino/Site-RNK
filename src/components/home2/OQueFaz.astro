@@ -19,6 +19,8 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
+  {/* Fundo da dobra: o R da parede da sede atravessando o painel, com ruído leve por cima (só desktop). */}
+  <RParede class="metodo__r" ajuste="none" />
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -58,7 +60,6 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
       <figure class="metodo__foto metodo__foto--dir">
         <Image src={salaVidro} alt="Sala de reunião com divisória de vidro e palavras em amarelo na parede" format="webp" quality={72} widths={[480, 960]} sizes="420px" loading="lazy" />
       </figure>
-      <RParede class="metodo__r" />
       <div class="metodo__midia">
         <Telefone />
       </div>
