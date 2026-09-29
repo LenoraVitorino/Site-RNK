@@ -81,23 +81,29 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     <div class="container">
       <p class:list={['int-citacao int-citacao--manifesto entra', longa && 'int-citacao--longa']} set:html={citacao} />
     </div>
+  ) : bloco.selo ? (
+    /* Com selo (Faça Parte, GPTW, 29/09/2026): o selo bem pequeno no canto
+       superior esquerdo e o título e o texto centrados na dobra. */
+    <div class="container int-texto__selada">
+      {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não ornamento. */}
+      <Image
+        class="int-texto__selo entra"
+        src={seloGptw}
+        alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
+        widths={[48, 96, 144]} sizes="48px" format="webp" quality={90} loading="lazy"
+      />
+      <div class="int-texto__centro">
+        <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} alinhamento="centro" />
+        <div class="int-texto__centro-corpo entra" style="--i:1">
+          {paragrafos.map((p) => <p class={classeDe(p)} set:html={p} />)}
+        </div>
+      </div>
+    </div>
   ) : (
     <div class="container int-grade-2 int-texto__grade">
-      {(titulo || bloco.eyebrow) && (bloco.selo ? (
-        <div class="int-texto__lado">
-          {/* Selo oficial nas cores da marca GPTW, sem filtro: é certificação, não ornamento.
-              Pequeno, no canto de cima, antes do título (29/09/2026). */}
-          <Image
-            class="int-texto__selo entra"
-            src={seloGptw}
-            alt="Selo Great Place To Work: empresa certificada, maio de 2025 a maio de 2026, Brasil"
-            widths={[64, 128, 192]} sizes="64px" format="webp" quality={90} loading="lazy"
-          />
-          <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} classe="int-cabeca--coluna" />
-        </div>
-      ) : (
+      {(titulo || bloco.eyebrow) && (
         <CabecaSecao id={secao.tituloId} eyebrow={bloco.eyebrow} titulo={titulo} classe="int-cabeca--coluna" />
-      ))}
+      )}
       {forma === 'ficha' ? (
         <dl class="int-dados int-grade-2__direita entra" style="--i:1">
           {fatos.map(([rotulo, resto]) => (
@@ -124,11 +130,24 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
 </section>
 
 <style>
-  /* ---------- Selo de certificação no canto de cima (Faça Parte, GPTW) ---------- */
+  /* ---------- Com selo: selo no canto, título e texto no centro (Faça Parte, GPTW) ---------- */
 
-  .int-texto__lado { display: grid; justify-items: start; gap: clamp(20px, 2vw, 28px); }
-  /* O <img> vem do componente Image, fora do escopo deste arquivo: :global() dentro do lado. */
-  .int-texto__lado :global(.int-texto__selo) { display: block; width: clamp(48px, 4vw, 60px); height: auto; }
+  .int-texto__selada { position: relative; }
+  /* O <img> vem do componente Image, fora do escopo deste arquivo: :global(). */
+  .int-texto__selada :global(.int-texto__selo) {
+    position: absolute; top: 0; left: var(--gutter, 24px);
+    display: block; width: clamp(36px, 2.8vw, 44px); height: auto;
+  }
+  .int-texto__centro { display: grid; justify-items: center; text-align: center; max-width: 760px; margin-inline: auto; }
+  .int-texto__centro-corpo { display: grid; gap: 16px; margin-top: 24px; max-width: 58ch; }
+  .int-texto__centro-corpo p { margin: 0; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.6; color: var(--int-apoio); text-wrap: balance; }
+  .int-texto__centro-corpo p.int-destaque { font-size: clamp(18px, 1.5vw, 21px); color: var(--int-tinta); }
+  /* No celular o selo entra no fluxo, acima do título, e o texto alinha à esquerda. */
+  @media (max-width: 599.98px) {
+    .int-texto__selada :global(.int-texto__selo) { position: static; margin-bottom: 28px; width: 36px; }
+    .int-texto__centro, .int-texto__centro :global(.int-cabeca) { justify-items: start; text-align: start; }
+    .int-texto__centro-corpo p { text-wrap: pretty; }
+  }
 
   /* ---------- Citação: manifesto à esquerda (E3, pin Hikari) ---------- */
 
