@@ -7,8 +7,9 @@
  * alt das fotos e os rótulos de acessibilidade) são as da lista "Microcopy
  * nova" da especificação.
  *
- * As duas versões (estudio e VERSAO=copy) usam o mesmo texto: o Sobre da
- * copy (home.md, seção 7) já é o texto da página, sem leitura do estúdio.
+ * Duas versões (src/data/versao.ts): a VERSAO=copy guarda o texto da copy
+ * entregue (home.md, seção 7), literal; a estudio (padrão) leva a copy
+ * revista pela Lenora em 29/09/2026. Onde não há revisão, as duas são iguais.
  *
  * Fotos: para pôr uma foto nova, colocar o arquivo (com pelo menos 1760px de
  * largura) em src/assets/sede/, importá-lo abaixo e preencher `foto` e `alt`
@@ -16,6 +17,7 @@
  */
 import type { ImageMetadata } from 'astro';
 import type { BlocoDe } from '../components/pagina/contexto';
+import { copyLiteral } from './versao';
 import operacao from '../assets/sede/operacao.jpg';
 import salaVidro from '../assets/sede/sala-vidro.jpg';
 import estudio from '../assets/sede/estudio.jpg';
@@ -64,8 +66,10 @@ export const seo = {
 export const abertura = {
   rotulo: 'Sobre',                    // home.md:191 (Eyebrow)
   linhasH1: ['Sobre a', 'Renke'],     // home.md:192 (H2 da home); a quebra é só tipográfica
-  /** HTML: tem o <strong>. Renderizar com set:html. */
-  lead: frase1,                       // home.md:194
+  /** HTML (a versão copy tem o <strong>). Renderizar com set:html. */
+  lead: copyLiteral
+    ? frase1                                              // home.md:194
+    : 'Uma operação de receita construída para clínicas.', // revisão de 29/09/2026
 };
 
 /* ------------------------------------------------------------------ */
@@ -75,8 +79,9 @@ export const abertura = {
 export const somos = {
   /** Tom duplo: a 1ª linha em tinta, a 2ª em cinza. */
   h2: ['Não somos agência de marketing.', 'Não somos consultoria de gestão.'] as const,   // home.md:195
-  texto:
-    'Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.',   // home.md:195-197
+  texto: copyLiteral
+    ? 'Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.'   // home.md:195-197
+    : 'Somos o time que conecta marketing, processo comercial e dados em uma operação única, orientada por dados e acompanhada de perto.',   // revisão de 29/09/2026
 };
 
 /* ------------------------------------------------------------------ */
