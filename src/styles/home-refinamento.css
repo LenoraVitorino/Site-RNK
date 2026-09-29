@@ -304,12 +304,10 @@ section[id] { scroll-margin-top: 110px; }
    de 12 do site:
    - vídeo no centro (colunas 5–8), a peça principal, na altura da tela;
    - título no alto à esquerda (1–4), com o selo por cima;
-   - número único, grande e fino, subindo de 0 ao valor, no canto inferior
-     esquerdo (1–4), e o parágrafo no canto inferior direito (9–12), os dois
-     sob um fio fino, na mesma linha de base do vídeo;
-   - o R da parede do salão em faixa grossa no vão do meio para a direita: a
-     haste fica atrás do vídeo, e barra, barriga e perna ocupam a coluna da
-     direita acima do parágrafo, sem tocar o texto.
+   - o parágrafo embaixo à esquerda (1–4), sob um fio fino, na linha de base do vídeo;
+   - à direita, o R da parede do salão completo, já formado, em faixa grossa,
+     com a haste e a perna até a borda de baixo do painel; o número único,
+     grande e fino, subindo de 0 ao valor, mora no vão entre a haste e a perna.
    Ruído leve sobre o fundo e o R, não sobre vídeo e textos. */
 .metodo__r { display: none; }
 .home-refinada #o-que-fazemos .tel__moldura, .home-refinada #o-que-fazemos .tel__tela { border-radius: 8px; }
@@ -321,14 +319,17 @@ section[id] { scroll-margin-top: 110px; }
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: .16; mix-blend-mode: multiply;
   }
-  /* O R: caixa do meio do painel até a margem direita, centrada na altura. */
+  /* O R: a coluna da direita inteira (9–12, todas as linhas), da altura do topo
+     do vídeo até a borda de baixo do painel (desce pelo respiro de baixo);
+     avança pela margem direita. O viewBox é alto e fica preso ao topo
+     (slice): o que sobra da haste e da perna é cortado pelo painel. */
+  .home-refinada .metodo-editorial .metodo__r-lugar { position: relative; grid-column: 9 / -1; grid-row: 1 / -1; z-index: 0; }
   .home-refinada #o-que-fazemos .metodo__r {
-    display: block; position: absolute; z-index: 0; pointer-events: none;
-    left: 45%; right: clamp(20px, 2.4vw, 40px); top: 50%; translate: 0 -60%;   /* centrado no vão entre o topo e o fio do parágrafo */
-    aspect-ratio: 1000 / 500; width: auto; height: auto;
-    color: var(--destaque); stroke: currentColor; stroke-width: 64; stroke-linejoin: miter;
+    display: block; position: absolute; left: 0; top: 0; bottom: calc(-1 * var(--metodo-respiro));
+    width: calc(100% + var(--gutter) - var(--metodo-recuo) - 24px); height: auto; overflow: visible;
+    color: var(--destaque); stroke: currentColor; stroke-width: 52; stroke-linejoin: miter;
   }
-
+  .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; }
   .home-refinada .metodo-editorial {
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto 1fr auto; grid-template-areas: none;
     column-gap: clamp(16px, 2vw, 32px); row-gap: 0; align-items: stretch;
@@ -342,23 +343,17 @@ section[id] { scroll-margin-top: 110px; }
     width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); max-width: none;
   }
   /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
-  .home-refinada .metodo-editorial :is(.metodo__numeros, .metodo__descricao) { position: relative; grid-row: 4; align-self: end; margin: 0; padding-top: 22px; }
-  .home-refinada .metodo-editorial :is(.metodo__numeros, .metodo__descricao)::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: rgb(37 37 35 / .24); }
-  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; max-width: none; padding-left: max(0px, calc(100% - 34ch)); font-size: 16px; }
-  .home-refinada .metodo-editorial .metodo__numeros { grid-column: 1 / span 4; }
+  /* Parágrafo embaixo à esquerda, sob um fio; o número à direita, dentro do R,
+     no vão entre a haste e a perna, sem fio (o próprio R o emoldura). */
+  .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; grid-row: 4; align-self: end; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
+  .home-refinada .metodo-editorial .metodo__descricao::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: rgb(37 37 35 / .24); }
+  .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
+  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-left: clamp(80px, 6vw, 96px); }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
   .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 18px; }
-  .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(112px, 10.5vw, 184px); font-weight: 200; line-height: .76; letter-spacing: -.07em; }
+  .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
   .home-refinada .metodo-editorial .metodo__legenda { max-width: 11ch; padding-bottom: .15em; white-space: normal; font-size: 11px; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
 }
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    /* A faixa se desenha na rolagem: primeiro a barriga, depois barra e haste; a perna por último. */
-    .metodo__r .metodo__r-traco { stroke-dasharray: 1; animation: metodo-r-desenha linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; }
-    .metodo__r .metodo__r-perna { animation-range: cover 30% cover 50%; }
-  }
-}
-@keyframes metodo-r-desenha { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
   .metodo-editorial .metodo__texto { grid-template-rows: auto auto; }
