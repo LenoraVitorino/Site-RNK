@@ -334,8 +334,8 @@ section[id] { scroll-margin-top: 110px; }
     color: var(--destaque); stroke: currentColor; stroke-width: 88px; stroke-linejoin: miter;   /* faixa grossa, como a fita da parede */
   }
   .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; isolation: isolate; }
-  /* Profundidade no vídeo, como a bolinha dos selos: anel claro e sombra caindo para baixo e para a esquerda. */
-  .home-refinada #o-que-fazemos .tel__moldura { box-shadow: 0 0 0 3px rgb(255 255 255 / .5), -28px 40px 70px -28px rgb(22 22 22 / .55); }
+  /* Profundidade no vídeo, como a bolinha dos selos: só a sombra caindo para baixo e para a direita, sem anel. */
+  .home-refinada #o-que-fazemos .tel__moldura { box-shadow: 28px 40px 70px -28px rgb(22 22 22 / .55); }
   .home-refinada .metodo-editorial {
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto 1fr auto; grid-template-areas: none;
     column-gap: clamp(16px, 2vw, 32px); row-gap: 0; align-items: stretch;
