@@ -2,7 +2,8 @@ import type { Pagina } from './tipos';
 import { copyLiteral } from '../versao';
 
 /**
- * Copy literal de docs/03-copy/contato.md. A versão estudio (padrão) tira o
+ * Copy literal de docs/03-copy/contato.md. A versão estudio (padrão) tem o
+ * título e a frase do formulário revistos em 29/09/2026 e tira o
  * bloco "Informações · Grupo RNK", que repetia endereço, e-mail e redes do
  * rodapé logo abaixo (29/09/2026); a VERSAO=copy mantém.
  */
@@ -14,13 +15,15 @@ export const contato: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Vamos conversar?'],
+      titulo: [copyLiteral ? 'Vamos conversar?' : 'Vamos falar sobre sua operação.'],
     },
     {
       tipo: 'formulario',
       // A sub do herói vive aqui, ao lado do formulário que ela descreve —
       // é a mesma frase da copy, só no lugar onde ela é instrução e não enfeite.
-      sub: 'Preencha o formulário e a gente responde em até 24h.',
+      sub: copyLiteral
+        ? 'Preencha o formulário e a gente responde em até 24h.'
+        : 'Conte sobre o momento da sua clínica e os desafios da sua operação comercial. Nossa equipe entra em contato para entender o cenário e os próximos passos.',   // revisão de 29/09/2026
       email: 'contato@renkestudio.com.br',
       botao: 'Enviar →',
       campos: [
