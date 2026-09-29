@@ -1,12 +1,13 @@
 ---
 /**
  * S5 · Cultura (docs/04-design/pagina-sobre.md, (a) "S5").
- * Colofão: uma frase isolada e os valores como palavras, sem cartões
- * (referência: Snøhetta About, rótulo à esquerda e texto à direita).
+ * Colofão: uma frase isolada e os valores como palavras, sem cartões.
  *
- * A partir de 900px: rótulo e H2 pequenos nas colunas 1–3; a frase, os
- * valores e o link nas 4–12 (ou 4–9, com o retrato nas 10–12).
- * Abaixo de 900px: rótulo e H2 em cima, o corpo embaixo.
+ * 29/09/2026 (nas duas versões): uma coluna só, no centro da página. O H2
+ * pequeno em cima (antes ficava sozinho à esquerda), a frase, os valores
+ * separados por pontos finos e o link. O selo #TEAMRENKE só existe na
+ * versão copy (cultura.rotulo); na estudio saiu. Abaixo de 600px o texto
+ * alinha à esquerda, para a frase longa não virar uma coluna centrada.
  *
  * O retrato do time (slot cultura) só aparece com foto: retrato placeholder
  * está vetado. Com ele, a seção ganha .sb-cultura--com-foto.
@@ -26,7 +27,7 @@ const comFoto = !!fotos.cultura.foto;
 >
   <div class="container sb-grade">
     <div class="sb-cultura__cabeca entra" style="--i:0">
-      <Selo>{cultura.rotulo}</Selo>
+      {cultura.rotulo && <Selo>{cultura.rotulo}</Selo>}
       <h2 class="sb-cultura__titulo" id="sobre-cultura-titulo">{cultura.h2}</h2>
     </div>
     <div class="sb-cultura__corpo entra" style="--i:1">
@@ -48,12 +49,15 @@ const comFoto = !!fotos.cultura.foto;
 </section>
 
 <style>
-  /* ---------- Cabeça: o título pequeno, preso à esquerda ---------- */
+  /* ---------- Uma coluna no centro ---------- */
 
-  .sb-cultura__cabeca { display: grid; gap: 12px; align-content: start; }
+  .sb-cultura__cabeca, .sb-cultura__corpo, .sb-cultura__foto { grid-column: 1 / -1; justify-self: center; }
+  .sb-cultura__cabeca { display: grid; justify-items: center; gap: 20px; text-align: center; }
+  /* O H2 como abertura discreta da frase: pequeno, em caixa alta espaçada. */
   .sb-cultura__titulo {
-    font-size: clamp(20px, 1.6vw, 24px); font-weight: 350; line-height: 1.2;
-    letter-spacing: -.02em; color: var(--sb-tinta);
+    margin: 0;
+    font-size: 13px; font-weight: 500; line-height: 1.2;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--sb-tinta-2);
   }
 
   /* ---------- Corpo: a frase isolada, os valores e o link ---------- */
@@ -64,19 +68,24 @@ const comFoto = !!fotos.cultura.foto;
      título ficava com seis linhas a 1440 e onze a 320. Na escala de frase,
      com o espaçamento entre palavras normal, lê como um parágrafo curto. */
   .sb-cultura__frase {
-    max-width: 30ch;
+    max-width: 30ch; margin: 28px 0 0;
     font-size: clamp(26px, 2.8vw, 40px); font-weight: 300; line-height: 1.18;
     letter-spacing: -.03em;
     color: var(--sb-tinta);
-    text-wrap: pretty;
+    text-align: center; text-wrap: balance;
   }
 
-  /* Os valores como palavras soltas, sem cartões nem marcadores. */
+  /* Os valores como palavras soltas, separadas por um ponto fino. */
   .sb-cultura__valores {
     list-style: none; margin: 48px 0 0; padding: 0;
-    display: flex; flex-wrap: wrap; gap: 12px 32px;
-    font-size: clamp(20px, 2vw, 28px); font-weight: 280; line-height: 1.2;
-    letter-spacing: -.025em; color: var(--sb-tinta-2);
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 0;
+    font-size: clamp(18px, 1.7vw, 24px); font-weight: 300; line-height: 1.2;
+    letter-spacing: -.02em; color: var(--sb-tinta-2);
+  }
+  .sb-cultura__valores li { display: inline-flex; align-items: center; }
+  .sb-cultura__valores li + li::before {
+    content: ''; width: 4px; height: 4px; margin-inline: clamp(16px, 2vw, 28px);
+    border-radius: 50%; background: currentColor; opacity: .45;
   }
 
   .sb-cultura__link {
@@ -93,30 +102,21 @@ const comFoto = !!fotos.cultura.foto;
   .sb-cultura__link:hover { text-decoration-color: currentColor; }
   .sb-cultura__link:hover :global(svg) { transform: translate(2px, -2px); }
   /* O link fica numa linha própria, abaixo dos valores. */
-  .sb-cultura__corpo { display: flex; flex-direction: column; align-items: flex-start; }
-
-  /* ---------- A partir de 900px: duas colunas ---------- */
-
-  @media (min-width: 900px) {
-    .sb-cultura__cabeca { grid-column: 1 / 4; grid-row: 1; }
-    .sb-cultura__corpo { grid-column: 4 / 13; grid-row: 1; }
-    .sb-cultura--com-foto .sb-cultura__corpo { grid-column: 4 / 10; }
-    .sb-cultura__foto { grid-column: 10 / 13; grid-row: 1; align-self: start; }
-    /* O rótulo e o H2 encostam no topo da frase, não da caixa de linha dela. */
-    .sb-cultura__cabeca { padding-top: .5em; }
-  }
-
-  /* ---------- Abaixo de 900px: rótulo e H2 em cima ---------- */
+  .sb-cultura__corpo { display: flex; flex-direction: column; align-items: center; }
+  .sb-cultura__foto { width: min(300px, 60%); margin-top: 56px; }
 
   @media (max-width: 899.98px) {
-    .sb-cultura__corpo { margin-top: 32px; }
-    .sb-cultura__foto { margin-top: 40px; grid-column: 1 / 5; }
     .sb-cultura__frase { font-size: 30px; }
   }
+  /* Celular: tudo à esquerda, na margem das outras dobras. */
   @media (max-width: 599.98px) {
-    .sb-cultura__frase { font-size: 23px; }
-    .sb-cultura__valores { font-size: 20px; gap: 10px 24px; margin-top: 40px; }
-    .sb-cultura__foto { grid-column: 1 / 4; }
+    .sb-cultura__cabeca, .sb-cultura__corpo, .sb-cultura__foto { justify-self: stretch; }
+    .sb-cultura__cabeca { justify-items: start; text-align: start; }
+    .sb-cultura__corpo { align-items: flex-start; }
+    .sb-cultura__frase { font-size: 23px; text-align: start; text-wrap: pretty; }
+    .sb-cultura__valores { justify-content: flex-start; font-size: 18px; margin-top: 40px; }
+    .sb-cultura__valores li + li::before { margin-inline: 12px; }
+    .sb-cultura__foto { width: 72%; }
   }
 
   @media (prefers-reduced-motion: reduce) {

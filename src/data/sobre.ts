@@ -174,7 +174,8 @@ export const casa = {
 /* ------------------------------------------------------------------ */
 
 export const cultura = {
-  rotulo: '#TEAMRENKE',            // faca-parte.ts:34
+  /** Só na versão copy: na estudio o selo saiu (29/09/2026, "nada high ticket"). */
+  rotulo: copyLiteral ? '#TEAMRENKE' : undefined,   // faca-parte.ts:34
   h2: 'No que acreditamos',        // faca-parte.ts:35
   frase: copyLiteral
     /** Recorte literal do começo do 2º parágrafo (faca-parte.ts:38). */
