@@ -88,7 +88,7 @@ export const contato: Pagina = {
         '<strong>E-mail:</strong> <a href="mailto:contato@renkestudio.com.br">contato@renkestudio.com.br</a>',
         '<strong>CNPJ:</strong> 37.079.656/0001-51',
         '<strong>Horário de atendimento:</strong> segunda a sexta, 08h às 12h | 13h30 às 17h. Sábados e domingos sem atendimento.',
-        '<strong>Redes:</strong> <a href="https://instagram.com/renkestudio">Instagram</a> · LinkedIn · YouTube',
+        '<strong>Redes:</strong> <a href="https://www.instagram.com/renke.studio/">Instagram</a> · <a href="https://br.linkedin.com/company/renke-criative-studio">LinkedIn</a> · <a href="https://www.youtube.com/@renkecreativestudio7680">YouTube</a>',
       ],
     }] : []),
   ],

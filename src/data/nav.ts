@@ -133,8 +133,8 @@ export const menu: NavItem[] = [
 export const acaoHeader = { rotulo: 'Contato', rota: '/contato' };
 
 export const rodape = {
+  /** A coluna de soluções do rodapé. A home fica no logo (29/09/2026). */
   links: [
-    { rotulo: 'Home', rota: '/' },
     // Sem página /studio: aponta para o Protocolo Revena na home (29/09/2026).
     { rotulo: 'Para Clínicas', rota: '/#protocolo-revena' },
     { rotulo: 'Para Agências', rota: '/academy' },
@@ -147,11 +147,12 @@ export const rodape = {
     { rotulo: 'Faça Parte', rota: '/faca-parte' },
     { rotulo: 'Contato', rota: '/contato' },
   ],
-  /** Rota '#': sem endereço ainda, o ícone não aparece no rodapé. */
+  /** Endereços passados pela Lenora em 29/09/2026, sem os parâmetros de rastreio. Rota '#': o ícone não aparece. */
   redes: [
-    { rotulo: 'Instagram', rota: 'https://instagram.com/renkestudio', icone: 'instagram' },
-    { rotulo: 'LinkedIn', rota: '#', icone: 'linkedin' },
-    { rotulo: 'YouTube', rota: '#', icone: 'youtube' },
+    { rotulo: 'Instagram', rota: 'https://www.instagram.com/renke.studio/', icone: 'instagram' },
+    { rotulo: 'LinkedIn', rota: 'https://br.linkedin.com/company/renke-criative-studio', icone: 'linkedin' },
+    { rotulo: 'Facebook', rota: 'https://www.facebook.com/renke.studio', icone: 'facebook' },
+    { rotulo: 'YouTube', rota: 'https://www.youtube.com/@renkecreativestudio7680', icone: 'youtube' },
   ],
   endereco: [
     'R. Benjamin Constant, 2364',
