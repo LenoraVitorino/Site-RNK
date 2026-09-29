@@ -2,34 +2,41 @@
 /**
  * Vamos além do tráfego pago: a jornada contada com os objetos dela, em
  * diagonal e sobrepostos. Atrás, o anúncio ("Agende sua avaliação", com o
- * botão "Enviar mensagem"); no meio, a conversa do comercial, que segue
- * além da borda de baixo; na frente, o cartão "Consulta agendada · qui,
- * 14:00". Um fio fino liga o anúncio à consulta. Em laço, a cena volta um
- * passo: o comercial digita, a resposta aparece, a consulta sobe, o fio se
- * fecha e o ponto amarelo acende. Pose estática = pose final; o movimento
- * só parte dela.
+ * botão "Enviar mensagem"); no meio, a conversa no WhatsApp do comercial,
+ * que segue além da borda de baixo: o logo no cabeçalho, o "Novo contato"
+ * online, a mensagem que chega com o cartão do anúncio e a
+ * resposta com o duplo visto. Tudo em grafite, sem o verde do aplicativo.
+ * Na frente, o cartão "Consulta agendada · qui, 14:00". Em laço, a cena
+ * volta um passo: o contato digita, a mensagem dele chega com o anúncio, o
+ * comercial responde, a consulta sobe, o fio se fecha e o ponto amarelo
+ * acende. Pose estática = pose final; o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Anúncio (atrás): 144 × 168 em (24, 32), o mesmo alto das janelas dos
-   outros pilares, com a foto de 92 e a faixa do botão. Conversa (plano
-   principal): canto em (148, 76), 236 de largura, sai por baixo. Consulta
-   (na frente): 204 × 52 em (96, 236), por cima da borda esquerda da
-   conversa, embaixo da resposta que a gerou. */
+/* Anúncio (atrás): 144 × 168 em (24, 32), com a foto de 92 e a faixa do
+   botão. Conversa (plano principal): canto em (144, 60), 240 de largura,
+   sai por baixo; cabeçalho de 40. Consulta (na frente): 204 × 52 em
+   (96, 236), por cima da borda esquerda da conversa, embaixo da resposta. */
 const A = { x: 24, y: 32, w: 144, h: 168 };
-const B = { x: 148, y: 76, w: 236 };
+const P = { x: 144, y: 60, w: 240 };
+const CAB = 40;
+const CY = P.y + CAB / 2;
 const C = { x: 96, y: 236, w: 204, h: 52 };
 const FOTO = { y: 68, h: 92 };
-/* Bolhas: raio 12, com o canto de quem fala em 4. */
-const bolha = (x: number, y: number, w: number, h: number, lado: 'esq' | 'dir') => {
-  const r = 12, q = 4;
-  const [bl, br] = lado === 'esq' ? [q, r] : [r, q];
-  return `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - br}A${br} ${br} 0 0 1 ${x + w - br} ${y + h}H${x + bl}A${bl} ${bl} 0 0 1 ${x} ${y + h - bl}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
+/* Balões do WhatsApp: raio 8 e a pontinha no alto, do lado de quem fala. */
+const balao = (x: number, y: number, w: number, h: number, lado: 'esq' | 'dir') => {
+  const r = 8;
+  return lado === 'esq'
+    ? `M${x - 5} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + 9}C${x} ${y + 6} ${x - 2} ${y + 3.5} ${x - 5.2} ${y + 1.5}Q${x - 6.6} ${y} ${x - 5} ${y}Z`
+    : `M${x + r} ${y}H${x + w + 5}Q${x + w + 6.6} ${y} ${x + w + 5.2} ${y + 1.5}C${x + w + 2} ${y + 3.5} ${x + w} ${y + 6} ${x + w} ${y + 9}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
 };
-const RECEBIDA = { x: B.x + 12, y: 132, w: 188, h: 32 };
-const ENVIADA = { x: 222, y: 172, w: 150, h: 48 };
-const DIGITA = { x: 316, y: 172, w: 56, h: 28 };
+/* Mensagem recebida, com o cartão do anúncio no topo, no molde da citação
+   do WhatsApp: fio à esquerda, texto e a miniatura rente à direita. */
+const RECEBIDA = { x: 156, y: P.y + CAB + 8, w: 220, h: 64 };
+const IND = { x: RECEBIDA.x + 4, y: RECEBIDA.y + 4, w: RECEBIDA.w - 8, h: 34 };
+const ENVIADA = { x: 218, y: RECEBIDA.y + RECEBIDA.h + 6, w: 150, h: 46 };
+const DIGITA = { x: RECEBIDA.x, y: RECEBIDA.y, w: 52, h: 30 };
 /* O fio sai da base do anúncio e entra na consulta pela esquerda. */
 const FY = C.y + C.h / 2;
 ---
@@ -42,8 +49,20 @@ const FY = C.y + C.h / 2;
     <linearGradient id={`${p}-perfil`} x1=".8" y1="0" x2=".2" y2="1">
       <stop stop-color="#5a5a55" /><stop offset="1" stop-color="#232322" />
     </linearGradient>
+    {/* Foto do contato: outro cinza, para não se confundir com a clínica. */}
+    <linearGradient id={`${p}-contato`} x1=".2" y1="0" x2=".8" y2="1">
+      <stop stop-color="#6b6b66" /><stop offset="1" stop-color="#2a2a28" />
+    </linearGradient>
+    {/* Miniatura do anúncio no cartão da conversa: a mesma foto, em 24. */}
+    <linearGradient id={`${p}-mini`} x1="1" y1="0" x2="0" y2="1">
+      <stop stop-color="#484844" /><stop offset=".7" stop-color="#232322" /><stop offset="1" stop-color="#1a1a19" />
+    </linearGradient>
+    <clipPath id={`${p}-ind`}>
+      <rect x={IND.x} y={IND.y} width={IND.w} height={IND.h} rx="5" />
+    </clipPath>
+    {/* Balão enviado: um grafite um tom acima do recebido. */}
     <linearGradient id={`${p}-bolha`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#2b2b2a" /><stop offset="1" stop-color="#222221" />
+      <stop stop-color="#2f2f2d" /><stop offset="1" stop-color="#282827" />
     </linearGradient>
   </defs>
 
@@ -67,33 +86,49 @@ const FY = C.y + C.h / 2;
   <circle class="jornada__anel" cx="40.5" cy={A.y + A.h} r="3.5" />
   <circle class="jornada__miolo" cx="40.5" cy={A.y + A.h} r="1.25" />
 
-  {/* Conversa do comercial: o plano principal. */}
-  <rect x={B.x} y={B.y} width={B.w} height="300" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-  <rect x={B.x + 16} y={B.y + 0.5} width="180" height="1" fill={`url(#${p}-fio-h)`} />
-  <circle cx={B.x + 24} cy="98" r="11" class="jornada__avatar" />
-  <circle cx={B.x + 24} cy="95" r="3.2" class="jornada__silhueta" />
-  <path d={`M${B.x + 17.5} 105.5a6.5 6.5 0 0 1 13 0`} class="jornada__silhueta" />
-  <text x={B.x + 42} y="95" class="jornada__titulo">Nova conversa</text>
-  <text x={B.x + 42} y="109.5" class="jornada__secundario">via anúncio</text>
-  <rect x={B.x} y="120" width={B.w} height="1" class="jornada__divisa" />
+  {/* Conversa no WhatsApp do comercial: o plano principal. */}
+  <rect x={P.x} y={P.y} width={P.w} height="300" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  {/* Barra do aplicativo, um tom acima da área das mensagens. */}
+  <path d={`M${P.x + 0.5} ${P.y + 16}A15.5 15.5 0 0 1 ${P.x + 16} ${P.y + 0.5}H${P.x + P.w - 16}A15.5 15.5 0 0 1 ${P.x + P.w - 0.5} ${P.y + 16}V${P.y + CAB}H${P.x + 0.5}Z`} class="jornada__barra" />
+  <rect x={P.x + 16} y={P.y + 0.5} width="180" height="1" fill={`url(#${p}-fio-h)`} />
+  <path d={`M161 ${CY - 5.5}l-5 5.5l5 5.5`} class="jornada__voltar" />
+  <circle cx="179" cy={CY} r="11" fill={`url(#${p}-contato)`} class="jornada__marca-borda" />
+  <text x="197" y={CY - 3} class="jornada__titulo">Novo contato</text>
+  <text x="197" y={CY + 11} class="jornada__secundario">online</text>
+  {/* Logo do WhatsApp (Simple Icons, 24 × 24), em 16, só em cinza. */}
+  <path transform={`translate(356 ${CY - 8}) scale(.6667)`} class="jornada__logo" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+  <rect x={P.x} y={P.y + CAB} width={P.w} height="1" class="jornada__divisa" />
 
-  <path d={bolha(RECEBIDA.x, RECEBIDA.y, RECEBIDA.w, RECEBIDA.h, 'esq')} class="jornada__recebida" />
-  <text x={RECEBIDA.x + 12} y={RECEBIDA.y + 20.5} class="jornada__texto">Vi o anúncio, quero agendar</text>
-
-  {/* "Digitando": três pontos que só mudam de opacidade. */}
+  {/* "Digitando": como no WhatsApp, o balão de três pontos é do contato,
+      do lado de quem escreve, no lugar onde a mensagem dele vai chegar;
+      os pontos só mudam de opacidade. */}
   <g class="jornada__digita">
-    <path d={bolha(DIGITA.x, DIGITA.y, DIGITA.w, DIGITA.h, 'dir')} class="jornada__recebida" />
-    <circle cx="332" cy="186" r="2.2" class="jornada__ponto jornada__ponto--1" />
-    <circle cx="344" cy="186" r="2.2" class="jornada__ponto jornada__ponto--2" />
-    <circle cx="356" cy="186" r="2.2" class="jornada__ponto jornada__ponto--3" />
+    <path d={balao(DIGITA.x, DIGITA.y, DIGITA.w, DIGITA.h, 'esq')} class="jornada__recebida" />
+    <circle cx={DIGITA.x + 14} cy={DIGITA.y + 15} r="2.2" class="jornada__ponto jornada__ponto--1" />
+    <circle cx={DIGITA.x + 26} cy={DIGITA.y + 15} r="2.2" class="jornada__ponto jornada__ponto--2" />
+    <circle cx={DIGITA.x + 38} cy={DIGITA.y + 15} r="2.2" class="jornada__ponto jornada__ponto--3" />
+  </g>
+
+  {/* A mensagem que chega pelo anúncio traz o cartão dele no topo. */}
+  <g class="jornada__chega">
+    <path d={balao(RECEBIDA.x, RECEBIDA.y, RECEBIDA.w, RECEBIDA.h, 'esq')} class="jornada__recebida" />
+    <rect x={IND.x} y={IND.y} width={IND.w} height={IND.h} rx="5" class="jornada__indicacao" />
+    <g clip-path={`url(#${p}-ind)`}>
+      <rect x={IND.x} y={IND.y} width="3" height={IND.h} class="jornada__citacao" />
+      <rect x={IND.x + IND.w - IND.h} y={IND.y} width={IND.h} height={IND.h} fill={`url(#${p}-mini)`} />
+    </g>
+    <text x={IND.x + 11} y={IND.y + 15} class="jornada__ind-titulo">Agende sua avaliação</text>
+    <text x={IND.x + 11} y={IND.y + 28} class="jornada__ind-origem">Anúncio · Instagram</text>
+    <text x={RECEBIDA.x + 10} y={RECEBIDA.y + 55} class="jornada__texto jornada__texto--recebida">Vi o anúncio, quero agendar</text>
+    <text x={RECEBIDA.x + RECEBIDA.w - 8} y={RECEBIDA.y + 57} text-anchor="end" class="jornada__hora-msg">09:12</text>
   </g>
 
   <g class="jornada__enviada">
-    <path d={bolha(ENVIADA.x, ENVIADA.y, ENVIADA.w, ENVIADA.h, 'dir')} fill={`url(#${p}-bolha)`} stroke={`url(#${p}-fio)`} />
-    <text x={ENVIADA.x + 12} y={ENVIADA.y + 19} class="jornada__texto jornada__texto--enviada">Temos quinta às 14h.</text>
-    <text x={ENVIADA.x + 12} y={ENVIADA.y + 36} class="jornada__texto jornada__texto--enviada">Confirmo?</text>
-    <text x="344" y={ENVIADA.y + 36} text-anchor="end" class="jornada__hora">09:14</text>
-    <path d="M347.5 204.5l2.2 2.2l4.3-4.8M352.5 206.2l0.5 0.5l4.3-4.8" class="jornada__lido" />
+    <path d={balao(ENVIADA.x, ENVIADA.y, ENVIADA.w, ENVIADA.h, 'dir')} fill={`url(#${p}-bolha)`} stroke={`url(#${p}-fio)`} />
+    <text x={ENVIADA.x + 10} y={ENVIADA.y + 18.5} class="jornada__texto jornada__texto--enviada">Temos quinta às 14h.</text>
+    <text x={ENVIADA.x + 10} y={ENVIADA.y + 35} class="jornada__texto jornada__texto--enviada">Confirmo?</text>
+    <text x={ENVIADA.x + ENVIADA.w - 24} y={ENVIADA.y + 37} text-anchor="end" class="jornada__hora-msg">09:14</text>
+    <path d={`M${ENVIADA.x + ENVIADA.w - 20.5} ${ENVIADA.y + 33.5}l2.2 2.2l4.3-4.8M${ENVIADA.x + ENVIADA.w - 15.5} ${ENVIADA.y + 35.2}l0.5 0.5l4.3-4.8`} class="jornada__lido" />
   </g>
 
   {/* Consulta agendada, na frente, com a sombra e a ponta do fio. */}
@@ -124,15 +159,22 @@ const FY = C.y + C.h / 2;
   .jornada__chamada { font-size: 15px; font-weight: 300; fill: #ecece8; letter-spacing: -.02em; }
   .jornada__botao { font-size: 12px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
   .jornada__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .jornada__avatar { fill: #262626; stroke: #ffffff; stroke-opacity: .1; }
-  .jornada__silhueta { fill: none; stroke: #8a8a85; stroke-width: 1.2; stroke-linecap: round; }
+  .jornada__barra { fill: #ffffff; fill-opacity: .025; }
+  .jornada__voltar { fill: none; stroke: #b9b9b4; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .jornada__logo { fill: #b9b9b4; }
   .jornada__divisa { fill: #ffffff; fill-opacity: .06; }
   .jornada__recebida { fill: #ffffff; fill-opacity: .045; stroke: #ffffff; stroke-opacity: .08; }
+  .jornada__indicacao { fill: #000000; fill-opacity: .28; }
+  .jornada__citacao { fill: #8a8a85; }
+  .jornada__ind-titulo { font-size: 11.5px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
+  .jornada__ind-origem { font-size: 10.5px; fill: #8a8a85; }
   .jornada__texto { font-size: 12.5px; fill: #b9b9b4; letter-spacing: -.005em; }
+  .jornada__texto--recebida { fill: #d6d6d1; }
   .jornada__texto--enviada { fill: #ecece8; }
   .jornada__hora { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
-  .jornada__lido { fill: none; stroke: #8a8a85; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-  .jornada__ponto { fill: #8a8a85; }
+  .jornada__hora-msg { font-size: 10.5px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .jornada__lido { fill: none; stroke: #b9b9b4; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+  .jornada__ponto { fill: #b9b9b4; }
   .jornada__digita { opacity: 0; }
   .jornada .jornada__icone { stroke: #ecece8; stroke-width: 2.4; }
   .jornada__consulta-nome { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
@@ -143,17 +185,18 @@ const FY = C.y + C.h / 2;
 
   /* Movimento, em laço de 12 s (tempos do ciclo):
      0–0,6 s   repouso na pose final;
-     0,6–1,0   a cena volta um passo: somem a resposta, a consulta, o fio
-               e o ponto amarelo;
-     1,1–1,4   o comercial começa a digitar (três pontos em opacidade);
-     2,9–3,5   os pontos saem e a resposta aparece, subindo 4;
+     0,6–1,0   a cena volta um passo: somem as duas mensagens, a consulta,
+               o fio e o ponto amarelo;
+     1,1–2,8   o contato digita (três pontos em opacidade, no balão dele);
+     2,7–3,2   a mensagem dele chega, com o cartão do anúncio, subindo 4;
+     3,3–3,8   a resposta do comercial aparece, subindo 4;
      3,9–4,7   a consulta sobe 8, com fade;
      4,5–5,2   o fio se fecha do anúncio até ela;
      5,1–5,6   o ponto amarelo acende.
      O resto (≈ 58% do ciclo) é repouso. O 0% de cada keyframe é a pose
      final. */
-  .jornada__digita, .jornada__ponto, .jornada__enviada, .jornada__consulta,
-  .jornada__fio, .jornada__acende {
+  .jornada__digita, .jornada__ponto, .jornada__chega, .jornada__enviada,
+  .jornada__consulta, .jornada__fio, .jornada__acende {
     animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
     animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
   }
@@ -161,6 +204,7 @@ const FY = C.y + C.h / 2;
   .jornada__ponto--1 { animation-name: jornada-ponto-1; }
   .jornada__ponto--2 { animation-name: jornada-ponto-2; }
   .jornada__ponto--3 { animation-name: jornada-ponto-3; }
+  .jornada__chega { animation-name: jornada-chega; }
   .jornada__enviada { animation-name: jornada-enviada; }
   .jornada__consulta { animation-name: jornada-consulta; }
   .jornada__fio { animation-name: jornada-fio; }
@@ -168,34 +212,39 @@ const FY = C.y + C.h / 2;
 
   @keyframes jornada-digita {
     0%, 9.17% { opacity: 0; }
-    11.67%, 24.17% { opacity: 1; }
-    26.67%, 100% { opacity: 0; }
+    11.67%, 21.67% { opacity: 1; }
+    23.33%, 100% { opacity: 0; }
   }
   @keyframes jornada-ponto-1 {
     0%, 11.67% { opacity: .3; }
     13.33% { opacity: 1; }
-    16.67% { opacity: .3; }
-    20% { opacity: 1; }
-    23.33%, 100% { opacity: .3; }
+    15.83% { opacity: .3; }
+    18.33% { opacity: 1; }
+    20.83%, 100% { opacity: .3; }
   }
   @keyframes jornada-ponto-2 {
-    0%, 13.33% { opacity: .3; }
-    15% { opacity: 1; }
-    18.33% { opacity: .3; }
-    21.67% { opacity: 1; }
-    25%, 100% { opacity: .3; }
+    0%, 12.5% { opacity: .3; }
+    14.17% { opacity: 1; }
+    16.67% { opacity: .3; }
+    19.17% { opacity: 1; }
+    21.67%, 100% { opacity: .3; }
   }
   @keyframes jornada-ponto-3 {
-    0%, 15% { opacity: .3; }
-    16.67% { opacity: 1; }
-    20% { opacity: .3; }
-    23.33% { opacity: 1; }
-    26.67%, 100% { opacity: .3; }
+    0%, 13.33% { opacity: .3; }
+    15% { opacity: 1; }
+    17.5% { opacity: .3; }
+    20% { opacity: 1; }
+    22.5%, 100% { opacity: .3; }
+  }
+  @keyframes jornada-chega {
+    0%, 5% { opacity: 1; transform: translateY(0); }
+    8.33%, 22.5% { opacity: 0; transform: translateY(4px); }
+    26.67%, 100% { opacity: 1; transform: translateY(0); }
   }
   @keyframes jornada-enviada {
     0%, 5% { opacity: 1; transform: translateY(0); }
-    8.33%, 25% { opacity: 0; transform: translateY(4px); }
-    29.17%, 100% { opacity: 1; transform: translateY(0); }
+    8.33%, 27.5% { opacity: 0; transform: translateY(4px); }
+    31.67%, 100% { opacity: 1; transform: translateY(0); }
   }
   @keyframes jornada-consulta {
     0%, 5% { opacity: 1; transform: translateY(0); }
