@@ -10,7 +10,7 @@
  *   linha 2 · B nas 1–5, foto do estúdio nas 7–12, mais baixa que o texto;
  *   linha 3 · cartão de detalhe nas 2–5, subindo para o vão abaixo de B;
  *             C nas 7–11, no meio vertical do cartão;
- *   linha 4 · D, a frase de fecho, nas 4–11.
+ *   linha 4 · D, a frase de fecho, centralizada na grade inteira.
  * As linhas são explícitas (grid-row), porque o posicionamento automático
  * poderia puxar um item para a linha de cima.
  *
@@ -63,8 +63,12 @@ const [fraseB, fraseC, fraseD] = prova.frases;
   .sb-prova__frase--c { text-wrap: wrap; }
 
   /* D: a frase de fecho, maior e mais fina, como a última linha do capítulo. */
+  /* D, a frase de fecho, centralizada na grade inteira em todas as larguras
+     (29/09/2026), nas duas versões. */
   .sb-prova__frase--d {
+    grid-column: 1 / -1; justify-self: center;
     max-width: 30ch;
+    text-align: center;
     font-family: var(--font-titulo);
     font-size: clamp(26px, 2.8vw, 40px); font-weight: 280; line-height: 1.18;
     letter-spacing: -.035em; word-spacing: -.08em;
@@ -87,7 +91,7 @@ const [fraseB, fraseC, fraseD] = prova.frases;
     /* O cartão sobe para o vão que a foto, mais baixa, deixa sob o texto B. */
     .sb-prova__detalhe { grid-column: 2 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
     .sb-prova__frase--c { grid-column: 7 / 12; align-self: center; }
-    .sb-prova__frase--d { grid-column: 4 / 12; margin-top: clamp(64px, 8vw, 128px); }
+    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
   }
 
   /* ---------- 900–1099.98: a mesma página dupla, mais estreita ---------- */
@@ -98,7 +102,7 @@ const [fraseB, fraseC, fraseD] = prova.frases;
     .sb-prova__foto { grid-column: 7 / 13; margin-top: clamp(0px, 6vw, 96px); }
     .sb-prova__detalhe { grid-column: 1 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
     .sb-prova__frase--c { grid-column: 7 / 13; align-self: center; }
-    .sb-prova__frase--d { grid-column: 2 / 13; margin-top: clamp(64px, 8vw, 128px); }
+    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
   }
 
   /* ---------- <900: uma coluna que ainda desencontra ---------- */
