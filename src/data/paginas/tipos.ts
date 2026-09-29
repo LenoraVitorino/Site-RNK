@@ -50,6 +50,8 @@ export type Bloco =
       rotaCta?: string;
       /** Centraliza o herói nessa página (o padrão é alinhado à esquerda). */
       centro?: boolean;
+      /** Esconde o rótulo da navegação acima do H1 (Academy, 28/09). */
+      semRotulo?: boolean;
     }
   | {
       tipo: 'lista';
@@ -83,6 +85,13 @@ export type Bloco =
       largo?: boolean;
       fundo?: 'alt' | 'escuro';
     }
+  /** Painéis grandes 2×2: ícone e índice no topo, título e frase na base (Academy, 28/09). */
+  | {
+      tipo: 'paineis';
+      h2: string;
+      /** `titulo` são as duas linhas do título, na quebra definida: todos os painéis com a mesma diagramação. */
+      itens: { icone: 'Target' | 'Handshake' | 'TrendingUp' | 'Layers' | 'Workflow' | 'BadgeCheck' | 'Users'; titulo: [string, string]; texto: string }[];
+    }
   | {
       tipo: 'etapas';
       eyebrow?: string;
@@ -106,6 +115,10 @@ export type Bloco =
       paragrafos: string[];
       fundo?: 'alt' | 'escuro';
       centro?: boolean;
+      /** Mais respiro em cima e embaixo, para dobras de texto curto (Performa, 28/09). */
+      respiro?: boolean;
+      /** Tópicos curtos com ícone (nome Lucide de Icone.astro), numa linha centralizada abaixo das duas colunas. */
+      topicos?: { icone: 'Compass' | 'Cpu' | 'Workflow'; texto: string }[];
       /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */
       selo?: 'gptw';
     }

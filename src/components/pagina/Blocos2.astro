@@ -17,6 +17,7 @@ import BlocoLista from './BlocoLista.astro';
 import BlocoProdutos from './BlocoProdutos.astro';
 import BlocoBlocos from './BlocoBlocos.astro';
 import BlocoEtapas from './BlocoEtapas.astro';
+import BlocoPaineis from './BlocoPaineis.astro';
 import BlocoAntesDepois from './BlocoAntesDepois.astro';
 import BlocoTexto from './BlocoTexto.astro';
 import BlocoNumeros from './BlocoNumeros.astro';
@@ -48,6 +49,7 @@ if (import.meta.env.DEV) for (const { bloco, secao } of plano)
     case 'produtos': return <BlocoProdutos bloco={bloco} secao={secao} />;
     case 'blocos': return <BlocoBlocos bloco={bloco} secao={secao} />;
     case 'etapas': return <BlocoEtapas bloco={bloco} secao={secao} />;
+    case 'paineis': return <BlocoPaineis bloco={bloco} secao={secao} />;
     case 'antesDepois': return <BlocoAntesDepois bloco={bloco} secao={secao} />;
     case 'texto': return <BlocoTexto bloco={bloco} secao={secao} />;
     case 'numeros': return <BlocoNumeros bloco={bloco} secao={secao} />;

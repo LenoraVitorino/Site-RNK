@@ -20,6 +20,7 @@
  */
 import { Image } from 'astro:assets';
 import CabecaSecao from './CabecaSecao.astro';
+import Icone from '../ui/Icone.astro';
 import seloGptw from '../../assets/selos/gptw-2025.png';
 import {
   classesSecao, ehCitacao, ehDestaque, formaTexto, partesFicha,
@@ -70,7 +71,7 @@ const classeDe = (p: string) => (ehCitacao(p) ? 'int-citacao' : ehDestaque(p) ? 
 const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some(ehCitacao);
 ---
 <section
-  class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`)}
+  class:list={classesSecao(secao, 'int-texto', `int-texto--${forma}`, bloco.respiro && 'int-texto--respiro')}
   id={secao.id}
   data-cena={secao.cena}
   data-tom={secao.tom}
@@ -112,6 +113,13 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
       )}
     </div>
   )}
+  {bloco.topicos && (
+    <div class="container">
+      <ul class="int-texto__topicos entra" style="--i:2">
+        {bloco.topicos.map((t) => <li><Icone nome={t.icone} size={28} class="int-texto__topico-icone" />{t.texto}</li>)}
+      </ul>
+    </div>
+  )}
 </section>
 
 <style>
@@ -150,6 +158,22 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
      em paginas2.css); aqui fica só o respiro da citação entre os parágrafos. */
   .int-texto__corpo > .int-citacao { margin-block: 12px; }
 
+  /* Respiro: dobra de texto curto com a altura das vizinhas (Performa). */
+  .int-texto--respiro {
+    display: grid; align-content: center;
+    min-height: min(80svh, 720px); padding-block: clamp(120px, 11vw, 190px);
+  }
+
+  /* ---------- Tópicos: linha centralizada abaixo do texto (Academy) ---------- */
+
+  .int-texto__topicos {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 32px clamp(48px, 8vw, 140px);
+    margin: clamp(56px, 7vw, 104px) 0 0; padding: 0; list-style: none;
+    font-size: clamp(17px, 1.4vw, 21px); font-weight: 300; letter-spacing: -.02em; color: var(--int-tinta);
+  }
+  .int-texto__topicos li { display: grid; justify-items: center; gap: 16px; text-align: center; }
+  .int-texto__topicos :global(.int-texto__topico-icone) { opacity: .7; }
+
   /* ---------- Ficha: rótulo e valor em duas colunas (pin 201) ---------- */
 
   .int-dados {
@@ -178,6 +202,7 @@ const manifesto = forma === 'solto' || paragrafos.length >= 3 || paragrafos.some
     .int-citacao--manifesto.int-citacao--longa { font-size: 28px; }
     .int-texto__corpo.int-manifesto > p:not(.int-citacao, .int-destaque) { font-size: 19px; }
     .int-dados { grid-template-columns: minmax(0, 1fr); }
+    .int-texto__topicos { flex-direction: column; align-items: center; }
   }
   /* Abaixo de 375px a frase-manifesto desce mais um degrau: a 32px ia a 7 linhas. */
   @media (max-width: 374.98px) {

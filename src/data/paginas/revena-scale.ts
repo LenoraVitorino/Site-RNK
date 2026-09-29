@@ -84,11 +84,6 @@ export const revenaScale: Pagina = {
         'Alertas proativos quando algo merece atenção imediata',
       ],
     },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'Seção 8 · Resultados — o briefing traz só [IMG]. Usar o bloco global de depoimentos/resultados (D11).',
-    },
     ctaProtocolo,
   ],
 };
