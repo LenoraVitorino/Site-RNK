@@ -66,10 +66,8 @@ export const seo = {
 export const abertura = {
   rotulo: 'Sobre',                    // home.md:191 (Eyebrow)
   linhasH1: ['Sobre a', 'Renke'],     // home.md:192 (H2 da home); a quebra é só tipográfica
-  /** HTML (a versão copy tem o <strong>). Renderizar com set:html. */
-  lead: copyLiteral
-    ? frase1                                              // home.md:194
-    : 'Uma operação de receita construída para clínicas.', // revisão de 29/09/2026
+  /** HTML: tem o <strong>. Renderizar com set:html. */
+  lead: frase1,                       // home.md:194
 };
 
 /* ------------------------------------------------------------------ */
@@ -78,7 +76,9 @@ export const abertura = {
 
 export const somos = {
   /** Tom duplo: a 1ª linha em tinta, a 2ª em cinza. */
-  h2: ['Não somos agência de marketing.', 'Não somos consultoria de gestão.'] as const,   // home.md:195
+  h2: copyLiteral
+    ? ['Não somos agência de marketing.', 'Não somos consultoria de gestão.'] as const   // home.md:195
+    : ['Uma operação de receita', 'construída para clínicas.'] as const,              // revisão de 29/09/2026; a quebra é só tipográfica
   texto: copyLiteral
     ? 'Somos o time que conecta marketing, processo comercial e dados em um sistema único, operado de perto, com responsabilidade pelo resultado da última linha do nosso cliente.'   // home.md:195-197
     : 'Somos o time que conecta marketing, processo comercial e dados em uma operação única, orientada por dados e acompanhada de perto.',   // revisão de 29/09/2026
