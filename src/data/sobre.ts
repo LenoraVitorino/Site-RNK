@@ -195,7 +195,12 @@ export const cultura = {
 
 export const fecho: BlocoDe<'ctaFinal'> = {
   tipo: 'ctaFinal',
-  destaque: 'Antes de trocar de agência de novo, descubra o que é RevOps.',   // home.md:218
+  destaque: copyLiteral
+    ? 'Antes de trocar de agência de novo, descubra o que é RevOps.'   // home.md:218
+    : 'Sua próxima decisão sobre receita começa aqui.',              // revisão de 29/09/2026
+  texto: copyLiteral
+    ? undefined
+    : 'Entenda como uma operação de Revenue Operations pode transformar a forma como sua clínica cresce.',   // revisão de 29/09/2026
   cta: 'Fale com a gente',                                                     // nav.ts:62
   rotaCta: '/contato',
 };

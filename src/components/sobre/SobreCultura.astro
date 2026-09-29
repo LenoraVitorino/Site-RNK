@@ -59,12 +59,16 @@ const comFoto = !!fotos.cultura.foto;
   /* ---------- Corpo: a frase isolada, os valores e o link ---------- */
 
   /* O .titulo dá a família e o tracking; o tamanho e o peso são os daqui. */
+  /* 29/09/2026: de 64px para 40px no máximo, nas duas versões ("muito
+     grande"). A frase da versão estudio tem 155 caracteres; na escala de
+     título ficava com seis linhas a 1440 e onze a 320. Na escala de frase,
+     com o espaçamento entre palavras normal, lê como um parágrafo curto. */
   .sb-cultura__frase {
-    max-width: 22ch;
-    font-size: clamp(32px, 4.4vw, 64px); font-weight: 280; line-height: 1.08;
-    letter-spacing: -.05em; word-spacing: -.08em;
+    max-width: 30ch;
+    font-size: clamp(26px, 2.8vw, 40px); font-weight: 300; line-height: 1.18;
+    letter-spacing: -.03em;
     color: var(--sb-tinta);
-    text-wrap: balance;
+    text-wrap: pretty;
   }
 
   /* Os valores como palavras soltas, sem cartões nem marcadores. */
@@ -107,10 +111,10 @@ const comFoto = !!fotos.cultura.foto;
   @media (max-width: 899.98px) {
     .sb-cultura__corpo { margin-top: 32px; }
     .sb-cultura__foto { margin-top: 40px; grid-column: 1 / 5; }
-    .sb-cultura__frase { font-size: 44px; }
+    .sb-cultura__frase { font-size: 30px; }
   }
   @media (max-width: 599.98px) {
-    .sb-cultura__frase { font-size: 32px; }
+    .sb-cultura__frase { font-size: 23px; }
     .sb-cultura__valores { font-size: 20px; gap: 10px 24px; margin-top: 40px; }
     .sb-cultura__foto { grid-column: 1 / 4; }
   }
