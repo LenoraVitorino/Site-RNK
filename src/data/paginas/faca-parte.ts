@@ -81,14 +81,15 @@ export const facaParte: Pagina = {
         { titulo: 'Evolução', texto: 'Crescer como profissional aqui é tão importante quanto entregar resultado.' },
       ],
     },
-    {
-      tipo: 'texto',
+    // Só na versão copy: na estudio a dobra saiu (29/09/2026); o endereço está no rodapé.
+    ...(copyLiteral ? [{
+      tipo: 'texto' as const,
       h2: 'Onde a mágica acontece',
       paragrafos: [
         'Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.',
         'R. Benjamin Constant, 2364 · Sala Térrea, Escola Agrícola · Blumenau/SC · CEP 89035-100',
       ],
-    },
+    }] : []),
     {
       tipo: 'formulario',
       h2: 'Quer fazer parte?',
