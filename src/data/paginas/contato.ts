@@ -3,7 +3,8 @@ import { copyLiteral } from '../versao';
 
 /**
  * Copy literal de docs/03-copy/contato.md. A versão estudio (padrão) tem o
- * título e a frase do formulário revistos em 29/09/2026 e tira o
+ * título e a frase do formulário revistos em 29/09/2026, leva o e-mail para o
+ * aviso sob o botão e tira o
  * bloco "Informações · Grupo RNK", que repetia endereço, e-mail e redes do
  * rodapé logo abaixo (29/09/2026); a VERSAO=copy mantém.
  */
@@ -24,7 +25,9 @@ export const contato: Pagina = {
       sub: copyLiteral
         ? 'Preencha o formulário e a gente responde em até 24h.'
         : 'Conte sobre o momento da sua clínica e os desafios da sua operação comercial. Nossa equipe entra em contato para entender o cenário e os próximos passos.',   // revisão de 29/09/2026
-      email: 'contato@renkestudio.com.br',
+      // Na estudio o e-mail sai da coluna do título e vai para o aviso sob o
+      // botão ("Ou escreva para…"), com o endereço do rodapé (nav.ts).
+      email: copyLiteral ? 'contato@renkestudio.com.br' : undefined,
       botao: 'Enviar →',
       campos: [
         { id: 'nome', rotulo: 'Nome', tipo: 'text', autocomplete: 'name', obrigatorio: true },
