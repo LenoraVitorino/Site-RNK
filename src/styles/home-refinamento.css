@@ -289,7 +289,7 @@ section[id] { scroll-margin-top: 110px; }
     100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
     var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
   background: #dddddd; color: #252523;
-  --metodo-respiro: clamp(48px, 5vw, 80px);   /* respiro curto: a dobra cabe numa tela */
+  --metodo-respiro: clamp(40px, 4vw, 64px);   /* respiro curto: a dobra cabe numa tela (28/09: um pouco mais curta) */
   padding-block: var(--metodo-respiro);
 }
 .home-refinada #o-que-fazemos > .container {
@@ -346,15 +346,20 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }
   .home-refinada .metodo-editorial .metodo__midia {
     grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / -1; justify-self: center; align-self: center;
-    width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); max-width: none;
+    width: min(100%, 400px, calc((100svh - 2 * var(--metodo-respiro) - 60px) * 9 / 16)); max-width: none;
   }
   /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
   /* Parágrafo embaixo à esquerda e número embaixo à direita, os dois sob um fio. */
-  .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; grid-row: 4; align-self: end; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
+  /* Parágrafo e número logo abaixo da barra do meio do R, que fica no centro
+     vertical da dobra: ocupam a altura toda da grade e descem 50% dela (o
+     'top' de um item de grade com position: relative mede a área da grade)
+     mais meia faixa (44px) e um respiro. */
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros) { grid-row: 1 / -1; align-self: start; top: calc(50% + 44px + 40px); }
+  .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
   .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 auto auto 0; width: 100%; height: 1px; background: rgb(37 37 35 / .24); }
-  .home-refinada .metodo-editorial .metodo__numeros::before { width: min(100%, 280px); }   /* fio curto: a perna do R passa ao lado */
+  .home-refinada .metodo-editorial .metodo__numeros::before { width: min(100%, 250px); }   /* fio curto: a perna do R passa ao lado */
   .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
-  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; grid-row: 4; align-self: end; margin: 0; padding-top: 22px; }
+  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; margin: 0; padding-top: 22px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
   .home-refinada .metodo-editorial .metodo__numero { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }   /* número em cima, legenda embaixo: fica estreito, longe da perna */
   .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
