@@ -191,6 +191,9 @@ section[id] { scroll-margin-top: 110px; }
 :is(#fale, #formulario, #academy-tools) .cabeca-dobra__selo { margin-bottom: 8px; }
 #pilares-revena .cabeca-dobra__selo { margin-bottom: 24px; }
 #o-que-fazemos .metodo__selo { margin-bottom: 28px; }
+@media (min-width: 1000px) {
+  #o-que-fazemos .metodo__selo { margin-top: 46px; }   /* selo + título no meio do vão entre a barra de cima e a do meio do R */
+}
 /* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
    Ecossistema, logo depois, encosta mais. */
 .home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
