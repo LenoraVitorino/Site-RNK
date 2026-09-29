@@ -247,8 +247,8 @@ section[id] { scroll-margin-top: 110px; }
 .metodo__valor-reserva { visibility: hidden; }
 .metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 12px; line-height: 1.45; color: #aaa; }
 /* Dobra papel (28/09/2026, referência Hikari): painel cinza-claro com cantos
-   chanfrados, recuado das bordas da tela, a cena aparece no recuo. Mesmo
-   papel das internas (#e7e7e5, texto #252523). A caixa de vidro vira a
+   chanfrados, recuado das bordas da tela, a cena aparece no recuo. Cinza
+   neutro #dddddd, o da referência (texto #252523). A caixa de vidro vira a
    própria dobra; o container desconta o recuo para o conteúdo seguir na
    margem da hero. No papel o número fica em grafite (a regra dos tokens:
    amarelo nunca como texto sobre claro). */
@@ -261,7 +261,7 @@ section[id] { scroll-margin-top: 110px; }
     var(--metodo-chanfro) 0, calc(100% - var(--metodo-chanfro)) 0, 100% var(--metodo-chanfro),
     100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
     var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
-  background: #e7e7e5; color: #252523;
+  background: #dddddd; color: #252523;
   --metodo-respiro: clamp(48px, 5vw, 80px);   /* respiro curto: a dobra cabe numa tela */
   padding-block: var(--metodo-respiro);
 }
@@ -281,7 +281,7 @@ section[id] { scroll-margin-top: 110px; }
 /* Moldura das fotos da sede: chanfro pequeno, eco do painel; a foto passa
    devagar dentro da moldura durante a rolagem (sem JS, só onde houver
    scroll-driven animations e sem movimento reduzido). */
-.metodo__foto { display: none; position: relative; margin: 0; overflow: hidden; background: #d9d9d7;
+.metodo__foto { display: none; position: relative; margin: 0; overflow: hidden; background: #d2d2d2;
   clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
 .metodo__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .metodo__foto--esq img { object-position: 30% 50%; }
@@ -299,7 +299,7 @@ section[id] { scroll-margin-top: 110px; }
 @media (min-width: 1000px) {
   .home-refinada .metodo-editorial {
     grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; grid-template-areas: none;
-    column-gap: clamp(16px, 2vw, 32px); row-gap: 48px; align-items: stretch;
+    column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; align-items: stretch;
   }
   .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__apresentacao) { display: contents; }
   .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 4; grid-row: 1; align-self: start; }
@@ -310,10 +310,10 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 4; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
   .home-refinada .metodo-editorial .metodo__descricao { grid-column: 9 / -1; grid-row: 2 / 4; align-self: end; justify-self: end; max-width: 34ch; font-size: 16px; }   /* 34ch: seis linhas; encostado no limite direito da grade, espelhando o título */
   /* Fotos da sede nos vãos, presas à grade: à esquerda, retângulo vertical
-     (colunas 1–3) entre o título e o número; à direita, retângulo horizontal
+     (colunas 1–4) entre o título e o número; à direita, retângulo horizontal
      (colunas 9–12) no alto, espelhando o título. Diagonal com o vídeo no meio. */
   .home-refinada .metodo-editorial .metodo__foto { display: block; }
-  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 1 / span 3; grid-row: 2; align-self: center; aspect-ratio: 3 / 4; }
+  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 1 / span 4; grid-row: 2; align-self: stretch; min-height: 0; }   /* espelha a da direita: 4 colunas, e ocupa a altura toda entre o título e o número */
   .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 9 / -1; grid-row: 1 / 3; align-self: start; aspect-ratio: 3 / 2; }   /* 1/3: não estica a linha do título */
 }
 @media (max-width: 999.98px) {
