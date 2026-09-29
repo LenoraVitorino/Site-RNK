@@ -358,7 +358,7 @@ section[id] { scroll-margin-top: 110px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
   .home-refinada .metodo-editorial .metodo__numero { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }   /* número em cima, legenda embaixo: fica estreito, longe da perna */
   .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
-  .home-refinada .metodo-editorial .metodo__legenda { max-width: none; padding-bottom: 0; white-space: nowrap; font-size: 11px; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
+  .home-refinada .metodo-editorial .metodo__legenda { max-width: none; padding-bottom: 0; white-space: nowrap; font-size: clamp(12px, 1.12vw, 19px);   /* na proporção do número: a legenda ocupa a largura do +30 */ line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
 }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
