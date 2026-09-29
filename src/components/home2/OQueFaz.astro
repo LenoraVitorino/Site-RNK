@@ -1,9 +1,17 @@
 ---
-/** Método editorial, vídeo com controles e prova em três colunas. Textos por versão. */
+/**
+ * Método editorial (28/09, referência Cine Casero / Awwwards): no alto, uma
+ * faixa de cabeçalho — título, parágrafo e o número — sob um fio; embaixo,
+ * a galeria em escada com o vídeo no centro e as fotos da sede diminuindo
+ * para as bordas, na mesma linha de base. Por trás da galeria passa a faixa
+ * amarela do R da parede do salão, que só aparece nos vãos e sobe numa curva
+ * na margem direita. Textos por versão.
+ */
 import { Image } from 'astro:assets';
 import Telefone from '../ui/Telefone.astro';
-import RParede from '../ui/RParede.astro';
 import cafe from '../../assets/sede/cafe.jpg';
+import equipe from '../../assets/sede/equipe.jpg';
+import operacao from '../../assets/sede/operacao.jpg';
 import salaVidro from '../../assets/sede/sala-vidro.jpg';
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
@@ -12,15 +20,13 @@ import { numerosProva } from '../../data/home';
 
 const SOBRE_NA_HOME = false;
 
-// Teste de 28/09 (referência Aura): só o primeiro número, no canto inferior esquerdo.
+// Só o primeiro número, na ponta direita do cabeçalho.
 const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0, 1).map(n => {
   const [, prefixo, valor, sufixo] = n.valor.match(/^(.*?)(\d+)(.*)$/)!;
   return { ...n, prefixo, alvo: Number(valor), sufixo };
 });
 ---
 <section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
-  {/* Fundo da dobra: o R da parede da sede atravessando o painel, com ruído leve por cima (só desktop). */}
-  <RParede class="metodo__r" ajuste="none" />
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
@@ -53,15 +59,24 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
           </ul>
         </div>
       </div>
-      {/* Fotos da sede nos vãos ao lado do vídeo (só desktop). */}
-      <figure class="metodo__foto metodo__foto--esq">
-        <Image src={cafe} alt="Área do café da Renke, com o R iluminado na parede e a mesa de reunião" format="webp" quality={72} widths={[400, 800]} sizes="300px" loading="lazy" />
-      </figure>
-      <figure class="metodo__foto metodo__foto--dir">
-        <Image src={salaVidro} alt="Sala de reunião com divisória de vidro e palavras em amarelo na parede" format="webp" quality={72} widths={[480, 960]} sizes="420px" loading="lazy" />
-      </figure>
-      <div class="metodo__midia">
-        <Telefone />
+      {/* Galeria em escada: fotos da sede (só desktop) em volta do vídeo. */}
+      <div class="metodo__galeria">
+        <span class="metodo__faixa" aria-hidden="true"></span>
+        <figure class="metodo__foto metodo__foto--p metodo__foto--esq">
+          <Image src={equipe} alt="Salão da sede da Renke, com o time nas estações de trabalho" format="webp" quality={72} widths={[240, 480]} sizes="200px" loading="lazy" />
+        </figure>
+        <figure class="metodo__foto metodo__foto--m metodo__foto--esq metodo__foto--cafe">
+          <Image src={cafe} alt="Área do café da Renke, com o R iluminado na parede" format="webp" quality={72} widths={[320, 640]} sizes="300px" loading="lazy" />
+        </figure>
+        <div class="metodo__midia">
+          <Telefone />
+        </div>
+        <figure class="metodo__foto metodo__foto--m metodo__foto--dir">
+          <Image src={operacao} alt="Escritório da Renke com a equipe nas estações de trabalho e o R da marca na parede" format="webp" quality={72} widths={[320, 640]} sizes="300px" loading="lazy" />
+        </figure>
+        <figure class="metodo__foto metodo__foto--p metodo__foto--dir">
+          <Image src={salaVidro} alt="Sala de reunião com divisória de vidro e palavras em amarelo na parede" format="webp" quality={72} widths={[240, 480]} sizes="200px" loading="lazy" />
+        </figure>
       </div>
     </div>
   </div>

@@ -287,89 +287,98 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .metodo-editorial .metodo__valor { color: #252523; font-weight: 300; }
 .home-refinada .metodo-editorial .metodo__legenda { color: #5f5f5d; }
 .home-refinada #o-que-fazemos :focus-visible { outline-color: #252523; }
-/* O R da parede da sede (RParede.astro) como detalhe, não como fundo
-   (28/09, segunda leitura): só um fragmento, em traço fino, no canto
-   superior direito que ficava vazio. A caixa do R começa no meio do painel,
-   atrás do vídeo, e é recortada até a coluna 9: aparecem a barra de cima, a
-   barriga na margem direita e a perna descendo pela margem; a haste nunca
-   aparece. Ruído leve sobre o fundo e o R, não sobre fotos, vídeo e textos.
-   Só desktop. */
-.metodo__r { display: none; }
+/* Diagramação editorial (28/09, referência Cine Casero, Awwwards SOTD):
+   1. Cabeçalho em faixa, na grade de 12: título (1–5), parágrafo (6–9) e o
+      número (10–12, à direita), alinhados pela base, sobre um fio fino.
+   2. Galeria em escada: o vídeo no centro é a maior peça; fotos médias ao
+      lado e pequenas nas pontas, todas na mesma linha de base. Na rolagem,
+      as fotos se abrem devagar a partir do vídeo.
+   3. A faixa amarela do R da parede do salão passa por trás da galeria (só
+      aparece nos vãos), sobe numa curva na margem direita e solta a perna
+      inclinada para baixo, como a fita na parede.
+   Ruído leve sobre o fundo e a faixa, não sobre fotos, vídeo e textos. */
+.metodo__galeria { position: relative; }
+.metodo__faixa, .metodo__foto { display: none; }
+.metodo__foto { position: relative; z-index: 1; margin: 0; overflow: hidden; background: #d2d2d2; }
+.metodo__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.metodo__foto--cafe img { object-position: 22% 50%; }   /* o R iluminado da parede no enquadramento */
+/* Mesmo chanfro miúdo nas fotos e no vídeo, eco dos cantos do painel. */
+.metodo__foto, .home-refinada #o-que-fazemos .tel__moldura {
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  border-radius: 0;
+}
+.home-refinada #o-que-fazemos .tel__tela { border-radius: 0; }
 @media (min-width: 1000px) {
   .home-refinada #o-que-fazemos { position: relative; isolation: isolate; }
   .home-refinada #o-que-fazemos > .container { position: relative; z-index: 2; }
-  .home-refinada #o-que-fazemos .metodo__r {
-    display: block; position: absolute; z-index: 0; pointer-events: none;
-    top: clamp(36px, 3.4vw, 56px); left: 50%; right: clamp(24px, 3vw, 48px);
-    width: auto; height: auto; aspect-ratio: 1000 / 560;
-    clip-path: inset(0 0 0 34%);
-    color: var(--destaque);
-  }
-  .home-refinada #o-que-fazemos .metodo__r path { stroke-width: 18; }   /* ≈13px: fio, não faixa */
   .home-refinada #o-que-fazemos::after {
     content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: .16; mix-blend-mode: multiply;
   }
-}
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .metodo__r .r-parede__traco { stroke-dasharray: 1; animation: metodo-r-desenha linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
-    .metodo__r .r-parede__perna { animation-range: entry 55% entry 100%; }
+  .home-refinada .metodo-editorial { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: clamp(32px, 3.4vw, 48px); align-items: stretch; }
+
+  /* 1. Cabeçalho em faixa */
+  .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__galeria) { grid-area: auto; min-width: 0; }
+  .home-refinada .metodo-editorial .metodo__texto {
+    position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: none;
+    column-gap: clamp(16px, 2vw, 32px); align-items: end; padding-bottom: clamp(24px, 2.4vw, 32px);
   }
-}
-@keyframes metodo-r-desenha { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-/* Moldura das fotos da sede: chanfro pequeno, eco do painel; a foto passa
-   devagar dentro da moldura durante a rolagem (sem JS, só onde houver
-   scroll-driven animations e sem movimento reduzido). */
-.metodo__foto { display: none; position: relative; margin: 0; overflow: hidden; background: #d2d2d2;
-  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
-.metodo__foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.metodo__foto--esq img { object-position: 30% 50%; }
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .metodo__foto img { height: 116%; margin-top: -8%; animation: metodo-foto-deriva linear both; animation-timeline: view(); animation-range: cover; }
-    .metodo__foto--dir img { animation-direction: reverse; }
-  }
-}
-@keyframes metodo-foto-deriva { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
-/* Leitura editorial (28/09): três faixas. No alto, título | vídeo | foto da
-   sala de vidro; no meio, foto do café | vídeo | o R aparecendo; embaixo, o
-   número e o parágrafo na mesma linha de base, cada um sob um fio fino, como
-   notas de rodapé. O vídeo atravessa as três. */
-/* No desktop (teste de 28/09, referência Aura), na grade de 12 colunas do site
-   (a mesma do /sobre): título no alto à esquerda (1–4), vídeo no centro (5–8),
-   subtítulo embaixo à direita (9–12) e um número só no canto inferior esquerdo.
-   Texto e apresentação somem da árvore de caixas para os filhos irem à grade. */
-@media (min-width: 1000px) {
-  .home-refinada .metodo-editorial {
-    grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; grid-template-areas: none;
-    column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; align-items: stretch;
-  }
-  .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__apresentacao) { display: contents; }
-  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 4; grid-row: 1; align-self: start; }
-  .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }   /* "O que a" / "Renke faz" na coluna estreita */
-  .home-refinada .metodo-editorial .metodo__numeros { position: relative; grid-column: 1 / span 4; grid-row: 3; align-self: start; margin: 0; padding-top: 20px; }
-  /* Fios de rodapé: desenhados com ::before porque sem-contornos.css apaga as bordas. */
-  .home-refinada .metodo-editorial :is(.metodo__numeros, .metodo__descricao)::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: rgb(37 37 35 / .24); }
-  /* Número editorial: algarismo grande e fino, legenda em versalete miúdo na linha de base. */
-  .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 18px; }
-  .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(72px, 7.2vw, 124px); font-weight: 200; line-height: .8; letter-spacing: -.065em; }
+  .home-refinada .metodo-editorial .metodo__texto::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: rgb(37 37 35 / .24); }
+  .home-refinada .metodo-editorial .metodo__apresentacao { display: contents; }
+  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 5; }
+  .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }
+  .home-refinada .metodo-editorial .metodo__descricao { grid-column: 6 / span 4; max-width: 36ch; font-size: 16px; }
+  .home-refinada .metodo-editorial .metodo__numeros { grid-column: 10 / -1; justify-self: end; margin: 0; }
+  .home-refinada .metodo-editorial .metodo__numero { display: flex; align-items: flex-end; gap: 16px; }
+  .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(64px, 6vw, 104px); font-weight: 200; line-height: .8; letter-spacing: -.065em; }
   .home-refinada .metodo-editorial .metodo__legenda { max-width: 12ch; padding-bottom: .1em; white-space: normal; font-size: 11px; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
-  .home-refinada .metodo-editorial .metodo__midia { grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / 4; width: min(100%, 420px, calc((100svh - 2 * var(--metodo-respiro)) * 9 / 16)); justify-self: center; align-self: center; }
-  .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 9 / -1; grid-row: 3; align-self: start; max-width: none; padding: 20px 0 0 max(0px, calc(100% - 34ch)); font-size: 16px; }   /* fio na coluna inteira; o texto em 34ch (seis linhas) encostado no limite direito */
-  /* Fotos da sede como peças soltas, menores que o vídeo: à esquerda, retrato
-     em duas colunas no meio da faixa; à direita, paisagem em três colunas,
-     pousada sobre o fio do parágrafo. O canto superior direito fica com o R. */
-  .home-refinada .metodo-editorial .metodo__foto { display: block; }
-  .home-refinada .metodo-editorial .metodo__foto--esq { grid-column: 2 / span 2; grid-row: 2; align-self: center; aspect-ratio: 4 / 5; }   /* peça solta: duas colunas, deslocada da margem */
-  .home-refinada .metodo-editorial .metodo__foto--dir { grid-column: 10 / -1; grid-row: 2; align-self: end; aspect-ratio: 3 / 2; }   /* peça solta: três colunas, pousada sobre o fio do parágrafo */
+
+  /* 2. Galeria em escada */
+  .home-refinada .metodo-editorial .metodo__galeria {
+    --galeria-h: clamp(400px, calc(100svh - 2 * var(--metodo-respiro) - 280px), 600px);
+    display: flex; justify-content: center; align-items: flex-end; gap: clamp(12px, 1.3vw, 20px);
+    height: var(--galeria-h);
+  }
+  .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; flex: none; height: 100%; width: auto; aspect-ratio: 9 / 16; max-width: none; }
+  .home-refinada .metodo-editorial .metodo__midia .tel { width: 100%; }
+  .home-refinada .metodo-editorial .metodo__foto { display: block; flex: none; }
+  .home-refinada .metodo-editorial .metodo__foto--m { height: 72%; aspect-ratio: 4 / 5; }
+  .home-refinada .metodo-editorial .metodo__foto--p { height: 48%; aspect-ratio: 3 / 4; }
+
+  /* 3. A faixa do R: barra de trás + curva subindo na margem direita + perna */
+  .home-refinada .metodo-editorial .metodo__faixa {
+    --faixa: clamp(24px, 2.2vw, 36px);
+    display: block; position: absolute; z-index: 0; pointer-events: none;
+    top: 6%; bottom: 30%; left: -40vw; right: calc(-1 * clamp(48px, 4.6vw, 80px));
+    border-bottom: var(--faixa) solid var(--destaque); border-right: var(--faixa) solid var(--destaque);
+    border-bottom-right-radius: calc(var(--faixa) * 2.6);
+  }
+  .home-refinada .metodo-editorial .metodo__faixa::after {
+    content: ''; position: absolute; top: 100%; right: calc(var(--faixa) * 1.9);
+    width: var(--faixa); height: 60vh; background: var(--destaque);
+    transform-origin: top; transform: skewX(-24deg);
+  }
 }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    @media (min-width: 1000px) {
+      /* As fotos se abrem a partir do vídeo; a faixa corre da esquerda para a direita. */
+      .home-refinada .metodo-editorial .metodo__foto { animation: metodo-foto-abre linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+      .home-refinada .metodo-editorial .metodo__foto--esq { --de: 48px; }
+      .home-refinada .metodo-editorial .metodo__foto--dir { --de: -48px; }
+      .home-refinada .metodo-editorial .metodo__foto--p { --de-mult: 2; }
+      .home-refinada .metodo-editorial .metodo__faixa { animation: metodo-faixa-corre linear both; animation-timeline: view(); animation-range: entry 10% cover 50%; }
+    }
+  }
+}
+@keyframes metodo-foto-abre { from { opacity: 0; transform: translateX(calc(var(--de, 0px) * var(--de-mult, 1))); } to { opacity: 1; transform: none; } }
+@keyframes metodo-faixa-corre { from { clip-path: inset(0 100% -100vh 0); } to { clip-path: inset(0 0 -100vh 0); } }
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
   .metodo-editorial .metodo__texto { grid-template-rows: auto auto; }
   .metodo-editorial h2.metodo__titulo { font-size: clamp(40px, 6vw, 56px); margin-bottom: 0; }
-  .metodo-editorial .metodo__midia { width: min(100%, 240px); justify-self: center; }
+  .metodo-editorial .metodo__midia { width: min(100%, 240px); margin-inline: auto; }
   .metodo-editorial .metodo__valor { font-size: clamp(36px, 5.6vw, 50px); }
 }
 @media (max-width: 599.98px) {
