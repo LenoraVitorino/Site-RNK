@@ -2,12 +2,15 @@
 /**
  * Bloco 'numeros' das internas. Especificação: docs/04-design/paginas-internas.md, "numeros".
  *
- * Duas formas, as duas sem contador e sem amarelo:
+ * Duas formas, sem contador e, fora do destaque, sem amarelo:
  * - Régua (padrão: Treinamento CRM, Cultura Pro, Contato): a régua de
  *   números do método da home, valor light grande e legenda curta embaixo;
  *   no celular, linhas 'valor | legenda', como o .metodo__numero.
  * - Grade (`grade: true`, Revena Full): cartões do Features com a estrutura
  *   da ficha de Resultados, índice no topo e a palavra no pé.
+ * - Régua em destaque (`destaque: true`, Contato, 29/09/2026): a mesma
+ *   régua com valores curtos em escala grande, um fio fino em cima de cada
+ *   item e o sinal '+' em amarelo, o único acento da dobra.
  *
  * partesNumero() só divide a frase: as duas spans, com o espaço real entre
  * elas, somam o item tal como está nos dados. Quando o valor termina em ':'
@@ -34,7 +37,7 @@ const notaCitacao = !!bloco.nota && /^["“”«]/.test(bloco.nota.trim());
 const iNota = Math.min(n, 5);
 ---
 <section
-  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua')}
+  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua', !bloco.grade && bloco.destaque && 'int-numeros--destaque')}
   id={secao.id}
   data-cena={secao.cena}
   data-tom={secao.tom}
@@ -60,7 +63,9 @@ const iNota = Math.min(n, 5);
             <li class="int-regua__item entra" style={`--i:${Math.min(i, 4)}`}>
               <span class="int-regua__valor">{valor.endsWith(':')
                 ? <>{valor.slice(0, -1)}<span class="visually-hidden">:</span></>
-                : valor}</span>
+                : bloco.destaque && valor.startsWith('+')
+                  ? <><span class="int-regua__sinal">+</span>{valor.slice(1)}</>
+                  : valor}</span>
               {legenda && <>{' '}<span class="int-regua__legenda">{legenda}</span></>}
             </li>
           );
@@ -97,6 +102,24 @@ const iNota = Math.min(n, 5);
   .int-regua__legenda { display: block; font-size: 14px; line-height: 1.5; color: var(--int-mudo); max-width: 24ch; }
   .int-regua__nota { margin-top: clamp(40px, 5vw, 72px); }
 
+  /* ---------- Régua em destaque (Contato) ---------- */
+  /* Valores curtos em escala grande e fina, um fio de 1px em cima de cada
+     item e o '+' em amarelo. A dobra ganha respiro embaixo para os números
+     não encostarem na seguinte. */
+  .int-numeros--destaque { padding-bottom: clamp(72px, 9vw, 144px); }
+  .int-numeros--destaque .int-regua { gap: clamp(24px, 4vw, 64px); }
+  .int-numeros--destaque .int-regua__item {
+    row-gap: 16px;
+    padding-top: clamp(24px, 2.4vw, 36px);
+    border-top: 1px solid color-mix(in srgb, var(--int-tinta) 16%, transparent);
+  }
+  .int-numeros--destaque .int-regua__valor {
+    font-size: clamp(56px, 7.2vw, 112px); font-weight: 200;
+    line-height: .95; letter-spacing: -.055em;
+  }
+  .int-numeros--destaque .int-regua__sinal { color: var(--amarelo-marca); font-weight: 200; margin-right: .04em; }
+  .int-numeros--destaque .int-regua__legenda { font-size: 15px; max-width: 22ch; }
+
   /* ---------- Grade: cartões do Features com a ficha de Resultados ---------- */
   .int-numeros__grade {
     list-style: none; margin: 0; padding: 0;
@@ -125,6 +148,9 @@ const iNota = Math.min(n, 5);
     .int-regua__item { grid-row: auto; grid-template-rows: none; row-gap: 6px; }
     .int-regua__valor { font-size: 28px; }
     .int-regua__legenda { max-width: 32ch; }
+    .int-numeros--destaque .int-regua { gap: 32px; }
+    .int-numeros--destaque .int-regua__item { row-gap: 8px; padding-top: 20px; }
+    .int-numeros--destaque .int-regua__valor { font-size: 56px; }
     /* Dois cartões por linha até 360px: a palavra inteira ('Experiência')
        cabe sem hifenizar com um respiro interno menor. */
     .int-numeros__cartao { padding: 20px; min-height: 140px; }

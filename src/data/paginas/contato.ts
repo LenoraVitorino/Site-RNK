@@ -49,6 +49,7 @@ export const contato: Pagina = {
     {
       tipo: 'numeros',
       fundo: 'alt',
+      destaque: true,
       itens: ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação'],
     },
     {

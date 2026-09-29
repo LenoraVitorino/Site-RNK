@@ -117,6 +117,8 @@ export type Bloco =
       nota?: string;
       /** Grade numerada (01, 02…) em vez da fileira de chips. */
       grade?: boolean;
+      /** Régua em destaque: números grandes com um fio em cima (só valores curtos, como no Contato). */
+      destaque?: boolean;
       fundo?: 'alt' | 'escuro';
     }
   | { tipo: 'faq'; h2: string; perguntas: Pergunta[]; fundo?: 'alt' | 'escuro' }
