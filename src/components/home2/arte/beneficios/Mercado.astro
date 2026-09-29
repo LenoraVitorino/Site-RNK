@@ -1,233 +1,318 @@
 ---
 /**
- * Oportunidades de mercado: o recorte de um mapa de bairro desenhado como
- * uma planta de situação, no escuro. As ruas são fios de largura variada
- * (locais, coletoras e a avenida em diagonal), com cruzamentos em T, e um
- * rio faz a curva embaixo, com uma ponte. Os concorrentes (anéis) se
- * aglomeram ao longo da avenida; "Sua clínica" é o marcador da casa, mais
- * adiante; e um bairro pouco atendido, entre a avenida e o rio, está
- * marcado como zona: contorno tracejado pelo meio das ruas, hachura fina e
- * a pílula "Espaço aberto", com o ponto amarelo. Na entrada, os anéis caem
- * em cascata; em laço lento, um movimento do mercado: uma clínica nova se
- * desenha no aglomerado, com o nome, fica um tempo e some. Pose estática =
- * pose final; o movimento só parte dela.
+ * Oportunidades de mercado: um recorte do painel de inteligência de
+ * mercado. Embaixo, a janela do mapa da região, em fio fino: a avenida em
+ * diagonal separa duas malhas de ruas. O Centro, bairro dos concorrentes,
+ * está aceso e contornado em fio contínuo, com um ponto por clínica; "Sua
+ * clínica" (o mesmo marcador do mapa de posicionamento) fica a sudoeste; e
+ * um bairro da Zona norte, sem ninguém, está marcado como espaço aberto:
+ * tracejado e hachurado como a brecha do posicionamento, com o ponto
+ * amarelo. Sobre o mapa flutua a lista "Movimentos", o que a Renke
+ * acompanha na região. O movimento mais novo ("Nova clínica · Centro ·
+ * hoje") está marcado, e um fio o liga à clínica que acabou de abrir, no
+ * alto do Centro. Em laço, a cena volta um passo: o movimento entra no
+ * alto da lista e o anel do pino novo se desenha. Pose estática = pose
+ * final; o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Ruas: eixos com espaçamento irregular (quadras de 30 a 38). Cada rua é
-   uma lista de trechos; onde falta um trecho, o cruzamento vira um T. As
-   coletoras (x 206, x 318 e y 116) são mais largas que as locais. */
-type Trecho = [number, number];
-const verticais: { x: number; trechos: Trecho[]; coletora?: boolean }[] = [
-  { x: 30, trechos: [[-10, 260]] },
-  { x: 64, trechos: [[-10, 116], [150, 260]] },
-  { x: 98, trechos: [[-10, 150], [214, 260]] },
-  { x: 134, trechos: [[-10, 260]] },
-  { x: 170, trechos: [[-10, 22], [54, 260]] },
-  { x: 206, trechos: [[-10, 260]], coletora: true },
-  { x: 244, trechos: [[-10, 54], [84, 260]] },
-  { x: 282, trechos: [[-10, 260]] },
-  { x: 318, trechos: [[-10, 260]], coletora: true },
-  { x: 356, trechos: [[-10, 182]] },
-  { x: 392, trechos: [[22, 260]] },
-  { x: 430, trechos: [[-10, 260]] },
-  { x: 466, trechos: [[-10, 150], [182, 260]] },
-  { x: 500, trechos: [[-10, 260]] },
+/* Janela do mapa: 384 × 222 (x 24 a 408, y 14 a 236). A lista flutua
+   sobre o terço da direita e sai dela até x 496. */
+const W = { x: 24, y: 14, w: 384, h: 222 };
+/* Avenida: reta que sobe 1 a cada 4 (−14°), de (24, 180) até a borda
+   direita. As ruas ao norte são ortogonais; as do sul seguem a avenida. */
+const AX = 24, AY = 180, INC = -0.25;
+const ANG = (Math.atan(INC) * 180) / Math.PI;
+const av = (x: number) => AY + INC * (x - AX);
+const AV = `translate(${AX} ${AY}) rotate(${ANG.toFixed(3)})`;
+/* Do referencial da avenida (u ao longo dela, v para baixo) ao do mapa. */
+const COS = Math.cos(Math.atan(INC)), SEN = Math.sin(Math.atan(INC));
+const doSul = (u: number, v: number): [number, number] => [
+  Math.round((AX + u * COS - v * SEN) * 10) / 10,
+  Math.round((AY + u * SEN + v * COS) * 10) / 10,
 ];
-const horizontais: { y: number; trechos: Trecho[]; coletora?: boolean }[] = [
-  { y: 22, trechos: [[-10, 356], [392, 530]] },
-  { y: 54, trechos: [[-10, 244], [318, 530]] },
-  { y: 84, trechos: [[-10, 530]] },
-  { y: 116, trechos: [[-10, 530]], coletora: true },
-  { y: 150, trechos: [[98, 530]] },
-  { y: 182, trechos: [[-10, 530]] },
-  { y: 214, trechos: [[-10, 282]] },
-  { y: 246, trechos: [[-10, 134], [170, 530]] },
-];
-const ruas = (coletora: boolean) =>
-  verticais.filter((r) => !!r.coletora === coletora).flatMap(({ x, trechos }) => trechos.map(([a, b]) => `M${x} ${a}V${b}`)).join('') +
-  horizontais.filter((r) => !!r.coletora === coletora).flatMap(({ y, trechos }) => trechos.map(([a, b]) => `M${a} ${y}H${b}`)).join('');
 
-/* Avenida (−16°) que passa por (150, 118); o rio, no quarto de baixo; a
-   coletora x 318 cruza o rio numa ponte. */
-const AV = 'translate(150 118) rotate(-16)';
-const RIO = 'M140 262C236 230 324 226 392 218C450 211 494 198 552 184';
-/* Concorrentes: dos dois lados da avenida, a 12–14 do eixo, mais densos
-   no meio do trecho e sem ritmo fixo. */
-const naAvenida = (x: number, d: number) => [x, Math.round((118 - 0.2867 * (x - 150) + d) * 10) / 10];
-const concorrentes = [
-  naAvenida(78, 14), naAvenida(104, -12), naAvenida(126, 12), naAvenida(143, -13),
-  naAvenida(158, 13), naAvenida(181, -12), naAvenida(222, 12),
+/* Malha do norte: eixos a cada 32–36, com alguns trechos interrompidos
+   (cruzamentos em T). Coordenadas em .5 para o fio de 1 ficar nítido. */
+type Trecho = [number, number];
+const norteV: [number, Trecho[]][] = [
+  [44, [[0, 250]]], [80, [[0, 250]]], [114, [[0, 250]]], [148, [[0, 250]]],
+  [184, [[0, 250]]], [220, [[0, 34], [66, 250]]], [254, [[0, 250]]], [290, [[0, 98], [130, 250]]],
+  [326, [[0, 250]]], [362, [[0, 250]]], [398, [[0, 250]]],
 ];
-/* Sua clínica: no cruzamento (244, 150), logo depois do aglomerado. */
-const SUA = { x: 244, y: 150 };
-/* Espaço aberto: cinco quadras em L, a leste da clínica, com o contorno
-   pelo meio das ruas e os cantos arredondados (raio 5). */
-const ZONA: [number, number][] = [[356, 116], [430, 116], [430, 182], [318, 182], [318, 150], [356, 150]];
+const norteH: [number, Trecho[]][] = [
+  [34, [[0, 254], [290, 520]]], [66, [[0, 520]]], [98, [[0, 520]]],
+  [130, [[0, 520]]], [162, [[0, 148], [184, 520]]],
+];
+/* Coletoras: uma rua de cada malha, um tom mais clara que as locais. */
+const COL_N = 184, COL_S = 68;
+const malhaNorte =
+  norteV.filter(([x]) => x !== COL_N).flatMap(([x, ts]) => ts.map(([a, b]) => `M${x + 0.5} ${a}V${b}`)).join('') +
+  norteH.flatMap(([y, ts]) => ts.map(([a, b]) => `M${a} ${y + 0.5}H${b}`)).join('');
+/* Malha do sul, no referencial da avenida; uma transversal em cada três
+   só começa na primeira paralela. */
+const sulU = [-20, 18, 54, 92, 128, 166, 204, 240, 278, 316, 354, 392, 430];
+const sulV = [34, 68, 102];
+const malhaSul =
+  sulU.map((u, i) => `M${u} ${i % 3 === 1 ? 34 : 0}V140`).join('') +
+  sulV.filter((v) => v !== COL_S).map((v) => `M-60 ${v}H480`).join('');
+const coletoras = { norte: `M${COL_N + 0.5} 0V250`, sul: `M-60 ${COL_S}H480` };
+
+/* Centro: o bairro dos concorrentes, um tom aceso, com o contorno em fio
+   contínuo seguindo as ruas dos dois lados da avenida (ao sul, no
+   referencial dela): o par do espaço aberto, que é tracejado. Ele segue
+   por baixo da lista. Um ponto por clínica. */
+const CENTRO: [number, number][] = [
+  [254.5, 66.5], [254.5, av(254.5)], doSul(316, 0), doSul(316, 34), doSul(166, 34), doSul(166, 0),
+  [184.5, 98.5], [220.5, 98.5], [220.5, 66.5],
+];
+const concorrentes: [number, number][] = [
+  [195, 111], [207, 124], [229, 108], [246, 114],
+  doSul(176, 15), doSul(198, 24), doSul(219, 12), doSul(250, 19), doSul(268, 10),
+];
+/* A clínica nova (o movimento do laço): na quadra do alto do Centro, na
+   altura da linha da lista que fala dela. */
+const NOVA = { x: 238, y: 88 };
+/* Sua clínica: ao sul da avenida, a sudoeste do Centro. */
+const SUA = { x: 92, y: 200 };
+
+/* Espaço aberto: sete quadras em L na Zona norte, entre as ruas x 44–184
+   e y 34–98, com cantos arredondados (raio 6). */
+const ZONA: [number, number][] = [[44.5, 34.5], [184.5, 34.5], [184.5, 66.5], [148.5, 66.5], [148.5, 98.5], [44.5, 98.5]];
 const cantos = (pts: [number, number][], r: number) => {
-  const n = pts.length;
+  const n = pts.length, f = (v: number) => Math.round(v * 10) / 10;
   let d = '';
   for (let i = 0; i < n; i++) {
     const [ax, ay] = pts[(i - 1 + n) % n], [bx, by] = pts[i], [cx, cy] = pts[(i + 1) % n];
-    const ux = Math.sign(bx - ax), uy = Math.sign(by - ay), vx = Math.sign(cx - bx), vy = Math.sign(cy - by);
-    d += `${i ? 'L' : 'M'}${bx - ux * r} ${by - uy * r}Q${bx} ${by} ${bx + vx * r} ${by + vy * r}`;
+    const la = Math.hypot(bx - ax, by - ay), lc = Math.hypot(cx - bx, cy - by);
+    const ra = Math.min(r, la / 2), rc = Math.min(r, lc / 2);
+    d += `${i ? 'L' : 'M'}${f(bx - ((bx - ax) / la) * ra)} ${f(by - ((by - ay) / la) * ra)}Q${bx} ${by} ${f(bx + ((cx - bx) / lc) * rc)} ${f(by + ((cy - by) / lc) * rc)}`;
   }
   return d + 'Z';
 };
-const ZONA_D = cantos(ZONA, 5);
-/* Pílula do espaço aberto: 128 × 28, uma chamada acima da zona, presa à
-   borda de cima dela por um fio curto com o anel de ancoragem. */
-const PA = { x: 329, y: 66, w: 128, h: 28 };
-const ANCORA = { x: 393, y: 116 };
-/* Clínica nova (laço): mais uma no aglomerado, do outro lado da avenida,
-   com o nome em cima. */
-const NOVA = { x: 250, y: 77.3 };
+const ZONA_D = cantos(ZONA, 6);
+const CENTRO_D = cantos(CENTRO, 5);
+
+/* Lista "Movimentos": 196 × 174, cabeçalho de 36 e linhas de 44. A quarta
+   linha fica escondida abaixo da borda e só aparece quando a cena volta
+   um passo. */
+const L = { x: 300, y: 30, w: 196, h: 174 };
+const LIN = 44, L0 = L.y + 36;
+const movimentos = [
+  { titulo: 'Nova clínica', onde: 'Centro · hoje', icone: 'pino', novo: true },
+  { titulo: 'Campanha de preço', onde: 'Instagram · há 3 dias', icone: 'etiqueta' },
+  { titulo: 'Procura em alta', onde: 'Zona norte · agosto', icone: 'alta' },
+  { titulo: 'Novo procedimento', onde: 'Centro · julho', icone: 'pino' },
+];
 ---
 <g class="mercado">
   <defs>
-    {/* O mapa nasce do escuro nas quatro bordas. */}
-    <linearGradient id={`${p}-bx`} gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="496" y2="0">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".12" stop-color="#ffffff" /><stop offset=".88" stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    <linearGradient id={`${p}-by`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="250">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".16" stop-color="#ffffff" /><stop offset=".84" stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </linearGradient>
-    <mask id={`${p}-mx`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
-      <rect width="520" height="250" fill={`url(#${p}-bx)`} />
+    <clipPath id={`${p}-janela`}>
+      <rect x={W.x} y={W.y} width={W.w} height={W.h} rx="16" />
+    </clipPath>
+    {/* Cada malha fica do seu lado da avenida. */}
+    <clipPath id={`${p}-norte`}>
+      <path d={`M0 0H520V${av(520) - 4}L0 ${av(0) - 4}Z`} />
+    </clipPath>
+    <clipPath id={`${p}-sul`}>
+      <path d={`M0 ${av(0) + 4}L520 ${av(520) + 4}V260H0Z`} />
+    </clipPath>
+    {/* No espaço aberto as ruas quase somem: o bairro está vazio. */}
+    <mask id={`${p}-ruas`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
+      <rect width="520" height="250" fill="#ffffff" />
+      <path d={ZONA_D} fill="#262626" />
     </mask>
-    <mask id={`${p}-my`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
-      <rect width="520" height="250" fill={`url(#${p}-by)`} />
-    </mask>
-    {/* Hachura da zona, fina, a 45°. */}
-    <pattern id={`${p}-hachura`} width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width=".8" height="5" fill="#ffffff" fill-opacity=".12" />
+    {/* Hachura do espaço aberto (a mesma da brecha do posicionamento), vazada
+        em volta do nome. */}
+    <pattern id={`${p}-hachura`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width=".8" height="6" fill="#ffffff" fill-opacity=".07" />
     </pattern>
+    <mask id={`${p}-vazado`} maskUnits="userSpaceOnUse" x="0" y="0" width="520" height="250">
+      <rect width="520" height="250" fill="#ffffff" />
+      <rect x="54" y="44" width="112" height="42" rx="6" fill="#000000" />
+    </mask>
+    {/* As linhas da lista entram e saem pela borda de baixo do cabeçalho. */}
+    <clipPath id={`${p}-linhas`}>
+      <rect x={L.x} y={L0 + 1} width={L.w} height={LIN * 3 - 1} />
+    </clipPath>
   </defs>
 
-  {/* Mapa: ruas, avenida, rio e ponte, sob as bordas que se apagam. As
-      cores são chapadas (sem transparência) para os cruzamentos não
-      clarearem onde as ruas se sobrepõem. */}
-  <g mask={`url(#${p}-mx)`}>
-    <g mask={`url(#${p}-my)`}>
-      <path d={ruas(false)} class="mercado__rua" />
-      <path d={ruas(true)} class="mercado__coletora" />
-      <g transform={AV}>
-        <rect x="-300" y="-4.5" width="700" height="9" class="mercado__avenida" />
-        <rect x="-300" y="-5" width="700" height="1" class="mercado__avenida-borda" />
-        <rect x="-300" y="4" width="700" height="1" class="mercado__avenida-borda" />
+  {/* Janela do mapa. */}
+  <rect x={W.x} y={W.y} width={W.w} height={W.h} rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+
+  <g clip-path={`url(#${p}-janela)`}>
+    {/* Centro. */}
+    <path d={CENTRO_D} class="mercado__centro" />
+    <g mask={`url(#${p}-ruas)`}>
+      <g clip-path={`url(#${p}-norte)`}>
+        <path d={malhaNorte} class="mercado__rua" />
+        <path d={coletoras.norte} class="mercado__rua mercado__rua--coletora" />
       </g>
-      <path d={RIO} class="mercado__rio-margem" />
-      <path d={RIO} class="mercado__rio" />
-      <path d="M318 206V246" class="mercado__coletora" />
+      <g clip-path={`url(#${p}-sul)`}>
+        <g transform={AV}>
+          <path d={malhaSul} class="mercado__rua" />
+          <path d={coletoras.sul} class="mercado__rua mercado__rua--coletora" />
+        </g>
+      </g>
+    </g>
+    {/* Avenida: duas margens em fio e o leito um tom acima do fundo. */}
+    <g transform={AV}>
+      <rect x="-60" y="-3" width="560" height="6" class="mercado__avenida" />
+      <path d="M-60 -3H500M-60 3H500" class="mercado__avenida-margem" />
     </g>
   </g>
+  <rect x={W.x + 16} y={W.y + 0.5} width="288" height="1" fill={`url(#${p}-fio-h)`} />
 
-  {/* Espaço aberto: hachura e contorno tracejado pelo meio das ruas; da
-      borda de cima sobe o fio da chamada. */}
-  <g class="mercado__area">
-    <path d={ZONA_D} class="mercado__zona" />
-    <path d={ZONA_D} fill={`url(#${p}-hachura)`} />
-    <path d={ZONA_D} class="mercado__zona-borda" />
-    <path d={`M${ANCORA.x + 0.5} ${PA.y + PA.h}V${ANCORA.y - 3.5}`} class="mercado__chamada-fio" />
-    <circle cx={ANCORA.x + 0.5} cy={ANCORA.y} r="3.5" class="mercado__anel" />
-    <circle cx={ANCORA.x + 0.5} cy={ANCORA.y} r="1.25" class="mercado__miolo" />
-  </g>
+  {/* Espaço aberto. */}
+  <path d={ZONA_D} fill={`url(#${p}-hachura)`} mask={`url(#${p}-vazado)`} />
+  <path d={ZONA_D} class="mercado__zona" />
+  <circle cx="66" cy="60" r="3" class="a-destaque" />
+  <text x="76" y="64.5" class="mercado__zona-nome">Espaço aberto</text>
+  <text x="76" y="80" class="mercado__bairro">Zona norte</text>
 
-  {/* Concorrentes, em cascata na entrada. */}
-  {concorrentes.map(([x, y], i) => (
-    <g class="mercado__cai" style={`--i:${i}`}>
-      <circle class="mercado__concorrente" cx={x} cy={y} r="4.5" />
+  {/* Concorrentes, no Centro. */}
+  <text x="214" y="92" text-anchor="end" class="mercado__bairro mercado__rotulo">Centro</text>
+  {concorrentes.map(([x, y]) => <circle cx={x} cy={y} r="3.5" class="mercado__concorrente" />)}
+
+  {/* A clínica nova: o anel se desenha no laço; um fio a liga à lista. */}
+  <path d={`M${NOVA.x + 9} ${NOVA.y + 0.5}H${L.x}`} class="mercado__liga" />
+  <circle cx={NOVA.x} cy={NOVA.y} r="7" class="mercado__nova-anel" pathLength="1" transform={`rotate(-90 ${NOVA.x} ${NOVA.y})`} />
+  <circle cx={NOVA.x} cy={NOVA.y} r="3.5" class="mercado__nova" />
+
+  {/* Sua clínica: poço, chip e miolo, como no mapa de posicionamento. */}
+  <circle cx={SUA.x} cy={SUA.y} r="14" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <circle cx={SUA.x} cy={SUA.y} r="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <circle cx={SUA.x} cy={SUA.y} r="3" class="mercado__sua-miolo" />
+  <text x={SUA.x + 22} y={SUA.y + 4.5} class="mercado__sua mercado__rotulo">Sua clínica</text>
+
+  {/* Movimentos: a lista que flutua sobre o mapa. */}
+  <g class="mercado__lista">
+    <rect x={L.x} y={L.y} width={L.w} height={L.h} rx="12" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={L.x} y={L.y} width={L.w} height={L.h} rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={L.x + 20} y={L.y + 0.5} width={L.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
+    <text x={L.x + 16} y={L.y + 23} class="mercado__titulo">Movimentos</text>
+    <rect x={L.x} y={L0} width={L.w} height="1" class="mercado__divisa" />
+
+    <g clip-path={`url(#${p}-linhas)`}>
+      <g class="mercado__feed">
+        {movimentos.map(({ titulo, onde, icone, novo }, i) => {
+          const y = L0 + i * LIN, cx = L.x + 26, cy = y + 22;
+          return (
+            <g class:list={['mercado__linha', { 'mercado__linha--nova': novo }]}>
+              {novo && <rect x={L.x + 6} y={y + 4} width={L.w - 12} height={LIN - 8} rx="8" class="mercado__selecao" />}
+              {i > 0 && <rect x={L.x + 16} y={y} width={L.w - 32} height="1" class="mercado__divisa" />}
+              {icone === 'pino' && (
+                <g>
+                  <circle cx={cx} cy={cy} r="6.5" class:list={['mercado__glifo-anel', { 'mercado__glifo-anel--novo': novo }]} />
+                  <circle cx={cx} cy={cy} r="3" class:list={['mercado__glifo-ponto', { 'mercado__glifo-ponto--novo': novo }]} />
+                </g>
+              )}
+              {icone === 'etiqueta' && (
+                <g class="a-icone mercado__icone" transform={`translate(${cx - 7} ${cy - 7}) scale(.5833)`}>
+                  <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+                  <circle cx="7.5" cy="7.5" r=".5" />
+                </g>
+              )}
+              {icone === 'alta' && (
+                <g class="a-icone mercado__icone" transform={`translate(${cx - 7} ${cy - 7}) scale(.5833)`}>
+                  <path d="M22 7 13.5 15.5 8.5 10.5 2 17" /><path d="M16 7h6v6" />
+                </g>
+              )}
+              <text x={L.x + 44} y={y + 19.5} class:list={['mercado__mov', { 'mercado__mov--novo': novo }]}>{titulo}</text>
+              <text x={L.x + 44} y={y + 34} class="mercado__onde">{onde}</text>
+            </g>
+          );
+        })}
+      </g>
     </g>
-  ))}
-  <text x="130" y="177" text-anchor="middle" class="mercado__cai mercado__legenda mercado__legenda--grupo" style="--i:7">Concorrentes</text>
-
-  {/* Clínica nova: aparece e some no laço. */}
-  <g class="mercado__nova">
-    <circle class="mercado__nova-anel" cx={NOVA.x} cy={NOVA.y} r="4.5" pathLength="1" transform={`rotate(-90 ${NOVA.x} ${NOVA.y})`} />
-    <g class="mercado__nova-nome">
-      <text x={NOVA.x} y={NOVA.y - 11} text-anchor="middle" class="mercado__legenda mercado__legenda--nova">Nova clínica</text>
-    </g>
-  </g>
-
-  {/* Sua clínica: o marcador da casa (poço e chip), com o nome. */}
-  <g class="mercado__cai" style="--i:8">
-    <circle cx={SUA.x} cy={SUA.y} r="12" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
-    <circle cx={SUA.x} cy={SUA.y} r="8" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <circle cx={SUA.x} cy={SUA.y} r="2.5" class="mercado__sua-miolo" />
-    <text x={SUA.x} y="177" text-anchor="middle" class="mercado__legenda mercado__legenda--sua">Sua clínica</text>
-  </g>
-
-  {/* Pílula do espaço aberto: a chamada da zona, flutuando acima dela. */}
-  <g class="mercado__pilula">
-    <rect x={PA.x} y={PA.y} width={PA.w} height={PA.h} rx={PA.h / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} filter={`url(#${p}-sombra)`} />
-    <rect x={PA.x + 20} y={PA.y + 0.5} width={PA.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
-    <circle cx={PA.x + 15} cy={PA.y + 14} r="2.5" class="a-destaque" />
-    <text x={PA.x + 26} y={PA.y + 18.5} class="mercado__aberto">Espaço aberto</text>
   </g>
 </g>
 
 <style>
-  .mercado__rua { fill: none; stroke: #151515; stroke-width: 3; }
-  .mercado__coletora { fill: none; stroke: #1b1b1b; stroke-width: 5; }
-  .mercado__avenida { fill: #171717; }
-  .mercado__avenida-borda { fill: #2c2c2c; }
-  .mercado__rio-margem { fill: none; stroke: #303030; stroke-width: 20; }
-  .mercado__rio { fill: none; stroke: #080808; stroke-width: 18; }
-  .mercado__zona { fill: #ffffff; fill-opacity: .025; }
-  .mercado__chamada-fio { fill: none; stroke: #ffffff; stroke-opacity: .28; }
-  .mercado__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
-  .mercado__miolo { fill: #d6d6d1; }
-  .mercado__zona-borda { fill: none; stroke: #ffffff; stroke-opacity: .34; stroke-dasharray: 3 4; }
-  .mercado__concorrente { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .45; stroke-width: 1.2; }
-  .mercado__nova-anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .75; stroke-width: 1.2; stroke-dasharray: 1; }
-  .mercado__sua-miolo { fill: #ecece8; }
-  /* Rótulos de mapa: um halo da cor do fundo os separa das ruas. */
-  .mercado__legenda {
-    font-size: 13px; letter-spacing: -.005em;
-    paint-order: stroke; stroke: #0e0e0e; stroke-width: 4px; stroke-linejoin: round;
-  }
-  .mercado__legenda--sua { font-weight: 500; fill: #d6d6d1; }
-  .mercado__legenda--grupo { font-size: 12px; fill: #8a8a85; }
-  .mercado__legenda--nova { font-size: 12px; fill: #9d9d98; }
-  .mercado__aberto { font-size: 13px; fill: #ecece8; letter-spacing: -.005em; }
+  .mercado__rua { fill: none; stroke: #ffffff; stroke-opacity: .07; }
+  .mercado__rua--coletora { stroke-opacity: .12; }
+  .mercado__avenida { fill: #ffffff; fill-opacity: .03; }
+  .mercado__avenida-margem { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .mercado__centro { fill: #ffffff; fill-opacity: .035; stroke: #ffffff; stroke-opacity: .14; }
+  .mercado__zona { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 3 3; }
+  .mercado__zona-nome { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.005em; }
+  /* Rótulo sobre as ruas: um halo da cor do fundo naquela altura os separa. */
+  .mercado__rotulo { paint-order: stroke; stroke: #151515; stroke-width: 4px; stroke-linejoin: round; }
+  .mercado__bairro { font-size: 11px; fill: #8a8a85; }
+  /* Concorrentes: ponto cheio, recortado das ruas por um fio do fundo. */
+  .mercado__concorrente { fill: #8a8a85; stroke: #171717; stroke-width: 2.5; paint-order: stroke; }
+  .mercado__nova { fill: #ecece8; stroke: #171717; stroke-width: 2.5; paint-order: stroke; }
+  .mercado__nova-anel { fill: none; stroke: #ecece8; stroke-opacity: .7; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .mercado__liga { fill: none; stroke: #ffffff; stroke-opacity: .28; }
+  .mercado__sua-miolo { fill: #d6d6d1; }
+  .mercado__sua { font-size: 13px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
 
-  /* A clínica nova só existe durante o laço. */
-  .mercado__nova { opacity: 0; }
+  .mercado__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .mercado__divisa { fill: #ffffff; fill-opacity: .06; }
+  .mercado__selecao { fill: #ffffff; fill-opacity: .035; }
+  .mercado__glifo-anel { fill: none; stroke: #ffffff; stroke-opacity: .16; }
+  .mercado__glifo-anel--novo { stroke: #ecece8; stroke-opacity: .7; }
+  .mercado__glifo-ponto { fill: #8a8a85; }
+  .mercado__glifo-ponto--novo { fill: #ecece8; }
+  .mercado .mercado__icone { stroke: #9d9d98; stroke-width: 2.4; }
+  .mercado__mov { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
+  .mercado__mov--novo { fill: #ecece8; }
+  .mercado__onde { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
 
-  /* Entrada (uma vez): os anéis caem em cascata (4 unidades, com fade),
-     depois a zona do espaço aberto aparece e a pílula chega por último. */
-  .mercado__cai { animation: mercado-cai 1.2s var(--a-entra) calc(.4s + var(--i) * .12s) both; }
-  .mercado__area { animation: mercado-surge 1.4s var(--a-entra) 1.5s both; }
-  .mercado__pilula { animation: mercado-cai 1.2s var(--a-entra) 1.9s both; }
-  @keyframes mercado-cai { from { opacity: 0; transform: translateY(-4px); } }
-  @keyframes mercado-surge { from { opacity: 0; } }
-
-  /* Laço lento, de 12 s, depois da entrada (atraso de 2,4 s):
-     0–3,0 s   repouso;
-     3,0–3,8   o anel da clínica nova se desenha;
-     3,6–4,1   o nome sobe 4 unidades, com fade;
-     4,1–7,2   fica;
-     7,2–7,8   anel e nome somem juntos.
-     O resto (60% do ciclo) é repouso na pose final. */
-  .mercado__nova, .mercado__nova-anel, .mercado__nova-nome {
-    animation-duration: 12s; animation-delay: 2.4s; animation-iteration-count: infinite;
+  /* Movimento, em laço de 12 s (tempos do ciclo):
+     0–0,8 s    repouso na pose final;
+     0,8–1,2    a cena volta um passo: a linha nova, o pino novo e o fio
+                somem;
+     1,2–1,75   as outras linhas sobem uma posição (a quarta, antiga,
+                entra por baixo);
+     2,6–3,2    o movimento novo entra no alto da lista e empurra as outras
+                uma linha para baixo;
+     3,1–3,5    a linha nova fica marcada;
+     3,3–3,9    o anel do pino novo se desenha no mapa, com o ponto;
+     3,8–4,3    o fio até a lista aparece.
+     O resto (≈ 64% do ciclo) é repouso. O 0% de cada keyframe é a pose
+     final. */
+  .mercado__feed, .mercado__linha--nova, .mercado__selecao, .mercado__nova, .mercado__nova-anel, .mercado__liga {
+    animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
     animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
   }
+  .mercado__feed { animation-name: mercado-feed; }
+  .mercado__linha--nova { animation-name: mercado-linha-nova; }
+  .mercado__selecao { animation-name: mercado-selecao; }
   .mercado__nova { animation-name: mercado-nova; }
-  .mercado__nova-anel { animation-name: mercado-nova-anel; }
-  .mercado__nova-nome { animation-name: mercado-nova-nome; }
+  .mercado__nova-anel { animation-name: mercado-anel; }
+  .mercado__liga { animation-name: mercado-liga; }
+
+  @keyframes mercado-feed {
+    0%, 10% { transform: translateY(0); }
+    14.58%, 21.67% { transform: translateY(-44px); }
+    26.67%, 100% { transform: translateY(0); }
+  }
+  @keyframes mercado-linha-nova {
+    0%, 6.67% { opacity: 1; }
+    10%, 21.67% { opacity: 0; }
+    26.67%, 100% { opacity: 1; }
+  }
+  @keyframes mercado-selecao {
+    0%, 6.67% { opacity: 1; }
+    10%, 25.83% { opacity: 0; }
+    29.17%, 100% { opacity: 1; }
+  }
   @keyframes mercado-nova {
-    0%, 24.99% { opacity: 0; }
-    25%, 60% { opacity: 1; }
-    65%, 100% { opacity: 0; }
+    0%, 6.67% { opacity: 1; }
+    10%, 27.5% { opacity: 0; }
+    30%, 100% { opacity: 1; }
   }
-  @keyframes mercado-nova-anel {
-    0%, 25% { stroke-dashoffset: 1; }
-    31.67%, 100% { stroke-dashoffset: 0; }
+  @keyframes mercado-anel {
+    0%, 6.67% { opacity: 1; stroke-dashoffset: 0; }
+    10% { opacity: 0; stroke-dashoffset: 0; }
+    10.01%, 27.5% { opacity: 1; stroke-dashoffset: 1; }
+    32.5%, 100% { opacity: 1; stroke-dashoffset: 0; }
   }
-  @keyframes mercado-nova-nome {
-    0%, 30% { opacity: 0; transform: translateY(4px); }
-    34.17%, 100% { opacity: 1; transform: none; }
+  @keyframes mercado-liga {
+    0%, 6.67% { opacity: 1; }
+    10%, 31.67% { opacity: 0; }
+    35.83%, 100% { opacity: 1; }
   }
 </style>
