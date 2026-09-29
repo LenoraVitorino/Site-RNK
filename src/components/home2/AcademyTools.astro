@@ -21,6 +21,8 @@ const produtos = [
     rota: '/tools',
   },
 ];
+// Logos secundárias das BUs (R + nome), em public/marca/bu-<chave>-escuro.png: largura × altura.
+const medidasMarca: Record<string, [number, number]> = { studio: [773, 150], academy: [953, 152], tools: [715, 151] };
 ---
 <section class="secao ecossistema ecossistema-editorial" id="academy-tools" aria-labelledby="ecossistema-titulo" data-ecossistema>
   <div class="container">
@@ -37,7 +39,7 @@ const produtos = [
             <div class="produto__arte" aria-hidden="true"></div>
             <div class="produto__corpo" id={`produto-miolo-${i}`}>
               <p class="rotulo">{p.eyebrow}</p>
-              <h3 class="produto__nome">{p.titulo}</h3>
+              <h3 class="produto__nome"><img class="produto__marca" src={`/marca/bu-${p.chave}-escuro.png`} alt={p.titulo} width={medidasMarca[p.chave][0]} height={medidasMarca[p.chave][1]} loading="lazy" /></h3>
               <p class="produto__texto">{p.texto}</p>
               <p class="produto__acao"><Botao href={existe(p.rota) ? p.rota : '/contato'} tamanho="sm">Conhecer {p.titulo}</Botao></p>
             </div>

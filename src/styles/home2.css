@@ -227,7 +227,7 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
 /* Só o monograma "R", na cor da marca. */
 .logo__img { width: 34px; height: 34px; max-width: none; }
-.logo__img--rodape { width: auto; height: 40px; }
+.logo__img--rodape { width: auto; height: 28px; }   /* Grupo RNK: logotipo largo (28/09) */
 
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: 0; flex: none;

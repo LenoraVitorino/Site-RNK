@@ -1,5 +1,5 @@
 /* Navegação compacta compartilhada pela home e páginas internas. */
-.header .logo__img { width: 128px; height: auto; display: block; }
+.header .logo__img { width: 136px; height: auto; display: block; }   /* Grupo RNK (28/09) */
 .header--claro .logo__img, .header--amarelo .logo__img { filter: brightness(0); }
 .header .megamenu__plano { display: inline-grid; flex: none; width: 24px; height: 24px; }
 .header .megamenu__plano img { width: 24px; height: 24px; grid-area: 1 / 1; }
@@ -37,7 +37,7 @@
   .header--claro { --cab-bg: rgb(242 242 238 / .97); }
   .header .header__inner { display: flex; gap: 10px; padding-inline: 16px; }
   .header .logo { min-height: 44px; }
-  .header .logo__img { width: 100px; }
+  .header .logo__img { width: 112px; }
   .header .header__acao { margin-left: auto; }
   .header .header__acao .botao { font-size: 13px; padding: 10px 12px; min-height: 44px; }
   .header .nav-toggle { display: grid; flex: none; }
