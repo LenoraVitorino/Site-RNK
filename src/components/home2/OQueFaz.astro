@@ -9,6 +9,7 @@
  */
 import { Image } from 'astro:assets';
 import Telefone from '../ui/Telefone.astro';
+import Selo from '../ui/Selo.astro';
 import cafe from '../../assets/sede/cafe.jpg';
 import equipe from '../../assets/sede/equipe.jpg';
 import operacao from '../../assets/sede/operacao.jpg';
@@ -30,6 +31,7 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
   <div class="container">
     <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
       <div class="metodo__texto">
+        {!copyLiteral && <Selo class="cabeca-dobra__selo metodo__selo">Revenue Operations</Selo>}
         <h2 class="titulo metodo__titulo" id="o-que-fazemos-titulo">
           {copyLiteral
             ? <><span>Nossa</span>{' '}<span>metodologia</span></>

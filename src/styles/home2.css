@@ -44,7 +44,7 @@ p, li, dd, dt, figcaption, blockquote { text-wrap: pretty; }
    destaques em 500. Menos ruído para uma página com muito texto. */
 .titulo, .ancora, .plano__nome, .cartao h2, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
-  word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
+  word-spacing: -.01em;   /* 28/09: com -.08em as palavras dos títulos grandes colavam ("a forma como sua"); quase o espaço natural da Inter */
 }
 p { margin: 0; }
 strong, b { font-weight: var(--peso-enfase); }

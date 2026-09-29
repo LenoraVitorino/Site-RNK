@@ -3,6 +3,7 @@
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
+import Selo from '../ui/Selo.astro';
 
 const produtos = [
   {
@@ -27,7 +28,7 @@ const produtos = [
       <header class="ecossistema__cabeca entra">
         {copyLiteral
           ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
-          : <h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2>}
+          : <><Selo class="cabeca-dobra__selo">Ecossistema Renke</Selo><h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2></>}
       </header>
 
       <div class="ecossistema__paineis entra">

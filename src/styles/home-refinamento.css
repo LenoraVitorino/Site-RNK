@@ -179,7 +179,18 @@ section[id] { scroll-margin-top: 110px; }
 .resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
 /* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
    de duas linhas. Nos Resultados, centrada. */
-:is(#perguntas, #resultados) .cabeca-dobra__selo { margin-bottom: clamp(20px, 2.4vw, 32px); }   /* vence o margin:0 do componente */
+:is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
+/* Espaçamento das cabeças (28/09): título um pouco mais aberto e o subtítulo mais afastado. */
+#perguntas .operacao__texto .operacao__titulo { line-height: 1.1; }
+#perguntas .cabeca-dobra__apoio { margin-top: clamp(24px, 2.4vw, 36px); }
+/* Onde a cabeça já tem gap próprio, a margem só completa os ~36px. */
+:is(#fale, #formulario, #academy-tools) .cabeca-dobra__selo { margin-bottom: 8px; }
+#pilares-revena .cabeca-dobra__selo { margin-bottom: 24px; }
+#o-que-fazemos .metodo__selo { margin-bottom: 12px; }
+/* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
+   Ecossistema, logo depois, encosta mais. */
+.home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
+.home-refinada #academy-tools { padding-top: clamp(40px, 4vw, 64px); }
 .cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
 .resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
 .resultados-editoriais__cabeca .titulo { margin-inline: auto; }
@@ -326,7 +337,9 @@ section[id] { scroll-margin-top: 110px; }
   }
   .home-refinada .metodo-editorial .metodo__texto::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: rgb(37 37 35 / .24); }
   .home-refinada .metodo-editorial .metodo__apresentacao { display: contents; }
-  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 5; }
+  .home-refinada .metodo-editorial .metodo__selo { grid-column: 1 / span 5; grid-row: 1; }
+  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 5; grid-row: 2; }
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros) { grid-row: 2; }
   .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }
   .home-refinada .metodo-editorial .metodo__descricao { grid-column: 6 / span 4; max-width: 36ch; font-size: 16px; }
   .home-refinada .metodo-editorial .metodo__numeros { grid-column: 10 / -1; justify-self: end; margin: 0; }
@@ -336,7 +349,7 @@ section[id] { scroll-margin-top: 110px; }
 
   /* 2. Galeria em escada */
   .home-refinada .metodo-editorial .metodo__galeria {
-    --galeria-h: clamp(400px, calc(100svh - 2 * var(--metodo-respiro) - 280px), 600px);
+    --galeria-h: clamp(380px, calc(100svh - 2 * var(--metodo-respiro) - 360px), 600px);   /* 360: o cabeçalho com o selo */
     display: flex; justify-content: center; align-items: flex-end; gap: clamp(12px, 1.3vw, 20px);
     height: var(--galeria-h);
   }
