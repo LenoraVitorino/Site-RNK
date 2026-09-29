@@ -4,7 +4,7 @@
  * Colofão: uma frase isolada e os valores como palavras, sem cartões.
  *
  * 29/09/2026 (nas duas versões): uma coluna só, no centro da página. O H2
- * pequeno em cima (antes ficava sozinho à esquerda), a frase, os valores
+ * na escala dos títulos do Sobre, a frase como subtítulo embaixo, os valores
  * separados por pontos finos e, só na versão copy, o link Faça Parte. O selo #TEAMRENKE só existe na
  * versão copy (cultura.rotulo); na estudio saiu. Abaixo de 600px o texto
  * alinha à esquerda, para a frase longa não virar uma coluna centrada.
@@ -28,10 +28,10 @@ const comFoto = !!fotos.cultura.foto;
   <div class="container sb-grade">
     <div class="sb-cultura__cabeca entra" style="--i:0">
       {cultura.rotulo && <Selo>{cultura.rotulo}</Selo>}
-      <h2 class="sb-cultura__titulo" id="sobre-cultura-titulo">{cultura.h2}</h2>
+      <h2 class="titulo sb-cultura__titulo" id="sobre-cultura-titulo">{cultura.h2}</h2>
     </div>
     <div class="sb-cultura__corpo entra" style="--i:1">
-      <p class="titulo sb-cultura__frase">{cultura.frase}</p>
+      <p class="sb-cultura__frase">{cultura.frase}</p>
       <ul class="sb-cultura__valores" role="list">
         {cultura.valores.map((v) => <li>{v}</li>)}
       </ul>
@@ -55,34 +55,26 @@ const comFoto = !!fotos.cultura.foto;
 
   .sb-cultura__cabeca, .sb-cultura__corpo, .sb-cultura__foto { grid-column: 1 / -1; justify-self: center; }
   .sb-cultura__cabeca { display: grid; justify-items: center; gap: 20px; text-align: center; }
-  /* O H2 como abertura discreta da frase: pequeno, em caixa alta espaçada. */
-  .sb-cultura__titulo {
-    margin: 0;
-    font-size: 13px; font-weight: 500; line-height: 1.2;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--sb-tinta-2);
-  }
+  /* O H2 na escala dos títulos do Sobre (o .titulo dá tamanho e tracking). */
+  .sb-cultura__titulo { margin: 0; color: var(--sb-tinta); text-wrap: balance; }
 
   /* ---------- Corpo: a frase isolada, os valores e o link ---------- */
 
-  /* O .titulo dá a família e o tracking; o tamanho e o peso são os daqui. */
-  /* 29/09/2026: de 64px para 40px no máximo, nas duas versões ("muito
-     grande"). A frase da versão estudio tem 155 caracteres; na escala de
-     título ficava com seis linhas a 1440 e onze a 320. Na escala de frase,
-     com o espaçamento entre palavras normal, lê como um parágrafo curto. */
+  /* A frase como subtítulo: corpo de leitura, em cinza, sob o título. */
   .sb-cultura__frase {
-    max-width: 30ch; margin: 28px 0 0;
-    font-size: clamp(26px, 2.8vw, 40px); font-weight: 300; line-height: 1.18;
-    letter-spacing: -.03em;
-    color: var(--sb-tinta);
+    max-width: 46ch; margin: 24px 0 0;
+    font-size: clamp(17px, 1.4vw, 20px); font-weight: 300; line-height: 1.55;
+    letter-spacing: -.005em;
+    color: var(--sb-tinta-2);
     text-align: center; text-wrap: balance;
   }
 
   /* Os valores como palavras soltas, separadas por um ponto fino. */
   .sb-cultura__valores {
-    list-style: none; margin: 48px 0 0; padding: 0;
+    list-style: none; margin: 40px 0 0; padding: 0;
     display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 0;
-    font-size: clamp(18px, 1.7vw, 24px); font-weight: 300; line-height: 1.2;
-    letter-spacing: -.02em; color: var(--sb-tinta-2);
+    font-size: clamp(15px, 1.2vw, 17px); font-weight: 400; line-height: 1.2;
+    letter-spacing: 0; color: var(--sb-tinta);
   }
   .sb-cultura__valores li { display: inline-flex; align-items: center; }
   .sb-cultura__valores li + li::before {
@@ -107,16 +99,13 @@ const comFoto = !!fotos.cultura.foto;
   .sb-cultura__corpo { display: flex; flex-direction: column; align-items: center; }
   .sb-cultura__foto { width: min(300px, 60%); margin-top: 56px; }
 
-  @media (max-width: 899.98px) {
-    .sb-cultura__frase { font-size: 30px; }
-  }
   /* Celular: tudo à esquerda, na margem das outras dobras. */
   @media (max-width: 599.98px) {
     .sb-cultura__cabeca, .sb-cultura__corpo, .sb-cultura__foto { justify-self: stretch; }
     .sb-cultura__cabeca { justify-items: start; text-align: start; }
     .sb-cultura__corpo { align-items: flex-start; }
-    .sb-cultura__frase { font-size: 23px; text-align: start; text-wrap: pretty; }
-    .sb-cultura__valores { justify-content: flex-start; font-size: 18px; margin-top: 40px; }
+    .sb-cultura__frase { text-align: start; text-wrap: pretty; }
+    .sb-cultura__valores { justify-content: flex-start; margin-top: 32px; }
     .sb-cultura__valores li + li::before { margin-inline: 12px; }
     .sb-cultura__foto { width: 72%; }
   }
