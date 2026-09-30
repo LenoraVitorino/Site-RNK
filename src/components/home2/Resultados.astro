@@ -2,11 +2,12 @@
 /** Provas como um extrato editorial: uma linha por especialidade, com o
     número grande à direita (Lenora, 30/09: o mosaico repetia a grade de
     cartões do Protocolo Revena e lia mal; volta o modelo anterior, das
-    linhas, melhorado). No desktop com mouse, uma foto da área aparece
-    acima do cursor e o acompanha com atraso, trocando de baixo para cima
-    ao mudar de linha, na linha do site da Immerso (referência dela, 30/09);
-    por enquanto, só a moldura de mockup de cada foto. Valores e textos vêm
-    da fonte compartilhada. */
+    linhas, melhorado). No desktop com mouse, a foto da área aparece
+    dentro da linha, no meio livre entre o texto e o número, com a altura
+    da linha; acompanha o cursor na horizontal, desliza para a linha nova e
+    troca de baixo para cima, na linha do site da Immerso (referência dela,
+    30/09). Por enquanto, só a moldura de mockup de cada foto. Valores e
+    textos vêm da fonte compartilhada. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 import Selo from '../ui/Selo.astro';
@@ -55,11 +56,12 @@ const tons = [
 </section>
 
 <script>
-  /* A foto acompanha o cursor com atraso (a cada quadro anda 14% do que
-     falta), com a base 16px acima dele. Ao entrar numa linha, a camada
-     daquela área sobe por cima da anterior (recorte de baixo para cima).
-     Só no desktop com mouse; com movimento reduzido, a foto vai direto ao
-     cursor e troca sem o recorte. */
+  /* A foto fica dentro da linha em foco: altura da linha menos 4 (quase
+     encosta nos fios, como na referência), largura 1,78 vezes a altura, centrada na altura da linha e, na horizontal, no
+     cursor, sem sair da coluna do meio (terceira trilha da grade). A cada
+     quadro anda 14% do que falta; ao entrar numa linha, a camada daquela
+     área sobe por cima da anterior. Só no desktop com mouse; com movimento
+     reduzido, vai direto ao lugar e troca sem o recorte. */
   const palco = document.querySelector<HTMLElement>('[data-resultados-fotos]');
   const pode = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1100px)');
   if (palco && pode.matches) {
@@ -68,8 +70,30 @@ const tons = [
     const camadas = [...palco.querySelectorAll<HTMLElement>('.resultados-foto__camada')];
     const linhas = [...palco.querySelectorAll<HTMLElement>('.resultado-linha')];
     let alvoX = 0, alvoY = 0, x = 0, y = 0, atual = -1, rodando = false, visivel = false;
-    let limpeza = 0;
+    let limpeza = 0, cursorX = 0;
+    let w = 256, h = 160;
 
+    /* Tamanho: pela linha mais baixa, para caber em todas. */
+    const mede = () => {
+      h = Math.max(96, Math.min(...linhas.map((l) => l.offsetHeight)) - 4);
+      w = Math.round(h * 1.78);
+      foto.style.width = `${w}px`; foto.style.height = `${h}px`;
+    };
+    /* Coluna do meio da linha: esquerda e direita, em relação ao palco. */
+    const faixa = (linha: HTMLElement) => {
+      const trilhas = getComputedStyle(linha).gridTemplateColumns.split(' ').map(parseFloat);
+      const vao = parseFloat(getComputedStyle(linha).columnGap) || 0;
+      const esq = trilhas[0] + trilhas[1] + vao * 2;
+      return [esq, esq + trilhas[2]];
+    };
+    const mira = () => {
+      if (atual < 0) return;
+      const linha = linhas[atual];
+      const [esq, dir] = faixa(linha);
+      const cx = cursorX - w / 2;
+      alvoX = dir - esq >= w ? Math.min(Math.max(cx, esq), dir - w) : (esq + dir - w) / 2;
+      alvoY = linha.offsetTop + (linha.offsetHeight - h) / 2;
+    };
     const passo = () => {
       const k = reduzido ? 1 : 0.14;
       x += (alvoX - x) * k; y += (alvoY - y) * k;
@@ -77,24 +101,25 @@ const tons = [
       if (visivel && (Math.abs(alvoX - x) > 0.2 || Math.abs(alvoY - y) > 0.2)) requestAnimationFrame(passo);
       else rodando = false;
     };
-    const mira = (e: PointerEvent) => {
-      const r = palco.getBoundingClientRect();
-      alvoX = e.clientX - r.left - foto.offsetWidth / 2;
-      alvoY = e.clientY - r.top - foto.offsetHeight - 16;
-    };
+    const anda = () => { if (!rodando) { rodando = true; requestAnimationFrame(passo); } };
+
+    mede();
+    addEventListener('resize', mede);
 
     palco.addEventListener('pointermove', (e) => {
-      mira(e);
-      if (!visivel) {
-        /* Primeira entrada: a foto nasce já no cursor, sem viajar do canto. */
+      cursorX = e.clientX - palco.getBoundingClientRect().left;
+      mira();
+      if (!visivel && atual >= 0) {
+        /* Primeira entrada: a foto nasce já no lugar, sem viajar do canto. */
         x = alvoX; y = alvoY; visivel = true;
         clearTimeout(limpeza);
+        foto.style.translate = `${x}px ${y}px`;
         foto.classList.add('resultados-foto--visivel');
       }
-      if (!rodando) { rodando = true; requestAnimationFrame(passo); }
+      anda();
     });
 
-    linhas.forEach((linha, i) => linha.addEventListener('pointerenter', () => {
+    linhas.forEach((linha, i) => linha.addEventListener('pointerenter', (e) => {
       if (i === atual) return;
       camadas.forEach((c) => c.classList.remove('resultados-foto__camada--saindo'));
       if (atual >= 0) {
@@ -103,6 +128,8 @@ const tons = [
       }
       camadas[i].classList.add('resultados-foto__camada--ativa');
       atual = i;
+      cursorX = e.clientX - palco.getBoundingClientRect().left;
+      mira(); anda();
     }));
 
     palco.addEventListener('pointerleave', () => {

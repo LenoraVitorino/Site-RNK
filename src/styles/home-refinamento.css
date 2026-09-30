@@ -20,32 +20,35 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
    repetia a grade de cartões do Protocolo e lia mal). Uma linha por
-   especialidade, entre fios: índice, área, texto e o número grande à
-   direita, sem contador, para ler de relance. */
+   especialidade, entre fios, na linha do site da Immerso: índice, área e
+   texto empilhados à esquerda, o meio livre (onde a foto aparece no
+   hover) e o número grande à direita, sem contador, para ler de relance. */
 #resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
 .resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
 .resultado-linha {
-  display: grid; grid-template-columns: 48px minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
-  column-gap: clamp(20px, 3vw, 48px); align-items: center;
-  padding-block: clamp(22px, 2.4vw, 36px); border-top: 1px solid #cfcfcc;
+  display: grid; grid-template-columns: 48px minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .9fr);
+  column-gap: clamp(20px, 3vw, 48px); row-gap: 8px; align-items: center;
+  padding-block: clamp(28px, 3vw, 44px); border-top: 1px solid #cfcfcc;
 }
-.resultado-linha__indice { align-self: center; font-size: 12px; color: #8a8a88; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-.resultado-linha__area { font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
-.resultado-linha__texto { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
-.resultado-linha__numero { margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
+.resultado-linha__indice { grid-column: 1; grid-row: 1; align-self: baseline; font-size: 12px; color: #8a8a88; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.resultado-linha__area { grid-column: 2; grid-row: 1; align-self: baseline; font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
+.resultado-linha__texto { grid-column: 2; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
+.resultado-linha__numero { grid-column: 4; grid-row: 1 / span 2; margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
 /* Foto da área no hover (referência Immerso, 30/09): só no desktop com
-   mouse. Acompanha o cursor pelo JS (translate); aparece e some com fade e
-   escala leve; cada camada entra recortada de baixo para cima por cima da
-   anterior. Por enquanto, moldura de mockup em grafite com a legenda. */
+   mouse. Fica dentro da linha, com a altura dela (2px de folga em cima e
+   embaixo), centrada na coluna do meio; acompanha o cursor só na
+   horizontal e desliza para a linha nova (JS, translate). Aparece e some
+   com fade e escala leve; cada camada entra recortada de baixo para cima
+   por cima da anterior. Por enquanto, moldura de mockup em grafite. */
 .resultados-extrato__palco { position: relative; }
 .resultados-foto { display: none; }
 @media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
   .resultados-foto {
     display: block; position: absolute; left: 0; top: 0; z-index: 3;
-    width: clamp(240px, 21vw, 320px); aspect-ratio: 3 / 2; pointer-events: none;
-    opacity: 0; scale: .96; will-change: translate; border-radius: 10px;
-    box-shadow: 0 18px 40px rgb(0 0 0 / .16);
+    width: 278px; height: 156px; pointer-events: none;
+    opacity: 0; scale: .97; will-change: translate; border-radius: 10px;
+    box-shadow: 0 18px 40px rgb(0 0 0 / .14);
     transition: opacity .5s var(--easing-suave), scale .7s var(--easing-suave);
   }
   .resultados-foto--visivel { opacity: 1; scale: 1; }
