@@ -7,12 +7,15 @@
  * o estado "Atualizado · seg, 09:00" e as abas tiradas da frase do cartão
  * (O que comunicam, Onde investem, Brechas; a ativa com o fio amarelo),
  * segue além da borda direita e da de baixo. Nas linhas, o que o mercado
- * comunica; nas colunas, três clínicas da região, anônimas (A, B e C), com
- * um ponto onde cada uma fala daquilo, maior quanto mais ela insiste. Todas
- * se amontoam em preço, e a linha "Resultado natural" fica vazia: a brecha,
- * com os lugares vazios em anel. A lista continua e se apaga na borda. Por
- * cima da tabela, a coluna "Sua clínica", o único elemento que flutua, com
- * um ponto só, amarelo e com anel, na linha vazia. Na entrada, o fio da aba
+ * comunica. Logo depois dos temas, por cima da tabela, a coluna "Sua
+ * clínica", o único elemento que flutua, com um ponto só, amarelo e com
+ * anel, na linha vazia; à direita dela, as clínicas da região, anônimas (A
+ * a F), até a borda da página, apagando-se nela (29/09: "e esse vazio
+ * ainda?"), com um ponto onde cada uma fala daquilo, maior quanto mais ela
+ * insiste. Todas se amontoam em preço, e a linha "Resultado natural" fica
+ * vazia: a brecha, com os lugares vazios em anel e a faixa alinhada às
+ * linhas da tabela (29/09: "me incomoda esse desalinhamento"). A lista
+ * também continua e se apaga na borda de baixo. Na entrada, o fio da aba
  * corre, os pontos aparecem coluna a coluna, a coluna da clínica sobe e o
  * ponto amarelo acende. Pose estática = pose final.
  */
@@ -20,8 +23,10 @@ interface Props { p: string }
 const { p } = Astro.props;
 
 /* Página: canto em (104, 32), como a do relatório, sangrando pela direita
-   e por baixo. Conteúdo de x 128 a 544, 16 dentro da área segura do
-   celular (x 80 a 560). */
+   e por baixo. O essencial (temas, coluna da clínica e as clínicas A, B e
+   C) fica entre x 128 e 500, dentro da área segura do celular (x 80 a
+   560); as colunas seguintes e as linhas se apagam de x 510 até a borda
+   do cartão (640). */
 const PX = 104, PY = 32;
 /* Abas (Inter 13; a ativa em 500), com vão de 24; divisa em y 136. */
 const abas = [
@@ -31,26 +36,25 @@ const abas = [
 ];
 const AY = 124, DY = 136;
 /* Tabela: cabeçalho centrado em y 168; linhas a cada 34, com o centro da
-   primeira em 204. Colunas das concorrentes a cada 44, a partir de 318. A
-   coluna da clínica é um cartão de 88 centrado em 500. Cada ponto tem o
+   primeira em 204. A coluna da clínica é um cartão de 88 centrado em 300,
+   logo depois dos temas ("Resultado natural", em 500, termina em 236,5).
+   Colunas das concorrentes a cada 48, a partir de 388. Cada ponto tem o
    peso do tema na comunicação da clínica: 2 (forte) ou 1 (de leve). */
 const HY = 168, L0 = 204, LH = 34;
-const colunas = [
-  { nome: 'A', x: 318 },
-  { nome: 'B', x: 362 },
-  { nome: 'C', x: 406 },
-];
+const colunas = ['A', 'B', 'C', 'D', 'E', 'F'].map((nome, i) => ({ nome, x: 388 + i * 48 }));
 type Linha = { tema: string; peso: Record<string, number>; brecha?: boolean; corte?: boolean };
 const linhas = ([
-  { tema: 'Preço baixo', peso: { A: 2, B: 2, C: 2 } },
-  { tema: 'Promoção', peso: { A: 1, C: 2 } },
-  { tema: 'Parcelamento', peso: { A: 2, B: 1 } },
+  { tema: 'Preço baixo', peso: { A: 2, B: 2, C: 2, D: 2, E: 1, F: 2 } },
+  { tema: 'Promoção', peso: { A: 1, C: 2, E: 2 } },
+  { tema: 'Parcelamento', peso: { A: 2, B: 1, D: 1, F: 1 } },
   { tema: 'Resultado natural', peso: {}, brecha: true },
-  { tema: 'Pacotes', peso: { B: 2, C: 1 }, corte: true },
+  { tema: 'Pacotes', peso: { B: 2, C: 1, D: 2, E: 1 }, corte: true },
 ] as Linha[]).map((l, i) => ({ ...l, y: L0 + i * LH }));
 const BY = linhas.find((l) => l.brecha)!.y;
-const S = { x: 456, y: 142, w: 88, cx: 500 };
+const S = { x: 256, y: 142, w: 88, cx: 300 };
 const SH = BY + 22 - S.y;
+/* Linhas da tabela: de x 128 até a borda do cartão. */
+const TX = 128, TW = 640 - TX;
 ---
 <g class="posicionamento">
   <defs>
@@ -61,6 +65,13 @@ const SH = BY + 22 - S.y;
     <mask id={`${p}-borda`} maskUnits="userSpaceOnUse" x="0" y="322" width="640" height="60">
       <rect x="0" y="322" width="640" height="60" fill={`url(#${p}-apaga)`} />
     </mask>
+    {/* A tabela se apaga na borda direita: há mais clínicas na região. */}
+    <linearGradient id={`${p}-apaga-dir`} gradientUnits="userSpaceOnUse" x1="510" y1="0" x2="640" y2="0">
+      <stop stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <mask id={`${p}-direita`} maskUnits="userSpaceOnUse" x="0" y="140" width="640" height="240">
+      <rect x="0" y="140" width="640" height="240" fill={`url(#${p}-apaga-dir)`} />
+    </mask>
   </defs>
 
   {/* Página. */}
@@ -69,7 +80,7 @@ const SH = BY + 22 - S.y;
   <text x="128" y="84" class="posicionamento__titulo">Concorrência</text>
   <circle cx="411" cy="80" r="2.5" class="posicionamento__estado" />
   <text x="419" y="84" class="posicionamento__atualizado">Atualizado</text>
-  <text x={S.x + S.w} y="84" text-anchor="end" class="posicionamento__meta">seg, 09:00</text>
+  <text x="544" y="84" text-anchor="end" class="posicionamento__meta">seg, 09:00</text>
 
   {/* Abas; a ativa tem o fio de baixo, em amarelo. */}
   {abas.map(({ nome, x, ativa }) => (
@@ -78,32 +89,34 @@ const SH = BY + 22 - S.y;
   <rect x={PX} y={DY} width="600" height="1" class="posicionamento__divisa" />
   <rect x="128" y={DY - 1} width={abas[0].w} height="2" rx="1" class="a-destaque posicionamento__aba-fio" />
 
-  {/* A linha vazia, um tom acima do fundo: a brecha. */}
-  <rect x={PX + 0.5} y={BY - LH / 2} width="599" height={LH} class="posicionamento__faixa" />
+  {/* A tabela, que se apaga na borda direita. */}
+  <g mask={`url(#${p}-direita)`}>
+    {/* A linha vazia, um tom acima do fundo: a brecha, alinhada às linhas. */}
+    <rect x={TX} y={BY - LH / 2} width={TW} height={LH} class="posicionamento__faixa" />
 
-  {/* Cabeçalho: as três concorrentes. */}
-  <text x="128" y={HY + 4} class="posicionamento__meta">3 clínicas da região</text>
-  {colunas.map(({ nome, x }) => (
-    <g>
-      <circle cx={x} cy={HY} r="11" class="posicionamento__avatar" />
-      <text x={x} y={HY + 4} text-anchor="middle" class="posicionamento__inicial">{nome}</text>
-    </g>
-  ))}
+    {/* Cabeçalho: as concorrentes. */}
+    <text x={TX} y={HY + 4} class="posicionamento__meta">Clínicas da região</text>
+    {colunas.map(({ nome, x }) => (
+      <g>
+        <circle cx={x} cy={HY} r="11" class="posicionamento__avatar" />
+        <text x={x} y={HY + 4} text-anchor="middle" class="posicionamento__inicial">{nome}</text>
+      </g>
+    ))}
 
-  {/* Linhas: as divisas seguem até a borda da página, por baixo da coluna
-      da clínica. */}
-  {linhas.map(({ tema, peso, brecha, corte, y }) => (
-    <g mask={corte ? `url(#${p}-borda)` : undefined}>
-      <rect x="128" y={y - LH / 2} width="512" height="1" class="posicionamento__divisa" />
-      <text x="128" y={y + 4.5} class:list={['posicionamento__tema', { 'posicionamento__tema--brecha': brecha }]}>{tema}</text>
-      {colunas.map(({ nome, x }, c) => peso[nome]
-        ? <circle cx={x} cy={y} r={peso[nome] === 2 ? 4.5 : 3} class:list={['posicionamento__ponto', { 'posicionamento__ponto--leve': peso[nome] === 1 }]} style={`--c:${c}`} />
-        : brecha
-          ? <circle cx={x} cy={y} r="4" class="posicionamento__lugar" />
-          : <rect x={x - 4} y={y - 0.5} width="8" height="1" class="posicionamento__vazio" />)}
-    </g>
-  ))}
-  <rect x="128" y={BY + LH / 2} width="512" height="1" class="posicionamento__divisa" />
+    {/* Linhas: as divisas passam por baixo da coluna da clínica. */}
+    {linhas.map(({ tema, peso, brecha, corte, y }) => (
+      <g mask={corte ? `url(#${p}-borda)` : undefined}>
+        <rect x={TX} y={y - LH / 2} width={TW} height="1" class="posicionamento__divisa" />
+        <text x={TX} y={y + 4.5} class:list={['posicionamento__tema', { 'posicionamento__tema--brecha': brecha }]}>{tema}</text>
+        {colunas.map(({ nome, x }, c) => peso[nome]
+          ? <circle cx={x} cy={y} r={peso[nome] === 2 ? 4.5 : 3} class:list={['posicionamento__ponto', { 'posicionamento__ponto--leve': peso[nome] === 1 }]} style={`--c:${c}`} />
+          : brecha
+            ? <circle cx={x} cy={y} r="4" class="posicionamento__lugar" />
+            : <rect x={x - 4} y={y - 0.5} width="8" height="1" class="posicionamento__vazio" />)}
+      </g>
+    ))}
+    <rect x={TX} y={BY + LH / 2} width={TW} height="1" class="posicionamento__divisa" />
+  </g>
 
   {/* A coluna da clínica, por cima da tabela. */}
   <g class="posicionamento__sua">
@@ -145,12 +158,12 @@ const SH = BY + 22 - S.y;
 
   /* Movimento, uma vez, na entrada:
      0,2–1,0 s  o fio amarelo da aba corre da esquerda para a direita;
-     0,4–1,6    os pontos das concorrentes aparecem, coluna a coluna;
+     0,4–1,8    os pontos das concorrentes aparecem, coluna a coluna;
      1,6–2,6    a coluna da clínica sobe 8, com fade;
      2,6–3,2    o ponto amarelo acende na linha vazia.
      Depois, nada se move. */
   .posicionamento__aba-fio { animation: posicionamento-corre .8s var(--a-vai-vem) .2s both; }
-  .posicionamento__ponto { animation: posicionamento-aparece .6s var(--a-entra) calc(.4s + var(--c) * .3s) both; }
+  .posicionamento__ponto { animation: posicionamento-aparece .6s var(--a-entra) calc(.4s + var(--c) * .16s) both; }
   .posicionamento__sua { animation: posicionamento-sobe 1s var(--a-entra) 1.6s both; }
   .posicionamento__acende { animation: posicionamento-aparece .6s var(--a-entra) 2.6s both; }
   @keyframes posicionamento-corre { from { transform: scaleX(0); } }
