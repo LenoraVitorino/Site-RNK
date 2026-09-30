@@ -1,8 +1,10 @@
 ---
-/** Provas em mosaico editorial. Valores e textos vêm da fonte compartilhada. */
+/** Provas como um extrato editorial: uma linha por especialidade, com o
+    número grande à direita (Lenora, 30/09: o mosaico repetia a grade de
+    cartões do Protocolo Revena e lia mal; volta o modelo anterior, das
+    linhas, melhorado). Valores e textos vêm da fonte compartilhada. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
-import ArteInterface from './ArteInterface.astro';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 ---
@@ -13,13 +15,13 @@ import { copyLiteral } from '../../data/versao';
       <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem estrutura.</h2>
       {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
     </header>
-    <ol class="resultados-mosaico" aria-label="Resultados por especialidade">
+    <ol class="resultados-extrato" aria-label="Resultados por especialidade">
       {resultados.map((r, i) => (
-        <li class:list={['resultado-ficha', i === 0 && 'resultado-ficha--destaque', 'entra']}>
-          <div class="resultado-ficha__topo"><h3>{r.especialidade}</h3><span aria-hidden="true">0{i + 1}</span></div>
-          {i === 0 && <div class="resultado-ficha__ilustracao"><ArteInterface id="resultado-agendamentos" tipo={5} /></div>}
-          <p class="resultado-ficha__numero num">{r.numero}</p>
-          <p class="resultado-ficha__texto">{r.texto}</p>
+        <li class="resultado-linha entra">
+          <span class="resultado-linha__indice" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="resultado-linha__area">{r.especialidade}</h3>
+          <p class="resultado-linha__texto">{r.texto}</p>
+          <p class="resultado-linha__numero num">{r.numero}</p>
         </li>
       ))}
     </ol>

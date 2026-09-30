@@ -18,19 +18,22 @@ section[id] { scroll-margin-top: 110px; }
 .cortina > .operacao-editorial { position: relative; height: auto; min-height: 0; transform: none; }
 .cortina .operacao-editorial :is(.ancora, .perguntas) { transform: none; opacity: 1; }
 
-/* Resultados: papel, grafite e assimetria. Os números permanecem legíveis sem contador. */
+/* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
+   repetia a grade de cartões do Protocolo e lia mal). Uma linha por
+   especialidade, entre fios: índice, área, texto e o número grande à
+   direita, sem contador, para ler de relance. */
 #resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
-.resultados-mosaico { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 12px; }
-.resultado-ficha { position: relative; display: flex; flex-direction: column; min-width: 0; padding: clamp(22px, 2.5vw, 36px); min-height: 260px; border: 1px solid #d2d2d0; border-radius: 10px; background: #efefed; }
-.resultado-ficha__topo { display: flex; justify-content: space-between; gap: 14px; align-items: start; z-index: 1; }
-.resultado-ficha__topo h3 { font-size: 14px; font-weight: 450; line-height: 1.3; letter-spacing: -.02em; }
-.resultado-ficha__topo > span { font-size: 10px; opacity: .6; }
-.resultado-ficha__numero { font-size: clamp(40px, 4.5vw, 68px); font-weight: 300; line-height: 1.12; letter-spacing: -.06em; margin-top: auto; padding-top: 34px; z-index: 1; }
-.resultado-ficha__texto { font-size: 13px; color: #626260; line-height: 1.6; margin-top: 14px; max-width: 29ch; z-index: 1; }
-.resultado-ficha--destaque { grid-row: span 2; background: #262624; border-color: #262624; color: #ededeb; overflow: hidden; }
-.resultado-ficha--destaque .resultado-ficha__numero { font-size: clamp(80px, 9vw, 140px); }
-.resultado-ficha--destaque .resultado-ficha__texto { color: #b6b6b4; }
+.resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
+.resultado-linha {
+  display: grid; grid-template-columns: 48px minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  column-gap: clamp(20px, 3vw, 48px); align-items: center;
+  padding-block: clamp(22px, 2.4vw, 36px); border-top: 1px solid #cfcfcc;
+}
+.resultado-linha__indice { align-self: center; font-size: 12px; color: #8a8a88; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.resultado-linha__area { font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
+.resultado-linha__texto { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
+.resultado-linha__numero { margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
 .resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
 .resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
@@ -85,16 +88,19 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }
   .operacao-editorial .operacao__cartoes { gap: 20px; }
-  .resultado-ficha { padding: 22px; }
 }
 @media (max-width: 899.98px) {
   .secao-indice { grid-template-columns: 1fr; gap: 22px; margin-bottom: 36px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  .resultados-mosaico { grid-template-columns: 1fr 1fr; }
-  .resultado-ficha--destaque { grid-column: 1 / -1; grid-row: auto; min-height: 300px; }
-  .resultado-ficha--destaque .resultado-ficha__texto { max-width: 36ch; }
+  /* Extrato no tablet: a área e o texto empilham à esquerda, o número fica
+     à direita. */
+  .resultado-linha { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 8px; }
+  .resultado-linha__area { grid-column: 2; }
+  .resultado-linha__texto { grid-column: 2; grid-row: 2; }
+  .resultado-linha__numero { grid-column: 3; grid-row: 1 / span 2; }
+  .resultado-linha__indice { grid-row: 1; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -102,11 +108,12 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  .resultados-mosaico { grid-template-columns: 1fr; }
-  .resultado-ficha { min-height: 235px; }
-  .resultado-ficha--destaque { min-height: 350px; }
-  .resultado-ficha__numero { font-size: 58px; }
-  .resultado-ficha__texto { max-width: 36ch; }
+  /* Extrato no celular: índice e área numa linha, o número grande embaixo
+     e o texto por último. */
+  .resultado-linha { grid-template-columns: 28px minmax(0, 1fr); row-gap: 10px; column-gap: 12px; align-items: baseline; }
+  .resultado-linha__area { grid-column: 2; grid-row: 1; }
+  .resultado-linha__numero { grid-column: 1 / -1; grid-row: 2; text-align: left; font-size: 56px; margin-top: 6px; }
+  .resultado-linha__texto { grid-column: 1 / -1; grid-row: 3; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -221,8 +228,6 @@ section[id] { scroll-margin-top: 110px; }
 }
 /* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
 #perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
-.resultado-ficha__ilustracao { width: calc(100% + 40px); margin: 20px -20px 0; aspect-ratio: 4 / 3; mask-image: radial-gradient(ellipse, #000 48%, transparent 76%); }
-.resultado-ficha--destaque .resultado-ficha__numero { padding-top: 8px; font-size: clamp(80px, 8vw, 122px); }
 
 @media (max-width: 1099.98px) {
   .features-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -232,11 +237,6 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
   .operacao-editorial .operacao__texto { position: static; }
-  .resultado-ficha--destaque { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
-  .resultado-ficha--destaque .resultado-ficha__topo { grid-column: 1 / -1; }
-  .resultado-ficha__ilustracao { grid-column: 2; grid-row: 2 / span 2; margin: 0; width: 100%; }
-  .resultado-ficha--destaque .resultado-ficha__numero { grid-column: 1; grid-row: 2; }
-  .resultado-ficha--destaque .resultado-ficha__texto { grid-column: 1; grid-row: 3; }
 }
 @media (max-width: 599.98px) {
   .features-grade { grid-template-columns: 1fr; }
@@ -246,8 +246,6 @@ section[id] { scroll-margin-top: 110px; }
   .pilares-editoriais__ponte { flex-direction: column; align-items: start; }
   .operacao-editorial .operacao__cartao { padding: 24px 20px; min-height: 0; gap: 0; }
   .operacao-editorial .operacao__texto-item { font-size: 16px; }
-  .resultado-ficha--destaque { display: flex; align-items: stretch; }
-  .resultado-ficha__ilustracao { width: 100%; margin: 8px 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .feature-card__arte .arte-pilar, .feature-card:hover .arte-pilar { transition: none; transform: none; }
