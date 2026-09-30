@@ -2,11 +2,25 @@
 /** Provas como um extrato editorial: uma linha por especialidade, com o
     número grande à direita (Lenora, 30/09: o mosaico repetia a grade de
     cartões do Protocolo Revena e lia mal; volta o modelo anterior, das
-    linhas, melhorado). Valores e textos vêm da fonte compartilhada. */
+    linhas, melhorado). No desktop com mouse, uma foto da área aparece
+    acima do cursor e o acompanha com atraso, trocando de baixo para cima
+    ao mudar de linha, na linha do site da Immerso (referência dela, 30/09);
+    por enquanto, só a moldura de mockup de cada foto. Valores e textos vêm
+    da fonte compartilhada. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
+
+/* Tons levemente diferentes por área, para a troca de foto se ler mesmo
+   com as molduras vazias. */
+const tons = [
+  ['#3b3a36', '#1d1d1b'],
+  ['#35383a', '#1b1c1d'],
+  ['#3a3634', '#1e1b1a'],
+  ['#363a35', '#1b1d1a'],
+  ['#383638', '#1c1b1d'],
+];
 ---
 <section class="secao resultados-editoriais" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
@@ -15,16 +29,90 @@ import { copyLiteral } from '../../data/versao';
       <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem estrutura.</h2>
       {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
     </header>
-    <ol class="resultados-extrato" aria-label="Resultados por especialidade">
-      {resultados.map((r, i) => (
-        <li class="resultado-linha entra">
-          <span class="resultado-linha__indice" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          <h3 class="resultado-linha__area">{r.especialidade}</h3>
-          <p class="resultado-linha__texto">{r.texto}</p>
-          <p class="resultado-linha__numero num">{r.numero}</p>
-        </li>
-      ))}
-    </ol>
+    <div class="resultados-extrato__palco" data-resultados-fotos>
+      <ol class="resultados-extrato" aria-label="Resultados por especialidade">
+        {resultados.map((r, i) => (
+          <li class="resultado-linha entra">
+            <span class="resultado-linha__indice" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="resultado-linha__area">{r.especialidade}</h3>
+            <p class="resultado-linha__texto">{r.texto}</p>
+            <p class="resultado-linha__numero num">{r.numero}</p>
+          </li>
+        ))}
+      </ol>
+      {/* Mockup (Lenora, 30/09): troca-se cada camada pela foto real da
+          área, com um <img> dentro, sem mexer no resto. */}
+      <div class="resultados-foto" aria-hidden="true">
+        {resultados.map((r, i) => (
+          <figure class="resultados-foto__camada" style={`--tom-a:${tons[i % tons.length][0]}; --tom-b:${tons[i % tons.length][1]}`}>
+            <figcaption class="resultados-foto__legenda">Foto · {r.especialidade}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
     <div class="resultados-editoriais__rodape"><Botao href="/contato">{hero.cta}</Botao></div>
   </div>
 </section>
+
+<script>
+  /* A foto acompanha o cursor com atraso (a cada quadro anda 14% do que
+     falta), com a base 16px acima dele. Ao entrar numa linha, a camada
+     daquela área sobe por cima da anterior (recorte de baixo para cima).
+     Só no desktop com mouse; com movimento reduzido, a foto vai direto ao
+     cursor e troca sem o recorte. */
+  const palco = document.querySelector<HTMLElement>('[data-resultados-fotos]');
+  const pode = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1100px)');
+  if (palco && pode.matches) {
+    const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const foto = palco.querySelector<HTMLElement>('.resultados-foto')!;
+    const camadas = [...palco.querySelectorAll<HTMLElement>('.resultados-foto__camada')];
+    const linhas = [...palco.querySelectorAll<HTMLElement>('.resultado-linha')];
+    let alvoX = 0, alvoY = 0, x = 0, y = 0, atual = -1, rodando = false, visivel = false;
+    let limpeza = 0;
+
+    const passo = () => {
+      const k = reduzido ? 1 : 0.14;
+      x += (alvoX - x) * k; y += (alvoY - y) * k;
+      foto.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+      if (visivel && (Math.abs(alvoX - x) > 0.2 || Math.abs(alvoY - y) > 0.2)) requestAnimationFrame(passo);
+      else rodando = false;
+    };
+    const mira = (e: PointerEvent) => {
+      const r = palco.getBoundingClientRect();
+      alvoX = e.clientX - r.left - foto.offsetWidth / 2;
+      alvoY = e.clientY - r.top - foto.offsetHeight - 16;
+    };
+
+    palco.addEventListener('pointermove', (e) => {
+      mira(e);
+      if (!visivel) {
+        /* Primeira entrada: a foto nasce já no cursor, sem viajar do canto. */
+        x = alvoX; y = alvoY; visivel = true;
+        clearTimeout(limpeza);
+        foto.classList.add('resultados-foto--visivel');
+      }
+      if (!rodando) { rodando = true; requestAnimationFrame(passo); }
+    });
+
+    linhas.forEach((linha, i) => linha.addEventListener('pointerenter', () => {
+      if (i === atual) return;
+      camadas.forEach((c) => c.classList.remove('resultados-foto__camada--saindo'));
+      if (atual >= 0) {
+        camadas[atual].classList.remove('resultados-foto__camada--ativa');
+        camadas[atual].classList.add('resultados-foto__camada--saindo');
+      }
+      camadas[i].classList.add('resultados-foto__camada--ativa');
+      atual = i;
+    }));
+
+    palco.addEventListener('pointerleave', () => {
+      visivel = false;
+      foto.classList.remove('resultados-foto--visivel');
+      /* Depois do fade, as camadas voltam ao ponto de partida. */
+      limpeza = window.setTimeout(() => {
+        camadas.forEach((c) => c.classList.remove('resultados-foto__camada--ativa', 'resultados-foto__camada--saindo'));
+        atual = -1;
+      }, 500);
+    });
+  }
+</script>

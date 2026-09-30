@@ -34,6 +34,34 @@ section[id] { scroll-margin-top: 110px; }
 .resultado-linha__area { font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
 .resultado-linha__texto { margin: 0; max-width: 46ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
 .resultado-linha__numero { margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
+/* Foto da área no hover (referência Immerso, 30/09): só no desktop com
+   mouse. Acompanha o cursor pelo JS (translate); aparece e some com fade e
+   escala leve; cada camada entra recortada de baixo para cima por cima da
+   anterior. Por enquanto, moldura de mockup em grafite com a legenda. */
+.resultados-extrato__palco { position: relative; }
+.resultados-foto { display: none; }
+@media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
+  .resultados-foto {
+    display: block; position: absolute; left: 0; top: 0; z-index: 3;
+    width: clamp(240px, 21vw, 320px); aspect-ratio: 3 / 2; pointer-events: none;
+    opacity: 0; scale: .96; will-change: translate; border-radius: 10px;
+    box-shadow: 0 18px 40px rgb(0 0 0 / .16);
+    transition: opacity .5s var(--easing-suave), scale .7s var(--easing-suave);
+  }
+  .resultados-foto--visivel { opacity: 1; scale: 1; }
+  .resultados-foto__camada {
+    position: absolute; inset: 0; margin: 0; overflow: hidden; border-radius: 10px;
+    background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
+    clip-path: inset(100% 0 0 0 round 10px);
+    transition: clip-path .8s cubic-bezier(.16, 1, .3, 1);
+  }
+  .resultados-foto__camada--ativa { z-index: 2; clip-path: inset(0 0 0 0 round 10px); }
+  .resultados-foto__camada--saindo { z-index: 1; clip-path: inset(0 0 0 0 round 10px); }
+  .resultados-foto__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resultados-foto, .resultados-foto__camada { transition: opacity .3s linear; }
+}
 .resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
 .resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
