@@ -1,8 +1,7 @@
 ---
 /**
- * Dizemos o que fazer todo mês: o relatório do mês como documento. Atrás,
- * os relatórios de julho e agosto aparecem só pela borda de cima; na
- * frente, a página de setembro, com o título grande, as abas dos
+ * Dizemos o que fazer todo mês: o relatório do mês como documento. A
+ * página de setembro, com o título grande, as abas dos
  * indicadores e o gráfico de comparecimento, sangrando pela direita e por
  * baixo. Sobre ela, o cartão "Plano de ação" de outubro, com os três passos
  * marcados. O gráfico ocupa a página até perto da borda direita: a linha
@@ -15,16 +14,12 @@
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Pilha: cada página anterior sobe 20 e recua 16 para a direita; todas
-   seguem além da borda direita. Na faixa de 20 que aparece, o nome do mês
-   fica centrado. A da frente começa em (104, 56) e sangra por baixo.
-   Conteúdo a 24 da borda: coluna de x 128 a 536 (536 = limite da área
-   segura do celular menos 24). */
+/* A página começa em (104, 56) e sangra pela direita e por baixo; a cena
+   inteira sobe 16 (translate no <g> de fora) para o respiro de cima não
+   ficar maior que o dos outros cartões largos, agora sem a pilha de julho
+   e agosto (Lenora, 29/09). Conteúdo a 24 da borda: coluna de x 128 a 536
+   (536 = limite da área segura do celular menos 24). */
 const PX = 104, PY = 56;
-const atras = [
-  { x: 136, y: 16, mes: 'Julho' },
-  { x: 120, y: 36, mes: 'Agosto' },
-];
 /* Abas dos indicadores: medidas em Inter 13 (ativa 500, as outras 400),
    com vão de 24. */
 const abas = [
@@ -66,11 +61,8 @@ const [PFX] = proj[proj.length - 1];
 const CX = 352, CY = 224, CW = 184, CH = 122;
 const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar pacientes'];
 ---
-<g class="decisao">
+<g class="decisao" transform="translate(0 -16)">
   <defs>
-    <linearGradient id={`${p}-folha`} x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#181818" /><stop offset="1" stop-color="#121212" />
-    </linearGradient>
     {/* A área da projeção fica um tom abaixo da real e se apaga para o fim. */}
     <linearGradient id={`${p}-some-g`} gradientUnits="userSpaceOnUse" x1={FX} y1="0" x2={PFX} y2="0">
       <stop stop-color="#ffffff" stop-opacity=".78" /><stop offset="1" stop-color="#ffffff" stop-opacity=".42" />
@@ -80,15 +72,7 @@ const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar paci
     </mask>
   </defs>
 
-  {/* Relatórios anteriores: só a borda de cima aparece. */}
-  {atras.map(({ x, y, mes }, i) => (
-    <g class="decisao__atras" style={`opacity:${i === 0 ? .7 : .9}`}>
-      <rect x={x} y={y} width="600" height="400" rx="16" fill={`url(#${p}-folha)`} stroke={`url(#${p}-fio)`} />
-      <text x={x + 20} y={y + 14.5} class="decisao__mes-atras">{mes}</text>
-    </g>
-  ))}
-
-  {/* Setembro, na frente. */}
+  {/* Setembro. */}
   <rect x={PX} y={PY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
   <rect x={PX + 16} y={PY + 0.5} width="420" height="1" fill={`url(#${p}-fio-h)`} />
   <text x="128" y="100" class="decisao__titulo">Setembro</text>
@@ -142,7 +126,6 @@ const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar paci
 <style>
   /* Corpos pensados para o cartão largo recortado no celular (escala ≈ .68):
      rótulos em 13 e secundários em 11,5. */
-  .decisao__mes-atras { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
   .decisao__titulo { font-size: 32px; font-weight: 300; fill: #efefeb; letter-spacing: -.03em; }
   .decisao__estado { fill: #8a8a85; }
   .decisao__enviado { font-size: 11.5px; font-weight: 500; fill: #b9b9b4; }
