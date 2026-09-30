@@ -60,8 +60,17 @@ section[id] { scroll-margin-top: 110px; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
 #fale .chamada__miolo p { color: #aeaeac; }
 #fale .botao { background: var(--papel); color: #171715; }
-/* Rede RevOps logo abaixo do botão, na largura do container. */
-#fale .chamada__rede { width: 100%; margin-top: clamp(8px, 1vw, 16px); }
+/* Rede RevOps logo abaixo do botão, na largura do container, colada nele
+   (o palco já tem respiro próprio acima dos módulos). */
+#fale .chamada__rede { width: 100%; margin-top: 0; }
+#fale .chamada { row-gap: clamp(8px, 1.2vw, 16px); }
+/* Título e apoio numa linha cada onde cabem, para não sobrar vazio nas
+   laterais (Lenora, 30/09); no celular voltam a quebrar. O text-wrap vai
+   junto do nowrap porque os dois dividem o text-wrap-mode. */
+@media (min-width: 720px) {
+  #fale .chamada__miolo .titulo,
+  #fale .chamada__miolo > p:not(.cabeca-dobra__selo) { max-width: none; white-space: nowrap; text-wrap: nowrap; }
+}
 .home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
 .home-refinada .form-card .field__label { color: #454543; }
 .home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }
