@@ -6,7 +6,7 @@
  * Atendimento é pega por um laço tracejado de follow-up, que a leva de
  * volta até Agendado. Em laço, um ponto percorre o fluxo direto; um segundo
  * cai na perda, perde a cor, é resgatado pelo follow-up e chega a Agendado,
- * que acende o ponto amarelo. Pose estática = pose final; o movimento só
+ * que ganha o visto amarelo. Pose estática = pose final; o movimento só
  * parte dela.
  */
 interface Props { p: string }
@@ -135,14 +135,16 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
   <rect x={AX - 32} y={L - 32} width="64" height="64" rx="18" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
   <rect x={AX - 24} y={L - 24} width="48" height="48" rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
   <rect x={AX - 16} y={L - 23.5} width="32" height="1" fill={`url(#${p}-fio-h)`} />
+  {/* Calendário com o visto: o visto é o toque amarelo, e se desenha
+      quando o contato resgatado chega (por baixo fica o visto cinza, que
+      aparece enquanto o amarelo está apagado). */}
   <g class="a-icone conversao__icone-fim" transform={`translate(${AX - 10} ${L - 10}) scale(.8333)`}>
     <path d="M8 2v4M16 2v4" />
     <rect x="3" y="4" width="18" height="18" rx="2" />
     <path d="M3 10h18" />
-    <path d="m9 16 2 2 4-4" />
+    <path class="conversao__visto-base" d="m9 16 2 2 4-4" />
+    <path class="conversao__visto conversao__acende" d="m9 16 2 2 4-4" pathLength="1" />
   </g>
-  <circle class="conversao__apagado" cx={AX + 14} cy={L - 14} r="2" />
-  <circle class="a-destaque conversao__acende" cx={AX + 14} cy={L - 14} r="2" />
   <circle class="conversao__anel" cx={AX} cy={L + 32} r="3.5" />
   <circle class="conversao__miolo" cx={AX} cy={L + 32} r="1.25" />
   <text x={AX} y="58" text-anchor="middle" class="a-rotulo conversao__rotulo conversao__rotulo--fim">Agendado</text>
@@ -157,7 +159,8 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
   .conversao .conversao__icone--laco { stroke: var(--destaque, #FFD103); }
   .conversao .conversao__icone-fim { stroke: #ecece8; stroke-width: 1.68; }
   .conversao .conversao__laco-nome { font-size: 13px; fill: #d6d6d1; }
-  .conversao__apagado { fill: #3a3a38; }
+  .conversao .conversao__visto-base { stroke: #4a4a47; }
+  .conversao .conversao__visto { stroke: var(--destaque, #FFD103); stroke-width: 2; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
   .conversao__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
   .conversao__miolo { fill: #d6d6d1; }
   .conversao__ponto {
@@ -166,14 +169,14 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
   }
 
   /* Movimento, em laço de 12 s (tempos do ciclo):
-     0–0,6 s   repouso na pose final (ponto amarelo aceso);
-     0,6–1,0   o ponto amarelo e o ícone do follow-up se apagam;
+     0–0,6 s   repouso na pose final (visto amarelo aceso);
+     0,6–1,0   o visto amarelo e o ícone do follow-up se apagam;
      0,9–3,0   o primeiro ponto atravessa o fluxo e some sob Agendado;
      1,3–3,1   o segundo ponto segue o fluxo e cai na perda de
                Atendimento, perdendo a cor; para um instante embaixo;
      3,4–5,2   o follow-up o pega (o ícone acende em amarelo): ele
                recupera a cor, corre pelo laço e sobe até Agendado;
-     5,2–5,7   o ponto amarelo acende.
+     5,2–5,7   o visto amarelo se desenha.
      O resto (≈ 57% do ciclo) é repouso. */
   .conversao__ponto--direto { animation: conversao-direto 12s var(--a-vai-vem) .4s infinite both; }
   .conversao__ponto--resgate { animation: conversao-resgate 12s var(--a-vai-vem) .4s infinite both; }
@@ -206,9 +209,12 @@ const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
     8.33%, 28.33% { opacity: 0; }
     32%, 100% { opacity: 1; }
   }
+  /* O visto amarelo de Agendado: some junto com o ícone do follow-up e se
+     desenha quando o contato resgatado chega. */
   @keyframes conversao-acende {
-    0%, 5% { opacity: 1; }
-    8.33%, 43.33% { opacity: 0; }
-    47.5%, 100% { opacity: 1; }
+    0%, 5% { stroke-dashoffset: 0; opacity: 1; }
+    8.33% { stroke-dashoffset: 0; opacity: 0; }
+    8.34%, 43.33% { stroke-dashoffset: 1; opacity: 1; }
+    47.5%, 100% { stroke-dashoffset: 0; opacity: 1; }
   }
 </style>
