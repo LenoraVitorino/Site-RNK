@@ -60,6 +60,8 @@ section[id] { scroll-margin-top: 110px; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
 #fale .chamada__miolo p { color: #aeaeac; }
 #fale .botao { background: var(--papel); color: #171715; }
+/* Rede RevOps logo abaixo do botão, na largura do container. */
+#fale .chamada__rede { width: 100%; margin-top: clamp(8px, 1vw, 16px); }
 .home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
 .home-refinada .form-card .field__label { color: #454543; }
 .home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }

@@ -1,7 +1,10 @@
 ---
-/** Chamada de contato centralizada. */
+/** Chamada de contato centralizada; logo abaixo, a rede RevOps (o núcleo
+    Renke ligado a marketing, comercial, operação, CRM, dados e automação),
+    nas duas versões (Lenora, 30/09). */
 import Botao from '../ui/Botao.astro';
 import Selo from '../ui/Selo.astro';
+import RevOpsAnimacao from './RevOpsAnimacao.astro';
 import { copyLiteral } from '../../data/versao';
 ---
 <section class="secao secao--amarela" id="fale" aria-labelledby="fale-titulo">
@@ -12,6 +15,6 @@ import { copyLiteral } from '../../data/versao';
       <p>Cada projeto começa com diagnóstico. Não usamos template. Não terceirizamos.</p>
       <Botao href="/contato" class="botao--lg">Converse com a equipe</Botao>
     </div>
-
+    <div class="chamada__rede entra"><RevOpsAnimacao /></div>
   </div>
 </section>
