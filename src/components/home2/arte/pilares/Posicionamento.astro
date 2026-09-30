@@ -2,59 +2,61 @@
 /**
  * Construímos seu posicionamento: o estudo de concorrência como uma tabela
  * limpa, no molde do relatório de setembro (Lenora, 29/09: sem produto nem
- * serviço, minimalista, "igual os de cima"; depois, "tá meio pobrinho e tem
- * muito lugar vazio, falta detalhe amarelo"). A página "Concorrência", com
- * o estado "Atualizado · seg, 09:00" e as abas tiradas da frase do cartão
- * (O que comunicam, Onde investem, Brechas; a ativa com o fio amarelo),
- * segue além da borda direita e da de baixo. Nas linhas, o que o mercado
- * comunica. Logo depois dos temas, por cima da tabela, a coluna "Sua
- * clínica", o único elemento que flutua, com um ponto só, amarelo e com
- * anel, na linha vazia; à direita dela, as clínicas da região, anônimas (A
- * a F), até a borda da página, apagando-se nela (29/09: "e esse vazio
- * ainda?"), com um ponto onde cada uma fala daquilo, maior quanto mais ela
- * insiste. Todas se amontoam em preço, e a linha "Resultado natural" fica
- * vazia: a brecha, com os lugares vazios em anel e a faixa alinhada às
- * linhas da tabela (29/09: "me incomoda esse desalinhamento"). A lista
- * também continua e se apaga na borda de baixo. Na entrada, o fio da aba
- * corre, os pontos aparecem coluna a coluna, a coluna da clínica sobe e o
- * ponto amarelo acende. Pose estática = pose final.
+ * serviço, minimalista, "igual os de cima"; sem vazios, com detalhe
+ * amarelo; depois, "muita bolinha" e o "desalinhamento entre texto e
+ * mockup"). A página "Concorrência" começa na linha do texto do cartão e
+ * segue além da borda direita e da de baixo, com o estado "Atualizado ·
+ * seg, 09:00" e as abas tiradas da frase do cartão (O que comunicam, Onde
+ * investem, Brechas; a ativa com o fio amarelo). Nas linhas, o que o
+ * mercado comunica. Logo depois dos temas, por cima da tabela, a coluna
+ * "Sua clínica", o único elemento que flutua, com um ponto só, amarelo, na
+ * linha vazia; à direita dela, as clínicas da região, anônimas, até a
+ * borda da página, apagando-se nela. Um ponto discreto marca onde cada uma
+ * fala daquilo, e a célula fica em branco onde não fala. Todas falam de
+ * preço, e a linha "Resultado natural" fica vazia: a brecha, um tom acima
+ * do fundo, alinhada às linhas. A lista também continua e se apaga na
+ * borda de baixo. Na entrada, o fio da aba corre, os pontos aparecem
+ * coluna a coluna, a coluna da clínica sobe e o ponto amarelo acende. Pose
+ * estática = pose final.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Página: canto em (104, 32), como a do relatório, sangrando pela direita
-   e por baixo. O essencial (temas, coluna da clínica e as clínicas A, B e
-   C) fica entre x 128 e 500, dentro da área segura do celular (x 80 a
-   560); as colunas seguintes e as linhas se apagam de x 510 até a borda
-   do cartão (640). */
-const PX = 104, PY = 32;
+/* Página: canto em (12, 32), na linha do texto do cartão (os 12px de
+   recuo do texto), sangrando pela direita e por baixo. O essencial (temas,
+   coluna da clínica e as clínicas A a D) fica entre x 36 e 471, dentro da
+   área segura do celular (x 0 a 480); as colunas seguintes e as linhas se
+   apagam de x 480 até a borda do cartão (640). */
+const PX = 12, PY = 32, TX = PX + 24;
 /* Abas (Inter 13; a ativa em 500), com vão de 24; divisa em y 136. */
 const abas = [
-  { nome: 'O que comunicam', x: 128, w: 112.8, ativa: true },
-  { nome: 'Onde investem', x: 264.8 },
-  { nome: 'Brechas', x: 380.8 },
+  { nome: 'O que comunicam', x: TX, w: 112.8, ativa: true },
+  { nome: 'Onde investem', x: TX + 136.8 },
+  { nome: 'Brechas', x: TX + 252.8 },
 ];
 const AY = 124, DY = 136;
+/* Estado, com a ponta direita em x 464: "Atualizado" (Inter 11,5 / 500,
+   58,1) e a data (58,6), com vão de 8. */
+const EX = 464;
 /* Tabela: cabeçalho centrado em y 168; linhas a cada 34, com o centro da
-   primeira em 204. A coluna da clínica é um cartão de 88 centrado em 300,
-   logo depois dos temas ("Resultado natural", em 500, termina em 236,5).
-   Colunas das concorrentes a cada 48, a partir de 388. Cada ponto tem o
-   peso do tema na comunicação da clínica: 2 (forte) ou 1 (de leve). */
+   primeira em 204. A coluna da clínica é um cartão de 88 centrado em 208,
+   logo depois dos temas ("Resultado natural", em 500, termina em 144,5).
+   Colunas das concorrentes a cada 56, a partir de 292. */
 const HY = 168, L0 = 204, LH = 34;
-const colunas = ['A', 'B', 'C', 'D', 'E', 'F'].map((nome, i) => ({ nome, x: 388 + i * 48 }));
-type Linha = { tema: string; peso: Record<string, number>; brecha?: boolean; corte?: boolean };
+const colunas = ['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((nome, i) => ({ nome, x: 292 + i * 56 }));
+type Linha = { tema: string; quem: string[]; brecha?: boolean; corte?: boolean };
 const linhas = ([
-  { tema: 'Preço baixo', peso: { A: 2, B: 2, C: 2, D: 2, E: 1, F: 2 } },
-  { tema: 'Promoção', peso: { A: 1, C: 2, E: 2 } },
-  { tema: 'Parcelamento', peso: { A: 2, B: 1, D: 1, F: 1 } },
-  { tema: 'Resultado natural', peso: {}, brecha: true },
-  { tema: 'Pacotes', peso: { B: 2, C: 1, D: 2, E: 1 }, corte: true },
+  { tema: 'Preço baixo', quem: ['A', 'B', 'C', 'D', 'E', 'F', 'G'] },
+  { tema: 'Promoção', quem: ['B', 'E'] },
+  { tema: 'Parcelamento', quem: ['A', 'D', 'F'] },
+  { tema: 'Resultado natural', quem: [], brecha: true },
+  { tema: 'Pacotes', quem: ['C', 'G'], corte: true },
 ] as Linha[]).map((l, i) => ({ ...l, y: L0 + i * LH }));
 const BY = linhas.find((l) => l.brecha)!.y;
-const S = { x: 256, y: 142, w: 88, cx: 300 };
+const S = { x: 164, y: 142, w: 88, cx: 208 };
 const SH = BY + 22 - S.y;
-/* Linhas da tabela: de x 128 até a borda do cartão. */
-const TX = 128, TW = 640 - TX;
+/* Linhas da tabela: de x 36 até a borda do cartão. */
+const TW = 640 - TX;
 ---
 <g class="posicionamento">
   <defs>
@@ -66,7 +68,7 @@ const TX = 128, TW = 640 - TX;
       <rect x="0" y="322" width="640" height="60" fill={`url(#${p}-apaga)`} />
     </mask>
     {/* A tabela se apaga na borda direita: há mais clínicas na região. */}
-    <linearGradient id={`${p}-apaga-dir`} gradientUnits="userSpaceOnUse" x1="510" y1="0" x2="640" y2="0">
+    <linearGradient id={`${p}-apaga-dir`} gradientUnits="userSpaceOnUse" x1="480" y1="0" x2="640" y2="0">
       <stop stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
     </linearGradient>
     <mask id={`${p}-direita`} maskUnits="userSpaceOnUse" x="0" y="140" width="640" height="240">
@@ -75,19 +77,19 @@ const TX = 128, TW = 640 - TX;
   </defs>
 
   {/* Página. */}
-  <rect x={PX} y={PY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={PX} y={PY} width="700" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
   <rect x={PX + 16} y={PY + 0.5} width="420" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x="128" y="84" class="posicionamento__titulo">Concorrência</text>
-  <circle cx="411" cy="80" r="2.5" class="posicionamento__estado" />
-  <text x="419" y="84" class="posicionamento__atualizado">Atualizado</text>
-  <text x="544" y="84" text-anchor="end" class="posicionamento__meta">seg, 09:00</text>
+  <text x={TX} y="84" class="posicionamento__titulo">Concorrência</text>
+  <circle cx={EX - 58.6 - 8 - 58.1 - 8} cy="80" r="2.5" class="posicionamento__estado" />
+  <text x={EX - 58.6 - 8 - 58.1} y="84" class="posicionamento__atualizado">Atualizado</text>
+  <text x={EX} y="84" text-anchor="end" class="posicionamento__meta">seg, 09:00</text>
 
   {/* Abas; a ativa tem o fio de baixo, em amarelo. */}
   {abas.map(({ nome, x, ativa }) => (
     <text x={x} y={AY} class:list={['posicionamento__aba', { 'posicionamento__aba--ativa': ativa }]}>{nome}</text>
   ))}
-  <rect x={PX} y={DY} width="600" height="1" class="posicionamento__divisa" />
-  <rect x="128" y={DY - 1} width={abas[0].w} height="2" rx="1" class="a-destaque posicionamento__aba-fio" />
+  <rect x={PX} y={DY} width="700" height="1" class="posicionamento__divisa" />
+  <rect x={TX} y={DY - 1} width={abas[0].w} height="2" rx="1" class="a-destaque posicionamento__aba-fio" />
 
   {/* A tabela, que se apaga na borda direita. */}
   <g mask={`url(#${p}-direita)`}>
@@ -103,16 +105,14 @@ const TX = 128, TW = 640 - TX;
       </g>
     ))}
 
-    {/* Linhas: as divisas passam por baixo da coluna da clínica. */}
-    {linhas.map(({ tema, peso, brecha, corte, y }) => (
+    {/* Linhas: as divisas passam por baixo da coluna da clínica; a célula
+        fica em branco onde a clínica não fala do tema. */}
+    {linhas.map(({ tema, quem, brecha, corte, y }) => (
       <g mask={corte ? `url(#${p}-borda)` : undefined}>
         <rect x={TX} y={y - LH / 2} width={TW} height="1" class="posicionamento__divisa" />
         <text x={TX} y={y + 4.5} class:list={['posicionamento__tema', { 'posicionamento__tema--brecha': brecha }]}>{tema}</text>
-        {colunas.map(({ nome, x }, c) => peso[nome]
-          ? <circle cx={x} cy={y} r={peso[nome] === 2 ? 4.5 : 3} class:list={['posicionamento__ponto', { 'posicionamento__ponto--leve': peso[nome] === 1 }]} style={`--c:${c}`} />
-          : brecha
-            ? <circle cx={x} cy={y} r="4" class="posicionamento__lugar" />
-            : <rect x={x - 4} y={y - 0.5} width="8" height="1" class="posicionamento__vazio" />)}
+        {colunas.map(({ nome, x }, c) => quem.includes(nome) &&
+          <circle cx={x} cy={y} r="3.5" class="posicionamento__ponto" style={`--c:${c}`} />)}
       </g>
     ))}
     <rect x={TX} y={BY + LH / 2} width={TW} height="1" class="posicionamento__divisa" />
@@ -124,12 +124,7 @@ const TX = 128, TW = 640 - TX;
     <rect x={S.x} y={S.y} width={S.w} height={SH} rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
     <rect x={S.x + 14} y={S.y + 0.5} width={S.w - 28} height="1" fill={`url(#${p}-fio-h)`} />
     <text x={S.cx} y={HY + 4} text-anchor="middle" class="posicionamento__sua-nome">Sua clínica</text>
-    {linhas.filter((l) => !l.corte).map(({ brecha, y }) => brecha
-      ? <g class="posicionamento__acende">
-          <circle cx={S.cx} cy={y} r="8.5" class="posicionamento__anel" />
-          <circle cx={S.cx} cy={y} r="4.5" class="a-destaque" />
-        </g>
-      : <rect x={S.cx - 4} y={y - 0.5} width="8" height="1" class="posicionamento__vazio" />)}
+    <circle cx={S.cx} cy={BY} r="4.5" class="a-destaque posicionamento__acende" />
   </g>
 </g>
 
@@ -148,22 +143,18 @@ const TX = 128, TW = 640 - TX;
   .posicionamento__inicial { font-size: 11px; font-weight: 500; fill: #8a8a85; }
   .posicionamento__tema { font-size: 13px; fill: #b9b9b4; letter-spacing: -.005em; }
   .posicionamento__tema--brecha { font-weight: 500; fill: #ecece8; }
-  .posicionamento__ponto { fill: #d6d6d1; }
-  .posicionamento__ponto--leve { fill: #8a8a85; }
-  .posicionamento__lugar { fill: none; stroke: #ffffff; stroke-opacity: .18; stroke-dasharray: 2 2.2; }
-  .posicionamento__vazio { fill: #ffffff; fill-opacity: .14; }
+  .posicionamento__ponto { fill: #b9b9b4; }
   .posicionamento__sua-nome { font-size: 12.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.005em; }
-  .posicionamento__anel { fill: none; stroke: var(--destaque, #FFD103); stroke-opacity: .35; }
   .posicionamento__aba-fio { transform-box: fill-box; transform-origin: left center; }
 
   /* Movimento, uma vez, na entrada:
      0,2–1,0 s  o fio amarelo da aba corre da esquerda para a direita;
-     0,4–1,8    os pontos das concorrentes aparecem, coluna a coluna;
+     0,4–1,9    os pontos das concorrentes aparecem, coluna a coluna;
      1,6–2,6    a coluna da clínica sobe 8, com fade;
      2,6–3,2    o ponto amarelo acende na linha vazia.
      Depois, nada se move. */
   .posicionamento__aba-fio { animation: posicionamento-corre .8s var(--a-vai-vem) .2s both; }
-  .posicionamento__ponto { animation: posicionamento-aparece .6s var(--a-entra) calc(.4s + var(--c) * .16s) both; }
+  .posicionamento__ponto { animation: posicionamento-aparece .6s var(--a-entra) calc(.4s + var(--c) * .15s) both; }
   .posicionamento__sua { animation: posicionamento-sobe 1s var(--a-entra) 1.6s both; }
   .posicionamento__acende { animation: posicionamento-aparece .6s var(--a-entra) 2.6s both; }
   @keyframes posicionamento-corre { from { transform: scaleX(0); } }

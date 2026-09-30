@@ -14,12 +14,14 @@
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* A página começa em (104, 56) e sangra pela direita e por baixo; a cena
-   inteira sobe 16 (translate no <g> de fora) para o respiro de cima não
-   ficar maior que o dos outros cartões largos, agora sem a pilha de julho
-   e agosto (Lenora, 29/09). Conteúdo a 24 da borda: coluna de x 128 a 536
-   (536 = limite da área segura do celular menos 24). */
-const PX = 104, PY = 56;
+/* As medidas abaixo estão no desenho original, com a página em (104, 56);
+   o <g> de fora leva tudo 92 para a esquerda, e a página começa em x 12,
+   na linha do texto do cartão (Lenora, 29/09: "desalinhamento entre texto
+   e mockup"), e 16 para cima, para o respiro de cima não ficar maior que o
+   dos outros cartões largos. A página sangra pela direita e por baixo.
+   Conteúdo a 24 da borda: coluna de x 128 a 536, que na tela fica de 36 a
+   444, dentro da área segura do celular (x 0 a 480). */
+const PX = 104, PY = 56, DX = -92;
 /* Abas dos indicadores: medidas em Inter 13 (ativa 500, as outras 400),
    com vão de 24. */
 const abas = [
@@ -30,9 +32,9 @@ const abas = [
 /* Linha do gráfico: um ponto por semana, de julho a setembro, com passo de
    32. Anda de lado com as oscilações de uma agenda de verdade, dá um salto
    quando o plano do mês entra (x 256 a 320) e segue subindo devagar até
-   agora (x 544, dentro da área segura do celular). Dali, duas semanas de
-   outubro tracejadas: a projeção do plano, que ocupa o fim da página no
-   desktop (até x 608) e pode ser cortada no celular. Do x 352 em diante a
+   agora (x 544, na tela 452, dentro da área segura do celular). Dali, as
+   semanas de outubro tracejadas: a projeção do plano, que ocupa o fim da
+   página no desktop (até x 704, na tela 612) e é cortada no celular. Do x 352 em diante a
    linha passa acima do cartão do plano. Curva por Catmull-Rom, calculada
    com a projeção junto, para a tangente seguir contínua em agora. */
 const pts: [number, number][] = [
@@ -40,7 +42,7 @@ const pts: [number, number][] = [
   [288, 246], [320, 223], [352, 208], [384, 202], [416, 204],
   [448, 195], [480, 191], [512, 189], [544, 181],
 ];
-const proj: [number, number][] = [[576, 174], [608, 166]];
+const proj: [number, number][] = [[576, 174], [608, 166], [640, 160], [672, 155], [704, 151]];
 const todos = [...pts, ...proj];
 const trecho = (de: number, ate: number) => {
   let d = `M${todos[de][0]} ${todos[de][1]}`;
@@ -61,7 +63,7 @@ const [PFX] = proj[proj.length - 1];
 const CX = 352, CY = 224, CW = 184, CH = 122;
 const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar pacientes'];
 ---
-<g class="decisao" transform="translate(0 -16)">
+<g class="decisao" transform={`translate(${DX} -16)`}>
   <defs>
     {/* A área da projeção fica um tom abaixo da real e se apaga para o fim. */}
     <linearGradient id={`${p}-some-g`} gradientUnits="userSpaceOnUse" x1={FX} y1="0" x2={PFX} y2="0">
@@ -73,7 +75,7 @@ const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar paci
   </defs>
 
   {/* Setembro. */}
-  <rect x={PX} y={PY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={PX} y={PY} width="700" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
   <rect x={PX + 16} y={PY + 0.5} width="420" height="1" fill={`url(#${p}-fio-h)`} />
   <text x="128" y="100" class="decisao__titulo">Setembro</text>
   <circle cx="415" cy="96" r="2.5" class="decisao__estado" />
@@ -84,7 +86,7 @@ const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar paci
   {abas.map(({ x, nome, ativa }) => (
     <text x={x} y="140" class:list={['decisao__aba', { 'decisao__aba--ativa': ativa }]}>{nome}</text>
   ))}
-  <rect x={PX} y="152" width="600" height="1" class="decisao__divisa" />
+  <rect x={PX} y="152" width="700" height="1" class="decisao__divisa" />
   <rect x="128" y="151" width={abas[0].largura} height="2" rx="1" class="a-destaque" />
 
   {/* Gráfico: a grade vai até o fim da projeção. */}

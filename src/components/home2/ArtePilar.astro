@@ -7,9 +7,12 @@
  *
  * Os três primeiros cartões são 4:3 (viewBox 400 × 300). Os dois últimos
  * são largos (16:9) no desktop e voltam a 4:3 no celular: a cena tem
- * 640 × 360 e é recortada ao centro (slice), com o essencial numa área
- * segura de x 80 a 560. Nas duas medidas, uma unidade do viewBox dá quase
- * um pixel no desktop de 1600px, e os textos saem no mesmo corpo.
+ * 640 × 360 e é recortada a partir da esquerda (xMin slice), com o
+ * essencial numa área segura de x 0 a 480. Assim a página desenhada começa
+ * na mesma linha do texto do cartão (x 12, os 12px de recuo do texto) nas
+ * duas medidas (Lenora, 29/09: "desalinhamento entre texto e mockup").
+ * Nas duas medidas, uma unidade do viewBox dá quase um pixel no desktop de
+ * 1600px, e os textos saem no mesmo corpo.
  */
 import '../../styles/ilustracoes.css';
 import Defs from './arte/Defs.astro';
@@ -31,7 +34,7 @@ const larga = tipo >= 3;
   <svg
     class:list={['arte', 'arte-pilar', `arte-pilar--${tipo}`]}
     viewBox={larga ? '0 0 640 360' : '0 0 400 300'}
-    preserveAspectRatio={larga ? 'xMidYMid slice' : 'xMidYMid meet'}
+    preserveAspectRatio={larga ? 'xMinYMid slice' : 'xMidYMid meet'}
     fill="none" aria-hidden="true" focusable="false"
   >
     <Defs p={p} />
