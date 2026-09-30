@@ -1,163 +1,292 @@
 ---
 /**
- * Construímos seu posicionamento: a análise de concorrência, como uma
- * tabela de verdade. Três clínicas da região (anônimas), com o que cada uma
- * comunica e onde investe. As mensagens delas estão grifadas juntas, com a
- * nota "Todos falam de preço"; logo abaixo, a linha hachurada da brecha,
- * "Ninguém fala de resultado". Sobre ela, a tese da clínica, com o ponto
- * amarelo. Na entrada, as linhas aparecem em cascata, o grifo se desenha, a
- * brecha aparece e a tese sobe. Pose estática = pose final; o movimento só
- * parte dela.
+ * Construímos seu posicionamento: o estudo de concorrência como um quadro
+ * de pesquisa. A janela "Estudo de concorrência" traz os anúncios de três
+ * clínicas da região (anônimas), como minipost: cabeçalho com a conta
+ * ("Clínica A", "B", "C") e o canal onde investe (Instagram ou Google, em
+ * cinza), e o criativo em grafite com a chamada grande e genérica de cada
+ * uma ("Promoção", "Pacote", "Preço baixo"). Uma lupa em fio fino estuda os
+ * anúncios e amplia a chamada sob a lente; cada anúncio ganha a etiqueta de
+ * pesquisa "preço", e uma linha de cota liga os três à conclusão "Todos
+ * falam de preço". Embaixo, à direita, a tese da clínica: o único cartão
+ * que flutua, com os toques de amarelo. Em laço, a lupa passa pelos três
+ * anúncios, as etiquetas surgem uma a uma, a cota se desenha e a tese
+ * sobe. Pose estática = pose final; o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Janela: canto em (96, 28), segue além do viewBox pela direita e por
-   baixo. Cabeçalho de 44. Conteúdo a 24 da borda (x 120), dentro da área
-   segura do celular (x 80 a 560). */
-const WX = 96, WY = 28;
-/* Colunas: "Concorrente", "Comunica" e "Investe em". Linhas de 40 a
-   partir de y 112. Pílulas de 24 (raio 12), largura = texto medido em
-   Inter 13 / 500 mais 12 de cada lado. A coluna "Investe em" começa no
-   mesmo eixo do cartão da tese (x 396). */
-const C0 = 120, C1 = 216, C2 = 396;
-const L0 = 112, LH = 40;
-const largura: Record<string, number> = {
-  'Preço baixo': 72.5, Pacotes: 49.5, 'Promoção': 62.7, Instagram: 61.6, Google: 44,
-};
-const pilula = (t: string) => Math.round(largura[t] + 24);
-const linhas = [
-  { nome: 'Clínica A', fala: 'Preço baixo', canal: 'Instagram' },
-  { nome: 'Clínica B', fala: 'Pacotes', canal: 'Google' },
-  { nome: 'Clínica C', fala: 'Promoção', canal: 'Instagram' },
-];
-const centro = (i: number) => L0 + LH * i + LH / 2;
-/* Grifo: um contorno só em volta das três mensagens, a 5 das pílulas
-   (raio concêntrico 17). */
-const G = { x: C1 - 5, y: centro(0) - 17, w: pilula('Preço baixo') + 10, h: centro(2) - centro(0) + 34 };
-/* Desenhado como path (e não rect) para o pathLength valer em todo
-   navegador; começa no alto, à esquerda, e corre no sentido horário. */
-const grifo = (() => {
-  const x = G.x + 0.5, y = G.y + 0.5, w = G.w - 1, h = G.h - 1, r = 16.5;
-  return `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
-})();
-/* Brecha: a linha que falta na tabela, hachurada e tracejada. */
-const B = { x: 108, y: 270, w: 420, h: 40 };
-/* Tese: o cartão pousado sobre o fim da brecha, centrado na altura dela
-   (o alto dele na linha de base de "Todos falam de preço"), no eixo da
-   coluna "Investe em" e a 16 da borda da área segura. */
-const T = { x: C2, y: 248, w: 148, h: 84 };
+/* Janela do estudo: canto em (96, 20), segue além do viewBox pela direita
+   e por baixo. Conteúdo de x 120 a 552, dentro da área segura do celular
+   (x 80 a 560). Cabeçalho de 44. */
+const WX = 96, WY = 20;
+/* Anúncios: minipost de 128 de largura, vão de 24 (passo 152), de y 80.
+   Cabeçalho de 30 (conta e canal) e criativo de 116. */
+const PY = 80, PW = 128, HH = 30, CH = 116, PASSO = 152;
+const CY0 = PY + HH, PB = CY0 + CH;
+const anuncios = [
+  { nome: 'Clínica A', canal: 'instagram', chamada: ['Promoção'] },
+  { nome: 'Clínica B', canal: 'google', chamada: ['Pacote'] },
+  { nome: 'Clínica C', canal: 'instagram', chamada: ['Preço', 'baixo'] },
+].map((a, i) => ({ ...a, x: 120 + PASSO * i }));
+const FIM = anuncios[2].x + PW;
+/* Etiqueta de pesquisa "preço" (Inter 12 / 600, 33,1), colada na borda
+   de baixo do anúncio, meio para fora, como um adesivo. */
+const EW = 46, EH = 20, EY = PB - 10;
+/* Cota: de A a C, com a conclusão no meio (Inter 13,5 / 500, 138,3). */
+const CY = 256, CM = (120 + FIM) / 2, CV = 138.3 / 2 + 12;
+/* Lupa: em repouso sobre a chamada de C. Lente de raio 32 (aro até 36),
+   aumento de 1,25: "Preço" ampliado mede 52,6 e fica centrado na lente.
+   O cabo sai a 45°. */
+const L = { x: anuncios[2].x + 33, y: CY0 + 36, r: 32, aro: 36, s: 1.25 };
+/* Tese: embaixo, à direita, sobre a janela. "Referência em" mede 99,6 e a
+   frase toda 220,1 (Inter 15 / 400); o espaço mede 4. */
+const T = { x: 300, y: 276, w: 252, h: 64 };
 ---
 <g class="posicionamento">
   <defs>
-    {/* Hachura da brecha (a mesma do espaço aberto do Mercado), vazada em
-        volta dos textos. */}
-    <pattern id={`${p}-hachura`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width=".8" height="6" fill="#ffffff" fill-opacity=".08" />
-    </pattern>
-    <mask id={`${p}-vazado`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="360">
-      <rect width="640" height="360" fill="#ffffff" />
-      <rect x={C0 - 4} y={B.y + 9} width="52" height="22" rx="4" fill="#000000" />
-      <rect x={C1 - 4} y={B.y + 9} width="170" height="22" rx="4" fill="#000000" />
-    </mask>
+    {anuncios.map((_, i) => (
+      <linearGradient id={`${p}-fundo-${i}`} x1="0" y1="0" x2=".4" y2="1">
+        <stop stop-color={['#3a3936', '#34332f', '#3c3a36'][i]} /><stop offset="1" stop-color={['#1c1b1a', '#1a1a18', '#1d1c1a'][i]} />
+      </linearGradient>
+    ))}
+    <linearGradient id={`${p}-objeto`} x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#6a6862" /><stop offset=".45" stop-color="#4b4945" /><stop offset="1" stop-color="#2c2b29" />
+    </linearGradient>
+    <linearGradient id={`${p}-base`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#000000" stop-opacity="0" /><stop offset="1" stop-color="#000000" stop-opacity=".35" />
+    </linearGradient>
+    {/* Foto da conta: disco cheio, sem contorno (com fio, lia como botão
+        de rádio). */}
+    <linearGradient id={`${p}-perfil`} x1="0" y1="0" x2=".5" y2="1">
+      <stop stop-color="#4a4844" /><stop offset="1" stop-color="#262523" />
+    </linearGradient>
+    <linearGradient id={`${p}-cabo`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#2e2e2c" /><stop offset="1" stop-color="#151515" />
+    </linearGradient>
+    {anuncios.map(({ x }, i) => (
+      <clipPath id={`${p}-post-${i}`}>
+        <rect x={x} y={PY} width={PW} height={PB - PY} rx="10" />
+      </clipPath>
+    ))}
+    <clipPath id={`${p}-lente`}>
+      <circle cx={L.x} cy={L.y} r={L.r} />
+    </clipPath>
+
+    {/* Os três anúncios, usados duas vezes: no quadro e ampliados na
+        lente. */}
+    <g id={`${p}-anuncios`}>
+      {anuncios.map(({ x, nome, canal, chamada }, i) => (
+        <g clip-path={`url(#${p}-post-${i})`}>
+          <rect x={x} y={PY} width={PW} height={PB - PY} fill={`url(#${p}-alto)`} />
+          {/* Cabeçalho do post: foto da conta, nome e canal. */}
+          <circle cx={x + 16} cy={PY + 15} r="8" fill={`url(#${p}-perfil)`} />
+          <text x={x + 30} y={PY + 19.2} class="posicionamento__nome">{nome}</text>
+          {canal === 'instagram' ? (
+            <g class="posicionamento__canal" transform={`translate(${x + PW - 26} ${PY + 8}) scale(.5833)`}>
+              <rect x="2" y="2" width="20" height="20" rx="5.5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <path d="M17.5 6.5h.01" />
+            </g>
+          ) : (
+            <path class="posicionamento__canal-g" transform={`translate(${x + PW - 26} ${PY + 8}) scale(.5833)`} d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+          )}
+          {/* Criativo. */}
+          <rect x={x} y={CY0} width={PW} height={CH} fill={`url(#${p}-fundo-${i})`} />
+          <rect x={x} y={PB - 40} width={PW} height="40" fill={`url(#${p}-base)`} />
+          {/* Objetos genéricos de clínica, em cinza chapado: frasco com
+              válvula, três ampolas (o pacote) e um pote. Desenhados num
+              criativo de 104 × 130 e presos ao canto de baixo à direita. */}
+          <g transform={`translate(${PW - 104 - 4} ${CH - 130})`}>
+          {i === 0 && (<>
+            <rect x={x + 58} y={CY0 + 86} width="30" height="40" rx="7" fill={`url(#${p}-objeto)`} />
+            <rect x={x + 68} y={CY0 + 78} width="10" height="9" fill={`url(#${p}-objeto)`} opacity=".85" />
+            <rect x={x + 63} y={CY0 + 73} width="20" height="6" rx="2" fill={`url(#${p}-objeto)`} />
+            <rect x={x + 81} y={CY0 + 74} width="9" height="3" rx="1.5" fill={`url(#${p}-objeto)`} opacity=".85" />
+          </>)}
+          {i === 1 && [0, 1, 2].map((k) => (<>
+            <rect x={x + 50 + k * 16} y={CY0 + 90} width="12" height="36" rx="4" fill={`url(#${p}-objeto)`} />
+            <rect x={x + 52 + k * 16} y={CY0 + 83} width="8" height="8" rx="1.5" fill={`url(#${p}-objeto)`} opacity=".85" />
+          </>))}
+          {i === 2 && (<>
+            <rect x={x + 54} y={CY0 + 92} width="36" height="8" rx="2" fill={`url(#${p}-objeto)`} />
+            <rect x={x + 52} y={CY0 + 99} width="40" height="27" rx="6" fill={`url(#${p}-objeto)`} />
+          </>)}
+          </g>
+          {chamada.map((linha, j) => (
+            <text x={x + 12} y={CY0 + (chamada.length > 1 ? 32 : 41) + j * 18} class="posicionamento__chamada">{linha}</text>
+          ))}
+        </g>
+      ))}
+    </g>
   </defs>
 
-  {/* Janela do produto, recortada pela borda. */}
+  {/* Janela do estudo. */}
   <rect x={WX} y={WY} width="600" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
   <rect x={WX + 16} y={WY + 0.5} width="400" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x={C0} y="55" class="posicionamento__trilha">Posicionamento</text>
-  <text x="225" y="55" class="posicionamento__barra">/</text>
-  <text x="237" y="55" class="posicionamento__titulo">Análise de concorrência</text>
-  <text x={T.x + T.w} y="55" text-anchor="end" class="posicionamento__quando">Atualizada hoje</text>
+  <text x="120" y="47" class="posicionamento__titulo">Estudo de concorrência</text>
+  <text x={FIM} y="47" text-anchor="end" class="posicionamento__meta">Anúncios ativos</text>
   <rect x={WX} y={WY + 44} width="600" height="1" class="posicionamento__divisa" />
 
-  {/* Cabeçalho da tabela. */}
-  <text x={C0} y="96.5" class="posicionamento__coluna">Concorrente</text>
-  <text x={C1} y="96.5" class="posicionamento__coluna">Comunica</text>
-  <text x={C2} y="96.5" class="posicionamento__coluna">Investe em</text>
-  <rect x={WX} y={L0} width="600" height="1" class="posicionamento__divisa" />
+  {/* Anúncios. */}
+  <use href={`#${p}-anuncios`} />
+  {anuncios.map(({ x }) => (
+    <g>
+      <rect x={x + 0.5} y={CY0} width={PW - 1} height="1" class="posicionamento__linha" />
+      <rect x={x + 0.5} y={PY + 0.5} width={PW - 1} height={PB - PY - 1} rx="9.5" class="posicionamento__borda" />
+    </g>
+  ))}
 
-  {/* Concorrentes. */}
-  {linhas.map(({ nome, fala, canal }, i) => {
-    const c = centro(i);
-    return (
-      <g class="posicionamento__linha" style={`--i:${i}`}>
-        {i > 0 && <rect x={WX} y={L0 + LH * i} width="600" height="1" class="posicionamento__divisa posicionamento__divisa--fina" />}
-        <text x={C0} y={c + 4.8} class="posicionamento__nome">{nome}</text>
-        <rect x={C1} y={c - 12} width={pilula(fala)} height="24" rx="12" class="posicionamento__pilula" />
-        <text x={C1 + pilula(fala) / 2} y={c + 4.5} text-anchor="middle" class="posicionamento__pilula-texto">{fala}</text>
-        {/* O canal é contexto: fica um tom abaixo das mensagens. */}
-        <rect x={C2} y={c - 12} width={pilula(canal)} height="24" rx="12" class="posicionamento__pilula posicionamento__pilula--canal" />
-        <text x={C2 + pilula(canal) / 2} y={c + 4.5} text-anchor="middle" class="posicionamento__pilula-texto posicionamento__pilula-texto--canal">{canal}</text>
+  {/* Lupa: a lente amplia o que está embaixo; em repouso, a chamada de C. */}
+  <g class="posicionamento__lupa">
+    <g clip-path={`url(#${p}-lente)`}>
+      <rect x={L.x - L.r} y={L.y - L.r} width={L.r * 2} height={L.r * 2} fill="#161616" />
+      <g class="posicionamento__contra">
+        <g transform={`translate(${L.x} ${L.y}) scale(${L.s}) translate(${-L.x} ${-L.y})`}>
+          <use href={`#${p}-anuncios`} />
+        </g>
       </g>
-    );
-  })}
-
-  {/* O padrão: as três mensagens grifadas juntas. */}
-  <path d={grifo} pathLength="1" class="posicionamento__grifo" />
-  <text x={C1} y={T.y} class="posicionamento__nota">Todos falam de preço</text>
-
-  {/* A brecha. */}
-  <g class="posicionamento__brecha">
-    <rect x={B.x} y={B.y} width={B.w} height={B.h} rx="10" fill={`url(#${p}-hachura)`} mask={`url(#${p}-vazado)`} />
-    <rect x={B.x + 0.5} y={B.y + 0.5} width={B.w - 1} height={B.h - 1} rx="10" class="posicionamento__brecha-borda" />
-    <text x={C0} y={B.y + 24.5} class="posicionamento__brecha-nome">Brecha</text>
-    <text x={C1} y={B.y + 24.8} class="posicionamento__brecha-frase">Ninguém fala de resultado</text>
+    </g>
+    <path d={`M${L.x - 24.5} ${L.y - 11.5}A27 27 0 0 1 ${L.x - 9.5} ${L.y - 25.3}`} class="posicionamento__reflexo" />
+    <g transform={`translate(${L.x} ${L.y}) rotate(45)`}>
+      <rect x={L.aro - 1} y="-5.5" width="9" height="11" rx="1.5" class="posicionamento__virola" />
+      <rect x={L.aro + 7.5} y="-4.5" width="32" height="9" rx="4.5" fill={`url(#${p}-cabo)`} class="posicionamento__cabo" />
+    </g>
+    <circle cx={L.x} cy={L.y} r={(L.r + L.aro) / 2} class="posicionamento__aro" />
+    <circle cx={L.x} cy={L.y} r={L.aro} class="posicionamento__aro-fora" />
+    <circle cx={L.x} cy={L.y} r={L.r} class="posicionamento__aro-dentro" />
   </g>
 
-  {/* A tese, sobre a brecha. */}
+  {/* Etiquetas de pesquisa. */}
+  {anuncios.map(({ x }, i) => (
+    <g class={`posicionamento__etiqueta posicionamento__etiqueta--${i}`}>
+      <rect x={x + 12} y={EY} width={EW} height={EH} rx="4" class="posicionamento__etiqueta-fundo" />
+      <text x={x + 12 + EW / 2} y={EY + 14} text-anchor="middle" class="posicionamento__etiqueta-texto">preço</text>
+    </g>
+  ))}
+
+  {/* O padrão: a linha de cota liga os três à conclusão. */}
+  <path d={`M120.5 ${CY - 5}V${CY + 5}M${FIM - 0.5} ${CY - 5}V${CY + 5}`} class="posicionamento__cota posicionamento__cota--ponta" />
+  <path d={`M${CM - CV} ${CY}H120.5`} pathLength="1" class="posicionamento__cota posicionamento__cota--esq" />
+  <path d={`M${CM + CV} ${CY}H${FIM - 0.5}`} pathLength="1" class="posicionamento__cota posicionamento__cota--dir" />
+  <text x={CM} y={CY + 4.8} text-anchor="middle" class="posicionamento__conclusao">Todos falam de preço</text>
+
+  {/* A tese. */}
   <g class="posicionamento__tese">
-    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
-    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="12" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
     <rect x={T.x + 20} y={T.y + 0.5} width={T.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
-    <circle cx={T.x + 18} cy={T.y + 21.5} r="3" class="a-destaque posicionamento__ponto" />
-    <text x={T.x + 28} y={T.y + 26} class="posicionamento__tese-nome">Sua tese</text>
-    <text x={T.x + 14} y={T.y + 52} class="posicionamento__tese-frase">Referência em</text>
-    <text x={T.x + 14} y={T.y + 72} class="posicionamento__tese-frase">resultado natural</text>
+    <circle cx={T.x + 19} cy={T.y + 21.5} r="3" class="a-destaque" />
+    <text x={T.x + 29} y={T.y + 26} class="posicionamento__tese-nome">Sua tese</text>
+    <text x={T.x + 15} y={T.y + 48} class="posicionamento__tese-frase">Referência em resultado natural</text>
+    <path d={`M${T.x + 15 + 103.6} ${T.y + 53.5}H${T.x + 15 + 220}`} pathLength="1" class="a-destaque-traco posicionamento__sublinha" />
   </g>
 </g>
 
 <style>
-  /* Corpos pensados para o cartão largo recortado no celular. */
-  .posicionamento__trilha { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
-  .posicionamento__barra { font-size: 13px; fill: #4d4d49; }
   .posicionamento__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .posicionamento__quando { font-size: 11.5px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .posicionamento__meta { font-size: 11.5px; fill: #8a8a85; letter-spacing: -.005em; }
   .posicionamento__divisa { fill: #ffffff; fill-opacity: .06; }
-  .posicionamento__divisa--fina { fill-opacity: .04; }
-  /* Hierarquia: o que cada clínica comunica é o assunto (pílulas claras,
-     grifadas); nomes e canais ficam um tom abaixo. */
-  .posicionamento__coluna { font-size: 12.5px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
   .posicionamento__nome { font-size: 13px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
-  .posicionamento__pilula { fill: #ffffff; fill-opacity: .05; stroke: #ffffff; stroke-opacity: .09; }
-  .posicionamento__pilula--canal { fill-opacity: .03; stroke-opacity: .06; }
-  .posicionamento__pilula-texto { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
-  .posicionamento__pilula-texto--canal { fill: #8a8a85; }
-  .posicionamento__grifo { fill: none; stroke: #ecece8; stroke-opacity: .5; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
-  .posicionamento__nota { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
-  .posicionamento__brecha-borda { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 3 3; }
-  .posicionamento__brecha-nome { font-size: 13px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
-  .posicionamento__brecha-frase { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.005em; }
-  .posicionamento__tese-nome { font-size: 12.5px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
-  .posicionamento__tese-frase { font-size: 15px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .posicionamento__chamada { font-size: 15px; font-weight: 700; fill: #d6d6d1; letter-spacing: -.02em; }
+  .posicionamento__linha { fill: #ffffff; fill-opacity: .06; }
+  .posicionamento__borda { fill: none; stroke: #ffffff; stroke-opacity: .1; }
+  .posicionamento__canal { fill: none; stroke: #8a8a85; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .posicionamento__canal-g { fill: #8a8a85; fill-opacity: .85; }
+  .posicionamento__reflexo { fill: none; stroke: #ffffff; stroke-opacity: .28; stroke-width: 1.2; stroke-linecap: round; }
+  .posicionamento__aro { fill: none; stroke: #1b1b1b; stroke-width: 4; }
+  .posicionamento__aro-fora { fill: none; stroke: #ffffff; stroke-opacity: .42; }
+  .posicionamento__aro-dentro { fill: none; stroke: #ffffff; stroke-opacity: .18; }
+  .posicionamento__virola { fill: #262626; stroke: #ffffff; stroke-opacity: .3; }
+  .posicionamento__cabo { stroke: #ffffff; stroke-opacity: .26; }
+  .posicionamento__etiqueta-fundo { fill: #8f8f8a; }
+  .posicionamento__etiqueta-texto { font-size: 12px; font-weight: 600; fill: #141414; letter-spacing: -.005em; }
+  .posicionamento__cota { fill: none; stroke: #ffffff; stroke-opacity: .3; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .posicionamento__cota--ponta { stroke-dasharray: none; }
+  .posicionamento__conclusao { font-size: 13.5px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.005em; }
+  .posicionamento__tese-nome { font-size: 13px; font-weight: 500; fill: #8a8a85; letter-spacing: -.005em; }
+  .posicionamento__tese-frase { font-size: 15px; font-weight: 400; fill: #ecece8; letter-spacing: -.01em; }
+  .posicionamento__sublinha { stroke-width: 1.2; stroke-dasharray: 1; stroke-dashoffset: 0; }
 
-  /* Movimento, uma vez, na entrada:
-     0,3–1,6 s  as três linhas de concorrentes aparecem em cascata (fade e
-                4 de subida);
-     1,7–2,6    o grifo se desenha em volta das mensagens;
-     2,4–3,0    a nota "Todos falam de preço" aparece;
-     2,9–3,8    a brecha aparece;
-     3,7–4,7    a tese sobe 8 com fade;
-     4,4–4,9    o ponto amarelo acende.
-     Depois, nada se move. */
-  .posicionamento__linha { animation: posicionamento-surge 1s var(--a-entra) calc(.3s + var(--i) * .16s) both; }
-  .posicionamento__grifo { animation: posicionamento-desenha .9s var(--a-vai-vem) 1.7s both; }
-  .posicionamento__nota { animation: posicionamento-aparece .6s var(--a-entra) 2.4s both; }
-  .posicionamento__brecha { animation: posicionamento-aparece .9s var(--a-entra) 2.9s both; }
-  .posicionamento__tese { animation: posicionamento-sobe 1s var(--a-entra) 3.7s both; }
-  .posicionamento__ponto { animation: posicionamento-aparece .5s var(--a-entra) 4.4s both; }
-  @keyframes posicionamento-surge { from { opacity: 0; transform: translateY(4px); } }
-  @keyframes posicionamento-desenha { from { stroke-dashoffset: 1; } }
-  @keyframes posicionamento-aparece { from { opacity: 0; } }
-  @keyframes posicionamento-sobe { from { opacity: 0; transform: translateY(8px); } }
+  /* Movimento, em laço de 13 s (tempos do ciclo):
+     0–0,8 s   repouso na pose final;
+     0,8–1,2   a cena volta um passo: somem as etiquetas, a cota, a
+               conclusão, a tese e a lupa;
+     1,2–1,6   a lupa aparece sobre o anúncio A;
+     1,6–2,0   a etiqueta de A é colada (fade e 4 de subida);
+     2,0–2,9   a lupa desliza para B; 2,9–3,3 a etiqueta de B;
+     3,3–4,2   a lupa desliza para C; 4,2–4,6 a etiqueta de C;
+     4,6–5,1   a cota se desenha do meio para as pontas;
+     4,7–5,1   as pontas e a conclusão aparecem;
+     5,1–5,9   a tese sobe 8 com fade;
+     5,8–6,3   o sublinhado amarelo se desenha.
+     O resto (≈ 58% do ciclo) é repouso. O 0% de cada keyframe é a pose
+     final. A lente e o que ela amplia andam juntos: dentro da lupa, o
+     conteúdo ampliado anda −1,25 vez o deslocamento dela. */
+  .posicionamento__lupa, .posicionamento__contra, .posicionamento__etiqueta, .posicionamento__cota,
+  .posicionamento__conclusao, .posicionamento__tese, .posicionamento__sublinha {
+    animation-duration: 13s; animation-delay: .4s; animation-iteration-count: infinite;
+    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
+  }
+  .posicionamento__lupa { animation-name: posicionamento-lupa; }
+  .posicionamento__contra { animation-name: posicionamento-contra; }
+  .posicionamento__etiqueta--0 { animation-name: posicionamento-etiqueta-0; }
+  .posicionamento__etiqueta--1 { animation-name: posicionamento-etiqueta-1; }
+  .posicionamento__etiqueta--2 { animation-name: posicionamento-etiqueta-2; }
+  .posicionamento__cota--esq, .posicionamento__cota--dir { animation-name: posicionamento-cota; }
+  .posicionamento__cota--ponta, .posicionamento__conclusao { animation-name: posicionamento-conclusao; }
+  .posicionamento__tese { animation-name: posicionamento-tese; }
+  .posicionamento__sublinha { animation-name: posicionamento-sublinha; }
+
+  /* A lupa anda um passo de anúncio (152) por vez, em 0,9 s. */
+  @keyframes posicionamento-lupa {
+    0%, 6.15% { opacity: 1; transform: translateX(0); }
+    9.23% { opacity: 0; transform: translateX(0); }
+    9.24% { opacity: 0; transform: translateX(-304px); }
+    12.31%, 15.38% { opacity: 1; transform: translateX(-304px); }
+    22.31%, 25.38% { opacity: 1; transform: translateX(-152px); }
+    32.31%, 100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes posicionamento-contra {
+    0%, 9.23% { transform: translateX(0); }
+    9.24%, 15.38% { transform: translateX(380px); }
+    22.31%, 25.38% { transform: translateX(190px); }
+    32.31%, 100% { transform: translateX(0); }
+  }
+  @keyframes posicionamento-etiqueta-0 {
+    0%, 6.15% { opacity: 1; transform: translateY(0); }
+    9.23%, 12.31% { opacity: 0; transform: translateY(4px); }
+    15.38%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes posicionamento-etiqueta-1 {
+    0%, 6.15% { opacity: 1; transform: translateY(0); }
+    9.23%, 22.31% { opacity: 0; transform: translateY(4px); }
+    25.38%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes posicionamento-etiqueta-2 {
+    0%, 6.15% { opacity: 1; transform: translateY(0); }
+    9.23%, 32.31% { opacity: 0; transform: translateY(4px); }
+    35.38%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes posicionamento-cota {
+    0%, 6.15% { opacity: 1; stroke-dashoffset: 0; }
+    9.23% { opacity: 0; stroke-dashoffset: 0; }
+    9.24%, 35.38% { opacity: 1; stroke-dashoffset: 1; }
+    39.23%, 100% { opacity: 1; stroke-dashoffset: 0; }
+  }
+  @keyframes posicionamento-conclusao {
+    0%, 6.15% { opacity: 1; }
+    9.23%, 36.15% { opacity: 0; }
+    39.23%, 100% { opacity: 1; }
+  }
+  @keyframes posicionamento-tese {
+    0%, 6.15% { opacity: 1; transform: translateY(0); }
+    9.23%, 39.23% { opacity: 0; transform: translateY(8px); }
+    45.38%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes posicionamento-sublinha {
+    0%, 9.23% { stroke-dashoffset: 0; }
+    9.24%, 44.62% { stroke-dashoffset: 1; }
+    48.46%, 100% { stroke-dashoffset: 0; }
+  }
 </style>
