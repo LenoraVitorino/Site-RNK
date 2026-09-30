@@ -1,160 +1,114 @@
 ---
 /**
- * Aquisição sob controle: o painel "Retorno por canal · Setembro", com a
- * ideia repensada a partir da frase do cartão (29/09: "caprichar mais,
- * repensar na ideia inicial, sempre com elegância"). À esquerda, o
- * investimento de cada canal (Instagram, Busca, Indicação) numa barra
- * fina; à direita, os pacientes que cada um trouxe. Entre as duas, faixas
- * em curva ligam o mesmo canal: a do Instagram nasce grossa e afina (muita
- * verba, poucos pacientes); a da Busca faz o contrário, cruza por cima das
- * outras e chega como a maior, com o "melhor retorno". Sem números: a
- * espessura diz tudo. A Busca é o único caminho claro; o amarelo fica na
- * lupa e no ponto do "melhor retorno". Na entrada, as faixas se revelam da
- * esquerda para a direita e os rótulos da chegada aparecem; depois, um
- * pontilhado miúdo corre devagar pelo eixo da Busca, sempre. Pose estática
- * = pose final.
+ * Aquisição sob controle: três canais (Busca, Redes sociais, Indicação) à
+ * esquerda, de onde saem fluxos em curva, tipo Sankey, que convergem no chip
+ * "Consultas". A espessura de cada faixa mostra o peso do canal, sem número:
+ * a Busca, o canal que mais traz consultas, é a faixa grossa e clara (e a
+ * lupa amarela); as outras recuam. A legenda "Origem das consultas" diz o
+ * que se vê (29/09: a cena estava "um pouco confusa"). Um tracejado miúdo
+ * corre devagar pelo eixo das faixas, mais visível na Busca. Pose estática
+ * = pose final; o movimento só parte dela.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Painel de 472 × 218 (x 24 a 496, y 16 a 234), cabeçalho de 44. As
-   barras (6 de largura) ficam em x 150 e 364, de y 94 a 218, com vão de 5
-   entre os canais; as faixas vão de uma à outra, com as alças no meio
-   (x 260). Os rótulos da esquerda são pílulas de 100 × 28 centradas no
-   trecho de cada canal na barra do investimento; os da direita, texto em
-   x 382. */
-const PX = 24, PY = 16, PW = 472, PH = 218;
-const XL = 156, XR = 364, XM = (XL + XR) / 2;
-type Canal = { nome: string; icone: string; l: [number, number]; r: [number, number]; foco?: boolean };
-const canais: Canal[] = [
-  { nome: 'Instagram', icone: 'instagram', l: [94, 148], r: [198, 218] },
-  { nome: 'Indicação', icone: 'indicacao', l: [196, 218], r: [157, 193] },
-  { nome: 'Busca', icone: 'busca', l: [153, 191], r: [94, 152], foco: true },
+/* Canais: pílula de 144 × 32 (x 60 a 204) com o centro em y; t é a
+   espessura da faixa e yd o centro dela na chegada (faixas empilhadas com
+   vão de 2, de 101 a 149, no meio do chip; a do meio segue quase reta). Cada faixa nasce sob a pílula,
+   curva de x 212 a 380 com as alças no meio (296) e some sob o soquete. */
+const canais = [
+  { rotulo: 'Busca', icone: 'busca', y: 69, t: 26, yd: 114, foco: true },
+  { rotulo: 'Redes sociais', icone: 'redes', y: 133, t: 6, yd: 132 },
+  { rotulo: 'Indicação', icone: 'indicacao', y: 197, t: 12, yd: 143 },
 ];
-const faixa = ({ l: [a, b], r: [c, d] }: Canal) =>
-  `M${XL} ${a}C${XM} ${a} ${XM} ${c} ${XR} ${c}V${d}C${XM} ${d} ${XM} ${b} ${XL} ${b}Z`;
-const meio = ([a, b]: [number, number]) => (a + b) / 2;
-const eixo = (c: Canal) => {
-  const y1 = meio(c.l), y2 = meio(c.r);
-  return `M${XL} ${y1}C${XM} ${y1} ${XM} ${y2} ${XR} ${y2}`;
+const faixa = ({ y, t, yd }: { y: number; t: number; yd: number }) => {
+  const a = y - t / 2, b = y + t / 2, c = yd - t / 2, d = yd + t / 2;
+  return `M188 ${a}H212C296 ${a} 296 ${c} 380 ${c}H404V${d}H380C296 ${d} 296 ${b} 212 ${b}H188Z`;
 };
-const busca = canais[2];
+const eixo = ({ y, yd }: { y: number; yd: number }) => `M188 ${y}H212C296 ${y} 296 ${yd} 380 ${yd}H404`;
+const CX = 424, CY = 125;
+/* Legenda: no alto, alinhada às pílulas. */
+const LY = 32;
 ---
 <g class="aquisicao">
   <defs>
-    <linearGradient id={`${p}-faixa`} gradientUnits="userSpaceOnUse" x1={XL} y1="0" x2={XR} y2="0">
-      <stop stop-color="#ffffff" stop-opacity=".05" /><stop offset="1" stop-color="#ffffff" stop-opacity=".03" />
+    {/* As faixas clareiam um pouco a caminho da chegada. */}
+    <linearGradient id={`${p}-faixa`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".025" /><stop offset="1" stop-color="#ffffff" stop-opacity=".075" />
     </linearGradient>
-    <linearGradient id={`${p}-borda`} gradientUnits="userSpaceOnUse" x1={XL} y1="0" x2={XR} y2="0">
-      <stop stop-color="#ffffff" stop-opacity=".12" /><stop offset="1" stop-color="#ffffff" stop-opacity=".06" />
+    <linearGradient id={`${p}-borda`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity=".18" />
     </linearGradient>
-    {/* A faixa da Busca clareia rumo aos pacientes. */}
-    <linearGradient id={`${p}-faixa-foco`} gradientUnits="userSpaceOnUse" x1={XL} y1="0" x2={XR} y2="0">
-      <stop stop-color="#ffffff" stop-opacity=".07" /><stop offset="1" stop-color="#ffffff" stop-opacity=".15" />
+    {/* A faixa da Busca é um tom mais clara que as outras. */}
+    <linearGradient id={`${p}-faixa-foco`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".05" /><stop offset="1" stop-color="#ffffff" stop-opacity=".13" />
     </linearGradient>
-    <linearGradient id={`${p}-borda-foco`} gradientUnits="userSpaceOnUse" x1={XL} y1="0" x2={XR} y2="0">
-      <stop stop-color="#ffffff" stop-opacity=".14" /><stop offset="1" stop-color="#ffffff" stop-opacity=".3" />
+    <linearGradient id={`${p}-borda-foco`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".12" /><stop offset="1" stop-color="#ffffff" stop-opacity=".28" />
     </linearGradient>
-    {/* Revelação da esquerda para a direita, na entrada. */}
-    <mask id={`${p}-revela`} maskUnits="userSpaceOnUse" x={XL - 2} y="80" width={XR - XL + 4} height="150">
-      <rect x={XL - 2} y="80" width={XR - XL + 4} height="150" fill="#ffffff" class="aquisicao__revela" />
-    </mask>
   </defs>
 
-  {/* Painel. */}
-  <rect x={PX} y={PY} width={PW} height={PH} rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-  <rect x={PX + 16} y={PY + 0.5} width="330" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x={PX + 20} y={PY + 27} class="aquisicao__titulo">Retorno por canal</text>
-  <text x={PX + PW - 20} y={PY + 27} text-anchor="end" class="aquisicao__meta">Setembro</text>
-  <rect x={PX} y={PY + 44} width={PW} height="1" class="aquisicao__divisa" />
+  <text x="60" y={LY} class="aquisicao__legenda">Origem das consultas</text>
 
-  {/* Cabeçalho das duas barras. */}
-  <text x="150" y="82" class="aquisicao__meta">Investimento</text>
-  <text x="370" y="82" text-anchor="end" class="aquisicao__meta">Pacientes</text>
+  {/* Faixas e, por cima, o fluxo miúdo no eixo de cada uma. */}
+  {canais.map((c) => (
+    <path d={faixa(c)} fill={`url(#${p}-${c.foco ? 'faixa-foco' : 'faixa'})`} stroke={`url(#${p}-${c.foco ? 'borda-foco' : 'borda'})`} />
+  ))}
+  {canais.map((c) => <path class:list={['aquisicao__fluxo', { 'aquisicao__fluxo--foco': c.foco }]} d={eixo(c)} />)}
 
-  {/* Faixas: a da Busca por último, por cima das outras. */}
-  <g mask={`url(#${p}-revela)`}>
-    {canais.map((c) => (
-      <path d={faixa(c)} fill={`url(#${p}-${c.foco ? 'faixa-foco' : 'faixa'})`} stroke={`url(#${p}-${c.foco ? 'borda-foco' : 'borda'})`} />
-    ))}
-    <path class="aquisicao__fluxo" d={eixo(busca)} />
-  </g>
-
-  {/* As duas barras, um trecho por canal. */}
-  {canais.map(({ l, r, foco }) => (
-    <g class:list={['aquisicao__barra', { 'aquisicao__barra--foco': foco }]}>
-      <rect x="150" y={l[0]} width="6" height={l[1] - l[0]} rx="3" />
-      <rect x={XR} y={r[0]} width="6" height={r[1] - r[0]} rx="3" class="aquisicao__chegada" />
+  {/* Canais. */}
+  {canais.map(({ rotulo, icone, y }) => (
+    <g>
+      <rect x="60" y={y - 16} width="144" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+      <g class:list={['a-icone', 'aquisicao__icone', { 'aquisicao__icone--foco': icone === 'busca' }]} transform={`translate(76 ${y - 8}) scale(.6667)`}>
+        {icone === 'busca' && <>
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </>}
+        {icone === 'redes' && <>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" />
+        </>}
+        {icone === 'indicacao' && <>
+          <path d="M18 21a8 8 0 0 0-16 0" />
+          <circle cx="10" cy="8" r="5" />
+          <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+        </>}
+      </g>
+      <text x="100" y={y + 5} class="a-rotulo aquisicao__rotulo">{rotulo}</text>
     </g>
   ))}
 
-  {/* Canais, à esquerda. */}
-  {canais.map(({ nome, icone, l, foco }) => {
-    const y = meio(l);
-    return (
-      <g>
-        <rect x="36" y={y - 14} width="100" height="28" rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-        <g class:list={['a-icone', 'aquisicao__icone', { 'aquisicao__icone--foco': foco }]} transform={`translate(48 ${y - 7}) scale(.5833)`}>
-          {icone === 'busca' && <>
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </>}
-          {icone === 'instagram' && <>
-            <rect x="2" y="2" width="20" height="20" rx="5.5" />
-            <circle cx="12" cy="12" r="4.2" />
-            <path d="M17.5 6.5h.01" />
-          </>}
-          {icone === 'indicacao' && <>
-            <path d="M18 21a8 8 0 0 0-16 0" />
-            <circle cx="10" cy="8" r="5" />
-            <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
-          </>}
-        </g>
-        <text x="68" y={y + 4.5} class:list={['aquisicao__canal', { 'aquisicao__canal--foco': foco }]}>{nome}</text>
-      </g>
-    );
-  })}
-
-  {/* Chegada, à direita: o mesmo canal, e a Busca com o melhor retorno. */}
-  <g class="aquisicao__rotulos">
-    {canais.map(({ nome, r, foco }) => foco
-      ? <g>
-          <text x="382" y={meio(r) - 3} class="aquisicao__canal aquisicao__canal--foco">{nome}</text>
-          <circle cx="385" cy={meio(r) + 10} r="2.5" class="a-destaque aquisicao__ponto" />
-          <text x="393" y={meio(r) + 14} class="aquisicao__retorno">melhor retorno</text>
-        </g>
-      : <text x="382" y={meio(r) + 4.5} class="aquisicao__canal aquisicao__canal--chegada">{nome}</text>)}
+  {/* Chegada: chip "Consulta" (soquete 72, chip 56), com o dia marcado. */}
+  <rect x={CX - 36} y={CY - 36} width="72" height="72" rx="20" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x={CX - 28} y={CY - 28} width="56" height="56" rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={CX - 18} y={CY - 27.5} width="36" height="1" fill={`url(#${p}-fio-h)`} />
+  <g class="a-icone aquisicao__icone--chegada" transform={`translate(${CX - 10} ${CY - 10}) scale(.8333)`}>
+    <path d="M8 2v4M16 2v4" />
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M3 10h18" />
   </g>
+  <circle cx={CX + 2.5} cy={CY + 3.5} r="1.9" class="a-destaque" />
+  <text x={CX} y={CY + 60} text-anchor="middle" class="a-rotulo aquisicao__chegada">Consultas</text>
 </g>
 
 <style>
-  .aquisicao__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .aquisicao__meta { font-size: 11.5px; fill: #8a8a85; letter-spacing: -.005em; }
-  .aquisicao__divisa { fill: #ffffff; fill-opacity: .06; }
-  .aquisicao__canal { font-size: 12.5px; fill: #b9b9b4; letter-spacing: -.005em; }
-  .aquisicao__canal--foco { font-weight: 500; fill: #ecece8; }
-  .aquisicao__canal--chegada { fill: #8a8a85; }
-  .aquisicao__retorno { font-size: 11px; fill: #b9b9b4; letter-spacing: -.005em; }
-  .aquisicao .aquisicao__icone { stroke: #8a8a85; stroke-width: 2.2; }
+  .aquisicao .aquisicao__rotulo { font-size: 14px; }
+  .aquisicao .aquisicao__icone { stroke-width: 2.1; stroke: #9d9d98; }
+  /* A lupa da Busca, o canal da faixa mais grossa, é o acento amarelo. */
   .aquisicao .aquisicao__icone--foco { stroke: var(--destaque, #FFD103); }
-  .aquisicao__barra rect { fill: #4a4a47; }
-  .aquisicao__barra--foco rect { fill: #d6d6d1; }
-  .aquisicao__revela { transform-box: fill-box; transform-origin: left center; }
+  .aquisicao .aquisicao__icone--chegada { stroke-width: 1.68; stroke: #ecece8; }
+  .aquisicao .aquisicao__chegada { font-size: 14px; fill: #ecece8; }
+  .aquisicao__legenda { font-size: 12.5px; fill: #8a8a85; letter-spacing: -.005em; }
 
-  /* Movimento: na entrada, as faixas se revelam da esquerda para a direita
-     (0,4–2,2 s), a chegada acende (1,8–2,6) e o ponto do melhor retorno
-     aparece (2,6–3,2). Depois, só um pontilhado miúdo corre devagar pelo
-     eixo da Busca (6 unidades por segundo), sempre; o deslocamento é
-     múltiplo do passo (12), então o laço não tem emenda. */
-  .aquisicao__revela { animation: aquisicao-revela 1.8s var(--a-vai-vem) .4s both; }
-  .aquisicao__chegada, .aquisicao__rotulos { animation: aquisicao-aparece .8s var(--a-entra) 1.8s both; }
-  .aquisicao__ponto { animation: aquisicao-aparece .6s var(--a-entra) 2.6s both; }
+  /* Movimento: um tracejado miúdo corre pelo eixo de cada faixa, sempre, bem
+     devagar (6 unidades por segundo) e apagado, como fluxo. O deslocamento
+     é múltiplo do passo do tracejado (12), então o laço não tem emenda. */
   .aquisicao__fluxo {
-    fill: none; stroke: #ffffff; stroke-opacity: .34; stroke-width: 1.3; stroke-linecap: round;
+    fill: none; stroke: #ffffff; stroke-opacity: .12; stroke-width: 1.3; stroke-linecap: round;
     stroke-dasharray: 0 12;
     animation: aquisicao-flui 8s linear infinite;
   }
-  @keyframes aquisicao-revela { from { transform: scaleX(0); } }
-  @keyframes aquisicao-aparece { from { opacity: 0; } }
+  .aquisicao__fluxo--foco { stroke-opacity: .34; }
   @keyframes aquisicao-flui { to { stroke-dashoffset: -48; } }
 </style>
