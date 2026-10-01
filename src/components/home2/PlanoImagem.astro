@@ -1,0 +1,10 @@
+---
+interface Props { plano: string }
+const { plano } = Astro.props;
+const imagens: Record<string, string> = {
+  start: 'seringa', run: 'maos', scale: 'estetoscopio', core: 'maos', full: 'estetoscopio',
+};
+---
+<div class:list={['plano-editorial', `plano-editorial--${plano}`]} aria-hidden="true">
+  <img src={`/imagens/planos-editoriais/${imagens[plano] ?? 'seringa'}.webp`} alt="" width="1254" height="1254" loading="lazy" decoding="async" />
+</div>

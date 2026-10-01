@@ -17,6 +17,8 @@ import { join } from 'node:path';
 import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import FotoSlot from '../ui/FotoSlot.astro';
+import PlanoImagem from './PlanoImagem.astro';
+import PlanosDirecao from './PlanosDirecao.astro';
 
 const ordem = ['START', 'RUN', 'SCALE', 'CORE', 'FULL'];
 const planos = ordem.map((n) => protocolos.find((p) => p.label === `REVENA ${n}`)!);
@@ -31,6 +33,7 @@ const icone = (label: string) => {
 const fotos = ['Foto · escritório', 'Foto · atendimento', 'Foto · reunião de dados', 'Foto · time', 'Foto · operação'];
 import Selo from '../ui/Selo.astro';
 ---
+<PlanosDirecao />
 <section class="planos" id="planos" data-planos aria-label="Os planos do Protocolo Revena">
   <div class="planos__fixo">
     <div class="planos__trilho" data-planos-trilho>
@@ -45,7 +48,7 @@ import Selo from '../ui/Selo.astro';
 
       {planos.map((p, i) => (
         <article class="plano">
-          <div class="plano__foto"><FotoSlot rotulo={fotos[i]} prop="670 / 460" /></div>
+          <div class="plano__foto"><PlanoImagem plano={p.label.replace('REVENA ', '').toLowerCase()} /><div class="plano__foto-anterior"><FotoSlot rotulo={fotos[i]} prop="670 / 460" /></div></div>
           <div class="plano__texto">
             <div class="plano__topo">
               {icone(p.label) && <img class="plano__icone" src={icone(p.label)} alt="" width="40" height="40" loading="lazy" />}
