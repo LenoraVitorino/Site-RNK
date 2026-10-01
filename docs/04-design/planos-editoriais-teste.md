@@ -18,7 +18,7 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/maos.webp`.
 
-Run: foto espelhada horizontalmente via CSS para ocupar a diagonal oposta ao título, com a luva preta no alto à direita e a mão sem luva embaixo à esquerda. Ampliada 8% e inclinada 10° à direita. Gradiente diagonal com transição progressiva nas duas extremidades dos punhos, preservando o centro opaco e a base que impede o símbolo de atravessar a foto. Símbolo e textos preservados nas duas versões.
+Run: foto espelhada horizontalmente via CSS para ocupar a diagonal oposta ao título, com a luva preta no alto à direita e a mão sem luva embaixo à esquerda. Ampliada 8% e inclinada 10° à direita. Contêiner sem recorte para não cortar os punhos após a rotação. Gradiente diagonal antecipado, com extremidades totalmente apagadas até 18% e a partir de 82%, preservando o centro opaco e a base que impede o símbolo de atravessar a foto. Símbolo e textos preservados nas duas versões.
 
 Prompt final:
 
