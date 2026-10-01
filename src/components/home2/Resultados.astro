@@ -32,9 +32,8 @@ const tons = [
     </header>
     <div class="resultados-extrato__palco" data-resultados-fotos>
       <ol class="resultados-extrato" aria-label="Resultados por especialidade">
-        {resultados.map((r, i) => (
+        {resultados.map((r) => (
           <li class="resultado-linha entra">
-            <span class="resultado-linha__indice" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <h3 class="resultado-linha__area">{r.especialidade}</h3>
             <p class="resultado-linha__texto">{r.texto}</p>
             <p class="resultado-linha__numero num">{r.numero}</p>
@@ -58,7 +57,7 @@ const tons = [
 <script>
   /* A foto fica dentro da linha em foco: altura da linha menos 4 (quase
      encosta nos fios, como na referência), largura 1,78 vezes a altura, centrada na altura da linha e, na horizontal, no
-     cursor, sem sair da coluna do meio (terceira trilha da grade). A cada
+     cursor, sem sair da coluna do meio (segunda trilha da grade). A cada
      quadro anda 14% do que falta; ao entrar numa linha, a camada daquela
      área sobe por cima da anterior. Só no desktop com mouse; com movimento
      reduzido, vai direto ao lugar e troca sem o recorte. */
@@ -83,8 +82,8 @@ const tons = [
     const faixa = (linha: HTMLElement) => {
       const trilhas = getComputedStyle(linha).gridTemplateColumns.split(' ').map(parseFloat);
       const vao = parseFloat(getComputedStyle(linha).columnGap) || 0;
-      const esq = trilhas[0] + trilhas[1] + vao * 2;
-      return [esq, esq + trilhas[2]];
+      const esq = trilhas[0] + vao;
+      return [esq, esq + trilhas[1]];
     };
     const mira = () => {
       if (atual < 0) return;
