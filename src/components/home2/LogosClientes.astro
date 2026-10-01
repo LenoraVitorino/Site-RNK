@@ -2,7 +2,7 @@
 /** Referências temporárias de layout, sem atribuir a Renke a clientes.
     Trocar os itens pelos arquivos originais das marcas quando disponíveis;
     o cinza e o hover são tratados por CSS, sem alterar os arquivos. */
-const logos = Array.from({ length: 6 }, () => ({
+const logos = Array.from({ length: 10 }, () => ({
   nome: 'Renke Studio',
   arquivo: '/marca/renke-assinatura.png',
   largura: 299,
@@ -27,24 +27,28 @@ const logos = Array.from({ length: 6 }, () => ({
 <style>
   .logos-clientes {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    align-items: center;
-    gap: clamp(28px, 4vw, 64px);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     list-style: none;
     padding: 0;
     margin: 0;
+    border-top: 1px solid rgb(255 255 255 / .07);
+    border-left: 1px solid rgb(255 255 255 / .07);
+    background: rgb(8 8 8 / .88);
   }
   .logos-clientes__item {
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 0;
-    min-height: 64px;
+    aspect-ratio: 1.2;
+    padding: 24px;
+    border-right: 1px solid rgb(255 255 255 / .07);
+    border-bottom: 1px solid rgb(255 255 255 / .07);
   }
   .logos-clientes__item img {
     display: block;
     width: 100%;
-    max-width: 160px;
+    max-width: 128px;
     height: auto;
     max-height: 48px;
     object-fit: contain;
@@ -55,12 +59,10 @@ const logos = Array.from({ length: 6 }, () => ({
   @media (hover: hover) and (pointer: fine) {
     .logos-clientes__item:hover img { filter: grayscale(0); opacity: 1; }
   }
-  @media (max-width: 899.98px) {
-    .logos-clientes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 40px; }
-  }
-  @media (max-width: 479.98px) {
-    .logos-clientes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; }
-    .logos-clientes__item img { max-width: 136px; }
+  @media (max-width: 699.98px) {
+    .logos-clientes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .logos-clientes__item { aspect-ratio: 1.6; padding: 22px; }
+    .logos-clientes__item img { max-width: 116px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .logos-clientes__item img { transition: none; }
