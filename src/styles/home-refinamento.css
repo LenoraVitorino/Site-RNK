@@ -94,10 +94,9 @@ section[id] { scroll-margin-top: 110px; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
 #fale .chamada__miolo p { color: #aeaeac; }
 #fale .botao { background: var(--papel); color: #171715; }
-/* Rede RevOps logo abaixo do botão, na largura do container, colada nele
-   (o palco já tem respiro próprio acima dos módulos). */
-#fale .chamada__rede { width: 100%; margin-top: 0; }
-#fale .chamada { row-gap: clamp(8px, 1.2vw, 16px); }
+/* Marcas abaixo do convite: espaço de leitura, sem caixas ou conexões. */
+#fale .chamada__logos { width: 100%; max-width: 1120px; }
+#fale .chamada { row-gap: clamp(56px, 6vw, 88px); }
 /* Título e apoio numa linha cada onde cabem, para não sobrar vazio nas
    laterais (Lenora, 30/09); no celular voltam a quebrar. O text-wrap vai
    junto do nowrap porque os dois dividem o text-wrap-mode. */
