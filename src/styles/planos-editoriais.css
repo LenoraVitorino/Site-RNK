@@ -7,7 +7,7 @@
 .plano-editorial--scale { overflow: visible; }
 .plano-editorial--scale .plano-editorial__foto { transform: scale(1.2); }
 /* Prótese compacta acima do título, com o mesmo acabamento suave das demais fotos. */
-.plano-editorial--full .plano-editorial__foto { transform: translateY(-18%) scale(.82); }
+.plano-editorial--full .plano-editorial__foto { transform: scale(.82); }
 .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
 html[data-planos-tema="claro"] .plano-editorial { display: none; }
 /* Cor limitada aos planos: a introdução mantém o papel e o grafite. */
