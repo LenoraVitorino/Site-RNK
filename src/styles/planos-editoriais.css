@@ -1,9 +1,22 @@
-/* Diagramação original clara. A fotografia é uma camada da composição:
+/* Abertura clara, planos escuros, diagramação original centralizada.
+   A fotografia é uma camada da composição:
    símbolo amarelo atrás, fotografia no meio, nome do plano à frente. */
 .plano-editorial { position: relative; overflow: hidden; pointer-events: none; }
 .plano-editorial .plano-editorial__foto { position: relative; z-index: 2; display: block; width: 100%; height: 100%; object-fit: contain; opacity: .46; mask-image: radial-gradient(ellipse at center, #000 40%, transparent 74%); }
 .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
 html[data-planos-tema="claro"] .plano-editorial { display: none; }
+/* Cor limitada aos planos: a introdução mantém o papel e o grafite. */
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco {
+  --pp-fundo: #101011; --pp-fundo-2: #151516; --pp-texto: #f2f2ee;
+  --pp-fio: rgb(242 242 238 / .12); color: var(--pp-texto);
+}
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco__nome { color: var(--pp-texto); }
+html:not([data-planos-tema="claro"]) .palcoplanos .palcoplanos__ancora { color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .palcoplanos .mapa__face { stroke: rgb(242 242 238 / .3); }
+html:not([data-planos-tema="claro"]) .palcoplanos .mapa__plano--ativo .mapa__face { fill: #deded9; stroke: #deded9; }
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco .botao { color: var(--pp-texto); border-color: rgb(242 242 238 / .28); }
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco .botao:hover { color: #161616; background: #f2f2ee; border-color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .palcoplanos .palcoplanos__fixo :focus-visible { outline-color: #f2f2ee; }
 /* As medidas e posições do nome e do SVG continuam em home2.css. */
 html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco__imagem { z-index: 8; background: transparent; pointer-events: none; }
 html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco--tom2 { background: var(--pp-fundo-2); }
@@ -27,6 +40,8 @@ html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-edi
 /* A copy mantém seu trilho e seus textos, com a mesma paleta e composição. */
 html:not([data-planos-tema="claro"]) .planos { background: #e7e7e5; color: #252523; }
 html:not([data-planos-tema="claro"]) .planos :is(.planos__dica, .plano__fala) { color: #5a5a58; }
+html:not([data-planos-tema="claro"]) .planos .plano { background: #101011; color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .planos .plano .plano__fala { color: #b7b7b3; }
 html:not([data-planos-tema="claro"]) .planos .plano__foto-anterior { display: none; }
 html:not([data-planos-tema="claro"]) .planos .plano__foto { display: block; overflow: hidden; background: transparent; }
 html:not([data-planos-tema="claro"]) .planos .plano-editorial { height: clamp(220px, 24vw, 340px); }
