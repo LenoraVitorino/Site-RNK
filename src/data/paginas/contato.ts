@@ -1,6 +1,13 @@
 import type { Pagina } from './tipos';
+import { copyLiteral } from '../versao';
 
-/** Copy literal de docs/03-copy/contato.md */
+/**
+ * Copy literal de docs/03-copy/contato.md. A versão estudio (padrão) tem o
+ * título e a frase do formulário revistos em 29/09/2026, leva o e-mail para o
+ * aviso sob o botão e tira o
+ * bloco "Informações · Grupo RNK", que repetia endereço, e-mail e redes do
+ * rodapé logo abaixo (29/09/2026); a VERSAO=copy mantém.
+ */
 export const contato: Pagina = {
   rota: '/contato',
   titulo: 'Contato | Renke — Revenue Operations, Academy e Soluções Digitais',
@@ -9,14 +16,18 @@ export const contato: Pagina = {
   blocos: [
     {
       tipo: 'hero',
-      titulo: ['Vamos conversar?'],
+      titulo: [copyLiteral ? 'Vamos conversar?' : 'Vamos falar sobre sua operação.'],
     },
     {
       tipo: 'formulario',
       // A sub do herói vive aqui, ao lado do formulário que ela descreve —
       // é a mesma frase da copy, só no lugar onde ela é instrução e não enfeite.
-      sub: 'Preencha o formulário e a gente responde em até 24h.',
-      email: 'contato@renkestudio.com.br',
+      sub: copyLiteral
+        ? 'Preencha o formulário e a gente responde em até 24h.'
+        : 'Conte sobre o momento da sua clínica e os desafios da sua operação comercial. Nossa equipe entra em contato para entender o cenário e os próximos passos.',   // revisão de 29/09/2026
+      // Na estudio o e-mail sai da coluna do título e vai para o aviso sob o
+      // botão ("Ou escreva para…"), com o endereço do rodapé (nav.ts).
+      email: copyLiteral ? 'contato@renkestudio.com.br' : undefined,
       botao: 'Enviar →',
       campos: [
         { id: 'nome', rotulo: 'Nome', tipo: 'text', autocomplete: 'name', obrigatorio: true },
@@ -38,12 +49,12 @@ export const contato: Pagina = {
     {
       tipo: 'numeros',
       fundo: 'alt',
-      itens: ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação'],
-    },
-    {
-      tipo: 'pendencia',
-      o_que:
-        '"6 anos de operação" conflita com "4 anos" usado no restante do site (D1). E os logos de clientes e parceiros desta seção ainda não foram autorizados.',
+      compacto: true,
+      // Na estudio, o R$42M da home (home.ts) no lugar dos "6 anos de operação",
+      // que conflitavam com os "quatro anos" do resto do site.
+      itens: copyLiteral
+        ? ['+140 clínicas atendidas', '+650 alunos no Academy', '6 anos de operação']
+        : ['+140 clínicas atendidas', '+650 alunos no Academy', 'R$42M em faturamento gerado'],
     },
     {
       tipo: 'faq',
@@ -67,23 +78,18 @@ export const contato: Pagina = {
         },
       ],
     },
-    {
-      tipo: 'pendencia',
-      o_que:
-        'O schema declara FAQ com 5 perguntas, mas só 4 foram transcritas. Falta uma. E o telefone/WhatsApp não foi informado, apesar de o rodapé e o sitemap preverem.',
-    },
-    {
-      tipo: 'texto',
+    ...(copyLiteral ? [{
+      tipo: 'texto' as const,
       eyebrow: 'Informações',
       h2: 'Grupo RNK',
-      fundo: 'alt',
+      fundo: 'alt' as const,
       paragrafos: [
         '<strong>Endereço:</strong> R. Benjamin Constant, 2364 · Sala Térrea, Escola Agrícola · Blumenau/SC · CEP 89035-100',
         '<strong>E-mail:</strong> <a href="mailto:contato@renkestudio.com.br">contato@renkestudio.com.br</a>',
         '<strong>CNPJ:</strong> 37.079.656/0001-51',
         '<strong>Horário de atendimento:</strong> segunda a sexta, 08h às 12h | 13h30 às 17h. Sábados e domingos sem atendimento.',
-        '<strong>Redes:</strong> <a href="https://instagram.com/renkestudio">Instagram</a> · LinkedIn · YouTube',
+        '<strong>Redes:</strong> <a href="https://www.instagram.com/renke.studio/">Instagram</a> · <a href="https://br.linkedin.com/company/renke-criative-studio">LinkedIn</a> · <a href="https://www.youtube.com/@renkecreativestudio7680">YouTube</a>',
       ],
-    },
+    }] : []),
   ],
 };

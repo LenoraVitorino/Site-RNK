@@ -149,18 +149,27 @@ bloco.campos.forEach((c, i) => {
      (.int-grade-2), no lugar das colunas centradas da home. O texto começa
      na margem do container e o cartão, na coluna direita das outras dobras. */
   @media (min-width: 900px) {
+    /* O cartão fica com a largura dele (até 460px) e o texto leva o resto:
+       com .85fr/1fr o título de 72px quebrava em três linhas a 1440. */
     #formulario.int-formulario--abertura .form-block {
-      grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
       justify-content: stretch;
-      gap: 9%;
+      gap: clamp(48px, 7vw, 120px);
     }
+    /* As colunas 1–5 e 8–12 da grade de 12 da home (home-refinamento.css)
+       vazavam para cá e criavam colunas implícitas: o cartão caía para baixo
+       do texto (29/09/2026). Aqui cada um fica na sua coluna, lado a lado,
+       e o cartão encosta na margem direita. */
+    #formulario.int-formulario--abertura .form-block__text { grid-column: 1; }
     #formulario.int-formulario--abertura .form-card {
+      grid-column: 2;
+      justify-self: end;
       width: 100%;
       max-width: 460px;
     }
   }
   @media (min-width: 900px) and (max-width: 1099.98px) {
-    #formulario.int-formulario--abertura .form-block { gap: 5%; }
+    #formulario.int-formulario--abertura .form-block { gap: 40px; }
   }
 
   /* No tablet a coluna de 560px da home ficava centrada, 39px para dentro da

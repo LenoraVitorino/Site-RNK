@@ -50,6 +50,8 @@ export type Bloco =
       rotaCta?: string;
       /** Centraliza o herói nessa página (o padrão é alinhado à esquerda). */
       centro?: boolean;
+      /** Esconde o rótulo da navegação acima do H1 (Academy, 28/09). */
+      semRotulo?: boolean;
     }
   | {
       tipo: 'lista';
@@ -83,6 +85,13 @@ export type Bloco =
       largo?: boolean;
       fundo?: 'alt' | 'escuro';
     }
+  /** Painéis grandes 2×2: ícone e índice no topo, título e frase na base (Academy, 28/09). */
+  | {
+      tipo: 'paineis';
+      h2: string;
+      /** `titulo` são as duas linhas do título, na quebra definida: todos os painéis com a mesma diagramação. */
+      itens: { icone: 'Target' | 'Handshake' | 'TrendingUp' | 'Layers' | 'Workflow' | 'BadgeCheck' | 'Users'; titulo: [string, string]; texto: string }[];
+    }
   | {
       tipo: 'etapas';
       eyebrow?: string;
@@ -106,6 +115,22 @@ export type Bloco =
       paragrafos: string[];
       fundo?: 'alt' | 'escuro';
       centro?: boolean;
+      /** Mais respiro em cima e embaixo, para dobras de texto curto (Performa, 28/09). */
+      respiro?: boolean;
+      /** Tópicos curtos com ícone (nome Lucide de Icone.astro), numa linha centralizada abaixo das duas colunas. */
+      topicos?: { icone: 'Compass' | 'Cpu' | 'Workflow'; texto: string }[];
+      /**
+       * Lista de crenças (Faça Parte, 29/09/2026): o título e o 1º parágrafo
+       * (como subtítulo) à esquerda; à direita, um item por linha, com ícone,
+       * nome e uma frase curta.
+       */
+      lista?: { icone: 'Compass' | 'Sparkles' | 'TrendingUp'; titulo: string; texto: string }[];
+      /** Com `selo`: a palavra do h2 que fica em destaque (tom pleno; o resto do título em tom mais baixo). */
+      realce?: string;
+      /** Com `selo`: botões sob o texto; o 1º é o principal. */
+      acoes?: { rotulo: string; rota: string }[];
+      /** Com `selo`: indicadores curtos com ícone, no pé do palco. */
+      indicadores?: { icone: 'Compass' | 'TrendingUp' | 'Users'; texto: string }[];
       /** Selo de certificação sob o título (layout, não copy). Arquivo em src/assets/selos/. */
       selo?: 'gptw';
     }
@@ -117,6 +142,8 @@ export type Bloco =
       nota?: string;
       /** Grade numerada (01, 02…) em vez da fileira de chips. */
       grade?: boolean;
+      /** Régua compacta: cartões baixos, valor e legenda lado a lado (só valores curtos, como no Contato). */
+      compacto?: boolean;
       fundo?: 'alt' | 'escuro';
     }
   | { tipo: 'faq'; h2: string; perguntas: Pergunta[]; fundo?: 'alt' | 'escuro' }

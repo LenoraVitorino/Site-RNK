@@ -133,19 +133,26 @@ export const menu: NavItem[] = [
 export const acaoHeader = { rotulo: 'Contato', rota: '/contato' };
 
 export const rodape = {
+  /** A coluna de soluções do rodapé. A home fica no logo (29/09/2026). */
   links: [
-    { rotulo: 'Home', rota: '/' },
-    { rotulo: 'Para Clínicas', rota: '/studio' },
+    // Sem página /studio: aponta para o Protocolo Revena na home (29/09/2026).
+    { rotulo: 'Para Clínicas', rota: '/#protocolo-revena' },
     { rotulo: 'Para Agências', rota: '/academy' },
     { rotulo: 'Tecnologia', rota: '/tools' },
     { rotulo: 'Conteúdos', rota: '/blog' },
+  ],
+  /** A coluna "A Renke" do rodapé (29/09/2026), com o nome do grupo do menu. */
+  renke: [
     { rotulo: 'Sobre', rota: '/sobre' },
     { rotulo: 'Faça Parte', rota: '/faca-parte' },
+    { rotulo: 'Contato', rota: '/contato' },
   ],
+  /** Endereços passados pela Lenora em 29/09/2026, sem os parâmetros de rastreio. Rota '#': o ícone não aparece. */
   redes: [
-    { rotulo: 'Instagram', rota: 'https://instagram.com/renkestudio' },
-    { rotulo: 'LinkedIn', rota: '#' },
-    { rotulo: 'YouTube', rota: '#' },
+    { rotulo: 'Instagram', rota: 'https://www.instagram.com/renke.studio/', icone: 'instagram' },
+    { rotulo: 'LinkedIn', rota: 'https://br.linkedin.com/company/renke-criative-studio', icone: 'linkedin' },
+    { rotulo: 'Facebook', rota: 'https://www.facebook.com/renke.studio', icone: 'facebook' },
+    { rotulo: 'YouTube', rota: 'https://www.youtube.com/@renkecreativestudio7680', icone: 'youtube' },
   ],
   endereco: [
     'R. Benjamin Constant, 2364',
@@ -153,6 +160,7 @@ export const rodape = {
     'Blumenau/SC · CEP 89035-100',
   ],
   email: 'contato@renkestudio.com.br',
+  cnpj: '37.079.656/0001-51',   // contato.md (bloco Informações)
   /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
   whatsapp: '',
   copyright: '© 2026 Grupo RNK. Todos os direitos reservados.',

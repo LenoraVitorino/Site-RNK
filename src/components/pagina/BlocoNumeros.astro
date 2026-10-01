@@ -6,6 +6,9 @@
  * - Régua (padrão: Treinamento CRM, Cultura Pro, Contato): a régua de
  *   números do método da home, valor light grande e legenda curta embaixo;
  *   no celular, linhas 'valor | legenda', como o .metodo__numero.
+ * - Régua compacta (`compacto: true`, Contato, 29/09/2026): os mesmos
+ *   cartões, pequenos e quase quadrados (valor em cima, legenda embaixo),
+ *   alinhados à esquerda. No celular viram linhas baixas.
  * - Grade (`grade: true`, Revena Full): cartões do Features com a estrutura
  *   da ficha de Resultados, índice no topo e a palavra no pé.
  *
@@ -34,7 +37,7 @@ const notaCitacao = !!bloco.nota && /^["“”«]/.test(bloco.nota.trim());
 const iNota = Math.min(n, 5);
 ---
 <section
-  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua')}
+  class:list={classesSecao(secao, 'int-numeros', bloco.grade ? 'int-numeros--grade' : 'int-numeros--regua', !bloco.grade && bloco.compacto && 'int-numeros--compacto')}
   id={secao.id}
   data-cena={secao.cena}
   data-tom={secao.tom}
@@ -87,15 +90,54 @@ const iNota = Math.min(n, 5);
   }
   /* Cada item ocupa duas linhas da grade (valor, legenda) em subgrid: quando
      um valor quebra em duas linhas, as legendas da fileira seguem juntas. */
-  .int-regua__item { min-width: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 12px; }
+  /* Cartões em degradê (28/09, referência de card de preço da Lenora): luz
+     cinza vinda do canto de cima que escurece até quase preto embaixo, borda
+     clara fina e brilho na aresta de cima. Os valores ficam numa linha só,
+     na mesma altura. */
+  .int-regua { gap: 8px; }
+  .int-regua__item {
+    position: relative; overflow: hidden;
+    min-width: 0; display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 12px;
+    padding: clamp(24px, 2.4vw, 36px); border-radius: 18px;
+    background:
+      radial-gradient(120% 95% at 22% 0%, rgb(255 255 255 / .2) 0%, rgb(255 255 255 / .06) 38%, transparent 70%),
+      linear-gradient(180deg, rgb(42 42 41 / .6) 0%, rgb(20 20 19 / .7) 55%, rgb(11 11 11 / .8) 100%);
+    border: 1px solid rgb(255 255 255 / .14);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), 0 24px 48px -28px rgb(0 0 0 / .4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.15); backdrop-filter: blur(16px) saturate(1.15);
+  }
+  .int-regua__item::before {
+    content: ''; position: absolute; inset: 0 0 auto; height: 1px; pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / .4), transparent);
+  }
   .int-regua__valor {
     display: block; font-family: var(--font-titulo); font-weight: 300;
-    font-size: clamp(28px, 2.8vw, 42px); line-height: 1.05; letter-spacing: -.045em;
-    font-variant-numeric: tabular-nums; color: var(--int-tinta); text-wrap: balance;
-    overflow-wrap: break-word;
+    font-size: clamp(24px, 1.9vw, 34px); line-height: 1.05; letter-spacing: -.045em;
+    font-variant-numeric: tabular-nums; color: #f2f2ee; white-space: nowrap;
   }
-  .int-regua__legenda { display: block; font-size: 14px; line-height: 1.5; color: var(--int-mudo); max-width: 24ch; }
+  .int-regua__legenda { display: block; font-size: 15px; line-height: 1.5; color: rgb(242 242 238 / .72); max-width: 26ch; }
+  /* Com o valor numa linha só, quatro colunas só a partir de 1200px: abaixo
+     disso 'Sem equipe nova' passava da coluna. */
+  @media (max-width: 1199.98px) {
+    .int-regua { grid-template-columns: repeat(var(--n-tab, 2), minmax(0, 1fr)); }
+  }
   .int-regua__nota { margin-top: clamp(40px, 5vw, 72px); }
+
+  /* Régua compacta (Contato): cartões de até 220px, quase quadrados, em vez
+     de faixas que atravessavam a página. A fileira fica no centro da página
+     e, em cada cartão, valor e legenda juntos no meio. */
+  .int-numeros--compacto .int-regua {
+    grid-template-columns: repeat(var(--n, 3), minmax(0, 220px));
+    justify-content: center; gap: 12px;
+  }
+  .int-numeros--compacto .int-regua__item {
+    grid-row: auto; grid-template-rows: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    aspect-ratio: 11 / 10; padding: 24px; border-radius: 16px;
+    text-align: center;
+  }
+  .int-numeros--compacto .int-regua__valor { font-size: clamp(28px, 2.4vw, 36px); }
+  .int-numeros--compacto .int-regua__legenda { font-size: 14px; max-width: none; text-wrap: balance; }
 
   /* ---------- Grade: cartões do Features com a ficha de Resultados ---------- */
   .int-numeros__grade {
@@ -121,10 +163,18 @@ const iNota = Math.min(n, 5);
      'valor | legenda' a coluna do valor tinha 118 a 145px e partia os números
      ao meio ('R$5k a / R$40k', 'Sem equipe / nova'). */
   @media (max-width: 599.98px) {
-    .int-regua { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .int-regua { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     .int-regua__item { grid-row: auto; grid-template-rows: none; row-gap: 6px; }
     .int-regua__valor { font-size: 28px; }
     .int-regua__legenda { max-width: 32ch; }
+    /* No celular três quadrados não cabem: linhas baixas, valor e legenda lado a lado. */
+    .int-numeros--compacto .int-regua { grid-template-columns: minmax(0, 1fr); }
+    .int-numeros--compacto .int-regua__item {
+      aspect-ratio: auto; flex-direction: row; align-items: baseline;
+      justify-content: start; gap: 14px; padding: 16px 20px; text-align: start;
+    }
+    .int-numeros--compacto .int-regua__valor { font-size: 24px; flex: none; }
+    .int-numeros--compacto .int-regua__legenda { max-width: none; }
     /* Dois cartões por linha até 360px: a palavra inteira ('Experiência')
        cabe sem hifenizar com um respiro interno menor. */
     .int-numeros__cartao { padding: 20px; min-height: 140px; }

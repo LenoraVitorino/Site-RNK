@@ -1,45 +1,92 @@
 ---
+/**
+ * Rodapé (29/09/2026): quatro colunas. A marca, com os ícones das redes
+ * embaixo (o logo leva à home); as soluções; A Renke (Sobre, Faça Parte, Contato); e o contato
+ * (e-mail e endereço). Embaixo, o copyright e
+ * o CNPJ (e, na versão copy, a assinatura). O layout é o mesmo nas duas
+ * versões; só o título da coluna de links muda ("Links" na copy).
+ *
+ * Os ícones das redes são desenhados aqui, no traço de 1,5 do Lucide: o
+ * Lucide 1.x não tem ícones de marca.
+ */
 import { rodape } from '../data/nav';
 import { existe } from '../data/rotas';
 import { copyLiteral } from '../data/versao';
+
+/* Um link com âncora vale se a página dele existe ('/#protocolo-revena' → '/'). */
+const temPagina = (rota: string) => existe(rota.split('#')[0] || '/');
+const redes = rodape.redes.filter((r) => r.rota && r.rota !== '#');
 ---
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
-      <div class="footer__col">
-        <img class="logo__img logo__img--rodape" src="/marca/grupo-rnk-branco.png" alt="Grupo RNK" width="875" height="120" />
+      <div class="footer__col footer__marca">
+        <a class="footer__logo" href="/" aria-label="Grupo RNK, página inicial">
+          <img class="logo__img logo__img--rodape" src="/marca/grupo-rnk-branco.png" alt="" width="875" height="120" />
+        </a>
+        {redes.length > 0 && (
+          <ul class="footer__redes" aria-label="Redes sociais">
+            {redes.map((r) => (
+              <li>
+                <a href={r.rota} target="_blank" rel="noopener" aria-label={`${r.rotulo} (abre em outra aba)`}>
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    {r.icone === 'instagram' && <>
+                      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                      <circle cx="12" cy="12" r="3.75" />
+                      <circle cx="16.9" cy="7.1" r=".9" fill="currentColor" stroke="none" />
+                    </>}
+                    {r.icone === 'linkedin' && <>
+                      <circle cx="6.75" cy="5.75" r="1.35" fill="currentColor" stroke="none" />
+                      <path d="M6.75 9.5V19.5" />
+                      <path d="M11.25 19.5V9.5M11.25 14c0-2.7 1.6-4.5 3.9-4.5 2.2 0 3.6 1.5 3.6 4.3v5.7" />
+                    </>}
+                    {r.icone === 'facebook' && <>
+                      <path d="M16.25 3.5h-2A3.5 3.5 0 0 0 10.75 7v13.5" />
+                      <path d="M7.75 10.5h8" />
+                    </>}
+                    {r.icone === 'youtube' && <>
+                      <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+                      <path d="M10 9.25v5.5l4.75-2.75z" fill="currentColor" stroke-width="1" />
+                    </>}
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      <nav class="footer__col" aria-label="Links do rodapé">
-        <p class="footer__title">Links</p>
+      <nav class="footer__col" aria-label="Soluções">
+        <p class="footer__title">{copyLiteral ? 'Links' : 'Soluções'}</p>
         <ul>
           {/* Sem "em breve" à mostra (Lenora, 26/09): só o que já tem página. */}
-          {rodape.links.filter((l) => existe(l.rota)).map((l) => (
+          {rodape.links.filter((l) => temPagina(l.rota)).map((l) => (
             <li><a href={l.rota}>{l.rotulo}</a></li>
           ))}
         </ul>
       </nav>
 
-      <div class="footer__col">
-        <p class="footer__title">Siga-nos</p>
+      <nav class="footer__col" aria-label="A Renke">
+        <p class="footer__title">A Renke</p>
         <ul>
-          {rodape.redes.filter((r) => r.rota && r.rota !== '#').map((r) => (
-            <li><a href={r.rota} rel="noopener">{r.rotulo}</a></li>
+          {rodape.renke.filter((l) => temPagina(l.rota)).map((l) => (
+            <li><a href={l.rota}>{l.rotulo}</a></li>
           ))}
         </ul>
-      </div>
+      </nav>
 
-      <div class="footer__col">
+      <div class="footer__col footer__contato">
         <p class="footer__title">Contato</p>
         <ul class="footer__contact">
+          <li><a href={`mailto:${rodape.email}`}>{rodape.email}</a></li>
           <li>{rodape.endereco.map((linha, i) => <>{i > 0 && <br />}{linha}</>)}</li>
-          <li>{rodape.email}</li>
         </ul>
       </div>
     </div>
 
     <div class="footer__bottom">
       <p>{rodape.copyright}</p>
+      <p>CNPJ {rodape.cnpj}</p>
       {copyLiteral && <p><em>{rodape.assinatura}</em></p>}
     </div>
   </div>

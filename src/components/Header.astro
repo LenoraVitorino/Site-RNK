@@ -52,7 +52,6 @@ const itensMenu = menu.flatMap((item) => {
                   <span class="megamenu__realce" aria-hidden="true"></span>
                   {item.grupos.map((grupo) => (
                     <div class="megamenu__coluna">
-                      <p class="megamenu__title">{grupo.titulo}</p>
                       <ul class="megamenu__list">
                         {grupo.itens.map((sub, i) => (
                           <li style={`--i: ${i}`}>

@@ -24,5 +24,5 @@ export const TEXTOS_INTERNAS = [
   '.int-hero__cabeca', '.int-hero__sub', '.int-hero__acoes', '.int-cabeca', '.int-lista__itens', '.int-rico',
   '.int-citacao', '.int-regua', '.int-faq__item', '.int-dados', '.int-cta__miolo', '.form-block__text', '.int-erro__miolo',
   '.int-etapas__fechamento', '.int-numeros__nota', '.int-blocos__lista', '.sb-abertura__miolo',
-  '.sb-tese__titulo', '.sb-tese__linha', '.sb-casa__titulo', '.sb-casa__texto',
+  '.sb-tese__titulo', '.sb-tese__linha', '.sb-casa__titulo', '.sb-casa__texto', '.int-texto__lista',
 ].map((s) => `main > [data-cena] ${s}`).join(', ');
