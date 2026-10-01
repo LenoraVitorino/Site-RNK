@@ -7,5 +7,5 @@ const imagens: Record<string, string> = {
 ---
 <div class:list={['plano-editorial', `plano-editorial--${plano}`]} aria-hidden="true">
   <img class="plano-editorial__foto" src={`/imagens/planos-editoriais/${imagens[plano] ?? 'seringa'}.webp`} alt="" width="1254" height="1254" loading="lazy" decoding="async" />
-  <img class="plano-editorial__simbolo" src={`/icones/plano-${plano}-dark.svg`} alt="" width="1080" height="1080" loading="lazy" />
+  <span class="plano-editorial__simbolo" style={`--simbolo: url('/icones/plano-${plano}-dark.svg')`}></span>
 </div>

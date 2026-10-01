@@ -2,9 +2,9 @@
 
 Geradas com a ferramenta nativa image_gen (sem CLI), como fotografias editoriais sintéticas e decorativas. Os três PNGs com transparência foram convertidos para WebP com alpha, sem alteração do conteúdo. Não representam clientes nem procedimentos reais.
 
-Padrão: direção escura com imagens. Comparação anterior: `?planos=claro`. Mesmos assets nas versões estudio e copy; textos preservados. Start: seringa; Run e Core: mãos; Scale e Full: estetoscópio.
+Padrão: diagramação original clara com imagens. Comparação sem fotografias: `?planos=claro`. Mesmos assets nas versões estudio e copy; textos preservados. Start: seringa; Run e Core: mãos; Scale e Full: estetoscópio.
 
-Composição: fotografia atrás do símbolo oficial, ambos centralizados no mesmo quadro. No desktop do estudio, o SVG existente mantém sua montagem; no celular e na copy, o componente compartilhado sobrepõe o SVG estático à fotografia.
+Composição: símbolo amarelo, fotografia sobre parte dele e nome do plano à frente de ambos. Fundo claro, posições e dimensões originais do palco preservados. No desktop do estudio, o SVG existente mantém sua montagem; no celular e na copy, o componente compartilhado une o símbolo amarelo e a fotografia. A foto tem contraste reduzido para preservar a leitura do nome em grafite.
 
 ## seringa
 
