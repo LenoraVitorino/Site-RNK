@@ -3,6 +3,8 @@
    símbolo amarelo atrás, fotografia no meio, nome do plano à frente. */
 .plano-editorial { position: relative; overflow: hidden; pointer-events: none; }
 .plano-editorial .plano-editorial__foto { position: relative; z-index: 2; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 1; mask-image: radial-gradient(ellipse at center, #000 40%, transparent 74%); }
+/* A troca da tesoura preserva a silhueta inteira da referência, sem desvanecer. */
+.plano-editorial--scale .plano-editorial__foto { mask-image: none; }
 .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
 html[data-planos-tema="claro"] .plano-editorial { display: none; }
 /* Cor limitada aos planos: a introdução mantém o papel e o grafite. */
