@@ -40,7 +40,7 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/modelo-dentario.webp`.
 
-Revisão: luva preta segurando as laterais de um modelo em tom natural de gesso marfim, com poros e pequenas irregularidades de superfície. Substitui o grafite rejeitado pela usuária. Posição acima do nome preserva a leitura. Centro com opacidade 100% e bordas suaves nas duas versões.
+Revisão: luva preta segurando as laterais de um modelo em tom natural de gesso marfim, com poros e pequenas irregularidades de superfície. Substitui o grafite rejeitado pela usuária. Posição acima do nome preserva a leitura. Foto reduzida a 82% da escala original para equilibrar a mão com as demais. Centro com opacidade 100% e bordas suaves nas duas versões.
 
 Original editado com image_gen nativo (sem CLI): `/Users/lenoravitorino/.codex/generated_images/01a0f7a0-9088-77f3-9efb-dbe962d52bf8/exec-8454097e-6ce4-4a5a-bade-db0924e05097.png`.
 
