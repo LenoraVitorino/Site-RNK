@@ -2,7 +2,7 @@
 interface Props { plano: string }
 const { plano } = Astro.props;
 const imagens: Record<string, string> = {
-  start: 'seringa', run: 'maos', scale: 'estetoscopio', core: 'maos', full: 'estetoscopio',
+  start: 'seringa', run: 'maos', scale: 'tesoura', core: 'maos', full: 'modelo-dentario',
 };
 ---
 <div class:list={['plano-editorial', `plano-editorial--${plano}`]} aria-hidden="true">
