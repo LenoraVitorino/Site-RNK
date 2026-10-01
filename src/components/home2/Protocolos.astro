@@ -16,7 +16,7 @@ const formatos = ['jornada', 'crm', 'automacao', 'decisao', 'posicionamento'];
       {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
     <div class="features-grade features-grade--bento">
-      {cartas.map((p, i) => (
+      {cartas.slice(0, 3).map((p, i) => (
         <article class:list={['feature-card', `feature-card--${formatos[i]}`, 'entra']}>
           <div class="feature-card__arte">
             {i === 1 || i === 2 ? <ArtePilar tipo={i} /> : <PilarEssencial tipo={i} />}
@@ -24,6 +24,14 @@ const formatos = ['jornada', 'crm', 'automacao', 'decisao', 'posicionamento'];
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
         </article>
       ))}
+      <div class="features-grade__faixa entra">
+        {cartas.slice(3).map((p, i) => (
+          <article class:list={['feature-card', `feature-card--${formatos[i + 3]}`]}>
+            <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+            <div class="feature-card__arte"><PilarEssencial tipo={i + 3} /></div>
+          </article>
+        ))}
+      </div>
     </div>
     {copyLiteral && <div class="pilares-editoriais__ponte">
       <p>A Renke recomenda o protocolo certo para o momento da sua clínica.</p>
