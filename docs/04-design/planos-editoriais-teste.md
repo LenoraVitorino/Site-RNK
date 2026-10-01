@@ -68,4 +68,4 @@ Prompt final:
 
 As fotos compartilham uma base na cor do respectivo plano, recortada pelo alpha do próprio asset. Assim, o gradiente visual termina no grafite, e o símbolo amarelo não atravessa luvas, mãos ou instrumentos. Vãos reais entre dedos e objetos continuam transparentes. Base e fotografia recebem juntas os espelhamentos e escalas já aprovados, sem mudanças de posição.
 
-No Full, o gradiente limita-se ao punho inferior. Prótese, dentes e gengiva ficam integralmente visíveis, sem escurecimento radial. Aplicado em estudio e copy.
+No Full, o gradiente acompanha a diagonal do punho inferior esquerdo (45°, transparente até 12% e opaco a partir de 38%), eliminando a borda rígida. Prótese, dentes e gengiva ficam integralmente visíveis, sem escurecimento radial. Aplicado em estudio e copy.

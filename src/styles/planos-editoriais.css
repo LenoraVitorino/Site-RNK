@@ -16,7 +16,7 @@
 /* Prótese compacta acima do título, com o mesmo acabamento suave das demais fotos. */
 .plano-editorial--full .plano-editorial__recorte { transform: rotate(12deg) scale(.82); }
 /* Só o punho desaparece no fundo; prótese e dentes permanecem sem escurecimento. */
-.plano-editorial--full .plano-editorial__foto { mask-image: linear-gradient(to top, transparent, #000 28%); }
+.plano-editorial--full .plano-editorial__foto { mask-image: linear-gradient(45deg, transparent 12%, #000 38%); }
 .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
 html[data-planos-tema="claro"] .plano-editorial { display: none; }
 /* Cor limitada aos planos: a introdução mantém o papel e o grafite. */
