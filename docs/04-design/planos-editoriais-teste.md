@@ -40,7 +40,7 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/protese-dentaria.webp`.
 
-Mão única com luva preta entrando da diagonal inferior esquerda, segurando prótese implantossuportada em tom natural com gengiva rosada, baseada na nova referência da usuária. Preserva escala de 82%, com rotação de 12° para acentuar a diagonal, centro opaco e bordas suaves nas duas versões. Sem bloco de gesso.
+Mão única com luva preta entrando da diagonal inferior esquerda, segurando prótese implantossuportada, baseada na nova referência da usuária. Exibição em preto e branco via CSS, com escala de 88% (aumento discreto em relação aos 82% anteriores), rotação de 12°, centro opaco e bordas suaves nas duas versões. O asset original preserva suas cores naturais. Sem bloco de gesso.
 
 Referência: `/var/folders/f3/2x5sz53x3gbbnvjpqz48wpxc0000gn/T/codex-clipboard-1d1fb972-d8f9-4e28-a0a4-af921b7a9a53.png`.
 
