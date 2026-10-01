@@ -18,6 +18,8 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/maos.webp`.
 
+Run: foto espelhada horizontalmente via CSS para ocupar a diagonal oposta ao título, com a luva preta no alto à direita e a mão sem luva embaixo à esquerda. Tamanho, gradiente, símbolo e textos preservados nas duas versões.
+
 Prompt final:
 
 > Use case: ads-marketing. Create a premium editorial photographic cutout for an aesthetic medicine website. Two anatomically realistic graceful adult hands approaching one another with a small gap between fingertips: a hand in matte black medical nitrile glove enters diagonally from upper left, a bare hand enters diagonally from lower right. Gentle elegant gesture suggesting care and precision, no touching face or procedure. Square composition, central negative space, refined black-and-white photography with restrained silver highlights and soft light, natural skin texture. Isolated on a genuinely transparent background. No text, no logos, no yellow, no extra hands or fingers, no jewelry, no sci-fi glow. Standalone photographic asset, not a mockup.
