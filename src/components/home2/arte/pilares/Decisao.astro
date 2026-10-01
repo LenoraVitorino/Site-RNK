@@ -1,0 +1,164 @@
+---
+/**
+ * Dizemos o que fazer todo mês: o relatório do mês como documento. A
+ * página de setembro, com o título grande, as abas dos
+ * indicadores e o gráfico de comparecimento, sangrando pela direita e por
+ * baixo. Sobre ela, o cartão "Plano de ação" de outubro, com os três passos
+ * marcados. O gráfico ocupa a página até perto da borda direita: a linha
+ * real vai até agora e dali segue a projeção tracejada de outubro. Amarelo
+ * em três toques: o sublinhado da aba ativa, o ponto de agora e o traço da
+ * projeção. Na entrada, a linha se desenha, o ponto de agora acende, o
+ * plano sobe, os passos se marcam em cascata e a projeção acende. Pose
+ * estática = pose final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* As medidas abaixo estão no desenho original, com a página em (104, 56);
+   o <g> de fora leva tudo 92 para a esquerda, e a página começa em x 12,
+   na linha do texto do cartão (Lenora, 29/09: "desalinhamento entre texto
+   e mockup"), e 16 para cima, para o respiro de cima não ficar maior que o
+   dos outros cartões largos. A página sangra pela direita e por baixo.
+   Conteúdo a 24 da borda: coluna de x 128 a 536, que na tela fica de 36 a
+   444, dentro da área segura do celular (x 0 a 480). */
+const PX = 104, PY = 56, DX = -92;
+/* Abas dos indicadores: medidas em Inter 13 (ativa 500, as outras 400),
+   com vão de 24. */
+const abas = [
+  { x: 128, nome: 'Comparecimento', largura: 105.9, ativa: true },
+  { x: 258, nome: 'Custo por agendamento', largura: 146.6 },
+  { x: 429, nome: 'Faturamento', largura: 76.7 },
+];
+/* Linha do gráfico: um ponto por semana, de julho a setembro, com passo de
+   32. Anda de lado com as oscilações de uma agenda de verdade, dá um salto
+   quando o plano do mês entra (x 256 a 320) e segue subindo devagar até
+   agora (x 544, na tela 452, dentro da área segura do celular). Dali, as
+   semanas de outubro tracejadas: a projeção do plano, que ocupa o fim da
+   página no desktop (até x 704, na tela 612) e é cortada no celular. Do x 352 em diante a
+   linha passa acima do cartão do plano. Curva por Catmull-Rom, calculada
+   com a projeção junto, para a tangente seguir contínua em agora. */
+const pts: [number, number][] = [
+  [128, 292], [160, 288], [192, 281], [224, 285], [256, 268],
+  [288, 246], [320, 223], [352, 208], [384, 202], [416, 204],
+  [448, 195], [480, 191], [512, 189], [544, 181],
+];
+const proj: [number, number][] = [[576, 174], [608, 166], [640, 160], [672, 155], [704, 151]];
+const todos = [...pts, ...proj];
+const trecho = (de: number, ate: number) => {
+  let d = `M${todos[de][0]} ${todos[de][1]}`;
+  for (let i = de; i < ate; i++) {
+    const a = todos[i - 1] ?? todos[i], b = todos[i], c = todos[i + 1], e = todos[i + 2] ?? c;
+    const c1 = [b[0] + (c[0] - a[0]) / 6, b[1] + (c[1] - a[1]) / 6];
+    const c2 = [c[0] - (e[0] - b[0]) / 6, c[1] - (e[1] - b[1]) / 6];
+    d += `C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${c[0]} ${c[1]}`;
+  }
+  return d;
+};
+const curva = trecho(0, pts.length - 1);
+const projecao = trecho(pts.length - 1, todos.length - 1);
+const [FX, FY] = pts[pts.length - 1];
+const [PFX] = proj[proj.length - 1];
+/* Plano de ação: 184 × 122, pousado no canto de baixo da coluna, abaixo do
+   ponto de agora. Cabeçalho de 34 e passos a cada 24 (Inter 13). */
+const CX = 352, CY = 224, CW = 184, CH = 122;
+const passos = ['Rever verba por canal', 'Confirmar na véspera', 'Reativar pacientes'];
+---
+<g class="decisao" transform={`translate(${DX} -16)`}>
+  <defs>
+    {/* A área da projeção fica um tom abaixo da real e se apaga para o fim. */}
+    <linearGradient id={`${p}-some-g`} gradientUnits="userSpaceOnUse" x1={FX} y1="0" x2={PFX} y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".78" /><stop offset="1" stop-color="#ffffff" stop-opacity=".42" />
+    </linearGradient>
+    <mask id={`${p}-some`} maskUnits="userSpaceOnUse" x={FX} y="0" width={PFX - FX + 4} height="400">
+      <rect x={FX} y="0" width={PFX - FX + 4} height="400" fill={`url(#${p}-some-g)`} />
+    </mask>
+  </defs>
+
+  {/* Setembro. */}
+  <rect x={PX} y={PY} width="700" height="400" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={PX + 16} y={PY + 0.5} width="420" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x="128" y="100" class="decisao__titulo">Setembro</text>
+  <circle cx="415" cy="96" r="2.5" class="decisao__estado" />
+  <text x="424" y="100" class="decisao__enviado">Enviado</text>
+  <text x="536" y="100" text-anchor="end" class="decisao__quando">seg, 09:00</text>
+
+  {/* Abas dos indicadores; a ativa tem o fio de baixo, em amarelo. */}
+  {abas.map(({ x, nome, ativa }) => (
+    <text x={x} y="140" class:list={['decisao__aba', { 'decisao__aba--ativa': ativa }]}>{nome}</text>
+  ))}
+  <rect x={PX} y="152" width="700" height="1" class="decisao__divisa" />
+  <rect x="128" y="151" width={abas[0].largura} height="2" rx="1" class="a-destaque" />
+
+  {/* Gráfico: a grade vai até o fim da projeção. */}
+  {[228, 276, 324].map((y) => <rect x="128" y={y} width={PFX - 128} height="1" class="decisao__grade" />)}
+  <path class="decisao__area" d={`${curva}L${FX} 380L128 380Z`} fill={`url(#${p}-area)`} />
+  <path class="decisao__linha" d={curva} pathLength="1" />
+  {/* Projeção de outubro: a área mais leve, que se apaga para a direita, e
+      o traço tracejado em amarelo, o que o plano deve render. */}
+  <g class="decisao__projecao">
+    <path d={`${projecao}L${PFX} 380L${FX} 380Z`} fill={`url(#${p}-area)`} mask={`url(#${p}-some)`} />
+    <path d={projecao} class="a-destaque-traco decisao__projecao-linha" />
+  </g>
+  <g class="decisao__agora">
+    <circle cx={FX} cy={FY} r="5.5" class="decisao__agora-anel" />
+    <circle cx={FX} cy={FY} r="2.5" class="a-destaque" />
+  </g>
+
+  {/* Plano de ação de outubro, sobre a página. */}
+  <g class="decisao__plano">
+    <rect x={CX} y={CY} width={CW} height={CH} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
+    <rect x={CX} y={CY} width={CW} height={CH} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <rect x={CX + 20} y={CY + 0.5} width={CW - 40} height="1" fill={`url(#${p}-fio-h)`} />
+    <text x={CX + 14} y={CY + 22} class="decisao__plano-titulo">Plano de ação</text>
+    <text x={CX + CW - 14} y={CY + 22} text-anchor="end" class="decisao__quando">Outubro</text>
+    <rect x={CX} y={CY + 34} width={CW} height="1" class="decisao__divisa" />
+    {passos.map((passo, i) => {
+      const y = CY + 54 + i * 24;
+      return (
+        <g>
+          <rect x={CX + 14.5} y={y - 6.5} width="13" height="13" rx="4" class="decisao__caixa" />
+          <path class="decisao__visto" style={`--i:${i}`} d={`M${CX + 18} ${y}l2.3 2.3l4.4-4.8`} pathLength="1" />
+          <text x={CX + 37} y={y + 4.5} class="decisao__passo">{passo}</text>
+        </g>
+      );
+    })}
+  </g>
+</g>
+
+<style>
+  /* Corpos pensados para o cartão largo recortado no celular (escala ≈ .68):
+     rótulos em 13 e secundários em 11,5. */
+  .decisao__titulo { font-size: 32px; font-weight: 300; fill: #efefeb; letter-spacing: -.03em; }
+  .decisao__estado { fill: #8a8a85; }
+  .decisao__enviado { font-size: 11.5px; font-weight: 500; fill: #b9b9b4; }
+  .decisao__quando { font-size: 11.5px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .decisao__aba { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
+  .decisao__aba--ativa { font-weight: 500; fill: #ecece8; }
+  .decisao__divisa { fill: #ffffff; fill-opacity: .06; }
+  .decisao__grade { fill: #ffffff; fill-opacity: .04; }
+  .decisao__linha { fill: none; stroke: #ffffff; stroke-opacity: .72; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .decisao__agora-anel { fill: #161616; stroke: #ecece8; stroke-width: 1.2; }
+  .decisao__projecao-linha { stroke-width: 1.3; stroke-dasharray: 3 4.5; }
+  .decisao__plano-titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .decisao__caixa { fill: #1d1d1d; stroke: #ffffff; stroke-opacity: .2; }
+  .decisao__visto { fill: none; stroke: #d6d6d1; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .decisao__passo { font-size: 13px; fill: #b9b9b4; letter-spacing: -.005em; }
+
+  /* Movimento, uma vez, na entrada:
+     0,4–2,2 s  a linha se desenha da esquerda para a direita;
+     2,1–3,5    quando ela chega, a área aparece por baixo;
+     2,1–2,7    o ponto de agora acende;
+     2,3–3,3    o plano de outubro sobe 8 com fade;
+     3,0–4,0    os três passos se marcam em cascata;
+     3,9–4,9    com o plano pronto, a projeção de outubro acende.
+     Depois, nada se move. */
+  .decisao__linha { animation: decisao-desenha 1.8s var(--a-vai-vem) .4s both; }
+  .decisao__area { animation: decisao-aparece 1.4s var(--a-entra) 2.1s both; }
+  .decisao__agora { animation: decisao-aparece .6s var(--a-entra) 2.1s both; }
+  .decisao__plano { animation: decisao-sobe 1s var(--a-entra) 2.3s both; }
+  .decisao__visto { animation: decisao-desenha .5s var(--a-vai-vem) calc(3s + var(--i) * .25s) both; }
+  .decisao__projecao { animation: decisao-aparece 1s var(--a-entra) 3.9s both; }
+  @keyframes decisao-desenha { from { stroke-dashoffset: 1; } }
+  @keyframes decisao-aparece { from { opacity: 0; } }
+  @keyframes decisao-sobe { from { opacity: 0; transform: translateY(8px); } }
+</style>

@@ -75,7 +75,7 @@ export const contato: Pagina = {
     {
       tipo: 'texto',
       eyebrow: 'Informações',
-      h2: 'Renke Studio',
+      h2: 'Grupo RNK',
       fundo: 'alt',
       paragrafos: [
         '<strong>Endereço:</strong> R. Benjamin Constant, 2364 · Sala Térrea, Escola Agrícola · Blumenau/SC · CEP 89035-100',

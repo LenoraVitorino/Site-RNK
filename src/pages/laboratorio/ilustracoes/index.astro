@@ -1,0 +1,37 @@
+---
+/**
+ * Laboratório das ilustrações (28/09/2026): as duas dobras reais da home
+ * com os cartões ilustrados, sem o fundo animado, para ver as cenas juntas.
+ * Fora dos buscadores e do menu. Aceita ?foto e ?t=ms, como as páginas de
+ * cada cena.
+ */
+import Base2 from '../../../layouts/Base2.astro';
+import Protocolos from '../../../components/home2/Protocolos.astro';
+import Perguntas from '../../../components/home2/Perguntas.astro';
+---
+<Base2 titulo="Laboratório · ilustrações" descricao="Laboratório das ilustrações" noindex classe="home-refinada">
+  <Protocolos />
+  <Perguntas />
+</Base2>
+
+<script>
+  /* Modos de foto (o Chromium headless não dispara IntersectionObserver):
+     ?foto  põe todas as cenas e blocos em cena desde o carregamento;
+     ?t=2400 faz o mesmo e congela todas as animações nesse instante (ms). */
+  const busca = new URLSearchParams(location.search);
+  const t = busca.get('t');
+  if (busca.has('foto') || t !== null) {
+    const forca = () => {
+      document.querySelectorAll('svg.arte').forEach((a) => a.classList.add('em-cena'));
+      document.querySelectorAll('.entra').forEach((a) => a.classList.add('visivel'));
+    };
+    forca();
+    new MutationObserver(() => document.querySelectorAll('svg.arte:not(.em-cena)').forEach((a) => a.classList.add('em-cena')))
+      .observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    if (t !== null) {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        for (const anim of document.getAnimations()) { anim.pause(); anim.currentTime = Number(t); }
+      }));
+    }
+  }
+</script>

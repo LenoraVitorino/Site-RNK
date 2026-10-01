@@ -15,9 +15,10 @@ import Base2 from '../layouts/Base2.astro';
 import FundoInterno from '../components/pagina/FundoInterno.astro';
 import Botao from '../components/ui/Botao.astro';
 import '../styles/paginas2.css';
+import Selo from '../components/ui/Selo.astro';
 ---
 <Base2
-  titulo="Página não encontrada | Renke Studio"
+  titulo="Página não encontrada | Grupo RNK"
   descricao="A página que você procurava não existe ou mudou de endereço."
   classe="home-refinada"
 >
@@ -25,7 +26,7 @@ import '../styles/paginas2.css';
   <section class="secao int-secao int-erro" id="secao-1" data-cena="hero" aria-labelledby="secao-1-titulo">
     <div class="container">
       <div class="int-erro__miolo">
-        <p class="rotulo">Erro 404</p>
+        <Selo>Erro 404</Selo>
         <h1 class="titulo int-erro__titulo" id="secao-1-titulo">Esse endereço não existe.</h1>
         <p class="int-erro__lead entra" style="--i:1">
           A página pode ter mudado de lugar, ou o link que te trouxe até aqui está errado.

@@ -2,7 +2,7 @@
 :root { --ref-fio: rgb(242 242 238 / .16); }
 section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
-.home-refinada :is(.hero, #o-que-fazemos, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
+.home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
 .home-refinada .footer { position: relative; z-index: 1; background: #0e0e0c; }
 .home-refinada .cortina > #perguntas { background: #090907; }
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
@@ -18,19 +18,53 @@ section[id] { scroll-margin-top: 110px; }
 .cortina > .operacao-editorial { position: relative; height: auto; min-height: 0; transform: none; }
 .cortina .operacao-editorial :is(.ancora, .perguntas) { transform: none; opacity: 1; }
 
-/* Resultados: papel, grafite e assimetria. Os números permanecem legíveis sem contador. */
+/* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
+   repetia a grade de cartões do Protocolo e lia mal). Uma linha por
+   especialidade, entre fios, na linha do site da Immerso: índice, área e
+   texto empilhados à esquerda, o meio livre (onde a foto aparece no
+   hover) e o número grande à direita, sem contador, para ler de relance. */
 #resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
-.resultados-mosaico { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 12px; }
-.resultado-ficha { position: relative; display: flex; flex-direction: column; min-width: 0; padding: clamp(22px, 2.5vw, 36px); min-height: 260px; border: 1px solid #d2d2d0; border-radius: 10px; background: #efefed; }
-.resultado-ficha__topo { display: flex; justify-content: space-between; gap: 14px; align-items: start; z-index: 1; }
-.resultado-ficha__topo h3 { font-size: 14px; font-weight: 450; line-height: 1.3; letter-spacing: -.02em; }
-.resultado-ficha__topo > span { font-size: 10px; opacity: .6; }
-.resultado-ficha__numero { font-size: clamp(40px, 4.5vw, 68px); font-weight: 300; line-height: 1.12; letter-spacing: -.06em; margin-top: auto; padding-top: 34px; z-index: 1; }
-.resultado-ficha__texto { font-size: 13px; color: #626260; line-height: 1.6; margin-top: 14px; max-width: 29ch; z-index: 1; }
-.resultado-ficha--destaque { grid-row: span 2; background: #262624; border-color: #262624; color: #ededeb; overflow: hidden; }
-.resultado-ficha--destaque .resultado-ficha__numero { font-size: clamp(80px, 9vw, 140px); }
-.resultado-ficha--destaque .resultado-ficha__texto { color: #b6b6b4; }
+.resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
+.resultado-linha {
+  display: grid; grid-template-columns: 48px minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .9fr);
+  column-gap: clamp(20px, 3vw, 48px); row-gap: 8px; align-items: center;
+  padding-block: clamp(28px, 3vw, 44px); border-top: 1px solid #cfcfcc;
+}
+.resultado-linha__indice { grid-column: 1; grid-row: 1; align-self: baseline; font-size: 12px; color: #8a8a88; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.resultado-linha__area { grid-column: 2; grid-row: 1; align-self: baseline; font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
+.resultado-linha__texto { grid-column: 2; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
+.resultado-linha__numero { grid-column: 4; grid-row: 1 / span 2; margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
+/* Foto da área no hover (referência Immerso, 30/09): só no desktop com
+   mouse. Fica dentro da linha, com a altura dela (2px de folga em cima e
+   embaixo), centrada na coluna do meio; acompanha o cursor só na
+   horizontal e desliza para a linha nova (JS, translate). Aparece e some
+   com fade e escala leve; cada camada entra recortada de baixo para cima
+   por cima da anterior. Por enquanto, moldura de mockup em grafite. */
+.resultados-extrato__palco { position: relative; }
+.resultados-foto { display: none; }
+@media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
+  .resultados-foto {
+    display: block; position: absolute; left: 0; top: 0; z-index: 3;
+    width: 278px; height: 156px; pointer-events: none;
+    opacity: 0; scale: .97; will-change: translate; border-radius: 10px;
+    box-shadow: 0 18px 40px rgb(0 0 0 / .14);
+    transition: opacity .5s var(--easing-suave), scale .7s var(--easing-suave);
+  }
+  .resultados-foto--visivel { opacity: 1; scale: 1; }
+  .resultados-foto__camada {
+    position: absolute; inset: 0; margin: 0; overflow: hidden; border-radius: 10px;
+    background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
+    clip-path: inset(100% 0 0 0 round 10px);
+    transition: clip-path .8s cubic-bezier(.16, 1, .3, 1);
+  }
+  .resultados-foto__camada--ativa { z-index: 2; clip-path: inset(0 0 0 0 round 10px); }
+  .resultados-foto__camada--saindo { z-index: 1; clip-path: inset(0 0 0 0 round 10px); }
+  .resultados-foto__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resultados-foto, .resultados-foto__camada { transition: opacity .3s linear; }
+}
 .resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
 .resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
@@ -43,6 +77,10 @@ section[id] { scroll-margin-top: 110px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 4 / 3; border-radius: 14px; }
 .ecossistema-editorial .produto__corpo { padding: 30px 8px 12px; background: #000; }
 .ecossistema-editorial .produto__nome { font-size: clamp(28px, 3vw, 40px); }
+/* Selo do público no canto superior esquerdo do quadro da imagem. */
+.ecossistema-editorial .produto__selo-bu { position: absolute; top: clamp(14px, 1.4vw, 20px); left: clamp(14px, 1.4vw, 20px); z-index: 2; }
+/* Nome da BU como a logo secundária (R + BU), na altura de uma linha do título. */
+.produto__marca { display: block; width: auto; height: clamp(26px, 2.4vw, 36px); max-width: 100%; }
 .ecossistema-editorial .produto__arte--camadas { background: #000; }
 .conexoes { width: 100%; height: 100%; }
 /* O pulso só responde à intenção do visitante. Nenhum autoplay decorativo. */
@@ -56,6 +94,17 @@ section[id] { scroll-margin-top: 110px; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
 #fale .chamada__miolo p { color: #aeaeac; }
 #fale .botao { background: var(--papel); color: #171715; }
+/* Rede RevOps logo abaixo do botão, na largura do container, colada nele
+   (o palco já tem respiro próprio acima dos módulos). */
+#fale .chamada__rede { width: 100%; margin-top: 0; }
+#fale .chamada { row-gap: clamp(8px, 1.2vw, 16px); }
+/* Título e apoio numa linha cada onde cabem, para não sobrar vazio nas
+   laterais (Lenora, 30/09); no celular voltam a quebrar. O text-wrap vai
+   junto do nowrap porque os dois dividem o text-wrap-mode. */
+@media (min-width: 720px) {
+  #fale .chamada__miolo .titulo,
+  #fale .chamada__miolo > p:not(.cabeca-dobra__selo) { max-width: none; white-space: nowrap; text-wrap: nowrap; }
+}
 .home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
 .home-refinada .form-card .field__label { color: #454543; }
 .home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }
@@ -70,16 +119,19 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }
   .operacao-editorial .operacao__cartoes { gap: 20px; }
-  .resultado-ficha { padding: 22px; }
 }
 @media (max-width: 899.98px) {
   .secao-indice { grid-template-columns: 1fr; gap: 22px; margin-bottom: 36px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  .resultados-mosaico { grid-template-columns: 1fr 1fr; }
-  .resultado-ficha--destaque { grid-column: 1 / -1; grid-row: auto; min-height: 300px; }
-  .resultado-ficha--destaque .resultado-ficha__texto { max-width: 36ch; }
+  /* Extrato no tablet: a área e o texto empilham à esquerda, o número fica
+     à direita. */
+  .resultado-linha { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 8px; }
+  .resultado-linha__area { grid-column: 2; }
+  .resultado-linha__texto { grid-column: 2; grid-row: 2; }
+  .resultado-linha__numero { grid-column: 3; grid-row: 1 / span 2; }
+  .resultado-linha__indice { grid-row: 1; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -87,11 +139,12 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  .resultados-mosaico { grid-template-columns: 1fr; }
-  .resultado-ficha { min-height: 235px; }
-  .resultado-ficha--destaque { min-height: 350px; }
-  .resultado-ficha__numero { font-size: 58px; }
-  .resultado-ficha__texto { max-width: 36ch; }
+  /* Extrato no celular: índice e área numa linha, o número grande embaixo
+     e o texto por último. */
+  .resultado-linha { grid-template-columns: 28px minmax(0, 1fr); row-gap: 10px; column-gap: 12px; align-items: baseline; }
+  .resultado-linha__area { grid-column: 2; grid-row: 1; }
+  .resultado-linha__numero { grid-column: 1 / -1; grid-row: 2; text-align: left; font-size: 56px; margin-top: 6px; }
+  .resultado-linha__texto { grid-column: 1 / -1; grid-row: 3; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -106,19 +159,24 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Abertura original, com a cena Peachweb escolhida para acompanhar as dobras. */
 .home-refinada .hero__fundo { display: none; }
-/* As duas mensagens usam a mesma escala e ocupam duas linhas. */
+/* As duas mensagens usam a mesma escala e ocupam duas linhas. Selo, título e
+   subtítulo ficam na faixa do meio da tela, alinhados à esquerda, entre duas
+   faixas livres; a prova social e o botão ficam numa linha própria, presos à
+   base. O título também respeita a altura, para sobrar respiro em telas baixas. */
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
-.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: auto auto auto minmax(72px, 1fr); min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 32px clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
-.hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; justify-self: start; margin: 0; }
-.hero--editorial .hero__h1 { grid-column: 1 / -1; min-width: 0; min-height: 2.35em; font-size: clamp(28px, 8.2vw, 132px); font-weight: 500; line-height: 1.06; letter-spacing: -.065em; }
+.hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(40px, 1fr) auto auto auto minmax(40px, 1fr) auto; min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 0 clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
+.hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin: 0 0 clamp(24px, 3.5svh, 40px); }
+.hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, min(8.2vw, 12.5svh), 132px); font-weight: 300; line-height: 1.06; letter-spacing: -.065em; }
 .hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
-.hero--editorial .hero__revops { margin-left: 0; font-weight: inherit; }
+/* Título em light; o trecho riscado e o RevOps ficam em medium. */
+.hero--editorial .hero__revops { margin-left: 0; font-weight: 500; }
+.hero--editorial .hero__risco { font-weight: 500; }
 .hero--editorial .hero__apoio { display: contents; }
-.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 3; justify-self: start; width: min(100%, 760px); margin: 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
-.hero--editorial .hero__acoes { grid-column: 2; grid-row: 4; margin: 0; }
+.hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: start; width: min(100%, 760px); margin: clamp(24px, 3.5svh, 40px) 0 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
+.hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
-.hero--editorial .hero__base { grid-column: 1; grid-row: 4; justify-content: flex-start; }
+.hero--editorial .hero__base { grid-column: 1; grid-row: 6; justify-content: flex-start; }
 @media (prefers-reduced-motion: no-preference) {
   /* RevOps termina de entrar aos 4,25 s; só então o subtítulo aparece. */
   .js .hero--editorial .hero__lead { animation: hero-subtitulo-entra .7s var(--easing) 4.25s both; }
@@ -130,8 +188,9 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   .hero--editorial .hero__palco { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; gap: 32px; padding-top: 16px; }
   .hero--editorial .hero__apoio { display: grid; grid-column: 1; grid-row: auto; max-width: none; gap: 24px; padding: 0; }
-  .hero--editorial .hero__base { grid-row: auto; }
-  .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; font-size: 16px; }
+  .hero--editorial .hero__palco .hero__selo, .hero--editorial .hero__h1, .hero--editorial .hero__base { grid-row: auto; }
+  .hero--editorial .hero__palco .hero__selo { margin: 0; }
+  .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; margin: 0; font-size: 16px; }
   .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; }
 }
 .home-refinada .cortina > #perguntas { background: transparent; }
@@ -169,10 +228,37 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__nome { margin: 0; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.15; max-width: none; text-wrap: balance; }
 .operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
-.resultados-editoriais__cabeca { margin-bottom: clamp(32px, 4vw, 56px); }
+.resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
 .resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
-.resultado-ficha__ilustracao { width: calc(100% + 40px); margin: 20px -20px 0; aspect-ratio: 4 / 3; mask-image: radial-gradient(ellipse, #000 48%, transparent 76%); }
-.resultado-ficha--destaque .resultado-ficha__numero { padding-top: 8px; font-size: clamp(80px, 8vw, 122px); }
+/* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
+   de duas linhas. Nos Resultados, centrada. */
+:is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
+/* Espaçamento das cabeças (28/09): título um pouco mais aberto e o subtítulo mais afastado. */
+#perguntas .operacao__texto .operacao__titulo { line-height: 1.1; }
+#perguntas .cabeca-dobra__apoio { margin-top: clamp(24px, 2.4vw, 36px); }
+/* Onde a cabeça já tem gap próprio, a margem só completa os ~36px. */
+:is(#fale, #formulario, #academy-tools) .cabeca-dobra__selo { margin-bottom: 8px; }
+#pilares-revena .cabeca-dobra__selo { margin-bottom: 24px; }
+#o-que-fazemos .metodo__selo { margin-bottom: 28px; }
+@media (min-width: 1000px) {
+  #o-que-fazemos .metodo__selo { margin-top: 46px; }   /* selo + título no meio do vão entre a barra de cima e a do meio do R */
+}
+/* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
+   Ecossistema, logo depois, encosta mais. */
+.home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
+.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px); }   /* e menos respiro antes do formulário */
+.cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
+.resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
+.resultados-editoriais__cabeca .titulo { margin-inline: auto; }
+.resultados-editoriais .cabeca-dobra__apoio { color: #50504e; }
+/* Apoio de Resultados numa linha só onde cabe (Lenora, 30/09); no celular
+   volta a quebrar, equilibrado. O text-wrap também vai no nowrap: os dois
+   dividem o text-wrap-mode com o balance da regra geral. */
+@media (min-width: 720px) {
+  .resultados-editoriais .cabeca-dobra__apoio { max-width: none; white-space: nowrap; text-wrap: nowrap; }
+}
+/* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
+#perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
 
 @media (max-width: 1099.98px) {
   .features-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -182,11 +268,6 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
   .operacao-editorial .operacao__texto { position: static; }
-  .resultado-ficha--destaque { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
-  .resultado-ficha--destaque .resultado-ficha__topo { grid-column: 1 / -1; }
-  .resultado-ficha__ilustracao { grid-column: 2; grid-row: 2 / span 2; margin: 0; width: 100%; }
-  .resultado-ficha--destaque .resultado-ficha__numero { grid-column: 1; grid-row: 2; }
-  .resultado-ficha--destaque .resultado-ficha__texto { grid-column: 1; grid-row: 3; }
 }
 @media (max-width: 599.98px) {
   .features-grade { grid-template-columns: 1fr; }
@@ -196,8 +277,6 @@ section[id] { scroll-margin-top: 110px; }
   .pilares-editoriais__ponte { flex-direction: column; align-items: start; }
   .operacao-editorial .operacao__cartao { padding: 24px 20px; min-height: 0; gap: 0; }
   .operacao-editorial .operacao__texto-item { font-size: 16px; }
-  .resultado-ficha--destaque { display: flex; align-items: stretch; }
-  .resultado-ficha__ilustracao { width: 100%; margin: 8px 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .feature-card__arte .arte-pilar, .feature-card:hover .arte-pilar { transition: none; transform: none; }
@@ -221,7 +300,11 @@ section[id] { scroll-margin-top: 110px; }
   font-weight: 300; letter-spacing: -.055em; word-spacing: normal;
   text-transform: none; color: var(--papel);
 }
-.metodo__titulo > span { display: block; }
+/* Título numa linha só (quebra equilibrada se não couber); a segunda parte
+   ("Renke faz", "metodologia") em medium. */
+.metodo-editorial h2.metodo__titulo { text-wrap: balance; }
+.metodo__titulo > span { display: inline; }
+.metodo__titulo > span:last-child { font-weight: 500; }
 .metodo-editorial .metodo__descricao { max-width: 56ch; margin: 0; font-size: clamp(16px, 1.3vw, 18px); line-height: 1.65; color: #bcbcbc; }
 .metodo__descricao > span { display: inline; }
 .metodo-editorial .metodo__midia { grid-area: midia; width: 100%; max-width: none; align-self: start; justify-self: stretch; }
@@ -236,11 +319,103 @@ section[id] { scroll-margin-top: 110px; }
 .metodo__valor-reserva, .metodo__valor-contagem { grid-area: 1 / 1; }
 .metodo__valor-reserva { visibility: hidden; }
 .metodo-editorial .metodo__legenda { max-width: none; white-space: nowrap; font-size: 12px; line-height: 1.45; color: #aaa; }
+/* Dobra papel (28/09/2026, referência Hikari): painel cinza-claro com cantos
+   chanfrados, recuado das bordas da tela, a cena aparece no recuo. Cinza
+   neutro #dddddd, o da referência (texto #252523). A caixa de vidro vira a
+   própria dobra; o container desconta o recuo para o conteúdo seguir na
+   margem da hero. No papel o número fica em grafite (a regra dos tokens:
+   amarelo nunca como texto sobre claro). */
+.home-refinada #o-que-fazemos {
+  --metodo-recuo: clamp(8px, 1.25vw, 20px);
+  --metodo-chanfro: clamp(14px, 1.5vw, 24px);
+  margin-inline: var(--metodo-recuo);
+  /* Cantos em corte diagonal (chanfro), não arredondados. */
+  clip-path: polygon(
+    var(--metodo-chanfro) 0, calc(100% - var(--metodo-chanfro)) 0, 100% var(--metodo-chanfro),
+    100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
+    var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
+  background: #dddddd; color: #252523;
+  --metodo-respiro: clamp(40px, 4vw, 64px);   /* respiro curto: a dobra cabe numa tela (28/09: um pouco mais curta) */
+  padding-block: var(--metodo-respiro);
+}
+.home-refinada #o-que-fazemos > .container {
+  max-width: calc(var(--largura) - 2 * var(--metodo-recuo));
+  padding-inline: max(16px, calc(var(--gutter) - var(--metodo-recuo)));
+}
+.home-refinada .metodo-editorial {
+  max-width: none; padding: 0; border-radius: 0; background: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.home-refinada .metodo-editorial h2.metodo__titulo { color: #252523; }
+.home-refinada .metodo-editorial .metodo__descricao { color: #50504e; }
+.home-refinada .metodo-editorial .metodo__valor { color: #252523; font-weight: 300; }
+.home-refinada .metodo-editorial .metodo__legenda { color: #5f5f5d; }
+.home-refinada #o-que-fazemos :focus-visible { outline-color: #252523; }
+/* Diagramação editorial (28/09, referência Aura, terceira leitura), na grade
+   de 12 do site:
+   - vídeo no centro (colunas 5–8), a peça principal, na altura da tela;
+   - título no alto à esquerda (1–4), com o selo por cima;
+   - o parágrafo embaixo à esquerda (1–4), sob um fio fino, na linha de base do vídeo;
+   - à direita, embaixo, o número único, grande e fino, subindo de 0 ao valor;
+   - por trás de tudo, o R da parede do salão ocupando a dobra inteira.
+   Ruído leve sobre o fundo e o R, não sobre vídeo e textos. */
+.metodo__r { display: none; }
+.home-refinada #o-que-fazemos .tel__moldura, .home-refinada #o-que-fazemos .tel__tela { border-radius: 8px; }
+@media (min-width: 1000px) {
+  .home-refinada #o-que-fazemos { position: relative; isolation: isolate; }
+  .home-refinada #o-que-fazemos > .container { position: relative; z-index: 2; }
+  .home-refinada #o-que-fazemos::after {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .16; mix-blend-mode: multiply;
+  }
+  /* O R ocupa o painel inteiro, por trás do conteúdo (e sob o ruído): o
+     viewBox tem a proporção do painel a 1600px e estica com ele; a faixa
+     mantém a espessura (non-scaling-stroke). Traçado pelos vazios, sem a
+     haste: as barras vêm da borda esquerda, a de cima acima do selo e a do
+     meio no centro vertical; barriga no canto superior direito; perna ao
+     lado do número. */
+  .home-refinada #o-que-fazemos .metodo__r {
+    display: block; position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
+    color: var(--destaque); stroke: currentColor; stroke-width: 88px; stroke-linejoin: miter;   /* faixa grossa, como a fita da parede */
+  }
+  .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; isolation: isolate; }
+  /* Profundidade no vídeo, como a bolinha dos selos: só a sombra caindo para baixo e para a direita, sem anel. */
+  .home-refinada #o-que-fazemos .tel__moldura { box-shadow: 28px 40px 70px -28px rgb(22 22 22 / .55); }
+  .home-refinada .metodo-editorial {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto 1fr auto; grid-template-areas: none;
+    column-gap: clamp(16px, 2vw, 32px); row-gap: 0; align-items: stretch;
+  }
+  .home-refinada .metodo-editorial :is(.metodo__texto, .metodo__apresentacao) { display: contents; }
+  .home-refinada .metodo-editorial .metodo__selo { grid-column: 1 / span 4; grid-row: 1; }
+  .home-refinada .metodo-editorial h2.metodo__titulo { grid-column: 1 / span 4; grid-row: 2; align-self: start; }
+  .home-refinada .metodo-editorial .metodo__titulo > span { display: block; }
+  .home-refinada .metodo-editorial .metodo__midia {
+    grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / -1; justify-self: center; align-self: center;
+    width: min(100%, 400px, calc((100svh - 2 * var(--metodo-respiro) - 60px) * 9 / 16)); max-width: none;
+  }
+  /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
+  /* Parágrafo embaixo à esquerda e número embaixo à direita, os dois sob um fio. */
+  /* Parágrafo e número logo abaixo da barra do meio do R, que fica no centro
+     vertical da dobra: ocupam a altura toda da grade e descem 50% dela (o
+     'top' de um item de grade com position: relative mede a área da grade)
+     mais meia faixa (44px) e um respiro. */
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros) { grid-row: 1 / -1; align-self: start; top: calc(50% + 44px + 40px); }
+  .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
+  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 auto auto 0; width: 100%; height: 1px; background: rgb(37 37 35 / .24); }
+  .home-refinada .metodo-editorial .metodo__numeros::before { width: min(100%, 250px); }   /* fio curto: a perna do R passa ao lado */
+  .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
+  .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; margin: 0; padding-top: 22px; }
+  /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
+  .home-refinada .metodo-editorial .metodo__numero { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }   /* número em cima, legenda embaixo: fica estreito, longe da perna */
+  .home-refinada .metodo-editorial .metodo__valor { font-size: clamp(96px, 8.8vw, 150px); font-weight: 200; line-height: .76; letter-spacing: -.06em; font-variant-numeric: proportional-nums; }   /* sem os algarismos tabulares, que abriam o "+30" */
+  .home-refinada .metodo-editorial .metodo__legenda { max-width: none; padding-bottom: 0; white-space: nowrap; font-size: clamp(12px, 1.12vw, 19px);   /* na proporção do número: a legenda ocupa a largura do +30 */ line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
+}
 @media (max-width: 999.98px) {
   .metodo-editorial { grid-template-columns: 1fr; grid-template-areas: "texto" "midia"; gap: 40px; }
   .metodo-editorial .metodo__texto { grid-template-rows: auto auto; }
   .metodo-editorial h2.metodo__titulo { font-size: clamp(40px, 6vw, 56px); margin-bottom: 0; }
-  .metodo-editorial .metodo__midia { width: min(100%, 240px); justify-self: center; }
+  .metodo-editorial .metodo__midia { width: min(100%, 240px); margin-inline: auto; }
   .metodo-editorial .metodo__valor { font-size: clamp(36px, 5.6vw, 50px); }
 }
 @media (max-width: 599.98px) {
@@ -257,12 +432,21 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Contato: texto e formulário próximos, centralizados na mesma composição. */
 #formulario { padding-block: clamp(40px, 4vw, 64px); }
-#formulario .form-block { grid-template-columns: minmax(0, 400px) minmax(0, 460px); justify-content: center; gap: clamp(32px, 4vw, 56px); }
+/* Na grade de 12 do site (28/09): texto nas colunas 1–5, na margem esquerda;
+   formulário nas colunas 8–12, na margem direita. */
+#formulario .form-block { grid-template-columns: repeat(12, minmax(0, 1fr)); justify-content: stretch; column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; }
+#formulario .form-block__text { grid-column: 1 / span 5; }
+#formulario .form-card { grid-column: 8 / -1; max-width: none; }
+@media (min-width: 900px) {
+  #formulario .form-block { align-items: start; }   /* selo e cartão começam na mesma linha */
+  .home-refinada #formulario { padding-top: clamp(32px, 3vw, 48px); }
+}
 #formulario .form-block__text { gap: 24px; }
 #formulario .form-block__text .titulo { max-width: none; }
 #formulario .form-card { justify-self: stretch; }
 @media (max-width: 899.98px) {
   #formulario .form-block { grid-template-columns: minmax(0, 560px); gap: 32px; }
+  #formulario :is(.form-block__text, .form-card) { grid-column: auto; }
   #formulario .form-card { max-width: none; }
 }
 
@@ -312,6 +496,12 @@ section[id] { scroll-margin-top: 110px; }
 @media (min-width: 600px) and (max-width: 899.98px) {
   #perguntas .operacao__cartoes { grid-template-columns: 1fr 1fr; gap: 20px; }
   #perguntas .operacao__cartao:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+/* No celular a ilustração do ganho ocupa a largura toda do cartão (entra no
+   recuo de 20px dos lados): as cenas já têm margem própria de ~48 unidades,
+   e os rótulos crescem uns 14%. */
+@media (max-width: 599.98px) {
+  #perguntas .operacao__ilustracao { width: calc(100% + 40px); margin-inline: -20px; }
 }
 
 /* Planos da copy: número em 12px, o piso de leitura. Sem foto ainda, o

@@ -14,6 +14,7 @@
 import CartaoFoto from './CartaoFoto.astro';
 import Icone from '../ui/Icone.astro';
 import { cultura, fotos } from '../../data/sobre';
+import Selo from '../ui/Selo.astro';
 
 const comFoto = !!fotos.cultura.foto;
 ---
@@ -25,7 +26,7 @@ const comFoto = !!fotos.cultura.foto;
 >
   <div class="container sb-grade">
     <div class="sb-cultura__cabeca entra" style="--i:0">
-      <p class="rotulo">{cultura.rotulo}</p>
+      <Selo>{cultura.rotulo}</Selo>
       <h2 class="sb-cultura__titulo" id="sobre-cultura-titulo">{cultura.h2}</h2>
     </div>
     <div class="sb-cultura__corpo entra" style="--i:1">

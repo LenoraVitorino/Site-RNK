@@ -18,10 +18,11 @@
  * data-cena="hero".
  */
 import { abertura } from '../../data/sobre';
+import Selo from '../ui/Selo.astro';
 ---
 <section class="secao int-secao sb-abertura" id="sobre-abertura" data-cena="hero" data-tom="cena" aria-labelledby="sobre-abertura-titulo">
   <div class="container sb-grade sb-abertura__miolo">
-    <p class="rotulo sb-abertura__rotulo">{abertura.rotulo}</p>
+    <Selo class="sb-abertura__rotulo">{abertura.rotulo}</Selo>
     <h1 class="titulo sb-abertura__titulo entra" id="sobre-abertura-titulo" style="--i:0">
       <span>{abertura.linhasH1[0]}</span>{' '}<span>{abertura.linhasH1[1]}</span>
     </h1>

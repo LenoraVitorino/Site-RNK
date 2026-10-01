@@ -44,7 +44,7 @@ p, li, dd, dt, figcaption, blockquote { text-wrap: pretty; }
    destaques em 500. Menos ruído para uma página com muito texto. */
 .titulo, .ancora, .plano__nome, .cartao h2, .esteira__numero b, .painel-dados__num {
   font-family: var(--font-titulo); font-weight: var(--peso-titulo); letter-spacing: -.035em;
-  word-spacing: -.08em;   /* a Inter tem espaço largo; com o tracking apertado, as palavras ficavam soltas */
+  word-spacing: -.01em;   /* 28/09: com -.08em as palavras dos títulos grandes colavam ("a forma como sua"); quase o espaço natural da Inter */
 }
 p { margin: 0; }
 strong, b { font-weight: var(--peso-enfase); }
@@ -227,7 +227,7 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 .logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
 /* Só o monograma "R", na cor da marca. */
 .logo__img { width: 34px; height: 34px; max-width: none; }
-.logo__img--rodape { width: auto; height: 40px; }
+.logo__img--rodape { width: auto; height: 28px; }   /* Grupo RNK: logotipo largo (28/09) */
 
 .nav-toggle {
   display: grid; gap: 4px; place-content: center; margin-left: 0; flex: none;

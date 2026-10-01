@@ -1,0 +1,116 @@
+---
+/**
+ * Oportunidades de mercado: o painel "Movimentos do mercado · Sua região",
+ * no molde da lista da Automação (29/09: o mapa "ainda tá muito IA, tem
+ * que deixar mais soft e elegante"). Quatro movimentos que a Renke
+ * acompanha na região, uma linha cada, só com o nome, o lugar e quando:
+ * "Nova clínica aberta · Centro · hoje", "Campanha de preço · Instagram ·
+ * Centro · há 3 dias", "Procura em alta · Harmonização · Zona norte" e,
+ * um tom abaixo, "Clínica encerrou · Zona sul · agosto". A procura em alta
+ * é a oportunidade: a linha fica um tom acima do fundo, como a consulta na
+ * Automação, e ganha a pílula "Oportunidade" com o ponto amarelo, o único
+ * toque de cor. Na entrada, as linhas chegam uma a uma, a faixa da
+ * oportunidade acende e a pílula aparece. Pose estática = pose final.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Painel de 472 × 216 (x 24 a 496, y 16 a 232), cabeçalho de 44. Linhas
+   de 40 a partir de y 60: ícone de 16 em x 44, nome em x 72 (Inter 13 /
+   500), o lugar logo depois (Inter 12, a 8 do nome) e o quando com a
+   ponta direita em x 476. */
+const PX = 24, PY = 16, PW = 472, PH = 216;
+const DIR = PX + PW - 20;
+const L0 = PY + 44, LH = 40;
+type Linha = { nome: string; w: number; onde: string; quando?: string; icone: string; agora?: boolean; oportunidade?: boolean; antes?: boolean };
+const linhas = ([
+  { nome: 'Nova clínica aberta', w: 119.5, onde: 'Centro', quando: 'hoje', icone: 'pino', agora: true },
+  { nome: 'Campanha de preço', w: 125.4, onde: 'Instagram · Centro', quando: 'há 3 dias', icone: 'etiqueta' },
+  { nome: 'Procura em alta', w: 97.5, onde: 'Harmonização · Zona norte', icone: 'alta', oportunidade: true },
+  { nome: 'Clínica encerrou', w: 101.9, onde: 'Zona sul', quando: 'agosto', icone: 'encerrou', antes: true },
+] as Linha[]).map((l, i) => ({ ...l, y: L0 + i * LH }));
+const OY = linhas.find((l) => l.oportunidade)!.y;
+/* Pílula "Oportunidade" (Inter 11 / 500, 72,4): ponto de 5 a 10 da borda,
+   texto a 21; 104 de largura, com a ponta direita em x 476. */
+const OW = 104, OX = DIR - OW;
+---
+<g class="mercado">
+  {/* Painel. */}
+  <rect x={PX} y={PY} width={PW} height={PH} rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={PX + 16} y={PY + 0.5} width="330" height="1" fill={`url(#${p}-fio-h)`} />
+  <text x={PX + 20} y={PY + 27} class="mercado__titulo">Movimentos do mercado</text>
+  <text x={DIR} y={PY + 27} text-anchor="end" class="mercado__meta">Sua região</text>
+  <rect x={PX} y={L0} width={PW} height="1" class="mercado__divisa" />
+
+  {/* A linha da oportunidade, um tom acima do fundo. */}
+  <g class="mercado__faixa">
+    <rect x={PX + 0.5} y={OY} width={PW - 1} height={LH} class="mercado__faixa-fundo" />
+    <rect x={PX} y={OY} width={PW} height="1" class="mercado__divisa" />
+    <rect x={PX} y={OY + LH} width={PW} height="1" class="mercado__divisa" />
+  </g>
+
+  {/* Linhas. */}
+  {linhas.map(({ nome, w, onde, quando, icone, agora, oportunidade, antes, y }, i) => (
+    <g class:list={['mercado__linha', { 'mercado__linha--antes': antes }]} style={`--i:${i}`}>
+      {i > 0 && !oportunidade && linhas[i - 1].oportunidade !== true
+        ? <rect x="72" y={y} width={PX + PW - 72} height="1" class="mercado__divisa" />
+        : null}
+      <g class="a-icone mercado__icone" transform={`translate(44 ${y + 12}) scale(.6667)`}>
+        {icone === 'pino' && <>
+          <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+          <circle cx="12" cy="10" r="3" />
+        </>}
+        {icone === 'etiqueta' && <>
+          <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+          <circle cx="7.5" cy="7.5" r=".5" />
+        </>}
+        {icone === 'alta' && <>
+          <path d="M22 7 13.5 15.5 8.5 10.5 2 17" />
+          <path d="M16 7h6v6" />
+        </>}
+        {icone === 'encerrou' && <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M8.5 12h7" />
+        </>}
+      </g>
+      <text x="72" y={y + 24.5} class:list={['mercado__nome', { 'mercado__nome--antes': antes }]}>{nome}</text>
+      <text x={72 + w + 8} y={y + 24.5} class="mercado__onde">{onde}</text>
+      {quando && <text x={DIR} y={y + 24.5} text-anchor="end" class:list={['mercado__quando', { 'mercado__quando--agora': agora }]}>{quando}</text>}
+    </g>
+  ))}
+
+  {/* A pílula da oportunidade, com o ponto amarelo. */}
+  <g class="mercado__oportunidade">
+    <rect x={OX} y={OY + 9} width={OW} height="22" rx="11" class="mercado__pilula" />
+    <circle cx={OX + 12.5} cy={OY + 20} r="2.5" class="a-destaque" />
+    <text x={OX + 21} y={OY + 24} class="mercado__pilula-texto">Oportunidade</text>
+  </g>
+</g>
+
+<style>
+  .mercado__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .mercado__meta { font-size: 11.5px; fill: #8a8a85; letter-spacing: -.005em; }
+  .mercado__divisa { fill: #ffffff; fill-opacity: .06; }
+  .mercado__faixa-fundo { fill: #ffffff; fill-opacity: .045; }
+  .mercado .mercado__icone { stroke: #8a8a85; stroke-width: 2.1; }
+  .mercado__nome { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  /* O que já passou fica um tom abaixo. */
+  .mercado__nome--antes { fill: #b9b9b4; }
+  .mercado .mercado__linha--antes .mercado__icone { stroke: #6f6f6b; }
+  .mercado__onde { font-size: 12px; fill: #8a8a85; letter-spacing: -.005em; }
+  .mercado__quando { font-size: 11px; fill: #8a8a85; }
+  .mercado__quando--agora { fill: #d6d6d1; }
+  .mercado__pilula { fill: #ffffff; fill-opacity: .06; stroke: #ffffff; stroke-opacity: .14; }
+  .mercado__pilula-texto { font-size: 11px; font-weight: 500; fill: #d6d6d1; }
+
+  /* Movimento, uma vez, na entrada:
+     0,4–2,0 s  as linhas chegam uma a uma, subindo 4, com fade;
+     1,8–2,6    a faixa da oportunidade acende;
+     2,4–3,0    a pílula "Oportunidade" aparece.
+     Depois, nada se move. */
+  .mercado__linha { animation: mercado-chega .8s var(--a-entra) calc(.4s + var(--i) * .25s) both; }
+  .mercado__faixa { animation: mercado-aparece .8s var(--a-entra) 1.8s both; }
+  .mercado__oportunidade { animation: mercado-aparece .6s var(--a-entra) 2.4s both; }
+  @keyframes mercado-chega { from { opacity: 0; transform: translateY(4px); } }
+  @keyframes mercado-aparece { from { opacity: 0; } }
+</style>

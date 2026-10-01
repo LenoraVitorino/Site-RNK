@@ -1,0 +1,98 @@
+---
+/**
+ * Aquisição sob controle: três canais (Busca, Redes sociais, Indicação) à
+ * esquerda, de onde saem fluxos em curva, tipo Sankey, que convergem no chip
+ * "Consulta". A espessura de cada faixa mostra o peso do canal, sem número.
+ * Um tracejado miúdo corre devagar pelo eixo de cada faixa. Pose estática =
+ * pose final; o movimento só parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Canais: pílula de 144 × 32 (x 60 a 204) com o centro em y; t é a
+   espessura da faixa e yd o centro dela na chegada (faixas empilhadas com
+   vão de 2; a do meio segue reta até o chip). Cada faixa nasce sob a pílula,
+   curva de x 212 a 380 com as alças no meio (296) e some sob o soquete. */
+const canais = [
+  { rotulo: 'Busca', icone: 'busca', y: 61, t: 20, yd: 108 },
+  { rotulo: 'Redes sociais', icone: 'redes', y: 125, t: 10, yd: 125 },
+  { rotulo: 'Indicação', icone: 'indicacao', y: 189, t: 16, yd: 140 },
+];
+const faixa = ({ y, t, yd }: { y: number; t: number; yd: number }) => {
+  const a = y - t / 2, b = y + t / 2, c = yd - t / 2, d = yd + t / 2;
+  return `M188 ${a}H212C296 ${a} 296 ${c} 380 ${c}H404V${d}H380C296 ${d} 296 ${b} 212 ${b}H188Z`;
+};
+const eixo = ({ y, yd }: { y: number; yd: number }) => `M188 ${y}H212C296 ${y} 296 ${yd} 380 ${yd}H404`;
+const CX = 424, CY = 125;
+---
+<g class="aquisicao">
+  <defs>
+    {/* As faixas clareiam um pouco a caminho da chegada. */}
+    <linearGradient id={`${p}-faixa`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".025" /><stop offset="1" stop-color="#ffffff" stop-opacity=".075" />
+    </linearGradient>
+    <linearGradient id={`${p}-borda`} gradientUnits="userSpaceOnUse" x1="204" y1="0" x2="388" y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity=".18" />
+    </linearGradient>
+  </defs>
+
+  <rect width="520" height="250" fill={`url(#${p}-pontos)`} mask={`url(#${p}-esmaece)`} />
+
+  {/* Faixas e, por cima, o fluxo miúdo no eixo de cada uma. */}
+  {canais.map((c) => (
+    <path d={faixa(c)} fill={`url(#${p}-faixa)`} stroke={`url(#${p}-borda)`} />
+  ))}
+  {canais.map((c) => <path class="aquisicao__fluxo" d={eixo(c)} />)}
+
+  {/* Canais. */}
+  {canais.map(({ rotulo, icone, y }) => (
+    <g>
+      <rect x="60" y={y - 16} width="144" height="32" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+      <g class="a-icone aquisicao__icone" transform={`translate(76 ${y - 8}) scale(.6667)`}>
+        {icone === 'busca' && <>
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </>}
+        {icone === 'redes' && <>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" />
+        </>}
+        {icone === 'indicacao' && <>
+          <path d="M18 21a8 8 0 0 0-16 0" />
+          <circle cx="10" cy="8" r="5" />
+          <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+        </>}
+      </g>
+      <text x="100" y={y + 5} class="a-rotulo aquisicao__rotulo">{rotulo}</text>
+    </g>
+  ))}
+
+  {/* Chegada: chip "Consulta" (soquete 72, chip 56), com o dia marcado. */}
+  <rect x={CX - 36} y={CY - 36} width="72" height="72" rx="20" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x={CX - 28} y={CY - 28} width="56" height="56" rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={CX - 18} y={CY - 27.5} width="36" height="1" fill={`url(#${p}-fio-h)`} />
+  <g class="a-icone aquisicao__icone--chegada" transform={`translate(${CX - 10} ${CY - 10}) scale(.8333)`}>
+    <path d="M8 2v4M16 2v4" />
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M3 10h18" />
+  </g>
+  <circle cx={CX + 2.5} cy={CY + 3.5} r="1.9" class="a-destaque" />
+  <text x={CX} y={CY + 60} text-anchor="middle" class="a-rotulo aquisicao__chegada">Consulta</text>
+</g>
+
+<style>
+  .aquisicao .aquisicao__rotulo { font-size: 14px; }
+  .aquisicao .aquisicao__icone { stroke-width: 2.1; stroke: #9d9d98; }
+  .aquisicao .aquisicao__icone--chegada { stroke-width: 1.68; stroke: #ecece8; }
+  .aquisicao .aquisicao__chegada { font-size: 14px; fill: #ecece8; }
+
+  /* Movimento: um tracejado miúdo corre pelo eixo de cada faixa, sempre, bem
+     devagar (6 unidades por segundo) e apagado, como fluxo. O deslocamento
+     é múltiplo do passo do tracejado (12), então o laço não tem emenda. */
+  .aquisicao__fluxo {
+    fill: none; stroke: #ffffff; stroke-opacity: .26; stroke-width: 1.3; stroke-linecap: round;
+    stroke-dasharray: 0 12;
+    animation: aquisicao-flui 8s linear infinite;
+  }
+  @keyframes aquisicao-flui { to { stroke-dashoffset: -48; } }
+</style>

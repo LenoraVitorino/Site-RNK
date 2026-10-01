@@ -1,0 +1,51 @@
+/* ============================================================
+   Ilustrações dos cartões (28/09/2026). Vale para as duas versões.
+
+   Direção: interfaces desenhadas com precisão, em preto e grafite, no
+   espírito das referências de vidro fosco escuro. Composição frontal (sem
+   cartões tortos), fio fino em vez de blocos cinza, poucos elementos, muito
+   ar. O amarelo é só um ponto, um visto ou a ponta de uma linha, nunca um
+   elemento principal. Sem brilho, sem halo, sem neon.
+
+   Movimento: um ou dois detalhes por cena, lentos e amortecidos. O estado
+   estático de cada elemento é a pose final da cena; a animação só parte de
+   outro estado ou passa por ele. Assim, com movimento reduzido ou sem JS,
+   a cena aparece pronta.
+   ============================================================ */
+
+.arte { display: block; width: 100%; height: 100%; overflow: visible; }
+.arte text { font-family: var(--font); font-kerning: normal; }
+
+/* Tipografia das cenas (unidades do viewBox). As classes comuns vão em
+   :where(.arte), sem peso de especificidade: a regra de uma cena (com o
+   escopo do Astro) sempre ganha, qualquer que seja a ordem dos estilos. */
+:where(.arte) .a-micro { font-size: 10.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; fill: #7c7c78; }
+:where(.arte) .a-rotulo { font-size: 12.5px; font-weight: 400; letter-spacing: -.005em; fill: #b9b9b4; }
+:where(.arte) .a-forte { font-size: 13.5px; font-weight: 500; letter-spacing: -.012em; fill: #ecece8; }
+:where(.arte) .a-titulo { font-size: 21px; font-weight: 300; letter-spacing: -.028em; fill: #efefeb; }
+:where(.arte) .a-apagado { fill: #6f6f6b; }
+
+/* Traços. */
+:where(.arte) .a-fio { fill: none; stroke: #ffffff; stroke-opacity: .12; stroke-width: 1; }
+:where(.arte) .a-fio-forte { fill: none; stroke: #ffffff; stroke-opacity: .28; stroke-width: 1; }
+:where(.arte) .a-tracejado { fill: none; stroke: #ffffff; stroke-opacity: .16; stroke-width: 1; stroke-dasharray: 2 4; }
+:where(.arte) .a-icone { fill: none; stroke: #c9c9c4; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+:where(.arte) .a-icone--apagado { stroke: #7c7c78; }
+:where(.arte) .a-destaque { fill: var(--destaque, #FFD103); }
+:where(.arte) .a-destaque-traco { fill: none; stroke: var(--destaque, #FFD103); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Cursor de colega (arte/Cursor.astro): seta e etiqueta amarelas, o nome
+   em grafite; o contorno escuro da seta a separa do que está embaixo. */
+:where(.arte) .a-cursor__etiqueta { fill: var(--destaque, #FFD103); }
+:where(.arte) .a-cursor__nome { font-size: 11.5px; font-weight: 500; letter-spacing: -.005em; fill: #161616; }
+:where(.arte) .a-cursor__seta { fill: var(--destaque, #FFD103); stroke: #0b0b0b; transform-box: fill-box; transform-origin: 0 0; }
+
+/* Pausa geral: nada se move enquanto a cena não está na tela. */
+.js .arte:not(.em-cena) * { animation-play-state: paused !important; }
+
+/* Curvas de movimento compartilhadas. */
+.arte { --a-entra: cubic-bezier(.16, 1, .3, 1); --a-vai-vem: cubic-bezier(.65, 0, .35, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .arte *, .arte *::before, .arte *::after { animation: none !important; transition: none !important; }
+}

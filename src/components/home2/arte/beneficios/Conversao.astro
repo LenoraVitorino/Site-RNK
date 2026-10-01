@@ -1,0 +1,220 @@
+---
+/**
+ * Mais conversão: o fluxo principal é uma faixa que atravessa a largura
+ * toda, de Contato a Agendado, e afina a cada etapa: o que se perde sai por
+ * baixo, numa faixa fina que desce em curva e se apaga. A perda de
+ * Atendimento é pega por um laço tracejado de follow-up, que a leva de
+ * volta até Agendado. Em laço, um ponto percorre o fluxo direto; um segundo
+ * cai na perda, perde a cor, é resgatado pelo follow-up e chega a Agendado,
+ * que ganha o visto amarelo. Pose estática = pose final; o movimento só
+ * parte dela.
+ */
+interface Props { p: string }
+const { p } = Astro.props;
+
+/* Eixo do fluxo em y 104. Etapas a cada 120 (x 76, 196, 316): soquete 40
+   (raio 13) e chip 28 (raio 9), com ícone de 14. Agendado em x 448:
+   soquete 64 (raio 18) e chip 48 (raio 12). A faixa passa por baixo dos
+   chips e só muda de espessura escondida neles: 24, 18, 12 e 8. Os rótulos
+   ficam todos acima, na mesma linha de base (58); a metade de baixo fica
+   para as perdas. */
+const L = 104;
+const AX = 448;
+const etapas = [
+  { x: 76, rotulo: 'Contato', icone: 'conversa' },
+  { x: 196, rotulo: 'Atendimento', icone: 'telefone' },
+  { x: 316, rotulo: 'Avaliação', icone: 'ficha' },
+];
+const trechos = [
+  { de: 24, ate: 76, t: 24 },
+  { de: 76, ate: 196, t: 18 },
+  { de: 196, ate: 316, t: 12 },
+  { de: 316, ate: AX, t: 8 },
+];
+/* Perda de cada etapa: fita de espessura d colada por baixo do fluxo que
+   segue. Sai do chip e desce numa curva longa (tangente horizontal na
+   saída, vertical na descida), como as faixas de Aquisição; as perdidas
+   se apagam, a resgatada afina até virar o fio do follow-up. */
+const perda = (n: number, tNova: number, d: number, fim: number, afina = false) => {
+  const a = L + tNova / 2, b = a + d, x0 = n + 20, eixo = x0 + 52, v = a + 60;
+  const fora = `M${n} ${a}H${x0}C${x0 + 36 + d} ${a} ${eixo + d / 2} ${a + 22} ${eixo + d / 2} ${v}`;
+  const dentro = `C${eixo - d / 2} ${b + 24} ${x0 + 30} ${b} ${x0} ${b}H${n}Z`;
+  const forma = afina
+    ? `${fora}V${fim - 26}C${eixo + d / 2} ${fim - 12} ${eixo + 0.4} ${fim - 6} ${eixo} ${fim}C${eixo - 0.4} ${fim - 6} ${eixo - d / 2} ${fim - 12} ${eixo - d / 2} ${fim - 26}V${v}${dentro}`
+    : `${fora}V${fim}H${eixo - d / 2}V${v}${dentro}`;
+  return { forma, a, fim, eixo, meio: a + d / 2, x0, d, v };
+};
+const perdas = [
+  { ...perda(76, 18, 6, 190), resgate: false },
+  { ...perda(196, 12, 6, 186, true), resgate: true },
+  { ...perda(316, 8, 4, 176), resgate: false },
+];
+const R = perdas[1];
+/* Follow-up: do fim da fita resgatada (x 268, y 186), desce até y 204,
+   dobra (raio 16), corre até x 432 e sobe (raio 16) à base de Agendado. */
+const LY = 204;
+const volta = `V${LY - 16}C${R.eixo} ${LY - 7.2} ${R.eixo + 7.2} ${LY} ${R.eixo + 16} ${LY}H${AX - 16}C${AX - 7.2} ${LY} ${AX} ${LY - 7.2} ${AX} ${LY - 16}`;
+const LACO = `M${R.eixo} ${R.fim}${volta}V${L + 32}`;
+/* Caminho do segundo ponto: eixo do fluxo, eixo da fita, laço e subida
+   até o centro de Agendado (onde some, sob o chip). */
+const RESGATE = `M24 ${L}H196V${R.meio}H${R.x0}C${R.x0 + 39} ${R.meio} ${R.eixo} ${R.a + 25} ${R.eixo} ${R.v}${volta}V${L}`;
+/* Pílula do follow-up: 108 × 28, centrada no trecho reto do laço. */
+const PW = 108, PH = 28, PX = 304, PY = LY - PH / 2;
+---
+<g class="conversao">
+  <defs>
+    {/* O fluxo nasce do escuro na borda esquerda e clareia até o fim. */}
+    <linearGradient id={`${p}-faixa`} gradientUnits="userSpaceOnUse" x1="24" y1="0" x2={AX} y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".1" stop-color="#ffffff" stop-opacity=".035" /><stop offset="1" stop-color="#ffffff" stop-opacity=".075" />
+    </linearGradient>
+    <linearGradient id={`${p}-borda`} gradientUnits="userSpaceOnUse" x1="24" y1="0" x2={AX} y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".1" stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity=".16" />
+    </linearGradient>
+    {/* Cada perda se apaga ao descer; a resgatada perde força, sem sumir. */}
+    {perdas.map(({ a, fim, resgate }, i) => (
+      <>
+        <linearGradient id={`${p}-perda-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1={a} x2="0" y2={fim}>
+          <stop stop-color="#ffffff" stop-opacity=".055" /><stop offset="1" stop-color="#ffffff" stop-opacity={resgate ? '.05' : '0'} />
+        </linearGradient>
+        <linearGradient id={`${p}-perda-borda-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1={a} x2="0" y2={fim}>
+          <stop stop-color="#ffffff" stop-opacity=".14" /><stop offset="1" stop-color="#ffffff" stop-opacity={resgate ? '.2' : '0'} />
+        </linearGradient>
+      </>
+    ))}
+  </defs>
+
+  {/* Perdas (por baixo do fluxo) e o laço de follow-up. */}
+  {perdas.map(({ forma }, i) => <path d={forma} fill={`url(#${p}-perda-${i})`} stroke={`url(#${p}-perda-borda-${i})`} />)}
+  <path class="conversao__laco" d={LACO} />
+
+  {/* Fluxo principal: um trecho por vão, com fio em cima e embaixo. */}
+  {trechos.map(({ de, ate, t }) => (
+    <>
+      <rect x={de} y={L - t / 2} width={ate - de} height={t} fill={`url(#${p}-faixa)`} />
+      <path d={`M${de} ${L - t / 2 + 0.5}H${ate}M${de} ${L + t / 2 - 0.5}H${ate}`} stroke={`url(#${p}-borda)`} />
+    </>
+  ))}
+
+  {/* Os dois pontos que percorrem o fluxo (em repouso, somem sob o chip). */}
+  <path class="conversao__ponto conversao__ponto--direto" d={`M24 ${L}H${AX}`} pathLength="100" />
+  <path class="conversao__ponto conversao__ponto--resgate" d={RESGATE} pathLength="100" />
+
+  {/* Etapas. */}
+  {etapas.map(({ x, rotulo, icone }) => (
+    <g>
+      <rect x={x - 20} y={L - 20} width="40" height="40" rx="13" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+      <rect x={x - 14} y={L - 14} width="28" height="28" rx="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+      <rect x={x - 8} y={L - 13.5} width="16" height="1" fill={`url(#${p}-fio-h)`} />
+      <g class="a-icone conversao__icone" transform={`translate(${x - 7} ${L - 7}) scale(.5833)`}>
+        {icone === 'conversa' && <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />}
+        {icone === 'telefone' && <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />}
+        {icone === 'ficha' && <>
+          <rect x="8" y="2" width="8" height="4" rx="1" />
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          <path d="m9 14 2 2 4-4" />
+        </>}
+      </g>
+      <text x={x} y="58" text-anchor="middle" class="a-rotulo conversao__rotulo">{rotulo}</text>
+    </g>
+  ))}
+
+  {/* Follow-up: a pílula flutua sobre o laço. */}
+  <rect x={PX} y={PY} width={PW} height={PH} rx={PH / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} filter={`url(#${p}-sombra)`} />
+  <rect x={PX + 20} y={PY + 0.5} width={PW - 40} height="1" fill={`url(#${p}-fio-h)`} />
+  {/* O ícone fica amarelo quando o follow-up age: por baixo, a versão
+      cinza; por cima, a amarela, que se apaga e acende no laço. */}
+  {['', ' conversao__icone--laco'].map((extra) => (
+    <g class={`a-icone conversao__icone${extra}`} transform={`translate(${PX + 13} ${PY + 7}) scale(.5833)`}>
+      <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+      <path d="M21 3v5h-5" />
+    </g>
+  ))}
+  <text x={PX + 33} y={PY + 18.5} class="a-rotulo conversao__laco-nome">Follow-up</text>
+
+  {/* Agendado: o destino, com o anel de ancoragem onde o laço chega. */}
+  <rect x={AX - 32} y={L - 32} width="64" height="64" rx="18" fill={`url(#${p}-poco)`} stroke={`url(#${p}-borda-poco)`} />
+  <rect x={AX - 24} y={L - 24} width="48" height="48" rx="12" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={AX - 16} y={L - 23.5} width="32" height="1" fill={`url(#${p}-fio-h)`} />
+  {/* Calendário com o visto: o visto é o toque amarelo, e se desenha
+      quando o contato resgatado chega (por baixo fica o visto cinza, que
+      aparece enquanto o amarelo está apagado). */}
+  <g class="a-icone conversao__icone-fim" transform={`translate(${AX - 10} ${L - 10}) scale(.8333)`}>
+    <path d="M8 2v4M16 2v4" />
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M3 10h18" />
+    <path class="conversao__visto-base" d="m9 16 2 2 4-4" />
+    <path class="conversao__visto conversao__acende" d="m9 16 2 2 4-4" pathLength="1" />
+  </g>
+  <circle class="conversao__anel" cx={AX} cy={L + 32} r="3.5" />
+  <circle class="conversao__miolo" cx={AX} cy={L + 32} r="1.25" />
+  <text x={AX} y="58" text-anchor="middle" class="a-rotulo conversao__rotulo conversao__rotulo--fim">Agendado</text>
+</g>
+
+<style>
+  .conversao__laco { fill: none; stroke: #ffffff; stroke-opacity: .28; stroke-dasharray: 3 4; }
+  .conversao .conversao__rotulo { font-size: 14px; fill: #9d9d98; }
+  .conversao .conversao__rotulo--fim { fill: #ecece8; }
+  .conversao .conversao__icone { stroke: #b9b9b4; stroke-width: 2.4; }
+  /* O ícone do follow-up, que resgata o contato, é um dos acentos amarelos. */
+  .conversao .conversao__icone--laco { stroke: var(--destaque, #FFD103); }
+  .conversao .conversao__icone-fim { stroke: #ecece8; stroke-width: 1.68; }
+  .conversao .conversao__laco-nome { font-size: 13px; fill: #d6d6d1; }
+  .conversao .conversao__visto-base { stroke: #4a4a47; }
+  .conversao .conversao__visto { stroke: var(--destaque, #FFD103); stroke-width: 2; stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+  .conversao__anel { fill: #0e0e0e; stroke: #ffffff; stroke-opacity: .3; }
+  .conversao__miolo { fill: #d6d6d1; }
+  .conversao__ponto {
+    fill: none; stroke: #ecece8; stroke-width: 5; stroke-linecap: round;
+    stroke-dasharray: 0 200; stroke-dashoffset: -100; opacity: 0;
+  }
+
+  /* Movimento, em laço de 12 s (tempos do ciclo):
+     0–0,6 s   repouso na pose final (visto amarelo aceso);
+     0,6–1,0   o visto amarelo e o ícone do follow-up se apagam;
+     0,9–3,0   o primeiro ponto atravessa o fluxo e some sob Agendado;
+     1,3–3,1   o segundo ponto segue o fluxo e cai na perda de
+               Atendimento, perdendo a cor; para um instante embaixo;
+     3,4–5,2   o follow-up o pega (o ícone acende em amarelo): ele
+               recupera a cor, corre pelo laço e sobe até Agendado;
+     5,2–5,7   o visto amarelo se desenha.
+     O resto (≈ 57% do ciclo) é repouso. */
+  .conversao__ponto--direto { animation: conversao-direto 12s var(--a-vai-vem) .4s infinite both; }
+  .conversao__ponto--resgate { animation: conversao-resgate 12s var(--a-vai-vem) .4s infinite both; }
+  .conversao__acende { animation: conversao-acende 12s var(--a-vai-vem) .4s infinite both; }
+  .conversao__icone--laco { animation: conversao-resgata 12s var(--a-vai-vem) .4s infinite both; }
+
+  @keyframes conversao-direto {
+    0%, 7.49% { stroke-dashoffset: -100; opacity: 0; }
+    7.5% { stroke-dashoffset: 0; opacity: 0; }
+    9.17% { opacity: 1; }
+    25% { stroke-dashoffset: -100; opacity: 1; }
+    25.01%, 100% { stroke-dashoffset: -100; opacity: 0; }
+  }
+  @keyframes conversao-resgate {
+    0%, 10.82% { stroke-dashoffset: -100; opacity: 0; }
+    10.83% { stroke-dashoffset: 0; opacity: 0; }
+    12.5% { opacity: 1; }
+    18.75% { opacity: 1; }
+    24.17% { opacity: .3; }
+    25.83% { stroke-dashoffset: -51.8; }
+    28.33% { stroke-dashoffset: -51.8; opacity: .3; }
+    32% { opacity: 1; }
+    43.33% { stroke-dashoffset: -100; opacity: 1; }
+    43.34%, 100% { stroke-dashoffset: -100; opacity: 0; }
+  }
+  /* O ícone do follow-up se apaga com o ponto de Agendado e acende quando
+     pega o contato perdido, junto com a volta da cor do ponto. */
+  @keyframes conversao-resgata {
+    0%, 5% { opacity: 1; }
+    8.33%, 28.33% { opacity: 0; }
+    32%, 100% { opacity: 1; }
+  }
+  /* O visto amarelo de Agendado: some junto com o ícone do follow-up e se
+     desenha quando o contato resgatado chega. */
+  @keyframes conversao-acende {
+    0%, 5% { stroke-dashoffset: 0; opacity: 1; }
+    8.33% { stroke-dashoffset: 0; opacity: 0; }
+    8.34%, 43.33% { stroke-dashoffset: 1; opacity: 1; }
+    47.5%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+</style>

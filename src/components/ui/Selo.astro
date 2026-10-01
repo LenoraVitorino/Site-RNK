@@ -1,0 +1,55 @@
+---
+/**
+ * Selo do texto de apoio (sobretítulo) das dobras: pílula arredondada como o
+ * selo da hero, com uma marca numa bolinha escura à esquerda e sombra suave
+ * saindo dela para baixo e para a esquerda (referência "View more", espelhada).
+ * marca="revena" leva o logo do Protocolo Revena; marca="estrela" (padrão),
+ * o ✦ amarelo do selo da hero. tom="auto" (padrão) é escuro e fica claro
+ * dentro das superfícies claras do site; "claro" e "escuro" forçam o tom.
+ */
+import LogoRevena from './LogoRevena.astro';
+
+interface Props {
+  tag?: 'h2' | 'p';
+  id?: string;
+  class?: string;
+  tom?: 'auto' | 'claro' | 'escuro';
+  marca?: 'revena' | 'estrela';
+}
+const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = Astro.props;
+---
+<Tag class:list={['selo-revena', `selo-revena--${tom}`, classe]} id={id}>
+  <span class="selo-revena__marca" aria-hidden="true">{marca === 'revena' ? <LogoRevena /> : <span class="selo-revena__estrela">✦</span>}</span>
+  <span class="selo-revena__texto"><slot /></span>
+</Tag>
+
+<style>
+  .selo-revena {
+    display: inline-flex; align-items: center; gap: 14px; width: fit-content;   /* em grade, não estica; centra onde a grade centra */
+    margin: 0; padding: 6px 24px 6px 6px; border-radius: 999px;
+    font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 1.2;
+    letter-spacing: -.01em; text-transform: none; text-wrap: balance; max-width: 100%;
+  }
+  .selo-revena--auto, .selo-revena--escuro {
+    background: rgb(15 17 17 / .85); color: var(--papel);
+    box-shadow: 0 0 0 1px rgb(242 242 238 / .1), -16px 22px 44px -22px rgb(0 0 0 / .7);
+  }
+  .selo-revena--claro,
+  :global(:is(.palcoplanos, .resultados-editoriais, #o-que-fazemos, .int-secao--papel)) .selo-revena--auto {
+    background: #fff; color: #252523;
+    box-shadow: 0 0 0 1px rgb(22 22 22 / .07), -16px 22px 44px -22px rgb(22 22 22 / .32);
+  }
+  .selo-revena__marca {
+    display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #3a3a3a, #121212 72%);
+    /* Anel claro e o brilho escuro caindo da bolinha, como na referência. */
+    box-shadow: 0 0 0 3px rgb(255 255 255 / .55), -6px 12px 26px -6px rgb(22 22 22 / .5);
+  }
+  .selo-revena--escuro .selo-revena__marca,
+  .selo-revena--auto .selo-revena__marca { box-shadow: 0 0 0 3px rgb(242 242 238 / .08), -6px 12px 26px -6px rgb(0 0 0 / .8); }
+  :global(:is(.palcoplanos, .resultados-editoriais, #o-que-fazemos, .int-secao--papel)) .selo-revena--auto .selo-revena__marca {
+    box-shadow: 0 0 0 3px rgb(255 255 255 / .55), -6px 12px 26px -6px rgb(22 22 22 / .5);
+  }
+  .selo-revena__marca :global(svg) { width: 56%; height: 56%; }
+  .selo-revena__estrela { color: var(--destaque); font-size: 20px; line-height: 1; }
+</style>

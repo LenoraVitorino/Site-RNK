@@ -1,5 +1,5 @@
 /* Navegação compacta compartilhada pela home e páginas internas. */
-.header .logo__img { width: 128px; height: auto; display: block; }
+.header .logo__img { width: 136px; height: auto; display: block; }   /* Grupo RNK (28/09) */
 .header--claro .logo__img, .header--amarelo .logo__img { filter: brightness(0); }
 .header .megamenu__plano { display: inline-grid; flex: none; width: 24px; height: 24px; }
 .header .megamenu__plano img { width: 24px; height: 24px; grid-area: 1 / 1; }
@@ -37,7 +37,7 @@
   .header--claro { --cab-bg: rgb(242 242 238 / .97); }
   .header .header__inner { display: flex; gap: 10px; padding-inline: 16px; }
   .header .logo { min-height: 44px; }
-  .header .logo__img { width: 100px; }
+  .header .logo__img { width: 112px; }
   .header .header__acao { margin-left: auto; }
   .header .header__acao .botao { font-size: 13px; padding: 10px 12px; min-height: 44px; }
   .header .nav-toggle { display: grid; flex: none; }
@@ -126,4 +126,29 @@
   .header .megamenu[hidden] :is(.megamenu__title, .megamenu__list li) { transform: none; transition: opacity .2s ease; }
   .header .megamenu__rotulo, .header .megamenu__seta,
   .header .megamenu__list a:is(:hover, :focus-visible) :is(.megamenu__rotulo, .megamenu__seta) { transform: none; transition: opacity .2s ease; }
+}
+
+/* CTA do cabeçalho mais sutil (28/09/2026): só contorno fino; no hover a
+   caixa se preenche devagar. Exceção explícita à regra sem contornos
+   (sem-contornos.css), por isso o !important na cor da borda. */
+.header .header__acao .botao {
+  background: transparent; background-image: none; box-shadow: none; filter: none;
+  color: var(--papel); border-color: rgb(242 242 238 / .45) !important;
+  transition: background-color .5s var(--easing-suave), color .5s var(--easing-suave), border-color .5s var(--easing-suave);
+}
+.header .header__acao .botao:hover { background: var(--papel); color: var(--grafite); border-color: var(--papel) !important; transform: none; filter: none; }
+.header:is(.header--claro, .header--amarelo) .header__acao .botao { background: transparent; color: var(--grafite); border-color: rgb(22 22 22 / .35) !important; }
+.header:is(.header--claro, .header--amarelo) .header__acao .botao:hover { background: var(--grafite); color: var(--papel); border-color: var(--grafite) !important; }
+
+/* Cabeçalho mais alto e arejado no desktop (28/09/2026, "muito fino, deixe
+   elegante"): caixa de 80px, mais respiro nas laterais, logo e itens um pouco
+   maiores e mais espaçados. A altura total (14 + 80 + 14) vira a
+   --altura-header que o resto do layout usa. */
+@media (min-width: 1024px) {
+  :root { --altura-header: 108px; }
+  .header .header__inner { min-height: 80px; padding: 14px 16px 14px 28px; border-radius: 18px; gap: 24px; }
+  .header .logo__img { width: 150px; }
+  .header .nav__list { gap: 10px; }
+  .header .nav__link { padding: 12px 16px; font-size: 15px; letter-spacing: .005em; }
+  .header .header__acao .botao { min-height: 48px; padding-inline: 22px; font-size: 15px; }
 }

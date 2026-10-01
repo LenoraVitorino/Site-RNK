@@ -9,6 +9,8 @@
 import { formulario } from '../../data/home';
 import { rodape } from '../../data/nav';
 import Botao from '../ui/Botao.astro';
+import Selo from '../ui/Selo.astro';
+import { copyLiteral } from '../../data/versao';
 const whatsapp = (rodape.whatsapp ?? '').replace(/\D/g, '');
 const canal = whatsapp ? 'WhatsApp' : 'e-mail';
 ---
@@ -16,6 +18,7 @@ const canal = whatsapp ? 'WhatsApp' : 'e-mail';
   <div class="container form-block">
     <div class="form-block__text entra">
       {/* data-quebra="livre": com o &nbsp; do fim, o balance deixava "transformar" sozinho numa linha a 320px. */}
+      {!copyLiteral && <Selo class="cabeca-dobra__selo">Fale com a Renke</Selo>}
       <h2 class="titulo caps" id="formulario-titulo" data-quebra="livre">{formulario.titulo}</h2>
       <p>{formulario.texto}</p>
     </div>

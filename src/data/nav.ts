@@ -155,6 +155,6 @@ export const rodape = {
   email: 'contato@renkestudio.com.br',
   /** Só dígitos, com DDI (ex.: 5547999999999). Vazio: o formulário abre o e-mail. */
   whatsapp: '',
-  copyright: '© 2026 Renke Studio. Todos os direitos reservados.',
+  copyright: '© 2026 Grupo RNK. Todos os direitos reservados.',
   assinatura: 'Você não controla o que não enxerga.',
 };

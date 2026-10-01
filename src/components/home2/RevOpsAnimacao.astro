@@ -1,5 +1,9 @@
 ---
-/** Marketing, comercial e operação conectados a uma única inteligência. */
+/** Marketing, comercial e operação conectados a uma única inteligência.
+    Proporção da referência (30/09: "ficou muito extensa na altura"): as
+    três linhas de módulos bem juntas, sem os nomes visíveis (ficam no
+    aria-label), num palco de 10 × 3 que tem o mesmo desenho, em
+    porcentagem, dos cabos (viewBox 1000 × 300) e dos módulos. */
 const frentes = [
   { nome: 'Marketing', lado: 'esquerda', linha: 1, icone: 'M7 13h5l12-5v16l-12-5H7z M12 19l2 7h4l-2-5' },
   { nome: 'Comercial', lado: 'esquerda', linha: 2, icone: 'M7 8h20v15H16l-6 5v-5H7z M12 13h10 M12 18h6' },
@@ -8,18 +12,19 @@ const frentes = [
   { nome: 'Dados', lado: 'direita', linha: 2, icone: 'M7 7v20h21 M12 22v-6 M18 22V9 M24 22V13' },
   { nome: 'Automação', lado: 'direita', linha: 3, icone: 'M19 5L8 19h8l-1 10 11-15h-8z' },
 ];
+/* Linhas em y 70, 150 e 230 do viewBox (23,3%, 50% e 76,7% do palco). */
 const caminhos = [
-  'M125 72C285 72 290 200 500 200',
-  'M180 200H500',
-  'M125 328C285 328 290 200 500 200',
-  'M500 200C710 200 715 72 875 72',
-  'M500 200H820',
-  'M500 200C710 200 715 328 875 328',
+  'M125 70C285 70 290 150 500 150',
+  'M180 150H500',
+  'M125 230C285 230 290 150 500 150',
+  'M500 150C710 150 715 70 875 70',
+  'M500 150H820',
+  'M500 150C710 150 715 230 875 230',
 ];
 ---
 <div class="revops-rede" role="img" aria-label="A Renke conecta marketing, comercial, operação, CRM, dados e automação em uma operação integrada de receita.">
   <div class="revops-rede__palco" aria-hidden="true">
-    <svg class="revops-rede__conexoes" viewBox="0 0 1000 400" preserveAspectRatio="none" fill="none">
+    <svg class="revops-rede__conexoes" viewBox="0 0 1000 300" preserveAspectRatio="none" fill="none">
       {caminhos.map((d, i) => <g>
         <path d={d} class="revops-rede__cabo-sombra" />
         <path d={d} class="revops-rede__cabo" />
@@ -34,7 +39,6 @@ const caminhos = [
         <svg class="revops-rede__cantos" viewBox="0 0 80 80" fill="none"><path d="M1 8V1h7 M72 1h7v7 M79 72v7h-7 M8 79H1v-7" /></svg>
         <svg class="revops-rede__simbolo" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={frente.icone} /></svg>
       </div>
-      <span>{frente.nome}</span>
     </div>)}
     <div class="revops-rede__centro">
       <i class="revops-rede__entrada"></i><i class="revops-rede__saida"></i>
@@ -47,7 +51,7 @@ const caminhos = [
 
 <style>
   .revops-rede { width: min(100%, 1120px); margin-inline: auto; }
-  .revops-rede__palco { position: relative; height: clamp(320px, 38vw, 460px); isolation: isolate; }
+  .revops-rede__palco { position: relative; aspect-ratio: 10 / 3; isolation: isolate; }
   .revops-rede__palco::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at center, #ffffff04, transparent 65%); }
   .revops-rede__conexoes { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .revops-rede__cabo-sombra { stroke: #000; stroke-width: 7; }
@@ -55,21 +59,20 @@ const caminhos = [
   .revops-rede__cabo-reflexo { stroke: #626262; stroke-opacity: .26; stroke-width: .7; transform: translateY(-1px); }
   .revops-rede__fluxo { stroke: #f0f0ec; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 3 97; animation: revops-fluxo 8s linear infinite; animation-delay: var(--atraso); }
   .revops-rede__fluxo--halo { stroke-width: 5; opacity: .45; filter: blur(3px); }
-  .revops-rede__frente { position: absolute; top: calc(18% + (var(--linha) - 1) * 32%); transform: translate(-50%, -50%); display: grid; justify-items: center; color: #939390; }
+  .revops-rede__frente { position: absolute; top: calc(23.333% + (var(--linha) - 1) * 26.667%); transform: translate(-50%, -50%); display: grid; justify-items: center; color: #939390; }
   .revops-rede__frente--esquerda { left: 12.5%; }
   .revops-rede__frente--direita { left: 87.5%; }
   .revops-rede__frente--esquerda[style*="--linha: 2"] { left: 18%; }
   .revops-rede__frente--direita[style*="--linha: 2"] { left: 82%; }
-  .revops-rede__icone { position: relative; display: grid; place-items: center; width: clamp(48px, 6.8vw, 76px); aspect-ratio: 1; border-radius: 2px; background: linear-gradient(135deg, #373737, #101010 36%, #171717 70%, #080808); box-shadow: 0 12px 25px #000b, inset 0 0 0 1px #ffffff0b; }
+  .revops-rede__icone { position: relative; display: grid; place-items: center; width: clamp(36px, 5.4vw, 64px); aspect-ratio: 1; border-radius: 2px; background: linear-gradient(135deg, #373737, #101010 36%, #171717 70%, #080808); box-shadow: 0 12px 25px #000b, inset 0 0 0 1px #ffffff0b; }
   .revops-rede__icone::before { content: ''; position: absolute; inset: 7%; background: radial-gradient(ellipse at 30% 0%, #ffffff24, transparent 70%), linear-gradient(120deg, #171717, #090909); box-shadow: inset 0 0 0 1px #ffffff0a, 0 2px 4px #000; }
   .revops-rede__icone::after { content: ''; position: absolute; inset: 12%; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0 3px, #ffffff03 3px 4px); }
   .revops-rede__simbolo { position: relative; width: 53%; color: #dededb; filter: drop-shadow(0 2px 1px #000) drop-shadow(0 0 7px #ffffff18); }
   .revops-rede__cantos { position: absolute; inset: -2px; width: calc(100% + 4px); height: calc(100% + 4px); stroke: #878784; stroke-width: .65; opacity: .75; }
-  .revops-rede__frente span { position: absolute; top: calc(100% + 14px); font-size: 12px; letter-spacing: .04em; white-space: nowrap; }
   .revops-rede__porta, .revops-rede__entrada, .revops-rede__saida { position: absolute; width: 5px; height: 18px; top: calc(50% - 9px); background: repeating-linear-gradient(0deg, #636363 0 1px, #171717 1px 4px); box-shadow: 0 0 0 2px #0b0b0b; }
   .revops-rede__frente--esquerda .revops-rede__porta { right: -8px; }
   .revops-rede__frente--direita .revops-rede__porta { left: -8px; }
-  .revops-rede__centro { position: absolute; left: 50%; top: 50%; width: clamp(100px, 18vw, 200px); aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 50%; background: #080808; box-shadow: 0 0 70px #bcbcbc08, 0 18px 40px #000c; }
+  .revops-rede__centro { position: absolute; left: 50%; top: 50%; width: clamp(84px, 15vw, 176px); aspect-ratio: 1; transform: translate(-50%, -50%); display: grid; place-items: center; border-radius: 50%; background: #080808; box-shadow: 0 0 70px #bcbcbc08, 0 18px 40px #000c; }
   .revops-rede__entrada { left: -5px; }
   .revops-rede__saida { right: -5px; }
   .revops-rede__superficie { position: absolute; inset: 5%; border-radius: 50%; background: radial-gradient(circle at 28% 20%, #ffffff0c, transparent 60%), radial-gradient(circle, #292929 .65px, transparent .9px) 0 0 / 4px 4px, #090909; box-shadow: inset 8px 8px 24px #ffffff03, inset -10px -10px 24px #000; }
@@ -78,8 +81,10 @@ const caminhos = [
   .revops-rede__arco { transform-origin: center; animation: revops-orbita 28s linear infinite; }
   @keyframes revops-fluxo { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
   @keyframes revops-orbita { to { transform: rotate(360deg); } }
+  /* No celular o palco fica mais alto (10 × 6), para os módulos não se
+     encostarem; cabos e módulos seguem as mesmas porcentagens. */
   @media (max-width: 600px) {
-    .revops-rede__frente span { font-size: 10px; letter-spacing: 0; }
+    .revops-rede__palco { aspect-ratio: 10 / 6; }
     .revops-rede__frente--esquerda[style*="--linha: 2"] { left: 12.5%; }
     .revops-rede__frente--direita[style*="--linha: 2"] { left: 87.5%; }
     .revops-rede__porta, .revops-rede__entrada, .revops-rede__saida { width: 3px; height: 12px; top: calc(50% - 6px); }
