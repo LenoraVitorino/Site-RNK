@@ -56,7 +56,7 @@ Prompt final de refinamento (sobre a imagem anterior):
 
 Asset: `public/imagens/planos-editoriais/instrumentos-dentarios.webp`.
 
-Core: duas mãos em diagonais opostas, com luvas pretas, aproximando espelho e sonda odontológicos. Substitui a foto repetida do Run para dar uma imagem própria a cada plano. Escala compartilhada, centro opaco e bordas suaves, nas duas versões.
+Core: duas mãos em diagonais opostas, com luvas pretas, aproximando espelho e sonda odontológicos. Foto espelhada horizontalmente via CSS: mão superior à direita e inferior à esquerda, ocupando a diagonal oposta ao título. Símbolo e textos preservados. Substitui a foto repetida do Run para dar uma imagem própria a cada plano. Escala compartilhada, centro opaco e bordas suaves, nas duas versões.
 
 Original gerado com image_gen nativo (sem CLI): `/Users/lenoravitorino/.codex/generated_images/01a0f7a0-9088-77f3-9efb-dbe962d52bf8/exec-d5fbcf91-7e07-4bec-9104-f20765c698a1.png`.
 
