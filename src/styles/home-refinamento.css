@@ -219,6 +219,8 @@ section[id] { scroll-margin-top: 110px; }
   mask-image: linear-gradient(to bottom, #000 65%, transparent 100%);
 }
 .feature-card__arte > svg { opacity: .85; }
+/* Os nomes das frentes do ecossistema precisam permanecer legíveis. */
+.feature-card--jornada .feature-card__arte { mask-image: none; }
 .feature-card__texto { position: relative; z-index: 1; min-width: 0; padding: 0; }
 .feature-card h3 { font-size: clamp(22px, 1.8vw, 27px); font-weight: 350; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
 .features-grade--bento > .feature-card h3 { min-height: 2.4em; }
