@@ -4,6 +4,8 @@ Geradas com a ferramenta nativa image_gen (sem CLI), como fotografias editoriais
 
 Padrão: direção escura com imagens. Comparação anterior: `?planos=claro`. Mesmos assets nas versões estudio e copy; textos preservados. Start: seringa; Run e Core: mãos; Scale e Full: estetoscópio.
 
+Composição: fotografia atrás do símbolo oficial, ambos centralizados no mesmo quadro. No desktop do estudio, o SVG existente mantém sua montagem; no celular e na copy, o componente compartilhado sobrepõe o SVG estático à fotografia.
+
 ## seringa
 
 Asset: `public/imagens/planos-editoriais/seringa.webp`.

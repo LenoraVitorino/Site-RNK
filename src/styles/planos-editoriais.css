@@ -2,6 +2,7 @@
    Imagens e tratamento compartilhados pelas duas versões de copy. */
 .plano-editorial { position: relative; overflow: hidden; }
 .plano-editorial img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.plano-editorial .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; }
 html[data-planos-tema="claro"] .plano-editorial { display: none; }
 html:not([data-planos-tema="claro"]) .palcoplanos {
   --pp-fundo: #101011; --pp-fundo-2: #151516; --pp-texto: #f2f2ee;
@@ -18,22 +19,20 @@ html:not([data-planos-tema="claro"]) .palcoplanos .botao { color: var(--pp-texto
 html:not([data-planos-tema="claro"]) .palcoplanos .botao:hover { color: #101011; background: #f2f2ee; }
 html:not([data-planos-tema="claro"]) .palcoplanos .botao:focus-visible { outline-color: #f2f2ee; }
 html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial {
-  position: absolute; width: min(65vw, 98svh); height: min(65vw, 98svh);
-  right: 0; bottom: -8svh;
+  position: absolute; width: min(57vw, 80svh); height: min(57vw, 80svh);
+  right: 4vw; bottom: 2svh;
   mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 88%, transparent);
 }
-html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, var(--pp-fundo), transparent 65%);
-}
-html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial--start { width: min(60vw, 86svh); height: min(60vw, 86svh); right: 3vw; }
+/* No palco, o SVG animado ocupa exatamente o mesmo quadro da fotografia.
+   Na pilha e na copy, a composição vem pronta do componente compartilhado. */
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial__simbolo { display: none; }
 html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .palcoplanos__nomes .plano-palco__nome {
   left: var(--grid-inset); top: 56%; transform: translateY(-50%); width: 46vw; font-size: 9.5vw;
 }
 html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .palcoplanos__icones {
-  inset: auto auto 5svh var(--grid-inset); width: 110px; height: 110px;
+  inset: auto 4vw 2svh auto; width: min(57vw, 80svh); height: min(57vw, 80svh);
 }
-html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco__icone { width: 160px; height: 160px; }
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco__icone { width: 100%; height: 100%; }
 html:not([data-planos-tema="claro"]) .palcoplanos .peca--papel { fill: #deded9; }
 html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-palco__icone-mob { display: none; }
 html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial {
