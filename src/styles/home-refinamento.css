@@ -20,49 +20,30 @@ section[id] { scroll-margin-top: 110px; }
 
 /* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
    repetia a grade de cartões do Protocolo e lia mal). Uma linha por
-   especialidade, entre fios, na linha do site da Immerso: área e
-   texto empilhados à esquerda, o meio livre (onde a foto aparece no
-   hover) e o número grande à direita, sem contador, para ler de relance. */
+   especialidade, entre fios, lida numa direção só (01/10): o número
+   grande, logo ao lado a área e a frase, e a foto da área sempre visível
+   à direita. Nada depende do hover. */
 #resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
 .resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
 .resultado-linha {
-  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .9fr);
-  column-gap: clamp(20px, 3vw, 48px); row-gap: 8px; align-items: center;
-  padding-block: clamp(28px, 3vw, 44px); border-top: 1px solid #cfcfcc;
+  display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1fr) clamp(200px, 20vw, 280px);
+  column-gap: clamp(28px, 4vw, 64px); row-gap: 12px; align-items: center;
+  padding-block: clamp(28px, 2.6vw, 40px); border-top: 1px solid #cfcfcc;
 }
-.resultado-linha__area { grid-column: 1; grid-row: 1; align-self: baseline; font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
-.resultado-linha__texto { grid-column: 1; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
-.resultado-linha__numero { grid-column: 3; grid-row: 1 / span 2; margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
-/* Foto da área no hover (referência Immerso, 30/09): só no desktop com
-   mouse. Fica dentro da linha, com a altura dela (2px de folga em cima e
-   embaixo), centrada na coluna do meio; acompanha o cursor só na
-   horizontal e desliza para a linha nova (JS, translate). Aparece e some
-   com fade e escala leve; cada camada entra recortada de baixo para cima
-   por cima da anterior. Por enquanto, moldura de mockup em grafite. */
-.resultados-extrato__palco { position: relative; }
-.resultados-foto { display: none; }
-@media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
-  .resultados-foto {
-    display: block; position: absolute; left: 0; top: 0; z-index: 3;
-    width: 278px; height: 156px; pointer-events: none;
-    opacity: 0; scale: .97; will-change: translate; border-radius: 10px;
-    box-shadow: 0 18px 40px rgb(0 0 0 / .14);
-    transition: opacity .5s var(--easing-suave), scale .7s var(--easing-suave);
-  }
-  .resultados-foto--visivel { opacity: 1; scale: 1; }
-  .resultados-foto__camada {
-    position: absolute; inset: 0; margin: 0; overflow: hidden; border-radius: 10px;
-    background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
-    clip-path: inset(100% 0 0 0 round 10px);
-    transition: clip-path .8s cubic-bezier(.16, 1, .3, 1);
-  }
-  .resultados-foto__camada--ativa { z-index: 2; clip-path: inset(0 0 0 0 round 10px); }
-  .resultados-foto__camada--saindo { z-index: 1; clip-path: inset(0 0 0 0 round 10px); }
-  .resultados-foto__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
+.resultado-linha__numero { grid-column: 1; grid-row: 1 / span 2; margin: 0; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
+.resultado-linha__area { grid-column: 2; grid-row: 1; align-self: end; font-size: clamp(24px, 2.1vw, 32px); font-weight: 400; line-height: 1.15; letter-spacing: -.03em; }
+.resultado-linha__texto { grid-column: 2; grid-row: 2; align-self: start; margin: 0; max-width: 46ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.55; color: #4a4a48; text-wrap: pretty; }
+/* Foto da área, por enquanto em moldura de mockup grafite. */
+.resultado-linha__foto {
+  grid-column: 3; grid-row: 1 / span 2; position: relative; margin: 0; overflow: hidden;
+  aspect-ratio: 16 / 9; border-radius: 10px;
+  background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
 }
-@media (prefers-reduced-motion: reduce) {
-  .resultados-foto, .resultados-foto__camada { transition: opacity .3s linear; }
+.resultado-linha__foto :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s var(--easing-suave); }
+.resultado-linha__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
+@media (hover: hover) and (pointer: fine) {
+  .resultado-linha:hover .resultado-linha__foto :is(img, video) { scale: 1.04; }
 }
 .resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
 .resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
@@ -123,12 +104,8 @@ section[id] { scroll-margin-top: 110px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  /* Extrato no tablet: a área e o texto empilham à esquerda, o número fica
-     à direita. */
-  .resultado-linha { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
-  .resultado-linha__area { grid-column: 1; }
-  .resultado-linha__texto { grid-column: 1; grid-row: 2; }
-  .resultado-linha__numero { grid-column: 2; grid-row: 1 / span 2; }
+  /* Extrato no tablet: número, texto e uma foto menor. */
+  .resultado-linha { grid-template-columns: minmax(0, .7fr) minmax(0, 1fr) clamp(140px, 22vw, 200px); column-gap: 24px; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -136,11 +113,13 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  /* Extrato no celular: área numa linha, o número grande embaixo
-     e o texto por último. */
-  .resultado-linha { grid-template-columns: minmax(0, 1fr); row-gap: 10px; column-gap: 12px; align-items: baseline; }
-  .resultado-linha__area { grid-column: 1; grid-row: 1; }
-  .resultado-linha__numero { grid-column: 1 / -1; grid-row: 2; text-align: left; font-size: 56px; margin-top: 6px; }
+  /* Extrato no celular: o número, a área e o texto empilhados à esquerda
+     e a foto, pequena, no alto à direita. */
+  .resultado-linha { grid-template-columns: minmax(0, 1fr) 116px; column-gap: 16px; row-gap: 10px; align-items: start; }
+  .resultado-linha__numero { grid-column: 1; grid-row: 1; font-size: 56px; }
+  .resultado-linha__foto { grid-column: 2; grid-row: 1; align-self: center; border-radius: 8px; }
+  .resultado-linha__legenda { display: none; }
+  .resultado-linha__area { grid-column: 1 / -1; grid-row: 2; margin-top: 6px; }
   .resultado-linha__texto { grid-column: 1 / -1; grid-row: 3; }
   #fale .chamada__numero { display: none; }
 }
@@ -163,6 +142,15 @@ section[id] { scroll-margin-top: 110px; }
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
 .hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(40px, 1fr) auto auto auto minmax(40px, 1fr) auto; min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 0 clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
 .hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin: 0 0 clamp(24px, 3.5svh, 40px); }
+/* Selo da hero com o mesmo chanfro leve dos selos das dobras (01/10). */
+.hero__selo, .hero__selo > span {
+  border-radius: 0;
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
+}
+.hero__selo { --c: 9px; }
+.hero__selo > span { --c: 6px; }
 .hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, min(8.2vw, 12.5svh), 132px); font-weight: 300; line-height: 1.06; letter-spacing: -.065em; }
 .hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
@@ -199,9 +187,9 @@ section[id] { scroll-margin-top: 110px; }
    igual, o acabamento do painel do método: chanfro de 45° nos quatro
    cantos, sem raio, com o vão de 16px entre elas (a Lenora reprovou
    laterais inclinadas e peças encaixadas: "apenas com os acabamentos, todos
-   por igual"). Três peças têm arte (conexões, CRM e automação) e só o CRM
-   se move; as outras duas são só texto, e a da decisão é a única em
-   amarelo. */
+   por igual"). Quatro peças têm arte: o CRM se move, as conexões têm uma
+   luz que passa uma vez e as outras ficam paradas. A da decisão é a única
+   em amarelo e fica só com o texto. */
 .pilares-features { padding-bottom: clamp(32px, 3vw, 48px); }
 .pilares-features + .letreiro { padding-top: clamp(24px, 2vw, 32px); padding-bottom: clamp(32px, 4vw, 56px); }
 .pilares-features .pilares__cabeca { margin-bottom: clamp(40px, 5vw, 64px); }
@@ -260,19 +248,15 @@ section[id] { scroll-margin-top: 110px; }
   transform: translate(-6%, -1.333%);
 }
 
-/* Decisão: a peça em amarelo, só com tipografia. É o amarelo original da
-   marca (Lenora, 01/10), que desce meio tom até a base. */
-.revena-peca--decisao {
-  container-type: inline-size;
-  background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500);
-}
+/* Decisão: a peça em amarelo, o amarelo original da marca (Lenora,
+   01/10), que desce meio tom até a base. Só texto, sem arte. */
+.revena-peca--decisao { background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500); }
 .revena-peca--decisao h3 { color: #161616; }
 .revena-peca--decisao p { color: rgb(22 22 22 / .74); }
-.revena-peca__eco {
-  align-self: flex-start; margin-top: auto; margin-left: -.05em; padding-top: 32px;
-  font-size: clamp(40px, 25cqw, 96px); font-weight: 500; line-height: .86; letter-spacing: -.04em; white-space: nowrap;
-  color: rgb(255 255 255 / .46); text-shadow: 0 6px 16px rgb(150 105 0 / .16);
-  pointer-events: none; user-select: none;
+/* Posicionamento: o domo tem a largura da peça e sangra pelas laterais e
+   por baixo. */
+.revena-peca--posicionamento .revena-peca__arte {
+  padding-top: 12px; margin-inline: calc(-1 * var(--peca-recuo)); margin-bottom: calc(-1 * var(--base));
 }
 
 @media (min-width: 1100px) {
@@ -295,6 +279,7 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--crm .revena-peca__arte { min-height: 250px; }
 }
 @media (max-width: 599.98px) {
+  .revena-bento { --peca-recuo: 24px; }
   .revena-peca { --base: 28px; padding: 28px 24px; }
   .revena-peca--crm .revena-peca__arte { min-height: 230px; margin-right: -24px; }
   .revena-peca--conexoes .revena-peca__arte { padding-top: 32px; }

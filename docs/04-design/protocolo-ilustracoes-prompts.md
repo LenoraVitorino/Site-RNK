@@ -164,3 +164,47 @@ pílula "Lembrete", com um halo pequeno e fraco. Nada mais.
 
 **Não fazer.** Nome de paciente, lista cortada, interruptores decorativos,
 cinco linhas com o mesmo peso.
+
+---
+
+## 5. Prompt — "Construímos seu posicionamento"
+
+> Subtítulo: "Estudamos seus concorrentes a fundo: o que comunicam, onde
+> investem, quais brechas deixam abertas."
+
+Referência da Lenora: o convite de pesquisa do aplicativo Hevy, com um globo
+pontilhado, retratos espalhados nele e um retrato maior no centro.
+
+**Papel.** Você é um designer de produto desenhando o mercado de uma clínica
+como um mapa: quem está em volta e onde ela se posiciona.
+
+**Ideia.** O mercado é um globo de pontos. Os concorrentes estão espalhados
+nele; a clínica do cliente fica no centro, maior, com nome.
+
+**Composição (388 × 172, estática, sangra pelas laterais e por baixo).**
+- A calota de um globo visto de frente, com o polo inclinado para trás: os
+  paralelos de pontos acompanham a silhueta curva, como um horizonte.
+- Seis concorrentes em círculos com as letras A a F. Sem rosto e sem nome.
+  Os do fundo, perto do horizonte, são menores e mais escuros.
+- No centro, a clínica: círculo maior, com moldura e uma cruz, e a etiqueta
+  "Sua clínica" logo abaixo.
+
+**Material e luz.** Pontos mais claros no alto do globo, apagando-se para os
+lados e para a base. Um fio de luz na silhueta, forte no meio e nulo nas
+pontas. Círculos com gradiente mínimo, fio que clareia no alto e sombra de
+apoio.
+
+**Destaque.** O ponto amarelo da etiqueta "Sua clínica", com halo pequeno.
+
+**Movimento.** Nenhum.
+
+**Não fazer.** Rostos, nomes de clínicas, linhas ligando os círculos, anéis
+concêntricos vistos de cima (viram alvo).
+
+---
+
+## 6. "Dizemos o que fazer todo mês" (cartão amarelo)
+
+Sem ilustração. A palavra "Decisão" ao fundo e as barras por canal foram
+reprovadas pela Lenora em 01/10 ("não quero nada nesse card"). O cartão fica
+só com o título e o texto sobre o amarelo da marca.

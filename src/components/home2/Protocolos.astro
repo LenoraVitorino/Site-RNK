@@ -4,11 +4,13 @@ import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
 import ArtePilar from './ArtePilar.astro';
 import PilarConexoes from './PilarConexoes.astro';
+import PilarPosicionamento from './PilarPosicionamento.astro';
 import Selo from '../ui/Selo.astro';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
-/* Bento de cinco peças chanfradas (01/10/2026): três com arte (conexões,
-   CRM em movimento e automação parada) e duas só de texto, para a dobra
-   respirar; a da decisão é a única em amarelo. */
+/* Bento de cinco peças chanfradas (01/10/2026), cada uma com a sua
+   imagem: diagrama (conexões), quadro em movimento (CRM), mensagem
+   (automação) e o domo do mercado (posicionamento). A peça amarela (decisão)
+   fica só com o texto: a Lenora não quer nada nela. */
 const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
@@ -24,7 +26,7 @@ const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
           {i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
           {(i === 1 || i === 2) && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
-          {i === 3 && <span class="revena-peca__eco" aria-hidden="true">Decisão</span>}
+          {i === 4 && <div class="revena-peca__arte"><PilarPosicionamento /></div>}
         </article>
       ))}
     </div>
