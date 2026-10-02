@@ -28,7 +28,7 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/tesoura.webp`.
 
-Revisão: edição direta da referência enviada pela usuária, com luvas pretas e recorte transparente. Mantém o gesto horizontal da entrega. Aplicação em Scale com `opacity: 1`, foto ampliada em 20% e a mesma máscara radial das demais fotos: centro opaco e bordas suavemente apagadas nas duas versões. Símbolo, nomes e diagramação preservados.
+Revisão: edição direta da referência enviada pela usuária, com luvas pretas e recorte transparente. Mantém o gesto horizontal da entrega. Aplicação em Scale com `opacity: 1`, escala óptica de 105% e a mesma máscara radial das demais fotos: centro opaco e bordas suavemente apagadas nas duas versões. Símbolo, nomes e diagramação preservados.
 
 Referência: `/var/folders/f3/2x5sz53x3gbbnvjpqz48wpxc0000gn/T/codex-clipboard-2689b730-d759-43a7-872b-34809b9106ff.png`.
 
@@ -42,7 +42,7 @@ Prompt final:
 
 Asset: `public/imagens/planos-editoriais/protese-dentaria.webp`.
 
-Mão única com luva preta entrando da diagonal inferior esquerda, segurando prótese implantossuportada, baseada na nova referência da usuária. Exibição em preto e branco via CSS, com escala de 88% (aumento discreto em relação aos 82% anteriores), rotação de 12°, centro opaco e bordas suaves nas duas versões. O asset original preserva suas cores naturais. Sem bloco de gesso.
+Mão única com luva preta entrando da diagonal inferior esquerda, segurando prótese implantossuportada, baseada na nova referência da usuária. Exibição em preto e branco via CSS, com escala óptica de 80%, rotação de 12°, centro opaco e bordas suaves nas duas versões. O asset original preserva suas cores naturais. Sem bloco de gesso.
 
 Referência: `/var/folders/f3/2x5sz53x3gbbnvjpqz48wpxc0000gn/T/codex-clipboard-1d1fb972-d8f9-4e28-a0a4-af921b7a9a53.png`.
 
@@ -58,7 +58,7 @@ Prompt final de refinamento (sobre a imagem anterior):
 
 Asset: `public/imagens/planos-editoriais/instrumentos-dentarios.webp`.
 
-Core: duas mãos em diagonais opostas, com luvas pretas, aproximando espelho e sonda odontológicos. Foto espelhada horizontalmente via CSS: mão superior à direita e inferior à esquerda, ocupando a diagonal oposta ao título. Símbolo e textos preservados. Substitui a foto repetida do Run para dar uma imagem própria a cada plano. Escala compartilhada, centro opaco e bordas suaves, nas duas versões.
+Core: duas mãos em diagonais opostas, com luvas pretas, aproximando espelho e sonda odontológicos. Foto espelhada horizontalmente via CSS: mão superior à direita e inferior à esquerda, ocupando a diagonal oposta ao título. Símbolo e textos preservados. Substitui a foto repetida do Run para dar uma imagem própria a cada plano. Escala óptica de 112%, centro opaco e bordas suaves, nas duas versões.
 
 Original gerado com image_gen nativo (sem CLI): `/Users/lenoravitorino/.codex/generated_images/01a0f7a0-9088-77f3-9efb-dbe962d52bf8/exec-d5fbcf91-7e07-4bec-9104-f20765c698a1.png`.
 
@@ -71,3 +71,7 @@ Prompt final:
 As fotos compartilham uma base na cor do respectivo plano, recortada pelo alpha do próprio asset. Assim, o gradiente visual termina no grafite, e o símbolo amarelo não atravessa luvas, mãos ou instrumentos. Vãos reais entre dedos e objetos continuam transparentes. Base e fotografia recebem juntas os espelhamentos e escalas já aprovados, sem mudanças de posição.
 
 No Full, o gradiente acompanha a diagonal do punho inferior esquerdo (45°, transparente até 12% e opaco a partir de 38%), eliminando a borda rígida. Prótese, dentes e gengiva ficam integralmente visíveis, sem escurecimento radial. Aplicado em estudio e copy.
+
+## Uniformização da escala das mãos
+
+Escalas calibradas pela proporção visível da mão, compensando os diferentes enquadramentos dos assets: Start 88%, Run 108%, Scale 105%, Core 112% e Full 80%. A transformação compartilhada mantém as diagonais e os espelhamentos. Contêineres sem corte rígido, máscaras de punho e base opaca preservadas. Conferência dos cinco planos na mesma viewport desktop e da copy no celular; builds de ambas as versões aprovados.

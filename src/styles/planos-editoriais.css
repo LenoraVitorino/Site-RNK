@@ -1,24 +1,21 @@
 /* Abertura clara, planos escuros, diagramação original centralizada.
    A fotografia é uma camada da composição:
    símbolo amarelo atrás, fotografia no meio, nome do plano à frente. */
-.plano-editorial { position: relative; overflow: hidden; pointer-events: none; }
-.plano-editorial__recorte { position: relative; z-index: 2; width: 100%; height: 100%; }
+.plano-editorial { position: relative; overflow: visible; pointer-events: none; }
+/* Compensa o enquadramento de cada foto para igualar a escala percebida das mãos. */
+.plano-editorial--start { --mao-escala: .88; }
+.plano-editorial--run { --mao-escala: 1.08; --mao-angulo: 10deg; --mao-espelho: -1; }
+.plano-editorial--scale { --mao-escala: 1.05; }
+.plano-editorial--core { --mao-escala: 1.12; --mao-espelho: -1; }
+.plano-editorial--full { --mao-escala: .8; --mao-angulo: 12deg; }
+.plano-editorial__recorte { position: relative; z-index: 2; width: 100%; height: 100%; transform: rotate(var(--mao-angulo, 0deg)) scale(var(--mao-escala, 1)) scaleX(var(--mao-espelho, 1)); }
 /* O fade se mistura ao fundo do plano, sem deixar o amarelo atravessar a foto.
    A máscara da própria imagem preserva os vãos entre dedos e instrumentos. */
 .plano-editorial__recorte::before { content: ''; position: absolute; inset: 0; background: var(--foto-fundo, #101011); mask: var(--foto) center / contain no-repeat; }
 .palcoplanos .plano-palco--tom2 .plano-editorial { --foto-fundo: #151516; }
 .plano-editorial .plano-editorial__foto { position: relative; z-index: 2; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 1; mask-image: radial-gradient(ellipse at center, #000 40%, transparent 74%); }
-/* Amplia apenas a foto da tesoura; mantém o centro opaco e o mesmo fade das demais. */
-.plano-editorial--scale { overflow: visible; }
-.plano-editorial--scale .plano-editorial__recorte { transform: scale(1.2); }
-/* Mãos do Run e Core na diagonal oposta aos nomes, sem espelhar símbolo ou texto. */
-.plano-editorial--core .plano-editorial__recorte { transform: scaleX(-1); }
-/* Inclinação leve à direita; o fade acompanha os dois punhos na foto original. */
-.plano-editorial--run { overflow: visible; }
-.plano-editorial--run .plano-editorial__recorte { transform: rotate(10deg) scale(1.08) scaleX(-1); }
+/* O fade acompanha os dois punhos na foto original. */
 .plano-editorial--run .plano-editorial__foto { mask-image: linear-gradient(135deg, transparent 18%, rgb(0 0 0 / .12) 23%, rgb(0 0 0 / .5) 29%, #000 38%, #000 62%, rgb(0 0 0 / .5) 71%, rgb(0 0 0 / .12) 77%, transparent 82%); }
-/* Prótese compacta acima do título, com o mesmo acabamento suave das demais fotos. */
-.plano-editorial--full .plano-editorial__recorte { transform: rotate(12deg) scale(.88); }
 /* Só o punho desaparece no fundo; prótese e dentes permanecem sem escurecimento. */
 .plano-editorial--full .plano-editorial__foto { filter: grayscale(1); mask-image: linear-gradient(45deg, transparent 12%, #000 38%); }
 .plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
