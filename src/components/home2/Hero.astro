@@ -3,6 +3,7 @@
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
+import Selo from '../ui/Selo.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
 
 const lead = copyLiteral ? hero.lead :
@@ -16,7 +17,7 @@ const lead = copyLiteral ? hero.lead :
 
   <div class="hero__grade">
     <div class="hero__palco">
-      <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</p>
+      <Selo class="hero__selo">{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</Selo>
       <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
         <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
           <span>Isso <span class="hero__risco">não é marketing</span></span>

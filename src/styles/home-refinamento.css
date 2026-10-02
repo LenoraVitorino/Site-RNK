@@ -142,15 +142,14 @@ section[id] { scroll-margin-top: 110px; }
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
 .hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(40px, 1fr) auto auto auto minmax(40px, 1fr) auto; min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 0 clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
 .hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin: 0 0 clamp(24px, 3.5svh, 40px); }
-/* Selo da hero com o mesmo chanfro leve dos selos das dobras (01/10). */
-.hero__selo, .hero__selo > span {
-  border-radius: 0;
-  clip-path: polygon(
-    var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
-    calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
-}
-.hero__selo { --c: 9px; }
-.hero__selo > span { --c: 6px; }
+/* O selo da hero é o mesmo componente dos selos das dobras (02/10: "todos
+   os textos de apoio na mesma espessura"); aqui só se desfaz o visual
+   antigo da classe, que continua cuidando da posição na grade. */
+/* O texto longo da copy quebra dentro da largura útil da tela. */
+.hero__selo.selo-revena { background: none; border: 0; border-radius: 0; line-height: 1.2; max-width: calc(100vw - 2 * var(--gutter)); }
+.hero__selo.selo-revena > span { border-radius: 0; background: none; color: inherit; font-size: inherit; }
+.hero__selo.selo-revena > .selo-revena__marca { display: grid; width: 33px; height: 33px; }
+.hero__selo.selo-revena > .selo-revena__texto { display: block; flex: 0 1 auto; min-width: 0; width: auto; height: auto; }
 .hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, min(8.2vw, 12.5svh), 132px); font-weight: 300; line-height: 1.06; letter-spacing: -.065em; }
 .hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
@@ -223,6 +222,8 @@ section[id] { scroll-margin-top: 110px; }
 /* Conexões: o diagrama ocupa a largura da peça, na proporção da cena, e
    fica no meio da altura que sobrar. */
 .revena-peca--conexoes .revena-peca__arte { padding-top: 36px; margin-block: auto; }
+/* Na peça larga, o texto pode ir um pouco mais longe antes de quebrar. */
+.revena-peca--conexoes p { max-width: 54ch; }
 
 /* CRM: janela de produto reta, sem perspectiva. A cena é posicionada para
    a janela (que nasce em x 24 e y 32 de 400 × 300) começar na linha do

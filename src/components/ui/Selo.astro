@@ -3,13 +3,17 @@
  * Selo do texto de apoio (sobretítulo) das dobras: uma etiqueta com os
  * cantos levemente chanfrados (Lenora, 01/10: "ao invés de arredondado,
  * acabamento levemente diagonal, mas cuidar com o uso"), no mesmo corte dos
- * cartões do Protocolo e do painel do método, em escala pequena. Leva uma
- * marca num quadrado escuro, também chanfrado, à esquerda, e uma sombra
- * suave para baixo e para a esquerda. O chanfro fica nestes selos e nos
- * painéis; botões, campos e pílulas de interface seguem arredondados.
- * marca="revena" leva o logo do Protocolo Revena; marca="estrela" (padrão),
- * o ✦ amarelo do selo da hero. tom="auto" (padrão) é escuro e fica claro
- * dentro das superfícies claras do site; "claro" e "escuro" forçam o tom.
+ * cartões do Protocolo e do painel do método, em escala pequena, com uma
+ * sombra suave para baixo e para a esquerda. O chanfro fica nestes selos e
+ * nos painéis; botões, campos e pílulas de interface seguem arredondados.
+ * Leva uma marca num quadrado escuro, também chanfrado, à esquerda (a
+ * Lenora chegou a tirar esse quadrado em 02/10 e pediu de volta em
+ * seguida: "volta com o detalhe interno do shape"). marca="revena" leva o
+ * logo do Protocolo Revena; marca="estrela" (padrão), o ✦ amarelo.
+ * tom="auto" (padrão) é escuro e fica claro dentro das superfícies claras
+ * do site; "claro" e "escuro" forçam o tom.
+ * Todos os selos têm a mesma espessura (Lenora, 02/10): 45px de altura e
+ * texto em 16px / 500, com ou sem o logo, inclusive o da hero.
  */
 import LogoRevena from './LogoRevena.astro';
 
@@ -35,8 +39,8 @@ const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = A
     --selo-corte: 9px; --selo-fundo: rgb(15 17 17 / .85); --selo-fio: rgb(242 242 238 / .12);
     --selo-sombra: rgb(0 0 0 / .55); --selo-anel: rgb(242 242 238 / .1);
     position: relative; isolation: isolate;
-    display: inline-flex; align-items: center; gap: 14px; width: fit-content;   /* em grade, não estica; centra onde a grade centra */
-    margin: 0; padding: 6px 22px 6px 6px;
+    display: inline-flex; align-items: center; gap: 12px; width: fit-content;   /* em grade, não estica; centra onde a grade centra */
+    margin: 0; padding: 6px 20px 6px 6px;
     font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 1.2;
     letter-spacing: -.01em; text-transform: none; text-wrap: balance; max-width: 100%;
     color: var(--papel);
@@ -57,10 +61,14 @@ const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = A
   }
   .selo-revena__marca {
     position: relative; isolation: isolate;
-    display: grid; place-items: center; flex: none; width: 44px; height: 44px;
+    display: grid; place-items: center; flex: none; width: 33px; height: 33px;
   }
-  .selo-revena__marca::before { --c: 8px; inset: -3px; z-index: -2; background: var(--selo-anel); }
-  .selo-revena__marca::after { --c: 6px; inset: 0; background: radial-gradient(circle at 35% 28%, #3a3a3a, #121212 72%); }
+  .selo-revena__marca::before { --c: 6.5px; inset: -2px; z-index: -2; background: var(--selo-anel); }
+  .selo-revena__marca::after { --c: 5px; inset: 0; background: radial-gradient(circle at 35% 28%, #3a3a3a, #121212 72%); }
   .selo-revena__marca :global(svg) { width: 56%; height: 56%; }
-  .selo-revena__estrela { color: var(--destaque); font-size: 20px; line-height: 1; }
+  .selo-revena__estrela { color: var(--destaque); font-size: 16px; line-height: 1; }
+  /* No celular, um ponto a menos para a frase da hero caber numa linha. */
+  @media (max-width: 479.98px) { .selo-revena { font-size: 15px; } }
+  /* Algumas dobras definem a entrelinha dos parágrafos por id; o texto do selo mantém a dele. */
+  .selo-revena__texto { line-height: 1.2; }
 </style>
