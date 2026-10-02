@@ -1,0 +1,112 @@
+---
+/**
+ * Vamos além do tráfego pago (01/10/2026): o subtítulo desenhado. De um
+ * lado, de onde o lead vem (marketing); do outro, por onde ele vira
+ * paciente (comercial); no meio, a Renke, que liga os dois. Sem movimento:
+ * neste bento só o CRM se move.
+ *
+ * As pílulas são HTML, para o texto não encolher com o cartão; os fios são
+ * um SVG esticado entre as colunas (viewBox 100 × 100, sem proporção fixa,
+ * com traço que não escala). No celular o diagrama fica em pé: marketing
+ * em cima, comercial embaixo.
+ */
+const origem = ['Anúncios', 'Instagram', 'Google'];
+const destino = ['Atendimento', 'Agenda', 'Consulta'];
+/* Cada fio sai do centro de uma pílula (1/6, 3/6 e 5/6 do eixo) e chega ao
+   núcleo num leque curto (44, 50, 56). */
+const PONTAS = [16.67, 50, 83.33];
+const LEQUE = [44, 50, 56];
+const deitado = (entra: boolean) => PONTAS.map((a, i) =>
+  entra ? `M0 ${a}C55 ${a} 45 ${LEQUE[i]} 100 ${LEQUE[i]}` : `M0 ${LEQUE[i]}C55 ${LEQUE[i]} 45 ${a} 100 ${a}`).join('');
+const empe = (entra: boolean) => PONTAS.map((a, i) =>
+  entra ? `M${a} 0C${a} 55 ${LEQUE[i]} 45 ${LEQUE[i]} 100` : `M${LEQUE[i]} 0C${LEQUE[i]} 55 ${a} 45 ${a} 100`).join('');
+---
+<div class="conexoes-pilar" aria-hidden="true">
+  <div class="conexoes-pilar__grupo conexoes-pilar__grupo--origem">
+    {origem.map((nome) => <span class="conexoes-pilar__pilula">{nome}</span>)}
+  </div>
+  {[true, false].map((entra) => (
+    <div class:list={['conexoes-pilar__fios', entra ? 'conexoes-pilar__fios--entra' : 'conexoes-pilar__fios--sai']}>
+      <svg class="conexoes-pilar__deitado" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" focusable="false">
+        <defs>
+          <linearGradient id={`conexoes-pilar-h-${entra ? 'e' : 's'}`} gradientUnits="userSpaceOnUse" x1={entra ? 0 : 100} y1="0" x2={entra ? 100 : 0} y2="0">
+            <stop stop-color="#ffffff" stop-opacity=".16" /><stop offset="1" stop-color="#ffffff" stop-opacity=".42" />
+          </linearGradient>
+        </defs>
+        <path d={deitado(entra)} stroke={`url(#conexoes-pilar-h-${entra ? 'e' : 's'})`} vector-effect="non-scaling-stroke" />
+      </svg>
+      <svg class="conexoes-pilar__em-pe" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" focusable="false">
+        <defs>
+          <linearGradient id={`conexoes-pilar-v-${entra ? 'e' : 's'}`} gradientUnits="userSpaceOnUse" x1="0" y1={entra ? 0 : 100} x2="0" y2={entra ? 100 : 0}>
+            <stop stop-color="#ffffff" stop-opacity=".16" /><stop offset="1" stop-color="#ffffff" stop-opacity=".42" />
+          </linearGradient>
+        </defs>
+        <path d={empe(entra)} stroke={`url(#conexoes-pilar-v-${entra ? 'e' : 's'})`} vector-effect="non-scaling-stroke" />
+      </svg>
+    </div>
+  ))}
+  <div class="conexoes-pilar__nucleo">
+    <img src="/marca/renke-monograma.png" alt="" width="40" height="40" loading="lazy" decoding="async" />
+  </div>
+  <div class="conexoes-pilar__grupo conexoes-pilar__grupo--destino">
+    {destino.map((nome) => <span class="conexoes-pilar__pilula">{nome}</span>)}
+  </div>
+</div>
+
+<style>
+  .conexoes-pilar {
+    display: grid; width: 100%; height: 100%; min-height: 0;
+    grid-template-columns: max-content minmax(32px, 1fr) auto minmax(32px, 1fr) max-content;
+    grid-template-areas: "origem entra nucleo sai destino";
+    align-items: stretch;
+  }
+  .conexoes-pilar__grupo { display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); align-items: center; }
+  .conexoes-pilar__grupo--origem { grid-area: origem; justify-items: end; }
+  .conexoes-pilar__grupo--destino { grid-area: destino; justify-items: start; }
+  .conexoes-pilar__fios--entra { grid-area: entra; }
+  .conexoes-pilar__fios--sai { grid-area: sai; }
+  .conexoes-pilar__fios { position: relative; min-width: 0; min-height: 0; }
+  .conexoes-pilar__fios svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .conexoes-pilar__fios path { stroke-width: 1; }
+  .conexoes-pilar__em-pe { display: none; }
+
+  .conexoes-pilar__pilula {
+    position: relative; display: inline-flex; align-items: center; height: 38px; padding-inline: 18px;
+    border-radius: 999px; border: 1px solid rgb(255 255 255 / .08);
+    background: linear-gradient(#1f1f1f, #161616);
+    color: #c3c3bd; font-size: 14px; line-height: 1; letter-spacing: -.005em; white-space: nowrap;
+  }
+  /* O ponto onde o fio encosta na pílula. */
+  .conexoes-pilar__pilula::after {
+    content: ''; position: absolute; top: 50%; width: 5px; height: 5px; margin-top: -2.5px;
+    border-radius: 50%; background: #8a8a85;
+  }
+  .conexoes-pilar__grupo--origem .conexoes-pilar__pilula::after { right: -3px; }
+  .conexoes-pilar__grupo--destino .conexoes-pilar__pilula::after { left: -3px; }
+
+  .conexoes-pilar__nucleo {
+    grid-area: nucleo; align-self: center;
+    display: grid; place-items: center; width: 88px; height: 88px; border-radius: 22px;
+    border: 1px solid rgb(255 255 255 / .14);
+    background: linear-gradient(#282828, #171717);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .06), 0 22px 32px -18px rgb(0 0 0 / .8);
+  }
+  .conexoes-pilar__nucleo img { display: block; width: 40px; height: 40px; }
+
+  /* Em pé: marketing em cima, a Renke no meio, comercial embaixo. */
+  @media (max-width: 599.98px) {
+    .conexoes-pilar {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(28px, 1fr) auto minmax(28px, 1fr) auto;
+      grid-template-areas: "origem" "entra" "nucleo" "sai" "destino";
+    }
+    .conexoes-pilar__grupo { grid-template-rows: none; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-items: center; }
+    .conexoes-pilar__deitado { display: none; }
+    .conexoes-pilar__em-pe { display: block; }
+    .conexoes-pilar__pilula { height: 32px; padding-inline: 10px; font-size: 12px; }
+    .conexoes-pilar__grupo--origem .conexoes-pilar__pilula::after { right: auto; left: 50%; top: auto; bottom: -3px; margin: 0 0 0 -2.5px; }
+    .conexoes-pilar__grupo--destino .conexoes-pilar__pilula::after { left: 50%; top: -3px; margin: 0 0 0 -2.5px; }
+    .conexoes-pilar__nucleo { justify-self: center; width: 68px; height: 68px; border-radius: 18px; }
+    .conexoes-pilar__nucleo img { width: 32px; height: 32px; }
+  }
+</style>

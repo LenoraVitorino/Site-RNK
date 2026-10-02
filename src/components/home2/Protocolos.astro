@@ -3,10 +3,13 @@ import { pilares } from '../../data/home';
 import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
 import ArtePilar from './ArtePilar.astro';
-import PilarEssencial from './PilarEssencial.astro';
+import PilarConexoes from './PilarConexoes.astro';
 import Selo from '../ui/Selo.astro';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
-const formatos = ['jornada', 'crm', 'automacao', 'decisao', 'posicionamento'];
+/* Bento de cinco peças chanfradas (01/10/2026): três com arte (conexões,
+   CRM em movimento e automação parada) e duas só de texto, para a dobra
+   respirar; a da decisão é a única em amarelo. */
+const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
@@ -15,23 +18,15 @@ const formatos = ['jornada', 'crm', 'automacao', 'decisao', 'posicionamento'];
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
       {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
-    <div class="features-grade features-grade--bento">
-      {cartas.slice(0, 3).map((p, i) => (
-        <article class:list={['feature-card', `feature-card--${formatos[i]}`, 'entra']}>
-          <div class="feature-card__arte">
-            {i === 1 || i === 2 ? <ArtePilar tipo={i} /> : <PilarEssencial tipo={i} />}
-          </div>
+    <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral }]}>
+      {cartas.map((p, i) => (
+        <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+          {i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
+          {(i === 1 || i === 2) && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
+          {i === 3 && <span class="revena-peca__eco" aria-hidden="true">Decisão</span>}
         </article>
       ))}
-      <div class="features-grade__faixa entra">
-        {cartas.slice(3).map((p, i) => (
-          <article class:list={['feature-card', `feature-card--${formatos[i + 3]}`]}>
-            <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
-            <div class="feature-card__arte"><PilarEssencial tipo={i + 3} /></div>
-          </article>
-        ))}
-      </div>
     </div>
     {copyLiteral && <div class="pilares-editoriais__ponte">
       <p>A Renke recomenda o protocolo certo para o momento da sua clínica.</p>

@@ -195,61 +195,119 @@ section[id] { scroll-margin-top: 110px; }
 
 
 
-/* Três cenas integradas ao fundo e uma faixa editorial compartilhada.
-   Só CRM e atendimento se movem; a perspectiva fica nas ilustrações. */
+/* Protocolo Revena: bento de cinco peças (01/10/2026). Todas levam, por
+   igual, o acabamento do painel do método: chanfro de 45° nos quatro
+   cantos, sem raio, com o vão de 16px entre elas (a Lenora reprovou
+   laterais inclinadas e peças encaixadas: "apenas com os acabamentos, todos
+   por igual"). Três peças têm arte (conexões, CRM e automação) e só o CRM
+   se move; as outras duas são só texto, e a da decisão é a única em
+   amarelo. */
 .pilares-features { padding-bottom: clamp(32px, 3vw, 48px); }
 .pilares-features + .letreiro { padding-top: clamp(24px, 2vw, 32px); padding-bottom: clamp(32px, 4vw, 56px); }
 .pilares-features .pilares__cabeca { margin-bottom: clamp(40px, 5vw, 64px); }
 .pilares__cabeca > p { color: #b6b6b4; font-size: 18px; }
-.features-grade--bento {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
-}
 .feature-card {
   display: flex; flex-direction: column;
   position: relative; isolation: isolate; min-width: 0; overflow: hidden;
   padding: 0 clamp(24px, 2.4vw, 36px) 32px; border-radius: 12px; border: 0;
   background: linear-gradient(145deg, #131313, #0b0b0b 70%);
 }
-.feature-card__arte {
-  width: calc(100% + 32px); margin-inline: -16px; min-width: 0;
-  height: clamp(230px, 21vw, 310px); flex-shrink: 0;
-  display: flex; align-items: center;
-  mask-image: linear-gradient(to bottom, #000 65%, transparent 100%);
-}
-.feature-card__arte > svg { opacity: .85; }
-/* Os nomes das frentes do ecossistema precisam permanecer legíveis. */
-.feature-card--jornada .feature-card__arte { mask-image: none; }
 .feature-card__texto { position: relative; z-index: 1; min-width: 0; padding: 0; }
 .feature-card h3 { font-size: clamp(22px, 1.8vw, 27px); font-weight: 350; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
-.features-grade--bento > .feature-card h3 { min-height: 2.4em; }
 .feature-card p { color: #a8a8a4; font-size: 16px; line-height: 1.65; margin-top: 14px; max-width: 44ch; text-wrap: pretty; }
-.features-grade__faixa {
-  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-radius: 12px; overflow: hidden;
-  background: linear-gradient(120deg, #131313, #0b0b0b 80%);
+
+.revena-bento {
+  --peca-vao: 16px;
+  --peca-chanfro: clamp(14px, 1.5vw, 24px);
+  --peca-recuo: clamp(24px, 2.4vw, 36px);
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--peca-vao);
 }
-.features-grade__faixa .feature-card {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(100px, .55fr);
-  align-items: center; gap: 16px; padding-block: 36px; border-radius: 0; background: none;
+.revena-peca {
+  --c: var(--peca-chanfro); --base: 32px;
+  grid-column: span 12; border-radius: 0;
+  padding: 34px var(--peca-recuo) var(--base);
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
 }
-.features-grade__faixa .feature-card + .feature-card::before {
-  content: ''; position: absolute; left: 0; top: 36px; bottom: 36px;
-  width: 1px; background: rgb(255 255 255 / .06);
+.revena-peca__arte { position: relative; display: grid; flex: 1 1 auto; min-width: 0; min-height: 0; margin-top: 28px; }
+
+/* Conexões: o diagrama ocupa a largura da peça. */
+.revena-peca--conexoes .revena-peca__arte { min-height: 232px; margin-top: 36px; }
+
+/* CRM e automação: janela de produto reta, sem perspectiva, começando na
+   linha do texto (a janela nasce em x 24 de 400, 6% da cena) e sumindo por
+   baixo. A cena fica perto do tamanho real (até 424px de largura, para o
+   texto dela não passar o do cartão) e a janela, que segue além do viewBox,
+   sangra pela direita e por baixo. */
+.revena-peca--crm .revena-peca__arte,
+.revena-peca--automacao .revena-peca__arte {
+  margin-bottom: calc(-1 * var(--base)); margin-right: calc(-1 * var(--peca-recuo));
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
-.features-grade__faixa .feature-card__arte {
-  width: calc(100% + 40px); height: 210px; margin: 0; opacity: .8;
-  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+.revena-peca--crm .revena-peca__arte { min-height: 260px; }
+.revena-peca--automacao .revena-peca__arte { min-height: 176px; }
+.revena-peca--crm .revena-peca__arte > svg.arte,
+.revena-peca--automacao .revena-peca__arte > svg.arte {
+  position: absolute; top: 0; left: 0; width: min(106.383%, 424px); height: auto; aspect-ratio: 4 / 3;
+  transform: translateX(-6%); opacity: .85;
 }
-/* Perspectiva discreta e fixa, sem reação ao ponteiro. */
-.feature-card--crm .arte-pilar { transform: perspective(1000px) rotateY(-6deg) rotateX(3deg) rotateZ(-3deg) scale(1.04); }
-.feature-card--automacao .arte-pilar { transform: perspective(1000px) rotateY(5deg) rotateX(3deg) rotateZ(2deg) scale(1.04); }
-/* Uma demonstração lenta; depois a interface descansa na pose final. */
+/* Sem a trilha "Comercial /", o nome do quadro volta para a margem da janela. */
+[data-pilares] .crm__titulo { transform: translateX(-81px); }
+
+/* Decisão: a peça em amarelo, só com tipografia. É o amarelo original da
+   marca (Lenora, 01/10), que desce meio tom até a base. */
+.revena-peca--decisao {
+  container-type: inline-size;
+  background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500);
+}
+.revena-peca--decisao h3 { color: #161616; }
+.revena-peca--decisao p { color: rgb(22 22 22 / .74); }
+.revena-peca__eco {
+  align-self: flex-start; margin-top: auto; margin-left: -.05em; padding-top: 32px;
+  font-size: clamp(56px, 25cqw, 96px); font-weight: 500; line-height: .86; letter-spacing: -.04em; white-space: nowrap;
+  color: rgb(255 255 255 / .46); text-shadow: 0 6px 16px rgb(150 105 0 / .16);
+  pointer-events: none; user-select: none;
+}
+
+@media (min-width: 1100px) {
+  .revena-bento { grid-template-rows: minmax(490px, auto) minmax(370px, auto); }
+  .revena-peca--conexoes { grid-column: span 7; }
+  .revena-peca--crm { grid-column: span 5; }
+  .revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento { grid-column: span 4; }
+  /* Altura para o cursor da Recepção aparecer inteiro, também com o texto longo da copy. */
+  .revena-peca--crm .revena-peca__arte { min-height: 330px; }
+}
+@media (min-width: 1280px) {
+  .revena-peca--automacao { grid-column: span 5; }
+  .revena-peca--decisao { grid-column: span 3; }
+}
+/* Tablet: conexões na largura toda e dois pares. */
+@media (min-width: 600px) and (max-width: 1099.98px) {
+  .revena-peca--crm, .revena-peca--automacao { grid-column: span 6; }
+  .revena-peca--decisao { grid-column: span 5; }
+  .revena-peca--posicionamento { grid-column: span 7; }
+  .revena-peca--crm .revena-peca__arte, .revena-peca--automacao .revena-peca__arte { min-height: 270px; }
+}
+@media (max-width: 599.98px) {
+  .revena-peca { --base: 28px; padding: 28px 24px; }
+  .revena-peca--crm .revena-peca__arte { min-height: 250px; }
+  .revena-peca--automacao .revena-peca__arte { min-height: 190px; }
+  .revena-peca--crm .revena-peca__arte, .revena-peca--automacao .revena-peca__arte { margin-right: -24px; }
+  .revena-peca--conexoes .revena-peca__arte { min-height: 248px; margin-top: 32px; }
+}
+
+/* Uma demonstração lenta do CRM; depois a interface descansa na pose
+   final. A automação fica parada nessa pose. */
 [data-pilares] .feature-card svg.arte-pilar * { animation-duration: 18s; animation-iteration-count: 1; }
+[data-pilares] .revena-peca--automacao svg.arte-pilar * { animation: none; }
 /* Nas duas cenas, retiramos metadados auxiliares que competiam com o texto. */
 [data-pilares] .crm__equipe, [data-pilares] .crm__trilha, [data-pilares] .crm__barra,
 [data-pilares] .crm__canal, [data-pilares] .crm__canal-nome, [data-pilares] .crm__quando { display: none; }
 [data-pilares] .automacao__quando, [data-pilares] .automacao__pilula,
 [data-pilares] .automacao__pilula-texto, [data-pilares] .automacao__consulta-quando { display: none; }
+/* O aviso flutuante ficaria cortado pela base da peça; a dobra já tem o seu amarelo. */
+[data-pilares] .automacao__aviso { display: none; }
 .arte-interface { display: block; width: 100%; height: 100%; }
 .pilares-editoriais__ponte { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--ref-fio); }
 .pilares-editoriais__ponte p { color: #b6b6b4; font-size: 16px; }
@@ -297,39 +355,15 @@ section[id] { scroll-margin-top: 110px; }
 /* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
 #perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
 
-@media (max-width: 1099.98px) {
-  .features-grade--bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .feature-card { padding-inline: 24px; }
-  .feature-card--automacao {
-    grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: center; gap: 24px; padding-block: 16px;
-  }
-  .features-grade__faixa .feature-card { grid-template-columns: 1fr; gap: 0; }
-  .features-grade__faixa .feature-card__arte { width: 100%; height: 140px; max-width: 240px; justify-self: end; }
-}
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
   .operacao-editorial .operacao__texto { position: static; }
 }
 @media (max-width: 599.98px) {
-  .features-grade--bento { grid-template-columns: 1fr; gap: 16px; }
-  .feature-card { padding: 0 24px 28px; }
-  .feature-card--automacao { display: flex; gap: 0; align-items: stretch; }
-  .features-grade--bento > .feature-card h3 { min-height: 0; }
-  .feature-card__arte { height: 230px; }
-  .features-grade__faixa { grid-template-columns: 1fr; }
-  .features-grade__faixa .feature-card { padding-block: 28px; }
-  .features-grade__faixa .feature-card + .feature-card::before {
-    top: 0; bottom: auto; left: 24px; right: 24px; height: 1px; width: auto;
-  }
-  .features-grade__faixa .feature-card__arte { height: 120px; }
   .feature-card h3 { font-size: 25px; }
   .pilares-editoriais__ponte { flex-direction: column; align-items: start; }
   .operacao-editorial .operacao__cartao { padding: 24px 20px; min-height: 0; gap: 0; }
   .operacao-editorial .operacao__texto-item { font-size: 16px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .feature-card__arte .arte-pilar { transform: none; }
 }
 
 /* Método compacto: texto contínuo à esquerda e vídeo vertical contido à direita. */
