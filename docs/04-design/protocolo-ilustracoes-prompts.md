@@ -211,17 +211,22 @@ concêntricos vistos de cima (viram alvo).
 Histórico: a Lenora reprovou a palavra "Decisão" ao fundo, as barras com a
 etiqueta "Investir mais", os indicadores em linhas entre fios ("ficou
 péssimo") e o mini painel com fundo grafite ("não quero fundo escuro, deixe
-sem fundo, mais minimalista").
+sem fundo, mais minimalista"). Depois mandou dois widgets de referência
+("Balance" e "Energy overview") e fechou em "gráfico de colunas e aí insere
+um cursor".
 
-**Ideia.** Um gráfico mínimo, desenhado direto sobre o amarelo, com o dado
-que a Renke acompanha todo mês.
+**Ideia.** Um gráfico mínimo, desenhado direto sobre o amarelo, com a Renke
+apontando o que importa no mês.
 
-**Composição (220 × 80, estática).** Sem fundo, sem moldura e sem título.
-Duas linhas de quatro meses (jul a out) em grafite: uma forte, subindo, com
-um ponto cheio no mês atual; outra mais clara, de apoio. Embaixo, a linha
-de base e os meses em corpo pequeno, com o mês atual mais escuro.
+**Composição (220 × 124, estática).** Sem fundo, sem moldura e sem título.
+Sete colunas finas de topo arredondado, de abril a outubro, em grafite bem
+claro; a do mês atual é a única cheia e a mais alta. Linha de base e os
+meses em corpo pequeno, com o mês atual mais escuro. Um cursor de colega
+(seta grafite e etiqueta grafite com "Renke" em amarelo) encosta na coluna
+do mês, vindo da esquerda.
 
-**Destaque.** O próprio cartão já é o amarelo; o gráfico é todo em grafite.
+**Destaque.** O próprio cartão já é o amarelo; o gráfico é todo em grafite e
+o amarelo volta só no nome da etiqueta.
 
 **Não fazer.** Fundo escuro, números inventados, etiquetas de recomendação,
-barras, área preenchida, mais de um gráfico.
+mais de um gráfico.

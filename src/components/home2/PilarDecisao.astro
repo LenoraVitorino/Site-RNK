@@ -1,39 +1,55 @@
 ---
 /**
- * Dizemos o que fazer todo mês (02/10/2026): um mini gráfico desenhado em
- * grafite direto sobre o amarelo, sem fundo nem moldura. A Lenora reprovou
- * a palavra "Decisão" ao fundo, as barras com a etiqueta "Investir mais",
- * os indicadores em linhas e o painel de fundo escuro ("não quero fundo
- * escuro, deixe sem fundo, mais minimalista"). Ficam só duas linhas de
- * quatro meses (o faturamento de dois canais), o ponto do mês atual, a
- * linha de base e os meses. Sem números. Estático.
+ * Dizemos o que fazer todo mês (02/10/2026): um mini gráfico de colunas
+ * desenhado em grafite direto sobre o amarelo, sem fundo nem moldura, com
+ * um cursor de colega (o da Renke) apontando a coluna do mês atual. Foi o
+ * que a Lenora pediu depois de reprovar a palavra "Decisão" ao fundo, as
+ * barras com a etiqueta "Investir mais", os indicadores em linhas e o
+ * painel de fundo escuro: "gráfico de colunas e aí insere um cursor".
+ * Sem números inventados. Estático.
  * Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
  */
 import '../../styles/ilustracoes.css';
 
-const meses = ['jul', 'ago', 'set', 'out'];
-/* Gráfico de x 0 a 216 (4 de folga para o ponto); os meses caem em passos iguais. */
-const X0 = 0, X1 = 216, BASE = 62;
-const xs = meses.map((_, i) => X0 + (i * (X1 - X0)) / (meses.length - 1));
-const principal = 'M0 50C24 49 46 36 72 38S114 23 144 24S190 8 216 4';
-const apoio = 'M0 55C26 55 48 47 72 48S116 41 144 42S192 35 216 36';
+/* Sete meses; a coluna do mês atual (a última) é a única cheia. */
+const meses = ['abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out'];
+const alturas = [26, 36, 30, 46, 40, 54, 84];
+const BASE = 106, L = 20, PASSO = (220 - L) / (meses.length - 1), RAIO = 5;
+const colunas = meses.map((m, i) => ({ m, x: i * PASSO, h: alturas[i], atual: i === meses.length - 1 }));
+/* Coluna de topo arredondado, apoiada na linha de base. */
+const coluna = (x: number, h: number) =>
+  `M${x.toFixed(1)} ${BASE}V${BASE - h + RAIO}a${RAIO} ${RAIO} 0 0 1 ${RAIO} ${-RAIO}h${L - 2 * RAIO}a${RAIO} ${RAIO} 0 0 1 ${RAIO} ${RAIO}V${BASE}z`;
+/* Cursor: a ponta encosta na lateral da coluna do mês, perto do alto, e a
+   seta fica toda sobre o amarelo; a etiqueta cai à esquerda, por cima das
+   colunas mais baixas. "Renke" mede 30 em Inter 10,5 / 500. */
+const foco = colunas[colunas.length - 1];
+const C = { x: foco.x - 2, y: BASE - foco.h + 9 };
+const E = { w: 46, h: 19 };
 ---
-<svg class="arte grafico-decisao" viewBox="0 0 220 80" fill="none" aria-hidden="true" focusable="false">
-  <path d={`M${X0} ${BASE + 0.5}H220`} class="grafico-decisao__base" />
-  <path d={apoio} class="grafico-decisao__linha grafico-decisao__linha--apoio" />
-  <path d={principal} class="grafico-decisao__linha" />
-  <circle cx="216" cy="4" r="3.5" class="grafico-decisao__ponto" />
-  {meses.map((m, i) => (
-    <text x={xs[i]} y="78" text-anchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'} class:list={['grafico-decisao__mes', { 'grafico-decisao__mes--atual': i === meses.length - 1 }]}>{m}</text>
+<svg class="arte colunas-decisao" viewBox="0 0 220 124" fill="none" aria-hidden="true" focusable="false">
+  {colunas.map(({ x, h, atual }) => <path d={coluna(x, h)} class:list={['colunas-decisao__coluna', { 'colunas-decisao__coluna--atual': atual }]} />)}
+  <path d={`M0 ${BASE + 0.5}H220`} class="colunas-decisao__base" />
+  {colunas.map(({ m, x, atual }) => (
+    <text x={x + L / 2} y="121" text-anchor="middle" class:list={['colunas-decisao__mes', { 'colunas-decisao__mes--atual': atual }]}>{m}</text>
   ))}
+  <g transform={`translate(${C.x} ${C.y})`}>
+    <g transform={`translate(${-E.w - 2} 15)`}>
+      <rect width={E.w} height={E.h} rx={E.h / 2} class="colunas-decisao__etiqueta" />
+      <text x={E.w / 2} y="13" text-anchor="middle" class="colunas-decisao__nome">Renke</text>
+    </g>
+    {/* Seta espelhada: aponta para cima e para a direita, na coluna. */}
+    <path d="M0 0L-17.6 6.5L-10 10L-6.5 17.6Z" class="colunas-decisao__seta" />
+  </g>
 </svg>
 
 <style>
-  .grafico-decisao { height: auto; overflow: visible; }
-  .grafico-decisao__base { stroke: #161616; stroke-opacity: .22; }
-  .grafico-decisao__linha { stroke: #161616; stroke-width: 1.8; stroke-linecap: round; }
-  .grafico-decisao__linha--apoio { stroke-opacity: .28; stroke-width: 1.4; }
-  .grafico-decisao__ponto { fill: #161616; }
-  .grafico-decisao__mes { font-size: 10px; fill: #161616; fill-opacity: .55; }
-  .grafico-decisao__mes--atual { fill-opacity: 1; font-weight: 500; }
+  .colunas-decisao { height: auto; overflow: visible; }
+  .colunas-decisao__coluna { fill: #161616; fill-opacity: .14; }
+  .colunas-decisao__coluna--atual { fill-opacity: 1; }
+  .colunas-decisao__base { stroke: #161616; stroke-opacity: .25; }
+  .colunas-decisao__mes { font-size: 9.5px; fill: #161616; fill-opacity: .55; }
+  .colunas-decisao__mes--atual { fill-opacity: 1; font-weight: 500; }
+  .colunas-decisao__seta { fill: #161616; stroke: var(--amarelo-marca, #FFD103); stroke-width: 1.2; stroke-linejoin: round; }
+  .colunas-decisao__etiqueta { fill: #161616; }
+  .colunas-decisao__nome { font-size: 10.5px; font-weight: 500; fill: var(--amarelo-marca, #FFD103); letter-spacing: -.005em; }
 </style>
