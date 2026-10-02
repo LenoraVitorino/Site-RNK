@@ -68,7 +68,7 @@ const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = A
   .selo-revena__marca :global(svg) { width: 56%; height: 56%; }
   .selo-revena__estrela { color: var(--destaque); font-size: 16px; line-height: 1; }
   /* No celular, um ponto a menos para a frase da hero caber numa linha. */
-  @media (max-width: 479.98px) { .selo-revena { font-size: 15px; } }
+  @media (max-width: 479.98px) { .selo-revena { gap: 10px; padding-right: 16px; font-size: 14.5px; } }
   /* Algumas dobras definem a entrelinha dos parágrafos por id; o texto do selo mantém a dele. */
   .selo-revena__texto { line-height: 1.2; }
 </style>

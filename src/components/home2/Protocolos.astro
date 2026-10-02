@@ -10,8 +10,14 @@ const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[
 /* Bento de cinco peças chanfradas (01/10/2026), cada uma com a sua
    imagem: diagrama (conexões), quadro em movimento (CRM), mensagem
    (automação) e o domo do mercado (posicionamento). A peça amarela (decisão)
-   fica só com o texto: a Lenora não quer nada nela. */
+   não leva ilustração (a Lenora não quer nada nela), mas também não pode
+   ficar vazia: os três indicadores do texto viram três linhas entre fios,
+   ocupando a altura da peça. O que sobrar do texto (na copy) segue em
+   parágrafo depois deles, na ordem em que a copy foi escrita. */
 const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
+const frases = cartas[3].texto.split(/(?<=\.)\s+/);
+const indicadores = frases.slice(0, 3).map((f) => f.replace(/\.$/, ''));
+const restoDecisao = frases.slice(3).join(' ');
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
@@ -23,7 +29,9 @@ const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
     <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral }]}>
       {cartas.map((p, i) => (
         <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
-          <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+          <div class="feature-card__texto"><h3>{p.titulo}</h3>{i !== 3 && <p>{p.texto}</p>}</div>
+          {i === 3 && <ul class="revena-peca__indicadores">{indicadores.map((t) => <li>{t}</li>)}</ul>}
+          {i === 3 && restoDecisao && <p class="revena-peca__resto">{restoDecisao}</p>}
           {i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
           {(i === 1 || i === 2) && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
           {i === 4 && <div class="revena-peca__arte"><PilarPosicionamento /></div>}

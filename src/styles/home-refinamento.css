@@ -250,10 +250,24 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Decisão: a peça em amarelo, o amarelo original da marca (Lenora,
-   01/10), que desce meio tom até a base. Só texto, sem arte. */
+   01/10), que desce meio tom até a base. Sem arte: os três indicadores do
+   texto ocupam a altura da peça, um por linha, entre fios (02/10: "ainda
+   não gosto desse vazio"). */
 .revena-peca--decisao { background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500); }
 .revena-peca--decisao h3 { color: #161616; }
 .revena-peca--decisao p { color: rgb(22 22 22 / .74); }
+.revena-peca__indicadores {
+  flex: 1 1 auto; display: flex; flex-direction: column; list-style: none; padding: 0;
+  margin: 24px 0 0;
+}
+.revena-peca__indicadores:last-child { margin-bottom: calc(8px - var(--base)); }
+.revena-peca__indicadores:not(:last-child) { border-bottom: 1px solid rgb(22 22 22 / .2); }
+.revena-peca--decisao .revena-peca__resto { margin-top: 20px; }
+.revena-peca__indicadores li {
+  flex: 1 1 0; display: flex; align-items: center; min-height: 52px; padding-block: 8px;
+  border-top: 1px solid rgb(22 22 22 / .2);
+  color: #161616; font-size: clamp(16px, 1.25vw, 18px); font-weight: 450; line-height: 1.3; letter-spacing: -.01em;
+}
 /* Posicionamento: o domo tem a largura da peça e sangra pelas laterais e
    por baixo. */
 .revena-peca--posicionamento .revena-peca__arte {

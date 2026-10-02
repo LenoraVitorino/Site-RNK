@@ -206,5 +206,8 @@ concêntricos vistos de cima (viram alvo).
 ## 6. "Dizemos o que fazer todo mês" (cartão amarelo)
 
 Sem ilustração. A palavra "Decisão" ao fundo e as barras por canal foram
-reprovadas pela Lenora em 01/10 ("não quero nada nesse card"). O cartão fica
-só com o título e o texto sobre o amarelo da marca.
+reprovadas pela Lenora em 01/10 ("não quero nada nesse card"). Só com o
+título e o parágrafo, ela ainda achou o cartão vazio (02/10). A solução é
+tipográfica: os três indicadores do próprio texto (custo por agendamento,
+taxa de comparecimento, faturamento por canal) viram três linhas entre
+fios, ocupando a altura do cartão.
