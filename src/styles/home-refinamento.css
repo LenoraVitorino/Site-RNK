@@ -230,30 +230,35 @@ section[id] { scroll-margin-top: 110px; }
     var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
     calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
 }
-.revena-peca__arte { position: relative; display: grid; flex: 1 1 auto; min-width: 0; min-height: 0; margin-top: 28px; }
+.revena-peca__arte { position: relative; flex: none; min-width: 0; margin-top: auto; padding-top: 28px; }
 
-/* Conexões: o diagrama ocupa a largura da peça. */
-.revena-peca--conexoes .revena-peca__arte { min-height: 232px; margin-top: 36px; }
+/* Conexões: o diagrama ocupa a largura da peça, na proporção da cena, e
+   fica no meio da altura que sobrar. */
+.revena-peca--conexoes .revena-peca__arte { padding-top: 36px; margin-block: auto; }
 
-/* CRM e automação: janela de produto reta, sem perspectiva, começando na
-   linha do texto (a janela nasce em x 24 de 400, 6% da cena) e sumindo por
-   baixo. A cena fica perto do tamanho real (até 424px de largura, para o
-   texto dela não passar o do cartão) e a janela, que segue além do viewBox,
-   sangra pela direita e por baixo. */
-.revena-peca--crm .revena-peca__arte,
-.revena-peca--automacao .revena-peca__arte {
+/* CRM: janela de produto reta, sem perspectiva. A cena é posicionada para
+   a janela (que nasce em x 24 e y 32 de 400 × 300) começar na linha do
+   texto e no alto da área; fica perto do tamanho real (até 424px de
+   largura, para o texto dela não passar o do cartão) e sangra pela direita
+   e por baixo, apagando-se na base. */
+.revena-peca--crm .revena-peca__arte {
+  flex: 1 1 auto; min-height: 260px; padding-top: 0; margin-top: 28px;
   margin-bottom: calc(-1 * var(--base)); margin-right: calc(-1 * var(--peca-recuo));
   mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
-.revena-peca--crm .revena-peca__arte { min-height: 260px; }
-.revena-peca--automacao .revena-peca__arte { min-height: 176px; }
-.revena-peca--crm .revena-peca__arte > svg.arte,
-.revena-peca--automacao .revena-peca__arte > svg.arte {
+.revena-peca--crm .revena-peca__arte > svg.arte {
   position: absolute; top: 0; left: 0; width: min(106.383%, 424px); height: auto; aspect-ratio: 4 / 3;
-  transform: translateX(-6%); opacity: .85;
+  transform: translate(-6%, -10.667%);
 }
-/* Sem a trilha "Comercial /", o nome do quadro volta para a margem da janela. */
-[data-pilares] .crm__titulo { transform: translateX(-81px); }
+/* Automação: a cena ocupa x 24 a 372 e y 4 a 130 do viewBox; a área tem a
+   proporção desse recorte e a cena cresce com a largura do texto. A última
+   etapa passa da borda e se apaga. */
+.revena-peca--automacao .feature-card__texto { margin-bottom: 28px; }
+.revena-peca--automacao .revena-peca__arte { aspect-ratio: 348 / 130; padding-top: 0; }
+.revena-peca--automacao .revena-peca__arte > svg.arte {
+  position: absolute; top: 0; left: 0; width: min(114.943%, 500px); height: auto; aspect-ratio: 4 / 3;
+  transform: translate(-6%, -1.333%);
+}
 
 /* Decisão: a peça em amarelo, só com tipografia. É o amarelo original da
    marca (Lenora, 01/10), que desce meio tom até a base. */
@@ -265,7 +270,7 @@ section[id] { scroll-margin-top: 110px; }
 .revena-peca--decisao p { color: rgb(22 22 22 / .74); }
 .revena-peca__eco {
   align-self: flex-start; margin-top: auto; margin-left: -.05em; padding-top: 32px;
-  font-size: clamp(56px, 25cqw, 96px); font-weight: 500; line-height: .86; letter-spacing: -.04em; white-space: nowrap;
+  font-size: clamp(40px, 25cqw, 96px); font-weight: 500; line-height: .86; letter-spacing: -.04em; white-space: nowrap;
   color: rgb(255 255 255 / .46); text-shadow: 0 6px 16px rgb(150 105 0 / .16);
   pointer-events: none; user-select: none;
 }
@@ -276,7 +281,7 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--crm { grid-column: span 5; }
   .revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento { grid-column: span 4; }
   /* Altura para o cursor da Recepção aparecer inteiro, também com o texto longo da copy. */
-  .revena-peca--crm .revena-peca__arte { min-height: 330px; }
+  .revena-peca--crm .revena-peca__arte { min-height: 340px; }
 }
 @media (min-width: 1280px) {
   .revena-peca--automacao { grid-column: span 5; }
@@ -287,27 +292,16 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--crm, .revena-peca--automacao { grid-column: span 6; }
   .revena-peca--decisao { grid-column: span 5; }
   .revena-peca--posicionamento { grid-column: span 7; }
-  .revena-peca--crm .revena-peca__arte, .revena-peca--automacao .revena-peca__arte { min-height: 270px; }
+  .revena-peca--crm .revena-peca__arte { min-height: 250px; }
 }
 @media (max-width: 599.98px) {
   .revena-peca { --base: 28px; padding: 28px 24px; }
-  .revena-peca--crm .revena-peca__arte { min-height: 250px; }
-  .revena-peca--automacao .revena-peca__arte { min-height: 190px; }
-  .revena-peca--crm .revena-peca__arte, .revena-peca--automacao .revena-peca__arte { margin-right: -24px; }
-  .revena-peca--conexoes .revena-peca__arte { min-height: 248px; margin-top: 32px; }
+  .revena-peca--crm .revena-peca__arte { min-height: 230px; margin-right: -24px; }
+  .revena-peca--conexoes .revena-peca__arte { padding-top: 32px; }
 }
 
-/* Uma demonstração lenta do CRM; depois a interface descansa na pose
-   final. A automação fica parada nessa pose. */
+/* Uma demonstração lenta do CRM; depois a interface descansa na pose final. */
 [data-pilares] .feature-card svg.arte-pilar * { animation-duration: 18s; animation-iteration-count: 1; }
-[data-pilares] .revena-peca--automacao svg.arte-pilar * { animation: none; }
-/* Nas duas cenas, retiramos metadados auxiliares que competiam com o texto. */
-[data-pilares] .crm__equipe, [data-pilares] .crm__trilha, [data-pilares] .crm__barra,
-[data-pilares] .crm__canal, [data-pilares] .crm__canal-nome, [data-pilares] .crm__quando { display: none; }
-[data-pilares] .automacao__quando, [data-pilares] .automacao__pilula,
-[data-pilares] .automacao__pilula-texto, [data-pilares] .automacao__consulta-quando { display: none; }
-/* O aviso flutuante ficaria cortado pela base da peça; a dobra já tem o seu amarelo. */
-[data-pilares] .automacao__aviso { display: none; }
 .arte-interface { display: block; width: 100%; height: 100%; }
 .pilares-editoriais__ponte { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--ref-fio); }
 .pilares-editoriais__ponte p { color: #b6b6b4; font-size: 16px; }

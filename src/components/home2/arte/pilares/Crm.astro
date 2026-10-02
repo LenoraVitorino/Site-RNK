@@ -7,6 +7,13 @@
  * dela descansa logo abaixo. Em laço, a cena volta um passo e repete o
  * gesto: o cursor entra, pega o cartão, arrasta e solta. Pose estática =
  * pose final; o movimento só parte dela.
+ *
+ * 01/10/2026 (docs/04-design/protocolo-ilustracoes-prompts.md): a cena
+ * ficou mais leve sem ficar vazia. O cabeçalho é só "Pipeline" e as
+ * iniciais; cada cartão traz o procedimento e, embaixo, o canal (um ponto e
+ * o nome, sem pílula) e o quando, em cinza discreto. As colunas mostram a
+ * contagem, que se atualiza com o gesto, e a vaga de destino aparece
+ * tracejada enquanto o cartão viaja.
  */
 import Cursor from '../Cursor.astro';
 
@@ -21,15 +28,11 @@ const WX = 24, WY = 32;
 const COL = [36, 188, 340];
 const SLOT = [112, 184, 256];
 const CW = 140, CH = 64;
-/* Largura do canal em Inter 10,5 / 500, mais 7 de folga de cada lado. */
-const larguraCanal: Record<string, number> = { Instagram: 49.8, 'Indicação': 48.4, Google: 35.5, Site: 18.9 };
-const pilula = (canal: string) => Math.round(larguraCanal[canal] + 14);
-
 /* Estado de cada coluna num glifo de progresso: metade, três quartos e
    cheio com visto. */
 const colunas = [
-  { x: COL[0], nome: 'Em contato', estado: 'meio' },
-  { x: COL[1], nome: 'Agendado', estado: 'quase' },
+  { x: COL[0], nome: 'Em contato', estado: 'meio', antes: 4, depois: 3 },
+  { x: COL[1], nome: 'Agendado', estado: 'quase', antes: 1, depois: 2 },
   { x: COL[2], nome: 'Atendido', estado: 'feito' },
 ];
 type Cartao = { c: number; s: number; titulo: string; canal: string; quando: string; visto?: boolean };
@@ -64,14 +67,17 @@ const RX = 288, RY = 254;
     <mask id={`${p}-borda`} maskUnits="userSpaceOnUse" x="320" y="0" width="200" height="400">
       <rect x="320" y="0" width="200" height="400" fill={`url(#${p}-apaga)`} />
     </mask>
+    {/* Luz fraca vinda do alto à esquerda, só dentro da janela. */}
+    <radialGradient id={`${p}-luz`} gradientUnits="userSpaceOnUse" cx="120" cy="32" r="300">
+      <stop stop-color="#ffffff" stop-opacity=".055" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
   </defs>
 
   {/* Janela do produto, recortada pela borda. */}
   <rect x={WX} y={WY} width="460" height="320" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
+  <rect x={WX} y={WY} width="460" height="320" rx="16" fill={`url(#${p}-luz)`} />
   <rect x={WX + 16} y={WY + 0.5} width="340" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x="44" y="59" class="crm__trilha">Comercial</text>
-  <text x="113" y="59" class="crm__barra">/</text>
-  <text x="125" y="59" class="crm__titulo">Pipeline</text>
+  <text x="44" y="59" class="crm__titulo">Pipeline</text>
   {/* Quem está no quadro agora: as duas áreas que usam o CRM, pela
       inicial (C de Comercial, R de Recepção), no lugar de duas silhuetas
       iguais. A Recepção tem o anel da cor do cursor dela, como nos editores
@@ -85,8 +91,8 @@ const RX = 288, RY = 254;
   </g>
   <rect x={WX} y={WY + 44} width="460" height="1" class="crm__divisa" />
 
-  {/* Cabeçalho das colunas: glifo de estado e nome. */}
-  {colunas.map(({ x, nome, estado }) => (
+  {/* Cabeçalho das colunas: glifo de estado, nome e contagem. */}
+  {colunas.map(({ x, nome, estado, antes, depois }) => (
     <g class:list={['crm__cabeca', { 'crm__apagada': estado === 'feito' }]} mask={estado === 'feito' ? `url(#${p}-borda)` : undefined}>
       <circle cx={x + 10} cy="96" r="5.5" class="crm__estado" />
       {estado === 'meio' && <path d={`M${x + 10} 93a3 3 0 0 1 0 6z`} class="crm__estado-cheio" />}
@@ -96,6 +102,10 @@ const RX = 288, RY = 254;
         <path d={`M${x + 7.6} 96.2l1.7 1.7l3.1-3.4`} class="crm__estado-visto" />
       </>}
       <text x={x + 22} y="100" class="crm__coluna">{nome}</text>
+      {depois && <>
+        <text x={x + CW - 2} y="100" text-anchor="end" class="crm__conta crm__antes">{antes}</text>
+        <text x={x + CW - 2} y="100" text-anchor="end" class="crm__conta crm__depois">{depois}</text>
+      </>}
     </g>
   ))}
 
@@ -108,8 +118,8 @@ const RX = 288, RY = 254;
           <g class:list={['crm__cartao', { 'crm__apagada': c === 2 }]} mask={c === 2 ? `url(#${p}-borda)` : undefined}>
             <rect x={x} y={y} width={CW} height={CH} rx="9" fill={`url(#${p}-cartao)`} stroke={`url(#${p}-fio)`} />
             <text x={x + 12} y={y + 24} class="crm__nome">{titulo}</text>
-            <rect x={x + 12} y={y + 36} width={pilula(canal)} height="18" rx="9" class="crm__canal" />
-            <text x={x + 12 + pilula(canal) / 2} y={y + 48.5} text-anchor="middle" class="crm__canal-nome">{canal}</text>
+            <circle cx={x + 14.5} cy={y + 44.5} r="2.5" class="crm__canal" />
+            <text x={x + 23} y={y + 48.5} class="crm__canal-nome">{canal}</text>
             <text x={x + CW - 12} y={y + 48.5} text-anchor="end" class="crm__quando">{quando}</text>
             {visto && <g class="crm__visto-fixo">
               <circle cx={x + CW - 18} cy={y + 20} r="6" />
@@ -121,6 +131,9 @@ const RX = 288, RY = 254;
     </g>
   ))}
 
+  {/* A vaga de destino, tracejada enquanto o cartão viaja. */}
+  <rect x={MX + 0.5} y={MY + 0.5} width={CW - 1} height={CH - 1} rx="8.5" class="crm__vaga" />
+
   {/* O cartão arrastado, já em "Agendado". */}
   <g class="crm__movel">
     <g class="crm__arco">
@@ -130,8 +143,8 @@ const RX = 288, RY = 254;
           <rect x={MX} y={MY} width={CW} height={CH} rx="9" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
           <rect x={MX + 20} y={MY + 0.5} width={CW - 40} height="1" fill={`url(#${p}-fio-h)`} />
           <text x={MX + 12} y={MY + 24} class="crm__nome crm__nome--foco">Harmonização</text>
-          <rect x={MX + 12} y={MY + 36} width={pilula('Google')} height="18" rx="9" class="crm__canal" />
-          <text x={MX + 12 + pilula('Google') / 2} y={MY + 48.5} text-anchor="middle" class="crm__canal-nome">Google</text>
+          <circle cx={MX + 14.5} cy={MY + 44.5} r="2.5" class="crm__canal" />
+          <text x={MX + 23} y={MY + 48.5} class="crm__canal-nome">Google</text>
           <text x={MX + CW - 12} y={MY + 48.5} text-anchor="end" class="crm__quando crm__antes">há 2 h</text>
           <text x={MX + CW - 12} y={MY + 48.5} text-anchor="end" class="crm__quando crm__quando--foco crm__depois">qui, 14:00</text>
           <circle class="crm__visto-anel" cx={MX + CW - 18} cy={MY + 20} r="6" />
@@ -152,8 +165,6 @@ const RX = 288, RY = 254;
 </g>
 
 <style>
-  .crm__trilha { font-size: 13px; fill: #8a8a85; letter-spacing: -.005em; }
-  .crm__barra { font-size: 13px; fill: #4d4d49; }
   .crm__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
   .crm__divisa { fill: #ffffff; fill-opacity: .06; }
   .crm__avatar { fill: #262626; stroke: #ffffff; stroke-opacity: .1; }
@@ -167,9 +178,11 @@ const RX = 288, RY = 254;
   .crm__estado-visto { fill: none; stroke: #1a1a1a; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
   .crm__nome { font-size: 13px; font-weight: 500; fill: #d6d6d1; letter-spacing: -.01em; }
   .crm__nome--foco { fill: #ecece8; }
-  .crm__canal { fill: #ffffff; fill-opacity: .045; stroke: #ffffff; stroke-opacity: .08; }
-  .crm__canal-nome { font-size: 10.5px; font-weight: 500; fill: #a3a39e; }
-  .crm__quando { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
+  .crm__conta { font-size: 11.5px; fill: #6f6f6b; font-variant-numeric: tabular-nums; }
+  .crm__canal { fill: #6f6f6b; }
+  .crm__canal-nome { font-size: 11px; fill: #8a8a85; }
+  .crm__quando { font-size: 11px; fill: #6f6f6b; font-variant-numeric: tabular-nums; }
+  .crm__vaga { fill: #ffffff; fill-opacity: .02; stroke: #ffffff; stroke-opacity: .26; stroke-dasharray: 4 4; opacity: 0; }
   .crm__quando--foco { fill: #b9b9b4; }
   .crm__visto-fixo circle, .crm__visto-anel { fill: none; stroke: #ffffff; stroke-opacity: .22; }
   .crm__visto-fixo path, .crm__visto { fill: none; stroke: #8a8a85; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
@@ -193,7 +206,7 @@ const RX = 288, RY = 254;
      5,25–5,75 o cursor se afasta um pouco e descansa.
      O resto (≈ 59% do ciclo) é repouso. O 0% de cada keyframe é a pose
      final. */
-  .crm__movel, .crm__arco, .crm__some, .crm__ergue, .crm__sombra, .crm__sobe,
+  .crm__movel, .crm__arco, .crm__some, .crm__ergue, .crm__sombra, .crm__sobe, .crm__vaga,
   .crm__antes, .crm__depois, .crm__visto, .crm__visto-anel,
   .crm__cursor, .crm__cursor-x, .crm__cursor-y, .crm :global(.a-cursor__seta) {
     animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
@@ -204,7 +217,7 @@ const RX = 288, RY = 254;
   .crm__arco { animation-name: crm-arco; }
   .crm__some { animation-name: crm-some; }
   .crm__ergue { animation-name: crm-ergue; }
-  .crm__sombra { animation-name: crm-sombra; }
+  .crm__sombra, .crm__vaga { animation-name: crm-sombra; }
   .crm__sobe { animation-name: crm-sobe; }
   .crm__antes { animation-name: crm-antes; }
   .crm__depois { animation-name: crm-depois; }
