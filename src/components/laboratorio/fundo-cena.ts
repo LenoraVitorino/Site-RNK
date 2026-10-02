@@ -481,6 +481,9 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
       const m = o as Mesh;
       if (m.isMesh) { m.material = material; m.frustumCulled = false; }
     });
+    // Compila o material do modelo antes da troca: compilar no primeiro
+    // quadro dele travava a página no meio da rolagem.
+    await renderer.compileAsync(gltf.scene, camera, cena).catch(() => {});
     grupo.remove(reserva);
     grupo.add(gltf.scene);
     if (gltf.animations[0]) {
@@ -491,8 +494,11 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
     }
   };
   Promise.allSettled([carregarEnvMap(pmrem, ARQUIVOS.envArcos), carregarEnvMap(pmrem, ARQUIVOS.envFaixas)]).then(([a, f]) => {
-    if (a.status === 'fulfilled') { literalDonut.envMap = a.value; donutMaterial.envMap = a.value; donutMaterial.needsUpdate = true; }
-    if (f.status === 'fulfilled') { literalMinhoca.envMap = f.value; minhocaMaterial.envMap = f.value; minhocaMaterial.needsUpdate = true; }
+    // Só os materiais dos modelos recebem os env maps: trocar o da reserva
+    // recompilava o shader dela de forma síncrona, segundos antes de o modelo
+    // ocupar o lugar dela.
+    if (a.status === 'fulfilled') literalDonut.envMap = a.value;
+    if (f.status === 'fulfilled') literalMinhoca.envMap = f.value;
     pmrem.dispose();
     carregarModelo(ARQUIVOS.donut, donutObj, pivo, literalDonut, VELOCIDADE.donut).catch(() => {});
     // Nas internas a minhoca não é baixada: ela só entra depois de t = .356, fora dos quadros usados.
@@ -562,7 +568,6 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const tamanhoComposer = new Vector2(-1, -1);
   let dtQuadro = 0;
 
-  const t0 = performance.now();
   const abriuNoTopo = scrollY < 40;
   const GRAU = Math.PI / 180;
 
@@ -578,7 +583,8 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
         roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
         continuas: ['metodologia', 'pilares', 'letreiro'],
         tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
-        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
+        // Conta desde a abertura da página: a cena agora só começa depois da entrada da hero.
+        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() > 3400,
       },
     pintar({ q, tempo, dt, parado, ponteiro }) {
       dtQuadro = dt;
@@ -604,12 +610,23 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
       l2.position.set(q.l2x, q.l2y, q.l2z);
       l3.intensity = q.l3i;
       l5.intensity = q.l5i;
-      spot.intensity = q.si;
-      spot.visible = q.si > .01;
+      // O spot nunca sai da cena: trocar o número de luzes recompila todos os
+      // materiais e travava a rolagem. Apagado, ele só fica sem intensidade.
+      spot.intensity = q.si > .01 ? q.si : 0;
 
       camera.position.y = q.cay;
       // Só um leve tilt pelo ponteiro (±1°), como a câmera de lá; sem foco seguindo o mouse.
       camera.rotation.set(-ponteiro.y * GRAU, -ponteiro.x * GRAU, 0);
+    },
+    // Compila os materiais da cena (os dois modelos, inclusive o que ainda está
+    // fora da tela) em paralelo, sem segurar a página; depois aquece o
+    // pós-processamento com um quadro, ainda invisível (opacidade 0).
+    async preparar() {
+      const minhocaVisivel = minhoca.visible;
+      minhoca.visible = true;
+      await renderer.compileAsync(cena, camera).catch(() => {});
+      minhoca.visible = minhocaVisivel;
+      await new Promise((r) => ('requestIdleCallback' in window ? requestIdleCallback(r, { timeout: 500 }) : setTimeout(r, 50)));
     },
     renderizar() {
       renderer.getSize(tamanho);
@@ -617,7 +634,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
         composer.setSize(tamanho.x, tamanho.y, false);
         tamanhoComposer.copy(tamanho);
       }
-      if (spot.visible && !videoAtivo) {
+      if (spot.intensity > 0 && !videoAtivo) {
         renderer.setRenderTarget(causticaAlvo);
         renderer.render(causticaCena, causticaCamera);
         renderer.setRenderTarget(null);

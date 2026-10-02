@@ -5,13 +5,14 @@ import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
 import Selo from '../ui/Selo.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
+import Risco from './HeroRisco.astro';
 
 const lead = copyLiteral ? hero.lead :
   'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
 ---
 <section class="hero hero--editorial" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
-    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" />
+    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" loading="lazy" decoding="async" />
     <span class="hero__brilho"></span>
   </div>
 
@@ -20,8 +21,8 @@ const lead = copyLiteral ? hero.lead :
       <Selo class="hero__selo">{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</Selo>
       <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
         <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
-          <span>Isso <span class="hero__risco">não é marketing</span></span>
-          <span><span class="hero__risco hero__risco--segundo">para clínicas.</span></span>
+          <span>Isso <Risco texto="não é marketing" /></span>
+          <span><Risco texto="para clínicas." segundo /></span>
         </span>
         <span class="hero__mensagem hero__mensagem--depois" aria-hidden="true">
           <span>Isso é</span>
