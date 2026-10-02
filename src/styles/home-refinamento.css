@@ -54,7 +54,8 @@ section[id] { scroll-margin-top: 110px; }
 .ecossistema-editorial .ecossistema__cabeca { gap: 24px; }
 /* Cabeça centrada, como a do Protocolo e a dos Resultados (Lenora, 02/10). */
 .ecossistema-editorial .ecossistema__cabeca { justify-items: center; text-align: center; }
-.ecossistema-editorial .ecossistema__cabeca .titulo { margin-inline: auto; }
+/* Título numa linha só onde cabe (02/10); no celular quebra equilibrado. */
+.ecossistema-editorial .ecossistema__cabeca .titulo { margin-inline: auto; max-width: none; text-wrap: balance; }
 .ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .ecossistema-editorial .produto { background: #000; border: 1px solid rgb(255 255 255 / .12); border-radius: 10px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 4 / 3; border-radius: 14px; }
