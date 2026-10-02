@@ -253,12 +253,12 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Decisão: a peça em amarelo, o amarelo original da marca (Lenora,
-   01/10), que desce meio tom até a base. Embaixo do texto, um mini painel
-   em grafite (02/10). */
+   01/10), que desce meio tom até a base. Embaixo do texto, um mini
+   gráfico em grafite, sem fundo (02/10). */
 .revena-peca--decisao { background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500); }
 .revena-peca--decisao h3 { color: #161616; }
 .revena-peca--decisao p { color: rgb(22 22 22 / .74); }
-.revena-peca--decisao .revena-peca__arte { padding-top: 24px; margin-bottom: calc(10px - var(--base)); }
+.revena-peca--decisao .revena-peca__arte { padding-top: 28px; }
 .revena-peca--decisao .revena-peca__arte > svg { max-width: 320px; }
 /* Posicionamento: o domo tem a largura da peça e sangra pelas laterais e
    por baixo. */

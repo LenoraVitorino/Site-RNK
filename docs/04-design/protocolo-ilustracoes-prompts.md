@@ -209,19 +209,19 @@ concêntricos vistos de cima (viram alvo).
 > por canal."
 
 Histórico: a Lenora reprovou a palavra "Decisão" ao fundo, as barras com a
-etiqueta "Investir mais" e os indicadores em linhas entre fios ("ficou
-péssimo"). Em 02/10 pediu "algum mini dashboard bem minimalista".
+etiqueta "Investir mais", os indicadores em linhas entre fios ("ficou
+péssimo") e o mini painel com fundo grafite ("não quero fundo escuro, deixe
+sem fundo, mais minimalista").
 
-**Ideia.** Um painel pequeno, como um widget, que mostra o dado que a Renke
-acompanha todo mês.
+**Ideia.** Um gráfico mínimo, desenhado direto sobre o amarelo, com o dado
+que a Renke acompanha todo mês.
 
-**Composição (220 × 122, estática).** Um cartão grafite de cantos
-arredondados, embaixo do texto, na largura dele. Dentro: o rótulo
-"Faturamento por canal", duas linhas de quatro meses (jul a out) e a linha
-de base. Uma linha em cinza; a outra em amarelo, subindo, com o ponto do mês
-atual na ponta.
+**Composição (220 × 80, estática).** Sem fundo, sem moldura e sem título.
+Duas linhas de quatro meses (jul a out) em grafite: uma forte, subindo, com
+um ponto cheio no mês atual; outra mais clara, de apoio. Embaixo, a linha
+de base e os meses em corpo pequeno, com o mês atual mais escuro.
 
-**Destaque.** A linha amarela e o ponto, com halo pequeno. O resto em cinza.
+**Destaque.** O próprio cartão já é o amarelo; o gráfico é todo em grafite.
 
-**Não fazer.** Números inventados, etiquetas de recomendação, barras, mais de
-um gráfico.
+**Não fazer.** Fundo escuro, números inventados, etiquetas de recomendação,
+barras, área preenchida, mais de um gráfico.
