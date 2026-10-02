@@ -76,7 +76,9 @@ section[id] { scroll-margin-top: 110px; }
 #fale { background: #121210; color: var(--papel); border-block: 1px solid var(--ref-fio); }
 #fale .chamada { grid-template-columns: 1fr; justify-items: center; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
-#fale .chamada__miolo p { color: #aeaeac; }
+#fale .chamada__miolo p { color: #aeaeac; font-size: clamp(17px, 1.25vw, 18px); }
+/* Apoio do formulário no mesmo corpo (02/10). */
+#formulario .form-block__text p:not(.rotulo) { font-size: clamp(17px, 1.25vw, 18px); }
 #fale .botao { background: var(--papel); color: #171715; }
 /* Marcas em duas linhas, com divisórias discretas e respiro interno. */
 #fale .chamada__logos { width: 100%; max-width: 1000px; }
@@ -92,7 +94,7 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada .form-card .field__label { color: #454543; }
 .home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }
 .home-refinada .form-card .field input::placeholder { color: #6b6b69; }
-.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #50504e; }
+.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #4a4a48; }
 .home-refinada .form-card .botao { background: #252523; color: #f4f4f2; border-color: #252523; }
 .home-refinada .form-card :focus-visible { outline-color: #252523; }
 /* Depois do envio: status e 'Copiar mensagem' nos tons do cartão claro. */
@@ -204,8 +206,8 @@ section[id] { scroll-margin-top: 110px; }
   background: linear-gradient(145deg, #131313, #0b0b0b 70%);
 }
 .feature-card__texto { position: relative; z-index: 1; min-width: 0; padding: 0; }
-.feature-card h3 { font-size: clamp(22px, 1.8vw, 27px); font-weight: 350; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
-.feature-card p { color: #a8a8a4; font-size: 16px; line-height: 1.65; margin-top: 14px; max-width: 44ch; text-wrap: pretty; }
+.feature-card h3 { font-size: var(--titulo-topico); font-weight: 350; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
+.feature-card p { color: #a8a8a4; font-size: var(--corpo-topico); line-height: 1.65; margin-top: 14px; max-width: 44ch; text-wrap: pretty; }
 
 .revena-bento {
   --peca-vao: 16px;
@@ -308,7 +310,7 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__cartao { position: relative; isolation: isolate; overflow: hidden; min-height: 0; padding: clamp(26px, 3vw, 44px); border: 0; border-radius: 18px; background: rgb(12 12 12 / .93); backdrop-filter: none; display: flex; flex-direction: column; gap: 0; }
 .operacao__ilustracao { position: relative; width: 100%; margin-top: 26px; }
 .operacao-editorial .operacao__nome { margin: 0; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.15; max-width: none; text-wrap: balance; }
-.operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
+.operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: var(--corpo-topico); color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
 .resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
 .resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
@@ -350,7 +352,6 @@ section[id] { scroll-margin-top: 110px; }
   .feature-card h3 { font-size: 25px; }
   .pilares-editoriais__ponte { flex-direction: column; align-items: start; }
   .operacao-editorial .operacao__cartao { padding: 24px 20px; min-height: 0; gap: 0; }
-  .operacao-editorial .operacao__texto-item { font-size: 16px; }
 }
 
 /* Método compacto: texto contínuo à esquerda e vídeo vertical contido à direita. */

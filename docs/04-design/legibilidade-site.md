@@ -39,11 +39,17 @@ pequeno: `#5a5a58` sobre o papel `#e7e7e5` (texto dos Resultados) e
 `#50504e` no aviso do formulário. A proposta é escurecer um passo, para
 `#4a4a48`, sempre que o corpo for menor que 18 px.
 
-## O que já foi aplicado (dobra de Resultados)
+## Aplicado em 02/10/2026
 
-- Título da especialidade: de 24,5 para 30 px em 1440 px.
-- Frase: de 15 para 18 px, em `#4a4a48`.
-- Linha lida numa direção só: número, depois especialidade e frase, depois
-  a foto, sempre visível.
+A Lenora aprovou a tabela ("pode aplicar os tamanhos da tabela no site
+inteiro pra ver"). Os dois tamanhos de tópico viraram tokens em
+`src/styles/tokens-v2.css` (`--titulo-topico` e `--corpo-topico`), usados na
+home (Protocolo, "O que muda", Ecossistema, Resultados) e nas internas
+(cartões, produtos, etapas, painéis, antes e depois, perguntas). Os demais
+itens da tabela foram ajustados um a um. Medição depois da mudança, em
+1440 px: título de tópico 30 px, corpo 18 px, campos 14 px, aviso 13,5 px,
+rodapé 13 e 16 px (os links do rodapé já herdavam 16 px de outra regra e
+ficaram assim), âncoras do palco 14,4 px, legendas das etapas 13,5 px.
 
-O restante da tabela espera o aval da Lenora.
+Na dobra de Resultados, além do tamanho: a linha é lida numa direção só
+(número, depois especialidade e frase, depois a foto, sempre visível).

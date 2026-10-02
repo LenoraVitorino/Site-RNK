@@ -122,7 +122,7 @@ if (import.meta.env.DEV) {
   ol.int-blocos__lista > .int-blocos__item { grid-template-columns: 48px minmax(0, 1fr); }
   ol.int-blocos__lista > .int-blocos__item > :not(.int-blocos__indice) { grid-column: 2; }
   .int-blocos__item > .int-blocos__indice { grid-row: 1; line-height: 1; padding-top: .8em; }
-  .int-blocos__item .int-blocos__texto { max-width: 50ch; font-size: 16px; color: var(--int-corpo); }
+  .int-blocos__item .int-blocos__texto { max-width: 50ch; font-size: var(--corpo-topico); color: var(--int-corpo); }
   .int-blocos__item .int-blocos__itens li { font-size: 16px; color: var(--int-corpo); }
 
   /* Com duas colunas de cartões (600 a 1099px) o h3 caía aos 21px do mínimo

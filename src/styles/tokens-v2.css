@@ -36,6 +36,10 @@
   --peso-enfase: 500;   /* strong, nomes, chamadas curtas */
   --peso-detalhe: 500;  /* rótulos miúdos e botões */
   --peso-corpo:  400;
+  /* Tópicos (02/10/2026, legibilidade): título e corpo dos cartões, etapas
+     e painéis, iguais em todo o site. O corpo cresce com a tela. */
+  --titulo-topico: clamp(24px, 2.1vw, 32px);
+  --corpo-topico:  clamp(16px, 1.25vw, 18px);
   --tracking-caps:  -.02em;   /* caixa alta em títulos */
   --tracking-label:  .12em;   /* rótulos pequenos em caixa alta */
 
