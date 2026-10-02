@@ -4,20 +4,15 @@ import { pilaresEstudio } from '../../data/pilares-estudio';
 import { copyLiteral } from '../../data/versao';
 import ArtePilar from './ArtePilar.astro';
 import PilarConexoes from './PilarConexoes.astro';
+import PilarDecisao from './PilarDecisao.astro';
 import PilarPosicionamento from './PilarPosicionamento.astro';
 import Selo from '../ui/Selo.astro';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 /* Bento de cinco peças chanfradas (01/10/2026), cada uma com a sua
    imagem: diagrama (conexões), quadro em movimento (CRM), mensagem
-   (automação) e o domo do mercado (posicionamento). A peça amarela (decisão)
-   não leva ilustração (a Lenora não quer nada nela), mas também não pode
-   ficar vazia: os três indicadores do texto viram três linhas entre fios,
-   ocupando a altura da peça. O que sobrar do texto (na copy) segue em
-   parágrafo depois deles, na ordem em que a copy foi escrita. */
+   (automação), um mini painel em grafite na peça amarela (decisão) e o
+   domo do mercado (posicionamento). */
 const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
-const frases = cartas[3].texto.split(/(?<=\.)\s+/);
-const indicadores = frases.slice(0, 3).map((f) => f.replace(/\.$/, ''));
-const restoDecisao = frases.slice(3).join(' ');
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
@@ -29,11 +24,10 @@ const restoDecisao = frases.slice(3).join(' ');
     <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral }]}>
       {cartas.map((p, i) => (
         <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
-          <div class="feature-card__texto"><h3>{p.titulo}</h3>{i !== 3 && <p>{p.texto}</p>}</div>
-          {i === 3 && <ul class="revena-peca__indicadores">{indicadores.map((t) => <li>{t}</li>)}</ul>}
-          {i === 3 && restoDecisao && <p class="revena-peca__resto">{restoDecisao}</p>}
+          <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
           {i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
           {(i === 1 || i === 2) && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
+          {i === 3 && <div class="revena-peca__arte"><PilarDecisao /></div>}
           {i === 4 && <div class="revena-peca__arte"><PilarPosicionamento /></div>}
         </article>
       ))}

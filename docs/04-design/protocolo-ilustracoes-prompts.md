@@ -203,11 +203,25 @@ concêntricos vistos de cima (viram alvo).
 
 ---
 
-## 6. "Dizemos o que fazer todo mês" (cartão amarelo)
+## 6. Prompt — "Dizemos o que fazer todo mês" (cartão amarelo)
 
-Sem ilustração. A palavra "Decisão" ao fundo e as barras por canal foram
-reprovadas pela Lenora em 01/10 ("não quero nada nesse card"). Só com o
-título e o parágrafo, ela ainda achou o cartão vazio (02/10). A solução é
-tipográfica: os três indicadores do próprio texto (custo por agendamento,
-taxa de comparecimento, faturamento por canal) viram três linhas entre
-fios, ocupando a altura do cartão.
+> Subtítulo: "Custo por agendamento. Taxa de comparecimento. Faturamento
+> por canal."
+
+Histórico: a Lenora reprovou a palavra "Decisão" ao fundo, as barras com a
+etiqueta "Investir mais" e os indicadores em linhas entre fios ("ficou
+péssimo"). Em 02/10 pediu "algum mini dashboard bem minimalista".
+
+**Ideia.** Um painel pequeno, como um widget, que mostra o dado que a Renke
+acompanha todo mês.
+
+**Composição (220 × 122, estática).** Um cartão grafite de cantos
+arredondados, embaixo do texto, na largura dele. Dentro: o rótulo
+"Faturamento por canal", duas linhas de quatro meses (jul a out) e a linha
+de base. Uma linha em cinza; a outra em amarelo, subindo, com o ponto do mês
+atual na ponta.
+
+**Destaque.** A linha amarela e o ponto, com halo pequeno. O resto em cinza.
+
+**Não fazer.** Números inventados, etiquetas de recomendação, barras, mais de
+um gráfico.

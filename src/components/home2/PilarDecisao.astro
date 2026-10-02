@@ -1,0 +1,58 @@
+---
+/**
+ * Dizemos o que fazer todo mês (02/10/2026): um mini painel em grafite
+ * sobre o cartão amarelo. A Lenora reprovou a palavra "Decisão" ao fundo,
+ * as barras com a etiqueta "Investir mais" e os indicadores em linhas, e
+ * pediu "algum mini dashboard bem minimalista". O painel mostra o
+ * faturamento por canal em duas linhas de quatro meses: uma em cinza e a
+ * outra em amarelo, com o ponto do mês atual. Sem números inventados.
+ * Estático. Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
+ */
+import '../../styles/ilustracoes.css';
+
+const p = 'decisao';
+const meses = ['jul', 'ago', 'set', 'out'];
+/* Gráfico entre x 16 e 204; os meses caem em passos iguais. */
+const X0 = 16, X1 = 204, BASE = 92;
+const xs = meses.map((_, i) => X0 + (i * (X1 - X0)) / (meses.length - 1));
+const amarela = 'M16 82C36 81 56 69 78.7 71S116 57 141.3 58S182 42 204 37';
+const cinza = 'M16 86C38 86 58 79 78.7 80S118 74 141.3 75S184 69 204 70';
+---
+<svg class="arte painel-decisao" viewBox="0 0 220 122" fill="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={`${p}-fundo`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#1e1e1e" /><stop offset="1" stop-color="#121212" />
+    </linearGradient>
+    <linearGradient id={`${p}-area`} x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFD103" stop-opacity=".2" /><stop offset="1" stop-color="#FFD103" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id={`${p}-halo`}>
+      <stop stop-color="#FFD103" stop-opacity=".35" /><stop offset="1" stop-color="#FFD103" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="220" height="122" rx="12" fill={`url(#${p}-fundo)`} />
+  <text x="16" y="25" class="painel-decisao__titulo">Faturamento por canal</text>
+  {/* Linhas de apoio: uma por mês, quase invisíveis. */}
+  {xs.map((x) => <path d={`M${x.toFixed(1)} 40V${BASE}`} class="painel-decisao__guia" />)}
+  <path d={`M${X0} ${BASE + 0.5}H${X1}`} class="painel-decisao__base" />
+  <path d={cinza} class="painel-decisao__linha" />
+  <path d={`${amarela}V${BASE}H16z`} fill={`url(#${p}-area)`} />
+  <path d={amarela} class="painel-decisao__linha painel-decisao__linha--foco" />
+  <circle cx="204" cy="37" r="11" fill={`url(#${p}-halo)`} />
+  <circle cx="204" cy="37" r="3.4" class="painel-decisao__ponto" />
+  {meses.map((m, i) => (
+    <text x={xs[i]} y="110" text-anchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'} class:list={['painel-decisao__mes', { 'painel-decisao__mes--atual': i === meses.length - 1 }]}>{m}</text>
+  ))}
+</svg>
+
+<style>
+  .painel-decisao { height: auto; }
+  .painel-decisao__titulo { font-size: 10.5px; font-weight: 500; fill: #b9b9b4; letter-spacing: -.005em; }
+  .painel-decisao__guia { stroke: #ffffff; stroke-opacity: .05; }
+  .painel-decisao__base { stroke: #ffffff; stroke-opacity: .12; }
+  .painel-decisao__linha { stroke: #6f6f6b; stroke-width: 1.4; stroke-linecap: round; }
+  .painel-decisao__linha--foco { stroke: var(--amarelo-marca, #FFD103); stroke-width: 1.8; }
+  .painel-decisao__ponto { fill: var(--amarelo-marca, #FFD103); stroke: #161616; stroke-width: 1.5; }
+  .painel-decisao__mes { font-size: 9.5px; fill: #6f6f6b; }
+  .painel-decisao__mes--atual { fill: #d6d6d1; }
+</style>
