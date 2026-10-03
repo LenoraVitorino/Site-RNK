@@ -52,7 +52,7 @@ export const ICONES_RENKE = {
   mudo: { grupo: 'Interface', rotulo: 'Sem som', substitui: 'VolumeX', base: 'M3.5 9.5H7L11.5 5.5V18.5L7 14.5H3.5Z', acento: 'M15.5 9.5L20.5 14.5M20.5 9.5L15.5 14.5' },
 
   /* ---------- Conceitos (indicadores, selos, cultura) ---------- */
-  brilho: { grupo: 'Conceitos', rotulo: 'Destaque (selo)', substitui: 'Sparkles', base: 'M12 3C12.7 8.4 15.6 11.3 21 12C15.6 12.7 12.7 15.6 12 21C11.3 15.6 8.4 12.7 3 12C8.4 11.3 11.3 8.4 12 3Z' },
+  brilho: { grupo: 'Conceitos', rotulo: 'Destaque (selo)', substitui: 'Sparkles', base: 'M12 3.5L20.5 12L12 20.5L3.5 12Z', pontos: [[12, 12, 3.4]] },
   pessoas: { grupo: 'Conceitos', rotulo: 'Pessoas', substitui: 'Users', base: circ(9, 8, 3.5) + 'M3 20V18L6 15H12L15 18V20M15.5 4.6A3.5 3.5 0 0 1 15.5 11.4M17 15L21 18V20' },
   verificado: { grupo: 'Conceitos', rotulo: 'Método validado', substitui: 'BadgeCheck', base: OCT, acento: 'M8.5 12L11 14.5L15.5 9.5' },
   crescimento: { grupo: 'Conceitos', rotulo: 'Crescimento', substitui: 'TrendingUp', base: 'M3 17.5L9 11.5L13 15.5L20 8.5M15 8H20.5V13.5', pontos: [[9, 11.5, 1.6]] },
@@ -64,8 +64,8 @@ export const ICONES_RENKE = {
   camadas: { grupo: 'Conceitos', rotulo: 'Camadas', substitui: 'Layers', base: 'M12 3.5L20.5 8L12 12.5L3.5 8ZM3.5 12.5L12 17L20.5 12.5M3.5 16.5L12 21L20.5 16.5', pontos: [[12, 8, 1.5]] },
 
   /* ---------- Ganhos (O que muda na sua clínica) ---------- */
-  funil: { grupo: 'Ganhos', rotulo: 'Conversão', base: 'M3.5 4.5H20.5L14 12.5V19L10 21V12.5Z', acento: 'M7.5 8.5H16.5' },
-  investimento: { grupo: 'Ganhos', rotulo: 'Investimento', base: 'M10.5 13.5V5.5A8 8 0 1 0 18.5 13.5Z', acento: 'M12.5 11.5V3.5A8 8 0 0 1 20.5 11.5Z' },
+  funil: { grupo: 'Ganhos', rotulo: 'Conversão', base: 'M3.5 3.5H20.5L14 11V15.5L10 17V11Z', pontos: [[12, 20.3, 1.7]] },
+  investimento: { grupo: 'Ganhos', rotulo: 'Investimento', base: 'M10 14V6.5A7.5 7.5 0 1 0 17.5 14Z', acento: 'M13 11V3.5A7.5 7.5 0 0 1 20.5 11Z' },
   dados: { grupo: 'Ganhos', rotulo: 'Dados', base: 'M3.5 20.5H20.5M7 17V13M11 17V9M15 17V11', acento: 'M19 17V6' },
 
   /* ---------- Canais e etapas (ilustrações) ---------- */

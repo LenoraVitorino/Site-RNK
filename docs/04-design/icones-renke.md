@@ -33,6 +33,15 @@ contexto). Dados: `src/data/icones-renke.ts`. Componente:
 - Redes sociais (Instagram, LinkedIn, Facebook, YouTube) saem do conjunto:
   ficam com os logos das marcas.
 
+## Ajustes da V1.2 (02/10/2026)
+
+- Investimento: a fatia estava colada demais na pizza; afastada (vão maior).
+- Conversão (funil): saiu o traço amarelo do meio; um losango cai pela boca
+  do funil (o lead que vira paciente).
+- Destaque (estrela do selo): o brilho curvo "ficou fora da identidade";
+  virou o losango duplo (contorno e losango cheio no centro), a própria
+  assinatura do conjunto.
+
 ## Inventário (41)
 
 - Interface (13): seta diagonal, seta, seta para baixo, avançar, abrir, menu,
