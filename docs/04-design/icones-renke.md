@@ -36,8 +36,8 @@ contexto). Dados: `src/data/icones-renke.ts`. Componente:
 ## Ajustes da V1.2 (02/10/2026)
 
 - Investimento: a fatia estava colada demais na pizza; afastada (vão maior).
-- Conversão (funil): saiu o traço amarelo do meio; um losango cai pela boca
-  do funil (o lead que vira paciente).
+- Conversão (funil): saiu o traço amarelo do meio. O losango que caía pela
+  boca também saiu ("tira essa estrela"): o funil fica só no traço.
 - Destaque (estrela do selo): o brilho curvo "ficou fora da identidade";
   virou o losango duplo (contorno e losango cheio no centro), a própria
   assinatura do conjunto.

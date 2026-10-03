@@ -64,7 +64,7 @@ export const ICONES_RENKE = {
   camadas: { grupo: 'Conceitos', rotulo: 'Camadas', substitui: 'Layers', base: 'M12 3.5L20.5 8L12 12.5L3.5 8ZM3.5 12.5L12 17L20.5 12.5M3.5 16.5L12 21L20.5 16.5', pontos: [[12, 8, 1.5]] },
 
   /* ---------- Ganhos (O que muda na sua clínica) ---------- */
-  funil: { grupo: 'Ganhos', rotulo: 'Conversão', base: 'M3.5 3.5H20.5L14 11V15.5L10 17V11Z', pontos: [[12, 20.3, 1.7]] },
+  funil: { grupo: 'Ganhos', rotulo: 'Conversão', base: 'M3.5 4.5H20.5L14 12.5V19L10 21V12.5Z' },
   investimento: { grupo: 'Ganhos', rotulo: 'Investimento', base: 'M10 14V6.5A7.5 7.5 0 1 0 17.5 14Z', acento: 'M13 11V3.5A7.5 7.5 0 0 1 20.5 11Z' },
   dados: { grupo: 'Ganhos', rotulo: 'Dados', base: 'M3.5 20.5H20.5M7 17V13M11 17V9M15 17V11', acento: 'M19 17V6' },
 
