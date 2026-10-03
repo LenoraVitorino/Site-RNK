@@ -328,7 +328,7 @@ section[id] { scroll-margin-top: 110px; }
 /* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
    Ecossistema, logo depois, encosta mais. */
 .home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
-.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px); }   /* e menos respiro antes do formulário */
+.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px) clamp(48px, 5vw, 80px); }
 .cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
 .resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
 .resultados-editoriais__cabeca .titulo { margin-inline: auto; }
@@ -496,7 +496,7 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Contato: texto e formulário próximos, centralizados na mesma composição. */
-#formulario { padding-block: clamp(40px, 4vw, 64px); }
+#formulario { padding-block: clamp(72px, 8vw, 136px) clamp(88px, 9vw, 152px); }   /* mais respiro (Lenora, 02/10) */
 /* Na grade de 12 do site (28/09): texto nas colunas 1–5, na margem esquerda;
    formulário nas colunas 8–12, na margem direita. */
 #formulario .form-block { grid-template-columns: repeat(12, minmax(0, 1fr)); justify-content: stretch; column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; }
@@ -504,9 +504,9 @@ section[id] { scroll-margin-top: 110px; }
 #formulario .form-card { grid-column: 8 / -1; max-width: none; }
 @media (min-width: 900px) {
   #formulario .form-block { align-items: start; }   /* selo e cartão começam na mesma linha */
-  .home-refinada #formulario { padding-top: clamp(32px, 3vw, 48px); }
+  .home-refinada #formulario { padding-top: clamp(72px, 8vw, 136px); }
 }
-#formulario .form-block__text { gap: 24px; }
+#formulario .form-block__text { gap: 32px; }
 #formulario .form-block__text .titulo { max-width: none; }
 #formulario .form-card { justify-self: stretch; }
 @media (max-width: 899.98px) {
