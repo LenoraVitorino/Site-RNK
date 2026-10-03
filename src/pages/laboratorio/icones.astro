@@ -15,13 +15,13 @@ import { perguntas } from '../../data/home';
 const nomes = Object.keys(ICONES_RENKE) as NomeIconeRenke[];
 const grupos = [...new Set(nomes.map((n) => ICONES_RENKE[n].grupo))];
 const ganhos: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
-const pilulas: NomeIconeRenke[] = ['anuncios', 'instagram', 'google', 'atendimento', 'agenda', 'consulta'];
+const pilulas: NomeIconeRenke[] = ['anuncios', 'redes', 'google', 'atendimento', 'agenda', 'consulta'];
 const comparar = nomes.filter((n) => 'substitui' in ICONES_RENKE[n]);
 ---
 <Base2 titulo="Laboratório · ícones Renke" descricao="Ícones Renke, V1" noindex classe="lab-icones">
   <main class="li">
     <header class="li__cabeca">
-      <p class="li__rotulo">Ícones Renke · V1</p>
+      <p class="li__rotulo">Ícones Renke · V1.1</p>
       <h1 class="li__titulo">Um conjunto próprio, com o acabamento da marca.</h1>
       <ul class="li__regras">
         <li><strong>Grade de 24, traço 1,5</strong>, quinas vivas e pontas retas.</li>
@@ -49,7 +49,7 @@ const comparar = nomes.filter((n) => 'substitui' in ICONES_RENKE[n]);
     <section class="li__painel li__painel--escuro">
       <h2 class="li__painel-titulo">Tamanhos (16, 20, 24, 32, 48)</h2>
       <div class="li__tamanhos">
-        {(['seta-diagonal', 'menu', 'verificado', 'mira', 'agenda', 'investimento'] as NomeIconeRenke[]).map((n) => (
+        {(['seta-diagonal', 'menu', 'verificado', 'mira', 'agenda', 'investimento', 'brilho'] as NomeIconeRenke[]).map((n) => (
           <div class="li__linha-tam">{[16, 20, 24, 32, 48].map((s) => <IconeRenke nome={n} size={s} />)}</div>
         ))}
       </div>

@@ -9,6 +9,8 @@
  *    do raio; o octógono é forma de base; círculos seguem círculos;
  *  - assinatura: o losango (quadrado a 45°) marca o ponto que importa em cada
  *    ícone e pode ser pintado com --icone-acento (amarelo) ou ficar no traço.
+ * Redes sociais (Instagram, LinkedIn, Facebook, YouTube) ficam com os logos
+ * das marcas, fora do conjunto (Lenora, 02/10).
  * Especificação: docs/04-design/icones-renke.md. Prévia: /laboratorio/icones.
  */
 
@@ -28,7 +30,7 @@ export interface IconeRenke {
   /** Losangos cheios de destaque: [cx, cy, raio]. */
   pontos?: [number, number, number][];
   rotulo: string;
-  grupo: 'Interface' | 'Conceitos' | 'Ganhos' | 'Canais e etapas' | 'Redes';
+  grupo: 'Interface' | 'Conceitos' | 'Ganhos' | 'Canais e etapas';
   /** Ícone da Lucide que este substitui (para a comparação na prévia). */
   substitui?: string;
 }
@@ -50,7 +52,7 @@ export const ICONES_RENKE = {
   mudo: { grupo: 'Interface', rotulo: 'Sem som', substitui: 'VolumeX', base: 'M3.5 9.5H7L11.5 5.5V18.5L7 14.5H3.5Z', acento: 'M15.5 9.5L20.5 14.5M20.5 9.5L15.5 14.5' },
 
   /* ---------- Conceitos (indicadores, selos, cultura) ---------- */
-  brilho: { grupo: 'Conceitos', rotulo: 'Destaque (selo)', substitui: 'Sparkles', base: 'M11 4L12.9 10.1L19 12L12.9 13.9L11 20L9.1 13.9L3 12L9.1 10.1Z', pontos: [[18.5, 5.5, 1.7]] },
+  brilho: { grupo: 'Conceitos', rotulo: 'Destaque (selo)', substitui: 'Sparkles', base: 'M12 3C12.7 8.4 15.6 11.3 21 12C15.6 12.7 12.7 15.6 12 21C11.3 15.6 8.4 12.7 3 12C8.4 11.3 11.3 8.4 12 3Z' },
   pessoas: { grupo: 'Conceitos', rotulo: 'Pessoas', substitui: 'Users', base: circ(9, 8, 3.5) + 'M3 20V18L6 15H12L15 18V20M15.5 4.6A3.5 3.5 0 0 1 15.5 11.4M17 15L21 18V20' },
   verificado: { grupo: 'Conceitos', rotulo: 'Método validado', substitui: 'BadgeCheck', base: OCT, acento: 'M8.5 12L11 14.5L15.5 9.5' },
   crescimento: { grupo: 'Conceitos', rotulo: 'Crescimento', substitui: 'TrendingUp', base: 'M3 17.5L9 11.5L13 15.5L20 8.5M15 8H20.5V13.5', pontos: [[9, 11.5, 1.6]] },
@@ -58,17 +60,16 @@ export const ICONES_RENKE = {
   tecnologia: { grupo: 'Conceitos', rotulo: 'Tecnologia', substitui: 'Cpu', base: ch(6, 6, 12, 12, 2) + 'M9.5 3V6M14.5 3V6M9.5 18V21M14.5 18V21M3 9.5H6M3 14.5H6M18 9.5H21M18 14.5H21', pontos: [[12, 12, 2.2]] },
   fluxo: { grupo: 'Conceitos', rotulo: 'Processo', substitui: 'Workflow', base: ch(3.5, 3.5, 7, 7, 1.5) + ch(13.5, 13.5, 7, 7, 1.5) + 'M7 10.5V13L11 17H13.5' },
   mira: { grupo: 'Conceitos', rotulo: 'Foco', substitui: 'Target', base: circ(12, 12, 9) + circ(12, 12, 5), pontos: [[12, 12, 1.9]] },
-  parceria: { grupo: 'Conceitos', rotulo: 'Parceria', substitui: 'Handshake', base: ch(3, 7, 11, 10, 2.5) + ch(10, 7, 11, 10, 2.5), pontos: [[12, 12, 1.5]] },
+  conexao: { grupo: 'Conceitos', rotulo: 'Conexão / parceria', substitui: 'Handshake', base: circ(5.5, 12, 3.5) + circ(18.5, 12, 3.5) + 'M9 12H10.1M13.9 12H15', pontos: [[12, 12, 1.7]] },
   camadas: { grupo: 'Conceitos', rotulo: 'Camadas', substitui: 'Layers', base: 'M12 3.5L20.5 8L12 12.5L3.5 8ZM3.5 12.5L12 17L20.5 12.5M3.5 16.5L12 21L20.5 16.5', pontos: [[12, 8, 1.5]] },
 
   /* ---------- Ganhos (O que muda na sua clínica) ---------- */
   funil: { grupo: 'Ganhos', rotulo: 'Conversão', base: 'M3.5 4.5H20.5L14 12.5V19L10 21V12.5Z', acento: 'M7.5 8.5H16.5' },
-  investimento: { grupo: 'Ganhos', rotulo: 'Investimento', base: OCT, acento: 'M12 3V12H21' },
+  investimento: { grupo: 'Ganhos', rotulo: 'Investimento', base: 'M10.5 13.5V5.5A8 8 0 1 0 18.5 13.5Z', acento: 'M12.5 11.5V3.5A8 8 0 0 1 20.5 11.5Z' },
   dados: { grupo: 'Ganhos', rotulo: 'Dados', base: 'M3.5 20.5H20.5M7 17V13M11 17V9M15 17V11', acento: 'M19 17V6' },
 
   /* ---------- Canais e etapas (ilustrações) ---------- */
   anuncios: { grupo: 'Canais e etapas', rotulo: 'Anúncios', base: 'M3.5 10V14H6.5L15.5 19V5L6.5 10ZM6.5 14L8 19.5H10.5L9.3 15.5', acento: 'M18.5 9.5L20.5 8M19 12H21.5M18.5 14.5L20.5 16' },
-  instagram: { grupo: 'Canais e etapas', rotulo: 'Instagram', base: ch(3, 3, 18, 18, 4.5) + circ(12, 12, 4), pontos: [[17, 7, 1.1]] },
   google: { grupo: 'Canais e etapas', rotulo: 'Google', base: 'M19.6 7.6A8.5 8.5 0 1 0 20.5 12H12.5' },
   busca: { grupo: 'Canais e etapas', rotulo: 'Busca', base: circ(10.5, 10.5, 6.5) + 'M15.3 15.3L20.5 20.5' },
   atendimento: { grupo: 'Canais e etapas', rotulo: 'Atendimento', base: 'M4 13.5V12A8 8 0 0 1 20 12V13.5' + ch(3, 13, 4, 6, 1) + ch(17, 13, 4, 6, 1), acento: 'M19 19L16.5 21.5H13' },
@@ -84,10 +85,6 @@ export const ICONES_RENKE = {
   encerrou: { grupo: 'Canais e etapas', rotulo: 'Encerrado', base: OCT, acento: 'M9 9L15 15M15 9L9 15' },
   base: { grupo: 'Canais e etapas', rotulo: 'Base de dados', base: 'M4 6L7 3.5H17L20 6V18L17 20.5H7L4 18ZM4 6L7 8.5H17L20 6M4 12L7 14.5H17L20 12' },
 
-  /* ---------- Redes (rodapé) ---------- */
-  linkedin: { grupo: 'Redes', rotulo: 'LinkedIn', base: ch(3, 3, 18, 18, 3) + 'M7.5 10.5V17M11 17V10.5M11 13.5A3 3 0 0 1 17 13.5V17', pontos: [[7.5, 7.3, 1.1]] },
-  facebook: { grupo: 'Redes', rotulo: 'Facebook', base: ch(3, 3, 18, 18, 3) + 'M16 7.5H14.5L12.5 9.5V21M9.5 13H16' },
-  youtube: { grupo: 'Redes', rotulo: 'YouTube', base: ch(2.5, 5.5, 19, 13, 3.5), acento: 'M10 9V15L15 12Z' },
 } satisfies Record<string, IconeRenke>;
 
 export type NomeIconeRenke = keyof typeof ICONES_RENKE;

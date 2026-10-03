@@ -22,18 +22,28 @@ contexto). Dados: `src/data/icones-renke.ts`. Componente:
   do traço quando o amarelo não cabe (sobre claro, em pílulas).
 - No máximo um destaque por ícone. O amarelo é detalhe.
 
-## Inventário (43)
+## Ajustes da V1.1 (02/10/2026, retorno da Lenora)
+
+- Investimento: o octógono com o canto marcado lia como relógio; virou gráfico
+  de pizza com a fatia em destaque descolada.
+- Destaque (estrela do selo): a estrela de traços retos "ficou estranha";
+  virou o brilho de quatro pontas com lados curvos, sem o losango solto.
+- Parceria: as duas formas encaixadas "não faziam sentido"; virou Conexão /
+  parceria, dois pontos ligados com o losango no encontro.
+- Redes sociais (Instagram, LinkedIn, Facebook, YouTube) saem do conjunto:
+  ficam com os logos das marcas.
+
+## Inventário (41)
 
 - Interface (13): seta diagonal, seta, seta para baixo, avançar, abrir, menu,
   fechar, mais, confirmado, tocar, pausar, som ligado, sem som.
 - Conceitos (10): destaque (estrela do selo), pessoas, método validado,
-  crescimento, direção, tecnologia, processo, foco, parceria, camadas.
+  crescimento, direção, tecnologia, processo, foco, conexão/parceria, camadas.
 - Ganhos (3 próprios, além de foco, processo, camadas e direção): conversão,
   investimento, dados.
-- Canais e etapas (14): anúncios, Instagram, Google, busca, atendimento,
-  conversa, agenda, consulta, redes sociais, indicação, telefone, ficha,
-  etiqueta, local, encerrado, base de dados.
-- Redes (3, além do Instagram): LinkedIn, Facebook, YouTube.
+- Canais e etapas (15): anúncios, Google, busca, atendimento,
+  conversa, agenda, consulta, redes sociais (genérico, @), indicação,
+  telefone, ficha, etiqueta, local, encerrado, base de dados (sem Instagram).
 
 ## Próximo passo (se aprovado)
 
