@@ -1,13 +1,14 @@
 ---
 /**
- * O que muda na sua clínica (02/10/2026). Referência: a dobra "Posture" do
- * site da Tiwis (vídeo da Lenora, 0:15–0:16): título no alto e cartões em
- * fila com ícone fino em cima e título e texto embaixo, que se constroem em
- * cerca de um segundo (fio, ícone, título, texto, da esquerda para a
- * direita). Os cartões são de vidro desfocado, com o fundo animado
- * aparecendo através (segunda referência dela). Sete ganhos: quatro na
- * primeira linha e três mais largos na segunda.
- * Substitui a pilha de cartões com o texto preso à esquerda.
+ * O que muda na sua clínica (02/10/2026). Cartões de vidro desfocado sobre
+ * o fundo animado (aprovado: "manter essa estética ficou foda"), numa
+ * escada como a referência "Business Goals": o título ocupa a quina de
+ * cima à esquerda e os sete cartões descem em degraus (2, 3, 2), com os
+ * vãos em triângulo embaixo à esquerda. O cartão de destaque com o número
+ * saiu (Lenora, 02/10: "retirar esse"). Ícone fino em anel, título e texto
+ * embaixo. A grade se constrói ao entrar (referência Tiwis, 0:15–0:16).
+ * Na copy original cada cartão traz a pergunta de dor do briefing (uma
+ * frase só) no lugar do ganho; as duas listas casam na mesma ordem.
  */
 import Selo from '../ui/Selo.astro';
 import { perguntas } from '../../data/home';
@@ -32,7 +33,7 @@ const icones = [
 ];
 ---
 <section class="secao ganhos" id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
-  <div class="container">
+  <div class="container ganhos__composicao">
     <header class="ganhos__cabeca">
       {copyLiteral ? (
         <h2 class="ancora operacao__titulo" id="perguntas-titulo">
@@ -56,13 +57,21 @@ const icones = [
 
     <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
       {perguntas.map((p, i) => (
-        <li class="ganhos__cartao" style={`--i:${i}`}>
-          <svg class="ganhos__icone" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-            <path d={icones[i]} stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+        <li class:list={['ganhos__cartao', `ganhos__cartao--${i + 1}`, { 'ganhos__cartao--pergunta': copyLiteral }]} style={`--i:${i}`}>
+          <span class="ganhos__anel" aria-hidden="true">
+            <svg class="ganhos__icone" viewBox="0 0 24 24" fill="none" focusable="false">
+              <path d={icones[i]} stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
           <div class="ganhos__corpo">
-            <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
-            <p class="ganhos__texto"><span>{p.texto}</span></p>
+            {copyLiteral ? (
+              <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
+            ) : (
+              <>
+                <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
+                <p class="ganhos__texto"><span>{p.texto}</span></p>
+              </>
+            )}
           </div>
         </li>
       ))}

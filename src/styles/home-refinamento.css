@@ -602,31 +602,49 @@ section[id] { scroll-margin-top: 110px; }
 #perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; }
 .ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 24ch; }
 
-/* Quatro na primeira linha, três mais largos na segunda. */
-.ganhos__grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
-.ganhos__cartao { grid-column: span 3; }
-.ganhos__cartao:nth-child(n + 5) { grid-column: span 4; }
-
+/* Escada (referência "Business Goals"): quatro colunas, o título na quina
+   de cima à esquerda e os sete cartões descendo em degraus (2, 3, 2), com
+   os vãos em triângulo embaixo à esquerda. A lista usa subgrid para
+   dividir as linhas com o título. */
+.ganhos__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
 .ganhos__cartao {
-  display: flex; flex-direction: column; justify-content: space-between; gap: 48px;
-  min-height: clamp(280px, 23vw, 340px); padding: clamp(24px, 2.2vw, 32px);
-  border: 1px solid rgb(255 255 255 / .09); border-radius: 14px;
+  position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+  min-height: clamp(280px, 22vw, 330px); padding: clamp(22px, 2vw, 30px);
+  border: 1px solid rgb(255 255 255 / .09); border-radius: 18px;
   background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
   -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
 }
-.ganhos__icone { width: 30px; height: 30px; color: var(--destaque); }
-.ganhos__corpo { display: grid; gap: 14px; }
-.ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: var(--titulo-topico); line-height: 1.12; letter-spacing: -.03em; color: var(--papel); text-wrap: balance; }
-.ganhos__texto { margin: 0; max-width: 38ch; font-size: var(--corpo-topico); line-height: 1.55; color: rgb(242 242 238 / .68); text-wrap: pretty; }
+.ganhos__anel { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgb(255 255 255 / .14); border-radius: 50%; }
+.ganhos__icone { width: 20px; height: 20px; color: var(--destaque); }
+.ganhos__corpo { position: relative; display: grid; gap: 12px; }
+.ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: clamp(22px, 1.75vw, 27px); line-height: 1.15; letter-spacing: -.025em; color: var(--papel); text-wrap: balance; }
+.ganhos__nome--pergunta { font-weight: 300; font-size: clamp(21px, 1.6vw, 25px); line-height: 1.25; text-wrap: pretty; }
+.ganhos__texto { margin: 0; max-width: 34ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
 /* A máscara de onde título e texto sobem. */
 .ganhos__nome, .ganhos__texto { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
-.ganhos__nome > span, .ganhos__texto > span { display: block; }
+:is(.ganhos__nome, .ganhos__texto) > span { display: block; }
+
+
+@media (min-width: 1100px) {
+  .ganhos__composicao { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, auto); gap: clamp(12px, 1.1vw, 16px); }
+  .ganhos__composicao > .ganhos__cabeca { grid-column: 1 / 3; grid-row: 1; align-self: start; max-width: none; margin: 0; padding-right: clamp(16px, 3vw, 48px); }
+  .ganhos__composicao > .ganhos__grade { grid-column: 1 / -1; grid-row: 1 / 4; grid-template-columns: subgrid; grid-template-rows: subgrid; gap: inherit; }
+  #perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3vw, 48px); }
+  .ganhos__cabeca .ancora__linha { white-space: normal; }
+  .ganhos__cartao--1 { grid-area: 1 / 3; }
+  .ganhos__cartao--2 { grid-area: 1 / 4; }
+  .ganhos__cartao--3 { grid-area: 2 / 2; }
+  .ganhos__cartao--4 { grid-area: 2 / 3; }
+  .ganhos__cartao--5 { grid-area: 2 / 4; }
+  .ganhos__cartao--6 { grid-area: 3 / 3; }
+  .ganhos__cartao--7 { grid-area: 3 / 4; }
+}
 
 /* Construção (só com JS e movimento liberado). */
 @media (prefers-reduced-motion: no-preference) {
   .js .ganhos__cartao { --d: calc(var(--i) * 70ms); opacity: 0; transition: opacity .9s var(--easing) var(--d); }
-  .js .ganhos__icone { opacity: 0; transform: scale(.4); transform-origin: 0 0; transition: opacity .6s var(--easing) calc(var(--d) + .2s), transform .8s var(--easing) calc(var(--d) + .2s); }
-  .js .ganhos__nome > span, .js .ganhos__texto > span { transform: translate3d(0, 105%, 0); transition: transform .9s var(--easing) calc(var(--d) + .38s); }
+  .js .ganhos__icone { opacity: 0; transform: scale(.4); transition: opacity .6s var(--easing) calc(var(--d) + .2s), transform .8s var(--easing) calc(var(--d) + .2s); }
+  .js :is(.ganhos__nome, .ganhos__texto) > span { transform: translate3d(0, 105%, 0); transition: transform .9s var(--easing) calc(var(--d) + .38s); }
   .js .ganhos__texto > span { transition-delay: calc(var(--d) + .55s); }
   .js .ganhos__grade--construida .ganhos__cartao { opacity: 1; }
   .js .ganhos__grade--construida .ganhos__icone { opacity: 1; transform: none; }
@@ -634,10 +652,9 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 @media (max-width: 1099.98px) {
-  .ganhos__cartao, .ganhos__cartao:nth-child(n + 5) { grid-column: span 6; }
-  .ganhos__cartao:last-child { grid-column: 1 / -1; }
+  .ganhos__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 599.98px) {
   .ganhos__grade { grid-template-columns: 1fr; }
-  .ganhos__cartao, .ganhos__cartao:nth-child(n + 5), .ganhos__cartao:last-child { grid-column: auto; min-height: 0; gap: 36px; }
+  .ganhos__cartao { min-height: 0; gap: 36px; }
 }
