@@ -597,15 +597,14 @@ section[id] { scroll-margin-top: 110px; }
    da esquerda para a direita.
    ============================================================ */
 #perguntas.ganhos { padding-block: var(--esp-secao); }
-.ganhos__cabeca { max-width: 860px; margin-bottom: clamp(48px, 5vw, 80px); }
+.ganhos__cabeca { max-width: none; margin-bottom: clamp(44px, 4.4vw, 72px); }
 .ganhos .operacao__titulo { margin: 0; }
-#perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; }
-.ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 24ch; }
+#perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; }
+#perguntas .ganhos__cabeca .cabeca-dobra__apoio { max-width: none; }
+.ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 36ch; text-wrap: balance; }
 
-/* Escada (referência "Business Goals"): quatro colunas, o título na quina
-   de cima à esquerda e os sete cartões descendo em degraus (2, 3, 2), com
-   os vãos em triângulo embaixo à esquerda. A lista usa subgrid para
-   dividir as linhas com o título. */
+/* Composição da referência "Business Goals", igual: título em cima, quatro
+   colunas de cartões quase quadrados alternando com vãos. */
 .ganhos__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
 .ganhos__cartao {
   position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
@@ -614,7 +613,7 @@ section[id] { scroll-margin-top: 110px; }
   background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
   -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
 }
-.ganhos__anel { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgb(255 255 255 / .14); border-radius: 50%; }
+.ganhos__anel { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgb(255 255 255 / .14); border-radius: 50%; }
 .ganhos__icone { width: 20px; height: 20px; color: var(--destaque); }
 .ganhos__corpo { position: relative; display: grid; gap: 12px; }
 .ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: clamp(22px, 1.75vw, 27px); line-height: 1.15; letter-spacing: -.025em; color: var(--papel); text-wrap: balance; }
@@ -624,20 +623,16 @@ section[id] { scroll-margin-top: 110px; }
 .ganhos__nome, .ganhos__texto { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
 :is(.ganhos__nome, .ganhos__texto) > span { display: block; }
 
-
 @media (min-width: 1100px) {
-  .ganhos__composicao { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, auto); gap: clamp(12px, 1.1vw, 16px); }
-  .ganhos__composicao > .ganhos__cabeca { grid-column: 1 / 3; grid-row: 1; align-self: start; max-width: none; margin: 0; padding-right: clamp(16px, 3vw, 48px); }
-  .ganhos__composicao > .ganhos__grade { grid-column: 1 / -1; grid-row: 1 / 4; grid-template-columns: subgrid; grid-template-rows: subgrid; gap: inherit; }
-  #perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3vw, 48px); }
-  .ganhos__cabeca .ancora__linha { white-space: normal; }
-  .ganhos__cartao--1 { grid-area: 1 / 3; }
-  .ganhos__cartao--2 { grid-area: 1 / 4; }
-  .ganhos__cartao--3 { grid-area: 2 / 2; }
-  .ganhos__cartao--4 { grid-area: 2 / 3; }
-  .ganhos__cartao--5 { grid-area: 2 / 4; }
-  .ganhos__cartao--6 { grid-area: 3 / 3; }
-  .ganhos__cartao--7 { grid-area: 3 / 4; }
+  /* Ritmo da referência: X X · X / · X X · / X X · · */
+  .ganhos__cartao { aspect-ratio: 1; min-height: auto; }
+  .ganhos__cartao--1 { grid-area: 1 / 1; }
+  .ganhos__cartao--2 { grid-area: 1 / 2; }
+  .ganhos__cartao--3 { grid-area: 1 / 4; }
+  .ganhos__cartao--4 { grid-area: 2 / 2; }
+  .ganhos__cartao--5 { grid-area: 2 / 3; }
+  .ganhos__cartao--6 { grid-area: 3 / 1; }
+  .ganhos__cartao--7 { grid-area: 3 / 2; }
 }
 
 /* Construção (só com JS e movimento liberado). */
