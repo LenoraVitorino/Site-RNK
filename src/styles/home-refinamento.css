@@ -2,7 +2,7 @@
 :root { --ref-fio: rgb(242 242 238 / .16); }
 section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
-.home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #resultados, #academy-tools, #fale, #formulario) { background: transparent; }
+.home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
 .home-refinada .footer { position: relative; z-index: 1; background: var(--fundo, #000); }   /* preto, como o resto do site (Lenora, 02/10) */
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
 .secao-indice { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 56px; }
@@ -22,17 +22,26 @@ section[id] { scroll-margin-top: 110px; }
    especialidade, entre fios, lida numa direção só (01/10): o número
    grande, logo ao lado a área e a frase, e a foto da área sempre visível
    à direita. Nada depende do hover. */
-#resultados.resultados-editoriais { background: transparent; color: #252523; }
+#resultados.resultados-editoriais { color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
 .resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
-/* Painel de vidro branco sobre o fundo animado (02/10): bem opaco, com o
-   mesmo desfoque dos cartões escuros. */
-.resultados-vidro {
-  padding: clamp(32px, 5vw, 80px) clamp(24px, 5vw, 80px) clamp(28px, 4vw, 64px);
-  border: 1px solid rgb(255 255 255 / .55); border-radius: 24px;
-  background: linear-gradient(170deg, rgb(248 248 245 / .9), rgb(234 234 230 / .84));
-  -webkit-backdrop-filter: blur(28px) saturate(1.1); backdrop-filter: blur(28px) saturate(1.1);
-  box-shadow: 0 50px 100px -50px rgb(0 0 0 / .7);
+/* A dobra vira o painel, como a do método (02/10, "a borda igual à da
+   segunda dobra"): recuada das bordas da tela, cantos em chanfro de 45°,
+   e claro translúcido com o fundo animado desfocado por trás. */
+.home-refinada #resultados {
+  --res-recuo: clamp(8px, 1.25vw, 20px);
+  --res-chanfro: clamp(14px, 1.5vw, 24px);
+  margin-inline: var(--res-recuo);
+  clip-path: polygon(
+    var(--res-chanfro) 0, calc(100% - var(--res-chanfro)) 0, 100% var(--res-chanfro),
+    100% calc(100% - var(--res-chanfro)), calc(100% - var(--res-chanfro)) 100%,
+    var(--res-chanfro) 100%, 0 calc(100% - var(--res-chanfro)), 0 var(--res-chanfro));
+  background: linear-gradient(170deg, rgb(246 246 243 / .88), rgb(234 234 231 / .82));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+}
+.home-refinada #resultados > .container {
+  max-width: calc(var(--largura) - 2 * var(--res-recuo));
+  padding-inline: max(16px, calc(var(--gutter) - var(--res-recuo)));
 }
 /* Linha: especialidade e frase à esquerda, número à direita. */
 .resultado-linha {
@@ -124,7 +133,6 @@ section[id] { scroll-margin-top: 110px; }
   .resultado-linha { align-items: end; }
   .resultado-linha__numero { grid-row: 1; font-size: 48px; }
   .resultado-linha__texto { grid-column: 1 / -1; }
-  .resultados-vidro { border-radius: 18px; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
