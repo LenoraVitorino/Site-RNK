@@ -658,3 +658,30 @@ section[id] { scroll-margin-top: 110px; }
   .ganhos__grade { grid-template-columns: 1fr; }
   .ganhos__cartao { min-height: 0; gap: 36px; }
 }
+
+/* ============================================================
+   Ecossistema Renke (02/10/2026): painéis no molde da dobra "Features"
+   do template Tidy. Texto de um lado, quadro prateado do outro, alternando.
+   ============================================================ */
+.ecossistema-editorial .ecossistema__box { padding: 0; background: none; border: 0; border-radius: 0; }
+.ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 1.6vw, 24px); }
+.eco-painel {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: clamp(16px, 2vw, 32px);
+  min-height: clamp(460px, 40vw, 620px); padding: clamp(12px, 1.1vw, 16px);
+  border: 1px solid rgb(255 255 255 / .06); border-radius: 18px; background: rgb(16 16 16 / .96);
+}
+.eco-painel--invertido { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
+.eco-painel--invertido .eco-painel__corpo { order: 2; }
+.eco-painel__corpo { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(24px, 4vw, 64px); }
+.eco-painel__rotulo { margin: 0 0 clamp(22px, 2.2vw, 32px); font-size: 12.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgb(242 242 238 / .78); }
+.eco-painel__nome { margin: 0; line-height: 1; }
+.eco-painel__marca { display: block; width: auto; height: clamp(30px, 2.8vw, 42px); }
+.eco-painel__texto { margin: clamp(20px, 2vw, 28px) 0 0; max-width: 40ch; font-size: var(--corpo-topico); line-height: 1.6; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+.eco-painel__acao { margin: clamp(28px, 2.8vw, 40px) 0 0; }
+.eco-painel .eco-arte { min-height: 100%; }
+@media (max-width: 899.98px) {
+  .eco-painel, .eco-painel--invertido { grid-template-columns: 1fr; min-height: 0; }
+  .eco-painel--invertido .eco-painel__corpo { order: 0; }
+  .eco-painel .eco-arte { order: -1; min-height: 0; aspect-ratio: 5 / 4; }
+  .eco-painel__corpo { padding: 12px 12px 20px; }
+}

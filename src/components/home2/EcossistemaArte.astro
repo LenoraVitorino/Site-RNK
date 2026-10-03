@@ -1,0 +1,122 @@
+---
+/**
+ * Quadro dos painéis do Ecossistema (02/10/2026). Referência: as imagens da
+ * dobra "Features" do template Tidy (PeachWeb) que a Lenora mandou: prata
+ * granulada, desenho de interface em traço fino branco, um elemento aceso
+ * com contorno duplo e um cursor chegando nele. Monocromático, sem dados.
+ *  - academy: grade de módulos em blocos, com o do meio aceso (método).
+ *  - tools: janela de ferramenta com a barra de comando acesa (tecnologia).
+ * O cursor chega e o elemento acende quando o painel entra na tela
+ * (.visivel, do observador da Base2); sem JS, a pose final.
+ */
+interface Props { tipo: 'academy' | 'tools'; numero: string }
+const { tipo, numero } = Astro.props;
+const id = `eco-${tipo}`;
+
+/* Grade da Academy: blocos de 150 com vão de 24, o do meio em (225, 165). */
+const P = 174, L = 150, R = 34;
+const blocos: [number, number, number, number][] = [];
+for (let j = -2; j <= 2; j++) for (let k = -2; k <= 2; k++) {
+  if (j === 0 && k === 1) continue;              // vira o bloco largo
+  if ((j === 1 || j === 2) && (k === 0 || k === 1)) continue;   // vira o bloco grande
+  if (j === 0 && k === 2) continue;
+  blocos.push([225 + k * P, 165 + j * P, L, L]);
+}
+blocos.push([225 + P, 165, L + P, L]);           // largo, à direita do aceso
+blocos.push([225, 165 + P, L + P, L + P]);       // grande, embaixo
+---
+<div class:list={['eco-arte', `eco-arte--${tipo}`]} aria-hidden="true">
+  <span class="eco-arte__numero">{numero}</span>
+  <svg class="eco-arte__desenho" viewBox="0 0 600 480" fill="none" focusable="false">
+    <defs>
+      <radialGradient id={`${id}-luz`} cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#fff" stop-opacity=".55" />
+        <stop offset="1" stop-color="#fff" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id={`${id}-vidro`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".16" />
+        <stop offset="1" stop-color="#000" stop-opacity=".18" />
+      </linearGradient>
+      <filter id={`${id}-brilho`} x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="9" />
+      </filter>
+    </defs>
+
+    {tipo === 'academy' ? (
+      <g>
+        <g class="eco-arte__fios">
+          {blocos.map(([x, y, w, h]) => <rect x={x} y={y} width={w} height={h} rx={R} />)}
+        </g>
+        <g class="eco-arte__aceso">
+          <rect x="213" y="153" width="174" height="174" rx="44" class="eco-arte__halo" filter={`url(#${id}-brilho)`} />
+          <rect x="213" y="153" width="174" height="174" rx="44" class="eco-arte__contorno" />
+          <rect x="233" y="173" width="134" height="134" rx="28" fill={`url(#${id}-vidro)`} class="eco-arte__contorno eco-arte__contorno--forte" />
+          <path d="M300 230v20M290 240h20" class="eco-arte__mais" />
+        </g>
+        <g class="eco-arte__cursor" transform="translate(372 296)">
+          <path d="M0 0l34 15-15 5-6 16L0 0Z" />
+        </g>
+      </g>
+    ) : (
+      <g>
+        <g class="eco-arte__fios">
+          <rect x="64" y="58" width="472" height="404" rx="26" />
+          <circle cx="94" cy="86" r="5" /><circle cx="112" cy="86" r="5" /><circle cx="130" cy="86" r="5" />
+          <path d="M64 114h472" />
+          <path d="M96 156h64" class="eco-arte__risco-claro" /><path d="M176 156h112" />
+          {[290, 338, 386].map((y) => <><circle cx="106" cy={y} r="9" /><path d={`M132 ${y}h120`} /><path d={`M268 ${y}h70`} class="eco-arte__risco-fraco" /></>)}
+        </g>
+        <g class="eco-arte__aceso">
+          <rect x="84" y="196" width="432" height="62" rx="31" class="eco-arte__halo" filter={`url(#${id}-brilho)`} />
+          <rect x="84" y="196" width="432" height="62" rx="31" class="eco-arte__contorno" />
+          <rect x="94" y="204" width="412" height="46" rx="23" fill={`url(#${id}-vidro)`} class="eco-arte__contorno eco-arte__contorno--forte" />
+          <path d="M122 227h58" class="eco-arte__risco-claro" />
+          <rect x="420" y="214" width="72" height="26" rx="13" class="eco-arte__botao" />
+          <path d="M440 227h32" class="eco-arte__botao-traco" />
+        </g>
+        <g class="eco-arte__cursor" transform="translate(470 238)">
+          <path d="M0 0l34 15-15 5-6 16L0 0Z" />
+        </g>
+      </g>
+    )}
+  </svg>
+</div>
+
+<style>
+  .eco-arte {
+    position: relative; overflow: hidden; isolation: isolate; border-radius: 12px; container-type: inline-size;
+    background:
+      radial-gradient(70% 60% at 50% 48%, rgb(255 255 255 / .16), transparent 70%),
+      radial-gradient(90% 80% at 18% 6%, #a3a3a0, transparent 60%),
+      linear-gradient(160deg, #8c8c89 0%, #5d5d5b 42%, #3b3b3a 100%);
+  }
+  /* Grão fino por cima, como a prata da referência. */
+  .eco-arte::after {
+    content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .5; mix-blend-mode: overlay;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+  .eco-arte__numero { position: absolute; top: clamp(16px, 2.4cqi, 26px); left: clamp(18px, 2.8cqi, 30px); z-index: 3; font-size: 15px; letter-spacing: .02em; color: rgb(255 255 255 / .62); }
+  .eco-arte__desenho { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .eco-arte--academy .eco-arte__desenho { transform: scale(1.12); }
+  .eco-arte__fios :is(rect, path, circle) { stroke: rgb(255 255 255 / .3); stroke-width: 1.4; }
+  .eco-arte__fios .eco-arte__risco-claro { stroke: rgb(255 255 255 / .7); stroke-width: 4; stroke-linecap: round; }
+  .eco-arte__fios .eco-arte__risco-fraco { stroke: rgb(255 255 255 / .16); stroke-width: 4; stroke-linecap: round; }
+  .eco-arte__fios path:not([class]) { stroke-width: 4; stroke-linecap: round; stroke: rgb(255 255 255 / .28); }
+  .eco-arte--tools .eco-arte__fios > rect, .eco-arte--tools .eco-arte__fios > path:first-of-type { stroke-width: 1.4; }
+  .eco-arte__halo { stroke: #fff; stroke-width: 6; opacity: .35; }
+  .eco-arte__contorno { stroke: rgb(255 255 255 / .55); stroke-width: 1.4; }
+  .eco-arte__contorno--forte { stroke: rgb(255 255 255 / .85); stroke-width: 1.8; }
+  .eco-arte__mais { stroke: rgb(255 255 255 / .35); stroke-width: 4; stroke-linecap: round; }
+  .eco-arte__risco-claro { stroke: rgb(255 255 255 / .9); stroke-width: 4; stroke-linecap: round; }
+  .eco-arte__botao { fill: rgb(255 255 255 / .92); }
+  .eco-arte__botao-traco { stroke: #2b2b2a; stroke-width: 4; stroke-linecap: round; }
+  .eco-arte__cursor path { fill: #1d1d1c; stroke: rgb(255 255 255 / .9); stroke-width: 1.6; stroke-linejoin: round; }
+
+  /* Chegada: o cursor desliza até o elemento e ele acende. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .eco-arte__cursor { translate: 46px 58px; opacity: 0; transition: translate 1.6s cubic-bezier(.22, 1, .36, 1) .5s, opacity .6s ease .5s; }
+    :global(.js) .eco-arte__aceso { opacity: .35; transition: opacity 1.2s ease 1.5s; }
+    :global(.js .visivel) .eco-arte__cursor { translate: 0 0; opacity: 1; }
+    :global(.js .visivel) .eco-arte__aceso { opacity: 1; }
+  }
+</style>
