@@ -459,7 +459,8 @@ section[id] { scroll-margin-top: 110px; }
      meio no centro vertical; barriga no canto superior direito; perna ao
      lado do número. */
   .home-refinada #o-que-fazemos .metodo__r {
-    display: block; position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
+    display: none;   /* R escondido para teste (Lenora, 02/10: "tira o R pra ver"); volta com display: block */
+    position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
     color: var(--destaque); stroke: currentColor; stroke-width: 88px; stroke-linejoin: miter;   /* faixa grossa, como a fita da parede */
   }
   .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; isolation: isolate; }
