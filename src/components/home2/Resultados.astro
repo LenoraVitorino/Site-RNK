@@ -1,29 +1,20 @@
 ---
-/** Provas como um extrato editorial: uma linha por especialidade, entre
-    fios (Lenora, 30/09: o mosaico repetia a grade do Protocolo e lia mal).
-    Em 01/10 ela achou os textos pequenos, a dobra vazia no meio e teve
-    dúvida se a linha seria lida da esquerda para a direita, e se a foto no
-    hover resolveria o vazio. A linha passou a ser lida numa direção só,
-    com tudo vizinho: o número primeiro, logo ao lado a especialidade e a
-    frase, e a foto da área sempre visível à direita (sem depender do
-    hover, que não existe no toque). Por enquanto, só a moldura de mockup
-    de cada foto. Valores e textos vêm da fonte compartilhada. */
+/** Provas como um extrato: uma linha por especialidade, entre fios.
+    02/10/2026 (Lenora): título menor, a especialidade e a frase à esquerda
+    e o número grande à direita, como a referência do tablet (Orbital), e a
+    dobra num painel de vidro branco desfocado sobre o fundo animado, bem
+    opaco ("não pode ser muito transparente"). As molduras de foto saíram:
+    a referência não tem foto e elas estavam vazias. Valores e textos vêm
+    da fonte compartilhada. */
 import { resultados, hero } from '../../data/home';
 import Botao from '../ui/Botao.astro';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 
-/* Tons levemente diferentes por área, enquanto as molduras estão vazias. */
-const tons = [
-  ['#3b3a36', '#1d1d1b'],
-  ['#35383a', '#1b1c1d'],
-  ['#3a3634', '#1e1b1a'],
-  ['#363a35', '#1b1d1a'],
-  ['#383638', '#1c1b1d'],
-];
 ---
 <section class="secao resultados-editoriais" id="resultados" aria-labelledby="resultados-titulo">
   <div class="container">
+    <div class="resultados-vidro">
     <header class="resultados-editoriais__cabeca entra">
       {!copyLiteral && <Selo class="cabeca-dobra__selo">Resultados por especialidade</Selo>}
       <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem estrutura.</h2>
@@ -35,14 +26,10 @@ const tons = [
           <h3 class="resultado-linha__area">{r.especialidade}</h3>
           <p class="resultado-linha__texto">{r.texto}</p>
           <p class="resultado-linha__numero num">{r.numero}</p>
-          {/* Mockup (Lenora, 30/09): troca-se a moldura pela foto real da
-              área, com um <img> dentro, sem mexer no resto. */}
-          <figure class="resultado-linha__foto" aria-hidden="true" style={`--tom-a:${tons[i % tons.length][0]}; --tom-b:${tons[i % tons.length][1]}`}>
-            <figcaption class="resultado-linha__legenda">Foto · {r.especialidade}</figcaption>
-          </figure>
         </li>
       ))}
     </ol>
     <div class="resultados-editoriais__rodape"><Botao href="/contato">{hero.cta}</Botao></div>
+    </div>
   </div>
 </section>

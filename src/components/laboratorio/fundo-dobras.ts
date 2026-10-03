@@ -20,7 +20,7 @@ export const ROTEIRO: [string, string][] = [
   ['#formulario', 'formulario'],
 ];
 
-export const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo-revena.pilares, .letreiro, #perguntas, #fale, #academy-tools, #sobre, #formulario';
+export const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo-revena.pilares, .letreiro, #perguntas, #resultados, #fale, #academy-tools, #sobre, #formulario';
 
 export const TEXTOS_DOBRAS = [
   TEXTOS, '#protocolo-revena.pilares .titulo', '.pilares__cabeca', '.operacao__titulo', '#fale .titulo', '#fale p', '.ecossistema__cabeca',

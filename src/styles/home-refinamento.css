@@ -2,7 +2,7 @@
 :root { --ref-fio: rgb(242 242 238 / .16); }
 section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
-.home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
+.home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #resultados, #academy-tools, #fale, #formulario) { background: transparent; }
 .home-refinada .footer { position: relative; z-index: 1; background: var(--fundo, #000); }   /* preto, como o resto do site (Lenora, 02/10) */
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
 .secao-indice { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 56px; }
@@ -22,28 +22,26 @@ section[id] { scroll-margin-top: 110px; }
    especialidade, entre fios, lida numa direção só (01/10): o número
    grande, logo ao lado a área e a frase, e a foto da área sempre visível
    à direita. Nada depende do hover. */
-#resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
+#resultados.resultados-editoriais { background: transparent; color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
 .resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
+/* Painel de vidro branco sobre o fundo animado (02/10): bem opaco, com o
+   mesmo desfoque dos cartões escuros. */
+.resultados-vidro {
+  padding: clamp(32px, 5vw, 80px) clamp(24px, 5vw, 80px) clamp(28px, 4vw, 64px);
+  border: 1px solid rgb(255 255 255 / .55); border-radius: 24px;
+  background: linear-gradient(170deg, rgb(248 248 245 / .9), rgb(234 234 230 / .84));
+  -webkit-backdrop-filter: blur(28px) saturate(1.1); backdrop-filter: blur(28px) saturate(1.1);
+  box-shadow: 0 50px 100px -50px rgb(0 0 0 / .7);
+}
+/* Linha: especialidade e frase à esquerda, número à direita. */
 .resultado-linha {
-  display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1fr) clamp(200px, 20vw, 280px);
-  column-gap: clamp(28px, 4vw, 64px); row-gap: 12px; align-items: center;
-  padding-block: clamp(28px, 2.6vw, 40px); border-top: 1px solid #cfcfcc;
+  display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr) minmax(0, 1fr); align-items: center; column-gap: clamp(20px, 3vw, 48px);
+  padding-block: clamp(22px, 2.4vw, 36px); border-top: 1px solid rgb(37 37 35 / .16);
 }
-.resultado-linha__numero { grid-column: 1; grid-row: 1 / span 2; margin: 0; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
-.resultado-linha__area { grid-column: 2; grid-row: 1; align-self: end; font-size: clamp(24px, 2.1vw, 32px); font-weight: 400; line-height: 1.15; letter-spacing: -.03em; }
-.resultado-linha__texto { grid-column: 2; grid-row: 2; align-self: start; margin: 0; max-width: 46ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.55; color: #4a4a48; text-wrap: pretty; }
-/* Foto da área, por enquanto em moldura de mockup grafite. */
-.resultado-linha__foto {
-  grid-column: 3; grid-row: 1 / span 2; position: relative; margin: 0; overflow: hidden;
-  aspect-ratio: 16 / 9; border-radius: 10px;
-  background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
-}
-.resultado-linha__foto :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s var(--easing-suave); }
-.resultado-linha__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
-@media (hover: hover) and (pointer: fine) {
-  .resultado-linha:hover .resultado-linha__foto :is(img, video) { scale: 1.04; }
-}
+.resultado-linha__area { margin: 0; font-size: clamp(19px, 1.5vw, 23px); font-weight: 400; line-height: 1.2; letter-spacing: -.02em; }
+.resultado-linha__texto { margin: 0; max-width: 36ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: #555553; text-wrap: pretty; }
+.resultado-linha__numero { justify-self: end; margin: 0; font-size: clamp(52px, 5.4vw, 88px); font-weight: 300; line-height: .95; letter-spacing: -.055em; white-space: nowrap; color: #1d1d1b; }
 .resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
 .resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
@@ -109,8 +107,11 @@ section[id] { scroll-margin-top: 110px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  /* Extrato no tablet: número, texto e uma foto menor. */
-  .resultado-linha { grid-template-columns: minmax(0, .7fr) minmax(0, 1fr) clamp(140px, 22vw, 200px); column-gap: 24px; }
+  /* Extrato no tablet: especialidade e frase empilhadas, número à direita. */
+  .resultado-linha { grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px; row-gap: 8px; }
+  .resultado-linha__area { grid-column: 1; grid-row: 1; }
+  .resultado-linha__texto { grid-column: 1; grid-row: 2; }
+  .resultado-linha__numero { grid-column: 2; grid-row: 1 / span 2; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -118,14 +119,12 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  /* Extrato no celular: o número, a área e o texto empilhados à esquerda
-     e a foto, pequena, no alto à direita. */
-  .resultado-linha { grid-template-columns: minmax(0, 1fr) 116px; column-gap: 16px; row-gap: 10px; align-items: start; }
-  .resultado-linha__numero { grid-column: 1; grid-row: 1; font-size: 56px; }
-  .resultado-linha__foto { grid-column: 2; grid-row: 1; align-self: center; border-radius: 8px; }
-  .resultado-linha__legenda { display: none; }
-  .resultado-linha__area { grid-column: 1 / -1; grid-row: 2; margin-top: 6px; }
-  .resultado-linha__texto { grid-column: 1 / -1; grid-row: 3; }
+  /* Extrato no celular: especialidade e número na mesma linha, a frase
+     embaixo, na largura toda. */
+  .resultado-linha { align-items: end; }
+  .resultado-linha__numero { grid-row: 1; font-size: 48px; }
+  .resultado-linha__texto { grid-column: 1 / -1; }
+  .resultados-vidro { border-radius: 18px; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -312,7 +311,7 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: var(--corpo-topico); color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
 .resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
-.resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
+.resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; font-size: clamp(30px, 2.8vw, 44px); line-height: 1.12; text-wrap: balance; }   /* menor (02/10) */
 /* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
    de duas linhas. Nos Resultados, centrada. */
 :is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
