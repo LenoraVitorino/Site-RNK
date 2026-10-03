@@ -1,14 +1,11 @@
 ---
 /**
- * Trecho riscado da hero. O cinza entra da esquerda por cima do texto claro
- * e o traço cresce junto, os dois só com transform (02/10/2026): a versão
- * anterior animava uma variável do degradê recortado no texto e repintava as
- * letras a cada quadro, o que travava a entrada quando o fundo 3D carregava.
- * A camada cinza anda para a direita e o texto dentro dela anda o mesmo tanto
- * para a esquerda, com a mesma curva: as letras ficam paradas e só a borda
- * do recorte avança.
+ * Trecho riscado da hero. O texto fica branco e um traço amarelo cresce por
+ * cima dele (Lenora, 02/10/2026: "deixar o marketing para clínicas em branco
+ * normal e passar com um traço mais espesso amarelo"). Só transform: nada
+ * repinta durante a entrada.
  */
 interface Props { texto: string; segundo?: boolean }
 const { texto, segundo = false } = Astro.props;
 ---
-<span class:list={['hero__risco', { 'hero__risco--segundo': segundo }]}>{texto}<span class="hero__risco-cinza"><span>{texto}</span></span></span>
+<span class:list={['hero__risco', { 'hero__risco--segundo': segundo }]}>{texto}</span>

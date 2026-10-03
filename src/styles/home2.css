@@ -410,19 +410,12 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 .hero__mensagem--antes { visibility: hidden; }
 .hero__mensagem--depois { opacity: 1; }
 .hero__revops { color: var(--destaque); font-weight: 500; }
-/* Trecho riscado (HeroRisco.astro): camada cinza por cima do texto claro,
-   revelada por transform, e o traço em scaleX. Nada repinta durante a entrada. */
+/* Trecho riscado (HeroRisco.astro): texto branco e traço amarelo que cresce
+   em scaleX por cima dele. Nada repinta durante a entrada. */
 .hero__risco { display: inline-block; position: relative; white-space: nowrap; }
-.hero__risco-cinza { position: absolute; inset: -.2em 0; padding-block: .2em; overflow: hidden; color: #777773; }
-.hero__risco-cinza > span { display: block; }
-.hero__risco::after { content: ''; position: absolute; left: 0; right: 0; top: 54%; height: 2px; background: #777773; transform-origin: left center; }
-.hero__risco-cinza, .hero__risco-cinza > span, .hero__risco::after { animation-duration: .8s; animation-timing-function: cubic-bezier(.65,0,.35,1); animation-delay: 1s; animation-fill-mode: both; }
-.js .hero__risco-cinza { animation-name: hero-risco-recorte; }
-.js .hero__risco-cinza > span { animation-name: hero-risco-letras; }
-.js .hero__risco::after { animation-name: hero-risco-traco; }
-.js .hero__risco--segundo .hero__risco-cinza, .js .hero__risco--segundo .hero__risco-cinza > span, .js .hero__risco--segundo::after { animation-delay: 1.4s; }
-@keyframes hero-risco-recorte { from { transform: translateX(-100%); } to { transform: none; } }
-@keyframes hero-risco-letras { from { transform: translateX(100%); } to { transform: none; } }
+.hero__risco::after { content: ''; position: absolute; left: 0; right: 0; top: 54%; height: max(3px, .042em); margin-top: calc(max(3px, .042em) / -2); border-radius: 1px; background: var(--destaque); transform-origin: left center; }
+.js .hero__risco::after { animation: hero-risco-traco .8s cubic-bezier(.65,0,.35,1) 1s both; }
+.js .hero__risco--segundo::after { animation-delay: 1.4s; }
 @keyframes hero-risco-traco { from { transform: scaleX(0); } to { transform: none; } }
 .js .hero__mensagem--antes { visibility: visible; animation: hero-frase-sai .7s ease 3.1s forwards; }
 .js .hero__mensagem--depois { opacity: 0; transform: translateY(.18em); animation: hero-frase-entra .9s var(--easing) 3.35s forwards; }
@@ -441,7 +434,7 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 @media (prefers-reduced-motion: reduce) {
   .js .hero__mensagem--antes { animation: none; visibility: hidden; }
   .js .hero__mensagem--depois { animation: none; opacity: 1; transform: none; }
-  .js .hero__risco-cinza, .js .hero__risco-cinza > span, .js .hero__risco::after { animation: none; }
+  .js .hero__risco::after { animation: none; }
 }
 
 /* ---------- Faixa: números + quem confia ---------- */
