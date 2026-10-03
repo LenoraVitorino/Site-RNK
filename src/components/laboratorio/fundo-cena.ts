@@ -568,6 +568,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const tamanhoComposer = new Vector2(-1, -1);
   let dtQuadro = 0;
 
+  const t0 = performance.now();
   const abriuNoTopo = scrollY < 40;
   const GRAU = Math.PI / 180;
 
@@ -583,8 +584,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
         roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
         continuas: ['metodologia', 'pilares', 'letreiro'],
         tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
-        // Conta desde a abertura da página: a cena agora só começa depois da entrada da hero.
-        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() > 3400,
+        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
       },
     pintar({ q, tempo, dt, parado, ponteiro }) {
       dtQuadro = dt;

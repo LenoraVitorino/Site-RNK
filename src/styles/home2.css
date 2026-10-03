@@ -413,7 +413,7 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 /* Trecho riscado (HeroRisco.astro): texto branco e traço amarelo que cresce
    em scaleX por cima dele. Nada repinta durante a entrada. */
 .hero__risco { display: inline-block; position: relative; white-space: nowrap; }
-.hero__risco::after { content: ''; position: absolute; left: 0; right: 0; top: 54%; height: max(3px, .042em); margin-top: calc(max(3px, .042em) / -2); border-radius: 1px; background: var(--destaque); transform-origin: left center; }
+.hero__risco::after { content: ''; position: absolute; z-index: 1; left: 0; right: 0; top: 54%; height: max(3px, .042em); margin-top: calc(max(3px, .042em) / -2); border-radius: 1px; background: var(--destaque); transform-origin: left center; }
 .js .hero__risco::after { animation: hero-risco-traco .8s cubic-bezier(.65,0,.35,1) 1s both; }
 .js .hero__risco--segundo::after { animation-delay: 1.4s; }
 @keyframes hero-risco-traco { from { transform: scaleX(0); } to { transform: none; } }

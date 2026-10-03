@@ -34,29 +34,11 @@ const { fundo, roteiro } = Astro.props;
       : fundo === 'superficie' ? import('./fundo-superficie')
       : import('./fundo-particulas');
     const comecar = () => carregar().then(({ iniciar }) => (iniciar as (c: HTMLCanvasElement, roteiro?: string) => void)(canvas, canvas.dataset.roteiro)).catch((erro) => { canvas.hidden = true; console.warn('Fundo vivo indisponível; mantendo a composição estática.', erro); });
-    const quandoOcioso = () => {
-      if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
-      else setTimeout(comecar, 300);
-    };
-    // Na home aberta no topo, a cena só começa depois da entrada da hero (o
-    // subtítulo é o último a chegar, aos 4,95 s; 02/10/2026): carregar e
-    // compilar o 3D no meio do risco travava a entrada. Rolar a página
-    // antecipa; um teto garante o início.
-    const ultimo = document.querySelector('.hero--editorial .hero__lead');
-    const animando = ultimo && scrollY < 40 && getComputedStyle(ultimo).animationName !== 'none';
-    if (!animando) quandoOcioso();
-    else {
-      let foi = false;
-      const ir = () => {
-        if (foi) return;
-        foi = true;
-        removeEventListener('scroll', ir);
-        quandoOcioso();
-      };
-      ultimo.addEventListener('animationend', ir, { once: true });
-      addEventListener('scroll', ir, { passive: true });
-      setTimeout(ir, 5600);
-    }
+    // Começa cedo, como antes (Lenora, 02/10: "volta com o fundo"). A hero
+    // não trava mais com isso: o risco e as frases só animam transform e
+    // opacidade, e a cena compila os shaders sem segurar a página.
+    if ('requestIdleCallback' in window) requestIdleCallback(comecar, { timeout: 1200 });
+    else setTimeout(comecar, 300);
   }
 </script>
 
