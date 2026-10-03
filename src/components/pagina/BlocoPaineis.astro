@@ -72,7 +72,7 @@ const { bloco, secao } = Astro.props;
      Sem nowrap: uma linha que não caiba no cartão quebra em vez de vazar. */
   .int-painel__titulo > span { display: block; text-wrap: balance; }
   /* Balance: as linhas do texto saem com largura parecida, sem sobra curta no fim. */
-  .int-painel__texto { margin: 0; max-width: 34ch; font-size: 16px; line-height: 1.55; color: #b6b6b6; text-wrap: balance; }
+  .int-painel__texto { margin: 0; max-width: 34ch; font-size: var(--corpo-topico); line-height: 1.55; color: #b6b6b6; text-wrap: balance; }
 
   @media (max-width: 1099.98px) {
     .int-paineis__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }

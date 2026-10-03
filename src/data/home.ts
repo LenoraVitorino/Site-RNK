@@ -90,15 +90,16 @@ export const protocolos = [
   },
 ];
 
-/** ⚠️ D8: o layout pede grid 2×2 (4 slots); a copy traz 7 perguntas. */
+/** Os sete ganhos (estúdio) e, em `pergunta`, a dor correspondente da copy
+ *  original (docs/03-copy/home.md, seção 3), na mesma ordem. */
 export const perguntas = [
-  { titulo: 'Aquisição sob controle', texto: 'Clareza sobre o investimento por paciente e os canais que realmente geram retorno.' },
-  { titulo: 'Mais conversão', texto: 'Acompanhe cada oportunidade até o agendamento e reduza perdas ao longo do processo.' },
-  { titulo: 'Processos que funcionam', texto: 'Uma operação comercial estruturada, sem depender de uma única pessoa.' },
-  { titulo: 'Investimento mais inteligente', texto: 'Direcione verba para os canais e estratégias com maior potencial de retorno.' },
-  { titulo: 'Decisões baseadas em dados', texto: 'Indicadores claros para identificar pontos de perda e definir onde agir.', excedente: true },
-  { titulo: 'Crescimento replicável', texto: 'Transforme o que funciona em processo e replique resultados com consistência.', excedente: true },
-  { titulo: 'Oportunidades de mercado', texto: 'Inteligência sobre concorrência, movimentos e espaços para novas oportunidades de crescimento.', excedente: true },
+  { titulo: 'Aquisição sob controle', texto: 'Clareza sobre o investimento por paciente e os canais que realmente geram retorno.', pergunta: 'Quanto custa um paciente novo pra sua clínica? De verdade, não o que a agência diz.' },
+  { titulo: 'Mais conversão', texto: 'Acompanhe cada oportunidade até o agendamento e reduza perdas ao longo do processo.', pergunta: 'Dos leads que chegam, quantos sentam na cadeira do seu consultório?' },
+  { titulo: 'Processos que funcionam', texto: 'Uma operação comercial estruturada, sem depender de uma única pessoa.', pergunta: 'Se sua secretária sai amanhã, o processo continua?' },
+  { titulo: 'Investimento mais inteligente', texto: 'Direcione verba para os canais e estratégias com maior potencial de retorno.', pergunta: 'Você sabe qual canal trouxe seus melhores pacientes este mês?' },
+  { titulo: 'Decisões baseadas em dados', texto: 'Indicadores claros para identificar pontos de perda e definir onde agir.', excedente: true, pergunta: 'No mês que o resultado não foi bom, você encontra o motivo baseado em dados e com facilidade?' },
+  { titulo: 'Crescimento replicável', texto: 'Transforme o que funciona em processo e replique resultados com consistência.', excedente: true, pergunta: 'E no mês que o resultado foi bom, você consegue atribuir o porquê para replicar?' },
+  { titulo: 'Oportunidades de mercado', texto: 'Inteligência sobre concorrência, movimentos e espaços para novas oportunidades de crescimento.', excedente: true, pergunta: 'Você sabe o que seus concorrentes estão comunicando agora e qual espaço estão deixando aberto pra você?' },
 ];
 
 /** ⚠️ Números placeholder — nota do próprio briefing. */

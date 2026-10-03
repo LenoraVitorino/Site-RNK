@@ -1,10 +1,16 @@
 ---
-/** Ícones de interface: Lucide oficial. Símbolos Revena usam os assets da marca. */
-import { Check, ArrowUpRight, ArrowRight, ArrowDown, ChevronRight, ChevronDown, Menu, X, Plus, Sparkles, Users, BadgeCheck, TrendingUp, VolumeX, Volume2, Play, Pause, Compass, Cpu, Workflow, Target, Handshake, Layers } from '@lucide/astro';
-const icones = { Check, ArrowUpRight, ArrowRight, ArrowDown, ChevronRight, ChevronDown, Menu, X, Plus, Sparkles, Users, BadgeCheck, TrendingUp, VolumeX, Volume2, Play, Pause, Compass, Cpu, Workflow, Target, Handshake, Layers };
-export type NomeIcone = keyof typeof icones;
+/**
+ * Ícones de interface. Desde 02/10/2026 desenham o conjunto próprio da Renke
+ * (src/data/icones-renke.ts), na versão em cor: traço na cor do texto e o
+ * losango de destaque em amarelo (--icone-acento; nas dobras claras, a cor do
+ * traço). Os nomes seguem os da Lucide, para nada mudar em quem chama.
+ */
+import IconeRenke from './IconeRenke.astro';
+import { DA_LUCIDE } from '../../data/icones-renke';
+
+const nomes = ['Check', 'ArrowUpRight', 'ArrowRight', 'ArrowDown', 'ChevronRight', 'ChevronDown', 'Menu', 'X', 'Plus', 'Sparkles', 'Users', 'BadgeCheck', 'TrendingUp', 'VolumeX', 'Volume2', 'Play', 'Pause', 'Compass', 'Cpu', 'Workflow', 'Target', 'Handshake', 'Layers'] as const;
+export type NomeIcone = typeof nomes[number];
 interface Props { nome: NomeIcone; class?: string; size?: number }
 const { nome, class: classe = '', size = 24 } = Astro.props;
-const Icone = icones[nome];
 ---
-<Icone size={size} stroke-width={1.5} class={`icone-lucide ${classe}`} aria-hidden="true" focusable="false" />
+<IconeRenke nome={DA_LUCIDE[nome]} size={size} class={`icone-lucide ${classe}`} />

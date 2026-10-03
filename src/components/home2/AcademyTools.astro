@@ -1,9 +1,16 @@
 ---
-/** Duas frentes com espaço reservado para arte e apresentação breve. */
+/**
+ * Ecossistema Renke (02/10/2026): as duas frentes em painéis grandes, um
+ * embaixo do outro, no molde da dobra "Features" do template Tidy que a
+ * Lenora mandou. De um lado o público, a marca, o texto e o botão; do
+ * outro, o quadro prateado com o desenho da frente (EcossistemaArte), com
+ * o lado alternando a cada painel. A cabeça segue centrada em uma linha.
+ */
 import Botao from '../ui/Botao.astro';
 import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 import Selo from '../ui/Selo.astro';
+import EcossistemaArte from './EcossistemaArte.astro';
 
 const produtos = [
   {
@@ -30,20 +37,19 @@ const medidasMarca: Record<string, [number, number]> = { studio: [773, 150], aca
       <header class="ecossistema__cabeca entra">
         {copyLiteral
           ? <h2 class="visually-hidden" id="ecossistema-titulo">Renke Academy e Renke Tools</h2>
-          : <><Selo class="cabeca-dobra__selo">Ecossistema Renke</Selo><h2 class="titulo" id="ecossistema-titulo">O mesmo método,<br />em outras frentes.</h2></>}
+          : <><Selo class="cabeca-dobra__selo">Ecossistema Renke</Selo><h2 class="titulo" id="ecossistema-titulo">O mesmo método, em outras frentes.</h2></>}
       </header>
 
-      <div class="ecossistema__paineis entra">
+      <div class="ecossistema__paineis">
         {produtos.map((p, i) => (
-          <article class:list={['produto', `produto--${p.chave}`, 'produto--aberto']} data-produto={i}>
-            <div class="produto__arte" aria-hidden="true"></div>
-            {/* O público de cada frente, como selo no canto do quadro da imagem. */}
-            <Selo class="produto__selo-bu">{p.eyebrow}</Selo>
-            <div class="produto__corpo" id={`produto-miolo-${i}`}>
-              <h3 class="produto__nome"><img class="produto__marca" src={`/marca/bu-${p.chave}-escuro.png`} alt={p.titulo} width={medidasMarca[p.chave][0]} height={medidasMarca[p.chave][1]} loading="lazy" /></h3>
-              <p class="produto__texto">{p.texto}</p>
-              <p class="produto__acao"><Botao href={existe(p.rota) ? p.rota : '/contato'} tamanho="sm">Conhecer {p.titulo}</Botao></p>
+          <article class:list={['eco-painel', `eco-painel--${p.chave}`, { 'eco-painel--invertido': i % 2 === 1 }, 'entra']} data-produto={i}>
+            <div class="eco-painel__corpo">
+              <p class="eco-painel__rotulo">{p.eyebrow}</p>
+              <h3 class="eco-painel__nome"><img class="eco-painel__marca" src={`/marca/bu-${p.chave}-escuro.png`} alt={p.titulo} width={medidasMarca[p.chave][0]} height={medidasMarca[p.chave][1]} loading="lazy" /></h3>
+              <p class="eco-painel__texto">{p.texto}</p>
+              <p class="eco-painel__acao"><Botao href={existe(p.rota) ? p.rota : '/contato'} tamanho="sm">Conhecer {p.titulo}</Botao></p>
             </div>
+            <EcossistemaArte tipo={p.chave as 'academy' | 'tools'} numero={String(i + 1).padStart(2, '0')} />
           </article>
         ))}
       </div>

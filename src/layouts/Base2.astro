@@ -6,6 +6,9 @@
  */
 import '@fontsource-variable/inter/wght.css';          // uma família só: títulos finos, corpo, destaques
 import '@fontsource-variable/inter/wght-italic.css';   // as falas dos doutores, em itálico
+/* Pré-carrega o arquivo latino da Inter: sem isso a hero pinta na fonte do
+   sistema e troca no meio da entrada. */
+import interLatina from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import '../styles/home2.css';
 import '../styles/home-refinamento.css';
 import '../styles/icones.css';
@@ -32,6 +35,7 @@ const { titulo, descricao, noindex = false, classe } = Astro.props;
   <title>{titulo}</title>
   <meta name="description" content={descricao} />
   {noindex && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="preload" href={interLatina} as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="/marca/renke-monograma.png" type="image/png" />
   <script is:inline>
     /* Marca que o JS está vivo antes da primeira pintura. Só então o CSS

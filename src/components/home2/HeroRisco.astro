@@ -1,0 +1,11 @@
+---
+/**
+ * Trecho riscado da hero. O texto fica branco e um traço amarelo cresce por
+ * cima dele (Lenora, 02/10/2026: "deixar o marketing para clínicas em branco
+ * normal e passar com um traço mais espesso amarelo"). Só transform: nada
+ * repinta durante a entrada.
+ */
+interface Props { texto: string; segundo?: boolean }
+const { texto, segundo = false } = Astro.props;
+---
+<span class:list={['hero__risco', { 'hero__risco--segundo': segundo }]}>{texto}</span>

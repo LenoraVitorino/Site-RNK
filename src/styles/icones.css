@@ -1,4 +1,7 @@
-/* Padrão Lucide em todas as interfaces; marcas e símbolos Revena são próprios. */
+/* Ícones Renke em todo o site (02/10/2026): o losango de destaque acende em
+   amarelo; nas dobras claras fica na cor do traço (amarelo não vai sobre claro). */
+:root { --icone-acento: var(--destaque, #FFD103); }
+:is(.palcoplanos, .resultados-editoriais, #o-que-fazemos, .int-secao--papel, .form-card, .botao--claro, .secao--amarela) { --icone-acento: currentColor; }
 .icone-lucide { flex-shrink: 0; vertical-align: middle; fill: none; }
 .nav-toggle { color: inherit; }
 .nav-toggle .nav-icone-fechar { display: none; }

@@ -1,0 +1,124 @@
+---
+/**
+ * Construímos seu posicionamento (01/10/2026): o mercado como um domo de
+ * pontos, com os concorrentes espalhados nele (clínicas A a F, sem rosto e
+ * sem nome) e a clínica do cliente no centro, maior, com a etiqueta "Sua
+ * clínica". Referência da Lenora: o convite de pesquisa do Hevy (globo
+ * pontilhado com retratos em volta de um retrato central).
+ * Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
+ *
+ * A cena tem a largura do cartão (388 × 172) e sangra pelas laterais e por
+ * baixo. Estática. O amarelo fica só no ponto da etiqueta.
+ */
+import '../../styles/ilustracoes.css';
+import Defs from './arte/Defs.astro';
+
+const p = 'posicionamento';
+const W = 388, H = 172;
+/* Globo visto de frente, com o polo inclinado para trás: só a calota de
+   cima aparece, como um horizonte curvo, e os paralelos acompanham a
+   silhueta. O centro fica abaixo da cena. */
+const C = { x: 194, y: 292 }, R = 262, INCLINA = (20 * Math.PI) / 180;
+const rad = (g: number) => (g * Math.PI) / 180;
+function projeta(lon: number, lat: number) {
+  const x = R * Math.cos(rad(lat)) * Math.sin(rad(lon));
+  const y = R * Math.sin(rad(lat));
+  const z = R * Math.cos(rad(lat)) * Math.cos(rad(lon));
+  return {
+    x: C.x + x,
+    y: C.y - (y * Math.cos(INCLINA) + z * Math.sin(INCLINA)),
+    z: z * Math.cos(INCLINA) - y * Math.sin(INCLINA),
+  };
+}
+/* Pontos em paralelos, com passo constante ao longo de cada um; as linhas
+   alternam meio passo. */
+const pontos: string[] = [];
+for (let lat = 4, linha = 0; lat <= 86; lat += 2.6, linha++) {
+  const n = Math.max(6, Math.round((2 * Math.PI * R * Math.cos(rad(lat))) / 9));
+  for (let i = 0; i < n; i++) {
+    const { x, y, z } = projeta(((i + (linha % 2) / 2) * 360) / n, lat);
+    if (z > 1 && x > -4 && x < W + 4 && y < H + 4) pontos.push(`M${x.toFixed(1)} ${y.toFixed(1)}h.01`);
+  }
+}
+/* Silhueta: o arco do globo que cruza a cena. */
+const borda = (x: number) => C.y - Math.sqrt(R * R - (x - C.x) ** 2);
+const silhueta = `M-6 ${borda(-6).toFixed(1)}A${R} ${R} 0 0 1 ${W + 6} ${borda(W + 6).toFixed(1)}`;
+/* Concorrentes: os do fundo, perto do horizonte, menores e mais escuros. */
+const concorrentes = [
+  { letra: 'A', x: 88, y: 118, r: 16, plano: 0 },
+  { letra: 'B', x: 304, y: 112, r: 17, plano: 0 },
+  { letra: 'C', x: 132, y: 68, r: 10.5, plano: 2 },
+  { letra: 'D', x: 262, y: 60, r: 11.5, plano: 2 },
+  { letra: 'E', x: 38, y: 150, r: 13, plano: 1 },
+  { letra: 'F', x: 352, y: 148, r: 13.5, plano: 1 },
+];
+const centro = { x: 194, y: 92, r: 25 };
+/* Etiqueta: 12 + ponto + 8 + "Sua clínica" (62 em Inter 12 / 500) + 12. */
+const E = { w: 100, h: 26 };
+---
+<svg class="arte posic" viewBox={`0 0 ${W} ${H}`} fill="none" aria-hidden="true" focusable="false">
+  <Defs p={p} />
+  <defs>
+    {/* Os pontos brilham perto do alto do globo e se apagam para os lados e para a base. */}
+    <radialGradient id={`${p}-some`} gradientUnits="userSpaceOnUse" cx={C.x} cy="44" r="215" gradientTransform={`translate(${C.x} 44) scale(1 .78) translate(${-C.x} -44)`}>
+      <stop stop-color="#ffffff" stop-opacity=".9" /><stop offset=".45" stop-color="#ffffff" stop-opacity=".5" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <mask id={`${p}-domo`} maskUnits="userSpaceOnUse" x="-8" y="-8" width={W + 16} height={H + 16}>
+      <rect x="-8" y="-8" width={W + 16} height={H + 16} fill={`url(#${p}-some)`} />
+    </mask>
+    <linearGradient id={`${p}-horizonte`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".3" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id={`${p}-luz`} gradientUnits="userSpaceOnUse" cx={centro.x} cy={centro.y - 14} r="120">
+      <stop stop-color="#ffffff" stop-opacity=".11" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <clipPath id={`${p}-globo`}><circle cx={C.x} cy={C.y} r={R} /></clipPath>
+    {[['#2c2c2c', '#181818'], ['#262626', '#161616'], ['#1f1f1f', '#131313']].map(([a, b], i) => (
+      <linearGradient id={`${p}-no-${i}`} x1="0" y1="0" x2="0" y2="1"><stop stop-color={a} /><stop offset="1" stop-color={b} /></linearGradient>
+    ))}
+    <radialGradient id={`${p}-halo`}>
+      <stop stop-color="#FFD103" stop-opacity=".3" /><stop offset="1" stop-color="#FFD103" stop-opacity="0" />
+    </radialGradient>
+    <filter id={`${p}-apoio`} x="-60%" y="-60%" width="220%" height="260%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity=".65" />
+    </filter>
+  </defs>
+
+  {/* O mercado: a calota de um globo de pontos, com a luz do horizonte. */}
+  <circle cx={centro.x} cy={centro.y - 14} r="120" fill={`url(#${p}-luz)`} clip-path={`url(#${p}-globo)`} />
+  <path d={pontos.join('')} class="posic__pontos" mask={`url(#${p}-domo)`} />
+  <path d={silhueta} stroke={`url(#${p}-horizonte)`} />
+
+  {/* Concorrentes. */}
+  {concorrentes.map(({ letra, x, y, r, plano }) => (
+    <g filter={`url(#${p}-apoio)`}>
+      <circle cx={x} cy={y} r={r} fill={`url(#${p}-no-${plano})`} stroke={`url(#${p}-fio)`} />
+      <text x={x} y={y + r * 0.26} text-anchor="middle" class:list={['posic__letra', `posic__letra--${plano}`]} style={`font-size:${(r * 0.72).toFixed(1)}px`}>{letra}</text>
+    </g>
+  ))}
+
+  {/* A clínica do cliente, no centro, com moldura, cruz e etiqueta. */}
+  <circle cx={centro.x} cy={centro.y} r={centro.r + 7} class="posic__moldura" />
+  <g filter={`url(#${p}-apoio)`}>
+    <circle cx={centro.x} cy={centro.y} r={centro.r} fill={`url(#${p}-no-0)`} stroke={`url(#${p}-fio)`} />
+  </g>
+  <path d={`M${centro.x} ${centro.y - 7.5}v15M${centro.x - 7.5} ${centro.y}h15`} class="posic__cruz" />
+  <g transform={`translate(${centro.x - E.w / 2} ${centro.y + centro.r + 13})`}>
+    <rect y="3" width={E.w} height={E.h} rx={E.h / 2} fill="#000000" filter={`url(#${p}-apoio)`} opacity=".7" />
+    <rect width={E.w} height={E.h} rx={E.h / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+    <circle cx="16" cy={E.h / 2} r="9" fill={`url(#${p}-halo)`} />
+    <circle cx="16" cy={E.h / 2} r="2.8" class="a-destaque" />
+    <text x="27" y={E.h / 2 + 4.2} class="posic__etiqueta">Sua clínica</text>
+  </g>
+</svg>
+
+<style>
+  .posic { height: auto; }
+  .posic__pontos { stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; }
+  .posic__letra { font-weight: 500; fill: #a3a39e; }
+  .posic__letra--1 { fill: #8a8a85; }
+  .posic__letra--2 { fill: #6f6f6b; }
+  .posic__moldura { fill: #ffffff; fill-opacity: .035; stroke: #ffffff; stroke-opacity: .1; }
+  .posic__cruz { stroke: #f2f2ee; stroke-width: 4.5; stroke-linecap: round; }
+  .posic__etiqueta { font-size: 12px; font-weight: 500; fill: #f2f2ee; letter-spacing: -.005em; }
+</style>

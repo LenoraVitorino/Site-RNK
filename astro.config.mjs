@@ -40,6 +40,14 @@ export default defineConfig({
   vite: {
     define: { __RAIZ__: JSON.stringify(raiz) },
 
+    // O fundo 3D importa estas bibliotecas por import dinâmico, depois da
+    // carga. Sem listá-las aqui, o Vite só as descobre nessa hora, reotimiza
+    // e responde 504 ("Outdated Optimize Dep"): no servidor local o fundo
+    // sumia depois de reiniciar com --force ou de um build (02/10/2026).
+    optimizeDeps: {
+      include: ['three', 'three/addons/loaders/GLTFLoader.js', 'three/addons/libs/meshopt_decoder.module.js', 'postprocessing'],
+    },
+
     server: {
       // O Vite recusa requisição cujo cabeçalho Host ele não conhece — é uma
       // proteção contra rebinding de DNS, não um capricho. O túnel chega com o

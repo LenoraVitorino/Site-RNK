@@ -1,31 +1,33 @@
 ---
 /**
- * Composição Solutions: título fixo e ganhos em cards ilustrados. As duas
- * versões mostram os sete ganhos (28/09/2026, Lenora: "volte com todas as
- * opções que tinha"); a do estúdio tinha ficado só com quatro desde 26/09.
+ * O que muda na sua clínica (02/10/2026). Cartões de vidro desfocado sobre
+ * o fundo animado (aprovado: "manter essa estética ficou foda"), numa
+ * composição da referência "Business Goals": título em cima, em duas linhas,
+ * e quatro colunas de cartões quase quadrados em diagrama, uns tocando os
+ * outros pelas quinas (X X · X / · · X · / X X · X; "deixa alguns um na
+ * ponta do outro"). O cartão de destaque com o número saiu. Ícone fino em anel, título e texto
+ * embaixo. A grade se constrói ao entrar (referência Tiwis, 0:15–0:16).
+ * Na copy original cada cartão traz a pergunta de dor do briefing (uma
+ * frase só) no lugar do ganho; as duas listas casam na mesma ordem.
  */
-import ArteBeneficio from './ArteBeneficio.astro';
 import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 
-const itens = perguntas;
-const entra = copyLiteral ? '' : 'entra';
-
+/* Ícones Renke, um por ganho (versão em cor: traço claro, losango em amarelo). */
+const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
 ---
-<div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura operacao operacao-editorial" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
-  <div class="container operacao__grade">
-    <div class="operacao__texto">
-
+<section class="secao ganhos" id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
+  <div class="container">
+    <header class="ganhos__cabeca">
       {copyLiteral ? (
         <h2 class="ancora operacao__titulo" id="perguntas-titulo">
           Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
           <strong>Mas e com o seu negócio?</strong>
         </h2>
       ) : (
-        <!-- A frase do print da Lenora (19/09), em duas linhas, com a tinta
-             palavra a palavra do Protocolo Revena. -->
         <>
           <Selo class="cabeca-dobra__selo">O que muda na sua clínica</Selo>
           <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
@@ -38,18 +40,41 @@ const entra = copyLiteral ? '' : 'entra';
           <p class="cabeca-dobra__apoio">Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.</p>
         </>
       )}
+    </header>
 
-    </div>
-
-    <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
-      {itens.map((p, i) => (
-        <li class:list={['operacao__cartao', entra]} style={`--i:${i}`}>
-          <h3 class="operacao__nome">{p.titulo}</h3>
-          <p class="operacao__texto-item">{p.texto}</p>
-          <div class="operacao__ilustracao"><ArteBeneficio tipo={i} /></div>
+    <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
+      {perguntas.map((p, i) => (
+        <li class:list={['ganhos__cartao', `ganhos__cartao--${i + 1}`, { 'ganhos__cartao--pergunta': copyLiteral }]} style={`--i:${i}`}>
+          <span class="ganhos__anel" aria-hidden="true">
+            <IconeRenke nome={icones[i]} size={22} class="ganhos__icone" />
+          </span>
+          <div class="ganhos__corpo">
+            {copyLiteral ? (
+              <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
+            ) : (
+              <>
+                <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
+                <p class="ganhos__texto"><span>{p.texto}</span></p>
+              </>
+            )}
+          </div>
         </li>
       ))}
     </ol>
   </div>
 </section>
-</div>
+
+<script>
+  /* A grade se constrói uma vez, quando um quarto dela entra na tela. */
+  const grade = document.querySelector<HTMLElement>('[data-ganhos-grade]');
+  if (grade) {
+    const construir = () => grade.classList.add('ganhos__grade--construida');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) construir();
+    else {
+      const obs = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) { construir(); obs.disconnect(); }
+      }, { threshold: .25 });
+      obs.observe(grade);
+    }
+  }
+</script>

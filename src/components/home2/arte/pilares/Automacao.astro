@@ -1,233 +1,106 @@
 ---
 /**
- * Automatizamos o seu atendimento: as mensagens automáticas de uma
- * "Avaliação facial", numa janela que segue além da borda de baixo. A
- * consulta (qui, 14:00, amanhã) divide a lista: antes dela, a confirmação
- * e o lembrete já saíram, com o duplo visto e a hora do envio; depois dela,
- * a pesquisa, a avaliação no Google e o convite para retorno esperam a vez,
- * um tom abaixo, e o último se apaga na borda. Linhas de um nome só, sem a
- * regra embaixo (Lenora, 29/09: "mais soft, ficou muito acumulada as
- * infos"); a faixa da consulta tem mais destaque, com o "amanhã" numa
- * pílula. O lembrete acabou de sair: por cima da janela, o aviso "Lembrete
- * enviado", ao lado das linhas que ainda vão sair, sem cobrir texto. Em
- * laço, a cena volta um passo: o interruptor "Automático" desliga, liga de
- * novo, os envios ganham o visto em cascata e o aviso sobe. Pose estática
- * = pose final; o movimento só parte dela.
+ * Automatizamos o seu atendimento (01/10/2026, refeita): o lembrete da
+ * consulta acabou de sair sozinho. Em cima, a mensagem enviada, num cartão
+ * flutuante; embaixo, a sequência em pílulas ligadas por um fio: a
+ * confirmação já saiu, o lembrete é a etapa atual e a pesquisa espera a
+ * vez, um tom abaixo. O fio é contínuo até a etapa atual e tracejado depois
+ * dela, e segue além da pesquisa até se apagar: a sequência continua.
+ * Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
+ *
+ * A cena ocupa x 24 a 372 e y 4 a 130 do viewBox de 400 × 300, e não se
+ * move: o bento já tem o gesto do CRM. O amarelo fica no visto duplo da
+ * mensagem e no ponto da etapa atual.
  */
 interface Props { p: string }
 const { p } = Astro.props;
 
-/* Janela: canto em (24, 32), como a do CRM, 328 de largura, sai por baixo. Cabeçalho de
-   44; linhas de 40 com ícone de 16 em x 40, texto em x 68 e o estado com a
-   ponta direita em x 336. A faixa da consulta (32) separa o antes do
-   depois. A última linha cruza a borda de baixo e se apaga nela. */
-const W = { x: 24, y: 32, w: 328 };
-const DIR = W.x + W.w - 16;
-const HY = W.y + 27;
-const L0 = W.y + 44, LH = 40, FAIXA = 32;
-type Linha = { titulo: string; icone: string; enviada?: string; agora?: boolean; corte?: boolean };
-const antes: Linha[] = [
-  { titulo: 'Confirmação', icone: 'confirmacao', enviada: 'seg, 09:00' },
-  { titulo: 'Lembrete', icone: 'lembrete', enviada: 'agora', agora: true },
+/* Mensagem: 348 × 80 a partir de (24, 4). */
+const M = { x: 24, y: 4, w: 348, h: 80 };
+const DIR = M.x + M.w - 16;
+/* Sequência: pílulas de 30 em y 100, com vão de 16. Largura do nome em
+   Inter 12 / 450 (medida no navegador); 28 antes do nome e 13 depois. */
+const PY = 100, PH = 30, VAO = 16;
+const etapas = [
+  { nome: 'Confirmação', t: 73, estado: 'feita' },
+  { nome: 'Lembrete', t: 53.5, estado: 'atual' },
+  { nome: 'Pesquisa', t: 51, estado: 'depois' },
 ];
-const depois: Linha[] = [
-  { titulo: 'Pesquisa de satisfação', icone: 'pesquisa' },
-  { titulo: 'Avaliação no Google', icone: 'avaliacao' },
-  { titulo: 'Convite para retorno', icone: 'retorno', corte: true },
-];
-const FY = L0 + antes.length * LH;
-const linhas = [
-  ...antes.map((l, i) => ({ ...l, y: L0 + i * LH })),
-  ...depois.map((l, i) => ({ ...l, y: FY + FAIXA + i * LH })),
-];
-/* Interruptor 28 × 16 com a ponta direita em x 336, centrado na altura
-   média do rótulo; o botão anda 12. */
-const TX = DIR - 28, TY = HY - 12.5;
-/* Aviso: 176 × 46, sai 32 pela direita da janela, sobre o lado vazio das
-   linhas que ainda vão sair, sem cobrir texto. */
-const T = { x: 208, y: 240, w: 176, h: 46 };
-/* Pílula do "amanhã" (Inter 11, 38 de largura), com a ponta em x 336. */
-const PW = 56;
+let px = M.x;
+const pilulas = etapas.map((e) => { const w = Math.round(28 + e.t + 13); const x = px; px += w + VAO; return { ...e, x, w }; });
+const atual = pilulas[1];
+const CY = PY + PH / 2;
+const AX = atual.x + atual.w / 2;
 ---
 <g class="automacao">
   <defs>
-    {/* A última linha se apaga na borda de baixo: a lista continua. */}
-    <linearGradient id={`${p}-apaga`} gradientUnits="userSpaceOnUse" x1="0" y1="276" x2="0" y2="300">
-      <stop stop-color="#ffffff" stop-opacity=".62" /><stop offset="1" stop-color="#ffffff" stop-opacity=".06" />
+    {/* O fio se apaga antes da borda do cartão: a sequência continua. */}
+    <linearGradient id={`${p}-apaga`} gradientUnits="userSpaceOnUse" x1="360" y1="0" x2="400" y2="0">
+      <stop stop-color="#ffffff" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
     </linearGradient>
-    <mask id={`${p}-borda`} maskUnits="userSpaceOnUse" x="0" y="270" width="400" height="80">
-      <rect x="0" y="270" width="400" height="80" fill={`url(#${p}-apaga)`} />
+    <mask id={`${p}-borda`} maskUnits="userSpaceOnUse" x="0" y="86" width="600" height="60">
+      <rect x="0" y="86" width="600" height="60" fill={`url(#${p}-apaga)`} />
     </mask>
+    <radialGradient id={`${p}-luz`} gradientUnits="userSpaceOnUse" cx="90" cy="4" r="240">
+      <stop stop-color="#ffffff" stop-opacity=".07" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id={`${p}-halo`}>
+      <stop stop-color="#FFD103" stop-opacity=".3" /><stop offset="1" stop-color="#FFD103" stop-opacity="0" />
+    </radialGradient>
   </defs>
 
-  {/* Janela, recortada pela borda de baixo. */}
-  <rect x={W.x} y={W.y} width={W.w} height="320" rx="16" fill={`url(#${p}-sup)`} stroke={`url(#${p}-fio)`} />
-  <rect x={W.x + 16} y={W.y + 0.5} width="240" height="1" fill={`url(#${p}-fio-h)`} />
-  <text x="40" y={HY} class="automacao__titulo">Avaliação facial</text>
-
-  {/* Interruptor "Automático", ligado. */}
-  <text x={TX - 8} y={HY} text-anchor="end" class="automacao__chave">Automático</text>
-  <rect x={TX} y={TY} width="28" height="16" rx="8" class="automacao__trilho" />
-  <rect x={TX} y={TY} width="28" height="16" rx="8" class="automacao__trilho-ligado" />
-  <g class="automacao__botao">
-    <circle cx={TX + 20} cy={TY + 8} r="6" class="automacao__botao-desligado" />
-    <circle cx={TX + 20} cy={TY + 8} r="6" class="automacao__botao-ligado" />
-  </g>
-  <rect x={W.x} y={L0} width={W.w} height="1" class="automacao__divisa" />
-
-  {/* A consulta divide a lista em antes e depois. */}
-  <rect x={W.x + 0.5} y={FY} width={W.w - 1} height={FAIXA} class="automacao__faixa" />
-  <rect x={W.x} y={FY} width={W.w} height="1" class="automacao__divisa" />
-  <rect x={W.x} y={FY + FAIXA} width={W.w} height="1" class="automacao__divisa" />
-  {/* Marco da consulta na coluna dos ícones: anel com miolo. */}
-  <circle cx="48" cy={FY + 16} r="4.5" class="automacao__marco" />
-  <circle cx="48" cy={FY + 16} r="1.8" class="automacao__marco-miolo" />
-  <text x="68" y={FY + 20.5} class="automacao__consulta">Consulta</text>
-  <text x="134" y={FY + 20.5} class="automacao__consulta-quando">qui, 14:00</text>
-  <rect x={DIR - PW} y={FY + 6} width={PW} height="20" rx="10" class="automacao__pilula" />
-  <text x={DIR - PW / 2} y={FY + 20} text-anchor="middle" class="automacao__pilula-texto">amanhã</text>
-
-  {/* Linhas: o que sai sozinho, só com o nome. */}
-  {linhas.map(({ titulo, icone, enviada, agora, corte, y }, i) => (
-    <g mask={corte ? `url(#${p}-borda)` : undefined} class:list={{ 'automacao__depois': !enviada }}>
-      {i === 1 || i >= 3 ? <rect x="68" y={y} width={W.x + W.w - 68} height="1" class="automacao__divisa" /> : null}
-      <g class="a-icone automacao__icone" transform={`translate(40 ${y + 12}) scale(.6667)`}>
-        {icone === 'confirmacao' && <>
-          <rect x="3" y="4" width="18" height="18" rx="2" />
-          <path d="M16 2v4M8 2v4M3 10h18" />
-          <path d="m9 16 2 2 4-4" />
+  {/* Sequência: o fio por trás e as pílulas por cima. */}
+  <g mask={`url(#${p}-borda)`}>
+    <path d={`M${pilulas[0].x + pilulas[0].w} ${CY}H${atual.x}`} class="automacao__fio" />
+    <path d={`M${atual.x + atual.w} ${CY}H404`} class="automacao__fio automacao__fio--depois" />
+    {pilulas.map(({ nome, estado, x, w }) => (
+      <g class={`automacao__etapa automacao__etapa--${estado}`}>
+        <rect x={x} y={PY} width={w} height={PH} rx={PH / 2} fill={`url(#${p}-${estado === 'atual' ? 'alto' : 'sup'})`} stroke={`url(#${p}-fio)`} />
+        {estado === 'feita' && <path d={`M${x + 12} ${CY + 0.3}l2.4 2.4l4.6-5`} class="automacao__feito" />}
+        {estado === 'atual' && <>
+          <circle cx={x + 16} cy={CY} r="10" fill={`url(#${p}-halo)`} />
+          <circle cx={x + 16} cy={CY} r="2.8" class="a-destaque" />
         </>}
-        {icone === 'lembrete' && <>
-          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-        </>}
-        {icone === 'pesquisa' && <>
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          <path d="M8 8h8M8 12h5" />
-        </>}
-        {icone === 'avaliacao' && <path d="M11.5 2.3a.5.5 0 0 1 1 0l2.3 4.7a2.1 2.1 0 0 0 1.6 1.2l5.2.7a.5.5 0 0 1 .3.9l-3.8 3.7a2.1 2.1 0 0 0-.6 1.9l.9 5.1a.5.5 0 0 1-.8.6l-4.6-2.4a2.1 2.1 0 0 0-2 0L6.4 21a.5.5 0 0 1-.8-.6l.9-5.1a2.1 2.1 0 0 0-.6-1.9L2.2 9.8a.5.5 0 0 1 .3-.9l5.2-.8a2.1 2.1 0 0 0 1.6-1.2z" />}
-        {icone === 'retorno' && <>
-          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
-          <path d="M3 3v5h5" />
-        </>}
+        {estado === 'depois' && <circle cx={x + 16} cy={CY} r="2.8" class="automacao__espera" />}
+        <text x={x + 28} y={CY + 4.2} class="automacao__nome">{nome}</text>
       </g>
-      <text x="68" y={y + 24.5} class:list={['automacao__nome', { 'automacao__nome--depois': !enviada }]}>{titulo}</text>
-      {enviada && <g class={`automacao__envio automacao__envio--${i + 1}`}>
-        <text x={DIR - 16} y={y + 24.5} text-anchor="end" class:list={['automacao__quando', { 'automacao__quando--agora': agora }]}>{enviada}</text>
-        <path
-          class:list={['automacao__visto', { 'automacao__visto--agora': agora }]}
-          d={`M${DIR - 10.1} ${y + 21}l2.4 2.4l4.6-5.2M${DIR - 5.1} ${y + 22.9}l.5.5l4.6-5.2`}
-          pathLength="1"
-        />
-      </g>}
-    </g>
-  ))}
-
-  {/* Aviso "Lembrete enviado", por cima da janela, com a sombra. O visto
-      amarelo é o único detalhe de cor da cena. */}
-  <g class="automacao__aviso">
-    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill="#000000" filter={`url(#${p}-sombra)`} />
-    <rect x={T.x} y={T.y} width={T.w} height={T.h} rx="10" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <rect x={T.x + 20} y={T.y + 0.5} width={T.w - 40} height="1" fill={`url(#${p}-fio-h)`} />
-    <circle cx={T.x + 22} cy={T.y + 23} r="8.5" class="automacao__aviso-anel" />
-    <path d={`M${T.x + 18.2} ${T.y + 23.2}l2.6 2.6l5-5.4`} class="a-destaque-traco automacao__aviso-visto" />
-    <text x={T.x + 40} y={T.y + 20} class="automacao__aviso-nome">Lembrete enviado</text>
-    <text x={T.x + 40} y={T.y + 35} class="automacao__quando">via WhatsApp</text>
+    ))}
   </g>
+
+  {/* A mensagem sai da etapa atual. */}
+  <path d={`M${AX} ${M.y + M.h}V${PY}`} class="automacao__haste" />
+  <circle cx={AX} cy={PY} r="2.2" class="automacao__haste-ponta" />
+
+  {/* Mensagem enviada, flutuando sobre a cena. */}
+  <rect x={M.x} y={M.y + 4} width={M.w} height={M.h} rx="14" fill="#000000" filter={`url(#${p}-sombra)`} opacity=".8" />
+  <rect x={M.x} y={M.y} width={M.w} height={M.h} rx="14" fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
+  <rect x={M.x} y={M.y} width={M.w} height={M.h} rx="14" fill={`url(#${p}-luz)`} />
+  <rect x={M.x + 24} y={M.y + 0.5} width={M.w - 48} height="1" fill={`url(#${p}-fio-h)`} />
+  <path class="a-icone automacao__icone" transform={`translate(${M.x + 16} ${M.y + 12}) scale(.625)`} d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" />
+  <text x={M.x + 39} y={M.y + 24}><tspan class="automacao__titulo">Lembrete</tspan><tspan dx="8" class="automacao__canal">WhatsApp</tspan></text>
+  <text x={DIR} y={M.y + 24} text-anchor="end" class="automacao__quando">agora</text>
+  <text x={M.x + 16} y={M.y + 47} class="automacao__texto">Sua avaliação facial é amanhã, às 14:00.</text>
+  <text x={M.x + 16} y={M.y + 64} class="automacao__texto">Podemos confirmar a sua presença?</text>
+  {/* Visto duplo: entregue e lido. O detalhe de cor da mensagem. */}
+  <path d={`M${DIR - 12.6} ${M.y + 60.5}l2.4 2.4l4.6-5.2M${DIR - 7.6} ${M.y + 62.4}l.5.5l4.6-5.2`} class="a-destaque-traco automacao__visto" />
 </g>
 
 <style>
-  .automacao__titulo { font-size: 13.5px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .automacao__quando { font-size: 11px; fill: #8a8a85; font-variant-numeric: tabular-nums; }
-  .automacao__quando--agora { fill: #d6d6d1; }
-  .automacao__chave { font-size: 12.5px; fill: #b9b9b4; letter-spacing: -.005em; }
-  .automacao__trilho { fill: #ffffff; fill-opacity: .06; stroke: #ffffff; stroke-opacity: .1; }
-  .automacao__trilho-ligado { fill: #ffffff; fill-opacity: .2; stroke: #ffffff; stroke-opacity: .16; }
-  .automacao__botao-desligado { fill: #6f6f6b; opacity: 0; }
-  .automacao__botao-ligado { fill: #ecece8; }
-  .automacao__divisa { fill: #ffffff; fill-opacity: .06; }
-  .automacao__faixa { fill: #ffffff; fill-opacity: .045; }
-  .automacao__consulta { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  .automacao__consulta-quando { font-size: 12px; fill: #b9b9b4; font-variant-numeric: tabular-nums; }
-  .automacao__pilula { fill: #ffffff; fill-opacity: .06; stroke: #ffffff; stroke-opacity: .14; }
-  .automacao__pilula-texto { font-size: 11px; font-weight: 500; fill: #d6d6d1; }
-  .automacao .automacao__icone { stroke: #8a8a85; stroke-width: 2.1; }
-  .automacao__marco { fill: none; stroke: #ecece8; stroke-width: 1.2; }
-  .automacao__marco-miolo { fill: #ecece8; }
-  .automacao__nome { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
-  /* O que ainda vai sair (depois da consulta) fica um tom abaixo. */
-  .automacao__nome--depois { fill: #b9b9b4; }
-  .automacao .automacao__depois .automacao__icone { stroke: #6f6f6b; }
-  .automacao__visto {
-    fill: none; stroke: #8a8a85; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 1; stroke-dashoffset: 0;
-  }
-  .automacao__visto--agora { stroke: #ecece8; }
-  .automacao__aviso-anel { fill: #ffffff; fill-opacity: .04; stroke: #ffffff; stroke-opacity: .14; }
-  .automacao .automacao__aviso-visto { stroke-width: 1.5; }
-  .automacao__aviso-nome { font-size: 13px; font-weight: 500; fill: #ecece8; letter-spacing: -.01em; }
+  .automacao__titulo { font-size: 12.5px; font-weight: 500; fill: #f2f2ee; letter-spacing: -.01em; }
+  .automacao__canal { font-size: 11.5px; fill: #8a8a85; }
+  .automacao__quando { font-size: 11px; fill: #8a8a85; }
+  .automacao__texto { font-size: 12px; fill: #c9c9c4; letter-spacing: -.005em; }
+  .automacao .automacao__icone { stroke: #b9b9b4; stroke-width: 2.2; }
+  .automacao .automacao__visto { stroke-width: 1.4; }
 
-  /* Movimento, em laço de 12 s (tempos do ciclo):
-     0–0,6 s   repouso na pose final;
-     0,6–1,0   a cena volta um passo: somem o aviso e os envios;
-     1,0–1,45  o interruptor desliza para desligado;
-     2,2–2,65  o interruptor liga de novo;
-     2,9–3,8   os envios voltam em cascata, com o visto se desenhando;
-     4,0–4,8   o aviso "Lembrete enviado" sobe 8, com fade.
-     O resto (≈ 65% do ciclo) é repouso. O 0% de cada keyframe é a pose
-     final. */
-  .automacao__botao, .automacao__botao-ligado, .automacao__botao-desligado,
-  .automacao__trilho-ligado, .automacao__envio, .automacao__visto, .automacao__aviso {
-    animation-duration: 12s; animation-delay: .4s; animation-iteration-count: infinite;
-    animation-timing-function: var(--a-vai-vem); animation-fill-mode: both;
-  }
-  .automacao__botao { animation-name: automacao-botao; }
-  .automacao__botao-ligado, .automacao__trilho-ligado { animation-name: automacao-ligado; }
-  .automacao__botao-desligado { animation-name: automacao-desligado; }
-  .automacao__envio--1 { animation-name: automacao-envio-1; }
-  .automacao__envio--2 { animation-name: automacao-envio-2; }
-  .automacao__envio--1 .automacao__visto { animation-name: automacao-visto-1; }
-  .automacao__envio--2 .automacao__visto { animation-name: automacao-visto-2; }
-  .automacao__aviso { animation-name: automacao-aviso; }
+  .automacao__fio { stroke: #ffffff; stroke-opacity: .26; }
+  .automacao__fio--depois { stroke-opacity: .18; stroke-dasharray: 2 4; }
+  .automacao__haste { stroke: #ffffff; stroke-opacity: .26; }
+  .automacao__haste-ponta { fill: #d6d6d1; }
 
-  @keyframes automacao-botao {
-    0%, 8.33% { transform: translateX(0); }
-    12.08%, 18.33% { transform: translateX(-12px); }
-    22.08%, 100% { transform: translateX(0); }
-  }
-  @keyframes automacao-ligado {
-    0%, 8.33% { opacity: 1; }
-    12.08%, 18.33% { opacity: 0; }
-    22.08%, 100% { opacity: 1; }
-  }
-  @keyframes automacao-desligado {
-    0%, 8.33% { opacity: 0; }
-    12.08%, 18.33% { opacity: 1; }
-    22.08%, 100% { opacity: 0; }
-  }
-  @keyframes automacao-envio-1 {
-    0%, 5% { opacity: 1; }
-    8.33%, 24.17% { opacity: 0; }
-    26.67%, 100% { opacity: 1; }
-  }
-  @keyframes automacao-envio-2 {
-    0%, 5% { opacity: 1; }
-    8.33%, 27.5% { opacity: 0; }
-    30%, 100% { opacity: 1; }
-  }
-  @keyframes automacao-visto-1 {
-    0%, 8.33% { stroke-dashoffset: 0; }
-    8.34%, 24.17% { stroke-dashoffset: 1; }
-    28.33%, 100% { stroke-dashoffset: 0; }
-  }
-  @keyframes automacao-visto-2 {
-    0%, 8.33% { stroke-dashoffset: 0; }
-    8.34%, 27.5% { stroke-dashoffset: 1; }
-    31.67%, 100% { stroke-dashoffset: 0; }
-  }
-  @keyframes automacao-aviso {
-    0%, 5% { opacity: 1; transform: translateY(0); }
-    8.33%, 33.33% { opacity: 0; transform: translateY(8px); }
-    40%, 100% { opacity: 1; transform: translateY(0); }
-  }
+  .automacao__nome { font-size: 12px; font-weight: 450; fill: #b9b9b4; letter-spacing: -.005em; }
+  .automacao__etapa--atual .automacao__nome { fill: #f2f2ee; }
+  .automacao__etapa--depois .automacao__nome { fill: #8a8a85; }
+  .automacao__feito { stroke: #8a8a85; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .automacao__espera { stroke: #ffffff; stroke-opacity: .3; }
 </style>

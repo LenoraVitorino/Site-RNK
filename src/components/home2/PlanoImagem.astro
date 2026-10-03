@@ -1,0 +1,14 @@
+---
+interface Props { plano: string }
+const { plano } = Astro.props;
+const imagens: Record<string, string> = {
+  start: 'seringa', run: 'maos', scale: 'tesoura', core: 'instrumentos-dentarios', full: 'protese-dentaria',
+};
+const foto = `/imagens/planos-editoriais/${imagens[plano] ?? 'seringa'}.webp`;
+---
+<div class:list={['plano-editorial', `plano-editorial--${plano}`]} aria-hidden="true">
+  <div class="plano-editorial__recorte" style={`--foto: url('${foto}')`}>
+    <img class="plano-editorial__foto" src={foto} alt="" width="1254" height="1254" loading="lazy" decoding="async" />
+  </div>
+  <span class="plano-editorial__simbolo" style={`--simbolo: url('/icones/plano-${plano}-dark.svg')`}></span>
+</div>

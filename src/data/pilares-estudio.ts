@@ -2,7 +2,7 @@
 export const pilaresEstudio = [
   {
     titulo: 'Vamos além do tráfego pago',
-    texto: 'Conectamos marketing ao comercial para lead virar paciente de verdade.',
+    texto: 'Conectamos marketing ao comercial para lead virar paciente de verdade, não só um número em relatório.',
   },
   {
     titulo: 'Implementamos um CRM',
