@@ -5,9 +5,9 @@
     própria dobra como painel claro translúcido, com o fundo animado
     desfocado por trás e os cantos em chanfro, igual à dobra do método. As molduras de foto saíram:
     a referência não tem foto e elas estavam vazias. Valores e textos vêm
-    da fonte compartilhada. */
-import { resultados, hero } from '../../data/home';
-import Botao from '../ui/Botao.astro';
+    da fonte compartilhada. O botão do fim saiu e os números contam de zero
+    até o valor quando a linha entra na tela (02/10). */
+import { resultados } from '../../data/home';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 
@@ -24,10 +24,45 @@ import { copyLiteral } from '../../data/versao';
         <li class="resultado-linha entra">
           <h3 class="resultado-linha__area">{r.especialidade}</h3>
           <p class="resultado-linha__texto">{r.texto}</p>
-          <p class="resultado-linha__numero num">{r.numero}</p>
+          {(() => {
+            const [, antes, valor, depois] = r.numero.match(/^(.*?)(\d+)(.*)$/) ?? ['', '', r.numero, ''];
+            return (
+              <p class="resultado-linha__numero num">
+                <span class="visually-hidden">{r.numero}</span>
+                <span class="resultado-linha__reserva" aria-hidden="true">{r.numero}</span>
+                <span class="resultado-linha__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
+              </p>
+            );
+          })()}
         </li>
       ))}
     </ol>
-    <div class="resultados-editoriais__rodape"><Botao href="/contato">{hero.cta}</Botao></div>
   </div>
 </section>
+
+<script>
+  /* Cada número conta de zero até o valor quando a linha entra na tela. */
+  const numeros = document.querySelectorAll<HTMLElement>('#resultados [data-contador]');
+  const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (numeros.length && !parado && 'IntersectionObserver' in window) {
+    const escrever = (el: HTMLElement, v: number) => { el.textContent = `${el.dataset.antes ?? ''}${v}${el.dataset.depois ?? ''}`; };
+    numeros.forEach((el) => escrever(el, 0));
+    const contar = (el: HTMLElement) => {
+      const alvo = Number(el.dataset.alvo), t0 = performance.now(), dur = 1600;
+      const passo = (agora: number) => {
+        const t = Math.min(1, (agora - t0) / dur);
+        escrever(el, Math.round(alvo * (1 - Math.pow(1 - t, 4))));
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+    const obs = new IntersectionObserver((entradas) => {
+      for (const e of entradas) {
+        if (!e.isIntersecting) continue;
+        contar(e.target as HTMLElement);
+        obs.unobserve(e.target);
+      }
+    }, { threshold: .6 });
+    numeros.forEach((el) => obs.observe(el));
+  }
+</script>
