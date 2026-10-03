@@ -9,7 +9,8 @@
  * Leva uma marca num quadrado escuro, também chanfrado, à esquerda (a
  * Lenora chegou a tirar esse quadrado em 02/10 e pediu de volta em
  * seguida: "volta com o detalhe interno do shape"). marca="revena" leva o
- * logo do Protocolo Revena; marca="estrela" (padrão), o ✦ amarelo.
+ * logo do Protocolo Revena; marca="estrela" (padrão), o ícone de destaque do conjunto Renke
+ * (losango duplo: contorno claro e losango amarelo no centro; até 02/10, o ✦).
  * tom="auto" (padrão) é escuro e fica claro dentro das superfícies claras
  * do site; "claro" e "escuro" forçam o tom.
  * Todos os selos têm a mesma espessura (Lenora, 02/10): 45px de altura e
@@ -25,9 +26,10 @@ interface Props {
   marca?: 'revena' | 'estrela';
 }
 const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = Astro.props;
+import IconeRenke from './IconeRenke.astro';
 ---
 <Tag class:list={['selo-revena', `selo-revena--${tom}`, classe]} id={id}>
-  <span class="selo-revena__marca" aria-hidden="true">{marca === 'revena' ? <LogoRevena /> : <span class="selo-revena__estrela">✦</span>}</span>
+  <span class="selo-revena__marca" aria-hidden="true">{marca === 'revena' ? <LogoRevena /> : <IconeRenke nome="brilho" size={17} class="selo-revena__estrela" />}</span>
   <span class="selo-revena__texto"><slot /></span>
 </Tag>
 
@@ -66,7 +68,7 @@ const { tag: Tag = 'p', id, class: classe, tom = 'auto', marca = 'estrela' } = A
   .selo-revena__marca::before { --c: 6.5px; inset: -2px; z-index: -2; background: var(--selo-anel); }
   .selo-revena__marca::after { --c: 5px; inset: 0; background: radial-gradient(circle at 35% 28%, #3a3a3a, #121212 72%); }
   .selo-revena__marca :global(svg) { width: 56%; height: 56%; }
-  .selo-revena__estrela { color: var(--destaque); font-size: 16px; line-height: 1; }
+  .selo-revena__marca :global(svg.selo-revena__estrela) { width: 17px; height: 17px; color: #f2f2ee; --icone-acento: var(--destaque); }
   /* No celular, um ponto a menos para a frase da hero caber numa linha. */
   @media (max-width: 479.98px) { .selo-revena { gap: 10px; padding-right: 16px; font-size: 14.5px; } }
   /* Algumas dobras definem a entrelinha dos parágrafos por id; o texto do selo mantém a dele. */

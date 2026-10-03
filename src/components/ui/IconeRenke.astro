@@ -4,11 +4,10 @@
  * currentColor; o destaque (traço ou losango) usa --icone-acento, que cai no
  * currentColor quando não definido. Ver src/data/icones-renke.ts.
  */
-import { ICONES_RENKE, type NomeIconeRenke, type IconeRenke } from '../../data/icones-renke';
+import { ICONES_RENKE, losango, type NomeIconeRenke, type IconeRenke } from '../../data/icones-renke';
 interface Props { nome: NomeIconeRenke; size?: number; class?: string; traco?: number }
 const { nome, size = 24, class: classe = '', traco = 1.5 } = Astro.props;
 const i: IconeRenke = ICONES_RENKE[nome];
-const losango = ([cx, cy, r]: [number, number, number]) => `M${cx} ${cy - r}L${cx + r} ${cy}L${cx} ${cy + r}L${cx - r} ${cy}Z`;
 ---
 <svg class:list={['icone-renke', classe]} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"
   stroke="currentColor" stroke-width={traco} stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt">

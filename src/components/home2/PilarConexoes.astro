@@ -13,16 +13,16 @@
 import '../../styles/ilustracoes.css';
 import Defs from './arte/Defs.astro';
 import Movimento from './arte/Movimento.astro';
+import { desenhoRenke, type NomeIconeRenke } from '../../data/icones-renke';
 
-/* Ícones no traço da Lucide, em grade de 24. */
-const ICONES: Record<string, string> = {
-  anuncios: 'm3 11 18-5v12L3 14v-3zM11.6 16.8a3 3 0 1 1-5.8-1.6',
-  instagram: 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zM16 11.4A4 4 0 1 1 12.6 8a4 4 0 0 1 3.4 3.4zM17.5 6.5h.01',
-  google: 'M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0zM21 21l-4.3-4.3',
-  atendimento: 'M7.9 20A9 9 0 1 0 4 16.1L2 22z',
-  agenda: 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM16 2v4M8 2v4M3 10h18',
-  consulta: 'M11 2v2M5 2v2M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1M8 15a6 6 0 0 0 12 0v-3M22 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',
-};
+/* Ícones do conjunto Renke (02/10/2026), em grade de 24; o Instagram segue
+   com o desenho da marca. */
+const RENKE: Record<string, NomeIconeRenke> = { anuncios: 'anuncios', google: 'google', atendimento: 'atendimento', agenda: 'agenda', consulta: 'consulta' };
+const INSTAGRAM = 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zM16 11.4A4 4 0 1 1 12.6 8a4 4 0 0 1 3.4 3.4zM17.5 6.5h.01';
+const ICONES: Record<string, { traco: string; pontos: string; marca?: boolean }> = Object.fromEntries([
+  ...Object.entries(RENKE).map(([k, n]) => [k, desenhoRenke(n)]),
+  ['instagram', { traco: INSTAGRAM, pontos: '', marca: true }],
+]);
 /* Largura de cada nome em Inter 13 / 450 (medida no navegador). */
 const NOMES = [
   { nome: 'Anúncios', icone: 'anuncios', t: 57 },
@@ -135,7 +135,10 @@ const cenas = [cena(false), cena(true)];
     {nos.map((n) => (
       <g class:list={['cx__no', { 'cx__no--fim': n.fim }]}>
         <rect x={n.x} y={n.y} width={n.w} height={n.h} rx={n.h / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-        {!alta && <path d={ICONES[n.icone]} class="a-icone cx__icone" transform={`translate(${n.x + 14} ${n.y + n.h / 2 - 8}) scale(.6667)`} />}
+        {!alta && <g transform={`translate(${n.x + 14} ${n.y + n.h / 2 - 8}) scale(.6667)`}>
+          <path d={ICONES[n.icone].traco} class:list={['a-icone', 'cx__icone', { 'cx__icone--renke': !ICONES[n.icone].marca }]} />
+          {ICONES[n.icone].pontos && <path d={ICONES[n.icone].pontos} class="cx__icone-ponto" />}
+        </g>}
         <text x={n.tx} y={n.y + n.h / 2 + corpo * 0.35} class="cx__nome" style={`font-size:${corpo}px`}>{n.nome}</text>
         {n.fim && <g transform={`translate(${n.x + n.w - (alta ? 17 : 20)} ${n.y + n.h / 2})`}>
           <circle r="15" fill={`url(#${p}-halo)`} class="cx__halo" />
@@ -182,6 +185,9 @@ const cenas = [cena(false), cena(true)];
   .cx__no--fim .cx__nome { fill: #f2f2ee; }
   .cx .cx__icone { stroke: #8f8f8a; stroke-width: 2; }
   .cx .cx__no--fim .cx__icone { stroke: #c9c9c4; }
+  .cx .cx__icone--renke { stroke-width: 2.25; stroke-linejoin: miter; stroke-linecap: butt; }
+  .cx .cx__icone-ponto { fill: #8f8f8a; stroke: none; }
+  .cx .cx__no--fim .cx__icone-ponto { fill: var(--destaque, #FFD103); }
   .cx__ponto { fill: #101010; stroke: #ffffff; stroke-opacity: .32; }
   .cx__ponto--aceso { fill: #d6d6d1; stroke-opacity: 0; }
   .cx__pendente { stroke: #ffffff; stroke-opacity: .3; opacity: 0; }

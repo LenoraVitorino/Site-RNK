@@ -88,3 +88,21 @@ export const ICONES_RENKE = {
 } satisfies Record<string, IconeRenke>;
 
 export type NomeIconeRenke = keyof typeof ICONES_RENKE;
+
+/** Losango cheio de raio r em (cx, cy). */
+export const losango = ([cx, cy, r]: [number, number, number]) => `M${cx} ${cy - r}L${cx + r} ${cy}L${cx} ${cy + r}L${cx - r} ${cy}Z`;
+
+/** O desenho de um ícone para SVGs próprios (ilustrações): o traço (base e
+ *  destaque juntos) e os losangos cheios. */
+export const desenhoRenke = (nome: NomeIconeRenke) => {
+  const i: IconeRenke = ICONES_RENKE[nome];
+  return { traco: i.base + (i.acento ?? ''), pontos: (i.pontos ?? []).map(losango).join('') };
+};
+
+/** Nome da Lucide → ícone Renke (o componente Icone desenha a versão Renke). */
+export const DA_LUCIDE: Record<string, NomeIconeRenke> = {
+  ArrowUpRight: 'seta-diagonal', ArrowRight: 'seta', ArrowDown: 'seta-baixo', ChevronRight: 'chevron-direita', ChevronDown: 'chevron-baixo',
+  Menu: 'menu', X: 'fechar', Plus: 'mais', Check: 'check', Play: 'play', Pause: 'pausa', VolumeX: 'mudo', Volume2: 'som',
+  Sparkles: 'brilho', Users: 'pessoas', BadgeCheck: 'verificado', TrendingUp: 'crescimento', Compass: 'bussola', Cpu: 'tecnologia',
+  Workflow: 'fluxo', Target: 'mira', Handshake: 'conexao', Layers: 'camadas',
+};
