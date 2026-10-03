@@ -1257,8 +1257,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .operacao__texto { position: sticky; top: calc(var(--altura-header) + 24px); min-width: 0; }
 .operacao__titulo { margin: 0; }
 /* Na coluna estreita a frase quebra onde precisar (a regra geral prende cada linha no desktop). */
-#perguntas .operacao__texto .ancora--revela { font-size: clamp(1.8rem, 2.7vw, 2.7rem); }
-#perguntas .operacao__texto .ancora__linha { white-space: normal; }
 .operacao__cartoes { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(12px, 1.2vw, 18px); }
 .operacao__cartao { display: grid; gap: 14px; padding: clamp(24px, 2.4vw, 36px); }
 .operacao__n { margin: 0; font-size: 12px; letter-spacing: .06em; color: var(--papel); }
@@ -1267,9 +1265,6 @@ a.botao:not(.botao--onda):hover::after { transform: translate(2px, -2px); }
 .operacao__foto { margin: 6px 0 4px; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: #0b0b0a; }
 .operacao__foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) brightness(.9); }
 .operacao__texto-item { margin: 0; max-width: 52ch; font-size: 15.5px; line-height: 1.65; color: rgb(242 242 238 / .74); }
-/* Na copy, a dobra entra presa na cortina: precisa caber numa tela. */
-.cortina > #perguntas { padding-block: clamp(56px, 9vh, 96px); }
-.cortina .operacao__texto { position: static; }
 @media (max-width: 899.98px) {
   .operacao__grade { grid-template-columns: 1fr; gap: 28px; }
   .operacao__texto { position: static; }

@@ -4,7 +4,6 @@ section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
 .home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
 .home-refinada .footer { position: relative; z-index: 1; background: var(--fundo, #000); }   /* preto, como o resto do site (Lenora, 02/10) */
-.home-refinada .cortina > #perguntas { background: #090907; }
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
 .secao-indice { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 56px; }
 .secao-indice > .rotulo { padding-top: 8px; }
@@ -184,7 +183,6 @@ section[id] { scroll-margin-top: 110px; }
   .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; margin: 0; font-size: 16px; }
   .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; }
 }
-.home-refinada .cortina > #perguntas { background: transparent; }
 
 
 
@@ -319,7 +317,6 @@ section[id] { scroll-margin-top: 110px; }
    de duas linhas. Nos Resultados, centrada. */
 :is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
 /* Espaçamento das cabeças (28/09): título um pouco mais aberto e o subtítulo mais afastado. */
-#perguntas .operacao__texto .operacao__titulo { line-height: 1.1; }
 #perguntas .cabeca-dobra__apoio { margin-top: clamp(24px, 2.4vw, 36px); }
 /* Onde a cabeça já tem gap próprio, a margem só completa os ~36px. */
 :is(#fale, #formulario, #academy-tools) .cabeca-dobra__selo { margin-bottom: 8px; }
@@ -343,7 +340,6 @@ section[id] { scroll-margin-top: 110px; }
   .resultados-editoriais .cabeca-dobra__apoio { max-width: none; white-space: nowrap; text-wrap: nowrap; }
 }
 /* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
-#perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
 
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
@@ -555,18 +551,6 @@ section[id] { scroll-margin-top: 110px; }
   [data-pilares] .feature-card h3 { font-size: 23px; }
 }
 
-/* Ganhos: duas colunas no tablet, como os resultados; na copy, com sete
-   ganhos, o último ocupa a linha inteira. */
-@media (min-width: 600px) and (max-width: 899.98px) {
-  #perguntas .operacao__cartoes { grid-template-columns: 1fr 1fr; gap: 20px; }
-  #perguntas .operacao__cartao:last-child:nth-child(odd) { grid-column: 1 / -1; }
-}
-/* No celular a ilustração do ganho ocupa a largura toda do cartão (entra no
-   recuo de 20px dos lados): as cenas já têm margem própria de ~48 unidades,
-   e os rótulos crescem uns 14%. */
-@media (max-width: 599.98px) {
-  #perguntas .operacao__ilustracao { width: calc(100% + 40px); margin-inline: -20px; }
-}
 
 /* Planos da copy: número em 12px, o piso de leitura. Sem foto ainda, o
    espaço reservado sai abaixo de 900px (eram cinco retângulos vazios
@@ -603,4 +587,57 @@ section[id] { scroll-margin-top: 110px; }
    "Conhecer Renke Academy" cabe numa linha dentro da caixa. */
 @media (max-width: 359.98px) {
   .ecossistema-editorial .produto__acao .botao__icone { display: none; }
+}
+
+/* ============================================================
+   O que muda na sua clínica (02/10/2026). Referência: dobra "Posture" da
+   Tiwis, com cartões de vidro desfocado sobre o fundo animado. A grade se
+   constrói em ~1 s quando entra na tela (Perguntas.astro): o cartão
+   aparece, o ícone cresce, título e texto sobem de dentro de uma máscara,
+   da esquerda para a direita.
+   ============================================================ */
+#perguntas.ganhos { padding-block: var(--esp-secao); }
+.ganhos__cabeca { max-width: 860px; margin-bottom: clamp(48px, 5vw, 80px); }
+.ganhos .operacao__titulo { margin: 0; }
+#perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; }
+.ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 24ch; }
+
+/* Quatro na primeira linha, três mais largos na segunda. */
+.ganhos__grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
+.ganhos__cartao { grid-column: span 3; }
+.ganhos__cartao:nth-child(n + 5) { grid-column: span 4; }
+
+.ganhos__cartao {
+  display: flex; flex-direction: column; justify-content: space-between; gap: 48px;
+  min-height: clamp(280px, 23vw, 340px); padding: clamp(24px, 2.2vw, 32px);
+  border: 1px solid rgb(255 255 255 / .09); border-radius: 14px;
+  background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
+  -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
+}
+.ganhos__icone { width: 30px; height: 30px; color: var(--destaque); }
+.ganhos__corpo { display: grid; gap: 14px; }
+.ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: var(--titulo-topico); line-height: 1.12; letter-spacing: -.03em; color: var(--papel); text-wrap: balance; }
+.ganhos__texto { margin: 0; max-width: 38ch; font-size: var(--corpo-topico); line-height: 1.55; color: rgb(242 242 238 / .68); text-wrap: pretty; }
+/* A máscara de onde título e texto sobem. */
+.ganhos__nome, .ganhos__texto { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.ganhos__nome > span, .ganhos__texto > span { display: block; }
+
+/* Construção (só com JS e movimento liberado). */
+@media (prefers-reduced-motion: no-preference) {
+  .js .ganhos__cartao { --d: calc(var(--i) * 70ms); opacity: 0; transition: opacity .9s var(--easing) var(--d); }
+  .js .ganhos__icone { opacity: 0; transform: scale(.4); transform-origin: 0 0; transition: opacity .6s var(--easing) calc(var(--d) + .2s), transform .8s var(--easing) calc(var(--d) + .2s); }
+  .js .ganhos__nome > span, .js .ganhos__texto > span { transform: translate3d(0, 105%, 0); transition: transform .9s var(--easing) calc(var(--d) + .38s); }
+  .js .ganhos__texto > span { transition-delay: calc(var(--d) + .55s); }
+  .js .ganhos__grade--construida .ganhos__cartao { opacity: 1; }
+  .js .ganhos__grade--construida .ganhos__icone { opacity: 1; transform: none; }
+  .js .ganhos__grade--construida :is(.ganhos__nome, .ganhos__texto) > span { transform: none; }
+}
+
+@media (max-width: 1099.98px) {
+  .ganhos__cartao, .ganhos__cartao:nth-child(n + 5) { grid-column: span 6; }
+  .ganhos__cartao:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 599.98px) {
+  .ganhos__grade { grid-template-columns: 1fr; }
+  .ganhos__cartao, .ganhos__cartao:nth-child(n + 5), .ganhos__cartao:last-child { grid-column: auto; min-height: 0; gap: 36px; }
 }

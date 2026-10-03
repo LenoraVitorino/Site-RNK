@@ -1,31 +1,45 @@
 ---
 /**
- * Composição Solutions: título fixo e ganhos em cards ilustrados. As duas
- * versões mostram os sete ganhos (28/09/2026, Lenora: "volte com todas as
- * opções que tinha"); a do estúdio tinha ficado só com quatro desde 26/09.
+ * O que muda na sua clínica (02/10/2026). Referência: a dobra "Posture" do
+ * site da Tiwis (vídeo da Lenora, 0:15–0:16): título no alto e cartões em
+ * fila com ícone fino em cima e título e texto embaixo, que se constroem em
+ * cerca de um segundo (fio, ícone, título, texto, da esquerda para a
+ * direita). Os cartões são de vidro desfocado, com o fundo animado
+ * aparecendo através (segunda referência dela). Sete ganhos: quatro na
+ * primeira linha e três mais largos na segunda.
+ * Substitui a pilha de cartões com o texto preso à esquerda.
  */
-import ArteBeneficio from './ArteBeneficio.astro';
 import Selo from '../ui/Selo.astro';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 
-const itens = perguntas;
-const entra = copyLiteral ? '' : 'entra';
-
+/* Ícones de traço fino (grade 24, estilo Lucide), um por ganho. */
+const icones = [
+  // Aquisição sob controle: mira
+  'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
+  // Mais conversão: funil
+  'M3 4h18l-7 8.5V19l-4 2v-8.5L3 4Z',
+  // Processos que funcionam: fluxo
+  'M4 3h6v6H4zM14 15h6v6h-6zM7 9v3a3 3 0 0 0 3 3h4',
+  // Investimento mais inteligente: gráfico de pizza
+  'M21 12A9 9 0 1 1 12 3v9h9ZM15 3.5A9 9 0 0 1 20.5 9H15V3.5Z',
+  // Decisões baseadas em dados: colunas
+  'M3 21h18M6 17v-5M11 17V7M16 17v-8M21 17V4',
+  // Crescimento replicável: camadas
+  'M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 17.5l9 5 9-5',
+  // Oportunidades de mercado: bússola
+  'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM15.5 8.5l-2 5-5 2 2-5 5-2Z',
+];
 ---
-<div class:list={[copyLiteral && 'cortina']}>
-<section class="secao secao--escura operacao operacao-editorial" id="perguntas" aria-labelledby="perguntas-titulo" data-operacao>
-  <div class="container operacao__grade">
-    <div class="operacao__texto">
-
+<section class="secao ganhos" id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
+  <div class="container">
+    <header class="ganhos__cabeca">
       {copyLiteral ? (
         <h2 class="ancora operacao__titulo" id="perguntas-titulo">
           Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
           <strong>Mas e com o seu negócio?</strong>
         </h2>
       ) : (
-        <!-- A frase do print da Lenora (19/09), em duas linhas, com a tinta
-             palavra a palavra do Protocolo Revena. -->
         <>
           <Selo class="cabeca-dobra__selo">O que muda na sua clínica</Selo>
           <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
@@ -38,18 +52,35 @@ const entra = copyLiteral ? '' : 'entra';
           <p class="cabeca-dobra__apoio">Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.</p>
         </>
       )}
+    </header>
 
-    </div>
-
-    <ol class="perguntas operacao__cartoes" aria-label="O que muda na sua clínica">
-      {itens.map((p, i) => (
-        <li class:list={['operacao__cartao', entra]} style={`--i:${i}`}>
-          <h3 class="operacao__nome">{p.titulo}</h3>
-          <p class="operacao__texto-item">{p.texto}</p>
-          <div class="operacao__ilustracao"><ArteBeneficio tipo={i} /></div>
+    <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
+      {perguntas.map((p, i) => (
+        <li class="ganhos__cartao" style={`--i:${i}`}>
+          <svg class="ganhos__icone" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <path d={icones[i]} stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div class="ganhos__corpo">
+            <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
+            <p class="ganhos__texto"><span>{p.texto}</span></p>
+          </div>
         </li>
       ))}
     </ol>
   </div>
 </section>
-</div>
+
+<script>
+  /* A grade se constrói uma vez, quando um quarto dela entra na tela. */
+  const grade = document.querySelector<HTMLElement>('[data-ganhos-grade]');
+  if (grade) {
+    const construir = () => grade.classList.add('ganhos__grade--construida');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) construir();
+    else {
+      const obs = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) { construir(); obs.disconnect(); }
+      }, { threshold: .25 });
+      obs.observe(grade);
+    }
+  }
+</script>
