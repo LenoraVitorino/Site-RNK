@@ -317,6 +317,9 @@ const itensMenu = menu.flatMap((item) => {
     while (n && n !== document.documentElement) {
       const dobra = !n.closest('a, button') && n.getBoundingClientRect().width >= minimo;
       if (!header.contains(n) && dobra) {
+        // Dobras de fundo translúcido (vidro claro) declaram o tom: data-tom.
+        const dica = (n as HTMLElement).dataset?.tom;
+        if (dica) return `header--${dica}`;
         const t = tomDeCor(getComputedStyle(n).backgroundColor);
         if (t) return t;
       }
