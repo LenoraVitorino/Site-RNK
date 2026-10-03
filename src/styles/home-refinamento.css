@@ -323,7 +323,10 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: var(--corpo-topico); color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
 .resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
-.resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; font-size: clamp(30px, 2.8vw, 44px); line-height: 1.12; text-wrap: balance; }   /* menor (02/10) */
+.resultados-editoriais__cabeca .titulo { max-width: none; margin: 0; font-size: clamp(30px, 2.8vw, 44px); line-height: 1.12; text-wrap: balance; }   /* menor (02/10) */
+/* Numa linha só a partir do tablet, com "operação tem estrutura" em médio (02/10). */
+@media (min-width: 900px) { .resultados-editoriais__cabeca .titulo { white-space: nowrap; } }
+.resultados-editoriais__enfase { font-weight: 500; }
 /* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
    de duas linhas. Nos Resultados, centrada. */
 :is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
