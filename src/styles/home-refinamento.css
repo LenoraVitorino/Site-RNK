@@ -603,8 +603,8 @@ section[id] { scroll-margin-top: 110px; }
 #perguntas .ganhos__cabeca .cabeca-dobra__apoio { max-width: none; }
 .ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 36ch; text-wrap: balance; }
 
-/* Composição da referência "Business Goals", igual: título em cima, quatro
-   colunas de cartões quase quadrados alternando com vãos. */
+/* Título em cima e quatro colunas de cartões quase quadrados, em diagrama:
+   pares lado a lado e cartões que se tocam pelas quinas. */
 .ganhos__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
 .ganhos__cartao {
   position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
@@ -624,15 +624,16 @@ section[id] { scroll-margin-top: 110px; }
 :is(.ganhos__nome, .ganhos__texto) > span { display: block; }
 
 @media (min-width: 1100px) {
-  /* Ritmo da referência: X X · X / · X X · / X X · · */
+  /* Diagrama (02/10, "deixa alguns um na ponta do outro"): X X · X /
+     · · X · / X X · X. O cartão do meio toca quatro pelas quinas. */
   .ganhos__cartao { aspect-ratio: 1; min-height: auto; }
   .ganhos__cartao--1 { grid-area: 1 / 1; }
   .ganhos__cartao--2 { grid-area: 1 / 2; }
   .ganhos__cartao--3 { grid-area: 1 / 4; }
-  .ganhos__cartao--4 { grid-area: 2 / 2; }
-  .ganhos__cartao--5 { grid-area: 2 / 3; }
-  .ganhos__cartao--6 { grid-area: 3 / 1; }
-  .ganhos__cartao--7 { grid-area: 3 / 2; }
+  .ganhos__cartao--4 { grid-area: 2 / 3; }
+  .ganhos__cartao--5 { grid-area: 3 / 1; }
+  .ganhos__cartao--6 { grid-area: 3 / 2; }
+  .ganhos__cartao--7 { grid-area: 3 / 4; }
 }
 
 /* Construção (só com JS e movimento liberado). */
