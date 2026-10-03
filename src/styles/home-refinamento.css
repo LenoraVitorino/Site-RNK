@@ -660,11 +660,11 @@ section[id] { scroll-margin-top: 110px; }
    do template Tidy. Texto de um lado, quadro prateado do outro, alternando.
    ============================================================ */
 .ecossistema-editorial .ecossistema__box { padding: 0; background: none; border: 0; border-radius: 0; }
-.ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 1.6vw, 24px); }
+.ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr; gap: 0; }
 .eco-painel {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: clamp(16px, 2vw, 32px);
   min-height: clamp(460px, 40vw, 620px); padding: clamp(12px, 1.1vw, 16px);
-  border: 1px solid rgb(255 255 255 / .06); border-radius: 18px; background: rgb(16 16 16 / .96);
+  border: 1px solid rgb(255 255 255 / .06); border-radius: 18px; background: #101010;   /* opaco: na pilha, o de baixo não pode vazar */
 }
 .eco-painel--invertido { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
 .eco-painel--invertido .eco-painel__corpo { order: 2; }
@@ -675,6 +675,11 @@ section[id] { scroll-margin-top: 110px; }
 .eco-painel__texto { margin: clamp(20px, 2vw, 28px) 0 0; max-width: 40ch; font-size: var(--corpo-topico); line-height: 1.6; color: rgb(242 242 238 / .72); text-wrap: pretty; }
 .eco-painel__acao { margin: clamp(28px, 2.8vw, 40px) 0 0; }
 .eco-painel .eco-arte { min-height: 100%; }
+/* Empilhar (02/10, "faz empilhar"): cada painel fica preso logo abaixo do
+   menu e o seguinte sobe por cima dele, com uma sombra suave na borda. */
+.eco-painel { position: sticky; top: calc(var(--altura-header) + 12px); box-shadow: 0 -24px 48px -12px rgb(0 0 0 / .65); }
+.eco-painel + .eco-painel { margin-top: clamp(32px, 6svh, 72px); }
+.eco-painel + .eco-painel { top: calc(var(--altura-header) + 28px); }   /* a borda do de baixo continua à vista */
 @media (max-width: 899.98px) {
   .eco-painel, .eco-painel--invertido { grid-template-columns: 1fr; min-height: 0; }
   .eco-painel--invertido .eco-painel__corpo { order: 0; }
