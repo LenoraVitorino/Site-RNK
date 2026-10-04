@@ -131,7 +131,7 @@
 @media (max-width: 899.98px) {
   /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
   .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
-  .plano-hero__arte { width: 100%; }
+  .plano-hero__arte { width: 100%; aspect-ratio: 640 / 700; }
 }
 @media (max-width: 699.98px) {
   .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
