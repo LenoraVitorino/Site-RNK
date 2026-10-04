@@ -12,7 +12,7 @@ import Base2 from '../../layouts/Base2.astro';
 import FundoInterno from '../../components/pagina/FundoInterno.astro';
 import BlocoCtaFinal from '../../components/pagina/BlocoCtaFinal.astro';
 import PlanoHero from '../../components/plano/PlanoHero.astro';
-import JanelaStart from '../../components/plano/JanelaStart.astro';
+import EcossistemaStart from '../../components/plano/EcossistemaStart.astro';
 import PlanoIdeal from '../../components/plano/PlanoIdeal.astro';
 import PlanoFaz from '../../components/plano/PlanoFaz.astro';
 import PlanoEtapas from '../../components/plano/PlanoEtapas.astro';
@@ -36,7 +36,7 @@ const [nome, plano1] = hero.bloco.titulo[0].split(' ') as [string, string];
 <Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada pagina-plano">
   <FundoInterno slot="fundo" />
   <PlanoHero linhas={[nome, plano1]} sub={hero.bloco.sub} cta={hero.bloco.cta} rotaCta={`#${lista.secao.id}`} ficha={fichaStart} secao={naCena(hero.secao, 'hero')}>
-    <JanelaStart slot="arte" />
+    <EcossistemaStart slot="arte" />
   </PlanoHero>
   <PlanoIdeal h2={lista.bloco.h2 ?? ''} itens={lista.bloco.itens} secao={lista.secao} />
   <PlanoFaz h2={blocos.bloco.h2 ?? ''} itens={blocos.bloco.itens} icones={['conexao', 'funil', 'fluxo', 'dados']} selo="Revena Start" secao={naCena(blocos.secao, 'pilares')} />

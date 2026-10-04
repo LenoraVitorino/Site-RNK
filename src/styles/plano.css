@@ -21,13 +21,9 @@
 .plano-hero__linha--2 { padding-left: .62em; font-weight: 500; }
 .plano-hero__sub { margin: 0; max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
 .plano-hero__acoes { margin: 4px 0 0; }
-/* À direita, grande, a arte do plano. A caixa é a do SVG do símbolo (1080),
-   e o símbolo ocupa ~57% dela no meio: a caixa pode passar da coluna. */
-.plano-hero__imagem { position: relative; align-self: stretch; min-height: 0; }
-.plano-hero__arte {
-  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
-  width: min(calc((100svh - 300px) / .57), calc(46vw / .57), 1240px); aspect-ratio: 1;
-}
+/* À direita, a arte do plano (o infográfico do ecossistema, 640 × 560). */
+.plano-hero__imagem { position: relative; align-self: center; }
+.plano-hero__arte { position: relative; width: min(100%, 700px, calc((100svh - 300px) * 640 / 560)); aspect-ratio: 640 / 560; margin-inline: auto; }
 .plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; }
 .plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .16); }
 .plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
@@ -135,8 +131,7 @@
 @media (max-width: 899.98px) {
   /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
   .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
-  .plano-hero__imagem { height: min(100vw, 600px); }
-  .plano-hero__arte { width: min(172vw, 1050px); }
+  .plano-hero__arte { width: 100%; }
 }
 @media (max-width: 699.98px) {
   .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
