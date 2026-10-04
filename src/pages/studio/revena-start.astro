@@ -34,7 +34,7 @@ const [nome, plano1] = hero.bloco.titulo[0].split(' ') as [string, string];
 ---
 <Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada pagina-plano">
   <FundoInterno slot="fundo" />
-  <PlanoHero linhas={[nome, plano1]} sub={hero.bloco.sub} cta={hero.bloco.cta} rotaCta={`#${lista.secao.id}`} ficha={fichaStart} secao={naCena(hero.secao, 'hero')} />
+  <PlanoHero simbolo="start" linhas={[nome, plano1]} sub={hero.bloco.sub} cta={hero.bloco.cta} rotaCta={`#${lista.secao.id}`} ficha={fichaStart} secao={naCena(hero.secao, 'hero')} />
   <PlanoIdeal h2={lista.bloco.h2 ?? ''} itens={lista.bloco.itens} secao={lista.secao} />
   <PlanoFaz h2={blocos.bloco.h2 ?? ''} itens={blocos.bloco.itens} icones={['conexao', 'funil', 'fluxo', 'dados']} selo="Revena Start" secao={naCena(blocos.secao, 'pilares')} />
   <PlanoEtapas h2={etapas.bloco.h2.join(' ')} etapas={etapas.bloco.etapas} fechamento={etapas.bloco.fechamento} secao={etapas.secao} />

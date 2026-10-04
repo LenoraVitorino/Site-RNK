@@ -7,14 +7,35 @@
 
 /* ---------- Hero (referência Tres Mares) ---------- */
 .plano-hero { position: relative; isolation: isolate; overflow: hidden; min-height: max(100svh, 640px); padding-top: var(--altura-header); color: var(--papel); }
-/* Duas faixas de vidro claro em diagonal, como a perna do R: a de cima
-   termina reta à direita e a de baixo começa reta à esquerda. */
-.plano-hero__forma {
-  position: absolute; inset: var(--altura-header) 0 0; z-index: -1; pointer-events: none;   /* começa sob o menu, que segue legível */
-  clip-path: polygon(30% -19%, 100% 25%, 100% 50%, 59.7% 50%, 100% 75.2%, 100% 126%, 30% 81.7%, 30% 50%, 59.7% 50%, 30% 31.4%);
-  background: linear-gradient(170deg, rgb(246 246 243 / .9), rgb(232 232 229 / .84));
+/* O símbolo do plano, gigante e vazando da tela, no lugar do da referência.
+   --simb-s é o lado da caixa do SVG (1080); --simb-x/y, o canto dela na hero. */
+.plano-hero {
+  --simb-s: 118vw;
+  --simb-x: calc(66vw - var(--simb-s) / 2);
+  --simb-y: calc(46svh - var(--simb-s) / 2);
+}
+/* O palco corta o símbolo logo abaixo do menu, que segue legível; dentro
+   dele o símbolo continua nas coordenadas da hero. */
+.plano-hero__palco { position: absolute; inset: var(--altura-header) 0 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.plano-hero__simbolo {
+  position: absolute;
+  left: var(--simb-x); top: calc(var(--simb-y) - var(--altura-header)); width: var(--simb-s); height: var(--simb-s);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.plano-hero__simbolo--papel {
+  -webkit-mask-image: var(--simb-papel); mask-image: var(--simb-papel);
+  background: linear-gradient(170deg, rgb(246 246 243 / .92), rgb(232 232 229 / .86));
   -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
 }
+.plano-hero__simbolo--ouro { -webkit-mask-image: var(--simb-ouro); mask-image: var(--simb-ouro); background: var(--destaque, #FFD103); }
+/* O texto fica grafite onde passa por cima do símbolo (só com o script, que alinha a silhueta). */
+.plano-hero--recorte .plano-recorte {
+  /* A cor de base vai como camada de imagem: o cabeçalho lê background-color para escolher o tom. */
+  background: var(--simb-silhueta) calc(var(--simb-x) - var(--rx, 0px)) calc(var(--simb-y) - var(--ry, 0px)) / var(--simb-s) var(--simb-s) no-repeat, linear-gradient(var(--cor-recorte, #f2f2ee), var(--cor-recorte, #f2f2ee));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.plano-hero--recorte .plano-hero__sub { --cor-recorte: rgb(242 242 238 / .84); }
 .plano-hero__grade {
   display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; row-gap: clamp(24px, 3vw, 40px);
   min-height: calc(max(100svh, 640px) - var(--altura-header)); padding-bottom: clamp(20px, 2.4vw, 32px);
@@ -23,8 +44,10 @@
 .plano-hero__titulo {
   align-self: center; margin: 0; padding-left: 12%;
   font-family: var(--font-titulo); font-weight: 300; font-size: clamp(76px, 13.4vw, 220px); line-height: .84; letter-spacing: -.065em;
-  color: #f2f2ee; mix-blend-mode: difference;
+  color: #f2f2ee;
 }
+/* Folga embaixo das letras para o recorte não cortar a descida. */
+.plano-hero__linha { padding-bottom: .06em; margin-bottom: -.06em; }
 .plano-hero__linha { display: block; }
 .plano-hero__linha--2 { padding-left: .6em; font-weight: 500; }
 .plano-hero__apoio { display: grid; justify-items: start; gap: 20px; max-width: min(340px, calc(30vw - var(--grid-inset) - 28px)); min-width: 250px; }
@@ -32,7 +55,8 @@
 .plano-hero__sub { margin: 0; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .82); text-wrap: pretty; }
 .plano-hero__acoes { margin: 4px 0 0; }
 /* A ficha na base, em colunas, e também invertendo sobre o vidro. */
-.plano-hero__ficha { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; color: #f2f2ee; mix-blend-mode: difference; }
+.plano-hero__ficha { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; color: #f2f2ee; }
+.plano-hero__ficha dt, .plano-hero__ficha dd { width: fit-content; }
 .plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .4); }
 .plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
 .plano-hero__ficha dd { margin: 6px 0 0; font-size: 15px; line-height: 1.4; max-width: 30ch; text-wrap: pretty; }
@@ -41,13 +65,14 @@
 @media (prefers-reduced-motion: no-preference) {
   .js .plano-hero__linha { animation: plano-sobe 1.2s var(--easing) both; }
   .js .plano-hero__linha--2 { animation-delay: .14s; }
-  .js .plano-hero__forma { animation: plano-vidro 1.6s var(--easing) both; }
+  .js .plano-hero__simbolo { animation: plano-vidro 1.6s var(--easing) both; }
+  .js .plano-hero__simbolo--ouro { animation-delay: .12s; }
   .js :is(.plano-hero__apoio, .plano-hero__ficha) { animation: plano-aparece 1s var(--easing) .5s both; }
   .js .plano-hero__ficha { animation-delay: .7s; }
 }
 @keyframes plano-sobe { from { opacity: 0; transform: translate3d(0, .18em, 0); } }
 @keyframes plano-aparece { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
-@keyframes plano-vidro { from { opacity: 0; transform: translate3d(4%, 0, 0); } }
+@keyframes plano-vidro { from { opacity: 0; transform: scale(.96); } }
 
 /* ---------- Painel claro com chanfro (o do método e dos Resultados) ---------- */
 .plano-painel {
@@ -143,8 +168,8 @@
   .plano-hero__titulo { padding-left: 0; font-size: clamp(64px, 21vw, 120px); }
   .plano-hero__linha--2 { padding-left: .45em; }
   .plano-hero__apoio { max-width: none; min-width: 0; }
-  /* No celular o vidro fica só na altura do nome; a frase e o botão ficam na cena. */
-  .plano-hero__forma { bottom: auto; height: clamp(280px, 78vw, 360px); clip-path: polygon(26% -19%, 100% 20%, 100% 50%, 58% 50%, 100% 72%, 100% 100%, 76% 100%, 26% 78%, 26% 50%, 58% 50%, 26% 30%); }
-  .plano-hero__titulo { align-self: start; padding-block: clamp(56px, 16vw, 84px) 0; min-height: clamp(280px, 78vw, 360px); }
+  /* No celular o símbolo fica na altura do nome; a frase e o botão ficam na cena. */
+  .plano-hero { --simb-s: 170vw; --simb-x: calc(74vw - var(--simb-s) / 2); --simb-y: calc(var(--altura-header) + 150px - var(--simb-s) / 2); }
+  .plano-hero__titulo { align-self: start; padding-block: clamp(40px, 12vw, 64px) 0; min-height: clamp(300px, 84vw, 380px); }
   .plano-hero__grade { grid-template-rows: auto auto auto; }
 }
