@@ -3,8 +3,9 @@
     reprovou a vitrine com a foto que trocava sozinha e mandou a referência
     "Services Section Animation" (details.so): uma lista numerada em que
     cada linha gruda no topo ao rolar e as seguintes vão se empilhando
-    embaixo dela. Aqui cada especialidade é uma linha: número de ordem, a
-    área e o resultado; embaixo, a frase e uma foto representativa da área.
+    embaixo dela. Aqui cada especialidade é uma linha: número de ordem e
+    área; embaixo, a frase com o resultado grande logo abaixo dela (Lenora,
+    04/10: "embaixo do texto, não em cima da foto") e uma foto da área.
     Só CSS (position: sticky); no celular a lista fica corrida.
     A dobra segue como o painel claro chanfrado, agora opaco, para cada
     linha cobrir a de baixo sem emenda. Valores, textos e fotos vêm da
@@ -35,14 +36,16 @@ const ordem = (i: number) => String(i + 1).padStart(2, '0');
             <div class="res-etapa__cabeca">
               <span class="res-etapa__ordem num" aria-hidden="true">{ordem(i)}</span>
               <h3 class="res-etapa__area">{r.especialidade}</h3>
-              <p class="res-etapa__numero num">
-                <span class="visually-hidden">{r.numero}</span>
-                <span class="res-etapa__reserva" aria-hidden="true">{r.numero}</span>
-                <span class="res-etapa__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
-              </p>
             </div>
             <div class="res-etapa__corpo">
-              <p class="res-etapa__texto">{r.texto}</p>
+              <div class="res-etapa__dados">
+                <p class="res-etapa__texto">{r.texto}</p>
+                <p class="res-etapa__numero num">
+                  <span class="visually-hidden">{r.numero}</span>
+                  <span class="res-etapa__reserva" aria-hidden="true">{r.numero}</span>
+                  <span class="res-etapa__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
+                </p>
+              </div>
               <figure class="res-etapa__foto">
                 <img
                   class:list={{ 'res-etapa__img--espelho': r.espelhar }}

@@ -51,22 +51,24 @@ section[id] { scroll-margin-top: 110px; }
 }
 .res-etapa:last-child { border-bottom: 1px solid rgb(37 37 35 / .18); }
 .res-etapa__cabeca {
-  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr) auto; align-items: center;
+  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr); align-items: center;
   height: var(--res-cab);
 }
 .res-etapa__ordem { font-size: clamp(15px, 1.2vw, 18px); letter-spacing: .02em; color: #5f5f5d; }
 .res-etapa__area { margin: 0; font-size: clamp(28px, 2.9vw, 46px); font-weight: 300; line-height: 1; letter-spacing: -.045em; color: #252523; }
+/* O resultado grande, embaixo da frase, no número fino da home. */
+.res-etapa__dados { grid-column: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding-right: 32px; }
 .res-etapa__numero {
-  position: relative; margin: 0; font-size: clamp(28px, 2.9vw, 46px); font-weight: 300; line-height: 1;
-  letter-spacing: -.045em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
+  position: relative; align-self: start; margin: 0; font-size: clamp(64px, 6.4vw, 112px); font-weight: 200; line-height: .85;
+  letter-spacing: -.06em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .res-etapa__reserva { visibility: hidden; }
-.res-etapa__contagem { position: absolute; top: 0; right: 0; }
+.res-etapa__contagem { position: absolute; top: 0; left: 0; }
 .res-etapa__corpo {
   display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 0;
   padding: 8px 0 clamp(28px, 3vw, 44px);
 }
-.res-etapa__texto { grid-column: 2; margin: 0; max-width: 32ch; padding-right: 32px; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
+.res-etapa__texto { margin: 0; max-width: 32ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
 .res-etapa__foto { grid-column: 3; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; }
 .res-etapa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; }
 .res-etapa__img--espelho { scale: -1 1; }
@@ -74,9 +76,10 @@ section[id] { scroll-margin-top: 110px; }
 .res-pilha::after { content: ''; display: block; height: clamp(24px, 3vw, 48px); }
 @media (max-width: 899.98px) {
   .res-etapa { position: static; }
-  .res-etapa__cabeca { grid-template-columns: 44px minmax(0, 1fr) auto; height: auto; padding-block: 22px 12px; }
+  .res-etapa__cabeca { grid-template-columns: 44px minmax(0, 1fr); height: auto; padding-block: 22px 12px; }
   .res-etapa__corpo { grid-template-columns: 1fr; row-gap: 16px; padding-top: 0; }
-  .res-etapa__texto, .res-etapa__foto { grid-column: 1; padding-right: 0; }
+  .res-etapa__dados, .res-etapa__foto { grid-column: 1; padding-right: 0; }
+  .res-etapa__numero { font-size: 64px; }
   .res-etapa__foto { grid-row: 1; }
 }
 
