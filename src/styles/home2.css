@@ -882,7 +882,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .footer__col a:hover { color: var(--papel); text-decoration: underline; text-underline-offset: 4px; }
 .footer__contact li { color: rgb(242 242 238 / .7); line-height: 1.5; margin-bottom: 16px; }
 .footer__contact a { color: var(--papel); }
-.footer__bottom { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgb(242 242 238 / .14); font-size: 13px; color: rgb(242 242 238 / .6); }
+.footer__bottom { display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; margin-top: clamp(20px, 2.4vw, 36px); padding-bottom: 32px; padding-top: 20px; border-top: 1px solid rgb(242 242 238 / .14); font-size: 13px; color: rgb(242 242 238 / .6); }
 .footer__bottom p { margin: 0; }
 /* As redes em caixinhas de 44px (o alvo de toque) com o chanfro do site: o
    fio é o fundo da caixa e o miolo escuro fica 1px para dentro. */
@@ -900,16 +900,23 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 }
 .footer__col .footer__redes a:hover { color: var(--papel); background: rgb(242 242 238 / .42); text-decoration: none; }
 .footer__col .footer__logo { display: inline-block; min-height: 0; min-width: 0; margin: 0; }
-/* O RNK ao fundo: a máscara é o logo e o recheio é um degradê que apaga
-   para baixo, com a mesma luz diagonal do fundo. A base fica cortada. */
-.footer__fundo { position: relative; z-index: -1; margin-top: clamp(32px, 5vw, 72px); overflow: hidden; pointer-events: none; user-select: none; }
-.footer__rnk {
-  display: block; width: 100%; aspect-ratio: 2392 / 816; margin-bottom: -7%;
-  -webkit-mask: url('/marca/rnk-rodape.png') center / contain no-repeat;
-  mask: url('/marca/rnk-rodape.png') center / contain no-repeat;
+/* O RENKE ao fundo (04/10, Lenora): sobe por trás das colunas, que passam
+   por cima dele; a máscara é o logo e o recheio é um degradê claro que apaga
+   para baixo, com a mesma luz diagonal do fundo. A barra do E fica amarela. */
+.footer__fundo { position: relative; z-index: -1; margin-top: calc(-1 * clamp(28px, 9vw, 150px)); pointer-events: none; user-select: none; }
+.footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2250 / 430; }
+.footer__renke, .footer__renke-barra { position: absolute; inset: 0; }
+.footer__renke {
+  -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat;
+  mask: url('/marca/renke-rodape.png') center / contain no-repeat;
   background:
-    linear-gradient(115deg, transparent 30%, rgb(242 242 238 / .07) 47%, transparent 62%),
-    linear-gradient(180deg, rgb(242 242 238 / .12) 0%, rgb(242 242 238 / .05) 50%, rgb(242 242 238 / 0) 88%);
+    linear-gradient(115deg, transparent 30%, rgb(242 242 238 / .06) 47%, transparent 62%),
+    linear-gradient(180deg, rgb(242 242 238 / .11) 0%, rgb(242 242 238 / .035) 100%);
+}
+.footer__renke-barra {
+  -webkit-mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
+  mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
+  background: linear-gradient(180deg, rgb(255 209 3 / .38), rgb(255 209 3 / .22));
 }
 
 /* ============================================================
@@ -929,7 +936,6 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 @media (min-width: 900px) {
   .footer { padding-block: clamp(72px, 7vw, 112px) 0; }
   .footer__grid { grid-template-columns: 1.8fr 1fr 1fr 1.3fr; gap: 48px; }
-  .footer__bottom { margin-top: clamp(56px, 6vw, 96px); }
 }
 
 @media (max-width: 1023.98px) {
