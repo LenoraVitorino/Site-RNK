@@ -1,0 +1,71 @@
+---
+/**
+ * GPTW (04/10/2026, layout editorial). No papel, o título em caixa alta na
+ * largura toda, como "Saímos da nossa zona de conforto". Embaixo, o texto
+ * à esquerda e a foto do nicho amarelo sangrando à direita, com o selo
+ * Great Place To Work grande, colado na borda da foto: é o destaque da
+ * dobra.
+ */
+import { Image } from 'astro:assets';
+import sofa from '../../assets/sede/sofa.jpg';
+import seloGptw from '../../assets/selos/gptw-2025.png';
+import Botao from '../ui/Botao.astro';
+import Seta from '../editorial/Seta.astro';
+import { doisPesos } from '../editorial/pesos';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'texto'> }
+const { bloco } = Astro.props;
+const h2 = bloco.h2 ?? '';
+const [leve, forte] = bloco.realce && h2.endsWith(bloco.realce)
+  ? [h2.slice(0, -bloco.realce.length).trim(), bloco.realce]
+  : doisPesos(h2, 2);
+---
+<section class="ed-secao ed-secao--papel fp-gptw" id="faca-parte-gptw" data-tom="claro" aria-labelledby="faca-parte-gptw-titulo">
+  <div class="container ed-grade fp-gptw__grade">
+    <h2 class="ed-display fp-gptw__titulo entra" id="faca-parte-gptw-titulo">{leve} <b>{forte}</b></h2>
+    <div class="fp-gptw__texto">
+      {bloco.paragrafos.map((p, i) => <p class="ed-chamada entra" style={`--i:${i}`} set:html={p} />)}
+      {bloco.indicadores && (
+        <ul class="fp-gptw__indicadores entra" style="--i:2">
+          {bloco.indicadores.map((it) => <li><Seta />{it.texto}</li>)}
+        </ul>
+      )}
+      {bloco.acoes && (
+        <div class="ed-acoes entra" style="--i:3">
+          {bloco.acoes.map((a, i) => i === 0
+            ? <Botao href={a.rota} variante="solido">{a.rotulo}</Botao>
+            : <a class="link-arrow fp-gptw__link" href={a.rota}>{a.rotulo}</a>)}
+        </div>
+      )}
+    </div>
+    <figure class="ed-foto ed-revela entra ed-sangra-dir fp-gptw__foto">
+      <Image src={sofa} alt="Nicho amarelo da sede com sofá e a frase “Seja o hábito da mudança!”." format="webp" quality={78} widths={[640, 1120, 1600]} sizes="(min-width: 900px) 55vw, 100vw" />
+    </figure>
+    <Image class="fp-gptw__selo entra" style="--i:1" src={seloGptw} alt="Selo Great Place To Work: empresa certificada no Brasil." widths={[220, 440]} sizes="(min-width: 900px) 220px, 140px" />
+  </div>
+</section>
+
+<style>
+  .fp-gptw__grade { row-gap: clamp(56px, 6vw, 104px); align-items: start; }
+  .fp-gptw__titulo { grid-column: 1 / -1; font-size: clamp(44px, 6.6vw, 120px); }
+  .fp-gptw__texto { grid-column: 1 / span 4; grid-row: 2; display: grid; gap: 32px; align-self: end; }
+  .fp-gptw__texto :global(strong) { font-weight: 700; }
+  .fp-gptw__indicadores { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 16px; font-weight: 500; }
+  .fp-gptw__indicadores li { display: flex; align-items: center; gap: 12px; }
+  .fp-gptw__indicadores :global(.ed-seta) { width: 26px; margin: 0; }
+  .fp-gptw :global(.ed-acoes) { align-items: center; gap: 24px; }
+  .fp-gptw__link { color: var(--ed-tinta); }
+  .fp-gptw__foto { grid-column: 6 / -1; grid-row: 2; aspect-ratio: 4 / 3; }
+  .fp-gptw__foto :global(img) { object-position: 50% 60%; }
+  /* O selo encosta na borda esquerda da foto, metade sobre ela. */
+  .fp-gptw__selo {
+    grid-column: 6 / span 2; grid-row: 2; align-self: start; position: relative; z-index: 2;
+    width: clamp(140px, 15vw, 220px); height: auto;
+    margin-top: clamp(-56px, -3vw, -32px); margin-left: calc(-.5 * clamp(140px, 15vw, 220px));
+  }
+  @media (max-width: 899.98px) {
+    .fp-gptw__texto, .fp-gptw__foto, .fp-gptw__selo { grid-column: 1 / -1; grid-row: auto; }
+    .fp-gptw__selo { margin: -96px 0 0 16px; }
+  }
+</style>

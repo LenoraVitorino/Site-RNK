@@ -1,5 +1,48 @@
 ---
-import Pagina from '../layouts/Pagina.astro';
-import { facaParte } from '../data/paginas/faca-parte';
+/**
+ * Faça parte (04/10/2026, layout editorial). A Lenora pediu a página
+ * "moderna e bem diagramada", com as fotos do time e do espaço e o selo
+ * GPTW bem destacado, no estilo dos carrosséis da Renke que o time
+ * aprovou. Ritmo: capa com retrato, papel (GPTW), grafite (time), papel
+ * (crenças), grafite (valores), papel (espaço) e o formulário na cena.
+ *
+ * O texto continua em src/data/paginas/faca-parte.ts, com as duas versões;
+ * cada dobra pega o seu bloco pelo tipo e pela ordem.
+ */
+import Base2 from '../layouts/Base2.astro';          // primeiro: a ordem do CSS depende disso
+import FundoInterno from '../components/pagina/FundoInterno.astro';
+import BlocoFormulario from '../components/pagina/BlocoFormulario.astro';
+import type { BlocoDe, ContextoSecao } from '../components/pagina/contexto';
+import FpCapa from '../components/faca-parte/FpCapa.astro';
+import FpGptw from '../components/faca-parte/FpGptw.astro';
+import FpTime from '../components/faca-parte/FpTime.astro';
+import FpCrencas from '../components/faca-parte/FpCrencas.astro';
+import FpValores from '../components/faca-parte/FpValores.astro';
+import FpEspaco from '../components/faca-parte/FpEspaco.astro';
+import { facaParte as pagina } from '../data/paginas/faca-parte';
+import '../styles/paginas2.css';
+import '../styles/editorial.css';
+
+const blocos = pagina.blocos;
+const hero = blocos.find((b): b is BlocoDe<'hero'> => b.tipo === 'hero')!;
+const textos = blocos.filter((b): b is BlocoDe<'texto'> => b.tipo === 'texto');
+const gptw = textos.find((b) => b.selo)!;
+const crencas = textos.find((b) => b.h2 === 'No que acreditamos')!;
+const valores = blocos.find((b): b is BlocoDe<'blocos'> => b.tipo === 'blocos')!;
+const formulario = blocos.find((b): b is BlocoDe<'formulario'> => b.tipo === 'formulario')!;
+
+const secaoForm: ContextoSecao = {
+  id: 'formulario', tituloId: 'formulario-titulo', indice: 6,
+  cena: 'formulario', tom: 'cena', junta: false, colaAbaixo: false, primeira: false,
+};
 ---
-<Pagina pagina={facaParte} />
+<Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada pg-editorial pg-faca-parte">
+  <FundoInterno slot="fundo" />
+  <FpCapa bloco={hero} />
+  <FpGptw bloco={gptw} />
+  <FpTime />
+  <FpCrencas bloco={crencas} />
+  <FpValores bloco={valores} />
+  <FpEspaco />
+  <BlocoFormulario bloco={formulario} secao={secaoForm} />
+</Base2>

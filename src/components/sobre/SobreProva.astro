@@ -1,132 +1,53 @@
 ---
 /**
- * S3 · A prova (docs/04-design/pagina-sobre.md, (a) "S3").
- * Página dupla de livro de mesa: fotos de tamanhos diferentes,
- * desencontradas na grade, com paralaxe leve e parágrafos curtos entre elas
- * (referência: Audo Copenhagen About).
- *
- * Zigue-zague em ≥1100, na .sb-grade de 12 colunas:
- *   linha 1 · H2 nas colunas 1–8 (20ch);
- *   linha 2 · B nas 1–5, foto do estúdio nas 7–12, mais baixa que o texto;
- *   linha 3 · cartão de detalhe nas 2–5, subindo para o vão abaixo de B;
- *             C nas 7–11, no meio vertical do cartão;
- *   linha 4 · D, a frase de fecho, centralizada na grade inteira.
- * As linhas são explícitas (grid-row), porque o posicionamento automático
- * poderia puxar um item para a linha de cima.
- *
- * A ordem do DOM é a ordem de leitura: H2, B, foto, slot, C, D.
- * A paralaxe (foto 24, detalhe −16: um desce, o outro sobe) é do
- * paralaxe.ts, iniciado pela página; aqui só se passa a amplitude.
+ * A prova (04/10/2026, layout editorial). "140 clínicas" vira o número
+ * gigante, com o começo da frase acima, pequeno e forte, como "+1.300 km
+ * percorridos". Embaixo, a foto do café sangra à esquerda e as três frases
+ * vêm à direita; a última, no marca-texto amarelo, atravessa a borda da
+ * foto (o único marca-texto da página).
  */
-import CartaoFoto from './CartaoFoto.astro';
+import { Image } from 'astro:assets';
 import { prova, fotos } from '../../data/sobre';
-
-const [fraseB, fraseC, fraseD] = prova.frases;
+const f = fotos.prova;
+const [a, b, c] = prova.frases;
 ---
-<section class="secao int-secao int-secao--papel sb-prova" id="sobre-prova" data-tom="papel" aria-labelledby="sobre-prova-titulo">
-  <div class="container sb-grade">
-    <h2 class="titulo sb-prova__titulo entra" id="sobre-prova-titulo" style="--i:0">
-      {prova.h2.antes}<span class="sb-prova__realce">{prova.h2.realce}</span>{prova.h2.depois}
+<section class="ed-secao ed-secao--papel sb-prova" id="sobre-prova" data-tom="claro" aria-labelledby="sobre-prova-titulo">
+  <div class="container ed-grade sb-prova__grade">
+    <h2 class="sb-prova__titulo entra" id="sobre-prova-titulo">
+      <span class="ed-antetitulo sb-prova__antes">{prova.h2.antes.trim()}</span>
+      <span class="ed-display sb-prova__numero"><b>{prova.h2.realce}{prova.h2.depois}</b></span>
     </h2>
-    <p class="sb-prova__frase sb-prova__frase--b entra" style="--i:1">{fraseB}</p>
-    <div class="sb-prova__foto">
-      <CartaoFoto slot={fotos.prova} sizes="(min-width: 1100px) min(820px, 44vw), (min-width: 600px) 72vw, 92vw" paralaxe={24} tom="claro" />
+    <figure class="ed-foto ed-revela entra ed-sangra-esq sb-prova__foto">
+      <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[640, 1120, 1600]} sizes="(min-width: 900px) 52vw, 100vw" style={`object-position: ${f.foco}`} />
+    </figure>
+    <div class="sb-prova__frases">
+      <p class="ed-chamada entra">{a}</p>
+      <p class="ed-chamada entra" style="--i:1">{b}</p>
     </div>
-    <div class="sb-prova__detalhe">
-      <CartaoFoto slot={fotos.provaDetalhe} sizes="(min-width: 900px) 380px, 66vw" paralaxe={-16} tom="claro" />
-    </div>
-    <p class="sb-prova__frase sb-prova__frase--c entra">{fraseC}</p>
-    <p class="sb-prova__frase sb-prova__frase--d entra">{fraseD}</p>
+    <p class="ed-chamada sb-prova__fecho entra" style="--i:2"><span class="ed-marca">{c}</span></p>
   </div>
 </section>
 
 <style>
-  /* ---------- Texto ---------- */
-
-  /* A frase em cinza e o realce em tinta, no mesmo peso: o destaque é só de tom. */
-  .sb-prova__titulo {
-    max-width: 20ch; margin: 0;
-    font-weight: 300; color: var(--sb-tinta-2);
+  .sb-prova__grade { row-gap: clamp(48px, 6vw, 104px); }
+  .sb-prova__titulo { margin: 0; display: grid; }
+  .sb-prova__antes { max-width: 24ch; }
+  .sb-prova__numero { font-size: clamp(64px, 12vw, 212px); line-height: .86; }
+  .sb-prova__foto { grid-column: 1 / span 6; grid-row: 2 / span 2; aspect-ratio: 4 / 5; }
+  .sb-prova__frases {
+    grid-column: 8 / -1; grid-row: 2; align-self: start;
+    display: grid; gap: clamp(28px, 3vw, 44px);
   }
-  .sb-prova__realce { color: var(--sb-tinta); }
-
-  /* B e C: parágrafos curtos, na medida de uma coluna de livro. */
-  .sb-prova__frase {
-    max-width: 34ch;
-    font-size: clamp(18px, 1.5vw, 21px); font-weight: 300; line-height: 1.55;
-    letter-spacing: -.01em; color: var(--sb-tinta);
-    text-wrap: pretty;
+  .sb-prova__frases .ed-chamada { padding-top: clamp(28px, 3vw, 44px); border-top: 1px solid var(--ed-fio-claro); font-weight: 400; color: var(--ed-tinta-2); }
+  /* O fecho começa sobre a foto e termina no papel. */
+  .sb-prova__fecho {
+    grid-column: 5 / -1; grid-row: 3; align-self: end; margin-bottom: clamp(32px, 5vw, 80px);
+    position: relative; z-index: 2;
+    font-size: clamp(26px, 2.8vw, 46px); font-weight: 600; line-height: 1.18; letter-spacing: -.035em;
   }
-
-  /* C com wrap comum: com pretty, a 320 "Desenvolvemos" ficava sozinha na
-     1ª linha ("Desenvolvemos / tecnologia própria para / ..."). */
-  .sb-prova__frase--c { text-wrap: wrap; }
-
-  /* D: a frase de fecho, maior e mais fina, como a última linha do capítulo. */
-  /* D, a frase de fecho, centralizada na grade inteira em todas as larguras
-     (29/09/2026), nas duas versões. */
-  .sb-prova__frase--d {
-    grid-column: 1 / -1; justify-self: center;
-    max-width: 30ch;
-    text-align: center;
-    font-family: var(--font-titulo);
-    font-size: clamp(26px, 2.8vw, 40px); font-weight: 280; line-height: 1.18;
-    letter-spacing: -.035em; word-spacing: -.08em;
-    text-wrap: balance;
-  }
-
-  /* ---------- ≥1100: o zigue-zague ---------- */
-
-  .sb-prova__titulo { grid-row: 1; }
-  .sb-prova__frase--b { grid-row: 2; }
-  .sb-prova__foto { grid-row: 2; }
-  .sb-prova__detalhe { grid-row: 3; }
-  .sb-prova__frase--c { grid-row: 3; }
-  .sb-prova__frase--d { grid-row: 4; }
-
-  @media (min-width: 1100px) {
-    .sb-prova__titulo { grid-column: 1 / 9; }
-    .sb-prova__frase--b { grid-column: 1 / 6; align-self: start; margin-top: 48px; }
-    .sb-prova__foto { grid-column: 7 / 13; margin-top: clamp(0px, 6vw, 96px); }
-    /* O cartão sobe para o vão que a foto, mais baixa, deixa sob o texto B. */
-    .sb-prova__detalhe { grid-column: 2 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
-    .sb-prova__frase--c { grid-column: 7 / 12; align-self: center; }
-    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
-  }
-
-  /* ---------- 900–1099.98: a mesma página dupla, mais estreita ---------- */
-
-  @media (min-width: 900px) and (max-width: 1099.98px) {
-    .sb-prova__titulo { grid-column: 1 / 10; }
-    .sb-prova__frase--b { grid-column: 1 / 7; align-self: start; margin-top: 48px; }
-    .sb-prova__foto { grid-column: 7 / 13; margin-top: clamp(0px, 6vw, 96px); }
-    .sb-prova__detalhe { grid-column: 1 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
-    .sb-prova__frase--c { grid-column: 7 / 13; align-self: center; }
-    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
-  }
-
-  /* ---------- <900: uma coluna que ainda desencontra ---------- */
-
   @media (max-width: 899.98px) {
-    .sb-prova__frase--b { grid-row: 2; margin-top: 40px; }
-    .sb-prova__foto { grid-row: 3; margin-top: 40px; }
-    .sb-prova__detalhe { grid-row: 4; margin-top: 32px; }
-    .sb-prova__frase--c { grid-row: 5; margin-top: 28px; }
-    .sb-prova__frase--d { grid-row: 6; margin-top: 64px; }
-  }
-
-  /* 600–899.98 (6 colunas): foto de B nas 2–6, cartão nas 1–4 com C embaixo. */
-  @media (min-width: 600px) and (max-width: 899.98px) {
-    .sb-prova__foto { grid-column: 2 / 7; }
-    .sb-prova__detalhe { grid-column: 1 / 5; }
-    .sb-prova__frase--c { grid-column: 1 / 6; }
-  }
-
-  /* <600 (4 colunas): pilha. A foto na largura toda (já é 3:2); o cartão a
-     72% e encostado à direita, para o zigue-zague não se perder; a paralaxe
-     cai pela metade sozinha no paralaxe.ts. */
-  @media (max-width: 599.98px) {
-    .sb-prova__detalhe { width: 72%; justify-self: end; }
-    .sb-prova__frase--d { font-size: 26px; }
+    .sb-prova__foto, .sb-prova__frases, .sb-prova__fecho { grid-column: 1 / -1; grid-row: auto; }
+    .sb-prova__foto { margin-right: 0; }
+    .sb-prova__fecho { margin: 0; }
   }
 </style>

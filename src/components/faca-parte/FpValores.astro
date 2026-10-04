@@ -1,0 +1,57 @@
+---
+/**
+ * Os 4 valores (04/10/2026, layout editorial). No grafite, a foto do
+ * estúdio entra pela direita e se desfaz no fundo; o título fica por cima,
+ * à esquerda, e os quatro valores descem em colunas numeradas, entre fios.
+ */
+import { Image } from 'astro:assets';
+import estudio from '../../assets/sede/estudio.jpg';
+import { doisPesos } from '../editorial/pesos';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'blocos'> }
+const { bloco } = Astro.props;
+const [leve, forte] = doisPesos(bloco.h2, 1);
+---
+<section class="ed-secao ed-secao--grafite fp-valores" id="faca-parte-valores" aria-labelledby="faca-parte-valores-titulo">
+  <figure class="ed-foto fp-valores__foto" aria-hidden="true">
+    <Image src={estudio} alt="" format="webp" quality={74} widths={[800, 1400, 2000]} sizes="(min-width: 900px) 62vw, 100vw" />
+  </figure>
+  <div class="container ed-grade fp-valores__grade">
+    <h2 class="ed-display fp-valores__titulo entra" id="faca-parte-valores-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
+    <ol class="fp-valores__lista" role="list">
+      {bloco.itens.map((v, i) => (
+        <li class="fp-valor entra" style={`--i:${i}`}>
+          <span class="fp-valor__n num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="fp-valor__titulo">{v.titulo}</h3>
+          <p class="ed-corpo">{v.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .fp-valores__foto { position: absolute; top: 0; right: 0; width: 62%; height: min(78%, 760px); z-index: -2; background: transparent; }
+  .fp-valores__foto::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(to right, var(--ed-grafite) 0%, rgb(13 13 13 / .55) 32%, rgb(13 13 13 / 0) 70%),
+      linear-gradient(to top, var(--ed-grafite) 0%, rgb(13 13 13 / 0) 45%);
+  }
+  .fp-valores__grade { row-gap: clamp(120px, 14vw, 240px); }
+  .fp-valores__titulo { grid-column: 1 / span 7; font-size: clamp(64px, 11vw, 196px); padding-top: clamp(40px, 6vw, 120px); }
+  .fp-valores__lista {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px var(--ed-gap);
+  }
+  .fp-valor { display: grid; align-content: start; gap: 14px; padding-top: 24px; border-top: 1px solid var(--ed-fio-escuro); }
+  .fp-valor__n { font-size: 14px; color: var(--ed-amarelo); letter-spacing: .04em; }
+  .fp-valor__titulo { margin: 0 0 4px; font-size: clamp(17px, 1.4vw, 26px); font-weight: 700; line-height: 1; letter-spacing: -.04em; text-transform: uppercase; }
+  @media (max-width: 1099.98px) { .fp-valores__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 899.98px) {
+    .fp-valores__foto { width: 100%; height: 520px; opacity: .6; }
+    .fp-valores__titulo { grid-column: 1 / -1; }
+  }
+  @media (max-width: 599.98px) { .fp-valores__lista { grid-template-columns: 1fr; } }
+</style>

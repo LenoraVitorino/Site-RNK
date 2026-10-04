@@ -1,88 +1,50 @@
 ---
 /**
- * S0 · Abertura do Sobre (docs/04-design/pagina-sobre.md, (a) "S0").
- * Capa de livro: o nome gigante e a frase sobre a cena, sem foto. A foto
- * chega na dobra seguinte, atravessando a costura.
- *
- * Composição (a partir de 900px): o H1 nas colunas 1–7 e o lead nas 8–12,
- * com a última linha do lead na mesma linha de base de "Renke" (alinhamento
- * pela última linha de base da grade; onde não houver, cai em `end`). Abaixo
- * de 900px, o lead desce para baixo do H1.
- *
- * O padding de baixo guarda --sb-sobe a mais: é o espaço que a foto de S1
- * (SobreManifesto.astro) ocupa quando sobe acima da costura. Os dois
- * componentes dependem desse mesmo token, que mora no sobre.css.
- *
- * A máscara de leitura da cena (fundo-internas.ts) protege
- * .sb-abertura__miolo; por isso a seção é filha direta do <main> e leva
- * data-cena="hero".
+ * Capa do Sobre (04/10/2026, layout editorial). A foto do salão na tela
+ * inteira, o nome em caixa alta por cima e a frase de abertura numa caixa
+ * de papel que nasce da dobra seguinte e sobe pela foto, como o cartão
+ * branco do carrossel "Nosso CEO foi convidado…".
  */
-import { abertura } from '../../data/sobre';
+import { Image } from 'astro:assets';
+import { abertura, fotos } from '../../data/sobre';
 import Selo from '../ui/Selo.astro';
+const f = fotos.capa;
 ---
-<section class="secao int-secao sb-abertura" id="sobre-abertura" data-cena="hero" data-tom="cena" aria-labelledby="sobre-abertura-titulo">
-  <div class="container sb-grade sb-abertura__miolo">
-    <Selo class="sb-abertura__rotulo">{abertura.rotulo}</Selo>
-    <h1 class="titulo sb-abertura__titulo entra" id="sobre-abertura-titulo" style="--i:0">
-      <span>{abertura.linhasH1[0]}</span>{' '}<span>{abertura.linhasH1[1]}</span>
+<section class="ed-capa sb-capa" id="sobre-abertura" aria-labelledby="sobre-abertura-titulo">
+  <figure class="ed-foto ed-capa__foto" style={`--foco: ${f.foco}`}>
+    <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[960, 1600, 2200]} sizes="100vw" loading="eager" fetchpriority="high" />
+  </figure>
+  <div class="container ed-grade sb-capa__miolo">
+    <Selo class="sb-capa__rotulo" tom="escuro">{abertura.rotulo}</Selo>
+    <h1 class="ed-display sb-capa__titulo entra" id="sobre-abertura-titulo">
+      <span>{abertura.linhasH1[0]}</span>{' '}<span><b>{abertura.linhasH1[1]}</b></span>
     </h1>
-    <p class="sb-abertura__lead entra" style="--i:1" set:html={abertura.lead} />
+    <div class="sb-capa__caixa entra" style="--i:1">
+      <p class="ed-chamada" set:html={abertura.lead} />
+    </div>
   </div>
 </section>
 
 <style>
-  /* A capa: o miolo encostado embaixo, com a reserva da foto de S1. */
-  .sb-abertura {
-    display: flex; flex-direction: column; justify-content: flex-end;
-    min-height: min(86vh, 900px);
-    min-height: min(86svh, 900px);
-    padding-top: calc(var(--altura-header) + 64px);
-    padding-bottom: calc(var(--esp-secao) + var(--sb-sobe));
-    color: var(--papel);
+  .sb-capa { padding-bottom: 0; }
+  .sb-capa__miolo { align-items: end; row-gap: 24px; }
+  .sb-capa__rotulo { grid-row: 1; justify-self: start; }
+  .sb-capa__titulo {
+    grid-row: 2; grid-column: 1 / span 8; align-self: end;
+    padding-bottom: clamp(40px, 5vw, 88px);
+    font-size: clamp(64px, 10.4vw, 188px);
   }
-
-  .sb-abertura__rotulo { grid-row: 1; margin-bottom: clamp(20px, 2.2vw, 32px); }
-
-  /* O nome gigante, em tom duplo: "Sobre a" em cinza, "Renke" em papel.
-     A quebra entre as duas linhas é só tipográfica (um único h1). */
-  .sb-abertura__titulo {
-    grid-row: 2; grid-column: 1 / 8;
-    align-self: end;
-    align-self: last baseline;   /* o par H1 + lead divide a mesma linha de base */
-    font-size: clamp(56px, 10vw, 168px);
-    font-weight: 250;
-    line-height: .92;
-    letter-spacing: -.055em;
-    word-spacing: -.08em;
-    text-wrap: nowrap;
-    color: var(--papel);
+  /* A caixa de papel encosta no pé da capa e emenda com a dobra de baixo. */
+  .sb-capa__caixa {
+    grid-row: 2; grid-column: 9 / -1; align-self: end;
+    margin-right: calc(-1 * var(--grid-inset));
+    padding: clamp(32px, 3.4vw, 56px) var(--grid-inset) clamp(32px, 3.4vw, 56px) clamp(32px, 3.4vw, 56px);
+    background-color: var(--ed-papel); color: var(--ed-tinta);
   }
-  .sb-abertura__titulo > span { display: block; }
-  .sb-abertura__titulo > span:first-child { color: var(--cinza); }
-
-  /* A frase na coluna da direita, com a última linha na base de "Renke". */
-  .sb-abertura__lead {
-    grid-row: 2; grid-column: 8 / 13;
-    align-self: end;
-    align-self: last baseline;
-    max-width: 34ch;
-    font-size: clamp(18px, 1.6vw, 22px);
-    font-weight: 300;
-    line-height: 1.45;
-    color: #bcbcbc;   /* 9:1 ou mais sobre a cena mascarada */
-    text-wrap: pretty;
-  }
-  .sb-abertura__lead :global(strong) { font-weight: 500; color: var(--papel); }
-
-  /* 6 e 4 colunas: o H1 na largura toda e o lead embaixo; a capa fica com a
-     altura do conteúdo. */
+  .sb-capa__titulo > span { white-space: nowrap; }
+  .sb-capa__caixa :global(strong) { font-weight: 700; }
   @media (max-width: 899.98px) {
-    .sb-abertura { min-height: auto; }
-    .sb-abertura__titulo { grid-column: 1 / -1; align-self: start; }
-    .sb-abertura__lead {
-      grid-row: 3; grid-column: 1 / -1;
-      align-self: start;
-      margin-top: 32px;
-    }
+    .sb-capa__titulo { grid-column: 1 / -1; padding-bottom: 32px; }
+    .sb-capa__caixa { grid-row: 3; grid-column: 1 / -1; margin-inline: calc(-1 * var(--grid-inset)); padding-inline: var(--grid-inset); }
   }
 </style>

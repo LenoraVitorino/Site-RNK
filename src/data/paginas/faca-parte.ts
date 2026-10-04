@@ -5,6 +5,20 @@ import { copyLiteral } from '../versao';
  * Copy literal de docs/03-copy/faca-parte.md. A versão estudio (padrão) tem
  * o topo revisto em 29/09/2026; a VERSAO=copy mantém o original.
  */
+/**
+ * Layout editorial (04/10/2026): o /faca-parte deixou o layout genérico e
+ * monta as dobras em src/components/faca-parte/, lendo os blocos abaixo.
+ * Textos novos só de interface, nas duas versões.
+ */
+export const facaParteEd = {
+  /** Título da dobra do time (estudio) e o rótulo da versão copy. */
+  time: copyLiteral
+    ? { rotulo: undefined, h2: '#TEAMRENKE' }
+    : { rotulo: 'Quem faz a Renke', h2: 'Pessoas que constroem a operação.' },
+  /** O quadro que fecha a grade de retratos, levando ao formulário. */
+  convite: { frase: 'O próximo pode ser você.', rotulo: 'Envie seu currículo', rota: '#formulario' },
+};
+
 export const facaParte: Pagina = {
   rota: '/faca-parte',
   titulo: 'Faça Parte | Renke — Trabalhe com RevOps, saúde e tecnologia',

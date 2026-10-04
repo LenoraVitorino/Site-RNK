@@ -1,0 +1,55 @@
+---
+/**
+ * No que acreditamos (04/10/2026, layout editorial). A foto do salão abre a
+ * dobra na largura da tela; o papel começa logo abaixo, com o título à
+ * esquerda e as crenças numa lista de setas à direita, cada uma em dois
+ * pesos ("Liberdade" no fino, "com autorresponsabilidade" no forte), como o
+ * carrossel "Atrair pacientes sem construir reputação é frágil". Na versão
+ * copy, sem a lista, entram os parágrafos.
+ */
+import { Image } from 'astro:assets';
+import salao from '../../assets/sede/equipe.jpg';
+import Seta from '../editorial/Seta.astro';
+import { doisPesos } from '../editorial/pesos';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'texto'> }
+const { bloco } = Astro.props;
+const [leve, forte] = doisPesos(bloco.h2 ?? '', 1);
+---
+<section class="ed-secao ed-secao--papel fp-crencas" id="faca-parte-crencas" data-tom="claro" aria-labelledby="faca-parte-crencas-titulo">
+  <figure class="ed-foto fp-crencas__foto">
+    <Image src={salao} alt="Salão da sede com o time nas estações de trabalho e a faixa amarela da marca na parede." format="webp" quality={76} widths={[960, 1600, 2200]} sizes="100vw" />
+  </figure>
+  <div class="container ed-grade fp-crencas__grade">
+    <div class="fp-crencas__cabeca">
+      {bloco.eyebrow && <p class="ed-antetitulo">{bloco.eyebrow}</p>}
+      <h2 class="ed-display ed-display--medio entra" id="faca-parte-crencas-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
+      {bloco.lista && bloco.paragrafos[0] && <p class="ed-chamada fp-crencas__frase entra" style="--i:1">{bloco.paragrafos[0]}</p>}
+    </div>
+    {bloco.lista ? (
+      <ul class="ed-setas fp-crencas__lista">
+        {bloco.lista.map((c, i) => (
+          <li class="entra" style={`--i:${i}`}><Seta /><p class="ed-setas__frase">{c.titulo} <b>{c.texto.replace(/^Com /, 'com ').replace(/^Como /, 'como ')}</b></p></li>
+        ))}
+      </ul>
+    ) : (
+      <div class="fp-crencas__textos">
+        {bloco.paragrafos.map((p, i) => <p class="ed-chamada entra" style={`--i:${i}`} set:html={p} />)}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .fp-crencas { padding-top: 0; }
+  .fp-crencas__foto { height: clamp(320px, 56vh, 640px); }
+  .fp-crencas__grade { row-gap: 56px; align-items: start; margin-top: clamp(64px, 7vw, 120px); }
+  .fp-crencas__cabeca { grid-column: 1 / span 5; display: grid; gap: clamp(24px, 2.6vw, 40px); }
+  .fp-crencas__frase { font-weight: 400; color: var(--ed-tinta-2); max-width: 28ch; }
+  .fp-crencas__lista, .fp-crencas__textos { grid-column: 7 / -1; }
+  .fp-crencas__textos { display: grid; gap: 28px; }
+  @media (max-width: 899.98px) {
+    .fp-crencas__cabeca, .fp-crencas__lista, .fp-crencas__textos { grid-column: 1 / -1; }
+  }
+</style>

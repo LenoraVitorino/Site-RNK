@@ -1,0 +1,62 @@
+---
+/**
+ * Capa do Faça parte (04/10/2026, layout editorial). O retrato da Geise
+ * com a camiseta da Renke à direita: o fundo preto da foto continua no
+ * grafite da dobra. O título em caixa alta à esquerda passa por cima da
+ * foto, e o selo GPTW já aparece aqui, ao lado do botão.
+ */
+import { Image } from 'astro:assets';
+import retrato from '../../assets/equipe/geise-retrato.jpg';
+import seloGptw from '../../assets/selos/gptw-2025.png';
+import Selo from '../ui/Selo.astro';
+import Botao from '../ui/Botao.astro';
+import { semSeta } from '../pagina/contexto';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'hero'> }
+const { bloco } = Astro.props;
+const forte = bloco.realce ?? bloco.titulo.length - 1;
+---
+<section class="ed-capa fp-capa" id="faca-parte-capa" aria-labelledby="faca-parte-titulo">
+  <figure class="ed-foto ed-capa__foto fp-capa__foto">
+    <Image src={retrato} alt="Geise, do time da Renke, com a camiseta da marca." format="webp" quality={80} widths={[480, 800, 1280]} sizes="(min-width: 900px) 46vw, 100vw" loading="eager" fetchpriority="high" />
+  </figure>
+  <div class="container ed-grade fp-capa__miolo">
+    <Selo class="fp-capa__rotulo" tom="escuro">A Renke</Selo>
+    <h1 class="ed-display fp-capa__titulo entra" id="faca-parte-titulo">
+      {bloco.titulo.map((l, i) => <span>{i === forte ? <b>{l}</b> : l}</span>)}
+    </h1>
+    <div class="fp-capa__pe entra" style="--i:1">
+      {bloco.sub && <p class="ed-corpo fp-capa__sub">{bloco.sub}</p>}
+      <div class="fp-capa__acoes">
+        {bloco.cta && <Botao href={bloco.rotaCta ?? '#formulario'} variante="claro">{semSeta(bloco.cta)}</Botao>}
+        <Image class="fp-capa__selo" src={seloGptw} alt="Selo Great Place To Work: empresa certificada no Brasil." width={88} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fp-capa { background-color: #050505; }
+  .fp-capa::before {
+    background:
+      linear-gradient(to right, #050505 0%, #050505 46%, rgb(5 5 5 / .5) 62%, rgb(5 5 5 / 0) 78%),
+      linear-gradient(to top, #050505 0%, rgb(5 5 5 / 0) 34%);
+  }
+  .fp-capa__foto { left: auto; width: min(54%, 860px); background: #050505; }
+  .fp-capa__foto :global(img) { object-position: 50% 18%; }
+  .fp-capa__miolo { row-gap: 28px; }
+  .fp-capa__rotulo { justify-self: start; }
+  .fp-capa__titulo { grid-column: 1 / span 9; font-size: clamp(40px, 10vw, 180px); }
+  .fp-capa__titulo > span { white-space: nowrap; }
+  .fp-capa__pe { grid-column: 1 / span 5; display: grid; gap: 32px; margin-top: 12px; }
+  .fp-capa__sub { max-width: 40ch; }
+  .fp-capa__acoes { display: flex; align-items: center; gap: 28px; }
+  .fp-capa__selo { width: 88px; height: auto; }
+  .fp-capa__acoes :global(.botao) { white-space: nowrap; }
+  @media (max-width: 899.98px) {
+    .fp-capa__foto { width: 100%; opacity: .55; }
+    .fp-capa::before { background: linear-gradient(to top, #050505 0%, rgb(5 5 5 / .85) 40%, rgb(5 5 5 / .2) 100%); }
+    .fp-capa__titulo, .fp-capa__pe { grid-column: 1 / -1; }
+  }
+</style>

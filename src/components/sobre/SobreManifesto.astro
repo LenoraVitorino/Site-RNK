@@ -1,103 +1,31 @@
 ---
 /**
- * S1 · O que somos (docs/04-design/pagina-sobre.md, (a) "S1").
- * A primeira dobra papel sobe como uma folha, e a foto da operação
- * atravessa a costura entre o escuro e o papel.
- *
- * A costura: o wrapper da foto tem margin-top negativo de
- * (--esp-secao + --sb-sobe), então o topo da foto fica --sb-sobe acima do
- * fim de S0, dentro da reserva que SobreAbertura.astro deixa no padding de
- * baixo. O `main > *` (.trilhos) dá o mesmo z-index a todas as seções, e a
- * de baixo pinta por cima da de cima.
- *
- * Grade: foto nas colunas 5–12 (≥1100px, encostada à direita) ou 4–12
- * (900–1099.98); título em tom duplo e o parágrafo desencontrado, mais à
- * direita. Abaixo de 900px, tudo empilha; abaixo de 600px, a foto vira 3:2.
- *
- * A foto é o LCP da página: eager, sem .entra; o movimento dela é só a
- * rolagem nativa e a paralaxe de ±18px dentro da moldura.
+ * O que somos (04/10/2026, layout editorial). No papel: o título em caixa
+ * alta, a 1ª linha no fino e a 2ª no forte; embaixo, a frase grande à
+ * esquerda e a foto do estúdio sangrando para a direita.
  */
-import CartaoFoto from './CartaoFoto.astro';
+import { Image } from 'astro:assets';
 import { somos, fotos } from '../../data/sobre';
+const f = fotos.somos;
 ---
-<section class="secao int-secao int-secao--papel sb-somos" id="sobre-somos" data-tom="papel" aria-labelledby="sobre-somos-titulo">
-  <div class="container sb-grade">
-    <div class="sb-somos__foto">
-      <CartaoFoto
-        slot={fotos.abertura}
-        sizes="(min-width: 1100px) min(820px, 58vw), (min-width: 900px) 64vw, 86vw"
-        paralaxe={18}
-        tom="claro"
-        eager
-      />
-    </div>
-    <h2 class="titulo sb-somos__titulo entra" id="sobre-somos-titulo" style="--i:0">
-      <span>{somos.h2[0]}</span>{' '}<span>{somos.h2[1]}</span>
+<section class="ed-secao ed-secao--papel sb-somos" id="sobre-somos" data-tom="claro" aria-labelledby="sobre-somos-titulo">
+  <div class="container ed-grade sb-somos__grade">
+    <h2 class="ed-display ed-display--medio sb-somos__titulo entra" id="sobre-somos-titulo">
+      <span>{somos.h2[0]}</span>{' '}<span><b>{somos.h2[1]}</b></span>
     </h2>
-    <p class="sb-somos__texto entra" style="--i:1">{somos.texto}</p>
+    <p class="ed-chamada sb-somos__texto entra" style="--i:1">{somos.texto}</p>
+    <figure class="ed-foto ed-revela entra ed-sangra-dir sb-somos__foto">
+      <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[720, 1280, 1760]} sizes="(min-width: 900px) 60vw, 100vw" style={`object-position: ${f.foco}`} />
+    </figure>
   </div>
 </section>
 
 <style>
-  /* A foto sobe acima da costura e fica encostada à direita da grade. */
-  .sb-somos__foto {
-    grid-row: 1; grid-column: 5 / 13;
-    justify-self: end;
-    width: 100%; max-width: 820px;
-    margin-top: calc(-1 * (var(--esp-secao) + var(--sb-sobe)));
-  }
-
-  /* Tom duplo: a primeira negação em tinta, a segunda em cinza (5,2:1).
-     Nas 12 colunas, e não nas 1–10 da especificação: medido no Chrome, cada
-     frase tem ~1054px a 1440 (75px), mais que as 10 colunas (991px), e o
-     título quebrava em quatro linhas. Assim cada frase fica numa linha só
-     de 900 a 1920. */
-  .sb-somos__titulo {
-    grid-row: 2; grid-column: 1 / -1;
-    margin-top: clamp(56px, 8vw, 120px);
-    font-size: clamp(34px, 5.2vw, 76px);
-    font-weight: 280;
-    line-height: 1.02;
-    letter-spacing: -.045em;
-    color: var(--sb-tinta);
-  }
-  .sb-somos__titulo > span { display: block; }
-  .sb-somos__titulo > span:last-child { color: var(--sb-tinta-2); }
-
-  /* O parágrafo começa mais à direita que o título: desencontrado. */
-  .sb-somos__texto {
-    grid-row: 3; grid-column: 7 / 13;
-    margin-top: 40px;
-    max-width: 40ch;
-    font-size: clamp(18px, 1.5vw, 22px);
-    font-weight: 300;
-    line-height: 1.5;
-    color: var(--sb-tinta);
-    text-wrap: pretty;
-  }
-
-  @media (max-width: 1099.98px) {
-    .sb-somos__foto { grid-column: 4 / 13; }
-    .sb-somos__texto { grid-column: 6 / 13; }
-  }
-
-  /* 6 colunas: foto na largura toda, texto empilhado. */
+  .sb-somos { padding-top: clamp(80px, 9vw, 152px); }
+  .sb-somos__grade { row-gap: clamp(48px, 6vw, 96px); align-items: end; }
+  .sb-somos__texto { grid-column: 1 / span 4; grid-row: 2; align-self: end; padding-bottom: 8px; }
+  .sb-somos__foto { grid-column: 6 / -1; grid-row: 2; aspect-ratio: 16 / 10; }
   @media (max-width: 899.98px) {
-    .sb-somos__foto { grid-column: 1 / -1; }
-    .sb-somos__texto { grid-column: 1 / -1; }
-  }
-
-  /* 4 colunas: a foto em 3:2, para não tomar a tela do celular. */
-  @media (max-width: 599.98px) {
-    .sb-somos__foto { --sb-prop: 3 / 2; }
-  }
-
-  /* Abaixo de ~386px, o título acompanha a largura: com 34px fixos, em 320
-     e 360 cada frase quebrava em três linhas ("Não somos / consultoria /
-     de gestão."). Medido no Chrome: "consultoria de gestão." tem ~9,1× o
-     corpo; 8,8vw deixa cada frase em duas linhas (28px em 320, 34px a
-     partir de ~386). */
-  @media (max-width: 599.98px) {
-    .sb-somos__titulo { font-size: clamp(28px, 8.8vw, 34px); }
+    .sb-somos__texto, .sb-somos__foto { grid-column: 1 / -1; grid-row: auto; }
   }
 </style>
