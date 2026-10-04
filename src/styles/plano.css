@@ -5,74 +5,40 @@
    (.ganhos__*, em home-refinamento.css) e o extrato dos Resultados.
    ============================================================ */
 
-/* ---------- Hero (referência Tres Mares) ---------- */
-.plano-hero { position: relative; isolation: isolate; overflow: hidden; min-height: max(100svh, 640px); padding-top: var(--altura-header); color: var(--papel); }
-/* O símbolo do plano, gigante e vazando da tela, no lugar do da referência.
-   --simb-s é o lado da caixa do SVG (1080); --simb-x/y, o canto dela na hero. */
-.plano-hero {
-  --simb-s: 118vw;
-  --simb-x: calc(66vw - var(--simb-s) / 2);
-  --simb-y: calc(46svh - var(--simb-s) / 2);
-}
-/* O palco corta o símbolo logo abaixo do menu, que segue legível; dentro
-   dele o símbolo continua nas coordenadas da hero. */
-.plano-hero__palco { position: absolute; inset: var(--altura-header) 0 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.plano-hero__simbolo {
-  position: absolute;
-  left: var(--simb-x); top: calc(var(--simb-y) - var(--altura-header)); width: var(--simb-s); height: var(--simb-s);
-  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-}
-.plano-hero__simbolo--papel {
-  -webkit-mask-image: var(--simb-papel); mask-image: var(--simb-papel);
-  background: linear-gradient(170deg, rgb(246 246 243 / .92), rgb(232 232 229 / .86));
-  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
-}
-.plano-hero__simbolo--ouro { -webkit-mask-image: var(--simb-ouro); mask-image: var(--simb-ouro); background: var(--destaque, #FFD103); }
-/* O texto fica grafite onde passa por cima do símbolo (só com o script, que alinha a silhueta). */
-.plano-hero--recorte .plano-recorte {
-  /* A cor de base vai como camada de imagem: o cabeçalho lê background-color para escolher o tom. */
-  background: var(--simb-silhueta) calc(var(--simb-x) - var(--rx, 0px)) calc(var(--simb-y) - var(--ry, 0px)) / var(--simb-s) var(--simb-s) no-repeat, linear-gradient(var(--cor-recorte, #f2f2ee), var(--cor-recorte, #f2f2ee));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.plano-hero--recorte .plano-hero__sub { --cor-recorte: rgb(242 242 238 / .84); }
+/* ---------- Hero (referência Tres Mares → o plano na home) ---------- */
+/* Fundo chapado, o mesmo do palco dos planos na home: a cena 3D não aparece aqui. */
+.plano-hero { position: relative; isolation: isolate; background: #101011; color: var(--papel); padding-top: var(--altura-header); }
 .plano-hero__grade {
-  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; row-gap: clamp(24px, 3vw, 40px);
-  min-height: calc(max(100svh, 640px) - var(--altura-header)); padding-bottom: clamp(20px, 2.4vw, 32px);
+  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(24px, 4vw, 72px); row-gap: clamp(32px, 4vw, 56px);
+  min-height: calc(max(100svh, 680px) - var(--altura-header)); padding-block: clamp(24px, 3vw, 48px) clamp(20px, 2.4vw, 32px);
 }
-/* O nome cruza o vidro: onde passa por cima dele, inverte para grafite. */
-.plano-hero__titulo {
-  align-self: center; margin: 0; padding-left: 12%;
-  font-family: var(--font-titulo); font-weight: 300; font-size: clamp(76px, 13.4vw, 220px); line-height: .84; letter-spacing: -.065em;
-  color: #f2f2ee;
-}
-/* Folga embaixo das letras para o recorte não cortar a descida. */
-.plano-hero__linha { padding-bottom: .06em; margin-bottom: -.06em; }
+.plano-hero__texto { align-self: center; display: grid; justify-items: start; gap: clamp(20px, 2vw, 28px); }
+.plano-hero__texto .selo-revena { margin: 0; }
+/* O nome diagramado: a segunda linha entra recuada, como "Private / Equity". */
+.plano-hero__titulo { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(68px, 9vw, 156px); line-height: .86; letter-spacing: -.06em; color: #f2f2ee; }
 .plano-hero__linha { display: block; }
-.plano-hero__linha--2 { padding-left: .6em; font-weight: 500; }
-.plano-hero__apoio { display: grid; justify-items: start; gap: 20px; max-width: min(340px, calc(30vw - var(--grid-inset) - 28px)); min-width: 250px; }
-.plano-hero__apoio .selo-revena { margin: 0; }
-.plano-hero__sub { margin: 0; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .82); text-wrap: pretty; }
+.plano-hero__linha--2 { padding-left: .62em; font-weight: 500; }
+.plano-hero__sub { margin: 0; max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
 .plano-hero__acoes { margin: 4px 0 0; }
-/* A ficha na base, em colunas, e também invertendo sobre o vidro. */
-.plano-hero__ficha { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; color: #f2f2ee; }
-.plano-hero__ficha dt, .plano-hero__ficha dd { width: fit-content; }
-.plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .4); }
-.plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
-.plano-hero__ficha dd { margin: 6px 0 0; font-size: 15px; line-height: 1.4; max-width: 30ch; text-wrap: pretty; }
+/* À direita, o símbolo com a foto editorial, a peça da home, um pouco menor. */
+.plano-hero__imagem { align-self: center; justify-self: center; width: min(100%, 72svh, 640px); aspect-ratio: 1; }
+.plano-hero__imagem .plano-editorial { width: 100%; height: 100%; --foto-fundo: #101011; }
+.plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; }
+.plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .16); }
+.plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
+.plano-hero__ficha dd { margin: 6px 0 0; font-size: 15px; line-height: 1.4; max-width: 30ch; color: #f2f2ee; text-wrap: pretty; }
 
-/* Entrada: o nome sobe linha por linha, depois o apoio e a ficha. */
+/* Entrada: o nome sobe linha por linha; depois a imagem, o apoio e a ficha. */
 @media (prefers-reduced-motion: no-preference) {
   .js .plano-hero__linha { animation: plano-sobe 1.2s var(--easing) both; }
   .js .plano-hero__linha--2 { animation-delay: .14s; }
-  .js .plano-hero__simbolo { animation: plano-vidro 1.6s var(--easing) both; }
-  .js .plano-hero__simbolo--ouro { animation-delay: .12s; }
-  .js :is(.plano-hero__apoio, .plano-hero__ficha) { animation: plano-aparece 1s var(--easing) .5s both; }
-  .js .plano-hero__ficha { animation-delay: .7s; }
+  .js .plano-hero__imagem { animation: plano-aparece 1.4s var(--easing) .25s both; }
+  .js :is(.plano-hero__texto .selo-revena, .plano-hero__sub, .plano-hero__acoes) { animation: plano-aparece 1s var(--easing) .45s both; }
+  .js .plano-hero__ficha { animation: plano-aparece 1s var(--easing) .7s both; }
 }
 @keyframes plano-sobe { from { opacity: 0; transform: translate3d(0, .18em, 0); } }
 @keyframes plano-aparece { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
-@keyframes plano-vidro { from { opacity: 0; transform: scale(.96); } }
 
 /* ---------- Painel claro com chanfro (o do método e dos Resultados) ---------- */
 .plano-painel {
@@ -147,7 +113,6 @@
 /* ---------- Tablet e celular ---------- */
 @media (max-width: 1099.98px) {
   .plano-hero__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .plano-hero__titulo { padding-left: 4%; }
 }
 @media (max-width: 899.98px) {
   .plano-ideal__grade { grid-template-columns: 1fr; }
@@ -164,12 +129,13 @@
   .plano-regua__trilho::before { left: -5px; top: 0; margin-top: 0; }
   .plano-entregas__linha { grid-template-columns: 1fr; }
 }
+@media (max-width: 899.98px) {
+  /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
+  .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
+  .plano-hero__imagem { width: min(100%, 460px); }
+}
 @media (max-width: 699.98px) {
-  .plano-hero__titulo { padding-left: 0; font-size: clamp(64px, 21vw, 120px); }
+  .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
   .plano-hero__linha--2 { padding-left: .45em; }
-  .plano-hero__apoio { max-width: none; min-width: 0; }
-  /* No celular o símbolo fica na altura do nome; a frase e o botão ficam na cena. */
-  .plano-hero { --simb-s: 170vw; --simb-x: calc(74vw - var(--simb-s) / 2); --simb-y: calc(var(--altura-header) + 150px - var(--simb-s) / 2); }
-  .plano-hero__titulo { align-self: start; padding-block: clamp(40px, 12vw, 64px) 0; min-height: clamp(300px, 84vw, 380px); }
-  .plano-hero__grade { grid-template-rows: auto auto auto; }
+}
 }

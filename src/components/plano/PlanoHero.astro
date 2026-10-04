@@ -1,24 +1,21 @@
 ---
 /**
- * Hero dos planos Revena (04/10/2026, Lenora: "algo do tipo dessa
- * referência", Tres Mares Capital / Private Equity). O nome do plano em duas
- * linhas desencontradas, gigante, cruzando o símbolo oficial do plano (no
- * lugar do símbolo da referência: "a ideia é usar o símbolo do revena
- * start"), enorme e vazando da tela: o lado claro em vidro e o lado amarelo
- * chapado. Onde o texto passa por cima do símbolo, ele fica grafite, como o
- * texto da referência escurece sobre o vermelho (background-clip: text com a
- * silhueta do símbolo, alinhada pelo script). Embaixo à esquerda, o selo, a
- * frase e o botão; na base, a ficha do plano em colunas. Tudo sobre a cena
- * 3D das internas.
+ * Hero dos planos Revena (04/10/2026). Partiu da referência Tres Mares
+ * Capital (Private Equity) e, a pedido da Lenora, ficou como o plano na
+ * home: fundo chapado (sem a cena 3D que se mexe), o nome do plano
+ * diagramado à esquerda, em duas linhas desencontradas, com o selo, a frase
+ * e o botão; à direita, o símbolo oficial do plano com a foto editorial (a
+ * mão com a seringa no Start), a mesma peça da home (PlanoImagem). Na base,
+ * a ficha do plano em colunas, como os números da referência.
  */
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import Icone from '../ui/Icone.astro';
 import Selo from '../ui/Selo.astro';
+import PlanoImagem from '../home2/PlanoImagem.astro';
 import { semSeta, type ContextoSecao } from '../pagina/contexto';
+import '../../styles/planos-editoriais.css';
 
 interface Props {
-  /** Nome do arquivo em public/icones: plano-<simbolo>-light.svg. */
+  /** Chave do plano: public/icones/plano-<simbolo>-dark.svg e a foto editorial. */
   simbolo: string;
   linhas: [string, string];
   sub?: string;
@@ -29,37 +26,16 @@ interface Props {
 }
 const { simbolo, linhas, sub, cta, rotaCta = '#secao-2', ficha, secao } = Astro.props;
 const naPagina = rotaCta.startsWith('#');
-
-/* O SVG oficial tem o lado amarelo em class "cls-1" e o lado escuro no resto
-   (como em PlanosPalco). Cada lado vira uma máscara, e os dois juntos, a
-   silhueta grafite que pinta o texto por cima do símbolo. */
-const svg = readFileSync(join(__RAIZ__, 'public', 'icones', `plano-${simbolo}-light.svg`), 'utf8');
-const vb = svg.match(/viewBox="([^"]+)"/)?.[1] ?? '0 0 1080 1080';
-const lados = { ouro: [] as string[], papel: [] as string[] };
-for (const [, tag, attrs] of svg.matchAll(/<(rect|path|polygon|circle|ellipse)\b([^>]*?)\/?>/g)) {
-  lados[/class="cls-1"/.test(attrs) ? 'ouro' : 'papel'].push(`<${tag} ${attrs.replace(/\s*class="[^"]*"/, '').trim()}/>`);
-}
-const uri = (formas: string, cor = '#000') =>
-  `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='${vb}'><g fill='${cor}'>${formas}</g></svg>`)}")`;
-const estilo = [
-  `--simb-ouro:${uri(lados.ouro.join(''))}`,
-  `--simb-papel:${uri(lados.papel.join(''))}`,
-  `--simb-silhueta:${uri(lados.ouro.join('') + lados.papel.join(''), '#232321')}`,
-].join(';');
 ---
-<section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId} style={estilo} data-plano-hero>
-  <div class="plano-hero__palco" aria-hidden="true">
-    <div class="plano-hero__simbolo plano-hero__simbolo--papel"></div>
-    <div class="plano-hero__simbolo plano-hero__simbolo--ouro"></div>
-  </div>
+<section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container plano-hero__grade">
-    <h1 id={secao.tituloId} class="plano-hero__titulo">
-      <span class="plano-hero__linha plano-recorte">{linhas[0]}</span>
-      <span class="plano-hero__linha plano-hero__linha--2 plano-recorte">{linhas[1]}</span>
-    </h1>
-    <div class="plano-hero__apoio">
+    <div class="plano-hero__texto">
       <Selo marca="revena">Protocolo Revena</Selo>
-      {sub && <p class="plano-hero__sub plano-recorte">{sub}</p>}
+      <h1 id={secao.tituloId} class="plano-hero__titulo">
+        <span class="plano-hero__linha">{linhas[0]}</span>
+        <span class="plano-hero__linha plano-hero__linha--2">{linhas[1]}</span>
+      </h1>
+      {sub && <p class="plano-hero__sub">{sub}</p>}
       {cta && (
         <p class="plano-hero__acoes">
           <a class="botao botao--lg" href={rotaCta}>
@@ -69,25 +45,9 @@ const estilo = [
         </p>
       )}
     </div>
+    <div class="plano-hero__imagem"><PlanoImagem plano={simbolo} /></div>
     <dl class="plano-hero__ficha">
-      {ficha.map((f) => <div><dt class="plano-recorte">{f.rotulo}</dt><dd class="plano-recorte">{f.valor}</dd></div>)}
+      {ficha.map((f) => <div><dt>{f.rotulo}</dt><dd>{f.valor}</dd></div>)}
     </dl>
   </div>
 </section>
-
-<script>
-  /* Alinha a silhueta do símbolo em cada texto: a posição dele dentro da
-     hero (offsetLeft/Top ignoram a animação de entrada). */
-  document.querySelectorAll<HTMLElement>('[data-plano-hero]').forEach((hero) => {
-    const textos = [...hero.querySelectorAll<HTMLElement>('.plano-recorte')];
-    const medir = () => textos.forEach((el) => {
-      let x = 0, y = 0, n: HTMLElement | null = el;
-      while (n && n !== hero) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent as HTMLElement | null; }
-      el.style.setProperty('--rx', `${x}px`); el.style.setProperty('--ry', `${y}px`);
-    });
-    medir();
-    hero.classList.add('plano-hero--recorte');
-    document.fonts?.ready.then(medir);
-    new ResizeObserver(medir).observe(hero);
-  });
-</script>
