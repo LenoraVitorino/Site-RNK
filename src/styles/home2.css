@@ -900,23 +900,19 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 }
 .footer__col .footer__redes a:hover { color: var(--papel); background: rgb(242 242 238 / .42); text-decoration: none; }
 .footer__col .footer__logo { display: inline-block; min-height: 0; min-width: 0; margin: 0; }
-/* O RENKE ao fundo (04/10, Lenora): sobe por trás das colunas, que passam
-   por cima dele; a máscara é o logo e o recheio é um degradê claro que apaga
-   para baixo, com a mesma luz diagonal do fundo. A barra do E fica amarela. */
-.footer__fundo { position: relative; z-index: -1; margin-top: calc(-1 * clamp(28px, 9vw, 150px)); pointer-events: none; user-select: none; }
+/* O RENKE ao fundo (04/10, Lenora): logo um pouco atrás das colunas, mais
+   para baixo, e todo em cinza escuro chapado (a barra do E também, sem
+   amarelo nem degradê). A máscara é o logo. */
+.footer__fundo { position: relative; z-index: -1; margin-top: calc(-1 * clamp(8px, 2.6vw, 44px)); pointer-events: none; user-select: none; }
 .footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2250 / 430; }
-.footer__renke, .footer__renke-barra { position: absolute; inset: 0; }
+.footer__renke, .footer__renke-barra { position: absolute; inset: 0; background: #1b1b1a; }
 .footer__renke {
   -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat;
   mask: url('/marca/renke-rodape.png') center / contain no-repeat;
-  background:
-    linear-gradient(115deg, transparent 30%, rgb(242 242 238 / .06) 47%, transparent 62%),
-    linear-gradient(180deg, rgb(242 242 238 / .11) 0%, rgb(242 242 238 / .035) 100%);
 }
 .footer__renke-barra {
   -webkit-mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
   mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
-  background: linear-gradient(180deg, rgb(255 209 3 / .38), rgb(255 209 3 / .22));
 }
 
 /* ============================================================
