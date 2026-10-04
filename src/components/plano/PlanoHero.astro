@@ -4,10 +4,14 @@
  * Capital (Private Equity) e, a pedido da Lenora, ficou como o plano na
  * home: fundo chapado (sem a cena 3D que se mexe), o nome do plano
  * diagramado à esquerda, em duas linhas desencontradas, com o selo, a frase
- * e o botão; à direita, o símbolo oficial do plano com a foto editorial (a
- * mão com a seringa no Start), a mesma peça da home (PlanoImagem). Na base,
- * a ficha do plano em colunas, como os números da referência.
+ * e o botão; à direita, grande, o símbolo oficial do plano com a foto
+ * editorial (a mão com a seringa no Start), a mesma peça da home
+ * (PlanoImagem). Animação da home: as duas metades do símbolo chegam de
+ * lados opostos e se juntam, a mão sobe por cima e depois flutua devagar.
+ * Na base, a ficha do plano em colunas, como os números da referência.
  */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import Icone from '../ui/Icone.astro';
 import Selo from '../ui/Selo.astro';
 import PlanoImagem from '../home2/PlanoImagem.astro';
@@ -26,6 +30,22 @@ interface Props {
 }
 const { simbolo, linhas, sub, cta, rotaCta = '#secao-2', ficha, secao } = Astro.props;
 const naPagina = rotaCta.startsWith('#');
+
+/* As duas metades do símbolo, como em PlanosPalco: o lado amarelo do SVG
+   (class cls-1) e o resto, ambos pintados de amarelo. De onde cada metade
+   chega também é o da home. */
+const svg = readFileSync(join(__RAIZ__, 'public', 'icones', `plano-${simbolo}-light.svg`), 'utf8');
+const lados = { ouro: [] as string[], papel: [] as string[] };
+for (const [, tag, attrs] of svg.matchAll(/<(rect|path|polygon|circle|ellipse)\b([^>]*?)\/?>/g)) {
+  lados[/class="cls-1"/.test(attrs) ? 'ouro' : 'papel'].push(`<${tag} ${attrs.replace(/\s*class="[^"]*"/, '').trim()}/>`);
+}
+const chegadas: Record<string, [number, number][]> = {
+  start: [[-110, 110], [110, -110]], run: [[-150, 0], [-210, 0]], scale: [[0, 150], [0, 210]],
+  core: [[0, 140], [0, -140]], full: [[0, -140], [0, 140]],
+};
+const pecas = (['ouro', 'papel'] as const).filter((l) => lados[l].length).map((l, k) => ({
+  formas: lados[l].join(''), de: (chegadas[simbolo] ?? chegadas.start)[k] ?? [0, 120],
+}));
 ---
 <section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container plano-hero__grade">
@@ -45,7 +65,14 @@ const naPagina = rotaCta.startsWith('#');
         </p>
       )}
     </div>
-    <div class="plano-hero__imagem"><PlanoImagem plano={simbolo} /></div>
+    <div class="plano-hero__imagem">
+      <div class="plano-hero__arte">
+        <svg class="plano-hero__simbolo" viewBox="0 0 1080 1080" aria-hidden="true" focusable="false">
+          {pecas.map((p) => <g class="plano-hero__peca" style={`--dx:${p.de[0]}px;--dy:${p.de[1]}px`} set:html={p.formas} />)}
+        </svg>
+        <PlanoImagem plano={simbolo} />
+      </div>
+    </div>
     <dl class="plano-hero__ficha">
       {ficha.map((f) => <div><dt>{f.rotulo}</dt><dd>{f.valor}</dd></div>)}
     </dl>

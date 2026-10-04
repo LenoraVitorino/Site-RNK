@@ -7,9 +7,9 @@
 
 /* ---------- Hero (referência Tres Mares → o plano na home) ---------- */
 /* Fundo chapado, o mesmo do palco dos planos na home: a cena 3D não aparece aqui. */
-.plano-hero { position: relative; isolation: isolate; background: #101011; color: var(--papel); padding-top: var(--altura-header); }
+.plano-hero { position: relative; isolation: isolate; overflow: clip; background: #101011; color: var(--papel); padding-top: var(--altura-header); }
 .plano-hero__grade {
-  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr) auto;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: minmax(0, 1fr) auto;
   column-gap: clamp(24px, 4vw, 72px); row-gap: clamp(32px, 4vw, 56px);
   min-height: calc(max(100svh, 680px) - var(--altura-header)); padding-block: clamp(24px, 3vw, 48px) clamp(20px, 2.4vw, 32px);
 }
@@ -21,9 +21,23 @@
 .plano-hero__linha--2 { padding-left: .62em; font-weight: 500; }
 .plano-hero__sub { margin: 0; max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
 .plano-hero__acoes { margin: 4px 0 0; }
-/* À direita, o símbolo com a foto editorial, a peça da home, um pouco menor. */
-.plano-hero__imagem { align-self: center; justify-self: center; width: min(100%, 72svh, 640px); aspect-ratio: 1; }
-.plano-hero__imagem .plano-editorial { width: 100%; height: 100%; --foto-fundo: #101011; }
+/* À direita, grande, o símbolo com a foto editorial (a peça da home). A arte
+   é maior que a coluna e pode passar dela; a foto esmaece nas bordas. */
+.plano-hero__imagem { position: relative; align-self: stretch; min-height: 0; }
+.plano-hero__arte {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  width: min(58vw, calc(100svh - 170px), 900px); aspect-ratio: 1;
+}
+.plano-hero__simbolo { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: var(--destaque, #FFD103); }
+.plano-hero__arte .plano-editorial { position: absolute; inset: 0; width: 100%; height: 100%; --foto-fundo: #101011; }
+.plano-hero__arte .plano-editorial__simbolo { display: none; }   /* o símbolo é o SVG acima, em duas metades */
+@media (prefers-reduced-motion: no-preference) {
+  .js .plano-hero__peca { animation: plano-peca 1.7s var(--easing) .25s both; }
+  .js .plano-hero__arte .plano-editorial__recorte { animation: plano-mao 1.8s var(--easing) .75s both, plano-flutua 9s ease-in-out 2.6s infinite alternate; }
+}
+@keyframes plano-peca { from { translate: var(--dx) var(--dy); opacity: 0; } 30% { opacity: 1; } }
+@keyframes plano-mao { from { translate: 0 12%; clip-path: inset(100% 0 0 0); } }   /* a mão sobe e se revela de baixo para cima, sempre opaca */
+@keyframes plano-flutua { to { translate: 0 -2.2%; } }
 .plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; }
 .plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .16); }
 .plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
@@ -33,7 +47,6 @@
 @media (prefers-reduced-motion: no-preference) {
   .js .plano-hero__linha { animation: plano-sobe 1.2s var(--easing) both; }
   .js .plano-hero__linha--2 { animation-delay: .14s; }
-  .js .plano-hero__imagem { animation: plano-aparece 1.4s var(--easing) .25s both; }
   .js :is(.plano-hero__texto .selo-revena, .plano-hero__sub, .plano-hero__acoes) { animation: plano-aparece 1s var(--easing) .45s both; }
   .js .plano-hero__ficha { animation: plano-aparece 1s var(--easing) .7s both; }
 }
@@ -132,7 +145,8 @@
 @media (max-width: 899.98px) {
   /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
   .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
-  .plano-hero__imagem { width: min(100%, 460px); }
+  .plano-hero__imagem { height: min(92vw, 560px); }
+  .plano-hero__arte { width: min(108vw, 620px); }
 }
 @media (max-width: 699.98px) {
   .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
