@@ -1,0 +1,46 @@
+---
+/**
+ * "O que o plano faz" (04/10/2026): os cartões de vidro desfocado da dobra
+ * "O que muda na sua clínica" da home (.ganhos__*), com o ícone Renke no
+ * anel e a mesma construção (cartão, ícone, título e texto sobem em
+ * sequência quando a grade entra na tela). Quatro lado a lado.
+ */
+import IconeRenke from '../ui/IconeRenke.astro';
+import Selo from '../ui/Selo.astro';
+import type { ContextoSecao } from '../pagina/contexto';
+
+interface Props { h2: string; itens: { titulo: string; texto?: string }[]; icones: string[]; selo?: string; secao: ContextoSecao }
+const { h2, itens, icones, selo, secao } = Astro.props;
+---
+<section class="plano-faz" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <header class="plano-cabeca entra">
+      {selo && <Selo class="cabeca-dobra__selo">{selo}</Selo>}
+      <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+    </header>
+    <ol class="ganhos__grade plano-faz__grade" data-plano-construir>
+      {itens.map((it, i) => (
+        <li class="ganhos__cartao" style={`--i:${i}`}>
+          <span class="ganhos__anel"><IconeRenke nome={icones[i]} size={22} class="ganhos__icone" /></span>
+          <div class="ganhos__corpo">
+            <h3 class="ganhos__nome"><span>{it.titulo}</span></h3>
+            {it.texto && <p class="ganhos__texto"><span>{it.texto}</span></p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  /* A mesma construção da home: só quando a grade entra na tela. */
+  document.querySelectorAll<HTMLElement>('[data-plano-construir]').forEach((grade) => {
+    if (!('IntersectionObserver' in window)) { grade.classList.add('ganhos__grade--construida'); return; }
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      grade.classList.add('ganhos__grade--construida');
+      obs.disconnect();
+    }, { threshold: .25 });
+    obs.observe(grade);
+  });
+</script>

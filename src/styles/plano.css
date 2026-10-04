@@ -1,0 +1,150 @@
+/* ============================================================
+   Páginas dos planos Revena (04/10/2026), começando pela Start.
+   Componentes em src/components/plano/. Peças reaproveitadas da home:
+   o painel claro com chanfro (método e Resultados), os cartões de vidro
+   (.ganhos__*, em home-refinamento.css) e o extrato dos Resultados.
+   ============================================================ */
+
+/* ---------- Hero (referência Tres Mares) ---------- */
+.plano-hero { position: relative; isolation: isolate; overflow: hidden; min-height: max(100svh, 640px); padding-top: var(--altura-header); color: var(--papel); }
+/* Duas faixas de vidro claro em diagonal, como a perna do R: a de cima
+   termina reta à direita e a de baixo começa reta à esquerda. */
+.plano-hero__forma {
+  position: absolute; inset: var(--altura-header) 0 0; z-index: -1; pointer-events: none;   /* começa sob o menu, que segue legível */
+  clip-path: polygon(30% -19%, 100% 25%, 100% 50%, 59.7% 50%, 100% 75.2%, 100% 126%, 30% 81.7%, 30% 50%, 59.7% 50%, 30% 31.4%);
+  background: linear-gradient(170deg, rgb(246 246 243 / .9), rgb(232 232 229 / .84));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+}
+.plano-hero__grade {
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; row-gap: clamp(24px, 3vw, 40px);
+  min-height: calc(max(100svh, 640px) - var(--altura-header)); padding-bottom: clamp(20px, 2.4vw, 32px);
+}
+/* O nome cruza o vidro: onde passa por cima dele, inverte para grafite. */
+.plano-hero__titulo {
+  align-self: center; margin: 0; padding-left: 12%;
+  font-family: var(--font-titulo); font-weight: 300; font-size: clamp(76px, 13.4vw, 220px); line-height: .84; letter-spacing: -.065em;
+  color: #f2f2ee; mix-blend-mode: difference;
+}
+.plano-hero__linha { display: block; }
+.plano-hero__linha--2 { padding-left: .6em; font-weight: 500; }
+.plano-hero__apoio { display: grid; justify-items: start; gap: 20px; max-width: min(340px, calc(30vw - var(--grid-inset) - 28px)); min-width: 250px; }
+.plano-hero__apoio .selo-revena { margin: 0; }
+.plano-hero__sub { margin: 0; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .82); text-wrap: pretty; }
+.plano-hero__acoes { margin: 4px 0 0; }
+/* A ficha na base, em colunas, e também invertendo sobre o vidro. */
+.plano-hero__ficha { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; color: #f2f2ee; mix-blend-mode: difference; }
+.plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .4); }
+.plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.plano-hero__ficha dd { margin: 6px 0 0; font-size: 15px; line-height: 1.4; max-width: 30ch; text-wrap: pretty; }
+
+/* Entrada: o nome sobe linha por linha, depois o apoio e a ficha. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .plano-hero__linha { animation: plano-sobe 1.2s var(--easing) both; }
+  .js .plano-hero__linha--2 { animation-delay: .14s; }
+  .js .plano-hero__forma { animation: plano-vidro 1.6s var(--easing) both; }
+  .js :is(.plano-hero__apoio, .plano-hero__ficha) { animation: plano-aparece 1s var(--easing) .5s both; }
+  .js .plano-hero__ficha { animation-delay: .7s; }
+}
+@keyframes plano-sobe { from { opacity: 0; transform: translate3d(0, .18em, 0); } }
+@keyframes plano-aparece { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+@keyframes plano-vidro { from { opacity: 0; transform: translate3d(4%, 0, 0); } }
+
+/* ---------- Painel claro com chanfro (o do método e dos Resultados) ---------- */
+.plano-painel {
+  --recuo: clamp(8px, 1.25vw, 20px);
+  --chanfro: clamp(14px, 1.5vw, 24px);
+  margin: var(--recuo);
+  padding-block: var(--esp-secao);
+  clip-path: polygon(var(--chanfro) 0, calc(100% - var(--chanfro)) 0, 100% var(--chanfro), 100% calc(100% - var(--chanfro)), calc(100% - var(--chanfro)) 100%, var(--chanfro) 100%, 0 calc(100% - var(--chanfro)), 0 var(--chanfro));
+  background: linear-gradient(170deg, rgb(246 246 243 / .88), rgb(234 234 231 / .82));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+  color: #252523;
+}
+.plano-painel > .container { max-width: calc(var(--largura) - 2 * var(--recuo)); padding-inline: max(16px, calc(var(--gutter) - var(--recuo))); }
+.plano-painel :focus-visible { outline-color: #252523; }
+
+.plano-cabeca { margin-bottom: clamp(36px, 4vw, 64px); }
+.plano-cabeca .titulo { margin: 0; font-weight: 300; }
+.plano-cabeca .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }
+
+/* ---------- Ideal para ---------- */
+.plano-ideal__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 112px); align-items: start; }
+.plano-ideal__titulo { margin: 0; font-weight: 300; position: sticky; top: calc(var(--altura-header) + 32px); }
+.plano-ideal__lista { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgb(37 37 35 / .16); }
+.plano-ideal__item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 20px; align-items: center; padding-block: clamp(18px, 2vw, 28px); border-top: 1px solid rgb(37 37 35 / .16); font-size: clamp(19px, 1.6vw, 25px); font-weight: 300; line-height: 1.3; letter-spacing: -.015em; text-wrap: pretty; }
+/* O número dentro de um losango de fio fino (a assinatura dos ícones Renke). */
+.plano-ideal__n { position: relative; display: grid; place-items: center; width: 36px; height: 36px; font-size: 12px; font-weight: 500; letter-spacing: 0; color: #50504e; }
+.plano-ideal__n::before { content: ''; position: absolute; inset: 5px; border: 1px solid rgb(37 37 35 / .4); transform: rotate(45deg); }
+
+/* ---------- O que o plano faz (cartões de vidro da home) ---------- */
+.plano-faz { padding-block: var(--esp-secao); }
+.plano-faz .plano-cabeca { text-align: center; display: grid; justify-items: center; }
+/* Os textos dos planos são mais longos que os da home: o cartão cresce em vez de ficar quadrado. */
+.plano-faz .ganhos__cartao { aspect-ratio: auto; min-height: clamp(300px, 25vw, 380px); gap: 48px; }
+.plano-faz .ganhos__nome { font-size: clamp(21px, 1.6vw, 25px); text-wrap: pretty; }
+.plano-faz .ganhos__corpo > * { min-width: 0; }
+
+/* ---------- Etapas: régua do tempo ---------- */
+.plano-regua { display: flex; margin: 0; padding: 0; list-style: none; }
+.plano-regua__etapa { flex: var(--peso) 1 0; min-width: 0; display: grid; align-content: start; gap: 8px; padding-right: clamp(14px, 1.8vw, 32px); }
+.plano-regua__etapa:last-child { padding-right: 0; }
+.plano-regua__trilho { position: relative; display: block; height: 1px; margin: 0 calc(-1 * clamp(14px, 1.8vw, 32px)) 22px 0; background: rgb(37 37 35 / .16); }
+.plano-regua__etapa:last-child .plano-regua__trilho { margin-right: 0; }
+.plano-regua__etapa--opcional .plano-regua__trilho { background: repeating-linear-gradient(90deg, rgb(37 37 35 / .3) 0 5px, transparent 5px 11px); }
+.plano-regua__fio { position: absolute; inset: 0; background: #252523; transform-origin: left; transform: scaleX(0); }
+.plano-regua__etapa--opcional .plano-regua__fio { background: repeating-linear-gradient(90deg, #252523 0 5px, transparent 5px 11px); }
+/* O marco de cada etapa: um losango que fica amarelo quando o fio chega. */
+.plano-regua__trilho::before { content: ''; position: absolute; z-index: 1; left: 0; top: 50%; width: 11px; height: 11px; margin-top: -5.5px; background: #ececea; border: 1px solid rgb(37 37 35 / .5); transform: rotate(45deg); }
+.plano-regua__n { font-size: 12.5px; font-weight: 500; color: #6a6a67; }
+.plano-regua__nome { margin: 0; font-size: clamp(19px, 1.5vw, 23px); font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
+.plano-regua__duracao { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: #6a6a67; }
+.plano-regua__texto { margin: 6px 0 0; font-size: 14.5px; line-height: 1.5; color: #50504e; max-width: 30ch; text-wrap: pretty; }
+.plano-etapas__fechamento { margin: clamp(40px, 4.4vw, 64px) 0 0; max-width: 62ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.55; color: #50504e; text-wrap: pretty; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .plano-regua__etapa { opacity: .3; transition: opacity .9s var(--easing) var(--atraso); }
+  .js .plano-regua__fio { transition: transform var(--dur) linear var(--atraso); }
+  .js .plano-regua__trilho::before { transition: background-color .6s var(--easing) var(--atraso), border-color .6s var(--easing) var(--atraso); }
+}
+.plano-regua--viva .plano-regua__etapa, html:not(.js) .plano-regua__etapa { opacity: 1; }
+.plano-regua--viva .plano-regua__fio, html:not(.js) .plano-regua__fio { transform: scaleX(1); }
+.plano-regua--viva .plano-regua__trilho::before { background: var(--destaque, #FFD103); border-color: #252523; }
+
+/* ---------- Entregas (o extrato dos Resultados) ---------- */
+.plano-entregas { padding-block: var(--esp-secao); }
+.plano-cabeca--linha { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 32px; }
+.plano-entregas__rotulos { margin: 0; font-size: 12.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
+.plano-entregas__lista { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgb(242 242 238 / .14); }
+.plano-entregas__linha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px clamp(20px, 4vw, 72px); align-items: baseline; padding-block: clamp(22px, 2.4vw, 34px); border-top: 1px solid rgb(242 242 238 / .14); }
+.plano-entregas__area { margin: 0; display: flex; align-items: center; gap: 18px; font-size: clamp(26px, 2.6vw, 42px); font-weight: 300; line-height: 1.1; letter-spacing: -.035em; color: var(--papel); }
+.plano-entregas__area::before { content: ''; flex: none; width: 9px; height: 9px; background: var(--destaque, #FFD103); transform: rotate(45deg) translateY(-2px); }
+.plano-entregas__texto { margin: 0; max-width: 42ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+
+/* ---------- Tablet e celular ---------- */
+@media (max-width: 1099.98px) {
+  .plano-hero__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plano-hero__titulo { padding-left: 4%; }
+}
+@media (max-width: 899.98px) {
+  .plano-ideal__grade { grid-template-columns: 1fr; }
+  .plano-ideal__titulo { position: static; }
+  /* A régua fica em pé: o fio desce pela esquerda. */
+  .plano-regua { flex-direction: column; gap: 32px; }
+  .plano-regua__etapa { position: relative; padding: 0 0 0 36px; }
+  .plano-regua__trilho { position: absolute; left: 5px; top: 4px; bottom: -36px; width: 1px; height: auto; margin: 0; }
+  .plano-regua__etapa:last-child .plano-regua__trilho { bottom: 0; }
+  .plano-regua__etapa--opcional .plano-regua__trilho { background: repeating-linear-gradient(180deg, rgb(37 37 35 / .3) 0 5px, transparent 5px 11px); }
+  .plano-regua__fio { transform-origin: top; transform: scaleY(0); }
+  .plano-regua__etapa--opcional .plano-regua__fio { background: repeating-linear-gradient(180deg, #252523 0 5px, transparent 5px 11px); }
+  .plano-regua--viva .plano-regua__fio, html:not(.js) .plano-regua__fio { transform: scaleY(1); }
+  .plano-regua__trilho::before { left: -5px; top: 0; margin-top: 0; }
+  .plano-entregas__linha { grid-template-columns: 1fr; }
+}
+@media (max-width: 699.98px) {
+  .plano-hero__titulo { padding-left: 0; font-size: clamp(64px, 21vw, 120px); }
+  .plano-hero__linha--2 { padding-left: .45em; }
+  .plano-hero__apoio { max-width: none; min-width: 0; }
+  /* No celular o vidro fica só na altura do nome; a frase e o botão ficam na cena. */
+  .plano-hero__forma { bottom: auto; height: clamp(280px, 78vw, 360px); clip-path: polygon(26% -19%, 100% 20%, 100% 50%, 58% 50%, 100% 72%, 100% 100%, 76% 100%, 26% 78%, 26% 50%, 58% 50%, 26% 30%); }
+  .plano-hero__titulo { align-self: start; padding-block: clamp(56px, 16vw, 84px) 0; min-height: clamp(280px, 78vw, 360px); }
+  .plano-hero__grade { grid-template-rows: auto auto auto; }
+}

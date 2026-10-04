@@ -1,5 +1,43 @@
 ---
-import Pagina from '../../layouts/Pagina.astro';
-import { revenaStart } from '../../data/paginas/revena-start';
+/**
+ * Revena Start (04/10/2026): primeira página de plano no desenho novo. A
+ * hero vem da referência Tres Mares (nome gigante cruzando faixas de vidro
+ * em diagonal, ficha na base) e as dobras reaproveitam a home: o painel
+ * claro com chanfro (lista e etapas), os cartões de vidro de "O que muda na
+ * sua clínica" (o que o plano faz), o extrato dos Resultados (entregas) e a
+ * chamada final das internas. Os componentes ficam em src/components/plano/
+ * para replicar nos outros planos. Textos: src/data/paginas/revena-start.ts.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoInterno from '../../components/pagina/FundoInterno.astro';
+import BlocoCtaFinal from '../../components/pagina/BlocoCtaFinal.astro';
+import PlanoHero from '../../components/plano/PlanoHero.astro';
+import PlanoIdeal from '../../components/plano/PlanoIdeal.astro';
+import PlanoFaz from '../../components/plano/PlanoFaz.astro';
+import PlanoEtapas from '../../components/plano/PlanoEtapas.astro';
+import PlanoEntregas from '../../components/plano/PlanoEntregas.astro';
+import { planejarSecoes, type BlocoDe, type ContextoSecao } from '../../components/pagina/contexto';
+import { revenaStart as pagina, fichaStart } from '../../data/paginas/revena-start';
+import '../../styles/paginas2.css';
+import '../../styles/plano.css';
+
+const plano = planejarSecoes(pagina.blocos, pagina.rota);
+function de<T extends BlocoDe<any>['tipo']>(tipo: T) {
+  const e = plano.find((p) => p.bloco.tipo === tipo);
+  if (!e || !e.secao) throw new Error(`[revena-start] falta o bloco ${tipo}`);
+  return e as { bloco: BlocoDe<T>; secao: ContextoSecao };
+}
+const hero = de('hero'), lista = de('lista'), blocos = de('blocos'), etapas = de('etapas'), entregas = de('antesDepois'), cta = de('ctaFinal');
+/* As dobras sobre a cena levam o quadro da home; os painéis claros, não. */
+const naCena = (s: ContextoSecao, cena: 'hero' | 'pilares') => ({ ...s, cena });
+const [nome, plano1] = hero.bloco.titulo[0].split(' ') as [string, string];
 ---
-<Pagina pagina={revenaStart} />
+<Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada pagina-plano">
+  <FundoInterno slot="fundo" />
+  <PlanoHero linhas={[nome, plano1]} sub={hero.bloco.sub} cta={hero.bloco.cta} rotaCta={`#${lista.secao.id}`} ficha={fichaStart} secao={naCena(hero.secao, 'hero')} />
+  <PlanoIdeal h2={lista.bloco.h2 ?? ''} itens={lista.bloco.itens} secao={lista.secao} />
+  <PlanoFaz h2={blocos.bloco.h2 ?? ''} itens={blocos.bloco.itens} icones={['conexao', 'funil', 'fluxo', 'dados']} selo="Revena Start" secao={naCena(blocos.secao, 'pilares')} />
+  <PlanoEtapas h2={etapas.bloco.h2.join(' ')} etapas={etapas.bloco.etapas} fechamento={etapas.bloco.fechamento} secao={etapas.secao} />
+  <PlanoEntregas h2={entregas.bloco.h2 ?? ''} rotulos={entregas.bloco.rotulos} linhas={entregas.bloco.linhas} secao={naCena(entregas.secao, 'pilares')} />
+  <BlocoCtaFinal bloco={cta.bloco} secao={{ ...cta.secao, tom: 'cena', cena: 'formulario' }} />
+</Base2>
