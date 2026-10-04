@@ -1,7 +1,7 @@
 ---
 /**
- * No que acreditamos (04/10/2026, layout editorial). A foto do salão abre a
- * dobra na largura da tela; o papel começa logo abaixo, com o título à
+ * No que acreditamos (04/10/2026). A foto do salão abre o painel claro, na
+ * largura dele; com o título à
  * esquerda e as crenças numa lista de setas à direita, cada uma em dois
  * pesos ("Liberdade" no fino, "com autorresponsabilidade" no forte), como o
  * carrossel "Atrair pacientes sem construir reputação é frágil". Na versão
@@ -10,6 +10,7 @@
 import { Image } from 'astro:assets';
 import salao from '../../assets/sede/equipe.jpg';
 import Seta from '../editorial/Seta.astro';
+import Selo from '../ui/Selo.astro';
 import { doisPesos } from '../editorial/pesos';
 import type { BlocoDe } from '../pagina/contexto';
 
@@ -23,7 +24,7 @@ const [leve, forte] = doisPesos(bloco.h2 ?? '', 1);
   </figure>
   <div class="container ed-grade fp-crencas__grade">
     <div class="fp-crencas__cabeca">
-      {bloco.eyebrow && <p class="ed-antetitulo">{bloco.eyebrow}</p>}
+      {bloco.eyebrow && <Selo>{bloco.eyebrow}</Selo>}
       <h2 class="ed-display ed-display--medio entra" id="faca-parte-crencas-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
       {bloco.lista && bloco.paragrafos[0] && <p class="ed-chamada fp-crencas__frase entra" style="--i:1">{bloco.paragrafos[0]}</p>}
     </div>
@@ -43,10 +44,10 @@ const [leve, forte] = doisPesos(bloco.h2 ?? '', 1);
 
 <style>
   .fp-crencas { padding-top: 0; }
-  .fp-crencas__foto { height: clamp(320px, 56vh, 640px); }
+  .fp-crencas__foto { height: clamp(300px, 50vh, 580px); clip-path: none; }
   .fp-crencas__grade { row-gap: 56px; align-items: start; margin-top: clamp(64px, 7vw, 120px); }
-  .fp-crencas__cabeca { grid-column: 1 / span 5; display: grid; gap: clamp(24px, 2.6vw, 40px); }
-  .fp-crencas__frase { font-weight: 400; color: var(--ed-tinta-2); max-width: 28ch; }
+  .fp-crencas__cabeca { grid-column: 1 / span 5; display: grid; justify-items: start; gap: clamp(24px, 2.6vw, 40px); }
+  .fp-crencas__frase { color: var(--ed-tinta-2); max-width: 28ch; }
   .fp-crencas__lista, .fp-crencas__textos { grid-column: 7 / -1; }
   .fp-crencas__textos { display: grid; gap: 28px; }
   @media (max-width: 899.98px) {

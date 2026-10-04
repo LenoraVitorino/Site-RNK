@@ -1,7 +1,6 @@
 ---
 /**
- * GPTW (04/10/2026, layout editorial). No papel, o título em caixa alta na
- * largura toda, como "Saímos da nossa zona de conforto". Embaixo, o texto
+ * GPTW (04/10/2026). No painel claro, o título fino na largura toda, como "Saímos da nossa zona de conforto". Embaixo, o texto
  * à esquerda e a foto do nicho amarelo sangrando à direita, com o selo
  * Great Place To Work grande, colado na borda da foto: é o destaque da
  * dobra.
@@ -48,7 +47,7 @@ const [leve, forte] = bloco.realce && h2.endsWith(bloco.realce)
 
 <style>
   .fp-gptw__grade { row-gap: clamp(56px, 6vw, 104px); align-items: start; }
-  .fp-gptw__titulo { grid-column: 1 / -1; font-size: clamp(44px, 6.6vw, 120px); }
+  .fp-gptw__titulo { grid-column: 1 / -1; font-size: clamp(40px, 5.2vw, 88px); }
   .fp-gptw__texto { grid-column: 1 / span 4; grid-row: 2; display: grid; gap: 32px; align-self: end; }
   .fp-gptw__texto :global(strong) { font-weight: 700; }
   .fp-gptw__indicadores { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 16px; font-weight: 500; }
@@ -57,7 +56,7 @@ const [leve, forte] = bloco.realce && h2.endsWith(bloco.realce)
   .fp-gptw :global(.ed-acoes) { align-items: center; gap: 24px; }
   .fp-gptw__link { color: var(--ed-tinta); }
   .fp-gptw__foto { grid-column: 6 / -1; grid-row: 2; aspect-ratio: 4 / 3; }
-  .fp-gptw__foto :global(img) { object-position: 50% 60%; }
+  .fp-gptw__foto :global(img) { object-position: 50% 60%; filter: saturate(.62) brightness(.96); }   /* o amarelo do nicho não domina o painel */
   /* O selo encosta na borda esquerda da foto, metade sobre ela. */
   .fp-gptw__selo {
     grid-column: 6 / span 2; grid-row: 2; align-self: start; position: relative; z-index: 2;

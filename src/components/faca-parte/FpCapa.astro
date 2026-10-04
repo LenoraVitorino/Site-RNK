@@ -1,9 +1,8 @@
 ---
 /**
  * Capa do Faça parte (04/10/2026, layout editorial). O retrato da Geise
- * com a camiseta da Renke à direita: o fundo preto da foto continua no
- * grafite da dobra. O título em caixa alta à esquerda passa por cima da
- * foto, e o selo GPTW já aparece aqui, ao lado do botão.
+ * com a camiseta da Renke à direita, se desfazendo na cena. O título fino
+ * à esquerda passa por cima da foto, e o selo GPTW já aparece aqui, ao lado do botão.
  */
 import { Image } from 'astro:assets';
 import retrato from '../../assets/equipe/geise-retrato.jpg';
@@ -17,7 +16,7 @@ interface Props { bloco: BlocoDe<'hero'> }
 const { bloco } = Astro.props;
 const forte = bloco.realce ?? bloco.titulo.length - 1;
 ---
-<section class="ed-capa fp-capa" id="faca-parte-capa" aria-labelledby="faca-parte-titulo">
+<section class="ed-capa fp-capa" id="faca-parte-capa" data-cena="hero" data-tom="cena" aria-labelledby="faca-parte-titulo">
   <figure class="ed-foto ed-capa__foto fp-capa__foto">
     <Image src={retrato} alt="Geise, do time da Renke, com a camiseta da marca." format="webp" quality={80} widths={[480, 800, 1280]} sizes="(min-width: 900px) 46vw, 100vw" loading="eager" fetchpriority="high" />
   </figure>
@@ -37,17 +36,19 @@ const forte = bloco.realce ?? bloco.titulo.length - 1;
 </section>
 
 <style>
-  .fp-capa { background-color: #050505; }
-  .fp-capa::before {
-    background:
-      linear-gradient(to right, #050505 0%, #050505 46%, rgb(5 5 5 / .5) 62%, rgb(5 5 5 / 0) 78%),
-      linear-gradient(to top, #050505 0%, rgb(5 5 5 / 0) 34%);
+  /* O retrato entra pela direita e se desfaz na cena, à esquerda e embaixo. */
+  .fp-capa__foto {
+    left: auto; width: min(54%, 860px);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to bottom, #000 64%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to bottom, #000 64%, transparent);
+    mask-composite: intersect;
   }
-  .fp-capa__foto { left: auto; width: min(54%, 860px); background: #050505; }
-  .fp-capa__foto :global(img) { object-position: 50% 18%; }
+  .fp-capa::before { background: linear-gradient(to top, rgb(8 8 8 / .5) 0%, rgb(8 8 8 / 0) 40%); }
+  .fp-capa__foto :global(img) { object-position: 50% 18%; filter: none; }
   .fp-capa__miolo { row-gap: 28px; }
   .fp-capa__rotulo { justify-self: start; }
-  .fp-capa__titulo { grid-column: 1 / span 9; font-size: clamp(40px, 10vw, 180px); }
+  .fp-capa__titulo { grid-column: 1 / span 8; font-size: clamp(48px, 7.6vw, 136px); line-height: .98; }
   .fp-capa__titulo > span { white-space: nowrap; }
   .fp-capa__pe { grid-column: 1 / span 5; display: grid; gap: 32px; margin-top: 12px; }
   .fp-capa__sub { max-width: 40ch; }
@@ -55,8 +56,7 @@ const forte = bloco.realce ?? bloco.titulo.length - 1;
   .fp-capa__selo { width: 88px; height: auto; }
   .fp-capa__acoes :global(.botao) { white-space: nowrap; }
   @media (max-width: 899.98px) {
-    .fp-capa__foto { width: 100%; opacity: .55; }
-    .fp-capa::before { background: linear-gradient(to top, #050505 0%, rgb(5 5 5 / .85) 40%, rgb(5 5 5 / .2) 100%); }
+    .fp-capa__foto { width: 100%; opacity: .5; }
     .fp-capa__titulo, .fp-capa__pe { grid-column: 1 / -1; }
   }
 </style>

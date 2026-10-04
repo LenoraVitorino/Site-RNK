@@ -1,7 +1,7 @@
 ---
 /**
- * A tese (04/10/2026, layout editorial). A foto da sala de vidro abre a
- * dobra e se desfaz no grafite; o título sobe pela foto e as afirmações
+ * A tese (04/10/2026). A foto da sala de vidro abre a dobra e se desfaz
+ * na cena; o título sobe pela foto e as afirmações
  * descem numa lista de setas entre fios, como "Atrair pacientes sem
  * construir reputação é frágil".
  */
@@ -12,13 +12,13 @@ import { doisPesos } from '../editorial/pesos';
 const f = fotos.tese;
 const [leve, forte] = doisPesos(tese.h2, 2);
 ---
-<section class="ed-secao ed-secao--grafite sb-tese" id="sobre-tese" aria-labelledby="sobre-tese-titulo">
-  <figure class="ed-foto sb-tese__foto">
+<section class="ed-secao ed-secao--grafite sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
+  <figure class="ed-foto ed-desfaz sb-tese__foto">
     <Image src={f.foto} alt={f.alt} format="webp" quality={76} widths={[960, 1600, 2200]} sizes="100vw" style={`object-position: ${f.foco}`} />
   </figure>
   <div class="container ed-grade sb-tese__miolo">
-    <h2 class="ed-display ed-display--medio sb-tese__titulo entra" id="sobre-tese-titulo">{leve} <b>{forte}</b></h2>
-    <ol class="ed-setas sb-tese__lista">
+    <h2 class="ed-display ed-display--medio ed-mascara sb-tese__titulo entra" id="sobre-tese-titulo">{leve} <b>{forte}</b></h2>
+    <ol class="ed-setas ed-mascara sb-tese__lista">
       {tese.passos.map((p, i) => (
         <li class="entra" style={`--i:${i}`}>
           <Seta />
@@ -34,15 +34,14 @@ const [leve, forte] = doisPesos(tese.h2, 2);
 
 <style>
   .sb-tese { padding-top: 0; }
-  .sb-tese__foto { height: clamp(360px, 62vh, 720px); }
-  .sb-tese__foto::before {
-    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to top, var(--ed-grafite) 0%, rgb(13 13 13 / .6) 30%, rgb(13 13 13 / 0) 70%);
+  /* A foto fica recuada como os painéis, com o chanfro em cima, e some na cena embaixo. */
+  .sb-tese__foto {
+    height: clamp(360px, 62vh, 720px); margin: var(--ed-recuo) var(--ed-recuo) 0;
+    clip-path: polygon(var(--ed-chanfro) 0, calc(100% - var(--ed-chanfro)) 0, 100% var(--ed-chanfro), 100% 100%, 0 100%, 0 var(--ed-chanfro));
   }
-  .sb-tese__miolo { position: relative; z-index: 1; margin-top: clamp(-200px, -12vw, -96px); row-gap: clamp(48px, 5vw, 80px); }
+  .sb-tese__miolo { position: relative; z-index: 1; margin-top: clamp(-180px, -11vw, -88px); row-gap: clamp(48px, 5vw, 80px); }
   .sb-tese__titulo { grid-column: 1 / span 9; }
   .sb-tese__lista { grid-column: 4 / -1; }
-  .sb-tese__frase { font-weight: 500; }
   @media (max-width: 899.98px) {
     .sb-tese__titulo, .sb-tese__lista { grid-column: 1 / -1; }
   }

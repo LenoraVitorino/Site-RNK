@@ -1,9 +1,8 @@
 ---
 /**
  * A casa (04/10/2026, layout editorial). Duas fotos da sede montadas como
- * página de revista: o salão grande, sangrando à esquerda, e o nicho
- * amarelo mais baixo, à direita. O título em caixa alta atravessa a borda
- * do salão e o texto fecha embaixo.
+ * página de revista, sobre a cena: o salão grande, sangrando à esquerda, e o nicho
+ * amarelo mais baixo, à direita. O título fino atravessa a borda do salão e o texto fecha embaixo.
  */
 import { Image } from 'astro:assets';
 import { casa, fotos } from '../../data/sobre';
@@ -11,7 +10,7 @@ import { doisPesos } from '../editorial/pesos';
 const [leve, forte] = doisPesos(casa.h2, 1);
 const a = fotos.casa, b = fotos.casaDetalhe;
 ---
-<section class="ed-secao ed-secao--grafite sb-casa" id="sobre-casa" aria-labelledby="sobre-casa-titulo">
+<section class="ed-secao ed-secao--grafite sb-casa" id="sobre-casa" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-casa-titulo">
   <div class="container ed-grade sb-casa__grade">
     <figure class="ed-foto ed-revela entra ed-sangra-esq sb-casa__a">
       <Image src={a.foto} alt={a.alt} format="webp" quality={78} widths={[720, 1280, 1760]} sizes="(min-width: 900px) 66vw, 100vw" style={`object-position: ${a.foco}`} />
@@ -19,8 +18,8 @@ const a = fotos.casa, b = fotos.casaDetalhe;
     <figure class="ed-foto ed-revela entra sb-casa__b" style="--i:1">
       <Image src={b.foto} alt={b.alt} format="webp" quality={78} widths={[480, 800, 1200]} sizes="(min-width: 900px) 30vw, 100vw" style={`object-position: ${b.foco}`} />
     </figure>
-    <h2 class="ed-display sb-casa__titulo entra" id="sobre-casa-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
-    <p class="ed-corpo sb-casa__texto entra" style="--i:1">{casa.texto}</p>
+    <h2 class="ed-display ed-mascara sb-casa__titulo entra" id="sobre-casa-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
+    <p class="ed-corpo ed-mascara sb-casa__texto entra" style="--i:1">{casa.texto}</p>
   </div>
 </section>
 
@@ -32,7 +31,7 @@ const a = fotos.casa, b = fotos.casaDetalhe;
   .sb-casa__titulo {
     grid-column: 5 / -1; grid-row: 2; align-self: end; position: relative; z-index: 1;
     margin-bottom: -.5em;   /* a 2ª linha passa da borda de baixo da foto */
-    font-size: clamp(48px, 7.4vw, 132px);
+    font-size: clamp(44px, 6.2vw, 112px);
   }
   .sb-casa__texto { grid-column: 9 / -1; grid-row: 3; margin-top: clamp(56px, 6vw, 96px); }
   @media (min-width: 900px) { .sb-casa__titulo > span { white-space: nowrap; } }

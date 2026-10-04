@@ -1,7 +1,7 @@
 ---
 /**
- * O que somos (04/10/2026, layout editorial). No papel: o título em caixa
- * alta, a 1ª linha no fino e a 2ª no forte; embaixo, a frase grande à
+ * O que somos (04/10/2026). No painel claro chanfrado, como o do método: o
+ * título fino, a 2ª linha em 500; embaixo, a frase grande à
  * esquerda e a foto do estúdio sangrando para a direita.
  */
 import { Image } from 'astro:assets';
@@ -21,7 +21,7 @@ const f = fotos.somos;
 </section>
 
 <style>
-  .sb-somos { padding-top: clamp(80px, 9vw, 152px); }
+  .sb-somos { margin-top: clamp(40px, 5vw, 80px); }
   .sb-somos__grade { row-gap: clamp(48px, 6vw, 96px); align-items: end; }
   .sb-somos__texto { grid-column: 1 / span 4; grid-row: 2; align-self: end; padding-bottom: 8px; }
   .sb-somos__foto { grid-column: 6 / -1; grid-row: 2; aspect-ratio: 16 / 10; }

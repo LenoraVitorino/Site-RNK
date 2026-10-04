@@ -1,16 +1,16 @@
 ---
 /**
  * Capa do Sobre (04/10/2026, layout editorial). A foto do salão na tela
- * inteira, o nome em caixa alta por cima e a frase de abertura numa caixa
- * de papel que nasce da dobra seguinte e sobe pela foto, como o cartão
- * branco do carrossel "Nosso CEO foi convidado…".
+ * inteira, se desfazendo na cena, o nome por cima em Inter fina e a frase
+ * de abertura numa caixa de vidro claro sobreposta à foto (o cartão branco
+ * dos carrosséis, no acabamento da home).
  */
 import { Image } from 'astro:assets';
 import { abertura, fotos } from '../../data/sobre';
 import Selo from '../ui/Selo.astro';
 const f = fotos.capa;
 ---
-<section class="ed-capa sb-capa" id="sobre-abertura" aria-labelledby="sobre-abertura-titulo">
+<section class="ed-capa sb-capa" id="sobre-abertura" data-cena="hero" data-tom="cena" aria-labelledby="sobre-abertura-titulo">
   <figure class="ed-foto ed-capa__foto" style={`--foco: ${f.foco}`}>
     <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[960, 1600, 2200]} sizes="100vw" loading="eager" fetchpriority="high" />
   </figure>
@@ -19,32 +19,22 @@ const f = fotos.capa;
     <h1 class="ed-display sb-capa__titulo entra" id="sobre-abertura-titulo">
       <span>{abertura.linhasH1[0]}</span>{' '}<span><b>{abertura.linhasH1[1]}</b></span>
     </h1>
-    <div class="sb-capa__caixa entra" style="--i:1">
+    <div class="ed-vidro sb-capa__caixa entra" style="--i:1">
       <p class="ed-chamada" set:html={abertura.lead} />
     </div>
   </div>
 </section>
 
 <style>
-  .sb-capa { padding-bottom: 0; }
   .sb-capa__miolo { align-items: end; row-gap: 24px; }
   .sb-capa__rotulo { grid-row: 1; justify-self: start; }
-  .sb-capa__titulo {
-    grid-row: 2; grid-column: 1 / span 8; align-self: end;
-    padding-bottom: clamp(40px, 5vw, 88px);
-    font-size: clamp(64px, 10.4vw, 188px);
-  }
-  /* A caixa de papel encosta no pé da capa e emenda com a dobra de baixo. */
-  .sb-capa__caixa {
-    grid-row: 2; grid-column: 9 / -1; align-self: end;
-    margin-right: calc(-1 * var(--grid-inset));
-    padding: clamp(32px, 3.4vw, 56px) var(--grid-inset) clamp(32px, 3.4vw, 56px) clamp(32px, 3.4vw, 56px);
-    background-color: var(--ed-papel); color: var(--ed-tinta);
-  }
+  .sb-capa__titulo { grid-row: 2; grid-column: 1 / span 7; align-self: end; font-size: clamp(56px, 8.4vw, 148px); line-height: .98; }
   .sb-capa__titulo > span { white-space: nowrap; }
-  .sb-capa__caixa :global(strong) { font-weight: 700; }
+  /* A caixa de vidro claro sobe pela foto, à direita. */
+  .sb-capa__caixa { grid-row: 2; grid-column: 8 / -1; align-self: end; }
+  .sb-capa__caixa :global(strong) { font-weight: 500; }
   @media (max-width: 899.98px) {
-    .sb-capa__titulo { grid-column: 1 / -1; padding-bottom: 32px; }
-    .sb-capa__caixa { grid-row: 3; grid-column: 1 / -1; margin-inline: calc(-1 * var(--grid-inset)); padding-inline: var(--grid-inset); }
+    .sb-capa__titulo { grid-column: 1 / -1; }
+    .sb-capa__caixa { grid-row: 3; grid-column: 1 / -1; margin-top: 16px; }
   }
 </style>

@@ -1,32 +1,31 @@
 /*
- * Páginas editoriais: Sobre e Faça parte (04/10/2026).
+ * Sobre e Faça parte (04/10/2026). Revisão da mesma noite: a 1ª versão,
+ * toda em caixa alta e com papel chapado, "saiu totalmente da identidade
+ * da home". Agora é a home com um toque dos carrosséis da Renke:
  *
- * Referência: os carrosséis da própria Renke que o time aprovou (Step Up):
- * foto grande com o título por cima, fundos sólidos (papel ou grafite)
- * emendados na foto, texto que atravessa a borda da imagem, setas e um
- * marca-texto em amarelo.
+ * - Da home: Inter fina (300) com a ênfase em 500, sem caixa alta; a cena
+ *   3D atrás das dobras escuras; as dobras claras como o painel do método
+ *   (recuado da tela, chanfro de 45° e claro translúcido sobre a cena);
+ *   cantos chanfrados nas fotos; selos nos sobretítulos; amarelo só em
+ *   detalhe.
+ * - Dos carrosséis: texto que se sobrepõe à foto e fotos grandes da sede
+ *   e do time, com a foto se desfazendo no fundo.
  *
- * Caixa alta, com critério: só nos títulos de exibição (h1, h2 e as
- * afirmações curtas das listas de seta), sempre em dois pesos, o fino e o
- * forte, como nos carrosséis. Parágrafos, rótulos, nomes e botões ficam em
- * caixa normal. O texto continua escrito normal no HTML; quem põe em caixa
- * alta é o CSS (o leitor de tela lê a frase, não letra por letra).
- *
- * Amarelo: as setas das listas e, no máximo, um marca-texto por página.
  * Toda classe leva o prefixo ed-.
  */
 
 .pg-editorial {
-  --ed-papel: #f2f2ee;
-  --ed-tinta: #1b1b1a;
-  --ed-tinta-2: #4f4f4c;
-  --ed-grafite: #0d0d0d;
-  --ed-fio-claro: rgb(27 27 26 / .16);
-  --ed-fio-escuro: rgb(242 242 238 / .16);
+  --ed-tinta: #252523;
+  --ed-tinta-2: #5f5f5d;
+  --ed-fio-claro: rgb(37 37 35 / .16);
+  --ed-fio-escuro: rgb(242 242 238 / .14);
   --ed-amarelo: var(--amarelo-marca, #FFD103);
-  --ed-respiro: clamp(88px, 10vw, 168px);
+  --ed-respiro: clamp(88px, 9vw, 152px);
   --ed-gap: clamp(16px, 2vw, 32px);
-  --ed-display: clamp(46px, 7.4vw, 132px);
+  --ed-recuo: clamp(8px, 1.25vw, 20px);
+  --ed-chanfro: clamp(14px, 1.5vw, 24px);
+  --ed-corte: clamp(10px, 1vw, 16px);   /* chanfro das fotos */
+  --ed-display: clamp(44px, 5.6vw, 96px);
 }
 
 /* Grade de 12, a do container da home. */
@@ -34,104 +33,118 @@
 .ed-grade > * { grid-column: 1 / -1; min-width: 0; }
 @media (max-width: 899.98px) { .ed-grade { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 
-/* Dobras sólidas. O grão leve do papel é o dos carrosséis. */
-.ed-secao { position: relative; isolation: isolate; padding-block: var(--ed-respiro); overflow: clip; }
-.ed-secao--papel { background-color: var(--ed-papel); color: var(--ed-tinta); }
-.ed-secao--grafite { background-color: var(--ed-grafite); color: var(--papel); }
-.ed-secao--papel::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: var(--grao-fino); opacity: .1; mix-blend-mode: multiply;
+/* Dobras. Escura = transparente, sobre a cena (leva data-cena). Clara =
+   o painel do método: recuado, chanfrado e translúcido. */
+.ed-secao { position: relative; isolation: isolate; padding-block: var(--ed-respiro); }
+.ed-secao--grafite { color: var(--papel); }
+.ed-secao--papel {
+  --ed-borda: max(16px, calc(var(--gutter) - var(--ed-recuo)));
+  margin-inline: var(--ed-recuo); color: var(--ed-tinta); overflow: clip;
+  clip-path: polygon(
+    var(--ed-chanfro) 0, calc(100% - var(--ed-chanfro)) 0, 100% var(--ed-chanfro),
+    100% calc(100% - var(--ed-chanfro)), calc(100% - var(--ed-chanfro)) 100%,
+    var(--ed-chanfro) 100%, 0 calc(100% - var(--ed-chanfro)), 0 var(--ed-chanfro));
+  background-image: linear-gradient(170deg, rgb(246 246 243 / .9), rgb(234 234 231 / .84));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+}
+.ed-secao--papel > .container {
+  max-width: calc(var(--largura) - 2 * var(--ed-recuo));
+  padding-inline: var(--ed-borda);
 }
 .ed-secao--colada-cima { padding-top: 0; }
 
-/* Título de exibição: caixa alta, dois pesos. <b> marca o peso forte. */
+/* Título: o da home, fino, com a 2ª parte em 500. */
 .ed-display {
-  margin: 0; font-size: var(--ed-display); font-weight: 300; line-height: .9; letter-spacing: -.05em;
-  text-transform: uppercase; text-wrap: balance;
-  padding-top: .06em;   /* folga para os acentos das maiúsculas (Í, Ç, Ã) */
+  margin: 0; font-size: var(--ed-display); font-weight: 300; line-height: 1.02; letter-spacing: -.055em;
+  text-wrap: balance;
 }
-.ed-display b, .ed-display strong { font-weight: 700; letter-spacing: -.055em; }
+.ed-display b, .ed-display strong { font-weight: 500; letter-spacing: -.05em; }
 .ed-display > span { display: block; }
-.ed-display--medio { --ed-display: clamp(38px, 5.2vw, 92px); }
-.ed-display--menor { --ed-display: clamp(32px, 3.8vw, 64px); line-height: .95; }
+.ed-display--medio { --ed-display: clamp(38px, 4.4vw, 72px); }
+.ed-display--menor { --ed-display: clamp(30px, 3vw, 52px); }
 
-/* Linha de abertura antes de um título grande ("Apesar do nosso foco estar em"). */
-.ed-antetitulo { margin: 0 0 .5em; font-size: clamp(18px, 1.7vw, 26px); font-weight: 600; letter-spacing: -.03em; line-height: 1.2; }
+/* Linha de abertura antes de um título grande. */
+.ed-antetitulo { margin: 0 0 .6em; font-size: clamp(17px, 1.4vw, 22px); font-weight: 300; letter-spacing: -.02em; line-height: 1.3; color: var(--ed-tinta-2); }
+.ed-secao--grafite .ed-antetitulo { color: var(--cinza); }
 
-/* Texto de apoio grande, em caixa normal, com peso (o "Levamos nosso time…"). */
-.ed-chamada { margin: 0; font-size: clamp(20px, 1.9vw, 30px); font-weight: 500; line-height: 1.22; letter-spacing: -.03em; text-wrap: pretty; }
+/* Frase de apoio grande, fina. */
+.ed-chamada { margin: 0; font-size: clamp(19px, 1.6vw, 25px); font-weight: 300; line-height: 1.38; letter-spacing: -.025em; text-wrap: pretty; }
+.ed-chamada strong, .ed-chamada b { font-weight: 500; }
 .ed-corpo { margin: 0; max-width: 46ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; color: var(--ed-tinta-2); text-wrap: pretty; }
-.ed-secao--grafite .ed-corpo, .ed-capa .ed-corpo { color: rgb(242 242 238 / .72); }
-.ed-corpo strong { font-weight: 600; color: var(--ed-tinta); }
+.ed-secao--grafite .ed-corpo, .ed-capa .ed-corpo { color: #aaa; }
+.ed-corpo strong { font-weight: 500; color: var(--ed-tinta); }
 .ed-secao--grafite .ed-corpo strong, .ed-capa .ed-corpo strong { color: var(--papel); }
 
-/* Marca-texto amarelo (um por página). Quebra junto com a linha. */
-.ed-marca {
-  background: var(--ed-amarelo); color: #161616; padding: .04em .22em .08em;
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
-}
-
-/* Lista de setas entre fios. */
+/* Lista de setas entre fios: frase fina, seta amarela fina. */
 .ed-setas { list-style: none; margin: 0; padding: 0; }
 .ed-setas > li {
-  display: grid; grid-template-columns: clamp(36px, 3.6vw, 60px) minmax(0, 1fr); column-gap: clamp(14px, 1.6vw, 24px);
-  padding-block: clamp(22px, 2.4vw, 36px); border-top: 1px solid var(--ed-fio-claro);
+  display: grid; grid-template-columns: clamp(28px, 2.4vw, 40px) minmax(0, 1fr); column-gap: clamp(14px, 1.6vw, 24px);
+  padding-block: clamp(22px, 2.2vw, 32px); border-top: 1px solid var(--ed-fio-claro);
 }
 .ed-setas > li:last-child { border-bottom: 1px solid var(--ed-fio-claro); }
 .ed-secao--grafite .ed-setas > li { border-color: var(--ed-fio-escuro); }
-.ed-seta { width: 100%; height: auto; margin-top: .28em; color: var(--ed-amarelo); }
-.ed-setas__frase {
-  margin: 0; font-size: clamp(22px, 2.5vw, 40px); font-weight: 300; line-height: 1.02; letter-spacing: -.04em;
-  text-transform: uppercase; text-wrap: balance;
-}
-.ed-setas__frase b { font-weight: 700; }
-.ed-setas__apoio { margin: .9em 0 0; max-width: 56ch; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.55; color: var(--ed-tinta-2); text-wrap: pretty; }
-.ed-secao--grafite .ed-setas__apoio { color: rgb(242 242 238 / .66); }
+.ed-seta { width: 100%; height: auto; margin-top: .42em; color: var(--ed-amarelo); }
+.ed-setas__frase { margin: 0; font-size: clamp(21px, 2vw, 32px); font-weight: 300; line-height: 1.18; letter-spacing: -.035em; text-wrap: balance; }
+.ed-setas__frase b { font-weight: 500; }
+.ed-setas__apoio { margin: .7em 0 0; max-width: 56ch; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.55; color: var(--ed-tinta-2); text-wrap: pretty; }
+.ed-secao--grafite .ed-setas__apoio { color: #a3a39b; }
 
-/* Foto: preenche o quadro, com o grão dos carrosséis por cima. */
-.ed-foto { position: relative; margin: 0; overflow: hidden; background: #111; }
-.ed-foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.ed-foto::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: var(--grao-fino); opacity: .16; mix-blend-mode: soft-light;
+/* Foto: chanfro da casa e um leve tom frio, como as fotos da home. */
+.ed-foto {
+  position: relative; margin: 0; overflow: hidden; background: #111;
+  clip-path: polygon(
+    var(--ed-corte) 0, calc(100% - var(--ed-corte)) 0, 100% var(--ed-corte),
+    100% calc(100% - var(--ed-corte)), calc(100% - var(--ed-corte)) 100%,
+    var(--ed-corte) 100%, 0 calc(100% - var(--ed-corte)), 0 var(--ed-corte));
 }
-/* Foto que sangra até a borda da tela (direita ou esquerda). */
-.ed-sangra-dir { margin-right: calc(-1 * var(--grid-inset)); }
-.ed-sangra-esq { margin-left: calc(-1 * var(--grid-inset)); }
+.ed-foto img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.86); }
+/* Foto que sangra até a borda do painel (ou da tela, nas dobras escuras). */
+.ed-sangra-dir { margin-right: calc(-1 * var(--ed-borda, var(--grid-inset))); }
+.ed-sangra-esq { margin-left: calc(-1 * var(--ed-borda, var(--grid-inset))); }
+/* Foto que se desfaz no fundo (a cena aparece por baixo). */
+.ed-desfaz { clip-path: none; -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent); mask-image: linear-gradient(to bottom, #000 45%, transparent); }
 
-/* Capa: foto na tela inteira, título por cima, fundo grafite emendado embaixo. */
+/* Capa: foto na tela inteira, título por cima, a foto se desfaz na cena. */
 .ed-capa {
   position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end;
-  min-height: max(100svh, 680px); padding-top: calc(var(--altura-header) + 48px); padding-bottom: clamp(48px, 6vw, 96px);
-  background-color: var(--ed-grafite); color: var(--papel); overflow: clip;
+  min-height: max(100svh, 680px); padding-top: calc(var(--altura-header) + 48px); padding-bottom: clamp(56px, 6vw, 104px);
+  color: var(--papel); overflow: clip;
 }
-.ed-capa__foto { position: absolute; inset: 0; z-index: -2; }
+.ed-capa__foto { position: absolute; inset: 0; z-index: -2; clip-path: none; background: transparent;
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent); mask-image: linear-gradient(to bottom, #000 62%, transparent); }
 .ed-capa__foto img { object-position: var(--foco, 50% 50%); }
 .ed-capa::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    linear-gradient(to top, var(--ed-grafite) 0%, rgb(13 13 13 / .82) 22%, rgb(13 13 13 / .2) 58%, rgb(13 13 13 / .45) 100%),
-    linear-gradient(to right, rgb(13 13 13 / .7) 0%, rgb(13 13 13 / 0) 60%);
+    linear-gradient(to top, rgb(8 8 8 / .9) 0%, rgb(8 8 8 / .55) 30%, rgb(8 8 8 / .15) 62%, rgb(8 8 8 / .4) 100%),
+    linear-gradient(to right, rgb(8 8 8 / .65) 0%, rgb(8 8 8 / 0) 62%);
 }
 
-/* Botões nas dobras editoriais: retos como os do site. */
-.ed-acoes { display: flex; flex-wrap: wrap; gap: 12px; }
-
-/* Entrada da foto: abre de baixo para cima, devagar. */
-.js .ed-revela { clip-path: inset(100% 0 0 0); }
-.js .ed-revela.visivel { clip-path: inset(0 0 0 0); transition: clip-path 1.4s cubic-bezier(.22, 1, .36, 1); }
-.js .ed-revela img { transform: scale(1.08); }
-.js .ed-revela.visivel img { transform: none; transition: transform 2.2s cubic-bezier(.22, 1, .36, 1); }
-
-@media (prefers-reduced-motion: reduce) {
-  .js .ed-revela, .js .ed-revela img { clip-path: none; transform: none; transition: none; }
+/* Caixa de vidro claro que se sobrepõe à foto (o cartão branco dos
+   carrosséis, no acabamento da home). */
+.ed-vidro {
+  position: relative; padding: clamp(28px, 3vw, 48px); color: var(--ed-tinta);
+  background: linear-gradient(170deg, rgb(246 246 243 / .92), rgb(234 234 231 / .86));
+  -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+  clip-path: polygon(
+    var(--ed-chanfro) 0, calc(100% - var(--ed-chanfro)) 0, 100% var(--ed-chanfro),
+    100% calc(100% - var(--ed-chanfro)), calc(100% - var(--ed-chanfro)) 100%,
+    var(--ed-chanfro) 100%, 0 calc(100% - var(--ed-chanfro)), 0 var(--ed-chanfro));
 }
 
-/* A foto que revela também é .entra (é o .entra que o Base2 observa); aqui
-   ela não esmaece nem sobe, só abre. */
+.ed-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+
+/* No painel claro o botão principal é grafite, como no método. */
+.ed-secao--papel .botao, .ed-vidro .botao { background: var(--ed-tinta); color: var(--papel); border-color: var(--ed-tinta); }
+.ed-secao--papel .botao:hover, .ed-vidro .botao:hover { background: #000; border-color: #000; }
+.ed-secao--papel :focus-visible { outline-color: var(--ed-tinta); }
+.ed-secao--papel .link-arrow { color: var(--ed-tinta); }
+
+/* Entrada da foto: abre devagar, de baixo para cima. */
+.js .ed-revela img { transform: scale(1.06); opacity: 0; }
+.js .ed-revela.visivel img { transform: none; opacity: 1; transition: transform 2s cubic-bezier(.22, 1, .36, 1), opacity 1.2s ease; }
 .js .entra.ed-revela { opacity: 1; transform: none; }
 
-/* No papel o botão principal é grafite. */
-.ed-secao--papel .botao { background: var(--ed-tinta); color: var(--papel); border-color: var(--ed-tinta); }
-.ed-secao--papel .botao:hover { background: #000; border-color: #000; }
-.ed-secao--papel :focus-visible { outline-color: var(--ed-tinta); }
+@media (prefers-reduced-motion: reduce) {
+  .js .ed-revela img { transform: none; opacity: 1; transition: none; }
+}

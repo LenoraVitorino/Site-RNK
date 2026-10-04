@@ -1,25 +1,25 @@
 ---
 /**
- * Cultura (04/10/2026, layout editorial). No papel: "No que acreditamos"
- * em caixa alta à esquerda, com a frase; os quatro valores à direita, numa
+ * Cultura (04/10/2026). No painel claro: "No que acreditamos" à esquerda, com a frase; os quatro valores à direita, numa
  * lista de setas amarelas entre fios.
  */
 import { cultura } from '../../data/sobre';
 import Seta from '../editorial/Seta.astro';
+import Selo from '../ui/Selo.astro';
 import { doisPesos } from '../editorial/pesos';
 const [leve, forte] = doisPesos(cultura.h2, 1);
 ---
 <section class="ed-secao ed-secao--papel sb-cultura" id="sobre-cultura" data-tom="claro" aria-labelledby="sobre-cultura-titulo">
   <div class="container ed-grade sb-cultura__grade">
     <div class="sb-cultura__cabeca">
-      {cultura.rotulo && <p class="ed-antetitulo">{cultura.rotulo}</p>}
+      {cultura.rotulo && <Selo>{cultura.rotulo}</Selo>}
       <h2 class="ed-display ed-display--medio entra" id="sobre-cultura-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
       <p class="ed-chamada sb-cultura__frase entra" style="--i:1">{cultura.frase}</p>
       {cultura.link && <a class="link-arrow sb-cultura__link" href={cultura.link.rota}>{cultura.link.rotulo}</a>}
     </div>
     <ul class="ed-setas sb-cultura__valores">
       {cultura.valores.map((v, i) => (
-        <li class="entra" style={`--i:${i}`}><Seta /><p class="ed-setas__frase"><b>{v}</b></p></li>
+        <li class="entra" style={`--i:${i}`}><Seta /><p class="ed-setas__frase">{v}</p></li>
       ))}
     </ul>
   </div>
@@ -28,10 +28,10 @@ const [leve, forte] = doisPesos(cultura.h2, 1);
 <style>
   .sb-cultura__grade { row-gap: 56px; align-items: start; }
   .sb-cultura__cabeca { grid-column: 1 / span 6; display: grid; gap: clamp(28px, 3vw, 44px); justify-items: start; }
-  .sb-cultura__frase { max-width: 26ch; font-weight: 400; color: var(--ed-tinta-2); }
+  .sb-cultura__frase { max-width: 26ch; color: var(--ed-tinta-2); }
   .sb-cultura__link { color: var(--ed-tinta); }
   .sb-cultura__valores { grid-column: 7 / -1; align-self: end; }
-  .sb-cultura__valores .ed-setas__frase { font-size: clamp(18px, 2.5vw, 40px); }
+  .sb-cultura__valores .ed-setas__frase { font-size: clamp(22px, 2.2vw, 36px); }
   @media (max-width: 899.98px) {
     .sb-cultura__cabeca, .sb-cultura__valores { grid-column: 1 / -1; }
   }

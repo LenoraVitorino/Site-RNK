@@ -1,22 +1,24 @@
 ---
 /**
- * O time (04/10/2026, layout editorial). Os retratos do time em grade, no
- * grafite: o fundo escuro e o amarelo dos retratos são os do próprio
+ * O time (04/10/2026). Os retratos do time em grade, sobre a cena, com o
+ * chanfro da casa: o fundo escuro e o amarelo dos retratos são os do próprio
  * estúdio fotográfico da Renke. O último quadro é o convite, em amarelo:
- * o próximo pode ser você (o único bloco amarelo da página).
+ * o próximo pode ser você (o único bloco amarelo da página, como o cartão
+ * amarelo do bento do Protocolo).
  */
 import { Image } from 'astro:assets';
 import { equipe } from '../../data/equipe';
 import { facaParteEd } from '../../data/paginas/faca-parte';
 import Seta from '../editorial/Seta.astro';
+import Selo from '../ui/Selo.astro';
 import { doisPesos } from '../editorial/pesos';
 const { time, convite } = facaParteEd;
 const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.h2];
 ---
-<section class="ed-secao ed-secao--grafite fp-time" id="faca-parte-time" aria-labelledby="faca-parte-time-titulo">
+<section class="ed-secao ed-secao--grafite fp-time" id="faca-parte-time" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-time-titulo">
   <div class="container fp-time__miolo">
-    <header class="fp-time__cabeca entra">
-      {time.rotulo && <p class="ed-antetitulo">{time.rotulo}</p>}
+    <header class="fp-time__cabeca ed-mascara entra">
+      {time.rotulo && <Selo class="fp-time__selo">{time.rotulo}</Selo>}
       <h2 class="ed-display ed-display--medio" id="faca-parte-time-titulo">{leve}{leve && ' '}<b>{forte}</b></h2>
     </header>
     <ul class="fp-time__grade" role="list">
@@ -40,13 +42,17 @@ const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.
 
 <style>
   .fp-time__miolo { display: grid; gap: clamp(48px, 5vw, 80px); }
-  .fp-time__cabeca .ed-antetitulo { color: rgb(242 242 238 / .66); }
+  .fp-time__cabeca { display: grid; justify-items: start; gap: clamp(24px, 2.6vw, 36px); }
   .fp-time__grade {
     list-style: none; margin: 0; padding: 0;
     display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(28px, 2.6vw, 40px) var(--ed-gap);
   }
   .fp-pessoa { display: grid; gap: 12px; }
-  .fp-pessoa__quadro { margin: 0; aspect-ratio: 1; overflow: hidden; background: #1a1a1a; }
+  .fp-pessoa__quadro {
+    --c: clamp(8px, .8vw, 12px);
+    margin: 0; aspect-ratio: 1; overflow: hidden; background: #1a1a1a;
+    clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
+  }
   .fp-pessoa__quadro :global(img) {
     display: block; width: 100%; height: 100%; object-fit: cover;
     transition: transform 1.2s cubic-bezier(.22, 1, .36, 1);
@@ -57,11 +63,13 @@ const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.
   .fp-convite { display: grid; min-width: 0; }
   .fp-convite__link {
     aspect-ratio: 1; min-width: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+    --c: clamp(8px, .8vw, 12px);
+    clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
     padding: clamp(16px, 1.6vw, 24px); background: var(--ed-amarelo); color: #161616; text-decoration: none;
     transition: background-color .5s ease;
   }
   .fp-convite__link:hover { background: #ffdc3a; }
-  .fp-convite__frase { font-size: clamp(17px, 1.6vw, 26px); font-weight: 700; line-height: .98; letter-spacing: -.045em; text-transform: uppercase; }
+  .fp-convite__frase { font-size: clamp(18px, 1.7vw, 27px); font-weight: 400; line-height: 1.08; letter-spacing: -.04em; }
   .fp-convite__acao { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
   .fp-convite__acao :global(.ed-seta) { width: 26px; margin: 0; color: #161616; transition: transform .6s cubic-bezier(.22, 1, .36, 1); }
   .fp-convite__link:hover :global(.ed-seta) { transform: translateX(4px); }
