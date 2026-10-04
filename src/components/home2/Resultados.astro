@@ -1,16 +1,22 @@
 ---
-/** Provas como um extrato: uma linha por especialidade, entre fios.
-    02/10/2026 (Lenora): título menor, a especialidade e a frase à esquerda
-    e o número grande à direita, como a referência do tablet (Orbital), e a
-    própria dobra como painel claro translúcido, com o fundo animado
-    desfocado por trás e os cantos em chanfro, igual à dobra do método. As molduras de foto saíram:
-    a referência não tem foto e elas estavam vazias. Valores e textos vêm
-    da fonte compartilhada. O botão do fim saiu e os números contam de zero
-    até o valor quando a linha entra na tela (02/10). */
+/** Resultados por especialidade como vitrine (04/10/2026). A Lenora achou o
+    extrato entre fios fraco: "não pode ser card, tem que ter foto, tem que
+    ser mais dinâmico". Agora uma foto grande à esquerda, com o número e a
+    frase da área por cima, e o índice das cinco especialidades à direita.
+    A vitrine passa sozinha de uma área para a outra (o fio do índice mostra
+    o tempo), para quando a pessoa passa o mouse ou sai da tela, e qualquer
+    área abre com um clique. A dobra segue como o painel claro chanfrado,
+    igual à do método. Valores, textos e fotos vêm da fonte compartilhada;
+    as fotos são provisórias (ver data/home.ts). */
 import { resultados } from '../../data/home';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 
+const partes = (numero: string) => {
+  const [, antes, valor, depois] = numero.match(/^(.*?)(\d+)(.*)$/) ?? ['', '', numero, ''];
+  return { antes, valor, depois };
+};
+const ordem = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <section class="secao resultados-editoriais" id="resultados" data-tom="claro" aria-labelledby="resultados-titulo">
   <div class="container">
@@ -19,50 +25,120 @@ import { copyLiteral } from '../../data/versao';
       <h2 class="titulo" id="resultados-titulo">O que muda quando a <span class="resultados-editoriais__enfase">operação tem estrutura</span>.</h2>
       {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
     </header>
-    <ol class="resultados-extrato" aria-label="Resultados por especialidade">
-      {resultados.map((r, i) => (
-        <li class="resultado-linha entra">
-          <h3 class="resultado-linha__area">{r.especialidade}</h3>
-          <p class="resultado-linha__texto">{r.texto}</p>
-          {(() => {
-            const [, antes, valor, depois] = r.numero.match(/^(.*?)(\d+)(.*)$/) ?? ['', '', r.numero, ''];
-            return (
-              <p class="resultado-linha__numero num">
-                <span class="visually-hidden">{r.numero}</span>
-                <span class="resultado-linha__reserva" aria-hidden="true">{r.numero}</span>
-                <span class="resultado-linha__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
-              </p>
-            );
-          })()}
-        </li>
-      ))}
-    </ol>
+
+    <div class="res-vitrine" data-vitrine>
+      <div class="res-palco entra">
+        {resultados.map((r, i) => {
+          const { antes, valor, depois } = partes(r.numero);
+          return (
+            <figure class="res-quadro" id={`res-quadro-${i}`} role="tabpanel" aria-labelledby={`res-aba-${i}`} data-ativo={i === 0 ? '' : undefined} inert={i !== 0}>
+              <img
+                class:list={['res-quadro__foto', { 'res-quadro__foto--espelho': r.espelhar }]}
+                src={`/imagens/planos-editoriais/${r.foto}.webp`}
+                alt="" width="1254" height="1254" loading="lazy" decoding="async"
+              />
+              <figcaption class="res-quadro__legenda">
+                <span class="res-quadro__area">{r.especialidade}</span>
+                <p class="res-quadro__numero num">
+                  <span class="visually-hidden">{r.numero}</span>
+                  <span class="res-quadro__reserva" aria-hidden="true">{r.numero}</span>
+                  <span class="res-quadro__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
+                </p>
+                <p class="res-quadro__texto">{r.texto}</p>
+              </figcaption>
+            </figure>
+          );
+        })}
+      </div>
+
+      <div class="res-indice entra" role="tablist" aria-label="Resultados por especialidade" aria-orientation="vertical">
+        {resultados.map((r, i) => (
+          <button
+            type="button" class="res-aba" role="tab" id={`res-aba-${i}`}
+            aria-controls={`res-quadro-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}
+          >
+            <span class="res-aba__ordem num" aria-hidden="true">{ordem(i)}</span>
+            <span class="res-aba__area">{r.especialidade}</span>
+            <span class="res-aba__numero num" aria-hidden="true">{r.numero}</span>
+            <span class="res-aba__tempo" aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-  /* Cada número conta de zero até o valor quando a linha entra na tela. */
-  const numeros = document.querySelectorAll<HTMLElement>('#resultados [data-contador]');
-  const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (numeros.length && !parado && 'IntersectionObserver' in window) {
+  /* Vitrine: uma área por vez. O fio do índice corre por CSS; quando ele
+     termina (animationend), a próxima área entra. Parar = pausar o fio. */
+  const vitrine = document.querySelector<HTMLElement>('#resultados [data-vitrine]');
+  if (vitrine) {
+    const abas = [...vitrine.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const quadros = [...vitrine.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let atual = 0;
+
     const escrever = (el: HTMLElement, v: number) => { el.textContent = `${el.dataset.antes ?? ''}${v}${el.dataset.depois ?? ''}`; };
-    numeros.forEach((el) => escrever(el, 0));
-    const contar = (el: HTMLElement) => {
-      const alvo = Number(el.dataset.alvo), t0 = performance.now(), dur = 1600;
+    let quadroContado = -1;
+    const contar = (i: number) => {
+      const el = quadros[i].querySelector<HTMLElement>('[data-contador]');
+      if (!el || parado) return;
+      quadroContado = i;
+      const alvo = Number(el.dataset.alvo), t0 = performance.now(), dur = 1400;
+      escrever(el, 0);
       const passo = (agora: number) => {
+        if (quadroContado !== i) { escrever(el, alvo); return; }
         const t = Math.min(1, (agora - t0) / dur);
         escrever(el, Math.round(alvo * (1 - Math.pow(1 - t, 4))));
         if (t < 1) requestAnimationFrame(passo);
       };
       requestAnimationFrame(passo);
     };
-    const obs = new IntersectionObserver((entradas) => {
-      for (const e of entradas) {
-        if (!e.isIntersecting) continue;
-        contar(e.target as HTMLElement);
-        obs.unobserve(e.target);
-      }
-    }, { threshold: .6 });
-    numeros.forEach((el) => obs.observe(el));
+
+    const abrir = (i: number, foco = false) => {
+      if (i === atual) return;
+      abas[atual].setAttribute('aria-selected', 'false');
+      abas[atual].tabIndex = -1;
+      quadros[atual].removeAttribute('data-ativo');
+      quadros[atual].inert = true;
+      atual = i;
+      abas[i].setAttribute('aria-selected', 'true');
+      abas[i].tabIndex = 0;
+      quadros[i].setAttribute('data-ativo', '');
+      quadros[i].inert = false;
+      if (foco) abas[i].focus();
+      contar(i);
+    };
+
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => abrir(i));
+      aba.addEventListener('keydown', (e) => {
+        const passo = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (passo) { e.preventDefault(); abrir((atual + passo + abas.length) % abas.length, true); }
+        else if (e.key === 'Home') { e.preventDefault(); abrir(0, true); }
+        else if (e.key === 'End') { e.preventDefault(); abrir(abas.length - 1, true); }
+      });
+      aba.querySelector('.res-aba__tempo')?.addEventListener('animationend', () => {
+        if (i === atual) abrir((atual + 1) % abas.length);
+      });
+    });
+
+    if (!parado) {
+      /* Corre só com a vitrine na tela e sem o mouse ou o foco nela. */
+      const motivos = new Set<string>(['fora']);
+      const atualizar = () => vitrine.toggleAttribute('data-pausado', motivos.size > 0);
+      const marcar = (m: string, sim: boolean) => { sim ? motivos.add(m) : motivos.delete(m); atualizar(); };
+      vitrine.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') marcar('mouse', true); });
+      vitrine.addEventListener('pointerleave', () => marcar('mouse', false));
+      vitrine.addEventListener('focusin', () => marcar('foco', true));
+      vitrine.addEventListener('focusout', (e) => { if (!vitrine.contains(e.relatedTarget as Node)) marcar('foco', false); });
+      let primeira = true;
+      new IntersectionObserver(([e]) => {
+        marcar('fora', !e.isIntersecting);
+        if (e.isIntersecting && primeira) { primeira = false; contar(atual); }
+      }, { threshold: .45 }).observe(vitrine);
+      atualizar();
+      vitrine.setAttribute('data-corre', '');
+    }
   }
 </script>

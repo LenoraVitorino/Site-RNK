@@ -17,17 +17,12 @@ section[id] { scroll-margin-top: 110px; }
 .cortina > .operacao-editorial { position: relative; height: auto; min-height: 0; transform: none; }
 .cortina .operacao-editorial :is(.ancora, .perguntas) { transform: none; opacity: 1; }
 
-/* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
-   repetia a grade de cartões do Protocolo e lia mal). Uma linha por
-   especialidade, entre fios, lida numa direção só (01/10): o número
-   grande, logo ao lado a área e a frase, e a foto da área sempre visível
-   à direita. Nada depende do hover. */
+/* Resultados: a dobra é o painel claro chanfrado, como a do método
+   (02/10, "a borda igual à da segunda dobra"): recuada das bordas da tela,
+   cantos em chanfro de 45° e claro translúcido com o fundo animado
+   desfocado por trás. */
 #resultados.resultados-editoriais { color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
-.resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
-/* A dobra vira o painel, como a do método (02/10, "a borda igual à da
-   segunda dobra"): recuada das bordas da tela, cantos em chanfro de 45°,
-   e claro translúcido com o fundo animado desfocado por trás. */
 .home-refinada #resultados {
   --res-recuo: clamp(8px, 1.25vw, 20px);
   --res-chanfro: clamp(14px, 1.5vw, 24px);
@@ -43,21 +38,108 @@ section[id] { scroll-margin-top: 110px; }
   max-width: calc(var(--largura) - 2 * var(--res-recuo));
   padding-inline: max(16px, calc(var(--gutter) - var(--res-recuo)));
 }
-/* Linha: especialidade e frase à esquerda, número à direita. */
-.resultado-linha {
-  display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr) minmax(0, 1fr); align-items: center; column-gap: clamp(20px, 3vw, 48px);
-  padding-block: clamp(22px, 2.4vw, 36px); border-top: 1px solid rgb(37 37 35 / .16);
-}
-.resultado-linha__area { margin: 0; font-size: clamp(19px, 1.5vw, 23px); font-weight: 400; line-height: 1.2; letter-spacing: -.02em; }
-.resultado-linha__texto { margin: 0; max-width: 36ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: #555553; text-wrap: pretty; }
-.resultado-linha__numero { justify-self: end; margin: 0; font-size: clamp(52px, 5.4vw, 88px); font-weight: 300; line-height: .95; letter-spacing: -.055em; white-space: nowrap; color: #1d1d1b; }
-/* A reserva guarda a largura final; a contagem corre por cima, alinhada à direita. */
-.resultado-linha__numero { position: relative; font-variant-numeric: tabular-nums; }
-.resultado-linha__reserva { visibility: hidden; }
-.resultado-linha__contagem { position: absolute; top: 0; right: 0; }
-.resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
-.resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
+
+/* Vitrine (04/10/2026, "não pode ser card, tem que ter foto, mais
+   dinâmico"): foto grande à esquerda com o número por cima, índice das
+   áreas à direita. Uma área por vez, trocando devagar. */
+.res-vitrine {
+  --res-tempo: 7s;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2vw, 32px);
+  align-items: end;
+}
+.res-palco {
+  --res-corte: clamp(12px, 1.2vw, 20px);
+  grid-column: 1 / span 7; position: relative; isolation: isolate; overflow: hidden;
+  aspect-ratio: 5 / 4; background: #050505;
+  clip-path: polygon(
+    var(--res-corte) 0, calc(100% - var(--res-corte)) 0, 100% var(--res-corte),
+    100% calc(100% - var(--res-corte)), calc(100% - var(--res-corte)) 100%,
+    var(--res-corte) 100%, 0 calc(100% - var(--res-corte)), 0 var(--res-corte));
+}
+.res-quadro { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s cubic-bezier(.4, 0, .2, 1); }
+.res-quadro[data-ativo] { opacity: 1; z-index: 1; }
+.res-quadro__foto {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 40%;
+  transform: scale(1.06); transition: transform 1.2s cubic-bezier(.4, 0, .2, 1);
+}
+.res-quadro__foto--espelho { scale: -1 1; object-position: 30% 40%; }
+/* A foto aproxima devagar enquanto a área está aberta. */
+.res-quadro[data-ativo] .res-quadro__foto { transform: scale(1); transition: transform 9s cubic-bezier(.22, 1, .36, 1); }
+/* Escurece embaixo e à esquerda, onde mora o texto. */
+.res-quadro::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to top, rgb(5 5 5 / .92) 0%, rgb(5 5 5 / .55) 34%, rgb(5 5 5 / 0) 62%),
+    linear-gradient(to right, rgb(5 5 5 / .55) 0%, rgb(5 5 5 / 0) 55%);
+}
+.res-quadro__legenda {
+  position: absolute; z-index: 1; left: clamp(24px, 3vw, 48px); right: clamp(24px, 3vw, 48px); bottom: clamp(24px, 3vw, 44px);
+  display: grid; justify-items: start; gap: 14px; color: var(--papel);
+}
+.res-quadro__legenda > * { opacity: 0; transform: translate3d(0, 14px, 0); transition: opacity .5s ease, transform .5s ease; }
+.res-quadro[data-ativo] .res-quadro__legenda > * {
+  opacity: 1; transform: none;
+  transition: opacity 1s cubic-bezier(.22, 1, .36, 1) .35s, transform 1.2s cubic-bezier(.22, 1, .36, 1) .35s;
+}
+.res-quadro[data-ativo] .res-quadro__legenda > :nth-child(2) { transition-delay: .45s; }
+.res-quadro[data-ativo] .res-quadro__legenda > :nth-child(3) { transition-delay: .6s; }
+/* O fio amarelo antes da área é o único amarelo da dobra. */
+.res-quadro__area {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 15px; font-weight: 500; letter-spacing: .01em; color: rgb(242 242 238 / .86);
+}
+.res-quadro__area::before { content: ''; width: 28px; height: 1px; background: var(--amarelo-marca, #FFD103); }
+.res-quadro__numero {
+  position: relative; margin: 0; font-size: clamp(72px, 8.4vw, 148px); font-weight: 200; line-height: .9;
+  letter-spacing: -.06em; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.res-quadro__reserva { visibility: hidden; }
+.res-quadro__contagem { position: absolute; top: 0; left: 0; }
+.res-quadro__texto { margin: 0; max-width: 34ch; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
+
+/* Índice: as cinco áreas entre fios; o fio de cima da aberta mostra o tempo. */
+.res-indice { grid-column: 9 / -1; display: grid; border-bottom: 1px solid rgb(37 37 35 / .16); }
+.res-aba {
+  position: relative; display: grid; grid-template-columns: 2.4em minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px;
+  width: 100%; padding: clamp(18px, 1.7vw, 26px) 0; border: 0; border-top: 1px solid rgb(37 37 35 / .16);
+  background: none; font: inherit; color: #252523; text-align: left; cursor: pointer;
+}
+.res-aba > :not(.res-aba__tempo) { opacity: .42; transition: opacity .6s ease; }
+.res-aba:hover > :not(.res-aba__tempo) { opacity: .72; }
+.res-aba[aria-selected="true"] > :not(.res-aba__tempo) { opacity: 1; }
+.res-aba__ordem { font-size: 13px; letter-spacing: .04em; }
+.res-aba__area { font-size: clamp(18px, 1.45vw, 22px); letter-spacing: -.02em; line-height: 1.2; }
+.res-aba__numero { font-size: clamp(18px, 1.45vw, 22px); font-weight: 300; letter-spacing: -.03em; }
+.res-aba__tempo {
+  position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: #1d1d1b;
+  transform: scaleX(0); transform-origin: left;
+}
+.res-aba[aria-selected="true"] .res-aba__tempo { transform: scaleX(1); }
+.res-vitrine[data-corre] .res-aba[aria-selected="true"] .res-aba__tempo {
+  transform: scaleX(0); animation: res-tempo var(--res-tempo) linear forwards;
+}
+.res-vitrine[data-corre][data-pausado] .res-aba__tempo { animation-play-state: paused; }
+@keyframes res-tempo { to { transform: scaleX(1); } }
+
+@media (max-width: 1099.98px) {
+  .res-palco { grid-column: 1 / span 7; }
+  .res-indice { grid-column: 8 / -1; }
+}
+@media (max-width: 899.98px) {
+  .res-vitrine { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+  .res-palco, .res-indice { grid-column: 1; }
+  .res-palco { aspect-ratio: 4 / 5; }
+  .res-quadro__foto { object-position: 62% 34%; }
+}
+@media (max-width: 599.98px) {
+  .res-quadro__numero { font-size: 76px; }
+  .res-aba { padding-block: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .res-quadro, .res-quadro__foto, .res-quadro__legenda > * { transition: none !important; }
+  .res-quadro__foto { transform: none; }
+}
 
 /* Ecossistema: duas portas de entrada, sem painel invisível sob o teclado. */
 .ecossistema__box { padding: clamp(20px, 4vw, 56px); background: #000; border: 1px solid rgb(242 242 238 / .12); border-radius: 16px; }
@@ -100,16 +182,70 @@ section[id] { scroll-margin-top: 110px; }
   #fale .chamada__miolo .titulo,
   #fale .chamada__miolo > p:not(.cabeca-dobra__selo) { max-width: none; white-space: nowrap; text-wrap: nowrap; }
 }
-.home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
-.home-refinada .form-card .field__label { color: #454543; }
-.home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }
-.home-refinada .form-card .field input::placeholder { color: #6b6b69; }
-.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #4a4a48; }
-.home-refinada .form-card .botao { background: #252523; color: #f4f4f2; border-color: #252523; }
-.home-refinada .form-card :focus-visible { outline-color: #252523; }
-/* Depois do envio: status e 'Copiar mensagem' nos tons do cartão claro. */
-.home-refinada .form-card .form-card__status { background: rgb(37 37 35 / .06); border-color: transparent; color: #252523; }
-.home-refinada .form-card .form-card__copiar { color: #252523; }
+/* Formulário (04/10/2026, a Lenora não gostou do cartão branco: "repensar,
+   deixar mais moderno"). Vidro escuro com o chanfro da casa, campos só com
+   o fio de baixo, letras maiores e o botão no amarelo da marca, o único
+   amarelo do cartão (o foco do campo acende o fio no mesmo amarelo). */
+.home-refinada .form-card {
+  --form-corte: clamp(12px, 1.2vw, 20px);
+  color-scheme: dark; color: var(--papel); border: 0; border-radius: 0; box-shadow: none;
+  gap: clamp(22px, 2vw, 28px); padding: clamp(28px, 3.2vw, 52px);
+  background: linear-gradient(160deg, rgb(38 38 36 / .58), rgb(10 10 10 / .5));
+  -webkit-backdrop-filter: blur(28px) saturate(1.1); backdrop-filter: blur(28px) saturate(1.1);
+  clip-path: polygon(
+    var(--form-corte) 0, calc(100% - var(--form-corte)) 0, 100% var(--form-corte),
+    100% calc(100% - var(--form-corte)), calc(100% - var(--form-corte)) 100%,
+    var(--form-corte) 100%, 0 calc(100% - var(--form-corte)), 0 var(--form-corte));
+}
+.home-refinada .form-card__duo { column-gap: clamp(20px, 2vw, 32px); row-gap: inherit; }
+.home-refinada .form-card .field__label { margin-bottom: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: rgb(242 242 238 / .56); }
+.home-refinada .form-card .field :is(input, select, textarea) {
+  min-height: 48px; padding: 8px 0 12px; border: 0; border-radius: 0; background: transparent;
+  font-size: clamp(16px, 1.2vw, 18px); color: var(--papel);
+  box-shadow: inset 0 -1px 0 rgb(242 242 238 / .2);
+  transition: box-shadow .45s cubic-bezier(.22, 1, .36, 1);
+}
+.home-refinada .form-card .field textarea { min-height: 120px; padding: 10px 0 12px; resize: vertical; line-height: 1.5; }
+.home-refinada .form-card .field select {
+  appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23f2f2ee' stroke-opacity='.6' stroke-width='1.3'/%3E%3C/svg%3E") right 4px center / 12px 8px no-repeat;
+}
+.home-refinada .form-card .field select:is(:invalid, :has(option[value=""]:checked)) { color: rgb(242 242 238 / .34); }
+.home-refinada .form-card .field select option { color: var(--papel); background: #161616; }
+.home-refinada .form-card .field :is(input, textarea)::placeholder { color: rgb(242 242 238 / .3); }
+.home-refinada .form-card .field :is(input, select, textarea):hover { box-shadow: inset 0 -1px 0 rgb(242 242 238 / .42); }
+.home-refinada .form-card .field :is(input, select, textarea):focus,
+.home-refinada .form-card .field :is(input, select, textarea):focus-visible {
+  outline: none; box-shadow: inset 0 -2px 0 var(--amarelo-marca, #FFD103);
+}
+.home-refinada .form-card .field--invalido :is(input, select, textarea) { box-shadow: inset 0 -1px 0 var(--erro); }
+.home-refinada .form-card :is(.field__erro) { color: var(--erro); }
+/* Faturamento em opções que se marcam com um clique, no lugar do select. */
+.form-card__opcoes { margin: 0; padding: 0; border: 0; min-width: 0; }
+.form-card__opcoes legend { padding: 0; }
+.form-card__escolhas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.form-card__escolha { position: relative; }
+.form-card__escolha input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.form-card__escolha span {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 8px 16px; border-radius: 999px;
+  font-size: 14.5px; color: rgb(242 242 238 / .78); background: rgb(242 242 238 / .06);
+  transition: background-color .4s ease, color .4s ease;
+}
+.form-card__escolha:hover span { background: rgb(242 242 238 / .12); color: var(--papel); }
+.form-card__escolha input:checked + span { background: var(--papel); color: var(--grafite); }
+.form-card__escolha input:focus-visible + span { outline: 2px solid var(--amarelo-marca, #FFD103); outline-offset: 2px; }
+.home-refinada .form-card .botao {
+  min-height: 54px; margin-top: 6px; border-radius: 12px;
+  background: var(--amarelo-marca, #FFD103); color: var(--grafite); border-color: var(--amarelo-marca, #FFD103);
+  font-weight: 500;
+}
+.home-refinada .form-card .botao:hover { background: #ffdc3a; border-color: #ffdc3a; }
+.home-refinada .form-card .botao:focus-visible { outline: 2px solid var(--papel); outline-offset: 3px; }
+.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a) { color: rgb(242 242 238 / .5); }
+.home-refinada .form-card .form-card__aviso a { color: rgb(242 242 238 / .72); }
+/* Depois do envio: status e 'Copiar mensagem' nos tons do vidro escuro. */
+.home-refinada .form-card .form-card__status { background: rgb(242 242 238 / .06); border-color: transparent; color: rgb(242 242 238 / .86); }
+.home-refinada .form-card .form-card__copiar { color: var(--papel); }
 
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }
@@ -120,11 +256,6 @@ section[id] { scroll-margin-top: 110px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  /* Extrato no tablet: especialidade e frase empilhadas, número à direita. */
-  .resultado-linha { grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px; row-gap: 8px; }
-  .resultado-linha__area { grid-column: 1; grid-row: 1; }
-  .resultado-linha__texto { grid-column: 1; grid-row: 2; }
-  .resultado-linha__numero { grid-column: 2; grid-row: 1 / span 2; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -132,11 +263,6 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  /* Extrato no celular: especialidade e número na mesma linha, a frase
-     embaixo, na largura toda. */
-  .resultado-linha { align-items: end; }
-  .resultado-linha__numero { grid-row: 1; font-size: 48px; }
-  .resultado-linha__texto { grid-column: 1 / -1; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -518,10 +644,10 @@ section[id] { scroll-margin-top: 110px; }
 /* Contato: texto e formulário próximos, centralizados na mesma composição. */
 #formulario { padding-block: clamp(72px, 8vw, 136px) clamp(88px, 9vw, 152px); }   /* mais respiro (Lenora, 02/10) */
 /* Na grade de 12 do site (28/09): texto nas colunas 1–5, na margem esquerda;
-   formulário nas colunas 8–12, na margem direita. */
+   formulário nas colunas 7–12, na margem direita. */
 #formulario .form-block { grid-template-columns: repeat(12, minmax(0, 1fr)); justify-content: stretch; column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; }
 #formulario .form-block__text { grid-column: 1 / span 5; }
-#formulario .form-card { grid-column: 8 / -1; max-width: none; }
+#formulario .form-card { grid-column: 7 / -1; max-width: none; }   /* uma coluna a mais para Nome e WhatsApp lado a lado (04/10) */
 @media (min-width: 900px) {
   #formulario .form-block { align-items: start; }   /* selo e cartão começam na mesma linha */
   .home-refinada #formulario { padding-top: clamp(72px, 8vw, 136px); }

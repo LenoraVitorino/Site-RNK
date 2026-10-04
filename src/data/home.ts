@@ -102,13 +102,16 @@ export const perguntas = [
   { titulo: 'Oportunidades de mercado', texto: 'Inteligência sobre concorrência, movimentos e espaços para novas oportunidades de crescimento.', excedente: true, pergunta: 'Você sabe o que seus concorrentes estão comunicando agora e qual espaço estão deixando aberto pra você?' },
 ];
 
-/** ⚠️ Números placeholder — nota do próprio briefing. */
+/** ⚠️ Números placeholder — nota do próprio briefing.
+ *  Fotos provisórias (04/10/2026): as do banco dos planos, uma por área pelo
+ *  gesto mais próximo. Trocar por fotos próprias de cada especialidade no
+ *  mesmo estilo (luva preta, fundo preto). `espelhar` vira a foto. */
 export const resultados = [
-  { especialidade: 'Dermatologia', numero: '19%', texto: 'Taxa de agendamento de 19% alcançada em apenas 90 dias de operação.' },
-  { especialidade: 'Otorrino', numero: '29%', texto: 'Leads recuperados com processos comerciais automatizados e follow-ups estruturados.' },
-  { especialidade: 'Cirurgia plástica', numero: '38%', texto: 'O digital passou a representar 38% da receita total da clínica.' },
-  { especialidade: 'Nutrologia', numero: '24%', texto: 'Pacientes reativados ao longo do trimestre por meio de ações estruturadas de relacionamento.' },
-  { especialidade: 'Tricologia', numero: '60 dias', texto: 'Rastreamento completo da origem dos leads, com dados centralizados em um único painel.' },
+  { especialidade: 'Dermatologia', numero: '19%', texto: 'Taxa de agendamento de 19% alcançada em apenas 90 dias de operação.', foto: 'seringa' },
+  { especialidade: 'Otorrino', numero: '29%', texto: 'Leads recuperados com processos comerciais automatizados e follow-ups estruturados.', foto: 'instrumentos-dentarios' },
+  { especialidade: 'Cirurgia plástica', numero: '38%', texto: 'O digital passou a representar 38% da receita total da clínica.', foto: 'tesoura' },
+  { especialidade: 'Nutrologia', numero: '24%', texto: 'Pacientes reativados ao longo do trimestre por meio de ações estruturadas de relacionamento.', foto: 'maos' },
+  { especialidade: 'Tricologia', numero: '60 dias', texto: 'Rastreamento completo da origem dos leads, com dados centralizados em um único painel.', foto: 'seringa', espelhar: true },
 ];
 
 export const formulario = {

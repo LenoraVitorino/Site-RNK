@@ -23,30 +23,31 @@ const canal = whatsapp ? 'WhatsApp' : 'e-mail';
       <p>{formulario.texto}</p>
     </div>
     <form class="form-card entra" novalidate data-form-contato data-email={rodape.email} data-whatsapp={whatsapp}>
-      <label class="field">
-        <span class="field__label">Nome</span>
-        <input id="h-nome" type="text" name="nome" autocomplete="name" placeholder="Como podemos te chamar" required aria-describedby="h-nome-erro" />
-        <span class="field__erro" id="h-nome-erro" hidden>Precisamos do seu nome.</span>
-      </label>
-      <label class="field">
-        <span class="field__label">WhatsApp</span>
-        <input id="h-zap" type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(47) 99999-9999" required aria-describedby="h-zap-erro" />
-        <span class="field__erro" id="h-zap-erro" hidden>Precisamos do seu WhatsApp para responder.</span>
-      </label>
       <div class="form-card__duo">
         <label class="field">
-          <span class="field__label">Especialidade</span>
-          <input id="h-esp" type="text" name="especialidade" placeholder="Ex.: Dermatologia" />
+          <span class="field__label">Nome</span>
+          <input id="h-nome" type="text" name="nome" autocomplete="name" placeholder="Como podemos te chamar" required aria-describedby="h-nome-erro" />
+          <span class="field__erro" id="h-nome-erro" hidden>Precisamos do seu nome.</span>
         </label>
         <label class="field">
-          <span class="field__label">Faturamento mensal</span>
-          <select id="h-fat" name="faturamento">
-            {formulario.faixasFaturamento.map((f, i) =>
-              i === 0 ? <option value="" selected disabled>{f}</option> : <option value={f}>{f}</option>
-            )}
-          </select>
+          <span class="field__label">WhatsApp</span>
+          <input id="h-zap" type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(47) 99999-9999" required aria-describedby="h-zap-erro" />
+          <span class="field__erro" id="h-zap-erro" hidden>Precisamos do seu WhatsApp para responder.</span>
         </label>
       </div>
+      <label class="field">
+        <span class="field__label">Especialidade</span>
+        <input id="h-esp" type="text" name="especialidade" placeholder="Ex.: Dermatologia" />
+      </label>
+      {/* Faturamento: opções de um clique no lugar do select (04/10/2026). */}
+      <fieldset class="field form-card__opcoes">
+        <legend class="field__label">Faturamento mensal</legend>
+        <div class="form-card__escolhas">
+          {formulario.faixasFaturamento.slice(1).map((f) => (
+            <label class="form-card__escolha"><input type="radio" name="faturamento" value={f} /><span>{f}</span></label>
+          ))}
+        </div>
+      </fieldset>
       <Botao type="submit" bloco>{formulario.botao}</Botao>
       <p class="form-card__status" role="status" aria-live="polite" data-status></p>
       <button type="button" class="form-card__copiar link-arrow" data-copiar hidden>Copiar mensagem</button>
@@ -79,7 +80,7 @@ const canal = whatsapp ? 'WhatsApp' : 'e-mail';
       const invalidos = campos.filter((campo) => !valida(campo));
       if (invalidos.length) { invalidos[0].focus(); return; }
 
-      const valor = (nome: string) => (form.elements.namedItem(nome) as HTMLInputElement | HTMLSelectElement).value.trim();
+      const valor = (nome: string) => ((form.elements.namedItem(nome) as HTMLInputElement | RadioNodeList | null)?.value ?? '').trim();
       const linhas = [
         `Nome: ${valor('nome')}`,
         `WhatsApp: ${valor('whatsapp')}`,

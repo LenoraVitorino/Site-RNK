@@ -219,10 +219,9 @@
 .int-fundo::after { content: ''; position: absolute; inset: 0; background: var(--grao-fino); opacity: .14; mix-blend-mode: soft-light; }
 
 /* ------------------------------------------------------------------ */
-/* Formulário. A regra clara da home só cobre input e select.           */
+/* Formulário: o textarea segue a regra da home (home-refinamento.css). */
 /* ------------------------------------------------------------------ */
 
-.home-refinada .form-card .field textarea { background: #f4f4f2; color: #252523; min-height: 120px; padding: 12px 14px; resize: vertical; }
 
 /* ------------------------------------------------------------------ */
 /* Pendência: recado para o time, só em dev.                            */
