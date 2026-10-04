@@ -1,58 +1,54 @@
 ---
 /**
- * Os 4 valores (04/10/2026). Sobre a cena, a foto do estúdio entra pela
- * direita e se desfaz; o título fica por cima,
- * à esquerda, e os quatro valores descem em colunas numeradas, entre fios.
+ * Os 4 valores (04/10/2026). Sobre a cena, a cabeça centrada da home; a
+ * foto do estúdio num cartão grande à esquerda e os quatro valores em
+ * cartões de vidro com ícone à direita, dois por dois.
  */
 import { Image } from 'astro:assets';
 import estudio from '../../assets/sede/estudio.jpg';
 import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 import type { BlocoDe } from '../pagina/contexto';
 
 interface Props { bloco: BlocoDe<'blocos'> }
 const { bloco } = Astro.props;
 const [leve, forte] = doisPesos(bloco.h2, 1);
+const icones: NomeIconeRenke[] = ['bussola', 'verificado', 'pessoas', 'crescimento'];
 ---
-<section class="ed-secao ed-secao--grafite fp-valores" id="faca-parte-valores" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-valores-titulo">
-  <figure class="ed-foto fp-valores__foto" aria-hidden="true">
-    <Image src={estudio} alt="" format="webp" quality={74} widths={[800, 1400, 2000]} sizes="(min-width: 900px) 62vw, 100vw" />
-  </figure>
-  <div class="container ed-grade fp-valores__grade">
-    <h2 class="ed-display ed-mascara fp-valores__titulo entra" id="faca-parte-valores-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
-    <ol class="fp-valores__lista ed-mascara" role="list">
+<section class="ed-secao ed-secao--cena fp-valores" id="faca-parte-valores" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-valores-titulo">
+  <div class="container">
+    <header class="ed-cabeca ed-mascara entra">
+      <Selo class="cabeca-dobra__selo">Valores</Selo>
+      <h2 class="ed-titulo" id="faca-parte-valores-titulo">{leve} <b>{forte}</b></h2>
+    </header>
+    <div class="fp-valores__grade">
+      <figure class="ed-foto fp-valores__foto entra">
+        <Image src={estudio} alt="Parede amarela com o nome Renke em neon e a frase “Pense, elabore e surpreenda!”." format="webp" quality={78} widths={[560, 960, 1280]} sizes="(min-width: 900px) 48vw, 100vw" />
+      </figure>
       {bloco.itens.map((v, i) => (
-        <li class="fp-valor entra" style={`--i:${i}`}>
-          <span class="fp-valor__n num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          <h3 class="fp-valor__titulo">{v.titulo}</h3>
-          <p class="ed-corpo">{v.texto}</p>
-        </li>
+        <article class="ed-cartao fp-valor entra" style={`--i:${i}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <div class="ed-cartao__corpo">
+            <h3 class="ed-cartao__nome">{v.titulo}</h3>
+            <p class="ed-cartao__texto">{v.texto}</p>
+          </div>
+        </article>
       ))}
-    </ol>
+    </div>
   </div>
 </section>
 
 <style>
-  /* A foto entra pela direita e se desfaz na cena. */
-  .fp-valores__foto {
-    position: absolute; top: var(--ed-recuo); right: var(--ed-recuo); width: 62%; height: min(78%, 760px); z-index: -2; background: transparent; clip-path: none;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 50%), linear-gradient(to bottom, #000 50%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 0%, #000 50%), linear-gradient(to bottom, #000 50%, transparent);
-    mask-composite: intersect;
-  }
-  .fp-valores__grade { row-gap: clamp(120px, 14vw, 240px); }
-  .fp-valores__titulo { grid-column: 1 / span 7; font-size: clamp(56px, 8vw, 144px); padding-top: clamp(40px, 6vw, 120px); }
-  .fp-valores__lista {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px var(--ed-gap);
-  }
-  .fp-valor { display: grid; align-content: start; gap: 14px; padding-top: 24px; border-top: 1px solid var(--ed-fio-escuro); }
-  .fp-valor__n { font-size: 14px; color: var(--ed-amarelo); letter-spacing: .04em; }
-  .fp-valor__titulo { margin: 0 0 4px; font-size: clamp(20px, 1.7vw, 28px); font-weight: 400; line-height: 1.1; letter-spacing: -.035em; }
-  @media (max-width: 1099.98px) { .fp-valores__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .fp-valores__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ed-vao); }
+  .fp-valores__foto { grid-column: 1 / span 2; grid-row: 1 / span 2; min-height: 100%; }
+  .fp-valor { min-height: clamp(240px, 19vw, 290px); }
+  .fp-valor .ed-cartao__nome { font-size: clamp(17px, 1.35vw, 22px); }   /* "Autorresponsabilidade" numa linha */
   @media (max-width: 899.98px) {
-    .fp-valores__foto { width: 100%; height: 520px; opacity: .6; }
-    .fp-valores__titulo { grid-column: 1 / -1; }
+    .fp-valores__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fp-valores__foto { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 4 / 3; }
+    .fp-valor { min-height: 0; }
   }
-  @media (max-width: 599.98px) { .fp-valores__lista { grid-template-columns: 1fr; } }
+  @media (max-width: 599.98px) { .fp-valores__grade { grid-template-columns: 1fr; } }
 </style>

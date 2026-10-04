@@ -1,9 +1,8 @@
 ---
 /**
- * Capa do Sobre (04/10/2026, layout editorial). A foto do salão na tela
- * inteira, se desfazendo na cena, o nome por cima em Inter fina e a frase
- * de abertura numa caixa de vidro claro sobreposta à foto (o cartão branco
- * dos carrosséis, no acabamento da home).
+ * Capa do Sobre (04/10/2026). A foto do salão na tela inteira, se
+ * desfazendo na cena, e o título da hero da home por cima dela, com a
+ * frase de abertura logo abaixo.
  */
 import { Image } from 'astro:assets';
 import { abertura, fotos } from '../../data/sobre';
@@ -11,30 +10,19 @@ import Selo from '../ui/Selo.astro';
 const f = fotos.capa;
 ---
 <section class="ed-capa sb-capa" id="sobre-abertura" data-cena="hero" data-tom="cena" aria-labelledby="sobre-abertura-titulo">
-  <figure class="ed-foto ed-capa__foto" style={`--foco: ${f.foco}`}>
+  <figure class="ed-capa__foto" style={`--foco: ${f.foco}`}>
     <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[960, 1600, 2200]} sizes="100vw" loading="eager" fetchpriority="high" />
   </figure>
-  <div class="container ed-grade sb-capa__miolo">
+  <div class="container sb-capa__miolo">
     <Selo class="sb-capa__rotulo" tom="escuro">{abertura.rotulo}</Selo>
-    <h1 class="ed-display sb-capa__titulo entra" id="sobre-abertura-titulo">
+    <h1 class="ed-capa__titulo entra" id="sobre-abertura-titulo">
       <span>{abertura.linhasH1[0]}</span>{' '}<span><b>{abertura.linhasH1[1]}</b></span>
     </h1>
-    <div class="ed-vidro sb-capa__caixa entra" style="--i:1">
-      <p class="ed-chamada" set:html={abertura.lead} />
-    </div>
+    <p class="ed-capa__sub entra" style="--i:1" set:html={abertura.lead} />
   </div>
 </section>
 
 <style>
-  .sb-capa__miolo { align-items: end; row-gap: 24px; }
-  .sb-capa__rotulo { grid-row: 1; justify-self: start; }
-  .sb-capa__titulo { grid-row: 2; grid-column: 1 / span 7; align-self: end; font-size: clamp(56px, 8.4vw, 148px); line-height: .98; }
-  .sb-capa__titulo > span { white-space: nowrap; }
-  /* A caixa de vidro claro sobe pela foto, à direita. */
-  .sb-capa__caixa { grid-row: 2; grid-column: 8 / -1; align-self: end; }
-  .sb-capa__caixa :global(strong) { font-weight: 500; }
-  @media (max-width: 899.98px) {
-    .sb-capa__titulo { grid-column: 1 / -1; }
-    .sb-capa__caixa { grid-row: 3; grid-column: 1 / -1; margin-top: 16px; }
-  }
+  .sb-capa__miolo { display: grid; justify-items: start; }
+  .sb-capa__rotulo { margin-bottom: clamp(20px, 2.2vw, 28px); }
 </style>

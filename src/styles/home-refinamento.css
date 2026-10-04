@@ -40,105 +40,44 @@ section[id] { scroll-margin-top: 110px; }
 }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
 
-/* Vitrine (04/10/2026, "não pode ser card, tem que ter foto, mais
-   dinâmico"): foto grande à esquerda com o número por cima, índice das
-   áreas à direita. Uma área por vez, trocando devagar. */
-.res-vitrine {
-  --res-tempo: 7s;
-  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2vw, 32px);
-  align-items: end;
+/* Pilha (04/10/2026, referência "Services Section Animation"): cada
+   especialidade é uma linha que gruda no topo ao rolar; as seguintes se
+   empilham logo abaixo da cabeça da anterior e cobrem o corpo dela. */
+.home-refinada #resultados { background: #d0d0cd; }   /* opaco: a linha de cima cobre a de baixo sem emenda */
+.res-pilha { --res-cab: clamp(68px, 6vw, 92px); list-style: none; margin: 0; padding: 0; }
+.res-etapa {
+  position: sticky; top: calc(var(--altura-header) + var(--i) * var(--res-cab));
+  background: #d0d0cd; border-top: 1px solid rgb(37 37 35 / .18);
 }
-.res-palco {
-  --res-corte: clamp(12px, 1.2vw, 20px);
-  grid-column: 1 / span 7; position: relative; isolation: isolate; overflow: hidden;
-  aspect-ratio: 5 / 4; background: #050505;
-  clip-path: polygon(
-    var(--res-corte) 0, calc(100% - var(--res-corte)) 0, 100% var(--res-corte),
-    100% calc(100% - var(--res-corte)), calc(100% - var(--res-corte)) 100%,
-    var(--res-corte) 100%, 0 calc(100% - var(--res-corte)), 0 var(--res-corte));
+.res-etapa:last-child { border-bottom: 1px solid rgb(37 37 35 / .18); }
+.res-etapa__cabeca {
+  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr) auto; align-items: center;
+  height: var(--res-cab);
 }
-.res-quadro { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s cubic-bezier(.4, 0, .2, 1); }
-.res-quadro[data-ativo] { opacity: 1; z-index: 1; }
-.res-quadro__foto {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 40%;
-  transform: scale(1.06); transition: transform 1.2s cubic-bezier(.4, 0, .2, 1);
+.res-etapa__ordem { font-size: clamp(15px, 1.2vw, 18px); letter-spacing: .02em; color: #5f5f5d; }
+.res-etapa__area { margin: 0; font-size: clamp(28px, 2.9vw, 46px); font-weight: 300; line-height: 1; letter-spacing: -.045em; color: #252523; }
+.res-etapa__numero {
+  position: relative; margin: 0; font-size: clamp(28px, 2.9vw, 46px); font-weight: 300; line-height: 1;
+  letter-spacing: -.045em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.res-quadro__foto--espelho { scale: -1 1; object-position: 30% 40%; }
-/* A foto aproxima devagar enquanto a área está aberta. */
-.res-quadro[data-ativo] .res-quadro__foto { transform: scale(1); transition: transform 9s cubic-bezier(.22, 1, .36, 1); }
-/* Escurece embaixo e à esquerda, onde mora o texto. */
-.res-quadro::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(to top, rgb(5 5 5 / .92) 0%, rgb(5 5 5 / .55) 34%, rgb(5 5 5 / 0) 62%),
-    linear-gradient(to right, rgb(5 5 5 / .55) 0%, rgb(5 5 5 / 0) 55%);
+.res-etapa__reserva { visibility: hidden; }
+.res-etapa__contagem { position: absolute; top: 0; right: 0; }
+.res-etapa__corpo {
+  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 0;
+  padding: 8px 0 clamp(28px, 3vw, 44px);
 }
-.res-quadro__legenda {
-  position: absolute; z-index: 1; left: clamp(24px, 3vw, 48px); right: clamp(24px, 3vw, 48px); bottom: clamp(24px, 3vw, 44px);
-  display: grid; justify-items: start; gap: 14px; color: var(--papel);
-}
-.res-quadro__legenda > * { opacity: 0; transform: translate3d(0, 14px, 0); transition: opacity .5s ease, transform .5s ease; }
-.res-quadro[data-ativo] .res-quadro__legenda > * {
-  opacity: 1; transform: none;
-  transition: opacity 1s cubic-bezier(.22, 1, .36, 1) .35s, transform 1.2s cubic-bezier(.22, 1, .36, 1) .35s;
-}
-.res-quadro[data-ativo] .res-quadro__legenda > :nth-child(2) { transition-delay: .45s; }
-.res-quadro[data-ativo] .res-quadro__legenda > :nth-child(3) { transition-delay: .6s; }
-/* O fio amarelo antes da área é o único amarelo da dobra. */
-.res-quadro__area {
-  display: inline-flex; align-items: center; gap: 12px;
-  font-size: 15px; font-weight: 500; letter-spacing: .01em; color: rgb(242 242 238 / .86);
-}
-.res-quadro__area::before { content: ''; width: 28px; height: 1px; background: var(--amarelo-marca, #FFD103); }
-.res-quadro__numero {
-  position: relative; margin: 0; font-size: clamp(72px, 8.4vw, 148px); font-weight: 200; line-height: .9;
-  letter-spacing: -.06em; white-space: nowrap; font-variant-numeric: tabular-nums;
-}
-.res-quadro__reserva { visibility: hidden; }
-.res-quadro__contagem { position: absolute; top: 0; left: 0; }
-.res-quadro__texto { margin: 0; max-width: 34ch; font-size: clamp(15px, 1.1vw, 17px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
-
-/* Índice: as cinco áreas entre fios; o fio de cima da aberta mostra o tempo. */
-.res-indice { grid-column: 9 / -1; display: grid; border-bottom: 1px solid rgb(37 37 35 / .16); }
-.res-aba {
-  position: relative; display: grid; grid-template-columns: 2.4em minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px;
-  width: 100%; padding: clamp(18px, 1.7vw, 26px) 0; border: 0; border-top: 1px solid rgb(37 37 35 / .16);
-  background: none; font: inherit; color: #252523; text-align: left; cursor: pointer;
-}
-.res-aba > :not(.res-aba__tempo) { opacity: .42; transition: opacity .6s ease; }
-.res-aba:hover > :not(.res-aba__tempo) { opacity: .72; }
-.res-aba[aria-selected="true"] > :not(.res-aba__tempo) { opacity: 1; }
-.res-aba__ordem { font-size: 13px; letter-spacing: .04em; }
-.res-aba__area { font-size: clamp(18px, 1.45vw, 22px); letter-spacing: -.02em; line-height: 1.2; }
-.res-aba__numero { font-size: clamp(18px, 1.45vw, 22px); font-weight: 300; letter-spacing: -.03em; }
-.res-aba__tempo {
-  position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: #1d1d1b;
-  transform: scaleX(0); transform-origin: left;
-}
-.res-aba[aria-selected="true"] .res-aba__tempo { transform: scaleX(1); }
-.res-vitrine[data-corre] .res-aba[aria-selected="true"] .res-aba__tempo {
-  transform: scaleX(0); animation: res-tempo var(--res-tempo) linear forwards;
-}
-.res-vitrine[data-corre][data-pausado] .res-aba__tempo { animation-play-state: paused; }
-@keyframes res-tempo { to { transform: scaleX(1); } }
-
-@media (max-width: 1099.98px) {
-  .res-palco { grid-column: 1 / span 7; }
-  .res-indice { grid-column: 8 / -1; }
-}
+.res-etapa__texto { grid-column: 2; margin: 0; max-width: 32ch; padding-right: 32px; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
+.res-etapa__foto { grid-column: 3; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; }
+.res-etapa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; }
+.res-etapa__img--espelho { scale: -1 1; }
+/* Respiro no fim, para a última linha subir até a pilha. */
+.res-pilha::after { content: ''; display: block; height: clamp(24px, 3vw, 48px); }
 @media (max-width: 899.98px) {
-  .res-vitrine { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
-  .res-palco, .res-indice { grid-column: 1; }
-  .res-palco { aspect-ratio: 4 / 5; }
-  .res-quadro__foto { object-position: 62% 34%; }
-}
-@media (max-width: 599.98px) {
-  .res-quadro__numero { font-size: 76px; }
-  .res-aba { padding-block: 16px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .res-quadro, .res-quadro__foto, .res-quadro__legenda > * { transition: none !important; }
-  .res-quadro__foto { transform: none; }
+  .res-etapa { position: static; }
+  .res-etapa__cabeca { grid-template-columns: 44px minmax(0, 1fr) auto; height: auto; padding-block: 22px 12px; }
+  .res-etapa__corpo { grid-template-columns: 1fr; row-gap: 16px; padding-top: 0; }
+  .res-etapa__texto, .res-etapa__foto { grid-column: 1; padding-right: 0; }
+  .res-etapa__foto { grid-row: 1; }
 }
 
 /* Ecossistema: duas portas de entrada, sem painel invisível sob o teclado. */

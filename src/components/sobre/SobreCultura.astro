@@ -1,38 +1,39 @@
 ---
 /**
- * Cultura (04/10/2026). No painel claro: "No que acreditamos" à esquerda, com a frase; os quatro valores à direita, numa
- * lista de setas amarelas entre fios.
+ * Cultura (04/10/2026). No painel claro, a cabeça centrada da home e os
+ * quatro valores em cartões claros com ícone, numa fileira.
  */
 import { cultura } from '../../data/sobre';
-import Seta from '../editorial/Seta.astro';
-import Selo from '../ui/Selo.astro';
 import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 const [leve, forte] = doisPesos(cultura.h2, 1);
+const icones: NomeIconeRenke[] = ['bussola', 'verificado', 'pessoas', 'crescimento'];
 ---
-<section class="ed-secao ed-secao--papel sb-cultura" id="sobre-cultura" data-tom="claro" aria-labelledby="sobre-cultura-titulo">
-  <div class="container ed-grade sb-cultura__grade">
-    <div class="sb-cultura__cabeca">
-      {cultura.rotulo && <Selo>{cultura.rotulo}</Selo>}
-      <h2 class="ed-display ed-display--medio entra" id="sobre-cultura-titulo"><span>{leve}</span> <span><b>{forte}</b></span></h2>
-      <p class="ed-chamada sb-cultura__frase entra" style="--i:1">{cultura.frase}</p>
-      {cultura.link && <a class="link-arrow sb-cultura__link" href={cultura.link.rota}>{cultura.link.rotulo}</a>}
-    </div>
-    <ul class="ed-setas sb-cultura__valores">
+<section class="ed-secao ed-painel sb-cultura" id="sobre-cultura" data-tom="claro" aria-labelledby="sobre-cultura-titulo">
+  <div class="container">
+    <header class="ed-cabeca entra">
+      <Selo class="cabeca-dobra__selo">{cultura.rotulo ?? 'Cultura'}</Selo>
+      <h2 class="ed-titulo" id="sobre-cultura-titulo">{leve} <b>{forte}</b></h2>
+      <p class="ed-apoio">{cultura.frase}</p>
+    </header>
+    <ul class="sb-cultura__valores" role="list">
       {cultura.valores.map((v, i) => (
-        <li class="entra" style={`--i:${i}`}><Seta /><p class="ed-setas__frase">{v}</p></li>
+        <li class="ed-cartao sb-cultura__valor entra" style={`--i:${i}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <p class="ed-cartao__nome">{v}</p>
+        </li>
       ))}
     </ul>
+    {cultura.link && <p class="sb-cultura__link"><a class="link-arrow" href={cultura.link.rota}>{cultura.link.rotulo}</a></p>}
   </div>
 </section>
 
 <style>
-  .sb-cultura__grade { row-gap: 56px; align-items: start; }
-  .sb-cultura__cabeca { grid-column: 1 / span 6; display: grid; gap: clamp(28px, 3vw, 44px); justify-items: start; }
-  .sb-cultura__frase { max-width: 26ch; color: var(--ed-tinta-2); }
-  .sb-cultura__link { color: var(--ed-tinta); }
-  .sb-cultura__valores { grid-column: 7 / -1; align-self: end; }
-  .sb-cultura__valores .ed-setas__frase { font-size: clamp(22px, 2.2vw, 36px); }
-  @media (max-width: 899.98px) {
-    .sb-cultura__cabeca, .sb-cultura__valores { grid-column: 1 / -1; }
-  }
+  .sb-cultura__valores { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ed-vao); }
+  .sb-cultura__valor { min-height: clamp(180px, 14vw, 220px); }
+  .sb-cultura__valor .ed-cartao__nome { font-size: clamp(17px, 1.35vw, 22px); }   /* "Autorresponsabilidade" numa linha */
+  .sb-cultura__link { margin: 32px 0 0; text-align: center; }
+  @media (max-width: 899.98px) { .sb-cultura__valores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>

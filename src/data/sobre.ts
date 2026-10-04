@@ -200,7 +200,7 @@ export const fotos: Record<'capa' | 'somos' | 'tese' | 'prova' | 'casa' | 'casaD
   capa: { foto: operacao, foco: '50% 42%', alt: 'Salão da sede da Renke, com o time nas estações de trabalho e o R amarelo na parede.' },
   somos: { foto: estudio, foco: '50% 40%', alt: 'Parede amarela com o nome Renke em neon e a frase “Pense, elabore e surpreenda!”.' },
   tese: { foto: salaVidro, foco: '40% 50%', alt: 'Sala de reunião com divisória de vidro e palavras em amarelo na parede.' },
-  prova: { foto: cafe, foco: '30% 50%', alt: 'Área do café da sede, com bancada e cadeiras amarelas.' },
-  casa: { foto: equipe, foco: '50% 50%', alt: 'Salão da sede com o time nas estações de trabalho e a faixa amarela da marca na parede.' },
+  prova: { foto: equipe, foco: '30% 50%', alt: 'Salão da sede com o time nas estações de trabalho e a faixa amarela da marca na parede.' },
+  casa: { foto: cafe, foco: '30% 50%', alt: 'Área do café da sede, com bancada e cadeiras amarelas.' },
   casaDetalhe: { foto: sofa, foco: '50% 50%', alt: 'Nicho amarelo com sofá e a frase “Seja o hábito da mudança!”.' },
 };

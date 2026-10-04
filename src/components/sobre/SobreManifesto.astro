@@ -1,31 +1,48 @@
 ---
 /**
- * O que somos (04/10/2026). No painel claro chanfrado, como o do método: o
- * título fino, a 2ª linha em 500; embaixo, a frase grande à
- * esquerda e a foto do estúdio sangrando para a direita.
+ * O que somos (04/10/2026). A mesma composição do "O que a Renke faz" da
+ * home, no painel claro chanfrado: selo, título e texto à esquerda; a foto
+ * do estúdio no meio, em cartão alto; o número grande à direita.
  */
 import { Image } from 'astro:assets';
 import { somos, fotos } from '../../data/sobre';
+import { numerosProva } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
+import Selo from '../ui/Selo.astro';
 const f = fotos.somos;
+const anos = numerosProva[copyLiteral ? 'copy' : 'estudio'][1];
 ---
-<section class="ed-secao ed-secao--papel sb-somos" id="sobre-somos" data-tom="claro" aria-labelledby="sobre-somos-titulo">
-  <div class="container ed-grade sb-somos__grade">
-    <h2 class="ed-display ed-display--medio sb-somos__titulo entra" id="sobre-somos-titulo">
-      <span>{somos.h2[0]}</span>{' '}<span><b>{somos.h2[1]}</b></span>
-    </h2>
-    <p class="ed-chamada sb-somos__texto entra" style="--i:1">{somos.texto}</p>
-    <figure class="ed-foto ed-revela entra ed-sangra-dir sb-somos__foto">
-      <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[720, 1280, 1760]} sizes="(min-width: 900px) 60vw, 100vw" style={`object-position: ${f.foco}`} />
+<section class="ed-secao ed-painel sb-somos" id="sobre-somos" data-tom="claro" aria-labelledby="sobre-somos-titulo">
+  <div class="container sb-somos__grade">
+    <div class="sb-somos__cabeca entra">
+      <Selo class="cabeca-dobra__selo">Quem somos</Selo>
+      <h2 class="ed-titulo" id="sobre-somos-titulo"><span>{somos.h2[0]}</span> <b>{somos.h2[1]}</b></h2>
+    </div>
+    <p class="sb-somos__texto entra" style="--i:1">{somos.texto}</p>
+    <figure class="ed-foto ed-foto--sombra sb-somos__foto entra" style="--i:1">
+      <Image src={f.foto} alt={f.alt} format="webp" quality={80} widths={[400, 720, 960]} sizes="(min-width: 900px) 30vw, 100vw" style={`object-position: ${f.foco}`} />
     </figure>
+    <p class="ed-numero sb-somos__numero entra" style="--i:2">
+      <span class="ed-numero__valor">{anos.valor}</span>
+      <span class="ed-numero__legenda">{anos.legenda}</span>
+    </p>
   </div>
 </section>
 
 <style>
-  .sb-somos { margin-top: clamp(40px, 5vw, 80px); }
-  .sb-somos__grade { row-gap: clamp(48px, 6vw, 96px); align-items: end; }
-  .sb-somos__texto { grid-column: 1 / span 4; grid-row: 2; align-self: end; padding-bottom: 8px; }
-  .sb-somos__foto { grid-column: 6 / -1; grid-row: 2; aspect-ratio: 16 / 10; }
+  .sb-somos__grade {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 3fr);
+    grid-template-areas: "cabeca foto numero" "texto foto numero";
+    column-gap: clamp(24px, 3.4vw, 64px); row-gap: 32px;
+  }
+  .sb-somos__cabeca { grid-area: cabeca; display: grid; justify-items: start; align-content: start; }
+  .sb-somos__cabeca .ed-titulo span { display: block; }
+  .sb-somos__texto { grid-area: texto; align-self: end; margin: 0; max-width: 34ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.6; color: #50504e; text-wrap: pretty; }
+  .sb-somos__foto { grid-area: foto; aspect-ratio: 4 / 5; }
+  .sb-somos__numero { grid-area: numero; align-self: end; margin: 0; }
+  .sb-somos__numero .ed-numero__valor { font-size: clamp(64px, 6.2vw, 112px); white-space: nowrap; }
   @media (max-width: 899.98px) {
-    .sb-somos__texto, .sb-somos__foto { grid-column: 1 / -1; grid-row: auto; }
+    .sb-somos__grade { grid-template-columns: 1fr; grid-template-areas: "cabeca" "texto" "foto" "numero"; }
+    .sb-somos__foto { aspect-ratio: 4 / 3; }
   }
 </style>

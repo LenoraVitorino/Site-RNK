@@ -1,48 +1,55 @@
 ---
 /**
- * A tese (04/10/2026). A foto da sala de vidro abre a dobra e se desfaz
- * na cena; o título sobe pela foto e as afirmações
- * descem numa lista de setas entre fios, como "Atrair pacientes sem
- * construir reputação é frágil".
+ * A tese (04/10/2026). Sobre a cena, a cabeça centrada da home e as
+ * afirmações em cartões de vidro com ícone (os das Perguntas), em volta de
+ * uma foto da sala de vidro em cartão alto.
  */
 import { Image } from 'astro:assets';
 import { tese, fotos } from '../../data/sobre';
-import Seta from '../editorial/Seta.astro';
 import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 const f = fotos.tese;
 const [leve, forte] = doisPesos(tese.h2, 2);
+const icones: NomeIconeRenke[] = ['crescimento', 'funil', 'conexao', 'dados', 'mira'];
+const cinco = tese.passos.length > 4;
 ---
-<section class="ed-secao ed-secao--grafite sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
-  <figure class="ed-foto ed-desfaz sb-tese__foto">
-    <Image src={f.foto} alt={f.alt} format="webp" quality={76} widths={[960, 1600, 2200]} sizes="100vw" style={`object-position: ${f.foco}`} />
-  </figure>
-  <div class="container ed-grade sb-tese__miolo">
-    <h2 class="ed-display ed-display--medio ed-mascara sb-tese__titulo entra" id="sobre-tese-titulo">{leve} <b>{forte}</b></h2>
-    <ol class="ed-setas ed-mascara sb-tese__lista">
+<section class="ed-secao ed-secao--cena sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
+  <div class="container">
+    <header class="ed-cabeca ed-mascara entra">
+      <Selo class="cabeca-dobra__selo">A tese</Selo>
+      <h2 class="ed-titulo" id="sobre-tese-titulo">{leve} <b>{forte}</b></h2>
+    </header>
+    <div class:list={['sb-tese__grade', { 'sb-tese__grade--cinco': cinco }]}>
       {tese.passos.map((p, i) => (
-        <li class="entra" style={`--i:${i}`}>
-          <Seta />
-          <div>
-            <p class="ed-setas__frase sb-tese__frase">{p.frase}</p>
-            {p.apoio && <p class="ed-setas__apoio">{p.apoio}</p>}
+        <article class="ed-cartao sb-tese__cartao entra" style={`--i:${i}; grid-area: c${i + 1}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <div class="ed-cartao__corpo">
+            <h3 class="ed-cartao__nome">{p.frase}</h3>
+            {p.apoio && <p class="ed-cartao__texto">{p.apoio}</p>}
           </div>
-        </li>
+        </article>
       ))}
-    </ol>
+      <figure class="ed-foto sb-tese__foto entra" style="--i:2">
+        <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[480, 800, 1120]} sizes="(min-width: 900px) 32vw, 100vw" style={`object-position: ${f.foco}`} />
+      </figure>
+    </div>
   </div>
 </section>
 
 <style>
-  .sb-tese { padding-top: 0; }
-  /* A foto fica recuada como os painéis, com o chanfro em cima, e some na cena embaixo. */
-  .sb-tese__foto {
-    height: clamp(360px, 62vh, 720px); margin: var(--ed-recuo) var(--ed-recuo) 0;
-    clip-path: polygon(var(--ed-chanfro) 0, calc(100% - var(--ed-chanfro)) 0, 100% var(--ed-chanfro), 100% 100%, 0 100%, 0 var(--ed-chanfro));
+  .sb-tese__grade {
+    display: grid; gap: var(--ed-vao);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: "c1 foto c2" "c3 foto c4";
   }
-  .sb-tese__miolo { position: relative; z-index: 1; margin-top: clamp(-180px, -11vw, -88px); row-gap: clamp(48px, 5vw, 80px); }
-  .sb-tese__titulo { grid-column: 1 / span 9; }
-  .sb-tese__lista { grid-column: 4 / -1; }
+  .sb-tese__grade--cinco { grid-template-areas: "c1 c2 foto" "c3 c4 c5"; }
+  .sb-tese__cartao { min-height: clamp(240px, 19vw, 300px); }
+  .sb-tese__foto { grid-area: foto; min-height: 100%; }
   @media (max-width: 899.98px) {
-    .sb-tese__titulo, .sb-tese__lista { grid-column: 1 / -1; }
+    .sb-tese__grade, .sb-tese__grade--cinco { grid-template-columns: 1fr; grid-template-areas: none; }
+    .sb-tese__cartao { grid-area: auto !important; min-height: 0; }
+    .sb-tese__foto { grid-area: auto; aspect-ratio: 4 / 3; grid-row: 1; }
   }
 </style>

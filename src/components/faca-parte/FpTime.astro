@@ -1,31 +1,29 @@
 ---
 /**
- * O time (04/10/2026). Os retratos do time em grade, sobre a cena, com o
- * chanfro da casa: o fundo escuro e o amarelo dos retratos são os do próprio
- * estúdio fotográfico da Renke. O último quadro é o convite, em amarelo:
- * o próximo pode ser você (o único bloco amarelo da página, como o cartão
- * amarelo do bento do Protocolo).
+ * O time (04/10/2026). Sobre a cena, a cabeça centrada da home e os
+ * retratos em grade, em cantos arredondados. O último quadro é o convite,
+ * em amarelo, como o cartão amarelo do bento do Protocolo.
  */
 import { Image } from 'astro:assets';
 import { equipe } from '../../data/equipe';
 import { facaParteEd } from '../../data/paginas/faca-parte';
-import Seta from '../editorial/Seta.astro';
-import Selo from '../ui/Selo.astro';
 import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
 const { time, convite } = facaParteEd;
 const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.h2];
 ---
-<section class="ed-secao ed-secao--grafite fp-time" id="faca-parte-time" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-time-titulo">
-  <div class="container fp-time__miolo">
-    <header class="fp-time__cabeca ed-mascara entra">
-      {time.rotulo && <Selo class="fp-time__selo">{time.rotulo}</Selo>}
-      <h2 class="ed-display ed-display--medio" id="faca-parte-time-titulo">{leve}{leve && ' '}<b>{forte}</b></h2>
+<section class="ed-secao ed-secao--cena fp-time" id="faca-parte-time" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-time-titulo">
+  <div class="container">
+    <header class="ed-cabeca ed-mascara entra">
+      {time.rotulo && <Selo class="cabeca-dobra__selo">{time.rotulo}</Selo>}
+      <h2 class="ed-titulo" id="faca-parte-time-titulo">{leve}{leve && ' '}<b>{forte}</b></h2>
     </header>
     <ul class="fp-time__grade" role="list">
       {equipe.map((p, i) => (
         <li class="fp-pessoa entra" style={`--i:${i % 6}`}>
-          <figure class="fp-pessoa__quadro">
-            <Image src={p.foto} alt="" format="webp" quality={78} widths={[240, 400, 560]} sizes="(min-width: 1200px) 220px, (min-width: 900px) 16vw, (min-width: 600px) 30vw, 46vw" />
+          <figure class="ed-foto fp-pessoa__quadro">
+            <Image src={p.foto} alt="" format="webp" quality={78} widths={[240, 400, 560]} sizes="(min-width: 1200px) 200px, (min-width: 900px) 16vw, (min-width: 600px) 24vw, 46vw" />
           </figure>
           <p class="fp-pessoa__nome">{p.nome}</p>
         </li>
@@ -33,7 +31,7 @@ const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.
       <li class="fp-convite entra" style="--i:5">
         <a class="fp-convite__link" href={convite.rota}>
           <span class="fp-convite__frase">{convite.frase}</span>
-          <span class="fp-convite__acao">{convite.rotulo}<Seta /></span>
+          <span class="fp-convite__acao">{convite.rotulo}<IconeRenke nome="seta" size={18} /></span>
         </a>
       </li>
     </ul>
@@ -41,38 +39,21 @@ const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.
 </section>
 
 <style>
-  .fp-time__miolo { display: grid; gap: clamp(48px, 5vw, 80px); }
-  .fp-time__cabeca { display: grid; justify-items: start; gap: clamp(24px, 2.6vw, 36px); }
-  .fp-time__grade {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(28px, 2.6vw, 40px) var(--ed-gap);
-  }
-  .fp-pessoa { display: grid; gap: 12px; }
-  .fp-pessoa__quadro {
-    --c: clamp(8px, .8vw, 12px);
-    margin: 0; aspect-ratio: 1; overflow: hidden; background: #1a1a1a;
-    clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
-  }
-  .fp-pessoa__quadro :global(img) {
-    display: block; width: 100%; height: 100%; object-fit: cover;
-    transition: transform 1.2s cubic-bezier(.22, 1, .36, 1);
-  }
+  .fp-time__grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 28px var(--ed-vao); }
+  .fp-pessoa { display: grid; gap: 12px; align-content: start; }
+  .fp-pessoa__quadro { aspect-ratio: 1; }
+  .fp-pessoa__quadro :global(img) { transition: transform 1.2s cubic-bezier(.22, 1, .36, 1); }
   .fp-pessoa:hover .fp-pessoa__quadro :global(img) { transform: scale(1.04); }
-  .fp-pessoa__nome { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: rgb(242 242 238 / .86); }
-  /* O convite ocupa um quadro, com a altura do retrato. */
-  .fp-convite { display: grid; min-width: 0; }
+  .fp-pessoa__nome { margin: 0; font-size: 15px; letter-spacing: -.01em; color: rgb(242 242 238 / .8); }
+  .fp-convite { min-width: 0; }
   .fp-convite__link {
-    aspect-ratio: 1; min-width: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-    --c: clamp(8px, .8vw, 12px);
-    clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
-    padding: clamp(16px, 1.6vw, 24px); background: var(--ed-amarelo); color: #161616; text-decoration: none;
-    transition: background-color .5s ease;
+    aspect-ratio: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; overflow: hidden;
+    padding: clamp(16px, 1.6vw, 24px); border-radius: var(--ed-raio-foto);
+    background: var(--amarelo-marca, #FFD103); color: #161616; text-decoration: none; transition: background-color .5s ease;
   }
   .fp-convite__link:hover { background: #ffdc3a; }
-  .fp-convite__frase { font-size: clamp(18px, 1.7vw, 27px); font-weight: 400; line-height: 1.08; letter-spacing: -.04em; }
-  .fp-convite__acao { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
-  .fp-convite__acao :global(.ed-seta) { width: 26px; margin: 0; color: #161616; transition: transform .6s cubic-bezier(.22, 1, .36, 1); }
-  .fp-convite__link:hover :global(.ed-seta) { transform: translateX(4px); }
+  .fp-convite__frase { font-size: clamp(18px, 1.6vw, 26px); font-weight: 400; line-height: 1.1; letter-spacing: -.035em; }
+  .fp-convite__acao { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 500; }
   .fp-convite__link:focus-visible { outline: 2px solid var(--papel); outline-offset: 4px; }
   @media (max-width: 1099.98px) { .fp-time__grade { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   @media (max-width: 699.98px) { .fp-time__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
