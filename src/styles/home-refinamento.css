@@ -3,7 +3,7 @@
 section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
 .home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
-.home-refinada .footer { position: relative; z-index: 1; background: var(--fundo, #000); }   /* preto, como o resto do site (Lenora, 02/10) */
+.home-refinada .footer { position: relative; z-index: 1; }   /* preto, como o resto do site (Lenora, 02/10); o fundo vem de home2.css */
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
 .secao-indice { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 56px; }
 .secao-indice > .rotulo { padding-top: 8px; }

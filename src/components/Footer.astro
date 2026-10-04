@@ -1,13 +1,16 @@
 ---
 /**
- * Rodapé (29/09/2026): quatro colunas. A marca, com os ícones das redes
- * embaixo (o logo leva à home); as soluções; A Renke (Sobre, Faça Parte, Contato); e o contato
- * (e-mail e endereço). Embaixo, o copyright e
- * o CNPJ (e, na versão copy, a assinatura). O layout é o mesmo nas duas
- * versões; só o título da coluna de links muda ("Links" na copy).
+ * Rodapé (04/10/2026, Lenora): escuro, na linha das referências F5 Sistema e
+ * Fargo. Quatro colunas com um fio fino sob o título de cada uma (a marca,
+ * as soluções, A Renke e o contato); as redes em caixinhas chanfradas; o
+ * copyright e o CNPJ (e, na versão copy, a assinatura); e, por último, o
+ * RNK gigante ao fundo, quase apagado, que some em direção à base. O layout
+ * é o mesmo nas duas versões; só o título da coluna de links muda ("Links"
+ * na copy).
  *
  * Os ícones das redes são desenhados aqui, no traço de 1,5 do Lucide: o
- * Lucide 1.x não tem ícones de marca.
+ * Lucide 1.x não tem ícones de marca. O RNK do fundo é um PNG ampliado do
+ * logo (public/marca/rnk-rodape.png), usado como máscara de um degradê.
  */
 import { rodape } from '../data/nav';
 import { existe } from '../data/rotas';
@@ -21,9 +24,11 @@ const redes = rodape.redes.filter((r) => r.rota && r.rota !== '#');
   <div class="container">
     <div class="footer__grid">
       <div class="footer__col footer__marca">
-        <a class="footer__logo" href="/" aria-label="Grupo RNK, página inicial">
-          <img class="logo__img logo__img--rodape" src="/marca/grupo-rnk-branco.png" alt="" width="875" height="120" />
-        </a>
+        <p class="footer__title footer__title--marca">
+          <a class="footer__logo" href="/" aria-label="Grupo RNK, página inicial">
+            <img class="logo__img logo__img--rodape" src="/marca/grupo-rnk-branco.png" alt="" width="875" height="120" />
+          </a>
+        </p>
         {redes.length > 0 && (
           <ul class="footer__redes" aria-label="Redes sociais">
             {redes.map((r) => (
@@ -90,4 +95,5 @@ const redes = rodape.redes.filter((r) => r.rota && r.rota !== '#');
       {copyLiteral && <p><em>{rodape.assinatura}</em></p>}
     </div>
   </div>
+  <div class="footer__fundo" aria-hidden="true"><div class="container"><span class="footer__rnk"></span></div></div>
 </footer>
