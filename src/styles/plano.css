@@ -9,7 +9,7 @@
 /* Fundo chapado, o mesmo do palco dos planos na home: a cena 3D não aparece aqui. */
 .plano-hero { position: relative; isolation: isolate; overflow: clip; background: #101011; color: var(--papel); padding-top: var(--altura-header); }
 .plano-hero__grade {
-  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: minmax(0, 1fr) auto;
+  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr) auto;
   column-gap: clamp(24px, 4vw, 72px); row-gap: clamp(32px, 4vw, 56px);
   min-height: calc(max(100svh, 680px) - var(--altura-header)); padding-block: clamp(24px, 3vw, 48px) clamp(20px, 2.4vw, 32px);
 }
@@ -19,7 +19,7 @@
 .plano-hero__titulo { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(68px, 9vw, 156px); line-height: .86; letter-spacing: -.06em; color: #f2f2ee; }
 .plano-hero__linha { display: block; }
 .plano-hero__linha--2 { padding-left: .62em; font-weight: 500; }
-.plano-hero__sub { margin: 0; max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: pretty; }
+.plano-hero__sub { margin: 0; max-width: 62ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: balance; }   /* em duas linhas no computador (Lenora, 04/10) */
 .plano-hero__acoes { margin: 4px 0 0; }
 /* À direita, a arte do plano (o infográfico do ecossistema, 640 × 560). */
 .plano-hero__imagem { position: relative; align-self: center; }
