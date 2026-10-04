@@ -1,0 +1,162 @@
+---
+/**
+ * A arte da hero do Revena Start (04/10/2026, teste da ideia 2: "o sistema
+ * dentro do símbolo"). O símbolo oficial do plano (public/icones/
+ * plano-start-light.svg: quatro barras arredondadas) vira uma janela, e cada
+ * barra mostra um pedaço vivo do que o Start organiza, na ordem do fluxo:
+ *   esquerda (amarela) — a origem dos leads correndo para o centro;
+ *   cima (clara) — os novos leads descendo;
+ *   baixo (amarela) — os agendados chegando;
+ *   direita (clara) — a taxa de agendamento, com a curva.
+ * Um cursor "Renke" passa de uma barra a outra. Tudo devagar e em laço; com
+ * movimento reduzido, fica parado. As barras chegam montando o símbolo, como
+ * na home. As medidas são as do SVG (caixa de 1080) em % e cqw.
+ */
+const canais = ['Google', 'Meta', 'Instagram', 'Site', 'Indicação', 'WhatsApp'];
+const novos = [
+  ['AM', 'Google', '09:42'], ['RC', 'Instagram', '09:47'], ['LF', 'Meta', '09:55'], ['JP', 'Site', '10:03'],
+  ['MS', 'Indicação', '10:12'], ['TB', 'Google', '10:18'], ['CN', 'WhatsApp', '10:26'],
+];
+const agendados = [['AM', 'Seg 14h'], ['LF', 'Ter 10h'], ['MS', 'Ter 16h'], ['JP', 'Qua 9h'], ['TB', 'Qui 11h'], ['RC', 'Sex 15h']];
+/* Retângulos do SVG oficial: x, y, largura, altura (raio 15,32). */
+const pct = (v: number) => `${(v / 10.8).toFixed(3)}%`;
+const barra = (x: number, y: number, w: number, h: number) => `left:${pct(x)};top:${pct(y)};width:${pct(w)};height:${pct(h)}`;
+---
+<div class="janela" aria-hidden="true">
+  <!-- Esquerda (amarela): de onde os leads chegam. -->
+  <div class="janela__barra janela__barra--ouro janela__barra--canais" style={`${barra(232.55, 493.64, 271.26, 97.01)};--dx:-10.2cqw;--dy:10.2cqw`}>
+    <p class="janela__rotulo">Origem dos leads</p>
+    <div class="janela__trilho janela__trilho--direita">
+      {[...canais, ...canais].map((c) => <span class="janela__canal">{c}</span>)}
+    </div>
+  </div>
+  <!-- Cima (clara): os novos leads descendo. -->
+  <div class="janela__barra janela__barra--papel janela__barra--novos" style={`${barra(494.17, 233.08, 97.01, 271.26)};--dx:10.2cqw;--dy:-10.2cqw`}>
+    <p class="janela__rotulo">Novos leads <span class="janela__ao-vivo"></span></p>
+    <div class="janela__coluna"><div class="janela__fluxo">
+      {[...novos, ...novos].map(([ini, canal, hora]) => (
+        <div class="janela__cartao"><span class="janela__ini">{ini}</span><small>{hora}</small><b>{canal}</b></div>
+      ))}
+    </div></div>
+  </div>
+  <!-- Direita (clara): a taxa de agendamento. -->
+  <div class="janela__barra janela__barra--papel janela__barra--taxa" style={`${barra(576.19, 489.35, 271.26, 97.01)};--dx:10.2cqw;--dy:-10.2cqw`}>
+    <div class="janela__taxa">
+      <p class="janela__rotulo">Taxa de agendamento</p>
+      <p class="janela__numero num"><span data-janela-conta="19">19</span>%</p>
+    </div>
+    <svg class="janela__curva" viewBox="0 0 100 40" preserveAspectRatio="none">
+      <path class="janela__curva-fundo" d="M0 34 L12 31 L24 32 L36 26 L48 27 L60 20 L72 18 L84 11 L100 6" />
+      <path class="janela__curva-linha" pathLength="1" d="M0 34 L12 31 L24 32 L36 26 L48 27 L60 20 L72 18 L84 11 L100 6" />
+    </svg>
+  </div>
+  <!-- Baixo (amarela): os agendados chegando. -->
+  <div class="janela__barra janela__barra--ouro janela__barra--agendados" style={`${barra(488.82, 575.66, 97.01, 271.26)};--dx:-10.2cqw;--dy:10.2cqw`}>
+    <p class="janela__rotulo">Agendados</p>
+    <div class="janela__coluna"><div class="janela__fluxo janela__fluxo--lento">
+      {[...agendados, ...agendados].map(([ini, quando]) => (
+        <div class="janela__cartao janela__cartao--ok"><span class="janela__ini">{ini}</span><small>✓</small><b>{quando}</b></div>
+      ))}
+    </div></div>
+  </div>
+  <!-- O cursor da Renke, passando de uma barra a outra. -->
+  <div class="janela__cursor">
+    <svg viewBox="0 0 24 24"><path d="M3 2L21 10L13 12L10 21Z" /></svg>
+    <span>Renke</span>
+  </div>
+</div>
+
+<script>
+  /* A taxa conta de zero quando a arte aparece. */
+  document.querySelectorAll<HTMLElement>('[data-janela-conta]').forEach((el) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const alvo = Number(el.dataset.janelaConta); el.textContent = '0';
+    setTimeout(() => {
+      const t0 = performance.now(), dur = 1800;
+      const passo = (t: number) => { const k = Math.min(1, (t - t0) / dur); el.textContent = String(Math.round(alvo * (1 - Math.pow(1 - k, 4)))); if (k < 1) requestAnimationFrame(passo); };
+      requestAnimationFrame(passo);
+    }, 1400);
+  });
+</script>
+
+<style>
+  .janela { position: absolute; inset: 0; container-type: inline-size; font-family: var(--font-titulo); }
+  .janela__barra {
+    position: absolute; overflow: hidden; border-radius: 1.42cqw;
+    color: #232321; display: flex; flex-direction: column;
+  }
+  .janela__barra--papel { background: #ededea; }
+  .janela__barra--ouro { background: var(--destaque, #FFD103); }
+  .janela__rotulo {
+    position: relative; z-index: 2; margin: 0; padding: .9cqw 1cqw .6cqw; display: flex; align-items: center; gap: .6cqw;
+    font-size: .86cqw; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: rgb(35 35 33 / .62); white-space: nowrap;
+  }
+  .janela__barra--papel .janela__rotulo { background: linear-gradient(#ededea 70%, rgb(237 237 234 / 0)); }
+  .janela__barra--ouro .janela__rotulo { background: linear-gradient(#FFD103 70%, rgb(255 209 3 / 0)); }
+  .janela__ao-vivo { width: .7cqw; height: .7cqw; border-radius: 50%; background: #2a9d5a; }
+
+  /* Colunas (cima e baixo): cartões descendo sem parar. */
+  .janela__coluna { position: relative; flex: 1; overflow: hidden; margin-top: -1.4cqw; }
+  .janela__fluxo { display: grid; gap: .7cqw; padding: 0 .8cqw; }
+  /* Cartão em duas linhas curtas: as iniciais e a hora em cima, o canal (ou o dia) embaixo. */
+  .janela__cartao {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .5cqw .5cqw;
+    padding: .7cqw .7cqw .75cqw; border-radius: .6cqw; background: #fff; box-shadow: 0 .15cqw .5cqw rgb(0 0 0 / .06);
+  }
+  .janela__cartao small { justify-self: end; font-size: .86cqw; color: rgb(35 35 33 / .55); line-height: 1; }
+  .janela__cartao b { grid-column: 1 / -1; font-size: 1cqw; font-weight: 500; line-height: 1.15; letter-spacing: -.01em; white-space: nowrap; }
+  .janela__ini { display: grid; place-items: center; width: 2cqw; height: 2cqw; border-radius: 50%; background: #232321; color: #f2f2ee; font-size: .78cqw; font-weight: 500; }
+  .janela__cartao--ok { background: rgb(255 255 255 / .62); box-shadow: none; }
+  .janela__cartao--ok .janela__ini { background: #232321; color: var(--destaque, #FFD103); }
+  .janela__cartao--ok small { color: #232321; font-size: 1cqw; }
+
+  /* Esquerda: os canais correndo para o centro. */
+  .janela__barra--canais { justify-content: flex-start; }
+  .janela__trilho { display: flex; gap: .7cqw; width: max-content; padding: .2cqw 0 0 1cqw; }
+  .janela__canal { padding: .55cqw 1.1cqw; border-radius: 99px; background: rgb(255 255 255 / .62); font-size: 1.05cqw; font-weight: 500; white-space: nowrap; }
+
+  /* Direita: a taxa e a curva. */
+  .janela__barra--taxa { flex-direction: row; align-items: stretch; }
+  .janela__taxa { display: grid; align-content: space-between; padding-bottom: .9cqw; }
+  .janela__numero { margin: 0; padding: 0 1cqw; font-size: 3.6cqw; font-weight: 300; line-height: .9; letter-spacing: -.05em; }
+  .janela__curva { flex: 1; min-width: 0; margin: 1.6cqw 1.2cqw 1.4cqw .4cqw; overflow: visible; }
+  .janela__curva path { fill: none; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+  .janela__curva-fundo { stroke: rgb(35 35 33 / .12); stroke-width: 1; }
+  .janela__curva-linha { stroke: #232321; stroke-width: 1.6; }
+
+  /* O cursor. */
+  .janela__cursor { position: absolute; z-index: 5; left: 62%; top: 40%; display: flex; align-items: flex-start; gap: .2cqw; pointer-events: none; }
+  .janela__cursor svg { width: 2.2cqw; height: 2.2cqw; fill: #f2f2ee; stroke: #232321; stroke-width: 1.2; stroke-linejoin: round; }
+  .janela__cursor span { margin-top: 1.6cqw; padding: .35cqw .9cqw; border-radius: 99px; background: var(--destaque, #FFD103); color: #232321; font-size: .95cqw; font-weight: 500; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Entrada: as barras chegam dos lados opostos e montam o símbolo. */
+    :global(.js) .janela__barra { animation: janela-chega 1.6s var(--easing) .2s both; }
+    :global(.js) .janela__barra--papel { animation-delay: .32s; }
+    /* Depois, o sistema funcionando. */
+    .janela__fluxo { animation: janela-desce 28s linear infinite; }
+    .janela__fluxo--lento { animation-duration: 34s; animation-delay: -9s; }
+    .janela__trilho--direita { animation: janela-direita 26s linear infinite; }
+    .janela__ao-vivo { animation: janela-pulsa 2.4s ease-in-out infinite; }
+    :global(.js) .janela__curva-linha { stroke-dasharray: 1; stroke-dashoffset: 1; animation: janela-curva 2.4s var(--easing) 1.4s forwards; }
+    :global(.js) .janela__cursor { opacity: 0; animation: janela-cursor-entra .8s var(--easing) 2.2s forwards, janela-cursor 14s var(--easing) 3s infinite; }
+  }
+  @keyframes janela-chega { from { translate: var(--dx) var(--dy); opacity: 0; } 35% { opacity: 1; } }
+  @keyframes janela-desce { from { transform: translate3d(0, -50%, 0); } to { transform: none; } }
+  @keyframes janela-direita { from { transform: translate3d(-50%, 0, 0); } to { transform: none; } }
+  @keyframes janela-pulsa { 50% { opacity: .25; } }
+  @keyframes janela-curva { to { stroke-dashoffset: 0; } }
+  @keyframes janela-cursor-entra { to { opacity: 1; } }
+  /* Passeio: um lead que chega (cima), a curva (direita), um agendado (baixo), volta. */
+  @keyframes janela-cursor {
+    0%, 100% { left: 62%; top: 40%; }
+    22% { left: 50%; top: 31%; }
+    30% { left: 50%; top: 31%; transform: scale(.88); }
+    34% { transform: none; }
+    52% { left: 72%; top: 48%; }
+    64% { left: 72%; top: 48%; }
+    80% { left: 50.5%; top: 66%; }
+    86% { left: 50.5%; top: 66%; transform: scale(.88); }
+    90% { transform: none; }
+  }
+</style>
