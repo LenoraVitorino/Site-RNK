@@ -905,7 +905,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
    cinza escuro com uma luz diagonal discreta. Um degradê do preto (embaixo)
    para o transparente (em cima) passa por cima dele, e a linha do copyright
    e do CNPJ fica nessa faixa escura. A máscara é o logo. */
-.footer__base { position: relative; margin-top: clamp(48px, 6vw, 96px); }
+.footer__base { position: relative; margin-top: clamp(16px, 2vw, 32px); }
 .footer__fundo { padding-inline: clamp(12px, 2.2vw, 36px); pointer-events: none; user-select: none; }
 .footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2269 / 451; }
 .footer__renke, .footer__renke-barra {
@@ -955,7 +955,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .footer__marca { grid-column: 1 / -1; }
 }
 @media (min-width: 900px) {
-  .footer { padding-block: clamp(72px, 7vw, 112px) 0; }
+  .footer { padding-block: clamp(104px, 11vw, 176px) 0; }   /* as colunas descem, mais perto do RENKE (04/10) */
   .footer__grid { grid-template-columns: 1.8fr 1fr 1fr 1.3fr; gap: 48px; }
 }
 
