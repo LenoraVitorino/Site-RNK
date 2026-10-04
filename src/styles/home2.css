@@ -900,12 +900,37 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 }
 .footer__col .footer__redes a:hover { color: var(--papel); background: rgb(242 242 238 / .42); text-decoration: none; }
 .footer__col .footer__logo { display: inline-block; min-height: 0; min-width: 0; margin: 0; }
-/* O RENKE ao fundo (04/10, Lenora): logo um pouco atrás das colunas, mais
-   para baixo, e todo em cinza escuro chapado (a barra do E também, sem
-   amarelo nem degradê). A máscara é o logo. */
-.footer__fundo { position: relative; z-index: -1; margin-top: calc(-1 * clamp(8px, 2.6vw, 44px)); pointer-events: none; user-select: none; }
-.footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2250 / 430; }
-.footer__renke, .footer__renke-barra { position: absolute; inset: 0; background: #1b1b1a; }
+/* O RENKE na base (04/10, Lenora: "bem parecido com aquela referência",
+   o Fargo): grande, quase de ponta a ponta, com as quinas inteiras, em
+   cinza escuro com uma luz diagonal discreta. Um degradê do preto (embaixo)
+   para o transparente (em cima) passa por cima dele, e a linha do copyright
+   e do CNPJ fica nessa faixa escura. A máscara é o logo. */
+.footer__base { position: relative; margin-top: clamp(48px, 6vw, 96px); }
+.footer__fundo { padding-inline: clamp(12px, 2.2vw, 36px); pointer-events: none; user-select: none; }
+.footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2269 / 451; }
+.footer__renke, .footer__renke-barra {
+  position: absolute; inset: 0;
+  background: linear-gradient(112deg, #1f1f1e 0%, #2b2b29 38%, #3a3a37 50%, #2a2a28 62%, #1d1d1c 100%);
+}
+.footer__renke {
+  -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat;
+  mask: url('/marca/renke-rodape.png') center / contain no-repeat;
+}
+.footer__renke-barra {
+  -webkit-mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
+  mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat;
+}
+.footer__base::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, #000 0%, rgb(0 0 0 / .9) 16%, rgb(0 0 0 / .5) 42%, rgb(0 0 0 / 0) 78%);
+}
+.footer__base-texto { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; }
+.footer__base .footer__bottom { margin-top: 0; padding-top: 0; padding-bottom: clamp(20px, 2.2vw, 32px); }
+@media (max-width: 699.98px) {
+  /* No celular o logo é baixo demais para levar as três linhas por cima. */
+  .footer__base-texto { position: relative; margin-top: -8px; }
+  .footer__base::after { background: linear-gradient(to top, #000 0%, #000 34%, rgb(0 0 0 / .4) 62%, rgb(0 0 0 / 0) 86%); }
+}
 .footer__renke {
   -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat;
   mask: url('/marca/renke-rodape.png') center / contain no-repeat;
