@@ -1,18 +1,26 @@
 ---
 /**
- * Arte da hero do Revena Start (04/10/2026), versão limpa: "mais elegante,
+ * Arte da hero dos planos Revena (04/10/2026; parametrizada em 05/10 para
+ * os cinco planos). Versão limpa, pedida pela Lenora: "mais elegante,
  * moderna, minimalista… clean, soft, pegando tudo que a gente já criou de
- * ilustração" (a Lenora reprovou o infográfico cheio de frentes). Poucas
- * peças, no idioma das ilustrações do Protocolo: o núcleo com anéis (como em
- * "Vamos além do tráfego pago"), com o símbolo do Start; um cartão de novo
- * lead chegando; o lembrete do WhatsApp (como em "Automatizamos o seu
- * atendimento"), confirmado pelo cursor Renke; e a pílula de agendado. Uma
- * luz amarela percorre os três fios, um de cada vez: lead → núcleo →
- * lembrete → agendado. Laço de 9 s, só CSS; com movimento reduzido, parado.
- * Caixa de 640 × 560 com as peças em %; os fios são traçados pelo script a
- * partir da posição real de cada peça (as larguras variam com o texto).
+ * ilustração". Poucas peças, no idioma das ilustrações do Protocolo: o
+ * núcleo com anéis, com o símbolo do plano; um cartão que chega; uma
+ * mensagem, confirmada pelo cursor Renke; e uma pílula de estado. Uma luz
+ * amarela percorre os três fios, um de cada vez. Laço de 9 s, só CSS; com
+ * movimento reduzido, parado. Caixa de 640 × 560 com as peças em %; os
+ * fios são traçados pelo script a partir da posição real de cada peça.
+ * O conteúdo de cada plano vem de src/data/planos.ts.
  */
+import type { ArtePlano } from '../../data/planos';
+interface Props { plano: string; arte: ArtePlano }
+const { plano, arte } = Astro.props;
 const fios = [0, 1, 2];
+const ICONES = {
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="3.75" /><circle cx="16.9" cy="7.1" r=".9" fill="currentColor" stroke="none" />',
+  relatorio: '<rect x="4.5" y="3.5" width="15" height="17" rx="2.5" /><path d="M8.5 15.5V12M12 15.5V9M15.5 15.5V11" />',
+  busca: '<circle cx="11" cy="11" r="6.5" /><path d="M16 16L20.5 20.5" />',
+  campanha: '<path d="M4 10V14H7L14 18.5V5.5L7 10ZM17.5 9.5A4 4 0 0 1 17.5 14.5" />',
+} as const;
 ---
 <div class="eco" aria-hidden="true" data-eco>
   <svg class="eco__fios" viewBox="0 0 640 560" focusable="false">
@@ -24,26 +32,24 @@ const fios = [0, 1, 2];
     <span class="eco__anel eco__anel--3"></span>
     <span class="eco__anel eco__anel--2"></span>
     <span class="eco__anel eco__anel--1"></span>
-    <span class="eco__miolo"><img src="/icones/plano-start-dark.svg" alt="" width="1080" height="1080" /></span>
+    <span class="eco__miolo"><img src={`/icones/plano-${plano}-dark.svg`} alt="" width="1080" height="1080" /></span>
   </div>
 
   <div class="eco__peca eco__lead">
-    <span class="eco__icone">
-      <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="3.75" /><circle cx="16.9" cy="7.1" r=".9" fill="currentColor" stroke="none" /></svg>
-    </span>
-    <span class="eco__texto"><b>Novo lead</b><small>Instagram · agora</small></span>
+    <span class="eco__icone"><svg viewBox="0 0 24 24" set:html={ICONES[arte.chegada.icone]} /></span>
+    <span class="eco__texto"><b>{arte.chegada.titulo}</b><small>{arte.chegada.sub}</small></span>
   </div>
 
   <div class="eco__peca eco__lembrete">
     <p class="eco__cabeca">
       <svg viewBox="0 0 24 24"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.5Z" /></svg>
-      <b>Lembrete</b><small>WhatsApp</small><small class="eco__agora">agora</small>
+      <b>{arte.mensagem.rotulo}</b><small>{arte.mensagem.canal}</small><small class="eco__agora">{arte.mensagem.quando}</small>
     </p>
-    <p class="eco__mensagem">Sua avaliação é amanhã, às 14:00. Podemos confirmar a sua presença?</p>
+    <p class="eco__mensagem">{arte.mensagem.texto}</p>
     <svg class="eco__visto" viewBox="0 0 24 24"><path d="M2.5 12.5L7 17L15.5 7.5M9.5 15.5L11 17L19.5 7.5" /></svg>
   </div>
 
-  <div class="eco__peca eco__agendado"><span class="eco__ponto"></span><b>Agendado</b><small>ter, 14:00</small></div>
+  <div class="eco__peca eco__agendado"><span class="eco__ponto"></span><b>{arte.estado.titulo}</b><small>{arte.estado.sub}</small></div>
 
   <div class="eco__cursor"><svg viewBox="0 0 24 24"><path d="M3 2L21 10L13 12L10 21Z" /></svg><span>Renke</span></div>
 </div>

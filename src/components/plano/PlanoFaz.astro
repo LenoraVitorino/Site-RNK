@@ -9,16 +9,17 @@ import IconeRenke from '../ui/IconeRenke.astro';
 import Selo from '../ui/Selo.astro';
 import type { ContextoSecao } from '../pagina/contexto';
 
-interface Props { h2: string; itens: { titulo: string; texto?: string }[]; icones: string[]; selo?: string; secao: ContextoSecao }
-const { h2, itens, icones, selo, secao } = Astro.props;
+interface Props { h2: string; sub?: string; itens: { titulo: string; texto?: string }[]; icones: string[]; selo?: string; secao: ContextoSecao }
+const { h2, sub, itens, icones, selo, secao } = Astro.props;
 ---
 <section class="plano-faz" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container">
     <header class="plano-cabeca entra">
       {selo && <Selo class="cabeca-dobra__selo">{selo}</Selo>}
       <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+      {sub && <p class="cabeca-dobra__apoio plano-faz__sub">{sub}</p>}
     </header>
-    <ol class="ganhos__grade plano-faz__grade" data-plano-construir>
+    <ol class="ganhos__grade plano-faz__grade" style={`--cols:${itens.length}`} data-plano-construir>
       {itens.map((it, i) => (
         <li class="ganhos__cartao" style={`--i:${i}`}>
           <span class="ganhos__anel"><IconeRenke nome={icones[i]} size={22} class="ganhos__icone" /></span>

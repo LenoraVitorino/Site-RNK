@@ -1,0 +1,20 @@
+---
+/**
+ * Frase de destaque dos planos (05/10/2026), sobre a cena: os parágrafos
+ * do bloco 'texto' da copy. O parágrafo inteiro em <strong> vira a frase
+ * grande; os demais, texto de apoio.
+ */
+import type { ContextoSecao } from '../pagina/contexto';
+interface Props { paragrafos: string[]; secao: ContextoSecao }
+const { paragrafos, secao } = Astro.props;
+const grande = (p: string) => /^<strong>.*<\/strong>$/.test(p.trim());
+---
+<section class="plano-frase" id={secao.id} data-cena="pilares">
+  <div class="container">
+    <div class="plano-frase__miolo plano-cabeca entra">
+      {paragrafos.map((p) => grande(p)
+        ? <p class="plano-frase__p" set:html={p.trim().replace(/^<strong>|<\/strong>$/g, '')} />
+        : <p class="plano-frase__p plano-frase__p--apoio" set:html={p} />)}
+    </div>
+  </div>
+</section>

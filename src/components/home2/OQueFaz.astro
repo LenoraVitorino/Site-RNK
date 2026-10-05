@@ -2,7 +2,7 @@
 /**
  * O que a Renke faz (05/10/2026). A Lenora achou ruim o vídeo solto no
  * meio, com o texto de um lado e um número do outro. Agora o vídeo vertical
- * fica grande à direita, na altura do painel, e à esquerda vêm o selo, o
+ * fica grande à esquerda, na altura do painel, e à direita vêm o selo, o
  * título, o texto e os três números da Renke em fileira, entre fios (antes
  * só aparecia o primeiro). O painel claro chanfrado continua o mesmo.
  * Textos por versão.
@@ -94,8 +94,8 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2vw, 32px);
     align-items: stretch; color: #252523;
   }
-  /* Esquerda: a cabeça no alto e os números no pé, na altura do vídeo. */
-  .oqf__texto { grid-column: 1 / span 7; display: flex; flex-direction: column; justify-content: space-between; gap: clamp(40px, 5vw, 72px); padding-block: clamp(8px, 1.4vw, 24px) 0; }
+  /* Direita: a cabeça no alto e os números no pé, na altura do vídeo. */
+  .oqf__texto { grid-column: 6 / -1; grid-row: 1; display: flex; flex-direction: column; justify-content: space-between; gap: clamp(40px, 5vw, 72px); padding-block: clamp(8px, 1.4vw, 24px) 0; }
   .oqf__cabeca { display: grid; justify-items: start; }
   .oqf__titulo { margin: 0; font-size: clamp(44px, 5.2vw, 84px); font-weight: 300; line-height: 1.02; letter-spacing: -.055em; }
   .oqf__titulo > * { display: block; }
@@ -109,8 +109,8 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
   .oqf__contagem { position: absolute; top: 0; left: 0; }
   .oqf__legenda { margin: 0; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: #5f5f5d; }
 
-  /* Direita: o vídeo vertical grande, com a sombra de sempre. */
-  .oqf__midia { grid-column: 9 / -1; justify-self: end; width: 100%; max-width: calc(min(78svh, 760px) * 9 / 16); }
+  /* Esquerda: o vídeo vertical grande, com a sombra de sempre (invertido em 05/10: "assim parece desequilibrado"). */
+  .oqf__midia { grid-column: 1 / span 4; grid-row: 1; justify-self: start; width: 100%; max-width: calc(min(78svh, 760px) * 9 / 16); }
   .oqf__midia :global(.tel) { width: 100%; }
   .oqf__midia :global(.tel__moldura), .oqf__midia :global(.tel__tela) { border-radius: 12px; }
 
@@ -119,6 +119,7 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
     .oqf { row-gap: 40px; }
     .oqf__texto { display: contents; }
     .oqf__cabeca, .oqf__numeros { grid-column: 1 / -1; }
+    .oqf__cabeca { grid-row: 1; }
     .oqf__midia { grid-column: 1 / -1; grid-row: 2; justify-self: center; max-width: 360px; }
     .oqf__numeros { grid-row: 3; }
   }

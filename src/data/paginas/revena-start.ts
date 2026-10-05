@@ -81,14 +81,3 @@ export const revenaStart: Pagina = {
     ctaProtocolo,
   ],
 };
-
-/**
- * Ficha da hero do plano (04/10/2026): rótulo e valor em colunas, como os
- * números da referência (Tres Mares). Só informações que a página já traz.
- */
-export const fichaStart = [
-  { rotulo: 'Duração', valor: '90 dias' },
-  { rotulo: 'Etapas', valor: 'Onboarding, diagnóstico, implementação e acompanhamento' },
-  { rotulo: 'Para clínicas', valor: 'Com operação comercial ativa' },
-  { rotulo: 'Entrega', valor: 'CRM, processo, automações e dados' },
-];

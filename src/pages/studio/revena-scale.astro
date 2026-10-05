@@ -1,5 +1,6 @@
 ---
-import Pagina from '../../layouts/Pagina.astro';
-import { revenaScale } from '../../data/paginas/revena-scale';
+/** Revena Scale: página de plano no desenho comum (layouts/PaginaPlano.astro). */
+import PaginaPlano from '../../layouts/PaginaPlano.astro';
+import { revenaScale as pagina } from '../../data/paginas/revena-scale';
 ---
-<Pagina pagina={revenaScale} />
+<PaginaPlano pagina={pagina} plano="scale" />
