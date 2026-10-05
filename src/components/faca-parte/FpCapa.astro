@@ -1,12 +1,15 @@
 ---
 /**
- * Capa do Faça parte (04/10/2026). O retrato da Geise com a camiseta da
- * Renke entra pela direita e se desfaz na cena; o título da hero da home
- * passa por cima dele. O selo GPTW já aparece aqui, ao lado do botão.
+ * Capa do Faça parte (04/10/2026, 2ª versão). Referência da Lenora (Qoves,
+ * "Join 50,000+ people"): uma grade de quadros com fios finos, retratos do
+ * time em alguns quadros e o texto no canto de baixo à esquerda, ocupando
+ * quatro colunas e três fileiras (com a frase de apoio não cabia em duas). No escuro da home, sobre a cena.
+ * Movimento: os retratos entram um a um e, de tempos em tempos, um quadro
+ * troca de pessoa devagar, para passarem os 17 do time sem lotar a grade.
+ * O selo GPTW fica só na dobra seguinte (pedido dela).
  */
-import { Image } from 'astro:assets';
-import retrato from '../../assets/equipe/geise-retrato.jpg';
-import seloGptw from '../../assets/selos/gptw-2025.png';
+import { getImage } from 'astro:assets';
+import { equipe } from '../../data/equipe';
 import Selo from '../ui/Selo.astro';
 import Botao from '../ui/Botao.astro';
 import { semSeta } from '../pagina/contexto';
@@ -15,38 +18,125 @@ import type { BlocoDe } from '../pagina/contexto';
 interface Props { bloco: BlocoDe<'hero'> }
 const { bloco } = Astro.props;
 const forte = bloco.realce ?? bloco.titulo.length - 1;
+
+/* Retratos já otimizados, para o script trocar sem pedir nada novo. */
+const fotos = await Promise.all(equipe.map(async (p) => ({
+  src: (await getImage({ src: p.foto, width: 400, format: 'webp', quality: 78 })).src,
+  alt: p.nome,
+})));
+
+/* 16 quadros soltos em volta do texto (7 × 4 no computador; o texto toma
+   as colunas 1–4 das fileiras 2 a 4). `d` = tem retrato no computador,
+   `c` = tem retrato no celular (4 × 3, só os 12 primeiros). */
+const DESK = [1, 3, 5, 7, 9, 11, 13, 15];   // xadrez
+const CEL = [1, 3, 4, 6, 9, 11];
+let proxima = 0;
+const quadros = Array.from({ length: 16 }, (_, i) => {
+  const d = DESK.includes(i), c = CEL.includes(i);
+  return { i, d, c, foto: d || c ? proxima++ : -1 };
+});
 ---
-<section class="ed-capa fp-capa" id="faca-parte-capa" data-cena="hero" data-tom="cena" aria-labelledby="faca-parte-titulo">
-  <figure class="ed-capa__foto fp-capa__foto">
-    <Image src={retrato} alt="Geise, do time da Renke, com a camiseta da marca." format="webp" quality={80} widths={[480, 800, 1280]} sizes="(min-width: 900px) 46vw, 100vw" loading="eager" fetchpriority="high" />
-  </figure>
+<section class="fp-capa" id="faca-parte-capa" data-cena="hero" data-tom="cena" aria-labelledby="faca-parte-titulo">
   <div class="container fp-capa__miolo">
-    <Selo class="fp-capa__rotulo" tom="escuro">A Renke</Selo>
-    <h1 class="ed-capa__titulo entra" id="faca-parte-titulo">
-      {bloco.titulo.map((l, i) => <span>{i === forte ? <b>{l}</b> : l}</span>)}
-    </h1>
-    {bloco.sub && <p class="ed-capa__sub entra" style="--i:1">{bloco.sub}</p>}
-    <div class="fp-capa__acoes entra" style="--i:2">
-      {bloco.cta && <Botao href={bloco.rotaCta ?? '#formulario'} variante="claro">{semSeta(bloco.cta)}</Botao>}
-      <Image class="fp-capa__selo" src={seloGptw} alt="Selo Great Place To Work: empresa certificada no Brasil." width={84} />
+    <div class="fp-grade" data-grade-time data-fotos={JSON.stringify(fotos)}>
+      <div class="fp-grade__texto ed-mascara">
+        <Selo class="fp-grade__selo" tom="escuro">A Renke</Selo>
+        <h1 class="fp-grade__titulo entra" id="faca-parte-titulo">
+          {bloco.titulo.map((l, i) => <span>{i === forte ? <b>{l}</b> : l}</span>)}
+        </h1>
+        {bloco.sub && <p class="fp-grade__sub entra" style="--i:1">{bloco.sub}</p>}
+        {bloco.cta && <div class="entra" style="--i:2"><Botao href={bloco.rotaCta ?? '#formulario'} variante="claro">{semSeta(bloco.cta)}</Botao></div>}
+      </div>
+      {quadros.map((q) => (
+        <div class:list={['fp-grade__quadro', { 'fp-grade__quadro--d': q.d, 'fp-grade__quadro--c': q.c, 'fp-grade__quadro--fora': q.i >= 12 }]} aria-hidden="true">
+          {q.foto >= 0 && (
+            <span class="fp-grade__foto" style={`--ordem:${q.foto}`}>
+              <img src={fotos[q.foto].src} alt="" width="400" height="400" loading={q.foto < 4 ? 'eager' : 'lazy'} decoding="async" data-pessoa={q.foto} />
+            </span>
+          )}
+        </div>
+      ))}
     </div>
   </div>
 </section>
 
-<style>
-  .fp-capa__foto {
-    left: auto; width: min(52%, 820px);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to bottom, #000 62%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 0%, #000 34%), linear-gradient(to bottom, #000 62%, transparent);
-    mask-composite: intersect;
+<script>
+  /* De tempos em tempos um quadro à vista troca de pessoa, com fusão lenta. */
+  const grade = document.querySelector<HTMLElement>('[data-grade-time]');
+  const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (grade && !parado) {
+    const fotos: { src: string; alt: string }[] = JSON.parse(grade.dataset.fotos ?? '[]');
+    let visivel = true;
+    new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }).observe(grade);
+    const trocar = () => {
+      if (!visivel || document.hidden) return;
+      const molduras = [...grade.querySelectorAll<HTMLElement>('.fp-grade__foto')].filter((m) => m.offsetParent);
+      if (!molduras.length) return;
+      const emUso = new Set(molduras.map((m) => Number(m.querySelector('img:last-child')?.getAttribute('data-pessoa'))));
+      const livres = fotos.map((_, i) => i).filter((i) => !emUso.has(i));
+      if (!livres.length) return;
+      const alvo = molduras[Math.floor(Math.random() * molduras.length)];
+      const n = livres[Math.floor(Math.random() * livres.length)];
+      const nova = new Image();
+      nova.src = fotos[n].src; nova.alt = ''; nova.dataset.pessoa = String(n);
+      nova.className = 'fp-grade__nova';
+      nova.decode().catch(() => {}).then(() => {
+        alvo.append(nova);
+        requestAnimationFrame(() => nova.classList.add('fp-grade__nova--dentro'));
+        alvo.querySelectorAll('img').forEach((im) => { if (im !== nova) im.classList.add('fp-grade__velha'); });
+        setTimeout(() => { alvo.querySelectorAll('img').forEach((im) => { if (im !== nova) im.remove(); }); nova.className = ''; }, 1700);
+      });
+    };
+    setInterval(trocar, 3200);
   }
-  .fp-capa__foto :global(img) { object-position: 50% 18%; }
-  .fp-capa::before { background: linear-gradient(to top, rgb(8 8 8 / .5) 0%, rgb(8 8 8 / 0) 40%); }
-  .fp-capa__miolo { display: grid; justify-items: start; }
-  .fp-capa__rotulo { margin-bottom: clamp(20px, 2.2vw, 28px); }
-  .fp-capa__acoes { display: flex; align-items: center; gap: 24px; margin-top: clamp(28px, 3vw, 40px); }
-  .fp-capa__acoes :global(.botao) { white-space: nowrap; }
-  .fp-capa__selo { width: 84px; height: auto; }
-  @media (max-width: 899.98px) { .fp-capa__foto { width: 100%; opacity: .5; } }
+</script>
+
+<style>
+  .fp-capa { position: relative; padding-top: var(--altura-header); padding-bottom: clamp(40px, 5vw, 80px); color: var(--papel); }
+  .fp-capa__miolo { container-type: inline-size; }
+  /* Quadros quadrados; se o texto pedir mais altura (a frase longa da
+     versão copy), as fileiras dele crescem juntas e os fios seguem alinhados. */
+  .fp-grade {
+    --fio: rgb(242 242 238 / .09);
+    --cols: 7;
+    display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    grid-auto-rows: minmax(calc((100cqw - 1px) / var(--cols)), auto);
+    border-left: 1px solid var(--fio); border-top: 1px solid var(--fio);
+  }
+  .fp-grade__quadro, .fp-grade__texto { border-right: 1px solid var(--fio); border-bottom: 1px solid var(--fio); }
+  .fp-grade__quadro { position: relative; }
+  .fp-grade__texto {
+    grid-column: 1 / span 4; grid-row: 2 / span 3;
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: clamp(18px, 2vw, 28px);
+    padding: clamp(24px, 3vw, 44px);
+  }
+  .fp-grade__titulo { margin: 0; font-size: clamp(44px, 5.4vw, 92px); font-weight: 300; line-height: 1; letter-spacing: -.055em; }
+  .fp-grade__titulo b { font-weight: 500; }
+  .fp-grade__titulo > span { display: block; }
+  .fp-grade__sub { margin: 0; max-width: 48ch; font-size: clamp(15px, 1.2vw, 18px); line-height: 1.55; color: #b4b4b0; text-wrap: pretty; }
+
+  /* O retrato: um quadro de canto arredondado, recuado do fio. */
+  .fp-grade__foto {
+    position: absolute; inset: clamp(4px, .5vw, 8px); overflow: hidden; border-radius: 10px; background: #1a1a1a;
+    display: none;
+  }
+  .fp-grade__quadro--d .fp-grade__foto { display: block; }
+  .fp-grade__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .fp-grade__foto :global(.fp-grade__nova) { opacity: 0; transform: scale(1.06); transition: opacity 1.5s ease, transform 2s cubic-bezier(.22, 1, .36, 1); }
+  .fp-grade__foto :global(.fp-grade__nova--dentro) { opacity: 1; transform: none; }
+  .fp-grade__foto :global(.fp-grade__velha) { opacity: 0; transition: opacity 1.5s ease; }
+  /* Entrada: um a um, devagar. */
+  :global(.js) .fp-grade__foto { opacity: 0; transform: scale(.94); animation: fp-entra 1.2s cubic-bezier(.22, 1, .36, 1) forwards; animation-delay: calc(.25s + var(--ordem) * .12s); }
+  @keyframes fp-entra { to { opacity: 1; transform: none; } }
+
+  @media (max-width: 899.98px) {
+    .fp-grade { --cols: 4; }
+    .fp-grade__quadro--fora { display: none; }
+    .fp-grade__quadro--d .fp-grade__foto { display: none; }
+    .fp-grade__quadro--c .fp-grade__foto { display: block; }
+    .fp-grade__texto { grid-column: 1 / -1; grid-row: 4; }   /* no celular, embaixo dos 12 quadros */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .fp-grade__foto { animation: none; opacity: 1; transform: none; }
+  }
 </style>
