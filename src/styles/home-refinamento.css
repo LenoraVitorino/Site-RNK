@@ -55,7 +55,7 @@ section[id] { scroll-margin-top: 110px; }
 /* O resultado grande, embaixo da frase, no número fino da home. */
 .res-etapa__dados { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
 .res-etapa__numero {
-  position: relative; align-self: start; margin: 0; font-size: clamp(64px, 6.4vw, 112px); font-weight: 200; line-height: .85;
+  position: relative; align-self: start; margin: 0; font-size: clamp(64px, 6.4vw, 112px); font-weight: 500; line-height: .85;   /* médio (Lenora, 04/10) */
   letter-spacing: -.06em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .res-etapa__reserva { visibility: hidden; }
