@@ -15,8 +15,6 @@ export const facaParteEd = {
   time: copyLiteral
     ? { rotulo: undefined, h2: '#TEAMRENKE' }
     : { rotulo: 'Quem faz a Renke', h2: 'Pessoas que constroem a operação.' },
-  /** O quadro que fecha a grade de retratos, levando ao formulário. */
-  convite: { frase: 'O próximo pode ser você.', rotulo: 'Envie seu currículo', rota: '#formulario' },
 };
 
 export const facaParte: Pagina = {

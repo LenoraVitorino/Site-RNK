@@ -5,8 +5,8 @@
  * círculo, combinando com a home, e sem os nomes. Os retratos são círculos
  * em duas fileiras que correm devagar em sentidos opostos (o mesmo
  * movimento do letreiro da home), com uma leve onda na altura e as bordas
- * sumindo na cena. Passar o mouse para a fileira. No meio do time, um
- * círculo amarelo convida para o formulário. O nome fica só no alt.
+ * sumindo na cena. Passar o mouse para a fileira. O nome fica só no alt.
+ * O círculo amarelo do convite saiu (Lenora, 04/10).
  * Com movimento reduzido, as fileiras ficam paradas e roláveis.
  */
 import { Image } from 'astro:assets';
@@ -14,20 +14,12 @@ import { equipe } from '../../data/equipe';
 import { facaParteEd } from '../../data/paginas/faca-parte';
 import { doisPesos } from '../editorial/pesos';
 import Selo from '../ui/Selo.astro';
-import IconeRenke from '../ui/IconeRenke.astro';
-const { time, convite } = facaParteEd;
+const { time } = facaParteEd;
 const [leve, forte] = time.h2.includes(' ') ? doisPesos(time.h2, 2) : ['', time.h2];
 
-/* Duas fileiras; o convite entra no meio da segunda. */
+/* Duas fileiras. */
 const meio = Math.ceil(equipe.length / 2);
-const fileiras = [
-  equipe.slice(0, meio).map((p) => ({ tipo: 'pessoa' as const, p })),
-  [
-    ...equipe.slice(meio, meio + 4).map((p) => ({ tipo: 'pessoa' as const, p })),
-    { tipo: 'convite' as const },
-    ...equipe.slice(meio + 4).map((p) => ({ tipo: 'pessoa' as const, p })),
-  ],
-];
+const fileiras = [equipe.slice(0, meio), equipe.slice(meio)];
 ---
 <section class="ed-secao ed-secao--cena fp-time" id="faca-parte-time" data-cena="pilares" data-tom="cena" aria-labelledby="faca-parte-time-titulo">
   <div class="container">
@@ -42,18 +34,11 @@ const fileiras = [
       <div class:list={['fp-fileira', `fp-fileira--${f + 1}`]}>
         {/* A trilha leva a fileira duas vezes; a 2ª cópia só fecha o laço e o leitor de tela pula. */}
         <ul class="fp-fileira__trilha" role="list">
-          {[0, 1].map((copia) => itens.map((it, i) => it.tipo === 'pessoa' ? (
+          {[0, 1].map((copia) => itens.map((p, i) => (
             <li class="fp-pessoa" style={`--k:${i}`} aria-hidden={copia ? 'true' : undefined}>
               <figure class="fp-pessoa__circulo">
-                <Image src={it.p.foto} alt={it.p.nome} format="webp" quality={78} widths={[200, 320, 440]} sizes="(min-width: 900px) 180px, 132px" />
+                <Image src={p.foto} alt={p.nome} format="webp" quality={78} widths={[200, 320, 440]} sizes="(min-width: 900px) 180px, 132px" />
               </figure>
-            </li>
-          ) : (
-            <li class="fp-pessoa fp-pessoa--convite" style={`--k:${i}`} aria-hidden={copia ? 'true' : undefined}>
-              <a class="fp-pessoa__circulo fp-convite" href={convite.rota} tabindex={copia ? -1 : undefined}>
-                <IconeRenke nome="mais" size={26} class="fp-convite__mais" />
-                <span class="fp-convite__frase">{convite.frase}</span>
-              </a>
             </li>
           )))}
         </ul>
@@ -93,14 +78,6 @@ const fileiras = [
   .fp-pessoa:hover .fp-pessoa__circulo { transform: translateY(-6px); }
   .fp-pessoa:hover .fp-pessoa__circulo :global(img) { transform: scale(1.05); }
 
-  /* O convite: o círculo amarelo do time. */
-  .fp-convite {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 18px;
-    background: var(--amarelo-marca, #FFD103); color: #161616; text-decoration: none; text-align: center;
-  }
-  .fp-convite:hover { background: #ffdc3a; }
-  .fp-convite:focus-visible { outline: 2px solid var(--papel); outline-offset: 4px; }
-  .fp-convite__frase { max-width: 9ch; font-size: clamp(15px, 1.3vw, 19px); line-height: 1.12; letter-spacing: -.03em; }
 
   @media (prefers-reduced-motion: reduce) {
     .fp-fileira { overflow-x: auto; }

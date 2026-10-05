@@ -2,9 +2,10 @@
 /**
  * Capa do Faça parte (04/10/2026). A composição exata da referência da
  * Lenora (Qoves, "Join 50,000+ people"), na largura da tela e fora da grade
- * do site: retratos do time soltos em 7 × 4 casas, sem fios, e o texto em
- * 4 × 2 embaixo à esquerda, com o selo no alto, o título em duas linhas, a
- * frase em duas e o botão no pé. No escuro da home, sobre a cena.
+ * do site: retratos do time soltos em 7 × 4 casas, sem fios. Os textos
+ * ficam na grade do site, em 4 × 3 embaixo à esquerda (subiram uma casa
+ * para o título caber no tamanho do título da home, 100px). A grade
+ * inteira cabe na altura da tela. No escuro da home, sobre a cena.
  * Movimento: os retratos entram um a um e, de tempos em tempos, um quadro
  * troca de pessoa devagar, para passarem os 17 do time sem lotar a grade.
  * O selo GPTW fica só na dobra seguinte (pedido dela).
@@ -26,14 +27,14 @@ const fotos = await Promise.all(equipe.map(async (p) => ({
   alt: p.nome,
 })));
 
-/* A composição da referência, 7 × 4: o texto toma as colunas 1–4 das
-   fileiras 3 e 4; os 20 quadros em volta. `d` = tem retrato no computador
-   (as mesmas casas da referência), `c` = tem retrato no celular (4 × 3,
-   só os 12 primeiros). */
-const DESK = [3, 5, 9, 11, 13, 15, 17, 19];
+/* 7 × 4: o texto toma as colunas 1–4 das fileiras 2 a 4; os 16 quadros
+   em volta (fileira 1 inteira e as colunas 5–7 embaixo). `d` = tem retrato
+   no computador, em xadrez; `c` = tem retrato no celular (4 × 3, só os 12
+   primeiros). */
+const DESK = [1, 3, 5, 7, 9, 11, 13, 15];
 const CEL = [1, 3, 4, 6, 9, 11];
 let proxima = 0;
-const quadros = Array.from({ length: 20 }, (_, i) => {
+const quadros = Array.from({ length: 16 }, (_, i) => {
   const d = DESK.includes(i), c = CEL.includes(i);
   return { i, d, c, foto: d || c ? proxima++ : -1 };
 });
@@ -98,21 +99,26 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
 <style>
   .fp-capa {
     --borda: clamp(16px, 2.4vw, 36px);   /* as fotos vão quase até a borda da tela */
-    position: relative; padding: var(--altura-header) var(--borda) clamp(40px, 5vw, 80px); color: var(--papel);
+    --pe: 24px;
+    position: relative; padding: var(--altura-header) var(--borda) var(--pe); color: var(--papel);
   }
   .fp-capa__miolo { container-type: inline-size; }
-  /* Casas quadradas; se o texto pedir mais altura (a frase longa da versão
-     copy), as fileiras dele crescem juntas. */
+  /* A altura da casa é a menor entre a largura da coluna e um quarto da
+     altura livre da tela: a grade inteira cabe na primeira dobra. Se o
+     texto pedir mais altura (a frase longa da versão copy), as fileiras
+     dele crescem juntas. */
   .fp-grade {
     --cols: 7;
+    --casa: max(120px, min(100cqw / var(--cols), (100svh - var(--altura-header) - var(--pe)) / 4));
     display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-    grid-auto-rows: minmax(calc(100cqw / var(--cols)), auto);
+    grid-auto-rows: minmax(var(--casa), auto);
   }
-  .fp-grade__quadro { position: relative; }
+  /* O retrato fica quadrado e centrado na casa, mesmo quando ela é mais larga que alta. */
+  .fp-grade__quadro { position: relative; display: grid; place-items: center; }
   /* Texto: selo no alto, título e frase no meio, botão no pé (como a referência). */
   .fp-grade__texto {
-    grid-column: 1 / span 4; grid-row: 3 / span 2;
-    display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 18px;
+    grid-column: 1 / span 4; grid-row: 2 / span 3;
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: clamp(24px, 2.4vw, 36px);
     /* Os textos ficam na grade do site: começam na margem do container,
        alinhados ao logo e às outras dobras. */
     padding: clamp(14px, 1.6vw, 24px) clamp(20px, 2.4vw, 36px) clamp(8px, .8vw, 12px) calc(var(--grid-inset) - var(--borda));
@@ -120,14 +126,16 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
   /* O botão fica no pé da primeira dobra: entra com a página, sem esperar a rolagem. */
   .fp-grade__acao { animation: fp-entra 1s cubic-bezier(.22, 1, .36, 1) .5s both; }
   .fp-grade__miolo { display: grid; gap: clamp(12px, 1.1vw, 16px); }
-  .fp-grade__titulo { margin: 0; font-size: clamp(38px, 4vw, 68px); font-weight: 300; line-height: 1.02; letter-spacing: -.055em; }
+  .fp-grade__titulo { margin: 0; font-size: clamp(48px, 7.8vw, 100px); font-weight: 300; line-height: 1.06; letter-spacing: -.065em; }   /* o título da hero da home */
   .fp-grade__titulo b { font-weight: 500; }
   .fp-grade__titulo > span { display: block; white-space: nowrap; }
   .fp-grade__sub { margin: 0; max-width: 40em; font-size: clamp(15px, 1.15vw, 18px); line-height: 1.5; color: #b4b4b0; text-wrap: balance; }
 
   /* O retrato: quadro de canto arredondado, recuado da casa. */
   .fp-grade__foto {
-    position: absolute; inset: clamp(4px, .5vw, 8px); overflow: hidden; border-radius: 10px; background: #1a1a1a;
+    --recuo: clamp(4px, .5vw, 8px);
+    position: relative; height: calc(100% - 2 * var(--recuo)); max-width: calc(100% - 2 * var(--recuo)); aspect-ratio: 1;
+    overflow: hidden; border-radius: 10px; background: #1a1a1a;
     display: none;
   }
   .fp-grade__quadro--d .fp-grade__foto { display: block; }
@@ -140,7 +148,7 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
   @keyframes fp-entra { to { opacity: 1; transform: none; } }
 
   @media (max-width: 899.98px) {
-    .fp-grade { --cols: 4; }
+    .fp-grade { --cols: 4; --casa: calc(100cqw / 4); }   /* no celular, casas quadradas pela largura */
     .fp-grade__quadro--fora { display: none; }
     .fp-grade__quadro--d .fp-grade__foto { display: none; }
     .fp-grade__quadro--c .fp-grade__foto { display: block; }
