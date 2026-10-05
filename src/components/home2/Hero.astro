@@ -7,8 +7,9 @@ import Selo from '../ui/Selo.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
 import Risco from './HeroRisco.astro';
 
+/* Na estudio, CRM, marketing, vendas e "para clínicas de alto padrão" em negrito (Lenora, 04/10). */
 const lead = copyLiteral ? hero.lead :
-  'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
+  'Uma operação integrada de <strong>CRM</strong>, <strong>marketing</strong> e <strong>vendas</strong> <strong>para clínicas de alto padrão</strong> que exigem mais controle, eficiência e resultado.';
 ---
 <section class="hero hero--editorial" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
@@ -30,7 +31,7 @@ const lead = copyLiteral ? hero.lead :
         </span>
       </h1>
       <div class="hero__apoio">
-        <p class="hero__lead">{lead}</p>
+        <p class="hero__lead" set:html={lead} />
         <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
       </div>
       <div class="hero__base">

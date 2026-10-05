@@ -264,6 +264,7 @@ section[id] { scroll-margin-top: 110px; }
 .hero--editorial .hero__risco--forte { font-weight: 500; }
 .hero--editorial .hero__apoio { display: contents; }
 .hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: start; width: min(100%, 760px); margin: clamp(24px, 3.5svh, 40px) 0 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
+.hero--editorial .hero__lead strong { font-weight: 600; color: var(--papel); }   /* palavras em destaque, em branco pleno */
 .hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
 .hero--editorial .hero__base { grid-column: 1; grid-row: 6; justify-content: flex-start; }
