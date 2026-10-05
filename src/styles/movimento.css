@@ -1,0 +1,76 @@
+/*
+ * Movimento do site (04/10/2026). A Lenora pediu as transições entre as
+ * dobras "mais dinâmicas e mais suaves", com efeitos de detalhe. Tudo
+ * aqui segue a regra da casa: lento, amortecido, só transform e opacidade
+ * (nada repinta), e nada acontece com movimento reduzido.
+ *
+ * 1. Entrada dos blocos (.entra): mais curso, mais tempo, freio longo.
+ * 2. Cabeças das dobras: selo, título e frase entram em sequência.
+ * 3. Painéis claros: assentam ao chegar (sobem e crescem um pouco),
+ *    acompanhando a rolagem.
+ * 4. Fotos: acomodam dentro da moldura enquanto atravessam a tela.
+ * 5. Cartões: respondem ao mouse com um leve levantar.
+ * 6. Rodapé: o RENKE sobe devagar quando o fim da página chega.
+ *
+ * Os itens 3, 4 e 6 usam animação ligada à rolagem (animation-timeline),
+ * só onde o navegador tem; nos outros a página fica como antes.
+ */
+
+:root { --freio: cubic-bezier(.22, 1, .36, 1); }
+
+/* 1. Entrada dos blocos. */
+.js .entra { opacity: 0; transform: translate3d(0, 28px, 0); }
+.entra.visivel { opacity: 1; transform: none; transition: opacity 1.1s var(--freio), transform 1.4s var(--freio); }
+.entra[style*="--i"].visivel { transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms); }
+
+/* 2. Cabeças: o bloco fica no lugar e os filhos entram um depois do outro. */
+.js :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra { opacity: 1; transform: none; }
+.js :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra > * {
+  opacity: 0; transform: translate3d(0, 22px, 0);
+}
+:is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > * {
+  opacity: 1; transform: none; transition: opacity 1.1s var(--freio), transform 1.4s var(--freio);
+}
+:is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > :nth-child(2) { transition-delay: .13s; }
+:is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > :nth-child(3) { transition-delay: .26s; }
+:is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > :nth-child(n + 4) { transition-delay: .39s; }
+
+/* 5. Cartões: levantam um pouco com o mouse. `translate` não disputa com
+   as animações que já usam `transform`. */
+@media (hover: hover) and (pointer: fine) {
+  :is(.ed-cartao, .ganhos__cartao, .feature-card) { transition: translate .8s var(--freio), border-color .8s ease; }
+  /* O cartão das Perguntas já tem a sua transição de opacidade (a construção da grade). */
+  .js .ganhos__cartao { transition: opacity .9s var(--easing) var(--d, 0s), translate .8s var(--freio), border-color .8s ease; }
+  :is(.ed-cartao, .ganhos__cartao, .feature-card):hover { translate: 0 -4px; }
+  :is(.ed-cartao, .ganhos__cartao):hover { border-color: rgb(255 255 255 / .2); }
+  .ed-painel .ed-cartao:hover { border-color: rgb(37 37 35 / .22); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* 3. Painéis claros: assentam ao chegar. */
+    .home-refinada :is(#o-que-fazemos, #resultados), .ed-painel {
+      animation: mov-assenta linear both; animation-timeline: view(); animation-range: entry 0% entry 80%;
+    }
+    @keyframes mov-assenta { from { transform: translate3d(0, 56px, 0) scale(.962); } to { transform: none; } }
+
+    /* 4. Fotos: acomodam dentro da moldura. */
+    :is(.ed-foto, .res-etapa__foto) img {
+      animation: mov-acomoda linear both; animation-timeline: view(); animation-range: entry 0% cover 55%;
+    }
+    @keyframes mov-acomoda { from { transform: scale(1.1); } to { transform: none; } }
+
+    /* 6. Rodapé: o RENKE sobe devagar. */
+    .footer__fundo {
+      animation: mov-renke linear both; animation-timeline: view(); animation-range: entry 0% entry 100%;
+    }
+    @keyframes mov-renke { from { transform: translate3d(0, 64px, 0); opacity: .35; } to { transform: none; opacity: 1; } }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .entra,
+  .js :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra > * {
+    opacity: 1; transform: none; transition: none;
+  }
+}
