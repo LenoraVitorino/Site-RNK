@@ -955,7 +955,7 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
   .footer__marca { grid-column: 1 / -1; }
 }
 @media (min-width: 900px) {
-  .footer { padding-block: clamp(104px, 11vw, 176px) 0; }   /* as colunas descem, mais perto do RENKE (04/10) */
+  .footer { padding-block: clamp(56px, 5.5vw, 88px) 0; }   /* menos respiro em cima (Lenora, 04/10) */
   .footer__grid { grid-template-columns: 1.8fr 1fr 1fr 1.3fr; gap: 48px; }
 }
 
