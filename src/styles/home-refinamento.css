@@ -133,7 +133,7 @@ section[id] { scroll-margin-top: 110px; }
 #formulario .form-block__text p:not(.rotulo) { font-size: clamp(17px, 1.25vw, 18px); }
 #fale .botao { background: var(--papel); color: #171715; }
 /* Marcas em duas linhas, com divisórias discretas e respiro interno. */
-#fale .chamada__logos { width: 100%; max-width: 1000px; }
+#fale .chamada__logos { width: 100%; max-width: 880px; }
 #fale .chamada { row-gap: clamp(56px, 6vw, 88px); }
 /* Título e apoio numa linha cada onde cabem, para não sobrar vazio nas
    laterais (Lenora, 30/09); no celular voltam a quebrar. O text-wrap vai

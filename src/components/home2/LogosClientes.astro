@@ -1,70 +1,83 @@
 ---
-/** Referências temporárias de layout, sem atribuir a Renke a clientes.
-    Trocar os itens pelos arquivos originais das marcas quando disponíveis;
-    o cinza e o hover são tratados por CSS, sem alterar os arquivos. */
-const logos = Array.from({ length: 10 }, () => ({
+/** Logos dos clientes (04/10/2026). Desenho do "logo-cloud-2" (21st.dev)
+    que a Lenora mandou, refeito em Astro e CSS (o site não usa React nem
+    Tailwind): grade de 4 × 2 com fios, fundo em xadrez, um "+" em cada
+    cruzamento de dentro e duas linhas, em cima e embaixo, que atravessam a
+    tela. No celular, 2 × 4.
+    Referências temporárias de layout, sem atribuir a Renke a clientes:
+    trocar os itens pelos arquivos originais das marcas quando disponíveis.
+    Os logos ficam brancos por CSS, sem alterar os arquivos. */
+const logos = Array.from({ length: 8 }, () => ({
   nome: 'Renke Studio',
   arquivo: '/marca/renke-assinatura.png',
   largura: 299,
   altura: 62,
 }));
 ---
-<ul class="logos-clientes" aria-label="Logos demonstrativos da Renke, temporários até a inclusão dos clientes">
-  {logos.map((logo) => (
-    <li class="logos-clientes__item">
-      <img
-        src={logo.arquivo}
-        alt={logo.nome}
-        width={logo.largura}
-        height={logo.altura}
-        loading="lazy"
-        decoding="async"
-      />
-    </li>
+<div class="logos-clientes">
+  <ul class="logos-clientes__grade" aria-label="Logos demonstrativos da Renke, temporários até a inclusão dos clientes">
+    {logos.map((logo) => (
+      <li class="logos-clientes__item">
+        <img src={logo.arquivo} alt={logo.nome} width={logo.largura} height={logo.altura} loading="lazy" decoding="async" />
+      </li>
+    ))}
+  </ul>
+  {[1, 2, 3].map((n) => (
+    <svg class:list={['logos-clientes__mais', `logos-clientes__mais--${n}`]} viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+    </svg>
   ))}
-</ul>
+</div>
 
 <style>
   .logos-clientes {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid rgb(255 255 255 / .07);
-    border-left: 1px solid rgb(255 255 255 / .07);
-    background: rgb(8 8 8 / .88);
+    --fio: rgb(242 242 238 / .12);
+    --xadrez: rgb(242 242 238 / .045);
+    position: relative; border-inline: 1px solid var(--fio);
   }
+  /* As duas linhas que atravessam a tela, em cima e embaixo. */
+  .logos-clientes::before, .logos-clientes::after {
+    content: ''; position: absolute; left: 50%; width: 100vw; height: 1px; margin-left: -50vw;
+    background: var(--fio); pointer-events: none;
+  }
+  .logos-clientes::before { top: -1px; }
+  .logos-clientes::after { bottom: -1px; }
+
+  .logos-clientes__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; margin: 0; padding: 0; }
   .logos-clientes__item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    aspect-ratio: 1.2;
-    padding: 24px;
-    border-right: 1px solid rgb(255 255 255 / .07);
-    border-bottom: 1px solid rgb(255 255 255 / .07);
+    display: flex; align-items: center; justify-content: center; min-width: 0;
+    padding: clamp(28px, 3vw, 40px) 16px;
+    border-right: 1px solid var(--fio); border-bottom: 1px solid var(--fio);
   }
+  .logos-clientes__item:nth-child(4n) { border-right: 0; }
+  .logos-clientes__item:nth-child(n + 5) { border-bottom: 0; }
+  /* Xadrez: 1 e 3 em cima, 6 e 8 embaixo. */
+  .logos-clientes__item:is(:nth-child(1), :nth-child(3), :nth-child(6), :nth-child(8)) { background: var(--xadrez); }
   .logos-clientes__item img {
-    display: block;
-    width: 100%;
-    max-width: 128px;
-    height: auto;
-    max-height: 48px;
-    object-fit: contain;
-    filter: grayscale(1);
-    opacity: .58;
-    transition: filter .7s var(--easing-suave), opacity .7s var(--easing-suave);
+    display: block; width: auto; height: clamp(18px, 1.7vw, 24px); max-width: 100%; object-fit: contain;
+    filter: brightness(0) invert(1); opacity: .72; pointer-events: none; user-select: none;
+    transition: opacity .7s var(--easing-suave);
   }
-  @media (hover: hover) and (pointer: fine) {
-    .logos-clientes__item:hover img { filter: grayscale(0); opacity: 1; }
-  }
+  @media (hover: hover) and (pointer: fine) { .logos-clientes__item:hover img { opacity: 1; } }
+
+  /* Um "+" em cada cruzamento de dentro. */
+  .logos-clientes__mais { position: absolute; z-index: 1; width: 24px; height: 24px; margin: -12.5px 0 0 -12.5px; color: var(--papel); pointer-events: none; top: 50%; }
+  .logos-clientes__mais--1 { left: 25%; }
+  .logos-clientes__mais--2 { left: 50%; }
+  .logos-clientes__mais--3 { left: 75%; }
+
   @media (max-width: 699.98px) {
-    .logos-clientes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .logos-clientes__item { aspect-ratio: 1.6; padding: 22px; }
-    .logos-clientes__item img { max-width: 116px; }
+    .logos-clientes__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .logos-clientes__item { padding: 30px 12px; border-right: 1px solid var(--fio); border-bottom: 1px solid var(--fio); background: none; }
+    .logos-clientes__item:nth-child(2n) { border-right: 0; }
+    .logos-clientes__item:nth-child(n + 5) { border-bottom: 1px solid var(--fio); }
+    .logos-clientes__item:nth-child(n + 7) { border-bottom: 0; }
+    .logos-clientes__item:is(:nth-child(3), :nth-child(6)) { background: none; }
+    .logos-clientes__item:is(:nth-child(1), :nth-child(4), :nth-child(5), :nth-child(8)) { background: var(--xadrez); }
+    .logos-clientes__mais { left: 50%; }
+    .logos-clientes__mais--1 { top: 25%; }
+    .logos-clientes__mais--2 { top: 50%; }
+    .logos-clientes__mais--3 { top: 75%; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .logos-clientes__item img { transition: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .logos-clientes__item img { transition: none; } }
 </style>
