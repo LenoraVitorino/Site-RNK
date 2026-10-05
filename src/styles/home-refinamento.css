@@ -44,43 +44,61 @@ section[id] { scroll-margin-top: 110px; }
    especialidade é uma linha que gruda no topo ao rolar; as seguintes se
    empilham logo abaixo da cabeça da anterior e cobrem o corpo dela. */
 .home-refinada #resultados { background: #d0d0cd; }   /* opaco: a linha de cima cobre a de baixo sem emenda */
-.res-pilha { --res-cab: clamp(68px, 6vw, 92px); list-style: none; margin: 0; padding: 0; }
-.res-etapa {
-  position: sticky; top: calc(var(--altura-header) + var(--i) * var(--res-cab));
-  background: #d0d0cd; border-top: 1px solid rgb(37 37 35 / .18);
+.res-pilha {
+  --res-cab: clamp(68px, 6vw, 92px);   /* altura da cabeça que fica à vista na pilha */
+  --res-fs: clamp(28px, 2.9vw, 46px);   /* corpo do nome da área */
+  list-style: none; margin: 0; padding: 0;
 }
+.res-etapa { background: #d0d0cd; border-top: 1px solid rgb(37 37 35 / .18); }
 .res-etapa:last-child { border-bottom: 1px solid rgb(37 37 35 / .18); }
-.res-etapa__cabeca {
-  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr); align-items: center;
-  height: var(--res-cab);
-}
-.res-etapa__ordem { font-size: clamp(15px, 1.2vw, 18px); letter-spacing: .02em; color: #5f5f5d; }
-.res-etapa__area { margin: 0; font-size: clamp(28px, 2.9vw, 46px); font-weight: 300; line-height: 1; letter-spacing: -.045em; color: #252523; }
+.res-etapa__area { margin: 0; font-size: var(--res-fs); font-weight: 300; line-height: 1; letter-spacing: -.045em; color: #252523; }
 /* O resultado grande, embaixo da frase, no número fino da home. */
-.res-etapa__dados { grid-column: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding-right: 32px; }
+.res-etapa__dados { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
 .res-etapa__numero {
   position: relative; align-self: start; margin: 0; font-size: clamp(64px, 6.4vw, 112px); font-weight: 200; line-height: .85;
   letter-spacing: -.06em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .res-etapa__reserva { visibility: hidden; }
 .res-etapa__contagem { position: absolute; top: 0; left: 0; }
-.res-etapa__corpo {
-  display: grid; grid-template-columns: clamp(64px, 8vw, 132px) minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 0;
-  padding: 8px 0 clamp(28px, 3vw, 44px);
-}
 .res-etapa__texto { margin: 0; max-width: 32ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
-.res-etapa__foto { grid-column: 3; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; }
+.res-etapa__foto { margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; transition: opacity .6s ease; }
 .res-etapa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; }
 .res-etapa__img--espelho { scale: -1 1; }
 /* Respiro no fim, para a última linha subir até a pilha. */
 .res-pilha::after { content: ''; display: block; height: clamp(24px, 3vw, 48px); }
+
+@media (min-width: 900px) {
+  /* Uma grade por linha, sem numeração (Lenora, 04/10): a área e o corpo (frase e
+     número) à esquerda; a foto à direita, com o topo na altura do topo
+     das letras do nome da área (Lenora, 04/10). */
+  .res-etapa {
+    position: sticky; top: calc(var(--altura-header) + var(--i) * var(--res-cab));
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); column-gap: clamp(32px, 4vw, 72px);
+    grid-template-rows: var(--res-cab) auto;
+    padding-bottom: clamp(28px, 3vw, 44px);
+    /* Margem embaixo que some no encontro com a margem negativa de cima da
+       linha seguinte (as duas se anulam): o espaço visível não muda, mas o
+       sticky conta a margem, e assim todas as linhas soltam o topo juntas e
+       a pilha sai inteira, sem a última passar por cima das outras. */
+    margin-bottom: calc((var(--res-n) - 1 - var(--i)) * var(--res-cab));
+  }
+  .res-etapa + .res-etapa { margin-top: calc(-1 * (var(--res-n) - var(--i)) * var(--res-cab)); }
+  .res-etapa__cabeca, .res-etapa__corpo { display: contents; }
+  .res-etapa__area { grid-area: 1 / 1; align-self: center; }
+  .res-etapa__dados { grid-area: 2 / 1; padding-top: 8px; }
+  .res-etapa__foto {
+    grid-area: 1 / 2 / span 2; align-self: start;
+    margin-top: calc((var(--res-cab) - var(--res-fs)) / 2 + .14 * var(--res-fs));
+  }
+  /* Quando a linha de baixo sobe e cobre esta, a foto some, para a pilha
+     de títulos ficar limpa. */
+  .res-etapa[data-coberta] .res-etapa__foto { opacity: 0; }
+}
 @media (max-width: 899.98px) {
-  .res-etapa { position: static; }
-  .res-etapa__cabeca { grid-template-columns: 44px minmax(0, 1fr); height: auto; padding-block: 22px 12px; }
-  .res-etapa__corpo { grid-template-columns: 1fr; row-gap: 16px; padding-top: 0; }
-  .res-etapa__dados, .res-etapa__foto { grid-column: 1; padding-right: 0; }
-  .res-etapa__numero { font-size: 64px; }
+  .res-etapa__cabeca { padding-block: 22px 14px; }
+  .res-etapa__corpo { display: grid; row-gap: 16px; padding-bottom: clamp(28px, 6vw, 40px); }
   .res-etapa__foto { grid-row: 1; }
+  .res-etapa__numero { font-size: 64px; }
 }
 
 /* Ecossistema: duas portas de entrada, sem painel invisível sob o teclado. */
