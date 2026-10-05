@@ -1,12 +1,12 @@
 ---
 /**
  * O time (04/10/2026, 2ª versão). A Lenora achou a grade de quadrados
- * parada e com cara do site antigo; pediu as fotos "em movimento", talvez
- * em elipse, combinando com a home. Agora os retratos são elipses em duas
- * fileiras que correm devagar em sentidos opostos (o mesmo movimento do
- * letreiro da home), com uma leve onda na altura e as bordas sumindo na
- * cena. Passar o mouse para a fileira; o nome fica sempre embaixo. No meio
- * do time, uma elipse amarela convida para o formulário.
+ * parada e com cara do site antigo; pediu as fotos "em movimento", em
+ * círculo, combinando com a home, e sem os nomes. Os retratos são círculos
+ * em duas fileiras que correm devagar em sentidos opostos (o mesmo
+ * movimento do letreiro da home), com uma leve onda na altura e as bordas
+ * sumindo na cena. Passar o mouse para a fileira. No meio do time, um
+ * círculo amarelo convida para o formulário. O nome fica só no alt.
  * Com movimento reduzido, as fileiras ficam paradas e roláveis.
  */
 import { Image } from 'astro:assets';
@@ -44,18 +44,16 @@ const fileiras = [
         <ul class="fp-fileira__trilha" role="list">
           {[0, 1].map((copia) => itens.map((it, i) => it.tipo === 'pessoa' ? (
             <li class="fp-pessoa" style={`--k:${i}`} aria-hidden={copia ? 'true' : undefined}>
-              <figure class="fp-pessoa__elipse">
-                <Image src={it.p.foto} alt="" format="webp" quality={78} widths={[200, 320, 440]} sizes="(min-width: 900px) 180px, 132px" />
+              <figure class="fp-pessoa__circulo">
+                <Image src={it.p.foto} alt={it.p.nome} format="webp" quality={78} widths={[200, 320, 440]} sizes="(min-width: 900px) 180px, 132px" />
               </figure>
-              <p class="fp-pessoa__nome">{it.p.nome}</p>
             </li>
           ) : (
             <li class="fp-pessoa fp-pessoa--convite" style={`--k:${i}`} aria-hidden={copia ? 'true' : undefined}>
-              <a class="fp-pessoa__elipse fp-convite" href={convite.rota} tabindex={copia ? -1 : undefined}>
+              <a class="fp-pessoa__circulo fp-convite" href={convite.rota} tabindex={copia ? -1 : undefined}>
                 <IconeRenke nome="mais" size={26} class="fp-convite__mais" />
                 <span class="fp-convite__frase">{convite.frase}</span>
               </a>
-              <p class="fp-pessoa__nome">{convite.rotulo}</p>
             </li>
           )))}
         </ul>
@@ -67,13 +65,13 @@ const fileiras = [
 <style>
   .fp-time { overflow: clip; }
   .fp-time__palco {
-    --elipse: clamp(132px, 12.5vw, 184px);
+    --circulo: clamp(132px, 12.5vw, 184px);
     display: grid; gap: clamp(20px, 2.4vw, 36px);
     /* As bordas somem na cena. */
     -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   }
-  .fp-fileira { overflow: hidden; padding-block: 12px 30px; }   /* folga para os nomes das elipses que descem na onda */
+  .fp-fileira { overflow: hidden; padding-block: 8px 26px; }   /* folga para os círculos que descem na onda */
   .fp-fileira__trilha {
     list-style: none; margin: 0; padding: 0;
     display: flex; gap: clamp(16px, 1.8vw, 28px); width: max-content;
@@ -84,20 +82,18 @@ const fileiras = [
   /* A trilha tem as duas cópias: andar metade dela fecha o laço sem salto. */
   @keyframes fp-corre { to { transform: translate3d(calc(-50% - clamp(8px, .9vw, 14px)), 0, 0); } }
 
-  .fp-pessoa { flex: none; width: var(--elipse); display: grid; justify-items: center; gap: 12px; }
-  /* Onda: as elipses sobem e descem um pouco, alternadas. */
+  .fp-pessoa { flex: none; width: var(--circulo); }
+  /* Onda: os círculos sobem e descem um pouco, alternadas. */
   .fp-pessoa:nth-child(even) { transform: translateY(18px); }
-  .fp-pessoa__elipse {
-    display: block; margin: 0; width: 100%; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 50%;
+  .fp-pessoa__circulo {
+    display: block; margin: 0; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 50%;
     background: #1a1a1a; transition: transform .9s cubic-bezier(.22, 1, .36, 1);
   }
-  .fp-pessoa__elipse :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform 1.2s cubic-bezier(.22, 1, .36, 1); }
-  .fp-pessoa:hover .fp-pessoa__elipse { transform: translateY(-6px); }
-  .fp-pessoa:hover .fp-pessoa__elipse :global(img) { transform: scale(1.05); }
-  .fp-pessoa__nome { margin: 0; font-size: 14px; letter-spacing: -.01em; color: rgb(242 242 238 / .72); white-space: nowrap; transition: color .4s ease; }
-  .fp-pessoa:hover .fp-pessoa__nome { color: var(--papel); }
+  .fp-pessoa__circulo :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform 1.2s cubic-bezier(.22, 1, .36, 1); }
+  .fp-pessoa:hover .fp-pessoa__circulo { transform: translateY(-6px); }
+  .fp-pessoa:hover .fp-pessoa__circulo :global(img) { transform: scale(1.05); }
 
-  /* O convite: a elipse amarela do time. */
+  /* O convite: o círculo amarelo do time. */
   .fp-convite {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 18px;
     background: var(--amarelo-marca, #FFD103); color: #161616; text-decoration: none; text-align: center;
@@ -105,7 +101,6 @@ const fileiras = [
   .fp-convite:hover { background: #ffdc3a; }
   .fp-convite:focus-visible { outline: 2px solid var(--papel); outline-offset: 4px; }
   .fp-convite__frase { max-width: 9ch; font-size: clamp(15px, 1.3vw, 19px); line-height: 1.12; letter-spacing: -.03em; }
-  .fp-pessoa--convite .fp-pessoa__nome { color: var(--amarelo-marca, #FFD103); }
 
   @media (prefers-reduced-motion: reduce) {
     .fp-fileira { overflow-x: auto; }
