@@ -58,7 +58,7 @@ const naPagina = href.startsWith('#');
       <p class="int-hero__acoes entra" style="--i:2">
         <a class="botao botao--lg" href={href}>
           <span class="botao__texto">{semSeta(cta)}</span>
-          <Icone nome={naPagina ? 'ArrowDown' : 'ArrowUpRight'} class={`botao__icone${naPagina ? ' int-hero__seta-baixo' : ''}`} size={20} />
+          <Icone nome={naPagina ? 'ArrowDown' : 'ArrowUpRight'} class={`botao__icone${naPagina ? ' int-hero__seta-baixo botao__icone--baixo' : ''}`} size={20} />
         </a>
       </p>
     )}

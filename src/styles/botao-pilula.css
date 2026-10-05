@@ -1,0 +1,47 @@
+/*
+ * Botões em pílula (05/10/2026). A Lenora mandou a referência ("gostei
+ * dessa CTA"): pílula amarela com a seta num círculo escuro à direita.
+ *
+ * - Forma: todo botão do site vira pílula; nos que levam a outra página, a
+ *   seta fica num círculo, apontando para a direita, e gira para cima no
+ *   hover. O botão do cabeçalho fica como está (a caixa dele é reta).
+ * - Amarelo: só nas chamadas principais de conversão (a hero, as dobras de
+ *   chamada e os formulários). Os demais seguem no papel, para o amarelo
+ *   continuar sendo detalhe.
+ */
+
+.botao { border-radius: 999px; }
+.header .header__acao .botao { border-radius: 12px; }
+
+/* A seta num círculo. */
+a.botao:has(.botao__icone):not(.header__acao *) { padding: 7px 7px 7px 26px; gap: 0; }
+a.botao.botao--lg:has(.botao__icone):not(.header__acao *) { padding: 8px 8px 8px 30px; }
+a.botao.botao--sm:has(.botao__icone):not(.header__acao *) { padding: 5px 5px 5px 20px; }
+a.botao .botao__icone {
+  box-sizing: content-box; width: 18px; height: 18px; padding: 12px; margin-left: 18px; border-radius: 50%;
+  background: #161616; color: var(--papel);
+  transform: rotate(45deg);   /* a seta ↗ deitada: aponta para a direita */
+  transition: transform .7s cubic-bezier(.22, 1, .36, 1);
+}
+a.botao.botao--lg .botao__icone { padding: 14px; margin-left: 22px; }
+a.botao.botao--sm .botao__icone { width: 16px; height: 16px; padding: 9px; margin-left: 14px; }
+a.botao:hover .botao__icone { transform: rotate(0deg); }
+/* Seta para baixo (âncora na própria página): não gira; desce um pouco no hover. */
+a.botao .botao__icone--baixo { transform: none; }
+a.botao:hover .botao__icone--baixo { transform: translateY(2px); }
+/* Botão escuro (nos painéis claros): o círculo inverte. */
+:is(.ed-painel, .secao--amarela, .resultados-editoriais) a.botao .botao__icone { background: var(--papel); color: #161616; }
+/* O cabeçalho mantém a seta simples. */
+.header .header__acao a.botao .botao__icone { box-sizing: border-box; width: auto; height: auto; padding: 0; margin-left: 12px; border-radius: 0; background: none; color: inherit; transform: none; }
+
+/* Amarelo nas chamadas principais. */
+.home-refinada :is(.hero__acoes, .chamada__miolo, .int-cta__acao, .plano-hero, .fp-grade__acao, .int-hero__acoes) a.botao,
+.home-refinada #fale a.botao {
+  background: var(--amarelo-marca, #FFD103); border-color: var(--amarelo-marca, #FFD103); color: #161616;
+}
+.home-refinada :is(.hero__acoes, .chamada__miolo, .int-cta__acao, .plano-hero, .fp-grade__acao, .int-hero__acoes) a.botao:hover,
+.home-refinada #fale a.botao:hover { background: #ffdc3a; border-color: #ffdc3a; }
+.home-refinada :is(.hero__acoes, .chamada__miolo, .int-cta__acao, .plano-hero, .fp-grade__acao, .int-hero__acoes) a.botao .botao__icone,
+.home-refinada #fale a.botao .botao__icone { background: #161616; color: var(--papel); }
+
+@media (prefers-reduced-motion: reduce) { a.botao .botao__icone { transition: none; } }

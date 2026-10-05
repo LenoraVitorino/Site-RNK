@@ -38,7 +38,7 @@ const naPagina = rotaCta.startsWith('#');
         <p class="plano-hero__acoes">
           <a class="botao botao--lg" href={rotaCta}>
             <span class="botao__texto">{semSeta(cta)}</span>
-            <Icone nome={naPagina ? 'ArrowDown' : 'ArrowUpRight'} class="botao__icone" size={20} />
+            <Icone nome={naPagina ? 'ArrowDown' : 'ArrowUpRight'} class={`botao__icone${naPagina ? ' botao__icone--baixo' : ''}`} size={20} />
           </a>
         </p>
       )}
