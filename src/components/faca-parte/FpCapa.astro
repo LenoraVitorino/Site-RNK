@@ -96,7 +96,10 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
 </script>
 
 <style>
-  .fp-capa { position: relative; padding: var(--altura-header) clamp(16px, 2.4vw, 36px) clamp(40px, 5vw, 80px); color: var(--papel); }
+  .fp-capa {
+    --borda: clamp(16px, 2.4vw, 36px);   /* as fotos vão quase até a borda da tela */
+    position: relative; padding: var(--altura-header) var(--borda) clamp(40px, 5vw, 80px); color: var(--papel);
+  }
   .fp-capa__miolo { container-type: inline-size; }
   /* Casas quadradas; se o texto pedir mais altura (a frase longa da versão
      copy), as fileiras dele crescem juntas. */
@@ -110,7 +113,9 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
   .fp-grade__texto {
     grid-column: 1 / span 4; grid-row: 3 / span 2;
     display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 18px;
-    padding: clamp(14px, 1.6vw, 24px) clamp(20px, 2.4vw, 36px) clamp(8px, .8vw, 12px);
+    /* Os textos ficam na grade do site: começam na margem do container,
+       alinhados ao logo e às outras dobras. */
+    padding: clamp(14px, 1.6vw, 24px) clamp(20px, 2.4vw, 36px) clamp(8px, .8vw, 12px) calc(var(--grid-inset) - var(--borda));
   }
   /* O botão fica no pé da primeira dobra: entra com a página, sem esperar a rolagem. */
   .fp-grade__acao { animation: fp-entra 1s cubic-bezier(.22, 1, .36, 1) .5s both; }
@@ -139,7 +144,7 @@ const quadros = Array.from({ length: 20 }, (_, i) => {
     .fp-grade__quadro--fora { display: none; }
     .fp-grade__quadro--d .fp-grade__foto { display: none; }
     .fp-grade__quadro--c .fp-grade__foto { display: block; }
-    .fp-grade__texto { grid-column: 1 / -1; grid-row: 4; padding-inline: 4px; padding-top: 32px; }
+    .fp-grade__texto { grid-column: 1 / -1; grid-row: 4; padding-top: 32px; padding-right: calc(var(--grid-inset) - var(--borda)); }
     .fp-grade__titulo > span { white-space: normal; }
   }
   @media (prefers-reduced-motion: reduce) {
