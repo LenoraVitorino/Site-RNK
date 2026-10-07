@@ -1,0 +1,7 @@
+---
+import '../../styles/planos-editoriais.css';
+---
+<script is:inline>
+  // Comparação temporária da direção visual, sem alterar a copy de cada versão.
+  document.documentElement.dataset.planosTema = new URLSearchParams(location.search).get('planos') === 'claro' ? 'claro' : 'editorial';
+</script>

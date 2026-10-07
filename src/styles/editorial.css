@@ -1,0 +1,134 @@
+/*
+ * Sobre e Faça parte (04/10/2026, 3ª rodada). A Lenora pediu as duas
+ * páginas "com a cara da home": sem diagonal em toda moldura, sem a
+ * diagramação solta e vazia, as coisas encaixadas. Por isso as dobras
+ * usam as peças da home, com os mesmos valores:
+ *
+ * - painel claro chanfrado (o do "O que a Renke faz" e dos Resultados):
+ *   o chanfro fica só nesses painéis grandes;
+ * - cabeça centrada com selo, título fino e frase de apoio;
+ * - cartões escuros de vidro, de canto arredondado (os das Perguntas);
+ * - fotos em cartão de canto arredondado (como o vídeo e as artes do
+ *   Ecossistema), nunca chanfradas;
+ * - painel preto com fio do Ecossistema para a sede.
+ * Dos carrosséis da Renke fica o texto por cima da foto, nas capas.
+ *
+ * Prefixo ed-.
+ */
+
+.pg-editorial {
+  --ed-tinta: #252523;
+  --ed-tinta-2: #5f5f5d;
+  --ed-recuo: clamp(8px, 1.25vw, 20px);
+  --ed-chanfro: clamp(14px, 1.5vw, 24px);
+  --ed-raio: 18px;        /* cartões (Perguntas) */
+  --ed-raio-foto: 14px;   /* fotos (vídeo e artes do Ecossistema) */
+  --ed-vao: clamp(12px, 1.1vw, 16px);
+}
+
+.ed-secao { position: relative; padding-block: var(--esp-secao); }
+.ed-secao--cena { color: var(--papel); }
+
+/* Painel claro chanfrado, recuado da tela, translúcido sobre a cena. */
+.ed-painel {
+  position: relative; margin-inline: var(--ed-recuo); color: var(--ed-tinta);
+  clip-path: polygon(
+    var(--ed-chanfro) 0, calc(100% - var(--ed-chanfro)) 0, 100% var(--ed-chanfro),
+    100% calc(100% - var(--ed-chanfro)), calc(100% - var(--ed-chanfro)) 100%,
+    var(--ed-chanfro) 100%, 0 calc(100% - var(--ed-chanfro)), 0 var(--ed-chanfro));
+  background-image: linear-gradient(170deg, rgb(246 246 243 / .88), rgb(234 234 231 / .82));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+}
+.ed-painel > .container {
+  max-width: calc(var(--largura) - 2 * var(--ed-recuo));
+  padding-inline: max(16px, calc(var(--gutter) - var(--ed-recuo)));
+}
+.ed-painel .botao { background: var(--ed-tinta); color: var(--papel); border-color: var(--ed-tinta); }
+.ed-painel .botao:hover { background: #000; border-color: #000; }
+.ed-painel :focus-visible { outline-color: var(--ed-tinta); }
+.ed-painel .link-arrow { color: var(--ed-tinta); }
+
+/* Cabeça da dobra, centrada como na home. */
+.ed-cabeca { display: grid; justify-items: center; text-align: center; margin-bottom: clamp(40px, 4.4vw, 64px); }
+.ed-cabeca .cabeca-dobra__selo { margin: 0 0 clamp(20px, 2.2vw, 28px); }
+.ed-cabeca--esq { justify-items: start; text-align: left; }
+.ed-titulo {
+  margin: 0; font-size: clamp(34px, 3.4vw, 52px); font-weight: 300; line-height: 1.08; letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.ed-titulo b, .ed-titulo strong { font-weight: 500; }
+.ed-apoio { max-width: 52ch; margin: clamp(16px, 1.8vw, 22px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; color: #aaa; text-wrap: balance; }
+.ed-painel .ed-apoio { color: #50504e; }
+
+/* Cartão escuro de vidro (Perguntas). */
+.ed-cartao {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 32px;
+  min-width: 0; padding: clamp(22px, 2vw, 30px);
+  border: 1px solid rgb(255 255 255 / .09); border-radius: var(--ed-raio);
+  background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
+  -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
+  color: var(--papel);
+}
+/* No painel claro, o cartão é claro (os do método). */
+.ed-painel .ed-cartao { border-color: rgb(37 37 35 / .1); background: linear-gradient(160deg, rgb(255 255 255 / .62), rgb(255 255 255 / .3)); color: var(--ed-tinta); }
+.ed-anel { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgb(255 255 255 / .14); border-radius: 50%; }
+.ed-painel .ed-anel { border-color: rgb(37 37 35 / .16); }
+.ed-anel svg { width: 22px; height: 22px; }
+.ed-cartao__corpo { display: grid; gap: 12px; }
+.ed-cartao__nome { margin: 0; font-weight: 400; font-size: clamp(21px, 1.7vw, 26px); line-height: 1.18; letter-spacing: -.025em; text-wrap: balance; }
+.ed-cartao__texto { margin: 0; max-width: 36ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+.ed-painel .ed-cartao__texto { color: #5a5a58; }
+
+/* Foto em cartão arredondado. */
+.ed-foto { position: relative; margin: 0; overflow: hidden; border-radius: var(--ed-raio-foto); background: #111; }
+.ed-foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ed-foto--sombra { box-shadow: 0 30px 60px -28px rgb(0 0 0 / .45); }
+/* Legenda por cima da foto, embaixo, sobre um véu escuro. */
+.ed-foto__legenda {
+  position: absolute; inset: auto 0 0 0; z-index: 1; padding: clamp(20px, 2vw, 28px);
+  color: var(--papel); background: linear-gradient(to top, rgb(0 0 0 / .72), rgb(0 0 0 / 0));
+}
+
+/* Capa: foto na tela inteira, o título por cima, a foto se desfaz na cena. */
+.ed-capa {
+  position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: min(92svh, 900px); padding-top: calc(var(--altura-header) + 48px); padding-bottom: clamp(56px, 6vw, 96px);
+  color: var(--papel); overflow: clip;
+}
+.ed-capa__foto { position: absolute; inset: 0; z-index: -2; margin: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent); mask-image: linear-gradient(to bottom, #000 58%, transparent); }
+.ed-capa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--foco, 50% 50%); }
+.ed-capa::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(to top, rgb(8 8 8 / .85) 0%, rgb(8 8 8 / .45) 34%, rgb(8 8 8 / .2) 64%, rgb(8 8 8 / .5) 100%),
+    linear-gradient(to right, rgb(8 8 8 / .7) 0%, rgb(8 8 8 / 0) 60%);
+}
+/* O título da capa: o da hero da home. */
+.ed-capa__titulo { margin: 0; font-size: clamp(52px, 7vw, 116px); font-weight: 300; line-height: 1; letter-spacing: -.055em; }
+.ed-capa__titulo b { font-weight: 500; }
+.ed-capa__titulo > span { display: block; }
+.ed-capa__sub { max-width: 46ch; margin: clamp(20px, 2vw, 28px) 0 0; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.55; color: #c4c4c0; text-wrap: pretty; }
+.ed-capa__sub strong { font-weight: 500; color: var(--papel); }
+
+/* Painel preto do Ecossistema. */
+.ed-caixa { border: 1px solid rgb(255 255 255 / .1); border-radius: 16px; background: #000; color: var(--papel); }
+
+/* Número grande, o "+30" do método. */
+.ed-numero { display: grid; gap: 16px; align-content: end; }
+.ed-numero__valor { font-size: clamp(80px, 7.6vw, 132px); font-weight: 200; line-height: .8; letter-spacing: -.06em; }
+.ed-numero__legenda { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #5f5f5d; }
+
+/* Rótulo miúdo espaçado, o "Para agências" do Ecossistema. */
+.ed-rotulo { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: #a3a39b; }
+
+.ed-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+
+@media (max-width: 899.98px) {
+  .ed-cabeca--esq { justify-items: center; text-align: center; }
+}
+
+/* O selo das cabeças com o mesmo respiro da home. */
+.pg-editorial .cabeca-dobra__selo { margin: 0 0 clamp(20px, 2.2vw, 28px); }
+/* Duas dobras na cena seguidas: um respiro só entre elas. */
+.ed-secao--cena + .ed-secao--cena { padding-top: 0; }

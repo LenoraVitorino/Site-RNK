@@ -1,0 +1,15 @@
+---
+/**
+ * Trecho riscado da hero. Um traço amarelo cresce por cima do texto
+ * (Lenora, 02/10/2026). Em 04/10 ela pediu "marketing" em negrito e
+ * amarelo e "para clínicas" em negrito branco: `destaque` é a palavra que
+ * fica em amarelo; `forte` deixa o trecho todo em negrito (o peso do
+ * "RevOps."). Só transform: nada repinta durante a entrada.
+ */
+interface Props { texto: string; segundo?: boolean; destaque?: string; forte?: boolean }
+const { texto, segundo = false, destaque, forte = false } = Astro.props;
+const i = destaque ? texto.indexOf(destaque) : -1;
+---
+<span class:list={['hero__risco', { 'hero__risco--segundo': segundo, 'hero__risco--forte': forte }]}>{i < 0 ? texto : (
+  <>{texto.slice(0, i)}<b class="hero__risco-destaque">{destaque}</b>{texto.slice(i + destaque!.length)}</>
+)}</span>

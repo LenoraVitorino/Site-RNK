@@ -1,0 +1,79 @@
+---
+/**
+ * Página de plano Revena (05/10/2026): o desenho da Start, aprovado como
+ * base, servindo aos cinco planos. Cada bloco da copy vira uma dobra:
+ *   hero            → PlanoHero, com a ilustração do plano
+ *   1ª lista        → PlanoIdeal (painel claro): "Ideal para clínicas que"
+ *   demais listas   → PlanoRotina (linhas entre fios, na cena)
+ *   blocos, numeros → PlanoFaz (cartões de vidro com ícone)
+ *   texto           → PlanoFrase (frase de destaque)
+ *   etapas          → PlanoEtapas (painel claro, régua)
+ *   antesDepois     → PlanoEntregas (extrato)
+ *   ctaFinal        → BlocoCtaFinal
+ * Textos: src/data/paginas/revena-*.ts. Ficha, ícones e ilustração:
+ * src/data/planos.ts.
+ */
+import Base2 from './Base2.astro';
+import FundoInterno from '../components/pagina/FundoInterno.astro';
+import BlocoCtaFinal from '../components/pagina/BlocoCtaFinal.astro';
+import PlanoHero from '../components/plano/PlanoHero.astro';
+import EcossistemaPlano from '../components/plano/EcossistemaPlano.astro';
+import PlanoIdeal from '../components/plano/PlanoIdeal.astro';
+import PlanoFaz from '../components/plano/PlanoFaz.astro';
+import PlanoEtapas from '../components/plano/PlanoEtapas.astro';
+import PlanoEntregas from '../components/plano/PlanoEntregas.astro';
+import PlanoFrase from '../components/plano/PlanoFrase.astro';
+import PlanoRotina from '../components/plano/PlanoRotina.astro';
+import { planejarSecoes, type ContextoSecao } from '../components/pagina/contexto';
+import type { Pagina } from '../data/paginas/tipos';
+import type { NomeIconeRenke } from '../data/icones-renke';
+import { extrasPlanos, type ExtrasPlano } from '../data/planos';
+import '../styles/paginas2.css';
+import '../styles/plano.css';
+
+interface Props { pagina: Pagina; plano: ExtrasPlano['slug'] }
+const { pagina, plano } = Astro.props;
+const extras = extrasPlanos[plano];
+const entradas = planejarSecoes(pagina.blocos, pagina.rota).filter((e) => e.secao);
+const naCena = (s: ContextoSecao, cena: 'hero' | 'pilares') => ({ ...s, cena });
+const ICONES_APOIO: NomeIconeRenke[] = ['crescimento', 'pessoas', 'investimento', 'verificado'];
+const nomePlano = plano[0].toUpperCase() + plano.slice(1);
+let listas = 0, grades = 0;
+const proxima = entradas[1]?.secao?.id ?? 'secao-2';
+---
+<Base2 titulo={pagina.titulo} descricao={pagina.descricao} classe="home-refinada pagina-plano">
+  <FundoInterno slot="fundo" />
+  {entradas.map(({ bloco, secao }) => {
+    const s = secao!;
+    if (bloco.tipo === 'hero') {
+      const [nome, resto] = bloco.titulo[0].split(' ') as [string, string];
+      return (
+        <PlanoHero linhas={[nome, resto]} sub={bloco.sub} cta={bloco.cta} rotaCta={`#${proxima}`} ficha={extras.ficha} secao={naCena(s, 'hero')}>
+          <EcossistemaPlano slot="arte" plano={plano} arte={extras.arte} />
+        </PlanoHero>
+      );
+    }
+    if (bloco.tipo === 'lista') {
+      return listas++ === 0
+        ? <PlanoIdeal h2={bloco.h2 ?? ''} itens={bloco.itens} secao={s} />
+        : <PlanoRotina h2={bloco.h2 ?? ''} itens={bloco.itens} secao={s} />;
+    }
+    if (bloco.tipo === 'blocos') {
+      const primeira = grades++ === 0;
+      return <PlanoFaz h2={bloco.h2 ?? ''} sub={bloco.sub} itens={bloco.itens} icones={primeira ? extras.icones : ICONES_APOIO} selo={primeira ? `Revena ${nomePlano}` : undefined} secao={naCena(s, 'pilares')} />;
+    }
+    if (bloco.tipo === 'numeros') {
+      return (
+        <>
+          <div class="plano-faz--curto"><PlanoFaz h2={bloco.h2 ?? ''} itens={bloco.itens.map((titulo) => ({ titulo }))} icones={['dados', 'fluxo', 'funil', 'pessoas']} secao={naCena(s, 'pilares')} /></div>
+          {bloco.nota && <PlanoFrase paragrafos={[`<strong>${bloco.nota}</strong>`]} secao={{ ...s, id: `${s.id}-nota` }} />}
+        </>
+      );
+    }
+    if (bloco.tipo === 'texto') return <PlanoFrase paragrafos={bloco.paragrafos} secao={s} />;
+    if (bloco.tipo === 'etapas') return <PlanoEtapas h2={bloco.h2.join(' ')} etapas={bloco.etapas} fechamento={bloco.fechamento} secao={s} />;
+    if (bloco.tipo === 'antesDepois') return <PlanoEntregas h2={bloco.h2 ?? ''} rotulos={bloco.rotulos} linhas={bloco.linhas} secao={naCena(s, 'pilares')} />;
+    if (bloco.tipo === 'ctaFinal') return <BlocoCtaFinal bloco={bloco} secao={{ ...s, tom: 'cena', cena: 'formulario' }} />;
+    return null;
+  })}
+</Base2>

@@ -1,0 +1,20 @@
+---
+/**
+ * Lista de rotina dos planos (05/10/2026): "o que acontece toda semana e
+ * todo mês na sua clínica". As mesmas linhas entre fios do extrato das
+ * entregas, numa coluna só, sobre a cena.
+ */
+import type { ContextoSecao } from '../pagina/contexto';
+interface Props { h2: string; itens: string[]; secao: ContextoSecao }
+const { h2, itens, secao } = Astro.props;
+---
+<section class="plano-entregas plano-rotina" id={secao.id} data-cena="pilares" aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <header class="plano-cabeca entra"><h2 id={secao.tituloId} class="titulo">{h2}</h2></header>
+    <ul class="plano-entregas__lista" role="list">
+      {itens.map((item, i) => (
+        <li class="plano-entregas__linha entra" style={`--i:${i % 3}`}><p class="plano-entregas__area">{item}</p></li>
+      ))}
+    </ul>
+  </div>
+</section>

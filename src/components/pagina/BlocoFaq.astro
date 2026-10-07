@@ -60,7 +60,7 @@ const { bloco, secao } = Astro.props;
   .int-faq__icone { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; color: var(--int-tinta); transition: transform .45s var(--easing); }
   .int-faq__item[open] .int-faq__icone { transform: rotate(45deg); }
 
-  .int-faq__resposta { max-width: 60ch; padding: 0 24px 24px; font-size: 16px; line-height: 1.65; color: var(--int-apoio); }
+  .int-faq__resposta { max-width: 60ch; padding: 0 24px 24px; font-size: var(--corpo-topico); line-height: 1.65; color: var(--int-apoio); }
 
   /* Altura animada onde o navegador sabe interpolar até auto. */
   @supports (interpolate-size: allow-keywords) {

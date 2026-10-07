@@ -1,0 +1,23 @@
+---
+/**
+ * Ícone do conjunto próprio da Renke (V1, 02/10/2026). Traço em
+ * currentColor; o destaque (traço ou losango) usa --icone-acento, que cai no
+ * currentColor quando não definido. Ver src/data/icones-renke.ts.
+ */
+import { ICONES_RENKE, losango, type NomeIconeRenke, type IconeRenke } from '../../data/icones-renke';
+interface Props { nome: NomeIconeRenke; size?: number; class?: string; traco?: number }
+const { nome, size = 24, class: classe = '', traco = 1.5 } = Astro.props;
+const i: IconeRenke = ICONES_RENKE[nome];
+---
+<svg class:list={['icone-renke', classe]} width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"
+  stroke="currentColor" stroke-width={traco} stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt">
+  <path d={i.base} />
+  {i.acento && <path d={i.acento} class="icone-renke__acento" />}
+  {i.pontos && <path d={i.pontos.map(losango).join('')} class="icone-renke__ponto" />}
+</svg>
+
+<style>
+  .icone-renke { flex-shrink: 0; vertical-align: middle; }
+  .icone-renke__acento { stroke: var(--icone-acento, currentColor); }
+  .icone-renke__ponto { fill: var(--icone-acento, currentColor); stroke: none; }
+</style>

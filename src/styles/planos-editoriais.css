@@ -1,0 +1,62 @@
+/* Abertura clara, planos escuros, diagramação original centralizada.
+   A fotografia é uma camada da composição:
+   símbolo amarelo atrás, fotografia no meio, nome do plano à frente. */
+.plano-editorial { position: relative; overflow: visible; pointer-events: none; }
+/* Compensa o enquadramento de cada foto para igualar a escala percebida das mãos. */
+.plano-editorial--start { --mao-escala: .88; }
+.plano-editorial--run { --mao-escala: 1.08; --mao-angulo: 10deg; --mao-espelho: -1; }
+.plano-editorial--scale { --mao-escala: 1.05; }
+.plano-editorial--core { --mao-escala: 1.12; --mao-espelho: -1; }
+.plano-editorial--full { --mao-escala: .8; --mao-angulo: 12deg; }
+.plano-editorial__recorte { position: relative; z-index: 2; width: 100%; height: 100%; transform: rotate(var(--mao-angulo, 0deg)) scale(var(--mao-escala, 1)) scaleX(var(--mao-espelho, 1)); }
+/* O fade se mistura ao fundo do plano, sem deixar o amarelo atravessar a foto.
+   A máscara da própria imagem preserva os vãos entre dedos e instrumentos. */
+.plano-editorial__recorte::before { content: ''; position: absolute; inset: 0; background: var(--foto-fundo, #101011); mask: var(--foto) center / contain no-repeat; }
+.palcoplanos .plano-palco--tom2 .plano-editorial { --foto-fundo: #151516; }
+.plano-editorial .plano-editorial__foto { position: relative; z-index: 2; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 1; mask-image: radial-gradient(ellipse at center, #000 40%, transparent 74%); }
+/* O fade acompanha os dois punhos na foto original. */
+.plano-editorial--run .plano-editorial__foto { mask-image: linear-gradient(135deg, transparent 18%, rgb(0 0 0 / .12) 23%, rgb(0 0 0 / .5) 29%, #000 38%, #000 62%, rgb(0 0 0 / .5) 71%, rgb(0 0 0 / .12) 77%, transparent 82%); }
+/* Só o punho desaparece no fundo; prótese e dentes permanecem sem escurecimento. */
+.plano-editorial--full .plano-editorial__foto { filter: grayscale(1); mask-image: linear-gradient(45deg, transparent 12%, #000 38%); }
+.plano-editorial__simbolo { position: absolute; inset: 0; z-index: 1; background: var(--destaque); mask: var(--simbolo) center / contain no-repeat; }
+html[data-planos-tema="claro"] .plano-editorial { display: none; }
+/* Cor limitada aos planos: a introdução mantém o papel e o grafite. */
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco {
+  --pp-fundo: #101011; --pp-fundo-2: #151516; --pp-texto: #f2f2ee;
+  --pp-fio: rgb(242 242 238 / .12); color: var(--pp-texto);
+}
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco__nome { color: var(--pp-texto); }
+html:not([data-planos-tema="claro"]) .palcoplanos .palcoplanos__ancora { color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .palcoplanos .mapa__face { stroke: rgb(242 242 238 / .3); }
+html:not([data-planos-tema="claro"]) .palcoplanos .mapa__plano--ativo .mapa__face { fill: #deded9; stroke: #deded9; }
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco .botao { color: var(--pp-texto); border-color: rgb(242 242 238 / .28); }
+html:not([data-planos-tema="claro"]) .palcoplanos .plano-palco .botao:hover { color: #161616; background: #f2f2ee; border-color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .palcoplanos .palcoplanos__fixo :focus-visible { outline-color: #f2f2ee; }
+/* As medidas e posições do nome e do SVG continuam em home2.css. */
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco__imagem { z-index: 8; background: transparent; pointer-events: none; }
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco--tom2 { background: var(--pp-fundo-2); }
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .palcoplanos__icones { z-index: 7; }
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-palco__info { z-index: 10; }
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(59vw, 91svh); height: min(59vw, 91svh);
+}
+html:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial__simbolo { display: none; }
+/* Na pilha, preserva o espaço e o alinhamento do ícone original. */
+html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-palco__imagem { position: relative; }
+html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-palco__icone-mob { visibility: hidden; }
+html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: min(48vw, 240px); height: min(48vw, 240px);
+}
+@media (max-width: 899.98px) {
+  html:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial { left: calc(min(48vw, 240px) * -.2); transform: none; }
+}
+/* A copy mantém seu trilho e seus textos, com a mesma paleta e composição. */
+html:not([data-planos-tema="claro"]) .planos { background: #e7e7e5; color: #252523; }
+html:not([data-planos-tema="claro"]) .planos :is(.planos__dica, .plano__fala) { color: #5a5a58; }
+html:not([data-planos-tema="claro"]) .planos .plano { background: #101011; color: #f2f2ee; }
+html:not([data-planos-tema="claro"]) .planos .plano .plano__fala { color: #b7b7b3; }
+html:not([data-planos-tema="claro"]) .planos .plano__foto-anterior { display: none; }
+html:not([data-planos-tema="claro"]) .planos .plano__foto { display: block; overflow: hidden; background: transparent; }
+html:not([data-planos-tema="claro"]) .planos .plano-editorial { height: clamp(220px, 24vw, 340px); }

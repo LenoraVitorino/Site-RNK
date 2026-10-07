@@ -1,0 +1,27 @@
+---
+/**
+ * "O que você passa a ter" (04/10/2026): o extrato da dobra Resultados da
+ * home, sobre a cena. Uma linha por entrega, entre fios: a área grande à
+ * esquerda, com o losango amarelo, e o resultado à direita.
+ */
+import type { ContextoSecao } from '../pagina/contexto';
+
+interface Props { h2: string; rotulos?: [string, string]; linhas: [string, string][]; secao: ContextoSecao }
+const { h2, rotulos, linhas, secao } = Astro.props;
+---
+<section class="plano-entregas" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <header class="plano-cabeca plano-cabeca--linha entra">
+      <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+      {rotulos && <p class="plano-entregas__rotulos" aria-hidden="true">{rotulos[0]} <span>→</span> {rotulos[1]}</p>}
+    </header>
+    <ol class="plano-entregas__lista">
+      {linhas.map(([area, texto], i) => (
+        <li class="plano-entregas__linha entra" style={`--i:${i % 3}`}>
+          <h3 class="plano-entregas__area">{area}</h3>
+          <p class="plano-entregas__texto">{texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

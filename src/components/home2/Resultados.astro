@@ -1,145 +1,106 @@
 ---
-/** Provas como um extrato editorial: uma linha por especialidade, com o
-    número grande à direita (Lenora, 30/09: o mosaico repetia a grade de
-    cartões do Protocolo Revena e lia mal; volta o modelo anterior, das
-    linhas, melhorado). No desktop com mouse, a foto da área aparece
-    dentro da linha, no meio livre entre o texto e o número, com a altura
-    da linha; acompanha o cursor na horizontal, desliza para a linha nova e
-    troca de baixo para cima, na linha do site da Immerso (referência dela,
-    30/09). Por enquanto, só a moldura de mockup de cada foto. Valores e
-    textos vêm da fonte compartilhada. */
-import { resultados, hero } from '../../data/home';
-import Botao from '../ui/Botao.astro';
+/** Resultados por especialidade (04/10/2026, 2ª versão do dia). A Lenora
+    reprovou a vitrine com a foto que trocava sozinha e mandou a referência
+    "Services Section Animation" (details.so): uma lista numerada em que
+    cada linha gruda no topo ao rolar e as seguintes vão se empilhando
+    embaixo dela. Aqui cada especialidade é uma linha, sem numeração ("não
+    gosto de numeração"): a área; embaixo, a frase com o resultado grande logo abaixo dela (Lenora,
+    04/10: "embaixo do texto, não em cima da foto") e uma foto da área.
+    Só CSS (position: sticky); no celular a lista fica corrida. A foto de
+    cada linha começa no topo das letras do título e some quando a linha
+    seguinte a cobre.
+    A dobra segue como o painel claro chanfrado, agora opaco, para cada
+    linha cobrir a de baixo sem emenda. Valores, textos e fotos vêm da
+    fonte compartilhada; as fotos são provisórias (ver data/home.ts). */
+import { resultados } from '../../data/home';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 
-/* Tons levemente diferentes por área, para a troca de foto se ler mesmo
-   com as molduras vazias. */
-const tons = [
-  ['#3b3a36', '#1d1d1b'],
-  ['#35383a', '#1b1c1d'],
-  ['#3a3634', '#1e1b1a'],
-  ['#363a35', '#1b1d1a'],
-  ['#383638', '#1c1b1d'],
-];
+const partes = (numero: string) => {
+  const [, antes, valor, depois] = numero.match(/^(.*?)(\d+)(.*)$/) ?? ['', '', numero, ''];
+  return { antes, valor, depois };
+};
 ---
-<section class="secao resultados-editoriais" id="resultados" aria-labelledby="resultados-titulo">
+<section class="secao resultados-editoriais" id="resultados" data-tom="claro" aria-labelledby="resultados-titulo">
   <div class="container">
     <header class="resultados-editoriais__cabeca entra">
       {!copyLiteral && <Selo class="cabeca-dobra__selo">Resultados por especialidade</Selo>}
-      <h2 class="titulo" id="resultados-titulo">O que muda quando a operação tem estrutura.</h2>
+      <h2 class="titulo" id="resultados-titulo">O que muda quando a <span class="resultados-editoriais__enfase">operação tem estrutura</span>.</h2>
       {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
     </header>
-    <div class="resultados-extrato__palco" data-resultados-fotos>
-      <ol class="resultados-extrato" aria-label="Resultados por especialidade">
-        {resultados.map((r, i) => (
-          <li class="resultado-linha entra">
-            <span class="resultado-linha__indice" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="resultado-linha__area">{r.especialidade}</h3>
-            <p class="resultado-linha__texto">{r.texto}</p>
-            <p class="resultado-linha__numero num">{r.numero}</p>
+
+    <ol class="res-pilha" style={`--res-n:${resultados.length}`} aria-label="Resultados por especialidade">
+      {resultados.map((r, i) => {
+        const { antes, valor, depois } = partes(r.numero);
+        return (
+          <li class="res-etapa" style={`--i:${i}`}>
+            <div class="res-etapa__cabeca">
+              <h3 class="res-etapa__area">{r.especialidade}</h3>
+            </div>
+            <div class="res-etapa__corpo">
+              <div class="res-etapa__dados">
+                <p class="res-etapa__texto">{r.texto}</p>
+                <p class="res-etapa__numero num">
+                  <span class="visually-hidden">{r.numero}</span>
+                  <span class="res-etapa__reserva" aria-hidden="true">{r.numero}</span>
+                  <span class="res-etapa__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
+                </p>
+              </div>
+              <figure class="res-etapa__foto">
+                <img
+                  class:list={{ 'res-etapa__img--espelho': r.espelhar }}
+                  src={`/imagens/planos-editoriais/${r.foto}.webp`}
+                  alt="" width="1254" height="1254" loading="lazy" decoding="async"
+                />
+              </figure>
+            </div>
           </li>
-        ))}
-      </ol>
-      {/* Mockup (Lenora, 30/09): troca-se cada camada pela foto real da
-          área, com um <img> dentro, sem mexer no resto. */}
-      <div class="resultados-foto" aria-hidden="true">
-        {resultados.map((r, i) => (
-          <figure class="resultados-foto__camada" style={`--tom-a:${tons[i % tons.length][0]}; --tom-b:${tons[i % tons.length][1]}`}>
-            <figcaption class="resultados-foto__legenda">Foto · {r.especialidade}</figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-    <div class="resultados-editoriais__rodape"><Botao href="/contato">{hero.cta}</Botao></div>
+        );
+      })}
+    </ol>
   </div>
 </section>
 
 <script>
-  /* A foto fica dentro da linha em foco: altura da linha menos 4 (quase
-     encosta nos fios, como na referência), largura 1,78 vezes a altura, centrada na altura da linha e, na horizontal, no
-     cursor, sem sair da coluna do meio (terceira trilha da grade). A cada
-     quadro anda 14% do que falta; ao entrar numa linha, a camada daquela
-     área sobe por cima da anterior. Só no desktop com mouse; com movimento
-     reduzido, vai direto ao lugar e troca sem o recorte. */
-  const palco = document.querySelector<HTMLElement>('[data-resultados-fotos]');
-  const pode = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1100px)');
-  if (palco && pode.matches) {
-    const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const foto = palco.querySelector<HTMLElement>('.resultados-foto')!;
-    const camadas = [...palco.querySelectorAll<HTMLElement>('.resultados-foto__camada')];
-    const linhas = [...palco.querySelectorAll<HTMLElement>('.resultado-linha')];
-    let alvoX = 0, alvoY = 0, x = 0, y = 0, atual = -1, rodando = false, visivel = false;
-    let limpeza = 0, cursorX = 0;
-    let w = 256, h = 160;
-
-    /* Tamanho: pela linha mais baixa, para caber em todas. */
-    const mede = () => {
-      h = Math.max(96, Math.min(...linhas.map((l) => l.offsetHeight)) - 4);
-      w = Math.round(h * 1.78);
-      foto.style.width = `${w}px`; foto.style.height = `${h}px`;
-    };
-    /* Coluna do meio da linha: esquerda e direita, em relação ao palco. */
-    const faixa = (linha: HTMLElement) => {
-      const trilhas = getComputedStyle(linha).gridTemplateColumns.split(' ').map(parseFloat);
-      const vao = parseFloat(getComputedStyle(linha).columnGap) || 0;
-      const esq = trilhas[0] + trilhas[1] + vao * 2;
-      return [esq, esq + trilhas[2]];
-    };
-    const mira = () => {
-      if (atual < 0) return;
-      const linha = linhas[atual];
-      const [esq, dir] = faixa(linha);
-      const cx = cursorX - w / 2;
-      alvoX = dir - esq >= w ? Math.min(Math.max(cx, esq), dir - w) : (esq + dir - w) / 2;
-      alvoY = linha.offsetTop + (linha.offsetHeight - h) / 2;
-    };
-    const passo = () => {
-      const k = reduzido ? 1 : 0.14;
-      x += (alvoX - x) * k; y += (alvoY - y) * k;
-      foto.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
-      if (visivel && (Math.abs(alvoX - x) > 0.2 || Math.abs(alvoY - y) > 0.2)) requestAnimationFrame(passo);
-      else rodando = false;
-    };
-    const anda = () => { if (!rodando) { rodando = true; requestAnimationFrame(passo); } };
-
-    mede();
-    addEventListener('resize', mede);
-
-    palco.addEventListener('pointermove', (e) => {
-      cursorX = e.clientX - palco.getBoundingClientRect().left;
-      mira();
-      if (!visivel && atual >= 0) {
-        /* Primeira entrada: a foto nasce já no lugar, sem viajar do canto. */
-        x = alvoX; y = alvoY; visivel = true;
-        clearTimeout(limpeza);
-        foto.style.translate = `${x}px ${y}px`;
-        foto.classList.add('resultados-foto--visivel');
-      }
-      anda();
+  /* Pilha: a linha coberta pela seguinte esconde a foto (data-coberta). */
+  const etapas = [...document.querySelectorAll<HTMLElement>('#resultados .res-etapa')];
+  const largo = matchMedia('(min-width: 900px)');
+  let pedido = 0;
+  const medir = () => {
+    pedido = 0;
+    etapas.forEach((el, i) => {
+      const prox = etapas[i + 1];
+      const coberta = largo.matches && !!prox && prox.getBoundingClientRect().top - el.getBoundingClientRect().top < el.offsetHeight * .55;
+      el.toggleAttribute('data-coberta', coberta);
     });
+  };
+  const agendar = () => { if (!pedido) pedido = requestAnimationFrame(medir); };
+  addEventListener('scroll', agendar, { passive: true });
+  addEventListener('resize', agendar);
+  medir();
 
-    linhas.forEach((linha, i) => linha.addEventListener('pointerenter', (e) => {
-      if (i === atual) return;
-      camadas.forEach((c) => c.classList.remove('resultados-foto__camada--saindo'));
-      if (atual >= 0) {
-        camadas[atual].classList.remove('resultados-foto__camada--ativa');
-        camadas[atual].classList.add('resultados-foto__camada--saindo');
+  /* Cada número conta de zero até o valor quando a linha entra na tela. */
+  const numeros = document.querySelectorAll<HTMLElement>('#resultados [data-contador]');
+  const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (numeros.length && !parado && 'IntersectionObserver' in window) {
+    const escrever = (el: HTMLElement, v: number) => { el.textContent = `${el.dataset.antes ?? ''}${v}${el.dataset.depois ?? ''}`; };
+    numeros.forEach((el) => escrever(el, 0));
+    const contar = (el: HTMLElement) => {
+      const alvo = Number(el.dataset.alvo), t0 = performance.now(), dur = 1600;
+      const passo = (agora: number) => {
+        const t = Math.min(1, (agora - t0) / dur);
+        escrever(el, Math.round(alvo * (1 - Math.pow(1 - t, 4))));
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+    const obs = new IntersectionObserver((entradas) => {
+      for (const e of entradas) {
+        if (!e.isIntersecting) continue;
+        contar(e.target as HTMLElement);
+        obs.unobserve(e.target);
       }
-      camadas[i].classList.add('resultados-foto__camada--ativa');
-      atual = i;
-      cursorX = e.clientX - palco.getBoundingClientRect().left;
-      mira(); anda();
-    }));
-
-    palco.addEventListener('pointerleave', () => {
-      visivel = false;
-      foto.classList.remove('resultados-foto--visivel');
-      /* Depois do fade, as camadas voltam ao ponto de partida. */
-      limpeza = window.setTimeout(() => {
-        camadas.forEach((c) => c.classList.remove('resultados-foto__camada--ativa', 'resultados-foto__camada--saindo'));
-        atual = -1;
-      }, 500);
-    });
+    }, { threshold: .6 });
+    numeros.forEach((el) => obs.observe(el));
   }
 </script>

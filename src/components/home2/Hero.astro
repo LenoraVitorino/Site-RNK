@@ -3,24 +3,27 @@
 import { hero } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import Botao from '../ui/Botao.astro';
+import Selo from '../ui/Selo.astro';
 import ConfiancaHero from './ConfiancaHero.astro';
+import Risco from './HeroRisco.astro';
 
+/* Na estudio, CRM, marketing, vendas e "para clínicas de alto padrão" em negrito (Lenora, 04/10). */
 const lead = copyLiteral ? hero.lead :
-  'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.';
+  'Uma operação integrada de <strong>CRM</strong>, <strong>marketing</strong> e <strong>vendas</strong> <strong>para clínicas de alto padrão</strong> que exigem mais controle, eficiência e resultado.';
 ---
 <section class="hero hero--editorial" aria-label="Apresentação">
   <div class="hero__fundo" aria-hidden="true">
-    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" />
+    <img class="hero__ondas" src="/imagens/hero-ondas.svg" alt="" width="1600" height="900" loading="lazy" decoding="async" />
     <span class="hero__brilho"></span>
   </div>
 
   <div class="hero__grade">
     <div class="hero__palco">
-      <p class="hero__selo"><span aria-hidden="true">✦</span>{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</p>
+      <Selo class="hero__selo">{copyLiteral ? 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.' : 'Você não controla o que não enxerga.'}</Selo>
       <h1 class="hero__h1" aria-label="Isso não é marketing para clínicas. Isso é RevOps.">
         <span class="hero__mensagem hero__mensagem--antes" aria-hidden="true">
-          <span>Isso <span class="hero__risco">não é marketing</span></span>
-          <span><span class="hero__risco hero__risco--segundo">para clínicas.</span></span>
+          <span>Isso <Risco texto="não é marketing" destaque="marketing" /></span>
+          <span><Risco texto="para clínicas." segundo forte /></span>
         </span>
         <span class="hero__mensagem hero__mensagem--depois" aria-hidden="true">
           <span>Isso é</span>
@@ -28,7 +31,7 @@ const lead = copyLiteral ? hero.lead :
         </span>
       </h1>
       <div class="hero__apoio">
-        <p class="hero__lead">{lead}</p>
+        <p class="hero__lead" set:html={lead} />
         <p class="hero__acoes"><Botao href="/contato">{copyLiteral ? 'Descubra se faz sentido para sua clínica' : 'Conhecer solução'}</Botao></p>
       </div>
       <div class="hero__base">

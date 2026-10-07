@@ -1,0 +1,45 @@
+---
+/**
+ * No que acreditamos (04/10/2026). No painel claro, a cabeça centrada da
+ * home e as crenças em cartões claros com ícone, numa fileira de três. Na
+ * versão copy, sem a lista, os dois parágrafos ficam na cabeça.
+ */
+import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'texto'> }
+const { bloco } = Astro.props;
+const [leve, forte] = doisPesos(bloco.h2 ?? '', 1);
+const icones: NomeIconeRenke[] = ['bussola', 'brilho', 'crescimento'];
+---
+<section class="ed-secao ed-painel fp-crencas" id="faca-parte-crencas" data-tom="claro" aria-labelledby="faca-parte-crencas-titulo">
+  <div class="container">
+    <header class="ed-cabeca entra">
+      <Selo class="cabeca-dobra__selo">{bloco.eyebrow ?? 'Cultura'}</Selo>
+      <h2 class="ed-titulo" id="faca-parte-crencas-titulo">{leve} <b>{forte}</b></h2>
+      {(bloco.lista ? bloco.paragrafos.slice(0, 1) : bloco.paragrafos).map((p) => <p class="ed-apoio" set:html={p} />)}
+    </header>
+    {bloco.lista && (
+      <ul class="fp-crencas__lista" role="list">
+        {bloco.lista.map((c, i) => (
+          <li class="ed-cartao fp-crencas__cartao entra" style={`--i:${i}`}>
+            <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+            <div class="ed-cartao__corpo">
+              <h3 class="ed-cartao__nome">{c.titulo}</h3>
+              <p class="ed-cartao__texto">{c.texto}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .fp-crencas__lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ed-vao); }
+  .fp-crencas__cartao { min-height: clamp(200px, 16vw, 240px); }
+  @media (max-width: 899.98px) { .fp-crencas__lista { grid-template-columns: 1fr; } .fp-crencas__cartao { min-height: 0; } }
+</style>

@@ -40,6 +40,8 @@ export interface Elemento {
   config?: Partial<Config>;
   /** Quando existir, o motor chama isto no lugar de renderer.render (pós-processamento do elemento). */
   renderizar?(): void;
+  /** Quando existir, o motor espera esta promessa antes do primeiro quadro (ex.: compilar shaders sem travar a página). */
+  preparar?(): Promise<void>;
 }
 
 export interface Config {
@@ -299,9 +301,13 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     uniformsLeitura.uCartaoN.value = c;
   };
 
+  // Último gesto (rolagem, ponteiro, tamanho da tela). Parado, o fundo pinta
+  // a 30 quadros por segundo; em movimento, a 60, mesmo em telas de 120 Hz.
+  let mexeu = performance.now();
   const ponteiro = { x: 0, y: 0, ax: 0, ay: 0 };
   if (!celular) {
     addEventListener('pointermove', (e) => {
+      mexeu = performance.now();
       ponteiro.x = (e.clientX / innerWidth) * 2 - 1;
       ponteiro.y = (e.clientY / innerHeight) * 2 - 1;
     }, { passive: true });
@@ -330,7 +336,13 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     return q;
   };
 
+  // A máscara de leitura mede os textos pela Range, o que obriga o navegador
+  // a calcular o layout. Só remede quando a rolagem muda ou a cada 250 ms.
+  let leituraY = NaN, leituraT = 0, leituraH = 0;
+  let pronto = false;
+
   const pintar = (dt: number) => {
+    if (!pronto) return;
     const parado = reduzido.matches;
     if (!parado) tempo += dt;
 
@@ -357,7 +369,11 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
     const a = quadros[nomes[i]], b = quadros[nomes[Math.min(i + 1, nomes.length - 1)]];
     const q = estado(p);
 
-    atualizarLeitura();
+    const agora = performance.now();
+    if (scrollY !== leituraY || innerHeight !== leituraH || agora - leituraT > 250) {
+      atualizarLeitura();
+      leituraY = scrollY; leituraH = innerHeight; leituraT = agora;
+    }
     uniformsLeitura.uLeituraForca.value = q.leitura ?? .85;
     renderer.toneMappingExposure = q.exposicao ?? 1;
 
@@ -373,17 +389,21 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   // Laço: só roda com alguma dobra transparente na tela e a aba visível.
   const naTela = new Set<Element>();
   let quadro = 0;
-  const rodando = () => !document.hidden && naTela.size > 0;
-  const laco = () => {
+  const rodando = () => pronto && !document.hidden && naTela.size > 0;
+  const laco = (agora: number) => {
     quadro = 0;
-    const agora = performance.now();
-    const dt = Math.min(.064, (agora - ultimo) / 1000);
-    ultimo = agora;
-    pintar(dt);
+    // A entrada (1,6 s) conta como movimento: o fade sai a 60 quadros.
+    const intervalo = agora - mexeu > 1800 ? 1000 / 30 : 1000 / 60;
+    if (agora - ultimo >= intervalo - 2) {
+      const dt = Math.min(.064, (agora - ultimo) / 1000);
+      ultimo = agora;
+      pintar(dt);
+    }
     if (rodando()) quadro = requestAnimationFrame(laco);
   };
   const acordar = () => {
-    if (!quadro && rodando()) { ultimo = performance.now(); quadro = requestAnimationFrame(laco); }
+    // Um quadro de folga: o primeiro rAF depois de acordar sempre pinta.
+    if (!quadro && rodando()) { ultimo = performance.now() - 17; quadro = requestAnimationFrame(laco); }
   };
   const observador = new IntersectionObserver((entradas) => {
     for (const e of entradas) e.isIntersecting ? naTela.add(e.target) : naTela.delete(e.target);
@@ -391,15 +411,21 @@ export function iniciar(canvas: HTMLCanvasElement, criar: (ctx: Contexto) => Ele
   });
   document.querySelectorAll(cfg.transparentes).forEach((el) => observador.observe(el));
   document.addEventListener('visibilitychange', acordar);
-  addEventListener('scroll', () => { if (reduzido.matches) pintar(0); acordar(); }, { passive: true });
-  addEventListener('resize', () => { redimensionar(); pintar(0); acordar(); }, { passive: true });
+  addEventListener('scroll', () => { mexeu = performance.now(); if (reduzido.matches) pintar(0); acordar(); }, { passive: true });
+  addEventListener('resize', () => { mexeu = performance.now(); redimensionar(); pintar(0); acordar(); }, { passive: true });
   document.fonts?.ready.then(() => { medir(); acordar(); });
   new ResizeObserver(() => medir()).observe(document.body);
 
   redimensionar();
   p = progresso(scrollY);
-  pintar(0);
-  acordar();
+  const comecar = () => {
+    pronto = true;
+    mexeu = performance.now();
+    pintar(0);
+    acordar();
+  };
+  if (elemento.preparar) elemento.preparar().catch(() => {}).then(comecar);
+  else comecar();
 
   if (import.meta.env.DEV) {
     // O painel embutido não roda requestAnimationFrame: estes ganchos pintam na mão.

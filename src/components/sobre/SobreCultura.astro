@@ -1,140 +1,39 @@
 ---
 /**
- * S5 · Cultura (docs/04-design/pagina-sobre.md, (a) "S5").
- * Colofão: o título, a frase e os quatro valores.
- *
- * 29/09/2026 (nas duas versões): duas colunas. À esquerda, o H2 na escala
- * dos títulos do Sobre e a frase como subtítulo (e, só na versão copy, o selo
- * #TEAMRENKE e o link Faça Parte). À direita, os valores um abaixo do outro,
- * cada um com um ícone fino num círculo e um fio entre as linhas. Abaixo de
- * 900px, tudo empilha.
- *
- * O retrato do time (slot cultura) só aparece com foto: retrato placeholder
- * está vetado. Com ele, a foto entra sob o texto, na coluna da esquerda.
+ * Cultura (04/10/2026). No painel claro, a cabeça centrada da home e os
+ * quatro valores em cartões claros com ícone, numa fileira.
  */
-import CartaoFoto from './CartaoFoto.astro';
-import Icone from '../ui/Icone.astro';
-import type { NomeIcone } from '../ui/Icone.astro';
-import { cultura, fotos } from '../../data/sobre';
+import { cultura } from '../../data/sobre';
+import { doisPesos } from '../editorial/pesos';
 import Selo from '../ui/Selo.astro';
-
-const comFoto = !!fotos.cultura.foto;
-
-/** Um ícone por valor, do Lucide, no traço fino do site. */
-const icones: Record<string, NomeIcone> = {
-  Liberdade: 'Compass',
-  Autorresponsabilidade: 'BadgeCheck',
-  Conexão: 'Handshake',
-  Evolução: 'TrendingUp',
-};
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+const [leve, forte] = doisPesos(cultura.h2, 1);
+const icones: NomeIconeRenke[] = ['bussola', 'verificado', 'pessoas', 'crescimento'];
 ---
-<section
-  class="secao int-secao int-secao--papel sb-cultura"
-  id="sobre-cultura"
-  data-tom="papel"
-  aria-labelledby="sobre-cultura-titulo"
->
-  <div class="container sb-grade">
-    <div class="sb-cultura__texto entra" style="--i:0">
-      {cultura.rotulo && <Selo>{cultura.rotulo}</Selo>}
-      <h2 class="titulo sb-cultura__titulo" id="sobre-cultura-titulo">{cultura.h2}</h2>
-      <p class="sb-cultura__frase">{cultura.frase}</p>
-      {cultura.link && (
-        <a class="sb-cultura__link" href={cultura.link.rota}>
-          <span>{cultura.link.rotulo}</span>
-          <Icone nome="ArrowUpRight" size={16} />
-        </a>
-      )}
-      {comFoto && (
-        <div class="sb-cultura__foto">
-          <CartaoFoto slot={fotos.cultura} sizes="(min-width: 900px) 300px, 60vw" tom="claro" />
-        </div>
-      )}
-    </div>
-
-    <ul class="sb-cultura__valores entra" style="--i:1" role="list">
-      {cultura.valores.map((v) => (
-        <li class="sb-cultura__valor">
-          <span class="sb-cultura__icone" aria-hidden="true">
-            {icones[v] && <Icone nome={icones[v]} size={18} />}
-          </span>
-          <span>{v}</span>
+<section class="ed-secao ed-painel sb-cultura" id="sobre-cultura" data-tom="claro" aria-labelledby="sobre-cultura-titulo">
+  <div class="container">
+    <header class="ed-cabeca entra">
+      <Selo class="cabeca-dobra__selo">{cultura.rotulo ?? 'Cultura'}</Selo>
+      <h2 class="ed-titulo" id="sobre-cultura-titulo">{leve} <b>{forte}</b></h2>
+      <p class="ed-apoio">{cultura.frase}</p>
+    </header>
+    <ul class="sb-cultura__valores" role="list">
+      {cultura.valores.map((v, i) => (
+        <li class="ed-cartao sb-cultura__valor entra" style={`--i:${i}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <p class="ed-cartao__nome">{v}</p>
         </li>
       ))}
     </ul>
+    {cultura.link && <p class="sb-cultura__link"><a class="link-arrow" href={cultura.link.rota}>{cultura.link.rotulo}</a></p>}
   </div>
 </section>
 
 <style>
-  /* Mais altura que as outras dobras papel: o colofão respira (29/09/2026). */
-  .sb-cultura { padding-block: clamp(136px, 15vw, 248px); }
-
-  /* ---------- Esquerda: título e subtítulo ---------- */
-
-  .sb-cultura__texto { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
-  /* O H2 na escala dos títulos do Sobre (o .titulo dá tamanho e tracking). */
-  .sb-cultura__titulo { margin: 0; color: var(--sb-tinta); text-wrap: balance; }
-  /* A frase como subtítulo: corpo de leitura, em cinza. */
-  .sb-cultura__frase {
-    max-width: 40ch; margin: 4px 0 0;
-    font-size: clamp(17px, 1.4vw, 20px); font-weight: 300; line-height: 1.55;
-    letter-spacing: -.005em; color: var(--sb-tinta-2);
-    text-wrap: pretty;
-  }
-
-  .sb-cultura__link {
-    display: inline-flex; align-items: center; gap: 6px;
-    /* Alvo de toque de 44px (OUT-07). */
-    min-height: 44px; margin-top: 8px;
-    font-size: 16px; font-weight: 400; line-height: 1.4; color: var(--sb-tinta);
-    text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
-    text-decoration-color: rgb(37 37 35 / .4);
-    transition: text-decoration-color .3s var(--easing, ease);
-  }
-  .sb-cultura__link :global(svg) { flex: none; transition: transform .3s var(--easing, ease); }
-  .sb-cultura__link:hover { text-decoration-color: currentColor; }
-  .sb-cultura__link:hover :global(svg) { transform: translate(2px, -2px); }
-
-  .sb-cultura__foto { width: min(300px, 72%); margin-top: 36px; }
-
-  /* ---------- Direita: os valores, um por linha ---------- */
-
-  .sb-cultura__valores { list-style: none; margin: 0; padding: 0; }
-  .sb-cultura__valor {
-    display: flex; align-items: center; gap: 20px;
-    padding-block: 20px;
-    border-top: 1px solid rgb(37 37 35 / .12);
-    font-size: clamp(20px, 1.8vw, 26px); font-weight: 300; line-height: 1.2;
-    letter-spacing: -.02em; color: var(--sb-tinta);
-  }
-  .sb-cultura__valor:last-child { border-bottom: 1px solid rgb(37 37 35 / .12); }
-  .sb-cultura__icone {
-    display: grid; place-items: center; flex: none;
-    width: 44px; height: 44px; border-radius: 50%;
-    color: var(--sb-tinta);
-    box-shadow: inset 0 0 0 1px rgb(37 37 35 / .16);
-  }
-
-  /* ---------- A partir de 900px: lado a lado ---------- */
-
-  @media (min-width: 900px) {
-    .sb-cultura__texto { grid-column: 1 / 7; grid-row: 1; align-self: center; }
-    .sb-cultura__valores { grid-column: 8 / 13; grid-row: 1; align-self: center; }
-  }
-
-  /* ---------- Abaixo de 900px: empilhado ---------- */
-
-  @media (max-width: 899.98px) {
-    .sb-cultura__texto, .sb-cultura__valores { grid-column: 1 / -1; }
-    .sb-cultura__valores { margin-top: 48px; }
-  }
-  @media (max-width: 599.98px) {
-    .sb-cultura__valor { gap: 16px; padding-block: 16px; font-size: 20px; }
-    .sb-cultura__icone { width: 40px; height: 40px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .sb-cultura__link, .sb-cultura__link :global(svg) { transition: none; }
-    .sb-cultura__link:hover :global(svg) { transform: none; }
-  }
+  .sb-cultura__valores { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ed-vao); }
+  .sb-cultura__valor { min-height: clamp(180px, 14vw, 220px); }
+  .sb-cultura__valor .ed-cartao__nome { font-size: clamp(17px, 1.35vw, 22px); }   /* "Autorresponsabilidade" numa linha */
+  .sb-cultura__link { margin: 32px 0 0; text-align: center; }
+  @media (max-width: 899.98px) { .sb-cultura__valores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>

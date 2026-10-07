@@ -1,132 +1,44 @@
 ---
 /**
- * S3 · A prova (docs/04-design/pagina-sobre.md, (a) "S3").
- * Página dupla de livro de mesa: fotos de tamanhos diferentes,
- * desencontradas na grade, com paralaxe leve e parágrafos curtos entre elas
- * (referência: Audo Copenhagen About).
- *
- * Zigue-zague em ≥1100, na .sb-grade de 12 colunas:
- *   linha 1 · H2 nas colunas 1–8 (20ch);
- *   linha 2 · B nas 1–5, foto do estúdio nas 7–12, mais baixa que o texto;
- *   linha 3 · cartão de detalhe nas 2–5, subindo para o vão abaixo de B;
- *             C nas 7–11, no meio vertical do cartão;
- *   linha 4 · D, a frase de fecho, centralizada na grade inteira.
- * As linhas são explícitas (grid-row), porque o posicionamento automático
- * poderia puxar um item para a linha de cima.
- *
- * A ordem do DOM é a ordem de leitura: H2, B, foto, slot, C, D.
- * A paralaxe (foto 24, detalhe −16: um desce, o outro sobe) é do
- * paralaxe.ts, iniciado pela página; aqui só se passa a amplitude.
+ * A prova (04/10/2026). No painel claro, a cabeça centrada: a frase em
+ * cima e "140 clínicas" no número fino da home. Embaixo, numa fileira, a
+ * foto do time e as três frases em cartões claros com ícone.
  */
-import CartaoFoto from './CartaoFoto.astro';
+import { Image } from 'astro:assets';
 import { prova, fotos } from '../../data/sobre';
-
-const [fraseB, fraseC, fraseD] = prova.frases;
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+const f = fotos.prova;
+const icones: NomeIconeRenke[] = ['camadas', 'tecnologia', 'pessoas'];
 ---
-<section class="secao int-secao int-secao--papel sb-prova" id="sobre-prova" data-tom="papel" aria-labelledby="sobre-prova-titulo">
-  <div class="container sb-grade">
-    <h2 class="titulo sb-prova__titulo entra" id="sobre-prova-titulo" style="--i:0">
-      {prova.h2.antes}<span class="sb-prova__realce">{prova.h2.realce}</span>{prova.h2.depois}
+<section class="ed-secao ed-painel sb-prova" id="sobre-prova" data-tom="claro" aria-labelledby="sobre-prova-titulo">
+  <div class="container">
+    <h2 class="ed-cabeca sb-prova__titulo entra" id="sobre-prova-titulo">
+      <span class="sb-prova__antes">{prova.h2.antes.trim()}</span>
+      <span class="sb-prova__numero">{prova.h2.realce}{prova.h2.depois}</span>
     </h2>
-    <p class="sb-prova__frase sb-prova__frase--b entra" style="--i:1">{fraseB}</p>
-    <div class="sb-prova__foto">
-      <CartaoFoto slot={fotos.prova} sizes="(min-width: 1100px) min(820px, 44vw), (min-width: 600px) 72vw, 92vw" paralaxe={24} tom="claro" />
+    <div class="sb-prova__fileira">
+      <figure class="ed-foto sb-prova__foto entra">
+        <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[400, 720, 960]} sizes="(min-width: 900px) 24vw, 100vw" style={`object-position: ${f.foco}`} />
+      </figure>
+      {prova.frases.map((t, i) => (
+        <article class="ed-cartao sb-prova__cartao entra" style={`--i:${i + 1}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <p class="sb-prova__frase">{t}</p>
+        </article>
+      ))}
     </div>
-    <div class="sb-prova__detalhe">
-      <CartaoFoto slot={fotos.provaDetalhe} sizes="(min-width: 900px) 380px, 66vw" paralaxe={-16} tom="claro" />
-    </div>
-    <p class="sb-prova__frase sb-prova__frase--c entra">{fraseC}</p>
-    <p class="sb-prova__frase sb-prova__frase--d entra">{fraseD}</p>
   </div>
 </section>
 
 <style>
-  /* ---------- Texto ---------- */
-
-  /* A frase em cinza e o realce em tinta, no mesmo peso: o destaque é só de tom. */
-  .sb-prova__titulo {
-    max-width: 20ch; margin: 0;
-    font-weight: 300; color: var(--sb-tinta-2);
-  }
-  .sb-prova__realce { color: var(--sb-tinta); }
-
-  /* B e C: parágrafos curtos, na medida de uma coluna de livro. */
-  .sb-prova__frase {
-    max-width: 34ch;
-    font-size: clamp(18px, 1.5vw, 21px); font-weight: 300; line-height: 1.55;
-    letter-spacing: -.01em; color: var(--sb-tinta);
-    text-wrap: pretty;
-  }
-
-  /* C com wrap comum: com pretty, a 320 "Desenvolvemos" ficava sozinha na
-     1ª linha ("Desenvolvemos / tecnologia própria para / ..."). */
-  .sb-prova__frase--c { text-wrap: wrap; }
-
-  /* D: a frase de fecho, maior e mais fina, como a última linha do capítulo. */
-  /* D, a frase de fecho, centralizada na grade inteira em todas as larguras
-     (29/09/2026), nas duas versões. */
-  .sb-prova__frase--d {
-    grid-column: 1 / -1; justify-self: center;
-    max-width: 30ch;
-    text-align: center;
-    font-family: var(--font-titulo);
-    font-size: clamp(26px, 2.8vw, 40px); font-weight: 280; line-height: 1.18;
-    letter-spacing: -.035em; word-spacing: -.08em;
-    text-wrap: balance;
-  }
-
-  /* ---------- ≥1100: o zigue-zague ---------- */
-
-  .sb-prova__titulo { grid-row: 1; }
-  .sb-prova__frase--b { grid-row: 2; }
-  .sb-prova__foto { grid-row: 2; }
-  .sb-prova__detalhe { grid-row: 3; }
-  .sb-prova__frase--c { grid-row: 3; }
-  .sb-prova__frase--d { grid-row: 4; }
-
-  @media (min-width: 1100px) {
-    .sb-prova__titulo { grid-column: 1 / 9; }
-    .sb-prova__frase--b { grid-column: 1 / 6; align-self: start; margin-top: 48px; }
-    .sb-prova__foto { grid-column: 7 / 13; margin-top: clamp(0px, 6vw, 96px); }
-    /* O cartão sobe para o vão que a foto, mais baixa, deixa sob o texto B. */
-    .sb-prova__detalhe { grid-column: 2 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
-    .sb-prova__frase--c { grid-column: 7 / 12; align-self: center; }
-    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
-  }
-
-  /* ---------- 900–1099.98: a mesma página dupla, mais estreita ---------- */
-
-  @media (min-width: 900px) and (max-width: 1099.98px) {
-    .sb-prova__titulo { grid-column: 1 / 10; }
-    .sb-prova__frase--b { grid-column: 1 / 7; align-self: start; margin-top: 48px; }
-    .sb-prova__foto { grid-column: 7 / 13; margin-top: clamp(0px, 6vw, 96px); }
-    .sb-prova__detalhe { grid-column: 1 / 6; margin-top: calc(-1 * clamp(0px, 8vw, 128px)); }
-    .sb-prova__frase--c { grid-column: 7 / 13; align-self: center; }
-    .sb-prova__frase--d { margin-top: clamp(64px, 8vw, 128px); }
-  }
-
-  /* ---------- <900: uma coluna que ainda desencontra ---------- */
-
-  @media (max-width: 899.98px) {
-    .sb-prova__frase--b { grid-row: 2; margin-top: 40px; }
-    .sb-prova__foto { grid-row: 3; margin-top: 40px; }
-    .sb-prova__detalhe { grid-row: 4; margin-top: 32px; }
-    .sb-prova__frase--c { grid-row: 5; margin-top: 28px; }
-    .sb-prova__frase--d { grid-row: 6; margin-top: 64px; }
-  }
-
-  /* 600–899.98 (6 colunas): foto de B nas 2–6, cartão nas 1–4 com C embaixo. */
-  @media (min-width: 600px) and (max-width: 899.98px) {
-    .sb-prova__foto { grid-column: 2 / 7; }
-    .sb-prova__detalhe { grid-column: 1 / 5; }
-    .sb-prova__frase--c { grid-column: 1 / 6; }
-  }
-
-  /* <600 (4 colunas): pilha. A foto na largura toda (já é 3:2); o cartão a
-     72% e encostado à direita, para o zigue-zague não se perder; a paralaxe
-     cai pela metade sozinha no paralaxe.ts. */
-  @media (max-width: 599.98px) {
-    .sb-prova__detalhe { width: 72%; justify-self: end; }
-    .sb-prova__frase--d { font-size: 26px; }
-  }
+  .sb-prova__titulo { margin-top: 0; font-weight: 300; }
+  .sb-prova__antes { font-size: clamp(18px, 1.5vw, 22px); letter-spacing: -.02em; color: #50504e; }
+  .sb-prova__numero { margin-top: 10px; font-size: clamp(64px, 7.4vw, 128px); font-weight: 200; line-height: .95; letter-spacing: -.06em; }
+  .sb-prova__fileira { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ed-vao); }
+  .sb-prova__foto { min-height: 100%; }
+  .sb-prova__cartao { min-height: clamp(260px, 21vw, 320px); }
+  .sb-prova__frase { margin: 0; font-size: clamp(18px, 1.45vw, 22px); line-height: 1.35; letter-spacing: -.02em; text-wrap: pretty; }
+  @media (max-width: 1099.98px) { .sb-prova__fileira { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sb-prova__foto { aspect-ratio: 4 / 3; } }
+  @media (max-width: 599.98px) { .sb-prova__fileira { grid-template-columns: 1fr; } .sb-prova__cartao { min-height: 0; } }
 </style>

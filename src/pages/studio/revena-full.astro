@@ -1,5 +1,6 @@
 ---
-import Pagina from '../../layouts/Pagina.astro';
-import { revenaFull } from '../../data/paginas/revena-full';
+/** Revena Full: página de plano no desenho comum (layouts/PaginaPlano.astro). */
+import PaginaPlano from '../../layouts/PaginaPlano.astro';
+import { revenaFull as pagina } from '../../data/paginas/revena-full';
 ---
-<Pagina pagina={revenaFull} />
+<PaginaPlano pagina={pagina} plano="full" />

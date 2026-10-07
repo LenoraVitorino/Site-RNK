@@ -1,0 +1,49 @@
+---
+/**
+ * A sede (04/10/2026), no Sobre e no Faça parte: o painel preto com fio do
+ * Ecossistema da home, com o texto à esquerda e um mosaico de fotos da
+ * sede à direita, em cantos arredondados.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { doisPesos } from './pesos';
+
+interface Foto { foto: ImageMetadata; alt: string; foco?: string }
+interface Props { id: string; rotulo: string; h2: string; texto: string; fotos: [Foto, Foto, Foto] }
+const { id, rotulo, h2, texto, fotos } = Astro.props;
+const [leve, forte] = doisPesos(h2, 1);
+---
+<section class="ed-secao ed-secao--cena ed-sede" id={id} data-cena="pilares" data-tom="cena" aria-labelledby={`${id}-titulo`}>
+  <div class="container">
+    <div class="ed-caixa ed-sede__caixa entra">
+      <div class="ed-sede__texto ed-mascara">
+        <p class="ed-rotulo">{rotulo}</p>
+        <h2 class="ed-titulo" id={`${id}-titulo`}>{leve} <b>{forte}</b></h2>
+        <p class="ed-sede__corpo">{texto}</p>
+      </div>
+      <div class="ed-sede__mosaico">
+        {fotos.map((f, i) => (
+          <figure class:list={['ed-foto', `ed-sede__foto--${i + 1}`]}>
+            <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={i === 0 ? [560, 960, 1280] : [360, 640]} sizes={i === 0 ? '(min-width: 900px) 34vw, 100vw' : '(min-width: 900px) 17vw, 50vw'} style={f.foco ? `object-position: ${f.foco}` : undefined} />
+          </figure>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ed-sede__caixa {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 3vw, 48px); align-items: center;
+    padding: clamp(10px, 1vw, 14px) clamp(10px, 1vw, 14px) clamp(10px, 1vw, 14px) clamp(28px, 4vw, 64px);
+  }
+  .ed-sede__texto { display: grid; gap: 20px; justify-items: start; padding-block: 24px; }
+  .ed-sede__corpo { margin: 0; max-width: 40ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; color: #a8a8a4; text-wrap: pretty; }
+  .ed-sede__mosaico { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 8px; aspect-ratio: 16 / 11; }
+  .ed-sede__foto--1 { grid-row: 1 / span 2; }
+  @media (max-width: 899.98px) {
+    .ed-sede__caixa { grid-template-columns: 1fr; padding: 24px 12px 12px; }
+    .ed-sede__texto { padding: 8px 12px 8px; }
+    .ed-sede__mosaico { aspect-ratio: 4 / 3.4; }
+  }
+</style>

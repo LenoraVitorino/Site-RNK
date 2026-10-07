@@ -1,69 +1,57 @@
 ---
 /**
- * Método editorial (28/09, referência Aura): vídeo no centro; à esquerda, o
- * título no alto e o parágrafo embaixo; à direita, o número grande subindo
- * embaixo. Por trás, o R da parede da sede ocupando a dobra inteira, em
- * faixa grossa, passando pelos vazios. Textos por versão.
+ * O que a Renke faz (05/10/2026). A Lenora achou ruim o vídeo solto no
+ * meio, com o texto de um lado e um número do outro. Agora o vídeo vertical
+ * fica grande à esquerda, na altura do painel, e à direita vêm o selo, o
+ * título, o texto e os três números da Renke em fileira, entre fios (antes
+ * só aparecia o primeiro). O painel claro chanfrado continua o mesmo.
+ * Textos por versão.
  */
 import Telefone from '../ui/Telefone.astro';
 import Selo from '../ui/Selo.astro';
-import Botao from '../ui/Botao.astro';
-import { existe } from '../../data/rotas';
 import { copyLiteral } from '../../data/versao';
 import { numerosProva } from '../../data/home';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 
-const SOBRE_NA_HOME = false;
-
-// Só o primeiro número, grande, no canto inferior esquerdo.
-const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0, 1).map(n => {
+const icones: NomeIconeRenke[] = ['pessoas', 'verificado', 'crescimento'];
+const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n) => {
   const [, prefixo, valor, sufixo] = n.valor.match(/^(.*?)(\d+)(.*)$/)!;
   return { ...n, prefixo, alvo: Number(valor), sufixo };
 });
 ---
-<section class="secao" id="o-que-fazemos" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
-  {/* O R da parede do salão ocupando a dobra inteira, já formado, sem a haste:
-      as barras de cima e do meio vêm da borda esquerda do painel (como a fita que
-      sai de trás da coluna), a barriga ocupa o canto superior direito, a barra do
-      meio passa no centro vertical, por trás do vídeo, e a perna desce até o
-      canto de baixo à direita (só desktop). */}
-  <svg class="metodo__r" viewBox="0 0 1560 885" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
-    <path vector-effect="non-scaling-stroke" d="M-60 44 H1360 A140 140 0 0 1 1500 184 V302 A140 140 0 0 1 1360 442 H-60" />
-    <path vector-effect="non-scaling-stroke" d="M1300 442 L1560 943" />
-  </svg>
+<section class="secao" id="o-que-fazemos" data-tom="claro" aria-labelledby="o-que-fazemos-titulo" data-metodologia>
   <div class="container">
-    <div class:list={['metodo', 'metodo-editorial', 'entra', copyLiteral && 'metodo--copy']}>
-      <div class="metodo__texto">
-        {!copyLiteral && <Selo class="cabeca-dobra__selo metodo__selo">Revenue Operations</Selo>}
-        <h2 class="titulo metodo__titulo" id="o-que-fazemos-titulo">
-          {copyLiteral
-            ? <><span>Nossa</span>{' '}<span>metodologia</span></>
-            : <><span>O que a</span>{' '}<span>Renke faz</span></>}
-        </h2>
-        <div class="metodo__apresentacao">
-          <p class="metodo__descricao">
-            <span>Utilizamos a metodologia de Revenue Operations</span>{' '}
-            <span>para estruturar a operação de receita. Analisamos cada etapa</span>{' '}
-            <span>da jornada comercial, identificamos oportunidades e</span>{' '}
-            <span>estruturamos processos a partir de dados, CRM e marketing.</span>
+    <div class="oqf">
+      <div class="oqf__texto">
+        <div class="oqf__cabeca entra">
+          {!copyLiteral && <Selo class="cabeca-dobra__selo">Revenue Operations</Selo>}
+          <h2 class="oqf__titulo" id="o-que-fazemos-titulo">
+            {copyLiteral
+              ? <><span>Nossa</span>{' '}<b>metodologia</b></>
+              : <><span>O que a</span>{' '}<b>Renke faz</b></>}
+          </h2>
+          <p class="oqf__descricao">
+            Utilizamos a metodologia de Revenue Operations para estruturar a operação de receita.
+            Analisamos cada etapa da jornada comercial, identificamos oportunidades e estruturamos
+            processos a partir de dados, CRM e marketing.
           </p>
-          {/* Botão para /sobre desligado (28/09): com a página no ar ele surgia colado ao
-              parágrafo e disputava com os números. Religar só com o aval da Lenora. */}
-          {SOBRE_NA_HOME && existe('/sobre') && <p><Botao href="/sobre">Ver mais sobre a Renke</Botao></p>}
-          <ul class="metodo__numeros" aria-label="A Renke em números">
-            {numeros.map((n) => (
-              <li class="metodo__numero">
-                <p class="metodo__valor num">
-                  <span class="visually-hidden">{n.valor}</span>
-                  <span class="metodo__valor-reserva" aria-hidden="true">{n.valor}</span>
-                  <span class="metodo__valor-contagem" aria-hidden="true" data-metodo-contador data-alvo={n.alvo} data-prefixo={n.prefixo} data-sufixo={n.sufixo}>{n.valor}</span>
-                </p>
-                <p class="metodo__legenda">{n.legenda}</p>
-              </li>
-            ))}
-          </ul>
         </div>
+        <ul class="oqf__numeros" aria-label="A Renke em números" role="list">
+          {numeros.map((n, i) => (
+            <li class="oqf__numero entra" style={`--i:${i}`}>
+              <span class="oqf__icone" aria-hidden="true"><IconeRenke nome={icones[i]} size={20} /></span>
+              <p class="oqf__valor num">
+                <span class="visually-hidden">{n.valor}</span>
+                <span class="oqf__reserva" aria-hidden="true">{n.valor}</span>
+                <span class="oqf__contagem" aria-hidden="true" data-metodo-contador data-alvo={n.alvo} data-prefixo={n.prefixo} data-sufixo={n.sufixo}>{n.valor}</span>
+              </p>
+              <p class="oqf__legenda" data-quebra="livre">{n.legenda}</p>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div class="metodo__midia">
+      <div class="oqf__midia entra" style="--i:1">
         <Telefone />
       </div>
     </div>
@@ -72,7 +60,7 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
 
 <script>
   const movimentoReduzido = matchMedia('(prefers-reduced-motion: reduce)');
-  const lista = document.querySelector<HTMLElement>('.metodo__numeros');
+  const lista = document.querySelector<HTMLElement>('.oqf__numeros');
   if (lista && !movimentoReduzido.matches && 'IntersectionObserver' in window) {
     const contadores = Array.from(lista.querySelectorAll<HTMLElement>('[data-metodo-contador]'));
     let quadro = 0;
@@ -104,3 +92,55 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).slice(0
     });
   }
 </script>
+
+<style>
+  .oqf {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2vw, 32px);
+    align-items: stretch; color: #252523;
+  }
+  /* Direita: cabeça e números centrados na altura do vídeo. */
+  .oqf__texto { grid-column: 5 / -1; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: clamp(32px, 3.4vw, 52px); padding-left: clamp(8px, 2vw, 32px); }
+  .oqf__cabeca { display: grid; justify-items: start; }
+  .oqf__titulo { margin: 0; font-size: clamp(40px, 4.4vw, 72px); font-weight: 300; line-height: 1.02; letter-spacing: -.055em; }
+  .oqf__titulo > * { display: inline; }
+  .oqf__titulo b { font-weight: 500; }
+  .oqf__descricao { margin: clamp(18px, 1.8vw, 26px) 0 0; max-width: 60ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.6; color: #50504e; text-wrap: pretty; }
+
+  /* Os três números grandes lado a lado, sem caixa nem ícone, com a legenda
+     embaixo e a contagem crescente (06/10: "não quero os números em cards").
+     Cabeça e números ficam juntos, centrados na altura do vídeo. */
+  .oqf__numeros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; max-width: 900px; }
+  /* Fio vertical entre os números e o ícone numa caixinha amarela (06/10). */
+  .oqf__numero { min-width: 0; }
+  .oqf__numero + .oqf__numero { padding-left: clamp(20px, 2.6vw, 44px); border-left: 1px solid rgb(37 37 35 / .16); }
+  .oqf__icone { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: clamp(20px, 2vw, 30px); border-radius: 10px; color: var(--sobre-marca);
+    background: linear-gradient(150deg, rgb(255 226 90 / .92), rgb(255 209 3 / .72));
+    border: 1px solid rgb(255 255 255 / .55);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 8px 18px -8px rgb(150 115 0 / .45), 0 2px 5px rgb(37 37 35 / .08);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .oqf__valor { position: relative; margin: 0 0 14px -.05em; font-size: clamp(44px, 4.6vw, 76px); font-weight: 300; line-height: .95; letter-spacing: -.06em; white-space: nowrap; }
+  .oqf__reserva { visibility: hidden; }
+  .oqf__contagem { position: absolute; top: 0; left: 0; }
+  .oqf__legenda { margin: 0; font-size: 12.5px; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: #5f5f5d; }
+
+  /* Esquerda: o vídeo vertical grande, com a sombra de sempre (invertido em 05/10: "assim parece desequilibrado"). */
+  .oqf__midia { grid-column: 1 / span 4; grid-row: 1; justify-self: start; width: 100%; max-width: calc(min(78svh, 760px) * 9 / 16); }
+  .oqf__midia :global(.tel) { width: 100%; }
+  .oqf__midia :global(.tel__moldura), .oqf__midia :global(.tel__tela) { border-radius: 12px; }
+
+  @media (max-width: 999.98px) {
+    /* Uma coluna: cabeça, vídeo e, por último, os números. */
+    .oqf { row-gap: 40px; }
+    .oqf__texto { display: contents; padding: 0; }
+    .oqf__cabeca, .oqf__numeros { grid-column: 1 / -1; }
+    .oqf__cabeca { grid-row: 1; }
+    .oqf__midia { grid-column: 1 / -1; grid-row: 2; justify-self: center; max-width: 360px; }
+    .oqf__numeros { grid-row: 3; }
+  }
+  @media (max-width: 599.98px) {
+    .oqf__numeros { grid-template-columns: 1fr; justify-content: stretch; }
+    .oqf__numero + .oqf__numero { margin-top: 24px; padding: 24px 0 0; border-left: 0; border-top: 1px solid rgb(37 37 35 / .16); }
+    .oqf__icone { margin-bottom: 16px; }
+    .oqf__valor { margin-bottom: 8px; font-size: 52px; }
+  }
+</style>

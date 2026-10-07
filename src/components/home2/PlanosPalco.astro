@@ -10,8 +10,8 @@ import { join } from 'node:path';
 import { protocolos } from '../../data/home';
 import { existe } from '../../data/rotas';
 import Botao from '../ui/Botao.astro';
-// Sem textura de fundo nos planos (Lenora, 26/09: "não gostei da textura,
-// vamos inserir outra coisa depois"): cada plano fica só no tom liso.
+import PlanoImagem from './PlanoImagem.astro';
+import PlanosDirecao from './PlanosDirecao.astro';
 
 const ordem = ['REVENA START', 'REVENA RUN', 'REVENA SCALE', 'REVENA CORE', 'REVENA FULL'];
 
@@ -56,6 +56,7 @@ const planos = ordem.map((label) => {
 });
 import Selo from '../ui/Selo.astro';
 ---
+<PlanosDirecao />
 <section class="palcoplanos" id="protocolo-revena" aria-labelledby="protocolo-revena-titulo" data-palcoplanos style={`--n:${planos.length}`}>
   <!-- Introdução da dobra, antes do palco, como o bloco de texto que antecede
        a "Financial solutions" da referência. -->
@@ -94,6 +95,7 @@ import Selo from '../ui/Selo.astro';
       {planos.map((p, i) => (
         <article class:list={['plano-palco', i % 2 === 1 && 'plano-palco--tom2', i === 0 && 'plano-palco--ativo']} data-plano={i} >
           <div class="plano-palco__imagem" data-imagem>
+            <PlanoImagem plano={p.id} />
             <img class="plano-palco__icone-mob" src={`/icones/plano-${p.id}-light.svg`} alt="" width="160" height="160" loading="lazy" aria-hidden="true" />
           </div>
           <div class="plano-palco__info" data-info>

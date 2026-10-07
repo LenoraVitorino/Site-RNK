@@ -5,8 +5,8 @@
  *
  * Preset: o formulário da home (home2/Formulario.astro), com as mesmas
  * classes (.form-block, .form-card, .field…) e o mesmo id #formulario, que
- * puxa as regras da home: colunas de 400 e 460 centralizadas e o cartão claro
- * sob .home-refinada. Há um só formulário por página.
+ * puxa as regras da home: colunas de 400 e 460 centralizadas e o cartão de
+ * vidro escuro sob .home-refinada (04/10/2026). Há um só formulário por página.
  *
  * Com secao.abertura (Contato), o título do hero curto vira o h1 da coluna de
  * texto e a seção ocupa a primeira dobra: título à esquerda, campos à direita
@@ -139,7 +139,7 @@ bloco.campos.forEach((c, i) => {
   .int-formulario .form-block__text .int-formulario__email { color: var(--papel); }
 
   /* Textarea: sem a folga de linha de base embaixo e com a entrelinha de
-     texto corrido. O fundo claro vem do paginas2.css. */
+     texto corrido. O resto vem da regra da home (home-refinamento.css). */
   .int-formulario .form-card .field textarea {
     display: block;
     line-height: 1.5;
@@ -181,10 +181,4 @@ bloco.campos.forEach((c, i) => {
   /* Sub sem palavra sozinha na última linha. */
   .int-formulario .form-block__text p { text-wrap: pretty; }
 
-  /* Campo inválido no cartão claro: a borda da home é para o cartão escuro e
-     some aqui. Um fio grafite marca o campo e o erro ganha o tom do texto. */
-  .int-formulario .form-card .field--invalido :is(input, select, textarea) {
-    box-shadow: inset 0 0 0 1px #252523;
-  }
-  .int-formulario .form-card .field__erro { color: #252523; }
 </style>

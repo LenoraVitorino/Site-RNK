@@ -1,221 +1,55 @@
 ---
 /**
- * S2 · A tese (docs/04-design/pagina-sobre.md, (a) "S2").
- * Leitura lenta: o título preso à esquerda com a foto da parede de
- * palavras (Snøhetta); a tese destrinchada em passos (quatro na estudio, cinco na copy), e o passo que
- * passa pelo centro da tela acende (VSIMDIM).
- *
- * - A partir de 900px: .sb-tese__fixo nas colunas 1–5 (título e, 32px
- *   abaixo, a foto 4:5 nas colunas 1–4) e as linhas nas colunas 7–12. O
- *   sticky só vale com 760px de altura ou mais; é o único sticky da página.
- * - Abaixo de 900px: sem sticky. O .sb-tese__fixo vira display: contents
- *   e a ordem passa a ser título, linhas e foto 3:2 na largura toda. A
- *   linha ativa continua valendo.
- * - Cada passo (.sb-tese__linha) é a afirmação e, na versão estudio, uma
- *   frase de apoio menor logo abaixo (29/09/2026). Na versão copy só há a
- *   afirmação: as cinco linhas do parágrafo da copy, sem mudar letra. O
- *   mesmo componente e os mesmos estilos servem às duas.
- * - Na cena (28/09/2026, "não deixe dobras seguidas sólidas"): fundo
- *   transparente com data-cena="pilares", entre o papel de S1 e o de S3. O
- *   título e cada linha entram na máscara de leitura (TEXTOS_INTERNAS em
- *   fundo-internas.ts), que escurece a cena atrás deles.
- * - Amarelo: o marcador de 6px da linha ativa é o único ponto da página.
- * - Os tons esmaecidos só valem com .sb-tese--viva, que o script põe. Sem
- *   JS ou com movimento reduzido, todas as linhas ficam em papel e o
- *   marcador fica parado no último passo.
+ * A tese (04/10/2026). Sobre a cena, a cabeça centrada da home e as
+ * afirmações em cartões de vidro com ícone (os das Perguntas), em volta de
+ * uma foto da sala de vidro em cartão alto.
  */
-import CartaoFoto from './CartaoFoto.astro';
+import { Image } from 'astro:assets';
 import { tese, fotos } from '../../data/sobre';
+import { doisPesos } from '../editorial/pesos';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+const f = fotos.tese;
+const [leve, forte] = doisPesos(tese.h2, 2);
+const icones: NomeIconeRenke[] = ['crescimento', 'funil', 'conexao', 'dados', 'mira'];
+const cinco = tese.passos.length > 4;
 ---
-<section class="secao int-secao sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
-  <div class="container sb-grade">
-    <div class="sb-tese__fixo">
-      <h2 class="titulo sb-tese__titulo entra" id="sobre-tese-titulo" style="--i:0">{tese.h2}</h2>
-      <div class="sb-tese__foto">
-        <CartaoFoto slot={fotos.tese} sizes="(min-width: 1440px) 380px, (min-width: 900px) 27vw, 92vw" paralaxe={14} />
-      </div>
-    </div>
-    <div class="sb-tese__texto">
-      {tese.passos.map((passo) => (
-        <div class="sb-tese__linha">
-          <p class="sb-tese__frase">{passo.frase}</p>
-          {passo.apoio && <p class="sb-tese__apoio">{passo.apoio}</p>}
-        </div>
+<section class="ed-secao ed-secao--cena sb-tese" id="sobre-tese" data-cena="pilares" data-tom="cena" aria-labelledby="sobre-tese-titulo">
+  <div class="container">
+    <header class="ed-cabeca ed-mascara entra">
+      <Selo class="cabeca-dobra__selo">A tese</Selo>
+      <h2 class="ed-titulo" id="sobre-tese-titulo">{leve} <b>{forte}</b></h2>
+    </header>
+    <div class:list={['sb-tese__grade', { 'sb-tese__grade--cinco': cinco }]}>
+      {tese.passos.map((p, i) => (
+        <article class="ed-cartao sb-tese__cartao entra" style={`--i:${i}; grid-area: c${i + 1}`}>
+          <span class="ed-anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+          <div class="ed-cartao__corpo">
+            <h3 class="ed-cartao__nome">{p.frase}</h3>
+            {p.apoio && <p class="ed-cartao__texto">{p.apoio}</p>}
+          </div>
+        </article>
       ))}
+      <figure class="ed-foto sb-tese__foto entra" style="--i:2">
+        <Image src={f.foto} alt={f.alt} format="webp" quality={78} widths={[480, 800, 1120]} sizes="(min-width: 900px) 32vw, 100vw" style={`object-position: ${f.foco}`} />
+      </figure>
     </div>
   </div>
 </section>
 
 <style>
-  /* ---------------------------------------------------------------- */
-  /* Composição a partir de 900px: coluna presa à esquerda, linhas à    */
-  /* direita, as duas na mesma linha da grade.                          */
-  /* ---------------------------------------------------------------- */
-
-  .sb-tese__fixo {
-    grid-column: 1 / span 5; grid-row: 1;
-    align-self: start;   /* sem esticar: o sticky precisa de folga na grade */
+  .sb-tese__grade {
+    display: grid; gap: var(--ed-vao);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas: "c1 foto c2" "c3 foto c4";
   }
-  /* Foto nas colunas 1–4 de 12: quatro das cinco colunas do .sb-tese__fixo,
-     com três vãos (80% da coluna presa menos um quinto de vão). */
-  .sb-tese__foto { width: calc(80% - var(--sb-gap) / 5); margin-top: 32px; }
-
-  .sb-tese__texto {
-    grid-column: 7 / -1; grid-row: 1;
-    display: grid; gap: clamp(40px, 9vh, 104px);
-    margin: 0; padding-block: 10vh;
-    font-family: var(--font-titulo); font-weight: 300;
-    font-size: clamp(22px, 2.3vw, 34px); line-height: 1.25; letter-spacing: -.025em;
-  }
-  .sb-tese__linha {
-    position: relative; display: block;
-    max-width: calc(26ch + 22px); padding-left: 22px;
-    color: var(--papel);
-    /* wrap, e não pretty nem balance (28/09/2026, responsividade): com os
-       dois, "desconectadas," ficava sozinha na linha do meio de 320 a 1024
-       ("Dados soltos, equipes / desconectadas, / decisões no feeling.").
-       A última palavra de cada linha já vem presa pelo middleware
-       (src/lib/sem-viuvas.mjs), então o wrap comum não deixa viúva. */
-    text-wrap: wrap;
-    transition: color .8s cubic-bezier(.22, 1, .36, 1);
-  }
-  .sb-tese__frase { margin: 0; }
-
-  /* A frase de apoio: corpo de leitura, fino, num cinza que acompanha o
-     estado do passo um tom abaixo da afirmação. Os alfas mínimos (.6) dão
-     mais de 4,5:1 sobre a cena mascarada, o mínimo do texto pequeno. */
-  .sb-tese__apoio {
-    margin: 14px 0 0;
-    max-width: 38ch;
-    font-family: var(--font);
-    font-size: clamp(15px, 1.15vw, 17px); font-weight: 300;
-    line-height: 1.55; letter-spacing: 0;
-    color: rgb(242 242 238 / .72);
-    text-wrap: pretty;
-    transition: color .8s cubic-bezier(.22, 1, .36, 1);
-  }
-
-  /* O marcador: 6×6, redondo, o único amarelo da página. Parado na linha 5
-     enquanto o script não assume (sem JS ou com movimento reduzido). Apagado,
-     é o mesmo amarelo com alfa 0: só a linha acesa pinta o amarelo pleno, e
-     a transição do fundo faz o esmaecer. */
-  .sb-tese__linha::before {
-    content: ''; position: absolute; left: 0; top: .55em;
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgb(255 209 3 / 0);
-    transition: background-color .8s cubic-bezier(.22, 1, .36, 1);
-  }
-  .sb-tese:not(.sb-tese--viva) .sb-tese__linha:last-child::before { background: var(--amarelo-marca); }
-
-  /* Linha ativa: futuras a .5 e lidas a .76 sobre a cena mascarada (as
-     futuras passam de 3:1, o mínimo do texto grande, mesmo com a cena
-     acesa atrás), a ativa em papel. */
-  .sb-tese--viva .sb-tese__linha { color: rgb(242 242 238 / .5); }
-  .sb-tese--viva .sb-tese__linha.lida { color: rgb(242 242 238 / .76); }
-  .sb-tese--viva .sb-tese__linha.ativa { color: var(--papel); }
-  .sb-tese--viva .sb-tese__linha.ativa::before { background: var(--amarelo-marca); }
-  .sb-tese--viva .sb-tese__apoio { color: rgb(242 242 238 / .6); }
-  .sb-tese--viva .lida .sb-tese__apoio { color: rgb(242 242 238 / .66); }
-  .sb-tese--viva .ativa .sb-tese__apoio { color: rgb(242 242 238 / .8); }
-
-  /* Coluna presa: só com altura para caber título e foto sem cortar. O fim
-     do parágrafo ganha folga (30vh em vez de 10vh) para a linha 5 chegar ao
-     centro da tela com a coluna ainda presa; com 10vh, a coluna começava a
-     subir na linha 4 e o título passava por baixo do cabeçalho. */
-  @media (min-width: 900px) and (min-height: 760px) {
-    .sb-tese__fixo { position: sticky; top: var(--int-topo-fixo); }
-    .sb-tese__texto { padding-bottom: 30vh; }
-    .sb-tese__foto :global(.sb-foto) { max-height: calc(100svh - var(--int-topo-fixo) - 220px); }
-  }
-
-  /* ---------------------------------------------------------------- */
-  /* Abaixo de 900px: título, linhas e foto 3:2, empilhados.            */
-  /* ---------------------------------------------------------------- */
-
+  .sb-tese__grade--cinco { grid-template-areas: "c1 c2 foto" "c3 c4 c5"; }
+  .sb-tese__cartao { min-height: clamp(240px, 19vw, 300px); }
+  .sb-tese__foto { grid-area: foto; min-height: 100%; }
   @media (max-width: 899.98px) {
-    .sb-tese__fixo { display: contents; }
-    .sb-tese__titulo { grid-column: 1 / -1; grid-row: 1; }
-    .sb-tese__texto {
-      grid-column: 1 / -1; grid-row: 2;
-      gap: 40px; padding-block: 0; margin-top: 40px;
-    }
-    .sb-tese__foto {
-      grid-column: 1 / -1; grid-row: 3;
-      width: 100%; margin-top: 56px;
-      --sb-prop: 3 / 2;
-    }
-  }
-
-  /* 600–899.98: 26px, o corpo da frase D da prova. Com os 22px do piso do
-     clamp, a tese ficava miúda perto do H2 de 32px, numa faixa estreita
-     com metade da largura vazia. As quebras continuam as mesmas. */
-  @media (min-width: 600px) and (max-width: 899.98px) {
-    .sb-tese__texto { font-size: 26px; }
-  }
-  /* Abaixo de 360px, 20px: a 22px "desconectadas, decisões" não cabe na
-     medida de 244px e a palavra longa volta a ficar sozinha. */
-  @media (max-width: 359.98px) {
-    .sb-tese__texto { font-size: 20px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .sb-tese__linha, .sb-tese__linha::before, .sb-tese__apoio { transition: none; }
+    .sb-tese__grade, .sb-tese__grade--cinco { grid-template-columns: 1fr; grid-template-areas: none; }
+    .sb-tese__cartao { grid-area: auto !important; min-height: 0; }
+    .sb-tese__foto { grid-area: auto; aspect-ratio: 4 / 3; grid-row: 1; }
   }
 </style>
-
-<script>
-  /*
-   * A linha ativa. Um IntersectionObserver com uma faixa de 10% no meio da
-   * tela; sem listener de scroll. Como o vão entre as linhas (9vh) é menor
-   * que a faixa (10vh), sempre há uma linha nela enquanto a tese passa.
-   * - Das linhas que tocam a faixa, acende a mais perto do centro.
-   * - As anteriores à ativa ficam .lida; sem ativa, é lida a que já passou
-   *   do centro.
-   * - Com movimento reduzido nada disso roda: as linhas ficam em papel e o
-   *   marcador parado na linha 5 (CSS).
-   */
-  const secao = document.querySelector<HTMLElement>('.sb-tese');
-  const reduzido = matchMedia('(prefers-reduced-motion: reduce)');
-
-  if (secao && 'IntersectionObserver' in window && !reduzido.matches) {
-    const linhas = Array.from(secao.querySelectorAll<HTMLElement>('.sb-tese__linha'));
-    const naFaixa = new Set<Element>();
-
-    const atualizar = () => {
-      const meio = innerHeight / 2;
-      const caixas = linhas.map((l) => l.getBoundingClientRect());
-      let ativa = -1;
-      let menor = Infinity;
-      linhas.forEach((l, i) => {
-        if (!naFaixa.has(l)) return;
-        const c = caixas[i];
-        const dist = c.top > meio ? c.top - meio : c.bottom < meio ? meio - c.bottom : 0;
-        if (dist < menor) { menor = dist; ativa = i; }
-      });
-      linhas.forEach((l, i) => {
-        l.classList.toggle('ativa', i === ativa);
-        l.classList.toggle('lida', ativa >= 0 ? i < ativa : caixas[i].bottom < meio);
-      });
-    };
-
-    const observador = new IntersectionObserver((entradas) => {
-      for (const e of entradas) {
-        if (e.isIntersecting) naFaixa.add(e.target);
-        else naFaixa.delete(e.target);
-      }
-      atualizar();
-    }, { rootMargin: '-45% 0px -45% 0px' });
-
-    secao.classList.add('sb-tese--viva');
-    linhas.forEach((l) => observador.observe(l));
-
-    // Se a pessoa ligar o movimento reduzido com a página aberta, volta ao
-    // estado parado.
-    reduzido.addEventListener('change', (e) => {
-      if (!e.matches) return;
-      observador.disconnect();
-      secao.classList.remove('sb-tese--viva');
-      linhas.forEach((l) => l.classList.remove('ativa', 'lida'));
-    });
-  }
-</script>

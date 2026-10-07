@@ -1,0 +1,16 @@
+---
+/** A sede no Faça parte: o painel do Ecossistema (editorial/PainelSede.astro), com o texto da casa do Sobre. */
+import PainelSede from '../editorial/PainelSede.astro';
+import cafe from '../../assets/sede/cafe.jpg';
+import sofa from '../../assets/sede/sofa.jpg';
+import salaVidro from '../../assets/sede/sala-vidro.jpg';
+import { casa } from '../../data/sobre';
+---
+<PainelSede
+  id="faca-parte-espaco" rotulo="A sede" h2={casa.h2} texto={casa.texto}
+  fotos={[
+    { foto: cafe, foco: '30% 50%', alt: 'Área do café da sede, com bancada e cadeiras amarelas.' },
+    { foto: sofa, alt: 'Nicho amarelo com sofá e a frase “Seja o hábito da mudança!”.' },
+    { foto: salaVidro, foco: '20% 50%', alt: 'Sala de reunião com divisória de vidro e palavras em amarelo na parede.' },
+  ]}
+/>

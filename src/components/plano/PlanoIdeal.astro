@@ -1,0 +1,26 @@
+---
+/**
+ * "Ideal para clínicas que:" nos planos (04/10/2026). A dobra vira o painel
+ * claro translúcido com chanfro da home (método e Resultados): título à
+ * esquerda, preso enquanto a lista passa; à direita, a lista numerada entre
+ * fios, cada item com um losango (sem número: a Lenora não gosta de
+ * numeração, 04/10).
+ */
+import type { ContextoSecao } from '../pagina/contexto';
+
+interface Props { h2: string; itens: string[]; secao: ContextoSecao }   // serve a qualquer lista do plano
+const { h2, itens, secao } = Astro.props;
+---
+<section class="plano-painel plano-ideal" id={secao.id} data-tom="claro" aria-labelledby={secao.tituloId}>
+  <div class="container plano-ideal__grade">
+    <h2 id={secao.tituloId} class="titulo plano-ideal__titulo entra">{h2}</h2>
+    <ol class="plano-ideal__lista">
+      {itens.map((item, i) => (
+        <li class="plano-ideal__item entra" style={`--i:${i}`}>
+          <span class="plano-ideal__n" aria-hidden="true"></span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

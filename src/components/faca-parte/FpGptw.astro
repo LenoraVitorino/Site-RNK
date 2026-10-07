@@ -1,0 +1,77 @@
+---
+/**
+ * GPTW (04/10/2026). A composição do "O que a Renke faz" da home, no painel
+ * claro: selo, título, texto e botões à esquerda; a foto do time no meio,
+ * em cartão alto; e, no lugar do número grande, o selo Great Place To Work
+ * em destaque.
+ */
+import { Image } from 'astro:assets';
+import salao from '../../assets/sede/equipe.jpg';
+import seloGptw from '../../assets/selos/gptw-2025.png';
+import Selo from '../ui/Selo.astro';
+import Botao from '../ui/Botao.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+import { doisPesos } from '../editorial/pesos';
+import type { BlocoDe } from '../pagina/contexto';
+
+interface Props { bloco: BlocoDe<'texto'> }
+const { bloco } = Astro.props;
+const h2 = bloco.h2 ?? '';
+const [leve, forte] = bloco.realce && h2.endsWith(bloco.realce)
+  ? [h2.slice(0, -bloco.realce.length).trim(), bloco.realce]
+  : doisPesos(h2, 2);
+const icones: NomeIconeRenke[] = ['bussola', 'crescimento', 'pessoas'];
+---
+<section class="ed-secao ed-painel fp-gptw" id="faca-parte-gptw" data-tom="claro" aria-labelledby="faca-parte-gptw-titulo">
+  <div class="container fp-gptw__grade">
+    <div class="fp-gptw__cabeca entra">
+      <Selo class="cabeca-dobra__selo">Great Place To Work</Selo>
+      <h2 class="ed-titulo" id="faca-parte-gptw-titulo">{leve} <b>{forte}</b></h2>
+    </div>
+    <div class="fp-gptw__texto entra" style="--i:1">
+      {bloco.paragrafos.map((p) => <p set:html={p} />)}
+      {bloco.indicadores && (
+        <ul class="fp-gptw__indicadores" role="list">
+          {bloco.indicadores.map((it, i) => <li><IconeRenke nome={icones[i]} size={18} />{it.texto}</li>)}
+        </ul>
+      )}
+      {bloco.acoes && (
+        <div class="ed-acoes">
+          {bloco.acoes.map((a, i) => i === 0
+            ? <Botao href={a.rota}>{a.rotulo}</Botao>
+            : <a class="link-arrow" href={a.rota}>{a.rotulo}</a>)}
+        </div>
+      )}
+    </div>
+    <figure class="ed-foto ed-foto--sombra fp-gptw__foto entra" style="--i:1">
+      <Image src={salao} alt="Salão da sede com o time nas estações de trabalho." format="webp" quality={80} widths={[400, 720, 960]} sizes="(min-width: 900px) 30vw, 100vw" style="object-position: 24% 50%" />
+    </figure>
+    <div class="fp-gptw__selo entra" style="--i:2">
+      <Image src={seloGptw} alt="Selo Great Place To Work: empresa certificada no Brasil." widths={[200, 400]} sizes="200px" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .fp-gptw__grade {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 3fr);
+    grid-template-areas: "cabeca foto selo" "texto foto selo";
+    column-gap: clamp(24px, 3.4vw, 64px); row-gap: 32px;
+  }
+  .fp-gptw__cabeca { grid-area: cabeca; display: grid; justify-items: start; align-content: start; }
+  .fp-gptw__texto { grid-area: texto; align-self: end; display: grid; gap: 24px; justify-items: start; }
+  .fp-gptw__texto > p { margin: 0; max-width: 36ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.6; color: #50504e; text-wrap: pretty; }
+  .fp-gptw__texto > p :global(strong) { font-weight: 500; color: var(--ed-tinta); }
+  .fp-gptw__indicadores { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; color: var(--ed-tinta); }
+  .fp-gptw__indicadores li { display: flex; align-items: center; gap: 10px; }
+  .fp-gptw__foto { grid-area: foto; aspect-ratio: 4 / 5; }
+  .fp-gptw__selo { grid-area: selo; align-self: end; }
+  .fp-gptw__selo :global(img) { display: block; width: clamp(140px, 13vw, 200px); height: auto; }
+  @media (max-width: 899.98px) {
+    .fp-gptw__grade { grid-template-columns: 1fr; grid-template-areas: "cabeca" "texto" "foto" "selo"; }
+    .fp-gptw__foto { aspect-ratio: 4 / 3; }
+    .fp-gptw__selo { margin-top: -88px; margin-left: 16px; position: relative; z-index: 1; }
+    .fp-gptw__selo :global(img) { width: 120px; }
+  }
+</style>

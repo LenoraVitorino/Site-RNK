@@ -1,0 +1,58 @@
+---
+/**
+ * Etapas do plano (04/10/2026): uma régua do tempo no painel claro com
+ * chanfro. Cada etapa ocupa a largura proporcional aos dias dela; a opcional
+ * entra tracejada no fim. Quando a régua aparece, um fio grafite corre da
+ * esquerda para a direita, devagar, e cada etapa acende quando ele passa
+ * (o losango amarelo é a ponta do fio). No celular, a régua fica em pé.
+ */
+import type { ContextoSecao } from '../pagina/contexto';
+
+interface Etapa { n: string; duracao?: string; nome: string; descricao?: string }
+interface Props { h2: string; etapas: Etapa[]; fechamento?: string; secao: ContextoSecao }
+const { h2, etapas, fechamento, secao } = Astro.props;
+/* "12 meses" conta em dias (× 30). */
+const dias = (e: Etapa) => Number(e.duracao?.match(/\d+/)?.[0] ?? 0) * (/m[eê]s/i.test(e.duracao ?? '') ? 30 : 1);
+const fixas = etapas.filter((e) => dias(e) > 0);
+const total = fixas.reduce((s, e) => s + dias(e), 0);
+/* A opcional ganha o peso de uma etapa média, para caber o texto. */
+const pesoOpcional = Math.min(48, Math.round(total / Math.max(1, fixas.length)));
+/* O fio anda sempre na mesma velocidade: cada trecho dura o seu peso e
+   começa quando o anterior termina. */
+const MS_POR_DIA = 26;
+/* Peso entre 24 e 48 na largura: a etapa curta cabe o texto e a longa (180
+   dias, 12 meses, nos planos Scale e Core) não espreme as outras. */
+const pesos = etapas.map((e) => Math.min(48, Math.max(24, dias(e) || pesoOpcional)));
+const atrasos = pesos.map((_, i) => pesos.slice(0, i).reduce((s, p) => s + p, 0) * MS_POR_DIA);
+---
+<section class="plano-painel plano-etapas" id={secao.id} data-tom="claro" aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <header class="plano-cabeca entra">
+      <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+    </header>
+    <ol class="plano-regua" data-plano-regua >
+      {etapas.map((e, i) => {
+        const opcional = dias(e) === 0;
+        return (
+          <li class:list={['plano-regua__etapa', { 'plano-regua__etapa--opcional': opcional }]} style={`--peso:${pesos[i]};--atraso:${atrasos[i] + 300}ms;--dur:${pesos[i] * MS_POR_DIA}ms`}>
+            <span class="plano-regua__trilho" aria-hidden="true"><span class="plano-regua__fio"></span></span>
+            <h3 class="plano-regua__nome">{e.nome}</h3>
+            {e.duracao && <p class="plano-regua__duracao">{e.duracao}</p>}
+            {e.descricao && <p class="plano-regua__texto">{e.descricao}</p>}
+          </li>
+        );
+      })}
+    </ol>
+    {fechamento && <p class="plano-etapas__fechamento entra">{fechamento}</p>}
+  </div>
+</section>
+
+<script>
+  /* O fio corre etapa por etapa; cada uma acende quando ele chega. */
+  document.querySelectorAll<HTMLElement>('[data-plano-regua]').forEach((regua) => {
+    const acender = () => regua.classList.add('plano-regua--viva');
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { acender(); return; }
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { acender(); obs.disconnect(); } }, { threshold: .4 });
+    obs.observe(regua);
+  });
+</script>

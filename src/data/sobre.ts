@@ -11,9 +11,9 @@
  * entregue (home.md, seção 7), literal; a estudio (padrão) leva a copy
  * revista pela Lenora em 29/09/2026. Onde não há revisão, as duas são iguais.
  *
- * Fotos: para pôr uma foto nova, colocar o arquivo (com pelo menos 1760px de
- * largura) em src/assets/sede/, importá-lo abaixo e preencher `foto` e `alt`
- * do slot. O layout não muda.
+ * Fotos: para trocar uma foto, colocar o arquivo (com pelo menos 1760px de
+ * largura) em src/assets/sede/, importá-lo abaixo e apontar a entrada de
+ * `fotos`. O layout não muda.
  */
 import type { ImageMetadata } from 'astro';
 import type { BlocoDe } from '../components/pagina/contexto';
@@ -23,21 +23,7 @@ import salaVidro from '../assets/sede/sala-vidro.jpg';
 import estudio from '../assets/sede/estudio.jpg';
 import cafe from '../assets/sede/cafe.jpg';
 import equipe from '../assets/sede/equipe.jpg';   // ES1: foto nova do salão, não a foto de grupo antiga (time-renke.png)
-
-export type Proporcao = '16 / 10' | '3 / 2' | '4 / 5';
-
-export interface SlotFoto {
-  id: string;
-  foto?: ImageMetadata;
-  alt: string;
-  /** object-position da imagem ('50% 45%'). */
-  foco?: string;
-  proporcao: Proporcao;
-  /** Sem foto: true = cartão de grão no lugar (em produção também); false = não renderiza. */
-  reservar: boolean;
-  /** O que falta no slot. Só aparece em import.meta.env.DEV. */
-  nota: string;
-}
+import sofa from '../assets/sede/sofa.jpg';
 
 /* ------------------------------------------------------------------ */
 /* SEO                                                                  */
@@ -163,10 +149,6 @@ export const casa = {
   texto: copyLiteral
     ? 'Operamos de forma híbrida com o time, com base física pra quem quiser um café e um papo presencial.'   // faca-parte.ts:57
     : 'Trabalhamos de forma híbrida, combinando operação remota com uma base física para encontros presenciais, reuniões e troca próxima com o time.',   // revisão de 29/09/2026
-  /** Microcopy nova 3: rótulos de acessibilidade do trilho e das setas. */
-  rotuloTrilho: 'Fotos da sede',
-  rotuloAnterior: 'Foto anterior',
-  rotuloProxima: 'Próxima foto',
 };
 
 /* ------------------------------------------------------------------ */
@@ -204,59 +186,21 @@ export const fecho: BlocoDe<'ctaFinal'> = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Fotos                                                                */
-/* Alt: microcopy nova 2 (e a ES1 para a equipe).                        */
+/* Fotos (04/10/2026, layout editorial): uma por dobra, todas da sede.  */
 /* ------------------------------------------------------------------ */
 
-export const fotos: Record<'abertura' | 'tese' | 'prova' | 'provaDetalhe' | 'cultura', SlotFoto> = {
-  /** S1: atravessa a costura; é o LCP. */
-  abertura: {
-    id: 'abertura', foto: operacao, foco: '50% 45%', proporcao: '16 / 10', reservar: true,
-    alt: 'Salão da sede da Renke, com o time nas estações de trabalho e o R amarelo na parede.',
-    nota: 'Foto da operação (16:10).',
-  },
-  /** S2: presa com o título. */
-  tese: {
-    id: 'tese', foto: salaVidro, foco: '14% 50%', proporcao: '4 / 5', reservar: true,
-    alt: 'Sala de reunião com divisória de vidro e palavras em amarelo na parede.',
-    nota: 'Sala de vidro (4:5).',
-  },
-  /** S3, linha B. */
-  prova: {
-    id: 'prova', foto: estudio, foco: '50% 40%', proporcao: '3 / 2', reservar: true,
-    alt: 'Parede amarela com o nome Renke em neon e a frase “Pense, elabore e surpreenda!”.',
-    nota: 'Estúdio (3:2).',
-  },
-  /** S3, linha C: cartão de grão até a foto chegar. */
-  provaDetalhe: {
-    id: 'prova-detalhe', alt: '', proporcao: '4 / 5', reservar: true,
-    nota: 'Slot prova-detalhe (4:5): foto de detalhe da sede, a produzir.',
-  },
-  /** S5: retrato do time atual. Retrato placeholder está vetado: só aparece com foto. */
-  cultura: {
-    id: 'cultura', alt: '', proporcao: '4 / 5', reservar: false,
-    nota: 'Slot cultura (4:5): retrato do time atual, a produzir.',
-  },
-};
+export interface FotoEd {
+  foto: ImageMetadata;
+  alt: string;
+  /** object-position da imagem ('50% 45%'). */
+  foco?: string;
+}
 
-/** S4: o trilho de cartões, na ordem (ES1). O slot casa-time deixou de existir. */
-export const casaCartoes: SlotFoto[] = [
-  {
-    id: 'cafe', foto: cafe, foco: '30% 50%', proporcao: '3 / 2', reservar: true,
-    alt: 'Área do café da sede, com bancada e cadeiras amarelas.',
-    nota: 'Café (3:2).',
-  },
-  {
-    id: 'equipe', foto: equipe, proporcao: '3 / 2', reservar: true,
-    alt: 'Salão da sede com o time nas estações de trabalho e a faixa amarela da marca na parede.',
-    nota: 'Equipe (3:2).',
-  },
-  {
-    id: 'casa-reuniao', alt: '', proporcao: '4 / 5', reservar: true,
-    nota: 'Slot casa-reuniao (4:5): sala de reunião, a produzir.',
-  },
-  {
-    id: 'casa-detalhe', alt: '', proporcao: '4 / 5', reservar: true,
-    nota: 'Slot casa-detalhe (4:5): detalhe da sede, a produzir.',
-  },
-];
+export const fotos: Record<'capa' | 'somos' | 'tese' | 'prova' | 'casa' | 'casaDetalhe', FotoEd> = {
+  capa: { foto: operacao, foco: '50% 42%', alt: 'Salão da sede da Renke, com o time nas estações de trabalho e o R amarelo na parede.' },
+  somos: { foto: estudio, foco: '50% 40%', alt: 'Parede amarela com o nome Renke em neon e a frase “Pense, elabore e surpreenda!”.' },
+  tese: { foto: salaVidro, foco: '40% 50%', alt: 'Sala de reunião com divisória de vidro e palavras em amarelo na parede.' },
+  prova: { foto: equipe, foco: '30% 50%', alt: 'Salão da sede com o time nas estações de trabalho e a faixa amarela da marca na parede.' },
+  casa: { foto: cafe, foco: '30% 50%', alt: 'Área do café da sede, com bancada e cadeiras amarelas.' },
+  casaDetalhe: { foto: sofa, foco: '50% 50%', alt: 'Nicho amarelo com sofá e a frase “Seja o hábito da mudança!”.' },
+};

@@ -70,6 +70,8 @@
   --int-ficha: #efefed; --int-ficha-texto: #252523;
 }
 .int-secao--papel .rotulo { color: var(--int-papel-rotulo); }
+/* Rótulos miúdos das etapas e do antes e depois um ponto maiores (02/10). */
+.int-etapa__duracao.rotulo, .int-antes-depois__legenda.rotulo { font-size: 13.5px; }
 /* Cena seguida do fecho, também na cena: os dois respiros somavam 152px sem
    troca de tom no celular e no tablet. O fecho encosta um pouco (a pendência
    só aparece em dev). */
@@ -173,7 +175,7 @@
 /* Sem hifenização automática: ela partia 'conec-tado' e 'comer-cial' em
    colunas estreitas. Só o título de uma palavra longa ('Autorresponsabilidade')
    leva .int-h3--longa e pode partir. */
-.int-h3 { font-size: clamp(22px, 1.9vw, 30px); font-weight: 300; line-height: 1.2; letter-spacing: -.04em; hyphens: manual; overflow-wrap: break-word; }
+.int-h3 { font-size: var(--titulo-topico); font-weight: 300; line-height: 1.2; letter-spacing: -.04em; hyphens: manual; overflow-wrap: break-word; }
 .int-h3--longa { hyphens: auto; }
 
 .int-rico { display: grid; gap: 20px; }
@@ -217,10 +219,9 @@
 .int-fundo::after { content: ''; position: absolute; inset: 0; background: var(--grao-fino); opacity: .14; mix-blend-mode: soft-light; }
 
 /* ------------------------------------------------------------------ */
-/* Formulário. A regra clara da home só cobre input e select.           */
+/* Formulário: o textarea segue a regra da home (home-refinamento.css). */
 /* ------------------------------------------------------------------ */
 
-.home-refinada .form-card .field textarea { background: #f4f4f2; color: #252523; min-height: 120px; padding: 12px 14px; resize: vertical; }
 
 /* ------------------------------------------------------------------ */
 /* Pendência: recado para o time, só em dev.                            */

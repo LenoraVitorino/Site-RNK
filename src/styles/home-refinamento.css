@@ -3,8 +3,7 @@
 section[id] { scroll-margin-top: 110px; }
 .home-refinada { background: #090907; }
 .home-refinada :is(.hero, .pilares, .letreiro, #perguntas, #academy-tools, #fale, #formulario) { background: transparent; }
-.home-refinada .footer { position: relative; z-index: 1; background: #0e0e0c; }
-.home-refinada .cortina > #perguntas { background: #090907; }
+.home-refinada .footer { position: relative; z-index: 1; }   /* preto, como o resto do site (Lenora, 02/10); o fundo vem de home2.css */
 .rotulo > span { margin-right: 18px; font-variant-numeric: tabular-nums; color: inherit; opacity: .65; }
 .secao-indice { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; margin-bottom: 56px; }
 .secao-indice > .rotulo { padding-top: 8px; }
@@ -18,60 +17,97 @@ section[id] { scroll-margin-top: 110px; }
 .cortina > .operacao-editorial { position: relative; height: auto; min-height: 0; transform: none; }
 .cortina .operacao-editorial :is(.ancora, .perguntas) { transform: none; opacity: 1; }
 
-/* Resultados: papel e grafite, como um extrato (Lenora, 30/09: o mosaico
-   repetia a grade de cartões do Protocolo e lia mal). Uma linha por
-   especialidade, entre fios, na linha do site da Immerso: índice, área e
-   texto empilhados à esquerda, o meio livre (onde a foto aparece no
-   hover) e o número grande à direita, sem contador, para ler de relance. */
-#resultados.resultados-editoriais { background: #e7e7e5; color: #252523; }
+/* Resultados: a dobra é o painel claro chanfrado, como a do método
+   (02/10, "a borda igual à da segunda dobra"): recuada das bordas da tela,
+   cantos em chanfro de 45° e claro translúcido com o fundo animado
+   desfocado por trás. */
+#resultados.resultados-editoriais { color: #252523; }
 .resultados-editoriais .rotulo { color: #5f5f5d; }
-.resultados-extrato { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #cfcfcc; }
-.resultado-linha {
-  display: grid; grid-template-columns: 48px minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .9fr);
-  column-gap: clamp(20px, 3vw, 48px); row-gap: 8px; align-items: center;
-  padding-block: clamp(28px, 3vw, 44px); border-top: 1px solid #cfcfcc;
+.home-refinada #resultados {
+  --res-recuo: clamp(8px, 1.25vw, 20px);
+  --res-chanfro: clamp(14px, 1.5vw, 24px);
+  margin-inline: var(--res-recuo);
+  clip-path: polygon(
+    var(--res-chanfro) 0, calc(100% - var(--res-chanfro)) 0, 100% var(--res-chanfro),
+    100% calc(100% - var(--res-chanfro)), calc(100% - var(--res-chanfro)) 100%,
+    var(--res-chanfro) 100%, 0 calc(100% - var(--res-chanfro)), 0 var(--res-chanfro));
+  background: linear-gradient(170deg, rgb(246 246 243 / .88), rgb(234 234 231 / .82));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
 }
-.resultado-linha__indice { grid-column: 1; grid-row: 1; align-self: baseline; font-size: 12px; color: #8a8a88; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-.resultado-linha__area { grid-column: 2; grid-row: 1; align-self: baseline; font-size: clamp(20px, 1.7vw, 26px); font-weight: 350; line-height: 1.2; letter-spacing: -.03em; }
-.resultado-linha__texto { grid-column: 2; grid-row: 2; align-self: start; margin: 0; max-width: 44ch; font-size: 15px; line-height: 1.6; color: #5a5a58; text-wrap: pretty; }
-.resultado-linha__numero { grid-column: 4; grid-row: 1 / span 2; margin: 0; text-align: right; font-size: clamp(48px, 5.6vw, 88px); font-weight: 300; line-height: 1; letter-spacing: -.06em; white-space: nowrap; color: #252523; }
-/* Foto da área no hover (referência Immerso, 30/09): só no desktop com
-   mouse. Fica dentro da linha, com a altura dela (2px de folga em cima e
-   embaixo), centrada na coluna do meio; acompanha o cursor só na
-   horizontal e desliza para a linha nova (JS, translate). Aparece e some
-   com fade e escala leve; cada camada entra recortada de baixo para cima
-   por cima da anterior. Por enquanto, moldura de mockup em grafite. */
-.resultados-extrato__palco { position: relative; }
-.resultados-foto { display: none; }
-@media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
-  .resultados-foto {
-    display: block; position: absolute; left: 0; top: 0; z-index: 3;
-    width: 278px; height: 156px; pointer-events: none;
-    opacity: 0; scale: .97; will-change: translate; border-radius: 10px;
-    box-shadow: 0 18px 40px rgb(0 0 0 / .14);
-    transition: opacity .5s var(--easing-suave), scale .7s var(--easing-suave);
-  }
-  .resultados-foto--visivel { opacity: 1; scale: 1; }
-  .resultados-foto__camada {
-    position: absolute; inset: 0; margin: 0; overflow: hidden; border-radius: 10px;
-    background: linear-gradient(160deg, var(--tom-a), var(--tom-b) 72%);
-    clip-path: inset(100% 0 0 0 round 10px);
-    transition: clip-path .8s cubic-bezier(.16, 1, .3, 1);
-  }
-  .resultados-foto__camada--ativa { z-index: 2; clip-path: inset(0 0 0 0 round 10px); }
-  .resultados-foto__camada--saindo { z-index: 1; clip-path: inset(0 0 0 0 round 10px); }
-  .resultados-foto__legenda { position: absolute; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; color: rgb(242 242 238 / .66); }
+.home-refinada #resultados > .container {
+  max-width: calc(var(--largura) - 2 * var(--res-recuo));
+  padding-inline: max(16px, calc(var(--gutter) - var(--res-recuo)));
 }
-@media (prefers-reduced-motion: reduce) {
-  .resultados-foto, .resultados-foto__camada { transition: opacity .3s linear; }
-}
-.resultados-editoriais__rodape { display: flex; justify-content: end; margin-top: 32px; }
-.resultados-editoriais .botao { background: #262624; color: #ededeb; border-color: #262624; }
 .resultados-editoriais :focus-visible { outline-color: #262624; }
+
+/* Pilha (04/10/2026, referência "Services Section Animation"): cada
+   especialidade é uma linha que gruda no topo ao rolar; as seguintes se
+   empilham logo abaixo da cabeça da anterior e cobrem o corpo dela. */
+.home-refinada #resultados { background: #d0d0cd; }   /* opaco: a linha de cima cobre a de baixo sem emenda */
+.res-pilha {
+  --res-cab: clamp(68px, 6vw, 92px);   /* altura da cabeça que fica à vista na pilha */
+  --res-fs: clamp(28px, 2.9vw, 46px);   /* corpo do nome da área */
+  list-style: none; margin: 0; padding: 0;
+}
+.res-etapa { background: #d0d0cd; border-top: 1px solid rgb(37 37 35 / .18); }
+.res-etapa:last-child { border-bottom: 1px solid rgb(37 37 35 / .18); }
+.res-etapa__area { margin: 0; font-size: var(--res-fs); font-weight: 300; line-height: 1; letter-spacing: -.045em; color: #252523; }
+/* O resultado grande, embaixo da frase, no número fino da home. */
+.res-etapa__dados { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+.res-etapa__numero {
+  position: relative; align-self: start; margin: 0; font-size: clamp(64px, 6.4vw, 112px); font-weight: 350; line-height: .85;   /* entre o fino e o médio (Lenora, 04/10: 500 ficou grosso) */
+  letter-spacing: -.06em; color: #252523; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.res-etapa__reserva { visibility: hidden; }
+.res-etapa__contagem { position: absolute; top: 0; left: 0; }
+.res-etapa__texto { margin: 0; max-width: 32ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
+.res-etapa__foto { margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; transition: opacity .6s ease; }
+.res-etapa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; }
+.res-etapa__img--espelho { scale: -1 1; }
+/* Respiro no fim, para a última linha subir até a pilha. */
+.res-pilha::after { content: ''; display: block; height: clamp(24px, 3vw, 48px); }
+
+@media (min-width: 900px) {
+  /* Uma grade por linha, sem numeração (Lenora, 04/10): a área e o corpo (frase e
+     número) à esquerda; a foto à direita, com o topo na altura do topo
+     das letras do nome da área (Lenora, 04/10). */
+  .res-etapa {
+    position: sticky; top: calc(var(--altura-header) + var(--i) * var(--res-cab));
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); column-gap: clamp(32px, 4vw, 72px);
+    grid-template-rows: var(--res-cab) auto;
+    padding-bottom: clamp(28px, 3vw, 44px);
+    /* Margem embaixo que some no encontro com a margem negativa de cima da
+       linha seguinte (as duas se anulam): o espaço visível não muda, mas o
+       sticky conta a margem, e assim todas as linhas soltam o topo juntas e
+       a pilha sai inteira, sem a última passar por cima das outras. */
+    margin-bottom: calc((var(--res-n) - 1 - var(--i)) * var(--res-cab));
+  }
+  .res-etapa + .res-etapa { margin-top: calc(-1 * (var(--res-n) - var(--i)) * var(--res-cab)); }
+  .res-etapa__cabeca, .res-etapa__corpo { display: contents; }
+  .res-etapa__area { grid-area: 1 / 1; align-self: center; }
+  .res-etapa__dados { grid-area: 2 / 1; padding-top: 8px; }
+  .res-etapa__foto {
+    grid-area: 1 / 2 / span 2; align-self: start;
+    margin-top: calc((var(--res-cab) - var(--res-fs)) / 2 + .14 * var(--res-fs));
+  }
+  /* Quando a linha de baixo sobe e cobre esta, a foto some, para a pilha
+     de títulos ficar limpa. */
+  .res-etapa[data-coberta] .res-etapa__foto { opacity: 0; }
+}
+@media (max-width: 899.98px) {
+  .res-etapa__cabeca { padding-block: 22px 14px; }
+  .res-etapa__corpo { display: grid; row-gap: 16px; padding-bottom: clamp(28px, 6vw, 40px); }
+  .res-etapa__foto { grid-row: 1; }
+  .res-etapa__numero { font-size: 64px; }
+}
 
 /* Ecossistema: duas portas de entrada, sem painel invisível sob o teclado. */
 .ecossistema__box { padding: clamp(20px, 4vw, 56px); background: #000; border: 1px solid rgb(242 242 238 / .12); border-radius: 16px; }
 .ecossistema-editorial .ecossistema__cabeca { gap: 24px; }
+/* Cabeça centrada, como a do Protocolo e a dos Resultados (Lenora, 02/10). */
+.ecossistema-editorial .ecossistema__cabeca { justify-items: center; text-align: center; }
+/* Título numa linha só onde cabe (02/10); no celular quebra equilibrado. */
+.ecossistema-editorial .ecossistema__cabeca .titulo { margin-inline: auto; max-width: none; text-wrap: balance; }
 .ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .ecossistema-editorial .produto { background: #000; border: 1px solid rgb(255 255 255 / .12); border-radius: 10px; }
 .ecossistema-editorial .produto__arte { aspect-ratio: 4 / 3; border-radius: 14px; }
@@ -92,12 +128,13 @@ section[id] { scroll-margin-top: 110px; }
 #fale { background: #121210; color: var(--papel); border-block: 1px solid var(--ref-fio); }
 #fale .chamada { grid-template-columns: 1fr; justify-items: center; }
 #fale .chamada__miolo { justify-items: center; text-align: center; }
-#fale .chamada__miolo p { color: #aeaeac; }
+#fale .chamada__miolo p { color: #aeaeac; font-size: clamp(17px, 1.25vw, 18px); }
+/* Apoio do formulário no mesmo corpo (02/10). */
+#formulario .form-block__text p:not(.rotulo) { font-size: clamp(17px, 1.25vw, 18px); }
 #fale .botao { background: var(--papel); color: #171715; }
-/* Rede RevOps logo abaixo do botão, na largura do container, colada nele
-   (o palco já tem respiro próprio acima dos módulos). */
-#fale .chamada__rede { width: 100%; margin-top: 0; }
-#fale .chamada { row-gap: clamp(8px, 1.2vw, 16px); }
+/* Marcas em duas linhas, com divisórias discretas e respiro interno. */
+#fale .chamada__logos { width: 100%; max-width: 880px; }
+#fale .chamada { row-gap: clamp(56px, 6vw, 88px); }
 /* Título e apoio numa linha cada onde cabem, para não sobrar vazio nas
    laterais (Lenora, 30/09); no celular voltam a quebrar. O text-wrap vai
    junto do nowrap porque os dois dividem o text-wrap-mode. */
@@ -105,16 +142,70 @@ section[id] { scroll-margin-top: 110px; }
   #fale .chamada__miolo .titulo,
   #fale .chamada__miolo > p:not(.cabeca-dobra__selo) { max-width: none; white-space: nowrap; text-wrap: nowrap; }
 }
-.home-refinada .form-card { background: #e7e7e5; color: #252523; border: 0; box-shadow: none; }
-.home-refinada .form-card .field__label { color: #454543; }
-.home-refinada .form-card .field :is(input, select) { background: #f4f4f2; color: #252523; border-color: #c3c3c1; }
-.home-refinada .form-card .field input::placeholder { color: #6b6b69; }
-.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a, .field__erro) { color: #50504e; }
-.home-refinada .form-card .botao { background: #252523; color: #f4f4f2; border-color: #252523; }
-.home-refinada .form-card :focus-visible { outline-color: #252523; }
-/* Depois do envio: status e 'Copiar mensagem' nos tons do cartão claro. */
-.home-refinada .form-card .form-card__status { background: rgb(37 37 35 / .06); border-color: transparent; color: #252523; }
-.home-refinada .form-card .form-card__copiar { color: #252523; }
+/* Formulário (04/10/2026, a Lenora não gostou do cartão branco: "repensar,
+   deixar mais moderno"). Vidro escuro com o chanfro da casa, campos só com
+   o fio de baixo, letras maiores e o botão no amarelo da marca, o único
+   amarelo do cartão (o foco do campo acende o fio no mesmo amarelo). */
+.home-refinada .form-card {
+  --form-corte: clamp(12px, 1.2vw, 20px);
+  color-scheme: dark; color: var(--papel); border: 0; border-radius: 0; box-shadow: none;
+  gap: clamp(22px, 2vw, 28px); padding: clamp(28px, 3.2vw, 52px);
+  background: linear-gradient(160deg, rgb(38 38 36 / .58), rgb(10 10 10 / .5));
+  -webkit-backdrop-filter: blur(28px) saturate(1.1); backdrop-filter: blur(28px) saturate(1.1);
+  clip-path: polygon(
+    var(--form-corte) 0, calc(100% - var(--form-corte)) 0, 100% var(--form-corte),
+    100% calc(100% - var(--form-corte)), calc(100% - var(--form-corte)) 100%,
+    var(--form-corte) 100%, 0 calc(100% - var(--form-corte)), 0 var(--form-corte));
+}
+.home-refinada .form-card__duo { column-gap: clamp(20px, 2vw, 32px); row-gap: inherit; }
+.home-refinada .form-card .field__label { margin-bottom: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: rgb(242 242 238 / .56); }
+.home-refinada .form-card .field :is(input, select, textarea) {
+  min-height: 48px; padding: 8px 0 12px; border: 0; border-radius: 0; background: transparent;
+  font-size: clamp(16px, 1.2vw, 18px); color: var(--papel);
+  box-shadow: inset 0 -1px 0 rgb(242 242 238 / .2);
+  transition: box-shadow .45s cubic-bezier(.22, 1, .36, 1);
+}
+.home-refinada .form-card .field textarea { min-height: 120px; padding: 10px 0 12px; resize: vertical; line-height: 1.5; }
+.home-refinada .form-card .field select {
+  appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23f2f2ee' stroke-opacity='.6' stroke-width='1.3'/%3E%3C/svg%3E") right 4px center / 12px 8px no-repeat;
+}
+.home-refinada .form-card .field select:is(:invalid, :has(option[value=""]:checked)) { color: rgb(242 242 238 / .34); }
+.home-refinada .form-card .field select option { color: var(--papel); background: #161616; }
+.home-refinada .form-card .field :is(input, textarea)::placeholder { color: rgb(242 242 238 / .3); }
+.home-refinada .form-card .field :is(input, select, textarea):hover { box-shadow: inset 0 -1px 0 rgb(242 242 238 / .42); }
+.home-refinada .form-card .field :is(input, select, textarea):focus,
+.home-refinada .form-card .field :is(input, select, textarea):focus-visible {
+  outline: none; box-shadow: inset 0 -2px 0 var(--amarelo-marca, #FFD103);
+}
+.home-refinada .form-card .field--invalido :is(input, select, textarea) { box-shadow: inset 0 -1px 0 var(--erro); }
+.home-refinada .form-card :is(.field__erro) { color: var(--erro); }
+/* Faturamento em opções que se marcam com um clique, no lugar do select. */
+.form-card__opcoes { margin: 0; padding: 0; border: 0; min-width: 0; }
+.form-card__opcoes legend { padding: 0; }
+.form-card__escolhas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.form-card__escolha { position: relative; }
+.form-card__escolha input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.form-card__escolha span {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 8px 16px; border-radius: 999px;
+  font-size: 14.5px; color: rgb(242 242 238 / .78); background: rgb(242 242 238 / .06);
+  transition: background-color .4s ease, color .4s ease;
+}
+.form-card__escolha:hover span { background: rgb(242 242 238 / .12); color: var(--papel); }
+.form-card__escolha input:checked + span { background: var(--papel); color: var(--grafite); }
+.form-card__escolha input:focus-visible + span { outline: 2px solid var(--amarelo-marca, #FFD103); outline-offset: 2px; }
+.home-refinada .form-card .botao {
+  min-height: 54px; margin-top: 6px; border-radius: 12px;
+  background: var(--amarelo-marca, #FFD103); color: var(--grafite); border-color: var(--amarelo-marca, #FFD103);
+  font-weight: 500;
+}
+.home-refinada .form-card .botao:hover { background: #ffdc3a; border-color: #ffdc3a; }
+.home-refinada .form-card .botao:focus-visible { outline: 2px solid var(--papel); outline-offset: 3px; }
+.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a) { color: rgb(242 242 238 / .5); }
+.home-refinada .form-card .form-card__aviso a { color: rgb(242 242 238 / .72); }
+/* Depois do envio: status e 'Copiar mensagem' nos tons do vidro escuro. */
+.home-refinada .form-card .form-card__status { background: rgb(242 242 238 / .06); border-color: transparent; color: rgb(242 242 238 / .86); }
+.home-refinada .form-card .form-card__copiar { color: var(--papel); }
 
 @media (max-width: 1099px) {
   .operacao-editorial .operacao__grade { gap: 5%; }
@@ -125,13 +216,6 @@ section[id] { scroll-margin-top: 110px; }
   .secao-indice > p:last-child:not(.rotulo) { grid-column: 1; }
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartoes { padding-top: 20px; }
-  /* Extrato no tablet: a área e o texto empilham à esquerda, o número fica
-     à direita. */
-  .resultado-linha { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 8px; }
-  .resultado-linha__area { grid-column: 2; }
-  .resultado-linha__texto { grid-column: 2; grid-row: 2; }
-  .resultado-linha__numero { grid-column: 3; grid-row: 1 / span 2; }
-  .resultado-linha__indice { grid-row: 1; }
   .ecossistema-editorial .ecossistema__paineis { grid-template-columns: 1fr; }
 }
 @media (max-width: 599.98px) {
@@ -139,12 +223,6 @@ section[id] { scroll-margin-top: 110px; }
   .operacao-editorial .operacao__cartoes { grid-template-columns: 1fr; }
   .operacao-editorial .operacao__cartao { gap: 16px; }
   .operacao-editorial .operacao__nome { font-size: 26px; }
-  /* Extrato no celular: índice e área numa linha, o número grande embaixo
-     e o texto por último. */
-  .resultado-linha { grid-template-columns: 28px minmax(0, 1fr); row-gap: 10px; column-gap: 12px; align-items: baseline; }
-  .resultado-linha__area { grid-column: 2; grid-row: 1; }
-  .resultado-linha__numero { grid-column: 1 / -1; grid-row: 2; text-align: left; font-size: 56px; margin-top: 6px; }
-  .resultado-linha__texto { grid-column: 1 / -1; grid-row: 3; }
   #fale .chamada__numero { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -166,14 +244,27 @@ section[id] { scroll-margin-top: 110px; }
 .hero--editorial .hero__grade { padding-top: 24px; padding-bottom: 32px; }
 .hero--editorial .hero__palco { display: grid; grid-template-columns: minmax(0, 1fr) clamp(240px, 28vw, 340px); grid-template-rows: minmax(40px, 1fr) auto auto auto minmax(40px, 1fr) auto; min-height: calc(100svh - var(--altura-header) - 56px); align-items: end; gap: 0 clamp(32px, 4vw, 64px); padding-block: 16px 32px; }
 .hero--editorial .hero__palco .hero__selo { grid-column: 1 / -1; grid-row: 2; justify-self: start; margin: 0 0 clamp(24px, 3.5svh, 40px); }
+/* O selo da hero é o mesmo componente dos selos das dobras (02/10: "todos
+   os textos de apoio na mesma espessura"); aqui só se desfaz o visual
+   antigo da classe, que continua cuidando da posição na grade. */
+/* O texto longo da copy quebra dentro da largura útil da tela. */
+.hero__selo.selo-revena { background: none; border: 0; border-radius: 0; line-height: 1.2; max-width: calc(100vw - 2 * var(--gutter)); }
+.hero__selo.selo-revena > span { border-radius: 0; background: none; color: inherit; font-size: inherit; }
+.hero__selo.selo-revena > .selo-revena__marca { display: grid; width: 33px; height: 33px; }
+.hero__selo.selo-revena > .selo-revena__texto { display: block; flex: 0 1 auto; min-width: 0; width: auto; height: auto; }
 .hero--editorial .hero__h1 { grid-column: 1 / -1; grid-row: 3; min-width: 0; min-height: 2.35em; font-size: clamp(28px, min(8.2vw, 12.5svh), 132px); font-weight: 300; line-height: 1.06; letter-spacing: -.065em; }
 .hero--editorial .hero__mensagem { align-content: start; padding-top: .08em; font-size: 1em; line-height: inherit; font-weight: inherit; letter-spacing: inherit; }
 .hero--editorial .hero__mensagem > span { white-space: nowrap; }
-/* Título em light; o trecho riscado e o RevOps ficam em medium. */
+/* Título em light, inclusive o trecho riscado; só o RevOps fica em medium
+   (Lenora, 02/10: "o título tá muito grosso, deixe light e médio"). */
 .hero--editorial .hero__revops { margin-left: 0; font-weight: 500; }
-.hero--editorial .hero__risco { font-weight: 500; }
+.hero--editorial .hero__risco { font-weight: 300; }
+/* "marketing" em negrito amarelo e "para clínicas" em negrito branco, no peso do "RevOps." (Lenora, 04/10). */
+.hero--editorial .hero__risco-destaque { font-weight: 500; color: var(--destaque); }
+.hero--editorial .hero__risco--forte { font-weight: 500; }
 .hero--editorial .hero__apoio { display: contents; }
 .hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: start; width: min(100%, 760px); margin: clamp(24px, 3.5svh, 40px) 0 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
+.hero--editorial .hero__lead strong { font-weight: 600; color: var(--papel); }   /* palavras em destaque, em branco pleno */
 .hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
 .hero--editorial .hero__base { grid-column: 1; grid-row: 6; justify-content: flex-start; }
@@ -193,27 +284,120 @@ section[id] { scroll-margin-top: 110px; }
   .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; margin: 0; font-size: 16px; }
   .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; }
 }
-.home-refinada .cortina > #perguntas { background: transparent; }
 
 
 
 
-/* Features: cenas próprias de cada serviço, três cards e duas frentes amplas. */
+/* Protocolo Revena: bento de cinco peças (01/10/2026). Todas levam, por
+   igual, o acabamento do painel do método: chanfro de 45° nos quatro
+   cantos, sem raio, com o vão de 16px entre elas (a Lenora reprovou
+   laterais inclinadas e peças encaixadas: "apenas com os acabamentos, todos
+   por igual"). Quatro peças têm arte: o CRM se move, as conexões têm uma
+   luz que passa uma vez e as outras ficam paradas. A da decisão é a única
+   em amarelo e fica só com o texto. */
 .pilares-features { padding-bottom: clamp(32px, 3vw, 48px); }
 .pilares-features + .letreiro { padding-top: clamp(24px, 2vw, 32px); padding-bottom: clamp(32px, 4vw, 56px); }
-.pilares-features .pilares__cabeca { margin-bottom: clamp(40px, 6vw, 80px); }
+.pilares-features .pilares__cabeca { margin-bottom: clamp(40px, 5vw, 64px); }
 .pilares__cabeca > p { color: #b6b6b4; font-size: 18px; }
-.features-grade { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
-.feature-card { grid-column: span 2; min-width: 0; padding: 16px; border-radius: 18px; border: 0; background: #0e0e0e; }
-.feature-card:nth-child(n+4) { grid-column: span 3; }
-.feature-card__arte { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #0e0e0e; }
-.feature-card:nth-child(n+4) .feature-card__arte { aspect-ratio: 16 / 9; }
+.feature-card {
+  display: flex; flex-direction: column;
+  position: relative; isolation: isolate; min-width: 0; overflow: hidden;
+  padding: 0 clamp(24px, 2.4vw, 36px) 32px; border-radius: 12px; border: 0;
+  background: linear-gradient(145deg, #131313, #0b0b0b 70%);
+}
+.feature-card__texto { position: relative; z-index: 1; min-width: 0; padding: 0; }
+.feature-card h3 { font-size: var(--titulo-topico); font-weight: 350; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
+.feature-card p { color: #a8a8a4; font-size: var(--corpo-topico); line-height: 1.65; margin-top: 14px; max-width: 44ch; text-wrap: pretty; }
+
+.revena-bento {
+  --peca-vao: 16px;
+  --peca-chanfro: clamp(14px, 1.5vw, 24px);
+  --peca-recuo: clamp(24px, 2.4vw, 36px);
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--peca-vao);
+}
+.revena-peca {
+  --c: var(--peca-chanfro); --base: 32px;
+  grid-column: span 12; border-radius: 0;
+  padding: 34px var(--peca-recuo) var(--base);
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
+}
+.revena-peca__arte { position: relative; flex: none; min-width: 0; margin-top: auto; padding-top: 28px; }
+
+/* Conexões: o diagrama ocupa a largura da peça, na proporção da cena, e
+   fica no meio da altura que sobrar. */
+.revena-peca--conexoes .revena-peca__arte { padding-top: 36px; margin-block: auto; }
+/* Na peça larga, o texto pode ir um pouco mais longe antes de quebrar. */
+.revena-peca--conexoes p { max-width: 54ch; }
+
+/* CRM: janela de produto reta, sem perspectiva. A cena é posicionada para
+   a janela (que nasce em x 24 e y 32 de 400 × 300) começar na linha do
+   texto e no alto da área; fica perto do tamanho real (até 424px de
+   largura, para o texto dela não passar o do cartão) e sangra pela direita
+   e por baixo, apagando-se na base. */
+.revena-peca--crm .revena-peca__arte {
+  flex: 1 1 auto; min-height: 260px; padding-top: 0; margin-top: 28px;
+  margin-bottom: calc(-1 * var(--base)); margin-right: calc(-1 * var(--peca-recuo));
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+.revena-peca--crm .revena-peca__arte > svg.arte {
+  position: absolute; top: 0; left: 0; width: min(106.383%, 424px); height: auto; aspect-ratio: 4 / 3;
+  transform: translate(-6%, -10.667%);
+}
+/* Automação: a cena ocupa x 24 a 372 e y 4 a 130 do viewBox; a área tem a
+   proporção desse recorte e a cena cresce com a largura do texto. A última
+   etapa passa da borda e se apaga. */
+.revena-peca--automacao .feature-card__texto { margin-bottom: 28px; }
+.revena-peca--automacao .revena-peca__arte { aspect-ratio: 348 / 130; padding-top: 0; }
+.revena-peca--automacao .revena-peca__arte > svg.arte {
+  position: absolute; top: 0; left: 0; width: min(114.943%, 500px); height: auto; aspect-ratio: 4 / 3;
+  transform: translate(-6%, -1.333%);
+}
+
+/* Decisão: a peça em amarelo, o amarelo original da marca (Lenora,
+   01/10), que desce meio tom até a base. Embaixo do texto, um mini
+   gráfico de colunas em grafite, sem fundo, com um cursor (02/10). */
+.revena-peca--decisao { background: linear-gradient(180deg, var(--amarelo-marca, #FFD103) 35%, #f2c500); }
+.revena-peca--decisao h3 { color: #161616; }
+.revena-peca--decisao p { color: rgb(22 22 22 / .74); }
+.revena-peca--decisao .revena-peca__arte { padding-top: 20px; }
+.revena-peca--decisao .revena-peca__arte > svg { max-width: 320px; }
+/* Posicionamento: a cena tem a largura da peça; o conteúdo dela já vem no
+   recuo do texto. */
+.revena-peca--posicionamento .revena-peca__arte {
+  padding-top: 12px; margin-inline: calc(-1 * var(--peca-recuo)); margin-bottom: calc(-1 * var(--base));
+}
+
+@media (min-width: 1100px) {
+  .revena-bento { grid-template-rows: minmax(490px, auto) minmax(370px, auto); }
+  .revena-peca--conexoes { grid-column: span 7; }
+  .revena-peca--crm { grid-column: span 5; }
+  .revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento { grid-column: span 4; }
+  /* Altura para o cursor da Recepção aparecer inteiro, também com o texto longo da copy. */
+  .revena-peca--crm .revena-peca__arte { min-height: 340px; }
+}
+@media (min-width: 1280px) {
+  .revena-peca--automacao { grid-column: span 5; }
+  .revena-peca--decisao { grid-column: span 3; }
+}
+/* Tablet: conexões na largura toda e dois pares. */
+@media (min-width: 600px) and (max-width: 1099.98px) {
+  .revena-peca--crm, .revena-peca--automacao { grid-column: span 6; }
+  .revena-peca--decisao { grid-column: span 5; }
+  .revena-peca--posicionamento { grid-column: span 7; }
+  .revena-peca--crm .revena-peca__arte { min-height: 250px; }
+}
+@media (max-width: 599.98px) {
+  .revena-bento { --peca-recuo: 24px; }
+  .revena-peca { --base: 28px; padding: 28px 24px; }
+  .revena-peca--crm .revena-peca__arte { min-height: 230px; margin-right: -24px; }
+  .revena-peca--conexoes .revena-peca__arte { padding-top: 32px; }
+}
+
+/* Uma demonstração lenta do CRM; depois a interface descansa na pose final. */
+[data-pilares] .feature-card svg.arte-pilar * { animation-duration: 18s; animation-iteration-count: 1; }
 .arte-interface { display: block; width: 100%; height: 100%; }
-.feature-card__arte .arte-pilar { transition: transform .8s var(--easing-suave); }
-.feature-card:hover .arte-pilar { transform: translateY(-4px); }
-.feature-card__texto { padding: 20px 12px 16px; }
-.feature-card h3 { font-size: clamp(21px, 2vw, 29px); font-weight: 350; line-height: 1.2; letter-spacing: -.04em; }
-.feature-card p { color: #b6b6b6; font-size: 15px; line-height: 1.65; margin-top: 14px; }
 .pilares-editoriais__ponte { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--ref-fio); }
 .pilares-editoriais__ponte p { color: #b6b6b4; font-size: 16px; }
 .pilares-editoriais__ponte a { flex-shrink: 0; }
@@ -226,15 +410,17 @@ section[id] { scroll-margin-top: 110px; }
 .operacao-editorial .operacao__cartao { position: relative; isolation: isolate; overflow: hidden; min-height: 0; padding: clamp(26px, 3vw, 44px); border: 0; border-radius: 18px; background: rgb(12 12 12 / .93); backdrop-filter: none; display: flex; flex-direction: column; gap: 0; }
 .operacao__ilustracao { position: relative; width: 100%; margin-top: 26px; }
 .operacao-editorial .operacao__nome { margin: 0; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.15; max-width: none; text-wrap: balance; }
-.operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: 16px; color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
+.operacao-editorial .operacao__texto-item { margin: 16px 0 0; font-size: var(--corpo-topico); color: #aaa; line-height: 1.65; padding: 0; background: none; max-width: 48ch; }
 
 .resultados-editoriais__cabeca { margin-bottom: clamp(40px, 5vw, 72px); }
-.resultados-editoriais__cabeca .titulo { max-width: 24ch; margin: 0; line-height: 1.12; text-wrap: balance; }
+.resultados-editoriais__cabeca .titulo { max-width: none; margin: 0; font-size: clamp(30px, 2.8vw, 44px); line-height: 1.12; text-wrap: balance; }   /* menor (02/10) */
+/* Numa linha só a partir do tablet, com "operação tem estrutura" em médio (02/10). */
+@media (min-width: 900px) { .resultados-editoriais__cabeca .titulo { white-space: nowrap; } }
+.resultados-editoriais__enfase { font-weight: 500; }
 /* Cabeça de dobra (28/09): selo do texto de apoio, título e subtítulo curto
    de duas linhas. Nos Resultados, centrada. */
 :is(#perguntas, #resultados, #pilares-revena, #fale, #formulario, #academy-tools, #o-que-fazemos) .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }   /* vence o margin:0 do componente */
 /* Espaçamento das cabeças (28/09): título um pouco mais aberto e o subtítulo mais afastado. */
-#perguntas .operacao__texto .operacao__titulo { line-height: 1.1; }
 #perguntas .cabeca-dobra__apoio { margin-top: clamp(24px, 2.4vw, 36px); }
 /* Onde a cabeça já tem gap próprio, a margem só completa os ~36px. */
 :is(#fale, #formulario, #academy-tools) .cabeca-dobra__selo { margin-bottom: 8px; }
@@ -246,7 +432,7 @@ section[id] { scroll-margin-top: 110px; }
 /* "Limitado a 1 nova clínica por mês": menos respiro embaixo, e o
    Ecossistema, logo depois, encosta mais. */
 .home-refinada #fale { padding-block: clamp(72px, 7vw, 120px) clamp(48px, 5vw, 80px); }
-.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px); }   /* e menos respiro antes do formulário */
+.home-refinada #academy-tools { padding-block: clamp(40px, 4vw, 64px) clamp(48px, 5vw, 80px); }
 .cabeca-dobra__apoio { max-width: 46ch; margin: clamp(16px, 1.8vw, 24px) 0 0; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; text-wrap: balance; color: #aaa; }
 .resultados-editoriais__cabeca { display: grid; justify-items: center; text-align: center; }
 .resultados-editoriais__cabeca .titulo { margin-inline: auto; }
@@ -258,28 +444,15 @@ section[id] { scroll-margin-top: 110px; }
   .resultados-editoriais .cabeca-dobra__apoio { max-width: none; white-space: nowrap; text-wrap: nowrap; }
 }
 /* Título da dobra de Perguntas maior (28/09): na escala dos títulos de dobra. */
-#perguntas .operacao__texto .operacao__titulo { font-size: clamp(34px, 3.6vw, 56px); line-height: 1.08; max-width: 16ch; }
 
-@media (max-width: 1099.98px) {
-  .features-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-  .feature-card, .feature-card:nth-child(n+4) { grid-column: auto; }
-  .feature-card:last-child { grid-column: 1 / -1; width: calc(50% - 10px); justify-self: center; }
-}
 @media (max-width: 899.98px) {
   .operacao-editorial .operacao__grade { grid-template-columns: 1fr; gap: 36px; }
   .operacao-editorial .operacao__texto { position: static; }
 }
 @media (max-width: 599.98px) {
-  .features-grade { grid-template-columns: 1fr; }
-  .feature-card:last-child { width: 100%; grid-column: auto; }
-  .feature-card__arte, .feature-card:nth-child(n+4) .feature-card__arte { aspect-ratio: 4 / 3; }
   .feature-card h3 { font-size: 25px; }
   .pilares-editoriais__ponte { flex-direction: column; align-items: start; }
   .operacao-editorial .operacao__cartao { padding: 24px 20px; min-height: 0; gap: 0; }
-  .operacao-editorial .operacao__texto-item { font-size: 16px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .feature-card__arte .arte-pilar, .feature-card:hover .arte-pilar { transition: none; transform: none; }
 }
 
 /* Método compacto: texto contínuo à esquerda e vídeo vertical contido à direita. */
@@ -334,7 +507,11 @@ section[id] { scroll-margin-top: 110px; }
     var(--metodo-chanfro) 0, calc(100% - var(--metodo-chanfro)) 0, 100% var(--metodo-chanfro),
     100% calc(100% - var(--metodo-chanfro)), calc(100% - var(--metodo-chanfro)) 100%,
     var(--metodo-chanfro) 100%, 0 calc(100% - var(--metodo-chanfro)), 0 var(--metodo-chanfro));
-  background: #dddddd; color: #252523;
+  /* Mesmo efeito da dobra dos números (02/10): claro translúcido, com o fundo
+     animado desfocado por trás (era #dddddd opaco com grão). */
+  background: linear-gradient(170deg, rgb(246 246 243 / .88), rgb(234 234 231 / .82));
+  -webkit-backdrop-filter: blur(30px) saturate(1.05); backdrop-filter: blur(30px) saturate(1.05);
+  color: #252523;
   --metodo-respiro: clamp(40px, 4vw, 64px);   /* respiro curto: a dobra cabe numa tela (28/09: um pouco mais curta) */
   padding-block: var(--metodo-respiro);
 }
@@ -365,6 +542,7 @@ section[id] { scroll-margin-top: 110px; }
   .home-refinada #o-que-fazemos { position: relative; isolation: isolate; }
   .home-refinada #o-que-fazemos > .container { position: relative; z-index: 2; }
   .home-refinada #o-que-fazemos::after {
+    display: none;   /* sem o grão: igual à dobra dos números (02/10) */
     content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     opacity: .16; mix-blend-mode: multiply;
@@ -376,7 +554,8 @@ section[id] { scroll-margin-top: 110px; }
      meio no centro vertical; barriga no canto superior direito; perna ao
      lado do número. */
   .home-refinada #o-que-fazemos .metodo__r {
-    display: block; position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
+    display: none;   /* R escondido para teste (Lenora, 02/10: "tira o R pra ver"); volta com display: block */
+    position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none;
     color: var(--destaque); stroke: currentColor; stroke-width: 88px; stroke-linejoin: miter;   /* faixa grossa, como a fita da parede */
   }
   .home-refinada .metodo-editorial .metodo__midia { position: relative; z-index: 1; isolation: isolate; }
@@ -394,16 +573,12 @@ section[id] { scroll-margin-top: 110px; }
     grid-area: auto; grid-column: 5 / span 4; grid-row: 1 / -1; justify-self: center; align-self: center;
     width: min(100%, 400px, calc((100svh - 2 * var(--metodo-respiro) - 60px) * 9 / 16)); max-width: none;
   }
-  /* Fios de rodapé (::before, porque sem-contornos.css apaga as bordas). */
-  /* Parágrafo embaixo à esquerda e número embaixo à direita, os dois sob um fio. */
   /* Parágrafo e número logo abaixo da barra do meio do R, que fica no centro
      vertical da dobra: ocupam a altura toda da grade e descem 50% dela (o
      'top' de um item de grade com position: relative mede a área da grade)
      mais meia faixa (44px) e um respiro. */
   .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros) { grid-row: 1 / -1; align-self: start; top: calc(50% + 44px + 40px); }
   .home-refinada .metodo-editorial .metodo__descricao { position: relative; grid-column: 1 / span 4; max-width: none; margin: 0; padding-top: 22px; font-size: 16px; }
-  .home-refinada .metodo-editorial :is(.metodo__descricao, .metodo__numeros)::before { content: ''; position: absolute; inset: 0 auto auto 0; width: 100%; height: 1px; background: rgb(37 37 35 / .24); }
-  .home-refinada .metodo-editorial .metodo__numeros::before { width: min(100%, 250px); }   /* fio curto: a perna do R passa ao lado */
   .home-refinada .metodo-editorial .metodo__descricao { padding-right: max(0px, calc(100% - 36ch)); }
   .home-refinada .metodo-editorial .metodo__numeros { position: relative; z-index: 1; grid-column: 9 / -1; margin: 0; padding-top: 22px; }
   /* Número editorial: algarismo enorme e fino, legenda em versalete miúdo na base. */
@@ -431,17 +606,17 @@ section[id] { scroll-margin-top: 110px; }
 }
 
 /* Contato: texto e formulário próximos, centralizados na mesma composição. */
-#formulario { padding-block: clamp(40px, 4vw, 64px); }
+#formulario { padding-block: clamp(72px, 8vw, 136px) clamp(88px, 9vw, 152px); }   /* mais respiro (Lenora, 02/10) */
 /* Na grade de 12 do site (28/09): texto nas colunas 1–5, na margem esquerda;
-   formulário nas colunas 8–12, na margem direita. */
+   formulário nas colunas 7–12, na margem direita. */
 #formulario .form-block { grid-template-columns: repeat(12, minmax(0, 1fr)); justify-content: stretch; column-gap: clamp(16px, 2vw, 32px); row-gap: 32px; }
 #formulario .form-block__text { grid-column: 1 / span 5; }
-#formulario .form-card { grid-column: 8 / -1; max-width: none; }
+#formulario .form-card { grid-column: 7 / -1; max-width: none; }   /* uma coluna a mais para Nome e WhatsApp lado a lado (04/10) */
 @media (min-width: 900px) {
   #formulario .form-block { align-items: start; }   /* selo e cartão começam na mesma linha */
-  .home-refinada #formulario { padding-top: clamp(32px, 3vw, 48px); }
+  .home-refinada #formulario { padding-top: clamp(72px, 8vw, 136px); }
 }
-#formulario .form-block__text { gap: 24px; }
+#formulario .form-block__text { gap: 32px; }
 #formulario .form-block__text .titulo { max-width: none; }
 #formulario .form-card { justify-self: stretch; }
 @media (max-width: 899.98px) {
@@ -482,27 +657,10 @@ section[id] { scroll-margin-top: 110px; }
   .metodo-editorial .metodo__legenda { white-space: nowrap; }
 }
 
-/* Pilares: no celular o texto do cartão perde o recuo duplo (16px do
-   cartão + 12px do texto), para "seu posicionamento" caber junto. */
-@media (max-width: 599.98px) {
-  [data-pilares] .feature-card__texto { padding: 20px 4px 8px; }
-}
 @media (max-width: 359.98px) {
   [data-pilares] .feature-card h3 { font-size: 23px; }
 }
 
-/* Ganhos: duas colunas no tablet, como os resultados; na copy, com sete
-   ganhos, o último ocupa a linha inteira. */
-@media (min-width: 600px) and (max-width: 899.98px) {
-  #perguntas .operacao__cartoes { grid-template-columns: 1fr 1fr; gap: 20px; }
-  #perguntas .operacao__cartao:last-child:nth-child(odd) { grid-column: 1 / -1; }
-}
-/* No celular a ilustração do ganho ocupa a largura toda do cartão (entra no
-   recuo de 20px dos lados): as cenas já têm margem própria de ~48 unidades,
-   e os rótulos crescem uns 14%. */
-@media (max-width: 599.98px) {
-  #perguntas .operacao__ilustracao { width: calc(100% + 40px); margin-inline: -20px; }
-}
 
 /* Planos da copy: número em 12px, o piso de leitura. Sem foto ainda, o
    espaço reservado sai abaixo de 900px (eram cinco retângulos vazios
@@ -539,4 +697,106 @@ section[id] { scroll-margin-top: 110px; }
    "Conhecer Renke Academy" cabe numa linha dentro da caixa. */
 @media (max-width: 359.98px) {
   .ecossistema-editorial .produto__acao .botao__icone { display: none; }
+}
+
+/* ============================================================
+   O que muda na sua clínica (02/10/2026). Referência: dobra "Posture" da
+   Tiwis, com cartões de vidro desfocado sobre o fundo animado. A grade se
+   constrói em ~1 s quando entra na tela (Perguntas.astro): o cartão
+   aparece, o ícone cresce, título e texto sobem de dentro de uma máscara,
+   da esquerda para a direita.
+   ============================================================ */
+#perguntas.ganhos { padding-block: var(--esp-secao); }
+.ganhos__cabeca { max-width: none; margin-bottom: clamp(44px, 4.4vw, 72px); }
+/* Cabeça centrada, como a do Protocolo Revena (Lenora, 04/10). */
+.ganhos__cabeca { display: grid; justify-items: center; text-align: center; }
+#perguntas .ganhos__cabeca .operacao__titulo { margin-inline: auto; text-align: center; }   /* vence o text-align: left do home2.css */
+#perguntas .ganhos__cabeca .cabeca-dobra__apoio { margin-inline: auto; text-wrap: balance; }
+.ganhos .operacao__titulo { margin: 0; }
+#perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; }
+#perguntas .ganhos__cabeca .cabeca-dobra__apoio { max-width: none; }
+.ganhos__cabeca .ancora:not(.ancora--revela) { font-size: clamp(30px, 3vw, 46px); max-width: 36ch; text-wrap: balance; }
+
+/* Título em cima e quatro colunas de cartões quase quadrados, em diagrama:
+   pares lado a lado e cartões que se tocam pelas quinas. */
+.ganhos__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); margin: 0; padding: 0; list-style: none; }
+.ganhos__cartao {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+  min-height: clamp(280px, 22vw, 330px); padding: clamp(22px, 2vw, 30px);
+  border: 1px solid rgb(255 255 255 / .09); border-radius: 18px;
+  background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
+  -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
+}
+.ganhos__anel { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgb(255 255 255 / .14); border-radius: 50%; }
+.ganhos__icone { width: 22px; height: 22px; color: var(--papel); }   /* traço claro, losango em amarelo */
+.ganhos__corpo { position: relative; display: grid; gap: 12px; }
+.ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: clamp(22px, 1.75vw, 27px); line-height: 1.15; letter-spacing: -.025em; color: var(--papel); text-wrap: balance; }
+.ganhos__nome--pergunta { font-weight: 300; font-size: clamp(21px, 1.6vw, 25px); line-height: 1.25; text-wrap: pretty; }
+.ganhos__texto { margin: 0; max-width: 34ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+/* A máscara de onde título e texto sobem. */
+.ganhos__nome, .ganhos__texto { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+:is(.ganhos__nome, .ganhos__texto) > span { display: block; }
+
+@media (min-width: 1100px) {
+  /* Diagrama (02/10, "deixa alguns um na ponta do outro"): X X · X /
+     · · X · / X X · X. O cartão do meio toca quatro pelas quinas. */
+  .ganhos__cartao { aspect-ratio: 1; min-height: auto; }
+  .ganhos__cartao--1 { grid-area: 1 / 1; }
+  .ganhos__cartao--2 { grid-area: 1 / 2; }
+  .ganhos__cartao--3 { grid-area: 1 / 4; }
+  .ganhos__cartao--4 { grid-area: 2 / 3; }
+  .ganhos__cartao--5 { grid-area: 3 / 1; }
+  .ganhos__cartao--6 { grid-area: 3 / 2; }
+  .ganhos__cartao--7 { grid-area: 3 / 4; }
+}
+
+/* Construção (só com JS e movimento liberado). */
+@media (prefers-reduced-motion: no-preference) {
+  .js .ganhos__cartao { --d: calc(var(--i) * 70ms); opacity: 0; transition: opacity .9s var(--easing) var(--d); }
+  .js .ganhos__icone { opacity: 0; transform: scale(.4); transition: opacity .6s var(--easing) calc(var(--d) + .2s), transform .8s var(--easing) calc(var(--d) + .2s); }
+  .js :is(.ganhos__nome, .ganhos__texto) > span { transform: translate3d(0, 105%, 0); transition: transform .9s var(--easing) calc(var(--d) + .38s); }
+  .js .ganhos__texto > span { transition-delay: calc(var(--d) + .55s); }
+  .js .ganhos__grade--construida .ganhos__cartao { opacity: 1; }
+  .js .ganhos__grade--construida .ganhos__icone { opacity: 1; transform: none; }
+  .js .ganhos__grade--construida :is(.ganhos__nome, .ganhos__texto) > span { transform: none; }
+}
+
+@media (max-width: 1099.98px) {
+  .ganhos__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 599.98px) {
+  .ganhos__grade { grid-template-columns: 1fr; }
+  .ganhos__cartao { min-height: 0; gap: 36px; }
+}
+
+/* ============================================================
+   Ecossistema Renke (02/10/2026): painéis no molde da dobra "Features"
+   do template Tidy. Texto de um lado, quadro prateado do outro, alternando.
+   ============================================================ */
+.ecossistema-editorial .ecossistema__box { padding: 0; background: none; border: 0; border-radius: 0; }
+.ecossistema-editorial .ecossistema__paineis { display: grid; grid-template-columns: 1fr; gap: 0; }
+.eco-painel {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: clamp(16px, 2vw, 32px);
+  min-height: clamp(460px, 40vw, 620px); padding: clamp(12px, 1.1vw, 16px);
+  border: 1px solid rgb(255 255 255 / .06); border-radius: 18px; background: #101010;   /* opaco: na pilha, o de baixo não pode vazar */
+}
+.eco-painel--invertido { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
+.eco-painel--invertido .eco-painel__corpo { order: 2; }
+.eco-painel__corpo { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(24px, 4vw, 64px); }
+.eco-painel__rotulo { margin: 0 0 clamp(22px, 2.2vw, 32px); font-size: 12.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgb(242 242 238 / .78); }
+.eco-painel__nome { margin: 0; line-height: 1; }
+.eco-painel__marca { display: block; width: auto; height: clamp(30px, 2.8vw, 42px); }
+.eco-painel__texto { margin: clamp(20px, 2vw, 28px) 0 0; max-width: 40ch; font-size: var(--corpo-topico); line-height: 1.6; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+.eco-painel__acao { margin: clamp(28px, 2.8vw, 40px) 0 0; }
+.eco-painel .eco-arte { min-height: 100%; }
+/* Empilhar (02/10, "faz empilhar"): cada painel fica preso logo abaixo do
+   menu e o seguinte sobe por cima dele, com uma sombra suave na borda. */
+.eco-painel { position: sticky; top: calc(var(--altura-header) + 12px); box-shadow: 0 -24px 48px -12px rgb(0 0 0 / .65); }
+.eco-painel + .eco-painel { margin-top: clamp(32px, 6svh, 72px); }
+.eco-painel + .eco-painel { top: calc(var(--altura-header) + 28px); }   /* a borda do de baixo continua à vista */
+@media (max-width: 899.98px) {
+  .eco-painel, .eco-painel--invertido { grid-template-columns: 1fr; min-height: 0; }
+  .eco-painel--invertido .eco-painel__corpo { order: 0; }
+  .eco-painel .eco-arte { order: -1; min-height: 0; aspect-ratio: 5 / 4; }
+  .eco-painel__corpo { padding: 12px 12px 20px; }
 }
