@@ -363,8 +363,8 @@ section[id] { scroll-margin-top: 110px; }
 .revena-peca--decisao p { color: rgb(22 22 22 / .74); }
 .revena-peca--decisao .revena-peca__arte { padding-top: 20px; }
 .revena-peca--decisao .revena-peca__arte > svg { max-width: 320px; }
-/* Posicionamento: o domo tem a largura da peça e sangra pelas laterais e
-   por baixo. */
+/* Posicionamento: a cena tem a largura da peça; o conteúdo dela já vem no
+   recuo do texto. */
 .revena-peca--posicionamento .revena-peca__arte {
   padding-top: 12px; margin-inline: calc(-1 * var(--peca-recuo)); margin-bottom: calc(-1 * var(--base));
 }

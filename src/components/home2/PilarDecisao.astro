@@ -1,20 +1,23 @@
 ---
 /**
- * Dizemos o que fazer todo mês (02/10/2026): um mini gráfico de colunas
- * desenhado em grafite direto sobre o amarelo, sem fundo nem moldura, com
- * um cursor de colega (o da Renke) apontando a coluna do mês atual. Foi o
- * que a Lenora pediu depois de reprovar a palavra "Decisão" ao fundo, as
+ * Dizemos o que fazer todo mês: um mini gráfico de colunas desenhado em
+ * grafite direto sobre o amarelo, sem fundo nem moldura, com um cursor de
+ * colega (o da Renke). Em 02/10 a Lenora fechou em "gráfico de colunas e aí
+ * insere um cursor", depois de reprovar a palavra "Decisão" ao fundo, as
  * barras com a etiqueta "Investir mais", os indicadores em linhas e o
- * painel de fundo escuro: "gráfico de colunas e aí insere um cursor".
- * Sem números inventados. Estático.
- * Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
+ * painel de fundo escuro. Em 06/10 pediu que o gráfico tivesse a ver com o
+ * texto (custo por agendamento, comparecimento, faturamento por canal) e
+ * reprovou três mini gráficos lado a lado (linha, anel e barras). Ficou o
+ * mesmo gráfico de colunas, agora por canal em vez de por mês: é o
+ * "faturamento por canal" do texto, e o cursor aponta o canal que rende
+ * mais. Sem números inventados. Só o cursor se move, uma vez, na entrada.
  */
 import '../../styles/ilustracoes.css';
 
-/* Sete meses; a coluna do mês atual (a última) é a única cheia. */
-const meses = ['abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out'];
-const alturas = [26, 36, 30, 46, 40, 54, 84];
-const BASE = 106, L = 20, PASSO = (220 - L) / (meses.length - 1), RAIO = 5;
+/* Quatro canais; a coluna do que rende mais (a última) é a única cheia. */
+const meses = ['Site', 'Indicação', 'Instagram', 'Google'];
+const alturas = [28, 44, 58, 84];
+const BASE = 106, L = 34, PASSO = (220 - L) / (meses.length - 1), RAIO = 5;
 const colunas = meses.map((m, i) => ({ m, x: i * PASSO, h: alturas[i], atual: i === meses.length - 1 }));
 /* Coluna de topo arredondado, apoiada na linha de base. */
 const coluna = (x: number, h: number) =>
@@ -32,6 +35,7 @@ const E = { w: 46, h: 19 };
   {colunas.map(({ m, x, atual }) => (
     <text x={x + L / 2} y="121" text-anchor="middle" class:list={['colunas-decisao__mes', { 'colunas-decisao__mes--atual': atual }]}>{m}</text>
   ))}
+  <g class="colunas-decisao__cursor" style={`--x1:${(colunas[0].x + L + 16 - C.x).toFixed(1)}px;--y1:${(BASE - colunas[0].h - C.y + 6).toFixed(1)}px;--x2:${(colunas[1].x + L + 4 - C.x).toFixed(1)}px;--y2:${(BASE - colunas[1].h - C.y + 6).toFixed(1)}px;--x3:${(colunas[2].x + L - C.x).toFixed(1)}px;--y3:${(BASE - colunas[2].h - C.y + 6).toFixed(1)}px`}>
   <g transform={`translate(${C.x} ${C.y})`}>
     <g transform={`translate(${-E.w - 2} 15)`}>
       <rect width={E.w} height={E.h} rx={E.h / 2} class="colunas-decisao__etiqueta" />
@@ -39,6 +43,7 @@ const E = { w: 46, h: 19 };
     </g>
     {/* Seta espelhada: aponta para cima e para a direita, na coluna. */}
     <path d="M0 0L-17.6 6.5L-10 10L-6.5 17.6Z" class="colunas-decisao__seta" />
+  </g>
   </g>
 </svg>
 
@@ -52,4 +57,17 @@ const E = { w: 46, h: 19 };
   .colunas-decisao__seta { fill: #161616; stroke: var(--amarelo-marca, #FFD103); stroke-width: 1.2; stroke-linejoin: round; }
   .colunas-decisao__etiqueta { fill: #161616; }
   .colunas-decisao__nome { font-size: 10.5px; font-weight: 500; fill: var(--amarelo-marca, #FFD103); letter-spacing: -.005em; }
+
+  /* Movimento, uma vez, na entrada (06/10: "faz ele passar por algumas
+     colunas e chegar no topo"): o cursor aparece no alto da primeira
+     coluna, para um instante em cada uma e pousa na do canal que rende
+     mais. Depois, nada se move. */
+  .colunas-decisao__cursor { animation: colunas-decisao-percorre 4.2s cubic-bezier(.45, 0, .2, 1) .5s both; }
+  @keyframes colunas-decisao-percorre {
+    0% { opacity: 0; transform: translate(var(--x1), calc(var(--y1) + 14px)); }
+    10%, 22% { opacity: 1; transform: translate(var(--x1), var(--y1)); }
+    38%, 50% { opacity: 1; transform: translate(var(--x2), var(--y2)); }
+    66%, 78% { opacity: 1; transform: translate(var(--x3), var(--y3)); }
+    100% { opacity: 1; transform: none; }
+  }
 </style>

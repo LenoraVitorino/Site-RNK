@@ -11,7 +11,10 @@ import Telefone from '../ui/Telefone.astro';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
 import { numerosProva } from '../../data/home';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 
+const icones: NomeIconeRenke[] = ['pessoas', 'verificado', 'crescimento'];
 const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n) => {
   const [, prefixo, valor, sufixo] = n.valor.match(/^(.*?)(\d+)(.*)$/)!;
   return { ...n, prefixo, alvo: Number(valor), sufixo };
@@ -37,6 +40,7 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
         <ul class="oqf__numeros" aria-label="A Renke em números" role="list">
           {numeros.map((n, i) => (
             <li class="oqf__numero entra" style={`--i:${i}`}>
+              <span class="oqf__icone" aria-hidden="true"><IconeRenke nome={icones[i]} size={20} /></span>
               <p class="oqf__valor num">
                 <span class="visually-hidden">{n.valor}</span>
                 <span class="oqf__reserva" aria-hidden="true">{n.valor}</span>
@@ -94,20 +98,30 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 2vw, 32px);
     align-items: stretch; color: #252523;
   }
-  /* Direita: a cabeça no alto e os números no pé, na altura do vídeo. */
-  .oqf__texto { grid-column: 6 / -1; grid-row: 1; display: flex; flex-direction: column; justify-content: space-between; gap: clamp(40px, 5vw, 72px); padding-block: clamp(8px, 1.4vw, 24px) 0; }
+  /* Direita: cabeça e números centrados na altura do vídeo. */
+  .oqf__texto { grid-column: 5 / -1; grid-row: 1; display: flex; flex-direction: column; justify-content: center; gap: clamp(32px, 3.4vw, 52px); padding-left: clamp(8px, 2vw, 32px); }
   .oqf__cabeca { display: grid; justify-items: start; }
-  .oqf__titulo { margin: 0; font-size: clamp(44px, 5.2vw, 84px); font-weight: 300; line-height: 1.02; letter-spacing: -.055em; }
-  .oqf__titulo > * { display: block; }
+  .oqf__titulo { margin: 0; font-size: clamp(40px, 4.4vw, 72px); font-weight: 300; line-height: 1.02; letter-spacing: -.055em; }
+  .oqf__titulo > * { display: inline; }
   .oqf__titulo b { font-weight: 500; }
-  .oqf__descricao { margin: clamp(24px, 2.6vw, 40px) 0 0; max-width: 46ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.6; color: #50504e; text-wrap: pretty; }
+  .oqf__descricao { margin: clamp(18px, 1.8vw, 26px) 0 0; max-width: 60ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.6; color: #50504e; text-wrap: pretty; }
 
-  .oqf__numeros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .oqf__numero { display: grid; align-content: start; gap: 12px; padding: clamp(18px, 1.8vw, 26px) 16px 0 0; border-top: 1px solid rgb(37 37 35 / .18); }
-  .oqf__valor { position: relative; margin: 0; font-size: clamp(32px, 3.5vw, 56px); font-weight: 300; line-height: 1; letter-spacing: -.055em; white-space: nowrap; }
+  /* Os três números grandes lado a lado, sem caixa nem ícone, com a legenda
+     embaixo e a contagem crescente (06/10: "não quero os números em cards").
+     Cabeça e números ficam juntos, centrados na altura do vídeo. */
+  .oqf__numeros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; max-width: 900px; }
+  /* Fio vertical entre os números e o ícone numa caixinha amarela (06/10). */
+  .oqf__numero { min-width: 0; }
+  .oqf__numero + .oqf__numero { padding-left: clamp(20px, 2.6vw, 44px); border-left: 1px solid rgb(37 37 35 / .16); }
+  .oqf__icone { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: clamp(20px, 2vw, 30px); border-radius: 10px; color: var(--sobre-marca);
+    background: linear-gradient(150deg, rgb(255 226 90 / .92), rgb(255 209 3 / .72));
+    border: 1px solid rgb(255 255 255 / .55);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 8px 18px -8px rgb(150 115 0 / .45), 0 2px 5px rgb(37 37 35 / .08);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .oqf__valor { position: relative; margin: 0 0 14px -.05em; font-size: clamp(44px, 4.6vw, 76px); font-weight: 300; line-height: .95; letter-spacing: -.06em; white-space: nowrap; }
   .oqf__reserva { visibility: hidden; }
   .oqf__contagem { position: absolute; top: 0; left: 0; }
-  .oqf__legenda { margin: 0; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: #5f5f5d; }
+  .oqf__legenda { margin: 0; font-size: 12.5px; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: #5f5f5d; }
 
   /* Esquerda: o vídeo vertical grande, com a sombra de sempre (invertido em 05/10: "assim parece desequilibrado"). */
   .oqf__midia { grid-column: 1 / span 4; grid-row: 1; justify-self: start; width: 100%; max-width: calc(min(78svh, 760px) * 9 / 16); }
@@ -117,15 +131,16 @@ const numeros = (copyLiteral ? numerosProva.copy : numerosProva.estudio).map((n)
   @media (max-width: 999.98px) {
     /* Uma coluna: cabeça, vídeo e, por último, os números. */
     .oqf { row-gap: 40px; }
-    .oqf__texto { display: contents; }
+    .oqf__texto { display: contents; padding: 0; }
     .oqf__cabeca, .oqf__numeros { grid-column: 1 / -1; }
     .oqf__cabeca { grid-row: 1; }
     .oqf__midia { grid-column: 1 / -1; grid-row: 2; justify-self: center; max-width: 360px; }
     .oqf__numeros { grid-row: 3; }
   }
   @media (max-width: 599.98px) {
-    .oqf__valor { font-size: 26px; }
-    .oqf__numero { padding-right: 8px; }
-    .oqf__legenda { font-size: 11px; letter-spacing: .08em; }
+    .oqf__numeros { grid-template-columns: 1fr; justify-content: stretch; }
+    .oqf__numero + .oqf__numero { margin-top: 24px; padding: 24px 0 0; border-left: 0; border-top: 1px solid rgb(37 37 35 / .16); }
+    .oqf__icone { margin-bottom: 16px; }
+    .oqf__valor { margin-bottom: 8px; font-size: 52px; }
   }
 </style>

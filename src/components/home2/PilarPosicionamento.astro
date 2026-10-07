@@ -1,112 +1,94 @@
 ---
 /**
- * Construímos seu posicionamento (01/10/2026): o mercado como um domo de
- * pontos, com os concorrentes espalhados nele (clínicas A a F, sem rosto e
- * sem nome) e a clínica do cliente no centro, maior, com a etiqueta "Sua
- * clínica". Referência da Lenora: o convite de pesquisa do Hevy (globo
- * pontilhado com retratos em volta de um retrato central).
- * Especificação em docs/04-design/protocolo-ilustracoes-prompts.md.
+ * Construímos seu posicionamento (06/10/2026). A Lenora descartou o globo
+ * ("não tem nada a ver") e mandou a referência: uma peça grande no centro,
+ * com uma impressão digital, e fios horizontais que passam por ela com
+ * pequenos nós redondos dos dois lados. A leitura: as clínicas da região
+ * aparecem nos fios pelo que o estudo olha nelas (anúncios, investimento,
+ * redes e busca, em cinza) e a do cliente é a que tem
+ * identidade própria, a digital em amarelo, com a etiqueta "Sua clínica".
+ * Segue o desenho do núcleo de "Vamos além do tráfego pago".
  *
- * A cena tem a largura do cartão (388 × 172) e sangra pelas laterais e por
- * baixo. Estática. O amarelo fica só no ponto da etiqueta.
+ * Cena de 388 × 172, na largura do cartão: os fios sangram pelas laterais.
+ * Na entrada os fios correm, os nós aparecem e a digital se desenha uma
+ * vez. Pose estática = pose final. Amarelo só na digital.
  */
 import '../../styles/ilustracoes.css';
 import Defs from './arte/Defs.astro';
+import { desenhoRenke, type NomeIconeRenke } from '../../data/icones-renke';
 
 const p = 'posicionamento';
 const W = 388, H = 172;
-/* Globo visto de frente, com o polo inclinado para trás: só a calota de
-   cima aparece, como um horizonte curvo, e os paralelos acompanham a
-   silhueta. O centro fica abaixo da cena. */
-const C = { x: 194, y: 292 }, R = 262, INCLINA = (20 * Math.PI) / 180;
-const rad = (g: number) => (g * Math.PI) / 180;
-function projeta(lon: number, lat: number) {
-  const x = R * Math.cos(rad(lat)) * Math.sin(rad(lon));
-  const y = R * Math.sin(rad(lat));
-  const z = R * Math.cos(rad(lat)) * Math.cos(rad(lon));
-  return {
-    x: C.x + x,
-    y: C.y - (y * Math.cos(INCLINA) + z * Math.sin(INCLINA)),
-    z: z * Math.cos(INCLINA) - y * Math.sin(INCLINA),
-  };
-}
-/* Pontos em paralelos, com passo constante ao longo de cada um; as linhas
-   alternam meio passo. */
-const pontos: string[] = [];
-for (let lat = 4, linha = 0; lat <= 86; lat += 2.6, linha++) {
-  const n = Math.max(6, Math.round((2 * Math.PI * R * Math.cos(rad(lat))) / 9));
-  for (let i = 0; i < n; i++) {
-    const { x, y, z } = projeta(((i + (linha % 2) / 2) * 360) / n, lat);
-    if (z > 1 && x > -4 && x < W + 4 && y < H + 4) pontos.push(`M${x.toFixed(1)} ${y.toFixed(1)}h.01`);
-  }
-}
-/* Silhueta: o arco do globo que cruza a cena. */
-const borda = (x: number) => C.y - Math.sqrt(R * R - (x - C.x) ** 2);
-const silhueta = `M-6 ${borda(-6).toFixed(1)}A${R} ${R} 0 0 1 ${W + 6} ${borda(W + 6).toFixed(1)}`;
-/* Concorrentes: os do fundo, perto do horizonte, menores e mais escuros. */
-const concorrentes = [
-  { letra: 'A', x: 88, y: 118, r: 16, plano: 0 },
-  { letra: 'B', x: 304, y: 112, r: 17, plano: 0 },
-  { letra: 'C', x: 132, y: 68, r: 10.5, plano: 2 },
-  { letra: 'D', x: 262, y: 60, r: 11.5, plano: 2 },
-  { letra: 'E', x: 38, y: 150, r: 13, plano: 1 },
-  { letra: 'F', x: 352, y: 148, r: 13.5, plano: 1 },
+const C = { x: 194, y: 70, s: 76 };
+const M = C.s / 2 + 10;
+/* Impressão digital (Lucide, grade de 24). */
+/* Na ordem do desenho: de fora para dentro, um traço depois do outro. */
+const DIGITAL = [
+  'M2 12a10 10 0 0 1 18-6', 'M21.8 16c.2-2 .131-5.354 0-6', 'M9 6.8a6 6 0 0 1 9 5.2v2',
+  'M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2', 'M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4', 'M14 13.12c0 2.38 0 6.38-1 8.88',
+  'M17.29 21.02c.12-.6.43-2.3.5-3.02', 'M8.65 22c.21-.66.45-1.32.57-2', 'M2 16h.01',
 ];
-const centro = { x: 194, y: 92, r: 25 };
+/* O que o estudo olha nos concorrentes: o que comunicam (anúncios e redes),
+   onde investem e onde estão as brechas (busca). */
+const ICONES: NomeIconeRenke[] = ['anuncios', 'investimento', 'redes', 'busca'];
+/* Dois fios de cada lado, com um nó em cada; os de fora menores e mais apagados. */
+const fios = [
+  { y: C.y - 20, x: 58, r: 15, lado: -1 },
+  { y: C.y + 20, x: 112, r: 13, lado: -1 },
+  { y: C.y - 20, x: 276, r: 13, lado: 1 },
+  { y: C.y + 20, x: 330, r: 15, lado: 1 },
+].map((f, i) => ({ ...f, icone: desenhoRenke(ICONES[i]) }));
 /* Etiqueta: 12 + ponto + 8 + "Sua clínica" (62 em Inter 12 / 500) + 12. */
 const E = { w: 100, h: 26 };
 ---
 <svg class="arte posic" viewBox={`0 0 ${W} ${H}`} fill="none" aria-hidden="true" focusable="false">
   <Defs p={p} />
   <defs>
-    {/* Os pontos brilham perto do alto do globo e se apagam para os lados e para a base. */}
-    <radialGradient id={`${p}-some`} gradientUnits="userSpaceOnUse" cx={C.x} cy="44" r="215" gradientTransform={`translate(${C.x} 44) scale(1 .78) translate(${-C.x} -44)`}>
-      <stop stop-color="#ffffff" stop-opacity=".9" /><stop offset=".45" stop-color="#ffffff" stop-opacity=".5" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
-    </radialGradient>
-    <mask id={`${p}-domo`} maskUnits="userSpaceOnUse" x="-8" y="-8" width={W + 16} height={H + 16}>
-      <rect x="-8" y="-8" width={W + 16} height={H + 16} fill={`url(#${p}-some)`} />
-    </mask>
-    <linearGradient id={`${p}-horizonte`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset=".5" stop-color="#ffffff" stop-opacity=".3" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    <linearGradient id={`${p}-fio-e`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={C.x - M} y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0" /><stop offset="1" stop-color="#ffffff" stop-opacity=".3" />
     </linearGradient>
-    <radialGradient id={`${p}-luz`} gradientUnits="userSpaceOnUse" cx={centro.x} cy={centro.y - 14} r="120">
-      <stop stop-color="#ffffff" stop-opacity=".11" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    <linearGradient id={`${p}-fio-d`} gradientUnits="userSpaceOnUse" x1={C.x + M} y1="0" x2={W} y2="0">
+      <stop stop-color="#ffffff" stop-opacity=".3" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id={`${p}-luz`} gradientUnits="userSpaceOnUse" cx={C.x} cy={C.y} r="70" gradientTransform={`translate(${C.x} ${C.y}) scale(2.2 1) translate(${-C.x} ${-C.y})`}>
+      <stop stop-color="#ffffff" stop-opacity=".08" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
     </radialGradient>
-    <clipPath id={`${p}-globo`}><circle cx={C.x} cy={C.y} r={R} /></clipPath>
-    {[['#2c2c2c', '#181818'], ['#262626', '#161616'], ['#1f1f1f', '#131313']].map(([a, b], i) => (
-      <linearGradient id={`${p}-no-${i}`} x1="0" y1="0" x2="0" y2="1"><stop stop-color={a} /><stop offset="1" stop-color={b} /></linearGradient>
-    ))}
-    <radialGradient id={`${p}-halo`}>
-      <stop stop-color="#FFD103" stop-opacity=".3" /><stop offset="1" stop-color="#FFD103" stop-opacity="0" />
-    </radialGradient>
+    <linearGradient id={`${p}-nucleo`} x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2c2c2c" /><stop offset="1" stop-color="#151515" /></linearGradient>
+    <linearGradient id={`${p}-no`} x1="0" y1="0" x2="0" y2="1"><stop stop-color="#262626" /><stop offset="1" stop-color="#171717" /></linearGradient>
     <filter id={`${p}-apoio`} x="-60%" y="-60%" width="220%" height="260%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity=".65" />
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity=".6" />
     </filter>
   </defs>
 
-  {/* O mercado: a calota de um globo de pontos, com a luz do horizonte. */}
-  <circle cx={centro.x} cy={centro.y - 14} r="120" fill={`url(#${p}-luz)`} clip-path={`url(#${p}-globo)`} />
-  <path d={pontos.join('')} class="posic__pontos" mask={`url(#${p}-domo)`} />
-  <path d={silhueta} stroke={`url(#${p}-horizonte)`} />
+  <rect width={W} height={H} fill={`url(#${p}-luz)`} />
 
-  {/* Concorrentes. */}
-  {concorrentes.map(({ letra, x, y, r, plano }) => (
-    <g filter={`url(#${p}-apoio)`}>
-      <circle cx={x} cy={y} r={r} fill={`url(#${p}-no-${plano})`} stroke={`url(#${p}-fio)`} />
-      <text x={x} y={y + r * 0.26} text-anchor="middle" class:list={['posic__letra', `posic__letra--${plano}`]} style={`font-size:${(r * 0.72).toFixed(1)}px`}>{letra}</text>
+  {/* Os fios passam pela peça central; em cada um, uma clínica da região. */}
+  {fios.map(({ y, lado }, i) => (
+    <path d={lado < 0 ? `M${C.x - M} ${y}H0` : `M${C.x + M} ${y}H${W}`} pathLength="1" stroke={`url(#${p}-fio-${lado < 0 ? 'e' : 'd'})`} class="posic__fio" style={`--k:${i}`} />
+  ))}
+  {fios.map(({ x, y, r, icone }, i) => (
+    <g class="posic__no" style={`--k:${i}`}>
+      <g filter={`url(#${p}-apoio)`}><circle cx={x} cy={y} r={r} fill={`url(#${p}-no)`} stroke={`url(#${p}-fio)`} /></g>
+      <g transform={`translate(${x - r * 0.55} ${y - r * 0.55}) scale(${(r * 1.1) / 24})`}>
+        <path d={icone.traco} class="a-icone posic__icone" />
+        {icone.pontos && <path d={icone.pontos} class="posic__icone-ponto" />}
+      </g>
     </g>
   ))}
 
-  {/* A clínica do cliente, no centro, com moldura, cruz e etiqueta. */}
-  <circle cx={centro.x} cy={centro.y} r={centro.r + 7} class="posic__moldura" />
-  <g filter={`url(#${p}-apoio)`}>
-    <circle cx={centro.x} cy={centro.y} r={centro.r} fill={`url(#${p}-no-0)`} stroke={`url(#${p}-fio)`} />
+  {/* A clínica do cliente: a peça grande, com a digital. */}
+  <g class="posic__nucleo">
+    <rect x={C.x - M} y={C.y - M} width={M * 2} height={M * 2} rx="26" class="posic__moldura" />
+    <rect x={C.x - C.s / 2 + 10} y={C.y - C.s / 2 + 12} width={C.s - 20} height={C.s - 20} rx="16" fill="#000000" filter={`url(#${p}-sombra)`} opacity=".85" />
+    <rect x={C.x - C.s / 2} y={C.y - C.s / 2} width={C.s} height={C.s} rx="20" fill={`url(#${p}-nucleo)`} stroke={`url(#${p}-fio)`} />
+    <rect x={C.x - C.s / 2 + 18} y={C.y - C.s / 2 + 0.5} width={C.s - 36} height="1" fill={`url(#${p}-fio-h)`} />
+    <g transform={`translate(${C.x - 21} ${C.y - 21}) scale(1.75)`}>
+      {DIGITAL.map((d, i) => <path d={d} pathLength="1" class="posic__digital" style={`--k:${i}`} />)}
+    </g>
   </g>
-  <path d={`M${centro.x} ${centro.y - 7.5}v15M${centro.x - 7.5} ${centro.y}h15`} class="posic__cruz" />
-  <g transform={`translate(${centro.x - E.w / 2} ${centro.y + centro.r + 13})`}>
+  <g class="posic__sua" transform={`translate(${C.x - E.w / 2} ${C.y + M + 12})`}>
     <rect y="3" width={E.w} height={E.h} rx={E.h / 2} fill="#000000" filter={`url(#${p}-apoio)`} opacity=".7" />
     <rect width={E.w} height={E.h} rx={E.h / 2} fill={`url(#${p}-alto)`} stroke={`url(#${p}-fio)`} />
-    <circle cx="16" cy={E.h / 2} r="9" fill={`url(#${p}-halo)`} />
     <circle cx="16" cy={E.h / 2} r="2.8" class="a-destaque" />
     <text x="27" y={E.h / 2 + 4.2} class="posic__etiqueta">Sua clínica</text>
   </g>
@@ -114,11 +96,26 @@ const E = { w: 100, h: 26 };
 
 <style>
   .posic { height: auto; }
-  .posic__pontos { stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; }
-  .posic__letra { font-weight: 500; fill: #a3a39e; }
-  .posic__letra--1 { fill: #8a8a85; }
-  .posic__letra--2 { fill: #6f6f6b; }
+  .posic__fio { stroke-width: 1; stroke-dasharray: 1; }
+  .posic__icone { stroke: #8a8a85; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .posic__icone-ponto { stroke: #8a8a85; stroke-width: 2; stroke-linecap: round; }
   .posic__moldura { fill: #ffffff; fill-opacity: .035; stroke: #ffffff; stroke-opacity: .1; }
-  .posic__cruz { stroke: #f2f2ee; stroke-width: 4.5; stroke-linecap: round; }
+  .posic__digital { stroke: #FFD103; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; }
   .posic__etiqueta { font-size: 12px; font-weight: 500; fill: #f2f2ee; letter-spacing: -.005em; }
+
+  /* Movimento, uma vez, na entrada:
+     0,2–1,3 s  os fios correm da peça para as bordas;
+     0,7–1,7    as clínicas da região aparecem neles;
+     1,3–4,3    a digital se desenha em linha, um traço depois do outro;
+     4,0–4,8    a etiqueta aparece.
+     Depois, nada se move. */
+  .posic__fio { animation: posic-corre .9s var(--a-vai-vem) calc(.2s + var(--k) * .08s) both; }
+  .posic__no { animation: posic-aparece .7s var(--a-entra) calc(.7s + var(--k) * .12s) both; }
+  /* Cada traço fica invisível até a sua vez (a ponta redonda do traço, parada,
+     aparecia como um ponto solto) e então se desenha em linha contínua. */
+  .posic__digital { animation: posic-desenha .6s cubic-bezier(.4, 0, .2, 1) calc(1.3s + var(--k) * .3s) both; }
+  .posic__sua { animation: posic-aparece .8s var(--a-entra) 4s both; }
+  @keyframes posic-corre { from { stroke-dashoffset: 1; } }
+  @keyframes posic-desenha { 0% { stroke-dashoffset: 1; opacity: 0; } 10% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
+  @keyframes posic-aparece { from { opacity: 0; } }
 </style>
