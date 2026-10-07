@@ -1,0 +1,158 @@
+---
+/**
+ * Arte da hero do Revena Start (06/10/2026). A Lenora não gostou do
+ * ecossistema de peças soltas e pediu que a hero represente o que o plano
+ * faz: "organizamos seu processo comercial, do primeiro contato ao
+ * fechamento, com dados, automações e rastreamento". A cena é um recorte de
+ * produto, reto e grande: a ficha de um lead com a origem rastreada, a
+ * régua das etapas e o registro do que aconteceu, linha por linha, até o
+ * fechamento. Por cima, o lembrete que saiu sozinho (a automação).
+ * Uma ação só: a jornada avança. Laço de 14 s, só CSS (opacity e
+ * transform); o estado estático é a pose final, que vale com movimento
+ * reduzido. Amarelo em três pontos: o visto do lembrete, o nó e a linha do
+ * fechamento. Microcopy de clínica, sem paciente nem métrica inventados.
+ */
+const etapas = ['Contato', 'Agendamento', 'Avaliação', 'Fechamento'];
+const registro = [
+  { o: 'Lead recebido', quem: 'Instagram', quando: 'seg, 09:12' },
+  { o: 'Primeiro contato', quem: 'Recepção', quando: 'seg, 09:20' },
+  { o: 'Avaliação agendada', quem: 'Agenda', quando: 'qui, 14:00' },
+  { o: 'Lembrete confirmado', quem: 'Automação', quando: 'qua, 14:02' },
+  { o: 'Tratamento fechado', quem: 'Comercial', quando: 'qui, 15:10' },
+];
+---
+<div class="jor" aria-hidden="true">
+  <div class="jor__janela">
+    <div class="jor__cabeca">
+      <span class="jor__origem"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="3.75" /><circle cx="16.9" cy="7.1" r=".9" fill="currentColor" stroke="none" /></svg></span>
+      <span class="jor__quem"><b>Novo lead</b><small>Instagram · Harmonização facial</small></span>
+      <span class="jor__selo"><i></i>Origem rastreada</span>
+    </div>
+
+    <ol class="jor__etapas">
+      <li class="jor__trilho"><span class="jor__fio"></span></li>
+      {etapas.map((nome, i) => (
+        <li class:list={['jor__etapa', `jor__etapa--${i}`]}><span class="jor__no"></span><b>{nome}</b></li>
+      ))}
+    </ol>
+
+    <ul class="jor__registro">
+      {registro.map((r, i) => (
+        <li class:list={['jor__linha', `jor__linha--${i}`]}>
+          <span class="jor__marca">{i === registro.length - 1 && <svg viewBox="0 0 24 24"><path d="M5.5 12.5L10 17L18.5 7.5" /></svg>}</span>
+          <b>{r.o}</b><small class="jor__de">{r.quem}</small><small class="jor__quando">{r.quando}</small>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="jor__lembrete">
+    <p class="jor__lembrete-cabeca">
+      <svg viewBox="0 0 24 24"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.5Z" /></svg>
+      <b>Lembrete</b><small>WhatsApp</small><small class="jor__agora">automático</small>
+    </p>
+    <p class="jor__mensagem">Sua avaliação é amanhã, às 14:00. Podemos confirmar a sua presença?</p>
+    <svg class="jor__visto" viewBox="0 0 24 24"><path d="M2.5 12.5L7 17L15.5 7.5M9.5 15.5L11 17L19.5 7.5" /></svg>
+  </div>
+</div>
+
+<style>
+  .jor { position: relative; container-type: inline-size; font-family: var(--font-titulo); color: #ecece8; }
+  .jor b { font-weight: 500; font-size: max(12px, 2.2cqw); letter-spacing: -.01em; white-space: nowrap; }
+  .jor small { font-size: max(11px, 1.9cqw); color: rgb(242 242 238 / .5); white-space: nowrap; }
+  .jor svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* A janela: superfície escura, um tom mais clara no alto, fio fino. */
+  .jor__janela {
+    position: relative; padding: max(16px, 3.4cqw) max(16px, 3.6cqw) max(26px, 6.4cqw); border-radius: max(14px, 2.6cqw);
+    background: linear-gradient(180deg, #1d1d1c, #131313 62%);
+    border: 1px solid rgb(255 255 255 / .09);
+    box-shadow: 0 4cqw 9cqw rgb(0 0 0 / .5), inset 0 1px 0 rgb(255 255 255 / .07);
+  }
+  .jor__cabeca { display: flex; align-items: center; gap: max(10px, 1.8cqw); }
+  .jor__origem { flex: none; display: grid; place-items: center; width: max(34px, 6.2cqw); height: max(34px, 6.2cqw); border-radius: 50%; background: rgb(255 255 255 / .05); border: 1px solid rgb(255 255 255 / .09); }
+  .jor__origem svg { width: 46%; height: 46%; }
+  .jor__quem { display: grid; gap: .3cqw; min-width: 0; }
+  .jor__quem b { font-size: max(13px, 2.5cqw); }
+  .jor__selo { margin-left: auto; display: flex; align-items: center; gap: max(6px, 1cqw); padding: max(6px, 1.1cqw) max(10px, 1.9cqw); border-radius: 99px; border: 1px solid rgb(255 255 255 / .1); font-size: max(11px, 1.9cqw); color: rgb(242 242 238 / .78); white-space: nowrap; }
+  .jor__selo i { width: max(5px, .9cqw); height: max(5px, .9cqw); border-radius: 50%; background: rgb(242 242 238 / .55); }
+
+  /* A régua das etapas: quatro nós sobre um fio que se completa. */
+  .jor__etapas { position: relative; list-style: none; height: max(44px, 8.4cqw); margin: max(22px, 4.6cqw) max(4px, .8cqw) 0; padding: 0; }
+  .jor__trilho { position: absolute; left: 0; right: 0; top: max(5px, .9cqw); height: 1px; background: rgb(255 255 255 / .12); }
+  .jor__fio { position: absolute; inset: 0; background: rgb(242 242 238 / .7); transform-origin: left; }
+  .jor__etapa { position: absolute; top: 0; display: grid; justify-items: center; gap: max(10px, 1.9cqw); translate: -50% 0; }
+  .jor__etapa--0 { left: 0; translate: 0 0; justify-items: start; }
+  .jor__etapa--1 { left: 33.333%; }
+  .jor__etapa--2 { left: 66.667%; }
+  .jor__etapa--3 { left: 100%; translate: -100% 0; justify-items: end; }
+  .jor__no { width: max(11px, 1.9cqw); height: max(11px, 1.9cqw); border-radius: 50%; background: #ecece8; box-shadow: 0 0 0 max(3px, .55cqw) #181818; }
+  .jor__etapa b { font-weight: 400; font-size: max(11px, 1.95cqw); color: rgb(242 242 238 / .86); }
+  .jor__etapa--3 .jor__no { background: var(--destaque, #FFD103); }
+
+  /* O registro: uma linha por acontecimento, entre fios. */
+  .jor__registro { list-style: none; margin: max(18px, 3.4cqw) 0 0; padding: 0; }
+  .jor__linha { display: grid; grid-template-columns: max(18px, 3.2cqw) minmax(0, 1fr) 18cqw auto; align-items: center; gap: max(8px, 1.6cqw); padding-block: max(11px, 2.05cqw); border-top: 1px solid rgb(255 255 255 / .07); }
+  .jor__linha b { font-weight: 400; color: rgb(242 242 238 / .92); }
+  .jor__quando { min-width: 11.5cqw; text-align: right; font-variant-numeric: tabular-nums; }
+  .jor__marca { display: grid; place-items: center; width: max(16px, 2.8cqw); height: max(16px, 2.8cqw); border-radius: 50%; border: 1px solid rgb(255 255 255 / .2); }
+  .jor__marca::before { content: ''; width: 28%; height: 28%; border-radius: 50%; background: rgb(242 242 238 / .6); }
+  .jor__linha--4 b { font-weight: 500; color: #f6f6f2; }
+  .jor__linha--4 .jor__marca { border-color: var(--destaque, #FFD103); color: var(--destaque, #FFD103); }
+  .jor__linha--4 .jor__marca::before { content: none; }
+  .jor__linha--4 .jor__marca svg { width: 68%; height: 68%; stroke-width: 2.2; }
+
+  /* O lembrete: solto sobre a base da janela, com sombra. */
+  .jor__lembrete {
+    position: relative; z-index: 1; width: min(100%, max(250px, 58cqw)); margin: -3.4cqw 0 0 -5.5cqw; display: grid; gap: max(6px, 1cqw);
+    padding: max(12px, 2.1cqw) max(14px, 2.5cqw); border-radius: max(13px, 2.3cqw);
+    background: linear-gradient(180deg, #2a2a29, #1c1c1b);
+    border: 1px solid rgb(255 255 255 / .11);
+    box-shadow: 0 3cqw 7cqw rgb(0 0 0 / .6), inset 0 1px 0 rgb(255 255 255 / .08);
+  }
+  .jor__lembrete-cabeca { margin: 0; display: flex; align-items: center; gap: max(6px, 1.1cqw); }
+  .jor__lembrete-cabeca svg { width: max(15px, 2.6cqw); height: max(15px, 2.6cqw); color: #b9b9b4; }
+  .jor__agora { margin-left: auto; }
+  .jor__mensagem { margin: 0; padding-right: max(24px, 4.4cqw); font-size: max(12px, 2.05cqw); line-height: 1.45; color: rgb(242 242 238 / .82); text-wrap: pretty; }
+  .jor__visto { position: absolute; right: max(13px, 2.3cqw); bottom: max(11px, 1.9cqw); width: max(16px, 2.8cqw); height: max(16px, 2.8cqw); color: var(--destaque, #FFD103); stroke-width: 1.6; }
+
+  /* Celular: sem a coluna de quem registrou; o lembrete não sai da tela. */
+  @container (max-width: 480px) {
+    .jor__linha { grid-template-columns: 18px minmax(0, 1fr) auto; }
+    .jor__de { display: none; }
+    .jor__selo { display: none; }
+    .jor__lembrete { margin: -14px 0 0 0; width: 92%; }
+    .jor__etapa--2 b { translate: -10px 0; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Entrada: a janela aparece e sobe de leve, uma vez. */
+    :global(.js) .jor__janela { animation: jor-janela 1.4s var(--easing) .25s both; }
+    /* O laço de 14 s: cada linha entra na sua vez, o fio avança até o nó da
+       etapa e o lembrete sobe antes de ser confirmado. */
+    .jor__linha, .jor__lembrete, .jor__fio, .jor__no, .jor__etapa b { animation-duration: 14s; animation-timing-function: var(--easing); animation-delay: 1.4s; animation-iteration-count: infinite; animation-fill-mode: both; }
+    .jor__linha--0 { animation-name: jor-l0; }
+    .jor__linha--1 { animation-name: jor-l1; }
+    .jor__linha--2 { animation-name: jor-l2; }
+    .jor__linha--3 { animation-name: jor-l3; }
+    .jor__linha--4 { animation-name: jor-l4; }
+    .jor__lembrete { animation-name: jor-lembrete; }
+    .jor__fio { animation-name: jor-fio; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+    .jor__etapa--0 :is(.jor__no, b) { animation-name: jor-n0; }
+    .jor__etapa--1 :is(.jor__no, b) { animation-name: jor-n1; }
+    .jor__etapa--2 :is(.jor__no, b) { animation-name: jor-n2; }
+    .jor__etapa--3 :is(.jor__no, b) { animation-name: jor-n3; }
+  }
+  @keyframes jor-janela { from { opacity: 0; transform: translate3d(0, 18px, 0); } }
+  @keyframes jor-l0 { 0%, 4% { opacity: 0; transform: translate3d(0, 8px, 0); } 9%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-l1 { 0%, 14% { opacity: 0; transform: translate3d(0, 8px, 0); } 19%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-l2 { 0%, 26% { opacity: 0; transform: translate3d(0, 8px, 0); } 31%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-l3 { 0%, 44% { opacity: 0; transform: translate3d(0, 8px, 0); } 49%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-l4 { 0%, 62% { opacity: 0; transform: translate3d(0, 8px, 0); } 67%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-lembrete { 0%, 34% { opacity: 0; transform: translate3d(0, 14px, 0); } 40%, 90% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+  @keyframes jor-fio { 0%, 14% { transform: scaleX(0); opacity: 1; } 26% { transform: scaleX(.3333); } 30%, 50% { transform: scaleX(.3333); } 58% { transform: scaleX(.6667); } 60% { transform: scaleX(.6667); } 66%, 90% { transform: scaleX(1); opacity: 1; } 96% { transform: scaleX(1); opacity: 0; } 100% { transform: scaleX(0); opacity: 0; } }
+  @keyframes jor-n0 { 0%, 13% { opacity: .32; } 17%, 90% { opacity: 1; } 96%, 100% { opacity: .32; } }
+  @keyframes jor-n1 { 0%, 25% { opacity: .32; } 29%, 90% { opacity: 1; } 96%, 100% { opacity: .32; } }
+  @keyframes jor-n2 { 0%, 56% { opacity: .32; } 60%, 90% { opacity: 1; } 96%, 100% { opacity: .32; } }
+  @keyframes jor-n3 { 0%, 64% { opacity: .32; } 68%, 90% { opacity: 1; } 96%, 100% { opacity: .32; } }
+</style>

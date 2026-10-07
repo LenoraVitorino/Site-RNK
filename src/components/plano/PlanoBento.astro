@@ -1,0 +1,207 @@
+---
+/**
+ * "O que o Start faz" em bento (06/10/2026), no molde do bento do Protocolo
+ * Revena da home: quatro peças com o chanfro de 45° nos quatro cantos, o
+ * texto em cima e, embaixo, um recorte de produto que mostra a entrega:
+ *   0 · origem de cada lead acompanhada até o fechamento (três jornadas);
+ *   1 · a etapa com roteiro e critérios (lista de conferência);
+ *   2 · as automações ligadas, cada uma com o seu momento;
+ *   3 · a fonte única: custo, conversão e canal (três mini gráficos).
+ * As artes não se movem (a hero já tem o gesto da página). Microcopy de
+ * clínica, sem números inventados. Amarelo: um ponto por peça, no máximo.
+ */
+import Selo from '../ui/Selo.astro';
+import type { ContextoSecao } from '../pagina/contexto';
+
+interface Props { h2: string; sub?: string; itens: { titulo: string; texto?: string }[]; selo?: string; secao: ContextoSecao }
+const { h2, sub, itens, selo, secao } = Astro.props;
+
+const ICONES = {
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="3.75" /><circle cx="16.9" cy="7.1" r=".9" fill="currentColor" stroke="none" />',
+  google: '<path d="M20 12.2A8 8 0 1 1 17.7 6.4M20 12.2H12.5" />',
+  indicacao: '<circle cx="9" cy="8.5" r="3.2" /><path d="M3.5 19.5a5.5 5.5 0 0 1 11 0M17.5 8v6M14.5 11h6" />',
+} as const;
+const jornadas = [
+  { icone: 'instagram', canal: 'Instagram', feitas: 4, estado: 'Fechado' },
+  { icone: 'google', canal: 'Google', feitas: 3, estado: 'Avaliação' },
+  { icone: 'indicacao', canal: 'Indicação', feitas: 2, estado: 'Agendado' },
+] as const;
+const criterios = [
+  { nome: 'Roteiro de atendimento', estado: 'feito' },
+  { nome: 'Orçamento apresentado', estado: 'feito' },
+  { nome: 'Retorno em 48 horas', estado: 'atual' },
+  { nome: 'Oportunidade recuperada', estado: 'depois' },
+];
+const automacoes = [
+  ['Confirmação', 'ao agendar'],
+  ['Lembrete', '24 horas antes'],
+  ['Follow-up', '2 dias depois'],
+  ['Alerta', 'sem resposta'],
+];
+const pecas = ['origem', 'processo', 'automacao', 'dados'];
+---
+<section class="plano-faz plano-bento-dobra" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container">
+    <header class="plano-cabeca entra">
+      {selo && <Selo class="cabeca-dobra__selo">{selo}</Selo>}
+      <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+      {sub && <p class="cabeca-dobra__apoio plano-faz__sub">{sub}</p>}
+    </header>
+    <ol class="plano-bento">
+      {itens.map((it, i) => (
+        <li class:list={['feature-card', 'revena-peca', 'plano-peca', `plano-peca--${pecas[i]}`, 'entra']} style={`--i:${i % 2}`}>
+          <div class="feature-card__texto"><h3>{it.titulo}</h3>{it.texto && <p>{it.texto}</p>}</div>
+
+          {i === 0 && (
+            <div class="plano-peca__arte pb-origem" aria-hidden="true">
+              <div class="pb-origem__linha pb-origem__linha--cabeca">
+                <small>Origem</small>
+                <span class="pb-origem__nomes">{['Contato', 'Agendamento', 'Avaliação', 'Fechamento'].map((n) => <small>{n}</small>)}</span>
+              </div>
+              {jornadas.map((j) => (
+                <div class="pb-origem__linha">
+                  <span class="pb-chip"><svg viewBox="0 0 24 24" set:html={ICONES[j.icone]} />{j.canal}</span>
+                  <span class="pb-origem__trilho" style={`--p:${(j.feitas - 1) / 3}`}>
+                    {[0, 1, 2, 3].map((n) => <i class:list={{ feito: n < j.feitas, fim: n === 3 && j.feitas === 4 }}></i>)}
+                  </span>
+                  <span class:list={['pb-origem__estado', { 'pb-origem__estado--fim': j.feitas === 4 }]}>{j.estado}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {i === 1 && (
+            <div class="plano-peca__arte pb-processo" aria-hidden="true">
+              <div class="pb-janela">
+                <p class="pb-janela__cabeca"><b>Avaliação</b><small>Etapa do processo</small></p>
+                <ul>
+                  {criterios.map((c) => (
+                    <li class={`pb-criterio pb-criterio--${c.estado}`}>
+                      <span class="pb-criterio__marca">{c.estado === 'feito' && <svg viewBox="0 0 24 24"><path d="M6 12.5L10.2 16.5L18 8" /></svg>}</span>
+                      {c.nome}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {i === 2 && (
+            <div class="plano-peca__arte pb-automacao" aria-hidden="true">
+              {automacoes.map(([nome, quando]) => (
+                <div class="pb-regra"><b>{nome}</b><small>{quando}</small><span class="pb-chave"></span></div>
+              ))}
+            </div>
+          )}
+
+          {i === 3 && (
+            <div class="plano-peca__arte pb-dados" aria-hidden="true">
+              <div class="pb-painel">
+                <p>Custo por paciente</p>
+                <svg viewBox="0 0 160 64" preserveAspectRatio="none"><path class="pb-area" d="M0 12C28 14 40 30 66 32S110 46 148 50V64H0Z" /><path class="pb-linha" d="M0 12C28 14 40 30 66 32S110 46 148 50" /></svg>
+                <span class="pb-ponto"></span>
+              </div>
+              <div class="pb-painel">
+                <p>Conversão por etapa</p>
+                <div class="pb-funil"><i style="--l:100%"></i><i style="--l:72%"></i><i style="--l:48%"></i><i style="--l:30%"></i></div>
+              </div>
+              <div class="pb-painel">
+                <p>Performance por canal</p>
+                <div class="pb-colunas"><i style="--a:46%"></i><i style="--a:100%" class="forte"></i><i style="--a:64%"></i><i style="--a:34%"></i></div>
+              </div>
+            </div>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .plano-bento {
+    --peca-vao: 16px; --peca-chanfro: clamp(14px, 1.5vw, 24px); --peca-recuo: clamp(24px, 2.4vw, 36px);
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--peca-vao); margin: 0; padding: 0; list-style: none;
+  }
+  .plano-peca { grid-column: span 12; gap: 0; }
+  .plano-peca__arte { position: relative; margin-top: auto; padding-top: clamp(28px, 3vw, 44px); font-family: var(--font-titulo); color: #ecece8; font-size: 14px; }
+  .plano-peca__arte b { font-weight: 500; letter-spacing: -.01em; }
+  .plano-peca__arte small, .plano-peca__arte p { font-size: 13px; color: rgb(242 242 238 / .55); }
+  .plano-peca__arte svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  @media (min-width: 1000px) {
+    .plano-bento { grid-template-rows: repeat(2, minmax(400px, auto)); }
+    .plano-peca--origem, .plano-peca--dados { grid-column: span 7; }
+    .plano-peca--processo, .plano-peca--automacao { grid-column: span 5; }
+  }
+
+  /* Pílula de interface (canal). */
+  .pb-chip { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px 0 11px; border-radius: 99px; background: linear-gradient(180deg, #262626, #191919); border: 1px solid rgb(255 255 255 / .1); font-size: 13.5px; white-space: nowrap; }
+  .pb-chip svg { width: 15px; height: 15px; color: #b9b9b4; }
+
+  /* 0 · Três jornadas: o canal, o fio com as etapas e onde cada uma está. */
+  .pb-origem { display: grid; gap: 18px; }
+  .pb-origem__linha--cabeca { padding-bottom: 14px; border-bottom: 1px solid rgb(255 255 255 / .08); }
+  .pb-origem__nomes { position: relative; height: 16px; }
+  .pb-origem__nomes small { position: absolute; top: 0; white-space: nowrap; translate: -50% 0; }
+  .pb-origem__nomes small:nth-child(1) { left: 0; translate: 0 0; }
+  .pb-origem__nomes small:nth-child(2) { left: calc(4.5px + (100% - 9px) / 3); }
+  .pb-origem__nomes small:nth-child(3) { left: calc(4.5px + (100% - 9px) * 2 / 3); }
+  .pb-origem__nomes small:nth-child(4) { left: 100%; translate: -100% 0; }
+  .pb-origem__linha { display: grid; grid-template-columns: 124px minmax(0, 1fr) 84px; align-items: center; gap: clamp(12px, 1.6vw, 24px); }
+  .pb-origem__trilho { position: relative; display: flex; justify-content: space-between; align-items: center; height: 12px; }
+  .pb-origem__trilho::before, .pb-origem__trilho::after { content: ''; position: absolute; left: 4px; top: 50%; height: 1px; }
+  .pb-origem__trilho::before { right: 4px; background: repeating-linear-gradient(90deg, rgb(255 255 255 / .22) 0 3px, transparent 3px 8px); }
+  .pb-origem__trilho::after { width: calc((100% - 8px) * var(--p)); background: rgb(242 242 238 / .6); }
+  .pb-origem__trilho i { position: relative; z-index: 1; width: 9px; height: 9px; border-radius: 50%; background: #111; border: 1px solid rgb(255 255 255 / .3); }
+  .pb-origem__trilho i.feito { background: #ecece8; border-color: #ecece8; }
+  .pb-origem__trilho i.fim { background: var(--destaque, #FFD103); border-color: var(--destaque, #FFD103); }
+  .pb-origem__estado { font-size: 13.5px; color: rgb(242 242 238 / .6); white-space: nowrap; }
+  .pb-origem__estado--fim { color: #f6f6f2; font-weight: 500; }
+
+  /* 1 · A etapa com os critérios: janela que sangra pela base e se apaga. */
+  .pb-processo { margin-bottom: calc(-1 * var(--base)); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); }
+  .pb-janela { padding: 18px 20px 6px; border-radius: 14px 14px 0 0; background: linear-gradient(180deg, #1d1d1c, #131313); border: 1px solid rgb(255 255 255 / .09); border-bottom: 0; }
+  .pb-janela__cabeca { margin: 0 0 8px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .pb-janela__cabeca b { font-size: 15px; color: #ecece8; }
+  .pb-janela ul { list-style: none; margin: 0; padding: 0; }
+  .pb-criterio { display: flex; align-items: center; gap: 12px; padding-block: 12px; border-top: 1px solid rgb(255 255 255 / .07); color: rgb(242 242 238 / .9); }
+  .pb-criterio__marca { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgb(255 255 255 / .28); color: #c9c9c4; }
+  .pb-criterio__marca svg { width: 12px; height: 12px; stroke-width: 2; }
+  .pb-criterio--atual { color: #f6f6f2; }
+  .pb-criterio--atual .pb-criterio__marca { border-color: rgb(255 255 255 / .4); }
+  .pb-criterio--atual .pb-criterio__marca::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--destaque, #FFD103); }
+  .pb-criterio--depois { color: rgb(242 242 238 / .45); }
+  .pb-criterio--depois .pb-criterio__marca { border-style: dashed; border-color: rgb(255 255 255 / .22); }
+
+  /* 2 · As automações ligadas: nome, momento e a chave. */
+  .pb-automacao { display: grid; }
+  .pb-regra { display: grid; grid-template-columns: minmax(0, 1fr) auto 34px; align-items: center; gap: 16px; padding-block: 13px; border-top: 1px solid rgb(255 255 255 / .08); }
+  .pb-regra:last-child { padding-bottom: 0; }
+  .pb-regra b { font-weight: 400; color: rgb(242 242 238 / .92); }
+  .pb-chave { position: relative; width: 34px; height: 20px; border-radius: 99px; background: rgb(242 242 238 / .9); }
+  .pb-chave::after { content: ''; position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #161616; }
+
+  /* 3 · A fonte única: três leituras lado a lado, sem números. */
+  .pb-dados { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .pb-painel { position: relative; display: grid; grid-template-rows: auto 1fr; gap: 18px; min-height: 148px; padding: 16px 16px 18px; border-radius: 14px; background: linear-gradient(180deg, #1d1d1c, #131313); border: 1px solid rgb(255 255 255 / .08); overflow: hidden; }
+  .pb-painel p { margin: 0; color: rgb(242 242 238 / .78); text-wrap: balance; }
+  .pb-painel svg { align-self: end; width: calc(100% + 32px); height: 64px; margin: 0 -16px -18px; }
+  .pb-linha { stroke: rgb(242 242 238 / .8); vector-effect: non-scaling-stroke; }
+  .pb-area { stroke: none; fill: rgb(255 255 255 / .05); }
+  .pb-ponto { position: absolute; left: calc(92.5% - 3.5px); bottom: 10.5px; width: 7px; height: 7px; border-radius: 50%; background: var(--destaque, #FFD103); box-shadow: 0 0 0 3px #151515; }
+  .pb-funil { align-self: end; display: grid; gap: 6px; }
+  .pb-funil i { height: 9px; width: var(--l); border-radius: 3px; background: rgb(242 242 238 / .22); }
+  .pb-funil i:first-child { background: rgb(242 242 238 / .72); }
+  .pb-colunas { align-self: end; display: flex; align-items: flex-end; gap: 8px; height: 64px; }
+  .pb-colunas i { flex: 1; height: var(--a); border-radius: 4px 4px 0 0; background: rgb(242 242 238 / .18); }
+  .pb-colunas i.forte { background: rgb(242 242 238 / .78); }
+
+  @media (max-width: 599.98px) {
+    .pb-origem__linha { grid-template-columns: 112px minmax(0, 1fr); }
+    .pb-origem__estado, .pb-origem__linha--cabeca { display: none; }
+    .pb-dados { grid-template-columns: 1fr; }
+    .pb-painel { min-height: 0; grid-template-columns: minmax(0, 1fr) 96px; grid-template-rows: auto; align-items: center; padding: 14px 16px; }
+    .pb-painel svg { width: 96px; height: 36px; margin: 0; }
+    .pb-ponto { display: none; }
+    .pb-colunas { height: 36px; }
+  }
+</style>
