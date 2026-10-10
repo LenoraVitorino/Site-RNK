@@ -77,8 +77,9 @@
 .p2-cena__clinica { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
 .p2-cena__clinica svg { width: 62%; height: 62%; fill: none; stroke: #161616; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .p2-cena__clinica-ponto { fill: #161616; stroke: none; }
-.p2-cena__corpo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 14px; align-items: start; padding: 8px 0 0; }
-.p2-cena__principal { position: relative; display: grid; gap: 10px; min-width: 0; }
+/* Duas colunas da mesma altura, com as bases na mesma linha: nada sobra embaixo de uma delas. */
+.p2-cena__corpo { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px 14px; align-items: stretch; padding: 8px 0 0; }
+.p2-cena__principal { position: relative; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; min-width: 0; }
 .p2-bloco { padding: 12px 14px 13px; border-radius: 14px; background: #262625; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset, 0 12px 24px -16px rgb(0 0 0 / .7); }
 .p2-legenda { display: block; margin-bottom: 4px; color: var(--suave); font-size: 12.5px; }
 .p2-linha { display: flex; align-items: center; justify-content: space-between; height: 34px; font-size: 14px; }
@@ -92,47 +93,40 @@
 .p2-chave--ligada { background: #F2F2EE; }
 .p2-chave i { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #161616; transform: translateX(12px); }
 /* Botão que vira estado. */
-/* Na tela do marketing as duas colunas têm a mesma altura: o botão encosta na base, na linha da caixa de leads. */
-.p2-cena__principal:has(> .p2-botao) { align-self: stretch; grid-template-rows: auto auto 1fr; }
-.p2-cena__principal > .p2-botao { align-self: end; }
+/* Tela do marketing: grade de 2 × 2. Em cima, o criativo e os canais, da
+   mesma altura; embaixo, na mesma linha, o lead que chega e o botão. */
+.p2-mkt { container-type: size; grid-template-rows: minmax(0, 1fr) 46px; }
+.p2-mkt > .p2-botao { align-self: center; }
 /* O botão da campanha é o da casa em miniatura: pílula amarela, à direita. */
 .p2-botao { justify-self: end; display: grid; place-items: center; height: 34px; padding-inline: 16px; border-radius: 17px; background: var(--amarelo-marca, #FFD103); color: #161616; font-size: 13px; font-weight: 500; white-space: nowrap; }
 .p2-botao > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 8px; opacity: 0; }
 .p2-botao > .p2-botao__depois { opacity: 1; }
 .p2-botao i, .p2-fim > i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #161616; }
 .p2-fim > i { background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
-/* O criativo subindo: ícone de imagem, estado e barra que enche. */
-.p2-envio { display: grid; grid-template-columns: 38px minmax(0, 1fr) 18px; align-items: center; gap: 0 12px; padding: 10px 14px 11px 10px; }
-.p2-envio__icone { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: #343432; }
-.p2-envio__icone svg { width: 19px; height: 19px; fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.p2-envio__texto { display: grid; min-width: 0; }
-.p2-envio__texto strong { font-size: 14px; }
-.p2-envio__texto { position: relative; }
-.p2-envio__texto em { position: absolute; right: 0; top: 2px; color: var(--suave); font-style: normal; font-size: 11.5px; }
-.p2 .p2-envio__barra { display: block; height: 3px; margin-top: 7px; border-radius: 2px; background: rgb(242 242 238 / .12); overflow: hidden; }
+/* O criativo subindo: ícone de imagem e arquivo em cima; barra e estado embaixo. */
+.p2-envio { display: grid; align-content: space-between; gap: 14px; padding: 14px; }
+.p2-envio__topo { display: grid; grid-template-columns: 40px minmax(0, 1fr) 18px; align-items: center; gap: 0 12px; }
+.p2-envio__icone { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: #343432; }
+.p2-envio__icone svg { width: 20px; height: 20px; fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.p2-envio__topo strong { font-size: 14.5px; }
+.p2-envio__base { display: grid; gap: 8px; }
+.p2 .p2-envio__barra { display: block; height: 3px; margin: 0; border-radius: 2px; background: rgb(242 242 238 / .12); overflow: hidden; }
 .p2-envio__barra i { display: block; height: 100%; border-radius: 2px; background: #F2F2EE; transform-origin: left; }
 .p2-envio__ok { position: relative; width: 18px; height: 18px; border-radius: 50%; background: #F2F2EE; }
 .p2-envio__ok::after { content: ''; position: absolute; left: 5.5px; top: 5.5px; width: 6px; height: 3.5px; border-left: 1.5px solid #161616; border-bottom: 1.5px solid #161616; transform: rotate(-45deg); }
-.p2-canais { padding-block: 4px; }
-.p2-canais .p2-linha { height: 30px; }
-/* Os leads da campanha: a caixa tem a altura da coluna da esquerda (o botão
-   e a base dela ficam na mesma linha); vazia até publicar, depois recebe a
-   ficha do primeiro lead, a mesma paciente que segue no CRM. */
-.p2-leads { align-self: stretch; display: grid; grid-template-rows: auto 1fr; gap: 10px; }
-.p2 .p2-pilha--esq { display: grid; justify-items: start; margin-top: 2px; color: var(--suave); font-size: 13px; }
+.p2 .p2-pilha--esq { display: grid; justify-items: start; margin: 0; color: var(--suave); font-size: 13px; }
 .p2 .p2-pilha--esq b { justify-self: start; text-align: left; }
-.p2-leads__topo { display: flex; justify-content: space-between; align-items: baseline; }
-.p2-leads__topo .p2-legenda { margin: 0; }
-.p2 .p2-leads__topo .p2-pilha { margin: 0; font-size: 12.5px; color: var(--suave); }
-.p2-leads__vaga { display: grid; align-content: start; }
-.p2-leads__vaga > * { grid-area: 1 / 1; }
-.p2-leads__espera { display: grid; place-items: center; height: 56px; border-radius: 12px; border: 1px dashed rgb(242 242 238 / .16); color: var(--suave); font-size: 12.5px; opacity: 0; }
-.p2-aviso { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; gap: 0 10px; height: 56px; padding: 0 12px 0 10px; border-radius: 12px; background: #333231; box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset; }
-.p2-aviso strong { font-size: 13.5px; }
-.p2 .p2-aviso strong + span { margin-top: 1px; font-size: 11.5px; white-space: nowrap; }
-.p2-aviso em { display: none; }
+.p2-canais { display: grid; grid-auto-rows: minmax(0, 1fr); padding-block: 4px; }
+.p2-canais .p2-linha { height: auto; }
+/* O lead que chega, na linha do botão: do tamanho do que diz, sem caixa em volta. */
+.p2-chegada { display: grid; align-items: center; min-width: 0; }
+.p2-chegada > * { grid-area: 1 / 1; }
+.p2-chegada__espera { color: var(--suave); font-size: 13px; opacity: 0; }
+.p2-aviso { justify-self: start; display: grid; grid-template-columns: 30px auto; align-items: center; gap: 0 10px; max-width: 100%; height: 46px; padding: 0 16px 0 8px; border-radius: 23px; background: #2b2b2a; box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset; }
+.p2-aviso strong { font-size: 13.5px; white-space: nowrap; }
+.p2 .p2-aviso strong + span { margin-top: 0; font-size: 11.5px; white-space: nowrap; }
 /* Conversa e horários. */
-.p2-conversa2 { display: grid; gap: 9px; }
+.p2-conversa2 { display: grid; gap: 9px; align-content: start; }
 .p2-fala { justify-self: start; max-width: 88%; padding: 10px 14px 11px; border-radius: 15px 15px 15px 4px; background: #2b2b2a; font-size: 14px; line-height: 1.3; }
 .p2-fala--nossa { justify-self: end; border-radius: 15px 15px 4px 15px; background: #F2F2EE; color: #161616; }
 .p2-vagas { position: relative; display: flex; gap: 8px; }
@@ -148,7 +142,7 @@
 .p2-item > i b { position: absolute; inset: -1px; border-radius: 50%; background: #F2F2EE; }
 .p2-item > i b::after { content: ''; position: absolute; left: 5.5px; top: 5.5px; width: 6px; height: 3.5px; border-left: 1.5px solid #161616; border-bottom: 1.5px solid #161616; transform: rotate(-45deg); }
 .p2-fim { justify-self: start; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 13px; border-radius: 18px; background: #F2F2EE; color: #161616; font-size: 14px; font-weight: 500; }
-.p2-quem { display: flex; align-items: center; gap: 10px; padding-block: 7px; font-size: 13px; line-height: 1.25; }
+.p2-quem { display: flex; align-items: center; gap: 10px; padding-block: 9px; font-size: 13px; line-height: 1.25; }
 .p2-quem + .p2-quem { border-top: 1px solid var(--fio); }
 /* Cursor de quem está trabalhando: seta e etiqueta com foto e nome. */
 .p2-mouse { display: none; position: absolute; z-index: 4; left: 0; top: 0; pointer-events: none; will-change: transform, opacity; }
@@ -319,7 +313,10 @@
   .p2-cena__corpo { grid-template-columns: minmax(0, 1fr); }
   .p2-cena__extra { display: none; }
   .p2-cena__topo > span:last-child, .p2-vaga:nth-child(3) { display: none; }
-  .p2-cena__extra.p2-leads { display: none; }
+  .p2-mkt { container-type: normal; grid-template-rows: none; }
+  .p2-mkt .p2-mouse, .p2-mkt .p2-chegada__espera { display: none; }
+  .p2-envio { gap: 10px; padding: 12px; }
+  .p2-canais .p2-linha { height: 30px; }
   .p2-vagas { gap: 6px; }
   .p2-vaga b { padding-inline: 10px; font-size: 12.5px; }
   .p2-crm { --vao: 8px; }

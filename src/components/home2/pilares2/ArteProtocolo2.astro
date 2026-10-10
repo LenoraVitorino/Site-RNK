@@ -47,11 +47,11 @@ const mouse = (n: string, k: number, pts: [number, string, string][]) => {
 // Tela 1, marketing: o criativo sobe, o Google é ligado, a campanha é publicada e o lead chega.
 q.push(`@keyframes p2-envio-barra{0%,${g(0, .07)}%{transform:scaleX(0)}${g(0, .27)}%,100%{transform:scaleX(1)}}`);
 troca('p2-envio', 0, .28); entra('p2-envio-ok', 0, .29, 'scale(.4)');
-mouse('p2-m1', 0, [[.36, '60%', '150px'], [.46, 'calc(100% - 30px)', '120px'], [.54, 'calc(100% - 30px)', '120px'], [.66, 'calc(100% - 66px)', '198px'], [.78, 'calc(100% - 66px)', '198px']]);
+mouse('p2-m1', 0, [[.36, '52%', '118px'], [.46, 'calc(100% - 30px)', 'calc(50cqh - 18px)'], [.54, 'calc(100% - 30px)', 'calc(50cqh - 18px)'], [.66, 'calc(100% - 70px)', 'calc(100cqh - 14px)'], [.78, 'calc(100% - 70px)', 'calc(100cqh - 14px)']]);
 q.push(`@keyframes p2-chave{0%,${g(0, .5)}%{background:#3d3d3b}${g(0, .54)}%,100%{background:#F2F2EE}}`,
   `@keyframes p2-chave-pino{0%,${g(0, .5)}%{transform:none}${g(0, .55)}%,100%{transform:translateX(12px)}}`);
 aperta('p2-publica', 0, .7); troca('p2-botao', 0, .72);
-troca('p2-leads', 0, .82); entra('p2-aviso', 0, .83, 'translateY(10px) scale(.96)');
+troca('p2-leads', 0, .82); entra('p2-aviso', 0, .84, 'translateY(10px) scale(.96)');
 // Tela 2, comercial: conversa com o lead e marca a avaliação.
 entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
 mouse('p2-m2', 1, [[.56, '62%', '70px'], [.68, '44px', '22px'], [.84, '44px', '22px']]);
@@ -116,37 +116,34 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
 
     <section class="p2-cena p2-anim" style="--a:p2-cena-0">
       <header class="p2-cena__topo"><span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span><b>Marketing</b><span>Campanha de outubro</span></header>
-      <div class="p2-cena__corpo">
-        <div class="p2-cena__principal">
-          <div class="p2-bloco p2-envio">
+      <div class="p2-cena__corpo p2-mkt">
+        <div class="p2-bloco p2-envio">
+          <div class="p2-envio__topo">
             <span class="p2-envio__icone"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg></span>
-            <div class="p2-envio__texto">
-              <strong>Criativo do anúncio</strong><em>harmonizacao-facial.jpg</em>
-              <span class="p2-pilha p2-pilha--esq"><b class="p2-anim" style="--a:p2-envio-a">Enviando a imagem…</b><b class="p2-pilha__depois p2-anim" style="--a:p2-envio-b">Imagem enviada</b></span>
-              <span class="p2-envio__barra"><i class="p2-anim" style="--a:p2-envio-barra"></i></span>
-            </div>
+            <div><strong>Criativo do anúncio</strong><span>harmonizacao-facial.jpg</span></div>
             <span class="p2-envio__ok p2-anim" style="--a:p2-envio-ok"></span>
           </div>
-          <div class="p2-bloco p2-canais">
-            <div class="p2-linha">Instagram<span class="p2-chave p2-chave--ligada"><i></i></span></div>
-            <div class="p2-linha">Google<span class="p2-chave p2-anim" style="--a:p2-chave"><i class="p2-anim" style="--a:p2-chave-pino"></i></span></div>
-            <div class="p2-linha">Público<span class="p2-linha__valor">Mulheres, 30 a 55 anos</span></div>
-          </div>
-          <div class="p2-botao p2-anim" style="--a:p2-publica">
-            <span class="p2-anim" style="--a:p2-botao-a">Publicar campanha</span>
-            <span class="p2-botao__depois p2-anim" style="--a:p2-botao-b"><i></i>Campanha no ar</span>
-          </div>
-          <div class="p2-mouse p2-anim" style="--a:p2-m1">
-            <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
-            <span class="p2-mouse__quem"><Image src={isa} {...rosto} /></span>
+          <div class="p2-envio__base">
+            <span class="p2-envio__barra"><i class="p2-anim" style="--a:p2-envio-barra"></i></span>
+            <span class="p2-pilha p2-pilha--esq"><b class="p2-anim" style="--a:p2-envio-a">Enviando a imagem…</b><b class="p2-pilha__depois p2-anim" style="--a:p2-envio-b">Imagem enviada</b></span>
           </div>
         </div>
-        <div class="p2-bloco p2-leads p2-cena__extra">
-          <div class="p2-leads__topo"><span class="p2-legenda">Leads da campanha</span><span class="p2-pilha"><b class="p2-anim" style="--a:p2-leads-a">0</b><b class="p2-pilha__depois p2-anim" style="--a:p2-leads-b">1</b></span></div>
-          <div class="p2-leads__vaga">
-            <span class="p2-leads__espera p2-anim" style="--a:p2-leads-a">Aguardando a publicação</span>
-            <div class="p2-aviso p2-anim" style="--a:p2-aviso"><i class="p2-ficha__foto">JM</i><div><strong>Juliana M.</strong><span>Harmonização · Google</span></div><em>agora</em></div>
-          </div>
+        <div class="p2-bloco p2-canais">
+          <div class="p2-linha">Instagram<span class="p2-chave p2-chave--ligada"><i></i></span></div>
+          <div class="p2-linha">Google<span class="p2-chave p2-anim" style="--a:p2-chave"><i class="p2-anim" style="--a:p2-chave-pino"></i></span></div>
+          <div class="p2-linha">Público<span class="p2-linha__valor">Mulheres, 30 a 55</span></div>
+        </div>
+        <div class="p2-chegada">
+          <span class="p2-chegada__espera p2-anim" style="--a:p2-leads-a">Nenhum lead ainda</span>
+          <div class="p2-aviso p2-anim" style="--a:p2-aviso"><i class="p2-ficha__foto">JM</i><div><strong>Novo lead: Juliana M.</strong><span>Harmonização · Google</span></div></div>
+        </div>
+        <div class="p2-botao p2-anim" style="--a:p2-publica">
+          <span class="p2-anim" style="--a:p2-botao-a">Publicar campanha</span>
+          <span class="p2-botao__depois p2-anim" style="--a:p2-botao-b"><i></i>Campanha no ar</span>
+        </div>
+        <div class="p2-mouse p2-anim" style="--a:p2-m1">
+          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+          <span class="p2-mouse__quem"><Image src={isa} {...rosto} /></span>
         </div>
       </div>
     </section>
@@ -172,9 +169,11 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
         </div>
         <div class="p2-bloco p2-cena__extra">
           <span class="p2-legenda">Lead</span>
-          <strong>Harmonização facial</strong>
-          <div class="p2-linha p2-linha--fina">Origem<span>Instagram</span></div>
+          <strong>Juliana M.</strong>
+          <div class="p2-linha p2-linha--fina">Interesse<span>Harmonização</span></div>
+          <div class="p2-linha p2-linha--fina">Origem<span>Google</span></div>
           <div class="p2-linha p2-linha--fina">Situação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">Em contato</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Agendado</b></span></div>
+          <div class="p2-linha p2-linha--fina">Avaliação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">A marcar</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Sex, 09:30</b></span></div>
         </div>
       </div>
     </section>
