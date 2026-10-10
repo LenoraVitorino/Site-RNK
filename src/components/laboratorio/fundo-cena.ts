@@ -384,6 +384,8 @@ async function carregarEnvMap(pmrem: PMREMGenerator, url: string): Promise<Textu
 
 function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const interna = roteiro === 'interna';
+  // Nos planos, o contraste é uniforme: sem manchas retangulares seguindo os textos.
+  const paginaPlano = document.body.classList.contains('pagina-plano');
   const { renderer, cena, camera, celular } = ctx;
   renderer.toneMapping = NoToneMapping;   // o ToneMappingEffect faz o ACES
 
@@ -579,7 +581,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
     config: interna
       ? {
         // Internas: seções lidas do DOM (data-cena), sem espera na entrada (a hero delas é estática).
-        roteiro: roteiroInterno(), transparentes: 'main > [data-cena]', textos: TEXTOS_INTERNAS, cartoes: '', caixas: '',
+        roteiro: roteiroInterno(), transparentes: 'main > [data-cena]', textos: paginaPlano ? '' : TEXTOS_INTERNAS, cartoes: '', caixas: '',
         continuas: [], tau: .45, curva: maisSuave, saltoMax: 1, pena: 90, esperarEntrada: () => true,
       }
       : {

@@ -1,0 +1,23 @@
+---
+/**
+ * A imagem da hero do plano (10/10/2026). A ilustração de tela saiu: uma
+ * tela em cada plano faz a Renke parecer empresa de sistema, e ela vende o
+ * processo feito por gente. No lugar, como na referência Tres Mares (nome
+ * grande, símbolo do produto e fotografia em preto e branco): uma foto real
+ * do time trabalhando, sem cor, num quadro arredondado como os cartões da
+ * home, com o símbolo oficial do plano como única nota de amarelo.
+ */
+import { Image } from 'astro:assets';
+import equipe from '../../assets/sede/equipe.jpg';
+
+interface Props { plano: string }
+const { plano } = Astro.props;
+const fotos: Record<string, { src: ImageMetadata; alt: string; foco: string }> = {
+  start: { src: equipe, alt: 'Time da Renke trabalhando nas estações da sede', foco: '30% 58%' },
+};
+const foto = fotos[plano] ?? fotos.start;
+---
+<figure class="plano-retrato">
+  <Image class="plano-retrato__foto" src={foto.src} alt={foto.alt} format="webp" quality={78} widths={[640, 960, 1400]} sizes="(max-width: 899px) 100vw, 46vw" loading="eager" style={`object-position:${foto.foco};transform-origin:${foto.foco}`} />
+  <span class="plano-retrato__simbolo" aria-hidden="true"><img src={`/icones/plano-${plano}-dark.svg`} alt="" width="40" height="40" /></span>
+</figure>
