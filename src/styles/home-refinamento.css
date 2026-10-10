@@ -388,30 +388,53 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--posicionamento { grid-column: span 7; }
   .revena-peca--crm .revena-peca__arte { min-height: 250px; }
 }
-/* O que muda na sua clínica, no desktop (10/10): sai o diagrama de quatro
-   colunas, que deixava um cartão sozinho no meio e buracos em volta. O
-   título fica preso à esquerda, com o fundo vivo livre embaixo dele, e os
-   sete cartões passam à direita, cada um parando um pouco abaixo do
-   anterior e cobrindo-o, até formar uma pilha. Nem grade nem carrossel. */
-@media (min-width: 1100px) {
-  #perguntas .container { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(48px, 7vw, 128px); align-items: start; }
-  #perguntas .ganhos__cabeca { position: sticky; top: clamp(120px, 24vh, 240px); justify-items: start; text-align: left; margin-bottom: 0; }
-  #perguntas.ganhos .ganhos__cabeca :is(.operacao__titulo, .cabeca-dobra__apoio) { margin-inline: 0; text-align: left; }
-  #perguntas .ganhos__cabeca .ancora { max-width: none; text-wrap: balance; }
-  /* Na coluna estreita as duas linhas do título quebram onde couber. */
-  #perguntas .ganhos__cabeca .ancora__linha { display: inline; white-space: normal; }
-  #perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(32px, 3vw, 46px); }
-  #perguntas .ganhos__grade { display: block; }
-  #perguntas .ganhos__cartao {
-    position: sticky; top: calc(clamp(104px, 16vh, 168px) + var(--i) * 18px);
-    grid-area: auto; aspect-ratio: auto; min-height: clamp(210px, 17vw, 250px); margin-bottom: 22px; gap: 28px;
-    background: linear-gradient(160deg, #1d1d1c, #131312);
-    -webkit-backdrop-filter: none; backdrop-filter: none;
-    box-shadow: 0 -22px 44px -30px rgb(0 0 0 / .9);
-  }
-  #perguntas .ganhos__cartao:last-child { margin-bottom: 0; }
-  #perguntas .ganhos__texto { max-width: 46ch; }
+/* O que muda na sua clínica: dor e resposta (10/10). Saíram o diagrama de
+   quatro colunas (cartão sozinho no meio) e a pilha de cartões (parecida com
+   os Resultados). À esquerda, as perguntas do dono de clínica em linhas
+   grandes e apagadas; a da vez acende. À direita, um cartão de vidro só, com
+   o que muda com a Renke. Sem grade, sem carrossel, sem ilustração. */
+.dores { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 112px); align-items: start; }
+.dores--so-perguntas { grid-template-columns: minmax(0, 1fr); max-width: 980px; margin-inline: auto; }
+.dores__lista { display: grid; margin: 0; padding: 0; list-style: none; }
+.dores__pergunta {
+  position: relative; display: block; width: 100%; padding: clamp(9px, .9vw, 14px) 0; border: 0; background: none; cursor: pointer; text-align: left;
+  font-family: var(--font-titulo); font-weight: 300; font-size: clamp(21px, 1.95vw, 29px); line-height: 1.22; letter-spacing: -.03em; text-wrap: pretty;
+  color: rgb(242 242 238 / .3); transition: color .7s ease;
 }
+.dores__pergunta::before { content: ''; position: absolute; left: -22px; top: calc(clamp(9px, .9vw, 14px) + .5em); width: 7px; height: 7px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); opacity: 0; transform: scale(.4); transition: opacity .6s ease, transform .6s ease; }
+.dores__pergunta--ativa { color: var(--papel); }
+.dores__pergunta--ativa::before { opacity: 1; transform: none; }
+.dores__pergunta:focus-visible { outline: 1px solid rgb(242 242 238 / .5); outline-offset: 6px; border-radius: 6px; }
+.dores__painel { position: sticky; top: clamp(110px, 20vh, 200px); display: grid; }
+.dores__resposta {
+  grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: space-between; gap: 56px;
+  min-height: clamp(300px, 26vw, 380px); padding: clamp(26px, 2.4vw, 36px);
+  border: 1px solid rgb(255 255 255 / .09); border-radius: 22px;
+  background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .025));
+  -webkit-backdrop-filter: blur(22px) saturate(1.1); backdrop-filter: blur(22px) saturate(1.1);
+  opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity .7s ease, transform .9s var(--easing-suave, ease);
+}
+.dores__resposta--ativa { opacity: 1; transform: none; transition-delay: .12s; }
+.dores__corpo { display: grid; gap: 12px; }
+.dores__com { margin: 0 0 4px; font-size: 14px; color: rgb(242 242 238 / .56); }
+.dores__resposta .ganhos__nome { font-size: clamp(26px, 2.3vw, 34px); font-weight: 350; }
+.dores__resposta .ganhos__texto { max-width: 38ch; font-size: clamp(16px, 1.2vw, 18px); }
+:is(.dores__resposta) :is(.ganhos__nome, .ganhos__texto) { overflow: visible; }
+.dores__mob { display: none; }
+/* Celular e tablet: sem o cartão ao lado; cada pergunta traz a resposta
+   logo embaixo, em pilha simples. */
+@media (max-width: 899.98px) {
+  .dores { grid-template-columns: minmax(0, 1fr); }
+  .dores__painel { display: none; }
+  .dores__item { padding-block: 22px; border-top: 1px solid rgb(242 242 238 / .12); }
+  .dores__pergunta { padding: 0; font-size: clamp(19px, 5vw, 22px); color: rgb(242 242 238 / .56); cursor: default; }
+  .dores__pergunta::before { display: none; }
+  .dores__mob { display: grid; gap: 8px; margin-top: 16px; }
+  .dores__mob h3 { margin: 0; font-family: var(--font-titulo); font-size: 20px; font-weight: 400; letter-spacing: -.02em; color: var(--papel); }
+  .dores__mob p { margin: 0; font-size: 15px; line-height: 1.55; color: rgb(242 242 238 / .66); }
+  .dores--so-perguntas .dores__pergunta { color: var(--papel); }
+}
+@media (prefers-reduced-motion: reduce) { .dores__pergunta, .dores__pergunta::before, .dores__resposta { transition: none; } }
 @media (max-width: 599.98px) {
   .revena-bento { --peca-recuo: 24px; }
   .revena-peca { --base: 28px; padding: 28px 24px; }

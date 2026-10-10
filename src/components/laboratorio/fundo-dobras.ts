@@ -24,6 +24,7 @@ export const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo
 
 export const TEXTOS_DOBRAS = [
   TEXTOS, '#protocolo-revena.pilares .titulo', '.pilares__cabeca', '.operacao__titulo', '#fale .titulo', '#fale p', '.ecossistema__cabeca',
+  '.dores__lista',   // as perguntas de dor: um bloco só, para o brilho do fundo não passar por baixo do texto
 ].join(', ');
 
 /** Caixas com fundo próprio: atrás delas o fundo perde brilho (e, no véu, o foco).

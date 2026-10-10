@@ -42,39 +42,60 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
       )}
     </header>
 
-    <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
-      {perguntas.map((p, i) => (
-        <li class:list={['ganhos__cartao', `ganhos__cartao--${i + 1}`, { 'ganhos__cartao--pergunta': copyLiteral }]} style={`--i:${i}`}>
-          <span class="ganhos__anel" aria-hidden="true">
-            <IconeRenke nome={icones[i]} size={22} class="ganhos__icone" />
-          </span>
-          <div class="ganhos__corpo">
-            {copyLiteral ? (
-              <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
-            ) : (
-              <>
-                <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
-                <p class="ganhos__texto"><span>{p.texto}</span></p>
-              </>
-            )}
-          </div>
-        </li>
-      ))}
-    </ol>
+    {/* Dor e resposta (10/10): as sete perguntas do dono de clínica, da copy
+        original, em linhas grandes; a da vez acende e, ao lado, um cartão só
+        mostra o que muda com a Renke. Passa sozinha, e o ponteiro ou o toque
+        escolhem. Na copy original ficam só as perguntas, sem o cartão. */}
+    <div class:list={['dores', { 'dores--so-perguntas': copyLiteral }]} data-dores>
+      <ol class="dores__lista" aria-label={copyLiteral ? 'Perguntas' : 'O que muda na sua clínica'}>
+        {perguntas.map((p, i) => (
+          <li class="dores__item">
+            <button type="button" class:list={['dores__pergunta', { 'dores__pergunta--ativa': i === 0 }]} data-dor={i} aria-pressed={i === 0 ? 'true' : 'false'}>{p.pergunta}</button>
+            {!copyLiteral && <div class="dores__mob"><h3>{p.titulo}</h3><p>{p.texto}</p></div>}
+          </li>
+        ))}
+      </ol>
+      {!copyLiteral && (
+        <div class="dores__painel" aria-hidden="true">
+          {perguntas.map((p, i) => (
+            <article class:list={['dores__resposta', { 'dores__resposta--ativa': i === 0 }]} data-resposta={i}>
+              <span class="ganhos__anel"><IconeRenke nome={icones[i]} size={22} class="ganhos__icone" /></span>
+              <div class="dores__corpo">
+                <p class="dores__com">Com a Renke</p>
+                <h3 class="ganhos__nome">{p.titulo}</h3>
+                <p class="ganhos__texto">{p.texto}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
   </div>
 </section>
 
 <script>
-  /* A grade se constrói uma vez, quando um quarto dela entra na tela. */
-  const grade = document.querySelector<HTMLElement>('[data-ganhos-grade]');
-  if (grade) {
-    const construir = () => grade.classList.add('ganhos__grade--construida');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) construir();
-    else {
-      const obs = new IntersectionObserver((entradas) => {
-        if (entradas.some((e) => e.isIntersecting)) { construir(); obs.disconnect(); }
-      }, { threshold: .25 });
-      obs.observe(grade);
+  /* A pergunta da vez: troca sozinha a cada 4,5 s enquanto a dobra está na
+     tela e ninguém está escolhendo; ponteiro, foco e toque escolhem. */
+  const dores = document.querySelector<HTMLElement>('[data-dores]');
+  if (dores) {
+    const perguntas = [...dores.querySelectorAll<HTMLButtonElement>('[data-dor]')];
+    const respostas = [...dores.querySelectorAll<HTMLElement>('[data-resposta]')];
+    let atual = 0, naTela = false, escolhendo = false;
+    const ativar = (i: number) => {
+      atual = i;
+      perguntas.forEach((b, k) => { b.classList.toggle('dores__pergunta--ativa', k === i); b.setAttribute('aria-pressed', String(k === i)); });
+      respostas.forEach((r, k) => r.classList.toggle('dores__resposta--ativa', k === i));
+    };
+    perguntas.forEach((b, i) => {
+      b.addEventListener('pointerenter', () => ativar(i));
+      b.addEventListener('focus', () => ativar(i));
+      b.addEventListener('click', () => ativar(i));
+    });
+    dores.addEventListener('pointerenter', () => { escolhendo = true; });
+    dores.addEventListener('pointerleave', () => { escolhendo = false; });
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { naTela = e.isIntersecting; }, { threshold: .3 }).observe(dores);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(() => { if (naTela && !escolhendo && !document.hidden) ativar((atual + 1) % perguntas.length); }, 4500);
     }
   }
 </script>
