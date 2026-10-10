@@ -4,8 +4,9 @@
  * a primeira "muito tecnológica", com cara de quem vende sistema: a Renke
  * vende o processo, feito por gente. Aqui cada peça mostra o trabalho
  * (um lead acompanhado, uma conversa, o plano do mês, o estudo feito pelo
- * time), em recortes claros e com as fotos reais da equipe, em preto e
- * branco. O quadro do CRM segue o da primeira versão.
+ * time), em recortes de vidro escuro e com as fotos reais da equipe, em
+ * preto e branco. Na ficha do lead, um cursor com nome e estado conduz os
+ * passos, como na tela inicial do ClickUp (vídeo de referência de 10/10). O quadro do CRM segue o da primeira versão.
  * Sem métricas nem pacientes inventados; o amarelo fica num ponto por peça.
  */
 import { Image } from 'astro:assets';
@@ -37,6 +38,10 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
         <li class="p2-passo p2-passo--feito"><i></i>Primeiro contato<span>10:12</span></li>
         <li class="p2-passo p2-passo--feito"><i></i>Avaliação agendada<span>sex, 09:30</span></li>
         <li class="p2-passo p2-passo--agora"><i></i>Paciente da clínica</li>
+        <li class="p2-cursor">
+          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+          <span class="p2-cursor__etiqueta"><b>Renke</b><span class="p2-cursor__estado"><i>Fazendo o primeiro contato…</i><i>Agendando a avaliação…</i><i>Lead virou paciente</i></span></span>
+        </li>
       </ul>
     </div>
     <div class="p2-lead__lado" data-p2 style="--d:360">
