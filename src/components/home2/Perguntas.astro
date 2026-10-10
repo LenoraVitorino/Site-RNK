@@ -42,60 +42,46 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
       )}
     </header>
 
-    {/* Dor e resposta (10/10): as sete perguntas do dono de clínica, da copy
-        original, em linhas grandes; a da vez acende e, ao lado, um cartão só
-        mostra o que muda com a Renke. Passa sozinha, e o ponteiro ou o toque
-        escolhem. Na copy original ficam só as perguntas, sem o cartão. */}
-    <div class:list={['dores', { 'dores--so-perguntas': copyLiteral }]} data-dores>
-      <ol class="dores__lista" aria-label={copyLiteral ? 'Perguntas' : 'O que muda na sua clínica'}>
-        {perguntas.map((p, i) => (
-          <li class="dores__item">
-            <button type="button" class:list={['dores__pergunta', { 'dores__pergunta--ativa': i === 0 }]} data-dor={i} aria-pressed={i === 0 ? 'true' : 'false'}>{p.pergunta}</button>
-            {!copyLiteral && <div class="dores__mob"><h3>{p.titulo}</h3><p>{p.texto}</p></div>}
-          </li>
-        ))}
-      </ol>
-      {!copyLiteral && (
-        <div class="dores__painel" aria-hidden="true">
-          {perguntas.map((p, i) => (
-            <article class:list={['dores__resposta', { 'dores__resposta--ativa': i === 0 }]} data-resposta={i}>
-              <span class="ganhos__anel"><IconeRenke nome={icones[i]} size={22} class="ganhos__icone" /></span>
-              <div class="dores__corpo">
-                <p class="dores__com">Com a Renke</p>
-                <h3 class="ganhos__nome">{p.titulo}</h3>
-                <p class="ganhos__texto">{p.texto}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-    </div>
+    {/* Painéis que se abrem (10/10): os sete cartões lado a lado numa faixa
+        só; o da vez fica largo, com título e texto, e os outros ficam
+        estreitos, só com o ícone e o nome em pé. Passa sozinho, e o ponteiro,
+        o foco ou o toque escolhem. Nem grade, nem carrossel, nem pilha. O
+        conteúdo é o de cada versão: os ganhos no estúdio, as perguntas na
+        copy original (sem misturar as duas). */}
+    <ol class:list={['paineis', { 'paineis--copy': copyLiteral }]} aria-label="O que muda na sua clínica" data-paineis>
+      {perguntas.map((p, i) => (
+        <li class:list={['painel', { 'painel--ativo': i === 0 }]} data-painel={i} tabindex="0">
+          <span class="ganhos__anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} class="painel__icone" /></span>
+          {!copyLiteral && <span class="painel__em-pe" aria-hidden="true">{p.titulo}</span>}
+          <div class="painel__corpo">
+            {copyLiteral
+              ? <h3 class="painel__nome painel__nome--pergunta">{p.pergunta}</h3>
+              : <><h3 class="painel__nome">{p.titulo}</h3><p class="painel__texto">{p.texto}</p></>}
+          </div>
+        </li>
+      ))}
+    </ol>
   </div>
 </section>
 
 <script>
-  /* A pergunta da vez: troca sozinha a cada 4,5 s enquanto a dobra está na
+  /* O painel da vez: troca sozinho a cada 4,5 s enquanto a faixa está na
      tela e ninguém está escolhendo; ponteiro, foco e toque escolhem. */
-  const dores = document.querySelector<HTMLElement>('[data-dores]');
-  if (dores) {
-    const perguntas = [...dores.querySelectorAll<HTMLButtonElement>('[data-dor]')];
-    const respostas = [...dores.querySelectorAll<HTMLElement>('[data-resposta]')];
+  const faixa = document.querySelector<HTMLElement>('[data-paineis]');
+  if (faixa) {
+    const paineis = [...faixa.querySelectorAll<HTMLElement>('[data-painel]')];
     let atual = 0, naTela = false, escolhendo = false;
-    const ativar = (i: number) => {
-      atual = i;
-      perguntas.forEach((b, k) => { b.classList.toggle('dores__pergunta--ativa', k === i); b.setAttribute('aria-pressed', String(k === i)); });
-      respostas.forEach((r, k) => r.classList.toggle('dores__resposta--ativa', k === i));
-    };
-    perguntas.forEach((b, i) => {
-      b.addEventListener('pointerenter', () => ativar(i));
-      b.addEventListener('focus', () => ativar(i));
-      b.addEventListener('click', () => ativar(i));
+    const ativar = (i: number) => { atual = i; paineis.forEach((el, k) => el.classList.toggle('painel--ativo', k === i)); };
+    paineis.forEach((el, i) => {
+      el.addEventListener('pointerenter', () => ativar(i));
+      el.addEventListener('focus', () => ativar(i));
+      el.addEventListener('click', () => ativar(i));
     });
-    dores.addEventListener('pointerenter', () => { escolhendo = true; });
-    dores.addEventListener('pointerleave', () => { escolhendo = false; });
-    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { naTela = e.isIntersecting; }, { threshold: .3 }).observe(dores);
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setInterval(() => { if (naTela && !escolhendo && !document.hidden) ativar((atual + 1) % perguntas.length); }, 4500);
+    faixa.addEventListener('pointerenter', () => { escolhendo = true; });
+    faixa.addEventListener('pointerleave', () => { escolhendo = false; });
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { naTela = e.isIntersecting; }, { threshold: .3 }).observe(faixa);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 900px)').matches) {
+      setInterval(() => { if (naTela && !escolhendo && !document.hidden) ativar((atual + 1) % paineis.length); }, 4500);
     }
   }
 </script>
