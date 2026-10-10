@@ -388,6 +388,13 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--posicionamento { grid-column: span 7; }
   .revena-peca--crm .revena-peca__arte { min-height: 250px; }
 }
+/* Celular: os mesmos cartões em ziguezague, um à esquerda e o seguinte à
+   direita, quina com quina, em vez de uma pilha de caixas iguais. */
+@media (max-width: 599.98px) {
+  #perguntas .ganhos__grade { gap: 10px; }
+  #perguntas .ganhos__cartao { width: 86%; }
+  #perguntas .ganhos__cartao:nth-child(even) { margin-left: auto; }
+}
 @media (max-width: 599.98px) {
   .revena-bento { --peca-recuo: 24px; }
   .revena-peca { --base: 28px; padding: 28px 24px; }
@@ -733,6 +740,8 @@ section[id] { scroll-margin-top: 110px; }
 .ganhos__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: clamp(22px, 1.75vw, 27px); line-height: 1.15; letter-spacing: -.025em; color: var(--papel); text-wrap: balance; }
 .ganhos__nome--pergunta { font-weight: 300; font-size: clamp(21px, 1.6vw, 25px); line-height: 1.25; text-wrap: pretty; }
 .ganhos__texto { margin: 0; max-width: 34ch; font-size: clamp(15px, 1.1vw, 16px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+/* Teste dor e resposta: a resposta direta abre a frase, em claro. */
+.ganhos__texto--resposta strong { font-weight: 500; color: var(--papel); }
 /* A máscara de onde título e texto sobem. */
 .ganhos__nome, .ganhos__texto { overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
 :is(.ganhos__nome, .ganhos__texto) > span { display: block; }
@@ -740,14 +749,37 @@ section[id] { scroll-margin-top: 110px; }
 @media (min-width: 1100px) {
   /* Diagrama (02/10, "deixa alguns um na ponta do outro"): X X · X /
      · · X · / X X · X. O cartão do meio toca quatro pelas quinas. */
-  .ganhos__cartao { aspect-ratio: 1; min-height: auto; }
-  .ganhos__cartao--1 { grid-area: 1 / 1; }
-  .ganhos__cartao--2 { grid-area: 1 / 2; }
-  .ganhos__cartao--3 { grid-area: 1 / 4; }
-  .ganhos__cartao--4 { grid-area: 2 / 3; }
-  .ganhos__cartao--5 { grid-area: 3 / 1; }
-  .ganhos__cartao--6 { grid-area: 3 / 2; }
-  .ganhos__cartao--7 { grid-area: 3 / 4; }
+  /* Losango de 2, 3 e 2 (10/10): cinco colunas, cartões alternados como num
+     tabuleiro, todos se tocando pelas quinas. Simétrico, sem cartão
+     sozinho no meio nem buraco de um lado (como no X X · X anterior). */
+  #perguntas .ganhos__grade { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(10px, .9vw, 14px); }
+  #perguntas .ganhos__cartao { aspect-ratio: 4 / 5; min-height: auto; padding: clamp(18px, 1.5vw, 22px); gap: 20px; }
+  #perguntas .ganhos__cartao .ganhos__anel { width: 42px; height: 42px; }
+  #perguntas .ganhos__cartao .ganhos__nome { font-size: clamp(19px, 1.5vw, 22px); }
+  #perguntas .ganhos__cartao .ganhos__nome--pergunta { font-size: clamp(17px, 1.3vw, 19px); }
+  #perguntas .ganhos__cartao .ganhos__texto { max-width: none; font-size: clamp(14px, 1vw, 15px); line-height: 1.5; }
+  #perguntas .ganhos__cartao--1 { grid-area: 1 / 2; }
+  #perguntas .ganhos__cartao--2 { grid-area: 1 / 4; }
+  #perguntas .ganhos__cartao--3 { grid-area: 2 / 1; }
+  #perguntas .ganhos__cartao--4 { grid-area: 2 / 3; }
+  #perguntas .ganhos__cartao--5 { grid-area: 2 / 5; }
+  #perguntas .ganhos__cartao--6 { grid-area: 3 / 2; }
+  #perguntas .ganhos__cartao--7 { grid-area: 3 / 4; }
+}
+
+/* TESTE (10/10, /laboratorio/dores-solucoes): bento no lugar do losango.
+   Grade inteira, sem buracos: dois cartões em cima (largo e estreito), três
+   no meio e dois embaixo (estreito e largo). Cartões mais altos, com mais
+   respiro e letra maior; ícone em cima, a pergunta e a resposta embaixo. */
+@media (min-width: 1100px) {
+  #perguntas.ganhos--bento .ganhos__grade { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 18px); }
+  #perguntas.ganhos--bento .ganhos__cartao { grid-area: auto; grid-column: span 4; aspect-ratio: auto; min-height: clamp(280px, 23vw, 350px); padding: clamp(26px, 2.4vw, 38px); gap: 48px; border-radius: clamp(20px, 1.7vw, 26px); }
+  #perguntas.ganhos--bento :is(.ganhos__cartao--1, .ganhos__cartao--7) { grid-column: span 7; }
+  #perguntas.ganhos--bento :is(.ganhos__cartao--2, .ganhos__cartao--6) { grid-column: span 5; }
+  #perguntas.ganhos--bento .ganhos__cartao .ganhos__anel { width: 48px; height: 48px; }
+  #perguntas.ganhos--bento .ganhos__corpo { gap: 14px; }
+  #perguntas.ganhos--bento .ganhos__cartao :is(.ganhos__nome, .ganhos__nome--pergunta) { max-width: 24ch; font-size: clamp(22px, 1.9vw, 29px); line-height: 1.16; text-wrap: balance; }
+  #perguntas.ganhos--bento .ganhos__cartao .ganhos__texto { max-width: 46ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.55; }
 }
 
 /* Construção (só com JS e movimento liberado). */

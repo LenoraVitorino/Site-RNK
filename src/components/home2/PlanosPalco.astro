@@ -44,12 +44,20 @@ const textoEstudio: Record<string, string> = {
   'REVENA SCALE': 'Comercial e marketing medidos de perto, com conteúdo orgânico e reativação da base de pacientes.',
 };
 
+// O momento da clínica, no canto inferior direito do palco (voltou em 10/10).
+// O Start usa a fala da copy original (docs/03-copy/home.md): em data/home.ts
+// o campo dele deixou de ser uma fala.
+const falaEstudio: Record<string, string> = {
+  'REVENA START': 'Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados.',
+};
+
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   return {
     id: chave(label),
     nome: nome(label),
     texto: textoEstudio[label] ?? p.texto,
+    fala: falaEstudio[label] ?? p.fala,
     rota: p.rota,
     pecas: pecas(label),
   };
@@ -64,9 +72,15 @@ import Selo from '../ui/Selo.astro';
     <div class="container palcoplanos__cabeca">
       <Selo tag="h2" class="palcoplanos__titulo" id="protocolo-revena-titulo" tom="claro" marca="revena">Protocolo Revena</Selo>
       <p class="palcoplanos__manifesto" data-revena-revela>
-        {'Estruturamos sua operação do zero e operamos juntos no longo prazo. Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
+        {'Estruturamos sua operação do zero e operamos juntos no longo prazo.'.split(' ').map((palavra) => (
           <><span data-palavra>{palavra}</span>{' '}</>
         ))}
+        <!-- A pergunta em peso médio: a frase de destaque do título (10/10). -->
+        <b>
+          {'Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
+            <><span data-palavra>{palavra}</span>{' '}</>
+          ))}
+        </b>
       </p>
     </div>
   </div>
@@ -87,9 +101,11 @@ import Selo from '../ui/Selo.astro';
       </svg>
       <ol class="palcoplanos__ancoras" aria-label="Planos Revena">
         {planos.map((p, i) => (
-          <li><button type="button" class:list={['palcoplanos__ancora', i === 0 && 'palcoplanos__ancora--ativa']} data-plano-ir={i} aria-current={i === 0 ? 'true' : undefined}>Revena {p.nome}</button></li>
+          <li><button type="button" class:list={['palcoplanos__ancora', i === 0 && 'palcoplanos__ancora--ativa']} data-plano-ir={i} aria-current={i === 0 ? 'true' : undefined}><span>Revena {p.nome}</span></button></li>
         ))}
       </ol>
+
+      <span class="palcoplanos__ver" data-ver aria-hidden="true">Ver o plano<svg viewBox="0 0 16 16" focusable="false"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
 
       <!-- Um plano por camada; a próxima camada inteira sobe de baixo para cima. -->
       {planos.map((p, i) => (
@@ -101,10 +117,21 @@ import Selo from '../ui/Selo.astro';
           <div class="plano-palco__info" data-info>
             <h3 class="plano-palco__nome plano-palco__nome--pilha"><span class="plano-palco__nome__a">Revena</span> <span class="plano-palco__nome__b">{p.nome}</span></h3>
 
+            {/* Um bloco só, com hierarquia: a fala do momento da clínica em destaque e, abaixo, o que o plano entrega. */}
             <div class="plano-palco__texto">
-              <p class="plano-palco__frase">{p.texto}</p>
-              <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="sm">Saiba mais</Botao>
+              {/* No desktop o bloco é só: qual plano é, o que ele é e o botão (o nome gigante já é o título). A fala do momento da clínica fica para a pilha do celular. */}
+              <p class="plano-palco__conta" aria-hidden="true">Plano {String(i + 1).padStart(2, '0')} de {String(planos.length).padStart(2, '0')}</p>
+              <p class="plano-palco__momento-rotulo">Momento da clínica</p>
+              <p class="plano-palco__fala">“{p.fala}”</p>
+              {/* O que o plano é e o convite andam juntos (display: contents: não muda o bloco; serve às variações de teste). */}
+              <div class="plano-palco__acao">
+                <p class="plano-palco__frase">{p.texto}</p>
+                {/* O convite vem logo depois do texto, na ordem da leitura, e diz para onde leva: a página do plano. */}
+                <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="md">Conhecer o Revena {p.nome}</Botao>
+              </div>
             </div>
+            {/* O centro do palco também é clicável: ao passar o mouse, o cursor ganha a etiqueta "Ver o plano". */}
+            <a class="plano-palco__link" href={existe(p.rota) ? p.rota : '#'} tabindex="-1" aria-hidden="true"></a>
 
           </div>
           <!-- Cada símbolo pertence à sua dobra: a próxima camada o cobre por inteiro. -->
@@ -138,6 +165,19 @@ import Selo from '../ui/Selo.astro';
     const names = [...trilho.querySelectorAll<HTMLElement>('[data-nome]')];
     const anchors = [...trilho.querySelectorAll<HTMLButtonElement>('[data-plano-ir]')];
     const mapa = [...trilho.querySelectorAll<SVGGElement>('[data-mapa]')];
+    // Etiqueta que acompanha o cursor sobre o centro do palco: deixa claro que ali se abre a página do plano.
+    const ver = trilho.querySelector<HTMLElement>('[data-ver]');
+    if (ver && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const fixo = trilho.querySelector<HTMLElement>('.palcoplanos__fixo')!;
+      fixo.addEventListener('pointermove', (e) => {
+        const sobre = (e.target as HTMLElement).closest?.('.plano-palco__link');
+        ver.classList.toggle('palcoplanos__ver--on', !!sobre);
+        if (!sobre) return;
+        const r = fixo.getBoundingClientRect();
+        ver.style.transform = `translate(${e.clientX - r.left + 18}px, ${e.clientY - r.top + 18}px)`;
+      });
+      fixo.addEventListener('pointerleave', () => ver.classList.remove('palcoplanos__ver--on'));
+    }
     const clamp = (x: number) => Math.max(0, Math.min(1, x));
     const ease = (x: number) => x * x * (3 - 2 * x);
     const count = layers.length;

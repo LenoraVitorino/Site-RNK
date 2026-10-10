@@ -1,0 +1,361 @@
+---
+/**
+ * Segunda versão das artes do Protocolo Revena (10/10/2026). A Lenora achou
+ * a primeira "muito tecnológica", com cara de quem vende sistema: a Renke
+ * vende o processo, feito por gente. Aqui cada peça mostra o trabalho
+ * (um lead acompanhado, uma conversa, o plano do mês, o estudo feito pelo
+ * time), com as fotos reais da equipe, em cor. Só o quadro do CRM é claro; as
+ * outras telas são escuras com detalhes em amarelo claro. O quadro do CRM segue o da primeira versão.
+ * Sem métricas nem pacientes inventados; o amarelo fica num ponto por peça.
+ */
+import { Image } from 'astro:assets';
+import '../../../styles/protocolo-v2.css';
+import isa from '../../../assets/equipe/isa.jpg';
+import lari from '../../../assets/equipe/lari.jpg';
+import julio from '../../../assets/equipe/julio-caldeira.jpg';
+import maria from '../../../assets/equipe/maria.jpg';
+import pedro from '../../../assets/equipe/pedro-packness.jpg';
+import milena from '../../../assets/equipe/milena.jpg';
+
+interface Props { peca: 'conexoes' | 'crm' | 'automacao' | 'decisao' | 'posicionamento' }
+const { peca } = Astro.props;
+
+/* 1. Do marketing ao paciente em três telas (10/10: "mostra a tela, não a
+   etapa, não o timeline"): a tela do marketing publicando a campanha, a do
+   comercial conversando e agendando, a da clínica recebendo o paciente.
+   Cada tela entra pela direita e sai pela esquerda; quem trabalha aparece
+   no cursor, com foto e nome. As telas são inventadas: representam o
+   processo, não um sistema à venda. Laço de 18 s, 6 s por tela; os tempos
+   de cada cena vão de 0 a 1 e viram % do laço em g(). */
+const g = (k: number, t: number) => +(((k + t) / 3) * 100).toFixed(2);
+const q: string[] = [];
+const cena = (k: number) => q.push(`@keyframes p2-cena-${k}{0%,${g(k, 0)}%{opacity:0;transform:translateX(44px)}${g(k, .09)}%,${g(k, .93)}%{opacity:1;transform:none}${g(k, 1)}%,100%{opacity:0;transform:translateX(-44px)}}`);
+const entra = (n: string, k: number, t: number, de = 'translateY(10px)') => q.push(`@keyframes ${n}{0%,${g(k, t)}%{opacity:0;transform:${de}}${g(k, t + .07)}%,100%{opacity:1;transform:none}}`);
+const troca = (n: string, k: number, t: number) => q.push(
+  `@keyframes ${n}-a{0%,${g(k, t)}%{opacity:1}${g(k, t + .02)}%,100%{opacity:0}}`,
+  `@keyframes ${n}-b{0%,${g(k, t + .02)}%{opacity:0}${g(k, t + .04)}%,100%{opacity:1}}`);
+const aperta = (n: string, k: number, t: number) => q.push(`@keyframes ${n}{0%,${g(k, t - .02)}%{transform:none}${g(k, t)}%{transform:scale(.95)}${g(k, t + .04)}%,100%{transform:none}}`);
+/* Cursor: pontos [tempo, left, top]; some antes do primeiro e depois do último. */
+const mouse = (n: string, k: number, pts: [number, string, string][]) => {
+  const [p0, pf] = [pts[0], pts[pts.length - 1]];
+  // Só transform (sem left/top), para o cursor deslizar sem refazer o layout:
+  // as porcentagens viram cqw do bloco onde o cursor mora.
+  const tr = ([, x, y]: [number, string, string]) => `translate(${x.replace(/%/g, 'cqw')},${y})`;
+  q.push(`@keyframes ${n}{0%,${g(k, p0[0] - .08)}%{opacity:0;transform:${tr(p0)} translate(18px,16px)}${pts.map((p) => `${g(k, p[0])}%{opacity:1;transform:${tr(p)}}`).join('')}${g(k, pf[0] + .1)}%,100%{opacity:0;transform:${tr(pf)} translate(14px,14px)}}`);
+};
+[0, 1, 2].forEach(cena);
+// Tela 1, marketing: os leads da campanha em pilha (10/10, "muito lista, muito
+// tabela": referência dos cartões empilhados do ClickUp). O marketing passa o da
+// frente ao comercial, o cartão voa para o painel ao lado e a pilha avança.
+const kf = (n: string, k: number, pts: [number, string][]) => q.push(`@keyframes ${n}{0%{${pts[0][1]}}${pts.map(([t, c]) => `${g(k, t)}%{${c}}`).join('')}100%{${pts[pts.length - 1][1]}}}`);
+const leads = [
+  { ini: 'JM', nome: 'Juliana M.', de: 'Harmonização', canal: 'Google', quando: 'agora' },
+  { ini: 'MS', nome: 'Mariana S.', de: 'Fios de PDO', canal: 'Instagram', quando: 'há 5 min' },
+  { ini: 'RL', nome: 'Renata L.', de: 'Botox', canal: 'Instagram', quando: 'há 1 h' },
+  { ini: 'PV', nome: 'Paula V.', de: 'Peeling', canal: 'Google', quando: 'há 2 h' },
+];
+const T1 = .34, T2 = .66;
+const vaga = [
+  'opacity:1;transform:translateY(62px);filter:brightness(1)',
+  'opacity:1;transform:translateY(30px) scale(.94);filter:brightness(.62)',
+  'opacity:1;transform:translateY(0) scale(.88);filter:brightness(.4)',
+  'opacity:0;transform:translateY(-16px) scale(.84);filter:brightness(.4)',
+];
+const fora = 'opacity:0;transform:translate(52cqw,34px) scale(.42);filter:brightness(1)';
+kf('p2-deck-0', 0, [[T1, vaga[0]], [T1 + .1, fora]]);
+kf('p2-deck-1', 0, [[T1 + .03, vaga[1]], [T1 + .13, vaga[0]], [T2, vaga[0]], [T2 + .1, fora]]);
+kf('p2-deck-2', 0, [[T1 + .03, vaga[2]], [T1 + .13, vaga[1]], [T2 + .03, vaga[1]], [T2 + .13, vaga[0]]]);
+kf('p2-deck-3', 0, [[T1 + .03, vaga[3]], [T1 + .13, vaga[2]], [T2 + .03, vaga[2]], [T2 + .13, vaga[1]]]);
+kf('p2-deck-acao-0', 0, [[0, 'opacity:1']]);
+kf('p2-deck-acao-1', 0, [[T1 + .08, 'opacity:0'], [T1 + .14, 'opacity:1']]);
+kf('p2-deck-acao-2', 0, [[T2 + .08, 'opacity:0'], [T2 + .14, 'opacity:1']]);
+kf('p2-deck-acao-3', 0, [[0, 'opacity:0']]);
+aperta('p2-deck-toque-0', 0, T1 - .02); aperta('p2-deck-toque-1', 0, T2 - .02);
+mouse('p2-m1', 0, [[.16, '46%', '120px'], [.28, 'calc(100% - 54px)', '174px'], [T2 + .04, 'calc(100% - 54px)', '174px']]);
+kf('p2-com-2', 0, [[T1 + .08, 'opacity:1'], [T1 + .1, 'opacity:0']]);
+kf('p2-com-3', 0, [[T1 + .1, 'opacity:0'], [T1 + .12, 'opacity:1'], [T2 + .08, 'opacity:1'], [T2 + .1, 'opacity:0']]);
+kf('p2-com-4', 0, [[T2 + .1, 'opacity:0'], [T2 + .12, 'opacity:1']]);
+entra('p2-com-jm', 0, T1 + .08, 'scale(.4)'); entra('p2-com-ms', 0, T2 + .08, 'scale(.4)');
+// Tela 2, comercial: conversa com o lead e marca a avaliação.
+entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
+mouse('p2-m2', 1, [[.56, '66%', '-64px'], [.68, '84px', '16px'], [.84, '84px', '16px']]);
+aperta('p2-vaga', 1, .72);
+q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#2b2b2a;color:#F2F2EE}${g(1, .76)}%,100%{background:#F2F2EE;color:#161616}}`);
+troca('p2-estado-lead', 1, .76);
+// Tela 3, clínica: a ficha da Juliana no dia da avaliação; a barra enche em três
+// passos (confirmou, chegou, fechou) e o estado termina em "Virou paciente".
+const passos = ['Confirmou', 'Compareceu', 'Fechou'];
+const TP = [.14, .36, .58];
+TP.forEach((t, i) => {
+  kf(`p2-pac-barra-${i}`, 2, [[t, 'transform:scaleX(0)'], [t + .14, 'transform:scaleX(1)']]);
+  kf(`p2-pac-passo-${i}`, 2, [[t + .06, 'opacity:.4'], [t + .14, 'opacity:1']]);
+});
+kf('p2-pac-est-0', 2, [[TP[1] + .12, 'opacity:1'], [TP[1] + .14, 'opacity:0']]);
+kf('p2-pac-est-1', 2, [[TP[1] + .14, 'opacity:0'], [TP[1] + .16, 'opacity:1'], [TP[2] + .12, 'opacity:1'], [TP[2] + .14, 'opacity:0']]);
+kf('p2-pac-est-2', 2, [[TP[2] + .14, 'opacity:0;transform:scale(.9)'], [TP[2] + .2, 'opacity:1;transform:none']]);
+const quadros = q.join('');
+
+/* 3. A conversa do lembrete, em % de um laço de 12 s. */
+const quadrosZap = [
+  '@keyframes p2-z-corpo{0%{opacity:0}4%,93%{opacity:1}100%{opacity:0}}',
+  '@keyframes p2-z-1{0%,6%{opacity:0;transform:translateY(10px) scale(.97)}11%,100%{opacity:1;transform:none}}',
+  '@keyframes p2-z-lido{0%,26%{stroke:rgb(22 22 22 / .32)}30%,100%{stroke:#161616}}',
+  '@keyframes p2-z-dig{0%,34%{opacity:0;transform:translateY(8px)}38%,50%{opacity:1;transform:none}53%,100%{opacity:0;transform:none}}',
+  '@keyframes p2-z-2{0%,52%{opacity:0;transform:translateY(8px) scale(.97)}57%,100%{opacity:1;transform:none}}',
+  '@keyframes p2-z-3{0%,68%{opacity:0;transform:translateY(8px)}73%,100%{opacity:1;transform:none}}',
+].join('');
+
+/* 4. O plano do mês virando entrega (10/10, "fez isso, isso, isso e
+   finalizou"): cada pendência tem a área e a pessoa do time que cuida dela.
+   `em` é quando entra em andamento e `feito` quando conclui, em % de 14 s. */
+const tarefas = [
+  { titulo: 'Mais verba no Google', area: 'Mídia paga', dono: julio, em: 10, feito: 24 },
+  { titulo: 'Novo roteiro para a recepção', area: 'Comercial', dono: lari, em: 34, feito: 48 },
+  { titulo: 'Reativar pacientes antigos', area: 'CRM e automação', dono: milena, em: 58, feito: 72 },
+];
+const quadrosPlano = tarefas.map((t, k) => [
+  `@keyframes p2-tar-${k}{0%,${t.em}%{opacity:.34}${t.em + 3}%,94%{opacity:1}100%{opacity:.34}}`,
+  `@keyframes p2-tar-dono-${k}{0%,${t.em}%{opacity:0;transform:scale(.7)}${t.em + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
+  `@keyframes p2-tar-ponto-${k}{0%,${t.em}%{opacity:0}${t.em + 3}%,${t.feito}%{opacity:1}${t.feito + 2}%,100%{opacity:0}}`,
+  `@keyframes p2-tar-visto-${k}{0%,${t.feito}%{opacity:0;transform:scale(.5)}${t.feito + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
+].join('')).join('')
+  // A barra do plano avança um terço a cada entrega; no fim, o estado do topo vira "Entregue".
+  + `@keyframes p2-plano-barra{0%,${tarefas[0].feito}%{transform:scaleX(0)}${tarefas.map((t, k) => `${t.feito + 4}%${k < 2 ? `,${tarefas[k + 1].feito}%` : ',94%'}{transform:scaleX(${((k + 1) / 3).toFixed(4)})}`).join('')}100%{transform:scaleX(0)}}`
+  + '@keyframes p2-plano-est-a{0%,76%{opacity:1}78%,96%{opacity:0}100%{opacity:1}}'
+  + '@keyframes p2-plano-est-b{0%,78%{opacity:0;transform:scale(.92)}82%,94%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}';
+
+/* 5. O estudo de concorrentes como processo (10/10: "mostra como é olhar os
+   concorrentes", sem foto da sede): quem analisa passa concorrente por
+   concorrente, anota o que cada um comunica e onde investe, e no fim aparece
+   a brecha que vira o posicionamento. Tempos em % de um laço de 14 s. */
+const concorrentes = [
+  { letra: 'A', comunica: 'Preço baixo', investe: 'Google' },
+  { letra: 'B', comunica: 'Antes e depois', investe: 'Instagram' },
+  { letra: 'C', comunica: 'Promoções', investe: 'Instagram' },
+];
+const quadrosEstudo = concorrentes.map((_, i) => {
+  const em = 8 + i * 18;
+  return `@keyframes p2-e-linha-${i}{0%,${em}%{opacity:.32}${em + 3}%,94%{opacity:1}100%{opacity:.32}}`
+    + [0, 1].map((j) => `@keyframes p2-e-nota-${i}-${j}{0%,${em + 4 + j * 5}%{opacity:0;transform:scale(.8)}${em + 7 + j * 5}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`).join('');
+}).join('')
+  + '@keyframes p2-e-brecha{0%,64%{opacity:0;transform:translateY(12px) scale(.97)}70%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}'
+  + '@keyframes p2-e-mouse{0%,4%{opacity:0;transform:translate(84cqw,96px)}9%,22%{opacity:1;transform:translate(58cqw,52px)}27%,40%{opacity:1;transform:translate(58cqw,89px)}45%,58%{opacity:1;transform:translate(58cqw,126px)}67%,86%{opacity:1;transform:translate(76cqw,196px)}93%,100%{opacity:0;transform:translate(82cqw,210px)}}';
+
+/* As artes contam um caso de uso com uma clínica fictícia, a Clínica Âmbar
+   (10/10: "inventa um nome de uma clínica, como se fosse um caso de uso"). */
+const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const, class: 'p2-rosto' };
+---
+{peca === 'conexoes' && (
+  <div class="p2 p2-tela" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadros}></style>
+
+    <section class="p2-cena p2-anim" style="--a:p2-cena-0">
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span><b>Marketing</b><span>Leads da campanha de outubro</span></header>
+      <div class="p2-cena__corpo">
+        <div class="p2-deck">
+          {leads.map((l, k) => (
+            <article class="p2-lead p2-anim" style={`--a:p2-deck-${k};z-index:${4 - k}`}>
+              <i class="p2-lead__foto">{l.ini}</i>
+              <div><strong>{l.nome}</strong><span>{l.de}<u> · veio do {l.canal}</u></span></div>
+              <em>{l.quando}</em>
+              <span class="p2-lead__acao p2-anim" style={`--a:p2-deck-acao-${k}`}><b class:list={[k < 2 && 'p2-anim']} style={k < 2 ? `--a:p2-deck-toque-${k}` : undefined}>Passar ao comercial<svg viewBox="0 0 16 16" focusable="false"><path d="M3 8h10M9 4l4 4-4 4" /></svg></b></span>
+            </article>
+          ))}
+          <div class="p2-mouse p2-anim" style="--a:p2-m1">
+            <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+            <span class="p2-mouse__quem"><Image src={isa} {...rosto} /></span>
+          </div>
+        </div>
+        <div class="p2-bloco p2-cena__extra p2-com">
+          <div class="p2-com__topo"><span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span><b>Comercial</b></div>
+          <div class="p2-com__num"><b class="p2-anim" style="--a:p2-com-2">2</b><b class="p2-anim" style="--a:p2-com-3">3</b><b class="p2-com__fim p2-anim" style="--a:p2-com-4">4</b></div>
+          <span class="p2-com__rotulo">leads em atendimento</span>
+          <div class="p2-com__fila"><i>CA</i><i>HR</i><i class="p2-anim" style="--a:p2-com-jm">JM</i><i class="p2-anim" style="--a:p2-com-ms">MS</i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p2-cena p2-anim" style="--a:p2-cena-1">
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span><b>Comercial</b><span>Conversa com o lead</span></header>
+      <div class="p2-cena__corpo">
+        <div class="p2-cena__principal">
+          <div class="p2-conversa2">
+            <span class="p2-fala p2-anim" style="--a:p2-fala-1">Oi! Vi o anúncio de harmonização.</span>
+            <span class="p2-fala p2-fala--nossa p2-anim" style="--a:p2-fala-2">Oi! Posso agendar sua avaliação?</span>
+            <span class="p2-fala p2-anim" style="--a:p2-fala-3">Pode ser na sexta.</span>
+          </div>
+          <div class="p2-vagas p2-anim" style="--a:p2-vagas">
+            <span class="p2-vaga p2-vaga--escolhida p2-anim" style="--a:p2-vaga"><b class="p2-anim" style="--a:p2-vaga-cor">Sex, 09:30</b></span>
+            <span class="p2-vaga"><b>Sex, 11:00</b></span>
+            <span class="p2-vaga"><b>Sex, 15:30</b></span>
+            <div class="p2-mouse p2-anim" style="--a:p2-m2">
+              <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+              <span class="p2-mouse__quem"><Image src={lari} {...rosto} /></span>
+            </div>
+          </div>
+        </div>
+        <div class="p2-bloco p2-cena__extra">
+          <span class="p2-legenda">Lead</span>
+          <strong>Juliana M.</strong>
+          <div class="p2-linha p2-linha--fina">Interesse<span>Harmonização</span></div>
+          <div class="p2-linha p2-linha--fina">Origem<span>Google</span></div>
+          <div class="p2-linha p2-linha--fina">Campanha<span>Outubro</span></div>
+          <div class="p2-linha p2-linha--fina">Situação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">Em contato</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Agendado</b></span></div>
+          <div class="p2-linha p2-linha--fina">Avaliação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">A marcar</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Sex, 09:30</b></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p2-cena p2-cena--fim p2-anim" style="--a:p2-cena-2">
+      <header class="p2-cena__topo"><span class="p2-cena__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg></span><b>Clínica Âmbar</b><span>Agenda de sexta</span></header>
+      <div class="p2-cena__corpo">
+        <div class="p2-cena__principal p2-pac">
+          <div class="p2-pac__ficha">
+            <div class="p2-pac__topo">
+              <i class="p2-lead__foto">JM</i>
+              <div><strong>Juliana M.</strong><span>Avaliação · 09:30</span></div>
+              <span class="p2-pac__estado"><b class="p2-anim" style="--a:p2-pac-est-0">Confirmada</b><b class="p2-anim" style="--a:p2-pac-est-1">Na clínica</b><b class="p2-pac__fim p2-anim" style="--a:p2-pac-est-2"><i></i>Virou paciente</b></span>
+            </div>
+            <ol class="p2-pac__passos">
+              {passos.map((t, i) => (
+                <li class="p2-anim" style={`--a:p2-pac-passo-${i}`}><i><b class="p2-anim" style={`--a:p2-pac-barra-${i}`}></b></i>{t}</li>
+              ))}
+            </ol>
+          </div>
+          <div class="p2-pac__depois">
+            <span>Depois dela</span>
+            <b>11:00 <i>Carla A.</i></b><b>14:00 <i>Helena R.</i></b>
+          </div>
+        </div>
+        <div class="p2-bloco p2-cena__extra p2-cuidou">
+          <span class="p2-legenda">Quem cuidou da Juliana</span>
+          <div><span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span><p><strong>Marketing</strong><span>Trouxe pelo Google</span></p></div>
+          <div><span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span><p><strong>Comercial</strong><span>Agendou a avaliação</span></p></div>
+          <div><span class="p2-cena__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg></span><p><strong>Clínica Âmbar</strong><span>Atendeu e fechou</span></p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+)}
+
+{peca === 'crm' && (
+  /* 2. O quadro do CRM em tela clara sobre o cartão escuro (10/10, referências
+     "Pipeline Tracking" e "Progress Tracking"): a recepção da clínica pega um
+     lead em contato, leva para "Agendado" e a ficha ganha dia e hora. */
+  <div class="p2 p2-crm" aria-hidden="true" data-p2 style="--d:0">
+    <div class="p2-crm__fundo">
+    <div class="p2-crm__topo">
+      <strong>Pipeline</strong>
+      <span class="p2-crm__time"><i>C</i><i>R</i></span>
+    </div>
+    <div class="p2-crm__quadro">
+      <div class="p2-crm__coluna">
+        <div class="p2-crm__cabeca"><i></i>Em contato<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">3</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">2</b></span></div>
+        <div class="p2-ficha"><i class="p2-ficha__foto">MS</i><div><strong>Mariana S.</strong><span>Fios de PDO<u> · Instagram</u></span></div><em>há 5 h</em></div>
+        <div class="p2-ficha p2-ficha--vaga"></div>
+        <div class="p2-ficha p2-crm__sobe p2-anim" style="--a:p2-crm-sobe"><i class="p2-ficha__foto">RL</i><div><strong>Renata L.</strong><span>Botox<u> · Indicação</u></span></div><em>ontem</em></div>
+      </div>
+      <div class="p2-crm__coluna">
+        <div class="p2-crm__cabeca p2-crm__cabeca--feito"><i></i>Agendado<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">2</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">3</b></span></div>
+        <div class="p2-ficha"><i class="p2-ficha__foto">CA</i><div><strong>Carla A.</strong><span>Retorno<u> · Site</u></span></div><em>sex, 09:30</em></div>
+        <div class="p2-ficha p2-crm__desce p2-anim" style="--a:p2-crm-desce"><i class="p2-ficha__foto">PV</i><div><strong>Paula V.</strong><span>Peeling<u> · Google</u></span></div><em>seg, 16:00</em></div>
+      </div>
+    </div>
+    </div>
+    {/* A ficha solta e o cursor ficam fora da camada que se apaga nas bordas. */}
+    <div class="p2-crm__solto">
+      <div class="p2-ficha p2-ficha--destino p2-anim" style="--a:p2-crm-destino"></div>
+      <div class="p2-crm__mover p2-anim" style="--a:p2-crm-mover">
+        <div class="p2-ficha p2-ficha--solta p2-anim" style="--a:p2-crm-ergue">
+          <i class="p2-ficha__foto">JM</i><div><strong>Juliana M.</strong><span>Harmonização<u> · Google</u></span></div>
+          <em class="p2-crm__hora"><b class="p2-anim" style="--a:p2-crm-antes">há 2 h</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">qui, 14:00</b></em>
+        </div>
+        <div class="p2-crm__cursor p2-anim" style="--a:p2-crm-cursor">
+          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+          <span class="p2-crm__etiqueta"><b>Recepção</b><span><i class="p2-anim" style="--a:p2-crm-fala-1">Agendando a avaliação…</i><i class="p2-anim" style="--a:p2-crm-fala-2">Agendada: quinta, 14:00</i></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{peca === 'automacao' && (
+  /* 3. A automação como conversa de WhatsApp (10/10: "não parece uma
+     conversa, faltam elementos do WhatsApp"): janela com contato, dia,
+     balões com hora e vistos, "digitando" e o campo de mensagem. O lembrete
+     sai sozinho, é lido, a paciente responde e a agenda se atualiza. */
+  <div class="p2 p2-zap" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadrosZap}></style>
+    <header class="p2-zap__topo">
+      <span class="p2-cena__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg></span>
+      <div><strong>Clínica Âmbar</strong><span>Conta comercial</span></div>
+      <svg class="p2-zap__icone" viewBox="0 0 24 24" focusable="false"><path d="M6.6 3.8h3l1.4 4-2 1.5a12 12 0 0 0 5.7 5.7l1.5-2 4 1.4v3c0 1.1-.9 2-2 2A15.6 15.6 0 0 1 4.6 5.800c0-1.1.9-2 2-2z" /></svg>
+    </header>
+    <div class="p2-zap__corpo p2-anim" style="--a:p2-z-corpo">
+      <span class="p2-zap__dia">Hoje</span>
+      <div class="p2-zap__balao p2-zap__balao--clinica p2-anim" style="--a:p2-z-1">
+        Sua avaliação é amanhã, às 14:00. Podemos confirmar a sua presença?
+        <span class="p2-zap__hora">08:00<svg class="p2-anim" style="--a:p2-z-lido" viewBox="0 0 18 12" focusable="false"><path d="M1 6.5l3.5 3.5L11 2.5M7 9l1 1 6.5-7.5" /></svg></span>
+      </div>
+      <div class="p2-zap__vez">
+        <div class="p2-zap__balao p2-zap__digitando p2-anim" style="--a:p2-z-dig"><i></i><i></i><i></i></div>
+        <div class="p2-zap__balao p2-anim" style="--a:p2-z-2">Confirmado, obrigada!<span class="p2-zap__hora">08:12</span></div>
+      </div>
+      <span class="p2-zap__dia p2-zap__dia--sistema p2-anim" style="--a:p2-z-3"><i></i>Presença confirmada na agenda</span>
+    </div>
+    <footer class="p2-zap__campo"><span>Mensagem</span><i><svg viewBox="0 0 24 24" focusable="false"><path d="M12 19v3" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><rect x="9" y="2" width="6" height="13" rx="3" /></svg></i></footer>
+  </div>
+)}
+
+{peca === 'decisao' && (
+  <div class="p2 p2-cartao p2-plano" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadrosPlano}></style>
+    <div class="p2-plano__topo">
+      <Image src={maria} {...rosto} />
+      <div><strong>Plano de outubro</strong><span>Reunião mensal</span></div>
+      <span class="p2-plano__estado">
+        <b class="p2-anim" style="--a:p2-plano-est-a">Em andamento</b>
+        <b class="p2-plano__entregue p2-anim" style="--a:p2-plano-est-b"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.5 8.4l3 3 6-6.6" /></svg>Entregue</b>
+      </span>
+    </div>
+    <div class="p2-plano__barra"><i class="p2-anim" style="--a:p2-plano-barra"></i></div>
+    <ul class="p2-plano__lista">
+      {tarefas.map((t, k) => (
+        <li class="p2-tarefa p2-anim" style={`--a:p2-tar-${k}`}>
+          <span class="p2-tarefa__marca">
+            <b class="p2-tarefa__ponto p2-anim" style={`--a:p2-tar-ponto-${k}`}><svg viewBox="0 0 20 20" focusable="false"><path d="M10 3a7 7 0 0 1 7 7" /></svg></b>
+            <b class="p2-tarefa__visto p2-anim" style={`--a:p2-tar-visto-${k}`}><svg viewBox="0 0 20 20" focusable="false"><path d="M5.6 10.4l3 3 5.8-6.6" /></svg></b>
+          </span>
+          <span class="p2-tarefa__texto">{t.titulo}<span>{t.area}</span></span>
+          <Image src={t.dono} {...rosto} class="p2-rosto p2-anim" style={`--a:p2-tar-dono-${k}`} />
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+{peca === 'posicionamento' && (
+  <div class="p2 p2-tela p2-estudo2" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadrosEstudo}></style>
+    <section class="p2-cena p2-cena--fim">
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={julio} {...rosto} /></span><b>Estudo de concorrentes</b></header>
+      <div class="p2-estudo2__corpo">
+        <div class="p2-estudo2__cabeca"><span>Concorrente</span><span>O que comunica</span><span>Onde investe</span></div>
+        {concorrentes.map((c, k) => (
+          <div class="p2-estudo2__linha p2-anim" style={`--a:p2-e-linha-${k}`}>
+            <span class="p2-estudo2__quem"><i>{c.letra}</i>Clínica {c.letra}</span>
+            <span><b class="p2-anim" style={`--a:p2-e-nota-${k}-0`}>{c.comunica}</b></span>
+            <span><b class="p2-anim" style={`--a:p2-e-nota-${k}-1`}>{c.investe}</b></span>
+          </div>
+        ))}
+        <div class="p2-estudo2__brecha p2-anim" style="--a:p2-e-brecha">
+          <i></i><div><strong>Brecha encontrada</strong><span>Ninguém fala do pós-procedimento</span></div>
+        </div>
+        <div class="p2-mouse p2-anim" style="--a:p2-e-mouse">
+          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+          <span class="p2-mouse__quem"><Image src={milena} {...rosto} /></span>
+        </div>
+      </div>
+    </section>
+  </div>
+)}
