@@ -31,8 +31,8 @@ const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'] as c
       {cartas.map((p, i) => (
         <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
-          {v2 && i !== 1 && <div class="revena-peca__arte"><ArteProtocolo2 peca={pecas[i] as 'conexoes'} /></div>}
-          {i === 1 && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
+          {v2 && <div class="revena-peca__arte"><ArteProtocolo2 peca={pecas[i]} /></div>}
+          {!v2 && i === 1 && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
           {!v2 && i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
           {!v2 && i === 2 && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
           {!v2 && i === 3 && <div class="revena-peca__arte"><PilarDecisao /></div>}

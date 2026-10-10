@@ -17,12 +17,14 @@
   .revena-bento--v2 :is(.revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento) { grid-column: span 4; }
 }
 
-.p2 { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }
+.p2 { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); --anel: rgb(242 242 238 / .22); --borda-rosto: #121212; color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }
 .p2 strong { display: block; font-weight: 500; font-size: 15px; letter-spacing: -.015em; }
 .p2 strong + span { display: block; margin-top: 2px; color: var(--suave); font-size: 13px; }
 .p2 ul { list-style: none; margin: 0; padding: 0; }
-.p2-cartao { background: linear-gradient(180deg, #1e1e1d, #171716); border: 1px solid var(--fio); border-radius: 14px; box-shadow: 0 18px 36px -22px rgb(0 0 0 / .8); }
-.p2-rosto { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.04); box-shadow: 0 0 0 2px #121212; background: #2a2a29; }
+/* Recorte claro sobre o cartão escuro: o contraste a nosso favor (10/10). */
+.p2-cartao, .p2-crm { --tinta: #161616; --suave: rgb(22 22 22 / .56); --fio: rgb(22 22 22 / .09); --anel: rgb(22 22 22 / .2); --borda-rosto: #fff; color: var(--tinta); }
+.p2-cartao { background: linear-gradient(180deg, #FCFCFA, #F1F1ED); border-radius: 14px; box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset, 0 24px 44px -24px rgb(0 0 0 / .9); }
+.p2-rosto { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.04); box-shadow: 0 0 0 2px var(--borda-rosto); background: #2a2a29; }
 .p2-rostos { display: flex; }
 .p2-rostos > * + * { margin-left: -12px; }
 .p2-rotulo, .p2-meta { color: var(--suave); font-size: 13px; }
@@ -31,9 +33,9 @@
 .p2-passos { display: grid; gap: 10px; }
 .p2-passo { display: flex; align-items: center; gap: 10px; }
 .p2-passo > span { margin-left: auto; padding-left: 12px; color: var(--suave); font-size: 13px; white-space: nowrap; }
-.p2-passo i, .p2-estado i { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgb(242 242 238 / .22); }
+.p2-passo i, .p2-estado i { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
 .p2-passo--feito i::after, .p2-estado i::after { content: ''; position: absolute; left: 5px; top: 4.5px; width: 6px; height: 3.5px; border-left: 1.4px solid var(--tinta); border-bottom: 1.4px solid var(--tinta); transform: rotate(-45deg); }
-.p2-passo--agora i { border-color: transparent; background: rgb(255 209 3 / .18); }
+.p2-passo--agora i { border-color: transparent; background: rgb(255 209 3 / .3); }
 .p2-passo--agora i::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
 
 /* 1. Do marketing à clínica: a história do processo, em três estações.
@@ -73,12 +75,73 @@
 @keyframes p2-rotulo-lead { 0%, 67% { opacity: 1; } 71%, 100% { opacity: 0; } }
 @keyframes p2-rotulo-paciente { 0%, 67% { opacity: 0; } 71%, 100% { opacity: 1; } }
 
+/* 2. O quadro do CRM: tela clara que sangra pela direita e por baixo do
+   cartão. Uma ficha solta é levada de "Em contato" para "Agendado" pelo
+   cursor da recepção, que diz o que está fazendo. Laço de 12 s; parado, o
+   quadro mostra a ficha já agendada. */
+.revena-bento--v2 .revena-peca--crm .revena-peca__arte { position: relative; mask-image: none; }
+.p2-crm { --laco: 12s; --col: 158px; --vao: 10px; --h: 68px; position: absolute; inset: 0; overflow: hidden; border-radius: 16px 0 0 0; background: linear-gradient(180deg, #F6F6F3, #ECECE7); box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset; }
+.p2-crm__topo { display: flex; align-items: center; justify-content: space-between; height: 50px; padding: 0 var(--peca-recuo, 24px) 0 18px; border-bottom: 1px solid var(--fio); }
+.p2 .p2-crm__time { display: flex; margin: 0; }
+.p2-crm__time i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px var(--fio); font-style: normal; font-size: 11.5px; font-weight: 500; }
+.p2-crm__time i + i { margin-left: -6px; background: #161616; color: #F2F2EE; }
+.p2-crm__quadro { position: relative; display: grid; grid-template-columns: repeat(3, var(--col)); gap: var(--vao); padding: 14px; }
+.p2-crm__coluna { display: grid; gap: 8px; align-content: start; }
+.p2-crm__coluna:last-child { opacity: .5; }
+.p2-crm__cabeca { display: flex; justify-content: space-between; height: 22px; padding-inline: 4px; color: var(--suave); font-size: 13px; }
+.p2-crm__conta { display: grid; }
+.p2-crm__conta b, .p2-crm__hora b { grid-area: 1 / 1; font-weight: 400; text-align: right; }
+.p2-crm__hora { display: grid; }
+.p2-crm__depois { opacity: 1; }
+.p2-crm__conta b:first-child:not(:only-child), .p2-crm__hora b:first-child { opacity: 0; }
+.p2-ficha { height: var(--h); padding: 12px 14px; border-radius: 12px; background: #fff; box-shadow: 0 1px 1px rgb(22 22 22 / .04), 0 8px 18px -12px rgb(22 22 22 / .22); }
+.p2-ficha strong { font-size: 15px; }
+.p2 .p2-ficha > span { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: var(--suave); font-size: 12px; white-space: nowrap; }
+.p2-ficha > span > i { flex: none; width: 5px; height: 5px; border-radius: 50%; background: rgb(22 22 22 / .28); }
+.p2-ficha em { margin-left: auto; font-style: normal; }
+.p2-ficha--vaga { background: none; box-shadow: none; }
+.p2-ficha--destino { background: none; box-shadow: none; border: 1px dashed rgb(22 22 22 / .22); opacity: 0; }
+.p2-crm__sobe { transform: translateY(calc(-1 * (var(--h) + 8px))); }
+/* A ficha solta nasce sobre a vaga da primeira coluna (cabeça 22 + 8, uma ficha + 8). */
+.p2-crm__mover { position: absolute; z-index: 2; left: 14px; top: calc(14px + 30px + var(--h) + 8px); width: var(--col); transform: translateX(calc(var(--col) + var(--vao))); }
+.p2-ficha--solta > span > i { background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .16); }
+.p2-crm__cursor { display: none; position: absolute; left: 44%; top: 78%; }
+.p2-crm__cursor svg { display: block; width: 18px; height: 18px; fill: #161616; stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
+.p2-crm__etiqueta { display: grid; margin: 1px 0 0 14px; padding: 7px 13px 8px 12px; border-radius: 12px; background: #161616; color: #F2F2EE; white-space: nowrap; box-shadow: 0 14px 26px -12px rgb(22 22 22 / .5); }
+.p2-crm__etiqueta b { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.p2 .p2-crm__etiqueta span { display: grid; margin: 0; font-size: 12px; line-height: 1.3; color: rgb(242 242 238 / .64); }
+.p2-crm__etiqueta span i { grid-area: 1 / 1; font-style: normal; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) { .js .p2-crm__cursor { display: block; } }
+@keyframes p2-crm-mover {
+  0% { opacity: 0; transform: none; }
+  4%, 18% { opacity: 1; transform: none; }
+  40%, 92% { opacity: 1; transform: translateX(calc(var(--col) + var(--vao))); }
+  96% { opacity: 0; transform: translateX(calc(var(--col) + var(--vao))); }
+  100% { opacity: 0; transform: none; }
+}
+@keyframes p2-crm-ergue {
+  0%, 13% { transform: none; box-shadow: 0 1px 1px rgb(22 22 22 / .04), 0 8px 18px -12px rgb(22 22 22 / .22); }
+  18%, 40% { transform: scale(1.04) rotate(2deg); box-shadow: 0 2px 2px rgb(22 22 22 / .04), 0 26px 36px -16px rgb(22 22 22 / .4); }
+  45%, 100% { transform: none; box-shadow: 0 1px 1px rgb(22 22 22 / .04), 0 8px 18px -12px rgb(22 22 22 / .22); }
+}
+@keyframes p2-crm-destino { 0%, 14% { opacity: 0; } 19%, 40% { opacity: 1; } 44%, 100% { opacity: 0; } }
+@keyframes p2-crm-sobe { 0%, 20% { transform: none; } 30%, 94% { transform: translateY(calc(-1 * (var(--h) + 8px))); } 100% { transform: none; } }
+@keyframes p2-crm-antes { 0%, 41% { opacity: 1; } 44%, 96% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes p2-crm-depois { 0%, 41% { opacity: 0; } 44%, 96% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes p2-crm-cursor {
+  0%, 6% { opacity: 0; transform: translate(34px, 30px); }
+  12%, 58% { opacity: 1; transform: none; }
+  66%, 100% { opacity: 0; transform: translate(22px, 26px); }
+}
+@keyframes p2-crm-fala-1 { 0%, 10% { opacity: 0; } 13%, 41% { opacity: 1; } 44%, 100% { opacity: 0; } }
+@keyframes p2-crm-fala-2 { 0%, 41% { opacity: 0; } 44%, 60% { opacity: 1; } 66%, 100% { opacity: 0; } }
+
 /* 3. A conversa que a automação conduz. */
 .p2-conversa { display: grid; gap: 12px; }
 .p2-conversa__linha { display: grid; gap: 6px; justify-items: start; }
 .p2-conversa__linha--resposta { justify-items: end; }
 .p2-balao { max-width: 88%; padding: 12px 16px; border-radius: 16px 16px 16px 4px; font-size: 14.5px; line-height: 1.4; }
-.p2-balao--escuro { background: #F2F2EE; color: #161616; border-radius: 16px 16px 4px 16px; }
+.p2-balao--resposta { background: #262625; border: 1px solid rgb(242 242 238 / .1); color: #F2F2EE; border-radius: 16px 16px 4px 16px; }
 .p2-estado { display: flex; align-items: center; gap: 8px; color: var(--suave); font-size: 13px; }
 
 /* 4. O plano do mês virando entrega: cada pendência tem a área e a pessoa
@@ -89,7 +152,7 @@
 .p2-plano__topo .p2-rosto { box-shadow: none; }
 .p2-plano__lista { display: grid; gap: 12px; }
 .p2-tarefa { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; align-items: center; gap: 0 10px; }
-.p2-tarefa__marca { position: relative; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgb(242 242 238 / .22); }
+.p2-tarefa__marca { position: relative; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
 .p2-tarefa__marca b { position: absolute; inset: 0; }
 .p2-tarefa__ponto { opacity: 0; }
 .p2-tarefa__ponto::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
@@ -120,6 +183,9 @@
   .p2-fluxo__quem { grid-auto-flow: column; justify-content: start; align-items: center; gap: 12px; }
   .p2-fluxo__quem .p2-rotulo { order: 2; }
   .p2-fluxo .p2-rosto, .p2-fluxo__clinica { width: 40px; height: 40px; }
+  .p2-crm { --col: 136px; --vao: 8px; --h: 64px; }
+  .p2-ficha strong { font-size: 14px; }
+  .p2-ficha { padding: 11px 12px; }
   .p2-estudo { height: 230px; }
   .p2-estudo__nota { gap: 10px; padding: 8px 14px 8px 8px; }
   .p2-estudo__nota .p2-rosto { width: 32px; height: 32px; }
