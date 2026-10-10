@@ -1,15 +1,5 @@
 ---
-/**
- * Etapas do plano. A régua horizontal no painel claro saiu em 10/10/2026
- * ("muito mais dinâmico do que horizontal"); o palco preso à tela com o
- * número em contorno foi reprovado no mesmo dia ("o número em traço não faz
- * nem sentido"), e cartão está fora ("bloco em cima do bloco"). Ficou um
- * fio em pé, sem caixa nenhuma: o título e a frase presos à esquerda e, à
- * direita, as etapas ao longo do fio. Com a rolagem o fio se enche e a
- * etapa que passa pelo meio da tela cresce e acende, enquanto as outras
- * recuam (o zoom vem daí). O losango amarelo marca a etapa da vez.
- * Sem movimento ou sem JS, todas ficam acesas, em lista.
- */
+/** Etapas em lista editorial: contraste constante, sem zoom ou opacidade por rolagem. */
 import type { ContextoSecao } from '../pagina/contexto';
 
 interface Etapa { n: string; duracao?: string; nome: string; descricao?: string }
@@ -18,16 +8,14 @@ const { h2, etapas, fechamento, secao } = Astro.props;
 ---
 <section class="plano-etapas" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container plano-etapas__grade">
-    <header class="plano-etapas__cabeca entra">
+    <header class="plano-etapas__cabeca">
       <h2 id={secao.tituloId} class="titulo">{h2}</h2>
       {fechamento && <p class="plano-etapas__fechamento">{fechamento}</p>}
     </header>
-    <ol class="plano-etapas__lista" data-plano-etapas>
-      <li class="plano-etapas__fio" aria-hidden="true"><b data-fio></b></li>
+    <ol class="plano-etapas__lista">
       {etapas.map((e) => (
-        <li class="plano-etapa" data-etapa>
-          <i class="plano-etapa__marco" aria-hidden="true"></i>
-          <div class="plano-etapa__texto" data-foco>
+        <li class="plano-etapa">
+          <div class="plano-etapa__texto">
             {e.duracao && <p class="plano-etapa__duracao">{e.duracao}</p>}
             <h3 class="plano-etapa__nome">{e.nome}</h3>
             {e.descricao && <p class="plano-etapa__descricao">{e.descricao}</p>}
@@ -37,38 +25,3 @@ const { h2, etapas, fechamento, secao } = Astro.props;
     </ol>
   </div>
 </section>
-
-<script>
-  /* A etapa mais perto do meio da tela cresce e acende; o fio enche até ela. */
-  document.querySelectorAll<HTMLElement>('[data-plano-etapas]').forEach((lista) => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const etapas = [...lista.querySelectorAll<HTMLElement>('[data-etapa]')];
-    const fio = lista.querySelector<HTMLElement>('[data-fio]');
-    let pedido = 0;
-    const desenhar = () => {
-      pedido = 0;
-      const meio = innerHeight * .5, alcance = innerHeight * .42;
-      const r = lista.getBoundingClientRect();
-      if (r.bottom < -200 || r.top > innerHeight + 200) return;
-      let atual = -1, maior = 0;
-      etapas.forEach((el, i) => {
-        const marco = el.querySelector<HTMLElement>('.plano-etapa__marco')!.getBoundingClientRect();
-        const centro = el.getBoundingClientRect();
-        const f = Math.max(0, 1 - Math.abs(centro.top + centro.height / 2 - meio) / alcance);
-        const foco = f * f * (3 - 2 * f);
-        const texto = el.querySelector<HTMLElement>('[data-foco]')!;
-        texto.style.transform = `scale(${.7 + .3 * foco})`;
-        texto.style.opacity = String(.26 + .74 * foco);
-        el.toggleAttribute('data-feito', marco.top <= meio);
-        if (foco > maior) { maior = foco; atual = i; }
-      });
-      etapas.forEach((el, i) => el.toggleAttribute('data-atual', i === atual && maior > .35));
-      if (fio) fio.style.transform = `scaleY(${Math.min(1, Math.max(0, (meio - r.top) / r.height))})`;
-    };
-    const pedir = () => { if (!pedido) pedido = requestAnimationFrame(desenhar); };
-    lista.setAttribute('data-vivo', '');
-    addEventListener('scroll', pedir, { passive: true });
-    addEventListener('resize', pedir);
-    desenhar();
-  });
-</script>

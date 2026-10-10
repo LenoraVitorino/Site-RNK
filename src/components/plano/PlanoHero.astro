@@ -1,19 +1,6 @@
 ---
-/**
- * Hero dos planos Revena (04/10/2026). Partiu da referência Tres Mares
- * Capital (Private Equity) e, a pedido da Lenora, ficou como o plano na
- * home: fundo chapado (sem a cena 3D que se mexe), o nome do plano
- * diagramado à esquerda, em duas linhas desencontradas, com o selo, a frase
- * e o botão; à direita, grande, a arte do plano (slot "arte"): o símbolo
- * oficial como janela para o sistema funcionando (JanelaStart no Start; a
- * mão com a seringa da home saiu: "não gostei de repetir o que tem na
- * home"). Na base, a ficha do plano, como na referência: aberta, sem
- * caixa, um fio por item com o losango amarelo na ponta e o ícone solto.
- */
+/** Hero editorial compartilhada pelos planos e pelas duas versões de copy. */
 import Icone from '../ui/Icone.astro';
-import IconeRenke from '../ui/IconeRenke.astro';
-import type { NomeIconeRenke } from '../../data/icones-renke';
-import Selo from '../ui/Selo.astro';
 import { semSeta, type ContextoSecao } from '../pagina/contexto';
 
 interface Props {
@@ -26,16 +13,12 @@ interface Props {
 }
 const { linhas, sub, cta, rotaCta = '#secao-2', ficha, secao } = Astro.props;
 const naPagina = rotaCta.startsWith('#');
-/* O ícone de cada item da ficha, pelo rótulo (10/10: a barra ganhou acabamento). */
-const ICONES_FICHA: Record<string, NomeIconeRenke> = {
-  'Duração': 'agenda', 'Ritmo': 'agenda', 'Etapas': 'fluxo', 'Pré-requisito': 'verificado', 'Para clínicas': 'pessoas', 'Entrega': 'camadas',
-};
 
 ---
 <section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container plano-hero__grade">
     <div class="plano-hero__texto">
-      <Selo marca="revena">Protocolo Revena</Selo>
+      <p class="plano-hero__rotulo">Protocolo Revena</p>
       <h1 id={secao.tituloId} class="plano-hero__titulo">
         <span class="plano-hero__linha">{linhas[0]}</span>
         <span class="plano-hero__linha plano-hero__linha--2">{linhas[1]}</span>
@@ -54,11 +37,12 @@ const ICONES_FICHA: Record<string, NomeIconeRenke> = {
       <div class="plano-hero__arte"><slot name="arte" /></div>
     </div>
     <dl class="plano-hero__ficha">
-      {ficha.map((f, i) => (
-        <div class="plano-hero__item" style={`--i:${i}`}>
-          <span class="plano-hero__icone" aria-hidden="true"><IconeRenke nome={ICONES_FICHA[f.rotulo] ?? 'verificado'} size={18} /></span>
+      {ficha.map((f) => (
+        <div class:list={["plano-hero__item", { "plano-hero__item--duracao": f.rotulo === "Duração" }]}>
           <dt>{f.rotulo}</dt>
-          <dd>{f.valor}</dd>
+          <dd>{f.rotulo === 'Duração' && /^\d+ dias$/.test(f.valor)
+            ? <><span class="plano-hero__numero">{f.valor.split(' ')[0]}</span>{' '}<span class="plano-hero__unidade">dias</span></>
+            : f.valor}</dd>
         </div>
       ))}
     </dl>

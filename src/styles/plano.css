@@ -5,57 +5,44 @@
    (.ganhos__*, em home-refinamento.css) e o extrato dos Resultados.
    ============================================================ */
 
-/* ---------- Hero (referência Tres Mares → o plano na home) ---------- */
-/* Fundo chapado, o mesmo do palco dos planos na home: a cena 3D não aparece aqui. */
+/* Fundo contínuo: contraste uniforme, sem máscaras retangulares atrás dos títulos. */
+.pagina-plano .fundo-vivo { filter: brightness(.35); }
+
+/* ---------- Hero: composição tipográfica sobre o símbolo em grande escala ---------- */
 .plano-hero { position: relative; isolation: isolate; overflow: clip; background: #101011; color: var(--papel); padding-top: var(--altura-header); }
 .plano-hero__grade {
-  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr) auto;
-  column-gap: clamp(24px, 4vw, 72px); row-gap: clamp(32px, 4vw, 56px);
-  min-height: calc(max(100svh, 680px) - var(--altura-header)); padding-block: clamp(24px, 3vw, 48px) clamp(20px, 2.4vw, 32px);
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr auto; gap: 32px 24px;
+  min-height: calc(max(100svh, 840px) - var(--altura-header));
+  padding-block: 28px 32px;
 }
-.plano-hero__texto { align-self: center; display: grid; justify-items: start; gap: clamp(20px, 2vw, 28px); }
-.plano-hero__texto .selo-revena { margin: 0; }
-/* O nome diagramado: a segunda linha entra recuada, como "Private / Equity". */
-.plano-hero__titulo { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(68px, 9vw, 156px); line-height: .86; letter-spacing: -.06em; color: #f2f2ee; }
+.plano-hero__texto { display: contents; }
+.plano-hero__rotulo, .plano-hero__sub { mix-blend-mode: difference; }
+.plano-hero__rotulo { grid-column: 1 / -1; margin: 0; font-size: 12px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: #bcbcb6; }
+.plano-hero__titulo {
+  grid-column: 3 / -1; position: relative; z-index: 1;
+  margin: 0; font-family: var(--font-titulo); font-weight: 300;
+  font-size: clamp(100px, 12.6vw, 200px); line-height: .85; letter-spacing: -.075em; color: #fff; mix-blend-mode: difference;
+}
 .plano-hero__linha { display: block; }
-.plano-hero__linha--2 { padding-left: .62em; font-weight: 500; }
-.plano-hero__sub { margin: 0; max-width: 62ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .78); text-wrap: balance; }   /* em duas linhas no computador (Lenora, 04/10) */
-.plano-hero__acoes { margin: 4px 0 0; }
-/* À direita, a arte do plano (o infográfico do ecossistema, 640 × 560). */
-.plano-hero__imagem { position: relative; align-self: center; }
-.plano-hero__arte { position: relative; width: min(100%, 700px, calc((100svh - 300px) * 640 / 560)); aspect-ratio: 640 / 560; margin-inline: auto; }
-/* A foto do time (no Start): quadro em pé, arredondado como os cartões da
-   home, sem cor; o símbolo do plano, num vidro escuro, é o único amarelo. */
-.plano-hero__arte:has(> .plano-retrato) { aspect-ratio: auto; width: min(100%, 560px, calc((100svh - 410px) * 4 / 5)); margin-right: 0; }
-.plano-retrato { position: relative; margin: 0; aspect-ratio: 4 / 5; overflow: hidden; border-radius: clamp(22px, 2vw, 30px); background: #151514; }
-.plano-retrato__foto { display: block; width: 100%; height: 100%; object-fit: cover; scale: 1.32; transform-origin: 30% 58%; filter: grayscale(1) contrast(1.04) brightness(.95); }
-.plano-retrato::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, transparent 55%, rgb(16 16 17 / .55)); box-shadow: 0 0 0 1px rgb(242 242 238 / .08) inset; pointer-events: none; }
-.plano-retrato__simbolo { position: absolute; z-index: 1; left: clamp(16px, 1.6vw, 24px); bottom: clamp(16px, 1.6vw, 24px); display: grid; place-items: center; width: 60px; height: 60px; border-radius: 16px; background: rgb(16 16 17 / .62); border: 1px solid rgb(242 242 238 / .12); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
-.plano-retrato__simbolo img { display: block; width: 40px; height: 40px; }
-/* A ficha, aberta, sem caixa (10/10: "bloco em cima do bloco" reprovado): um
-   fio por item, que se desenha na entrada com o losango amarelo na ponta, o
-   ícone solto ao lado do rótulo e o valor na letra dos títulos. */
-.plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px clamp(20px, 3vw, 48px); margin: 0; }
-.plano-hero__item { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px 10px; align-content: start; min-width: 0; padding-top: 20px; }
-.plano-hero__item::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgb(242 242 238 / .2); transform-origin: 0 50%; }
-.plano-hero__item::after { content: ''; position: absolute; left: 0; top: -3.5px; width: 7px; height: 7px; background: var(--destaque, #FFD103); transform: rotate(45deg); }
-.plano-hero__icone { display: grid; place-items: center; color: rgb(242 242 238 / .7); }
-.plano-hero__ficha dt { font-size: 14px; color: rgb(242 242 238 / .6); }
-.plano-hero__ficha dd { grid-column: 1 / -1; margin: 0; max-width: 26ch; font-family: var(--font-titulo); font-size: clamp(17px, 1.4vw, 21px); font-weight: 300; line-height: 1.3; letter-spacing: -.02em; color: #f2f2ee; text-wrap: pretty; }
-
-/* Entrada: o nome sobe linha por linha; depois a imagem, o apoio e a ficha. */
+.plano-hero__linha--2 { padding-left: .85em; font-weight: 300; }
+.plano-hero__sub { grid-column: 1 / 5; align-self: end; position: relative; margin: 8px 0 0; max-width: 36ch; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.6; color: #c8c7c1; text-wrap: pretty; }
+.plano-hero__acoes { grid-column: 5 / 9; align-self: end; margin: 0 0 2px 24px; position: relative; }
+.plano-hero__imagem { position: absolute; z-index: -1; pointer-events: none; inset: 12px calc(-1 * var(--gutter)) 160px 30%; overflow: clip; }
+.plano-hero__arte { position: absolute; width: clamp(800px, 88vw, 1460px); aspect-ratio: 1; top: 46%; left: 65%; transform: translate(-50%, -50%); }
+/* Um único fio neutro organiza a ficha; os dados não levam ícones ou marcadores. */
+.plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: .8fr 1.3fr 1fr 1fr; gap: 32px clamp(24px, 4vw, 64px); margin: 0; padding-top: 28px; border-top: 1px solid rgb(242 242 238 / .12); }
+.plano-hero__item { display: grid; align-content: start; gap: 14px; min-width: 0; }
+.plano-hero__ficha dt { font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: #aaa9a3; }
+.plano-hero__ficha dd { margin: 0; max-width: 27ch; font-size: clamp(16px, 1.25vw, 19px); font-weight: 300; line-height: 1.5; color: #e1e0da; text-wrap: pretty; }
+.plano-hero__item--duracao dd { display: flex; align-items: baseline; gap: 10px; line-height: 1; }
+.plano-hero__numero { font-size: clamp(42px, 4vw, 60px); font-weight: 300; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
+.plano-hero__unidade { font-size: 17px; color: #aaa9a3; }
 @media (prefers-reduced-motion: no-preference) {
-  .js .plano-hero__linha { animation: plano-sobe 1.2s var(--easing) both; }
-  .js .plano-hero__linha--2 { animation-delay: .14s; }
-  .js :is(.plano-hero__texto .selo-revena, .plano-hero__sub, .plano-hero__acoes) { animation: plano-aparece 1s var(--easing) .45s both; }
-  .js .plano-hero__ficha { animation: plano-aparece 1s var(--easing) .7s both; }
-  .js .plano-hero__item::before { animation: plano-risca 1.4s var(--easing) calc(.8s + var(--i, 0) * .12s) both; }
-  .js .plano-retrato { animation: plano-aparece 1.4s var(--easing) .3s both; }
-  .js .plano-retrato__foto { animation: plano-assenta 2.6s var(--easing) .3s both; }
+  .js :is(.plano-hero__rotulo, .plano-hero__sub, .plano-hero__acoes) { animation: plano-aparece 1.6s var(--easing) both; }
+  .js .plano-hero__ficha { animation: plano-aparece 1.4s var(--easing) .25s both; }
 }
-@keyframes plano-sobe { from { opacity: 0; transform: translate3d(0, .18em, 0); } }
-@keyframes plano-assenta { from { transform: scale(1.06); } }
-@keyframes plano-risca { from { transform: scaleX(0); } }
 @keyframes plano-aparece { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
 
 /* ---------- Painel claro com chanfro (o do método e dos Resultados) ---------- */
@@ -105,27 +92,28 @@
 .plano-faz .ganhos__nome { font-size: clamp(21px, 1.6vw, 25px); text-wrap: pretty; }
 .plano-faz .ganhos__corpo > * { min-width: 0; }
 
-/* ---------- Etapas: fio em pé, sem caixa (10/10) ---------- */
-.plano-etapas { padding-block: var(--esp-secao); color: var(--papel); }
-.plano-etapas__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start; }
-.plano-etapas__cabeca { position: sticky; top: calc(var(--altura-header) + 48px); display: grid; gap: clamp(20px, 2.4vw, 32px); }
+/* ---------- Etapas: superfície opaca e leitura contínua ---------- */
+.plano-etapas {
+  position: relative; isolation: isolate;
+  padding-block: clamp(64px, 8vw, 120px);
+  background: #101011; color: #f2f2ee;
+}
+.plano-etapas__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px clamp(40px, 7vw, 112px); align-items: start; }
+.plano-etapas__cabeca { position: sticky; top: calc(var(--altura-header) + 40px); display: grid; gap: 24px; }
 .plano-etapas__cabeca .titulo { margin: 0; font-weight: 300; }
-.plano-etapas__fechamento { margin: 0; max-width: 38ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
-.plano-etapas__lista { position: relative; list-style: none; margin: 0; padding: 0; }
-.plano-etapas__fio { position: absolute; left: 5px; top: 0; bottom: 0; width: 1px; background: rgb(242 242 238 / .14); }
-.plano-etapas__fio b { display: block; height: 100%; background: #f2f2ee; transform-origin: 50% 0; }
-[data-vivo] .plano-etapas__fio b { transform: scaleY(0); will-change: transform; }
-.plano-etapa { position: relative; display: grid; grid-template-columns: 11px minmax(0, 1fr); align-items: center; gap: clamp(24px, 3vw, 48px); padding-block: clamp(26px, 6svh, 60px); }
-.plano-etapa__marco { position: relative; z-index: 1; width: 11px; height: 11px; background: #f2f2ee; border: 1px solid #f2f2ee; transform: rotate(45deg); transition: background-color .5s var(--easing), border-color .5s var(--easing); }
-[data-vivo] .plano-etapa:not([data-feito]) .plano-etapa__marco { background: #0d0d0d; border-color: rgb(242 242 238 / .4); }
-[data-vivo] .plano-etapa[data-atual] .plano-etapa__marco { background: var(--destaque, #FFD103); border-color: var(--destaque, #FFD103); }
-.plano-etapa__texto { display: grid; gap: clamp(8px, 1vw, 14px); justify-items: start; transform-origin: 0 50%; will-change: transform, opacity; }
-.plano-etapa__duracao { margin: 0; font-size: 15px; color: rgb(242 242 238 / .6); }
-.plano-etapa__nome { margin: 0; font-family: var(--font-titulo); font-size: clamp(34px, 5vw, 76px); font-weight: 300; line-height: 1; letter-spacing: -.05em; }
-.plano-etapa__descricao { margin: 0; max-width: 32ch; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+.plano-etapas__fechamento { margin: 0; max-width: 38ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.65; color: #bcbcb6; text-wrap: pretty; }
+.plano-etapas__lista { list-style: none; margin: 0; padding: 0; }
+.plano-etapa { padding-block: 28px; border-top: 1px solid rgb(242 242 238 / .16); }
+.plano-etapa:last-child { padding-bottom: 0; }
+.plano-etapa__texto { display: grid; gap: 12px; justify-items: start; }
+.plano-etapa__duracao { margin: 0; font-size: 14px; line-height: 1.5; color: #bcbcb6; }
+.plano-etapa__nome { margin: 0; font-family: var(--font-titulo); font-size: clamp(28px, 2.8vw, 40px); font-weight: 300; line-height: 1.15; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.plano-etapa__descricao { margin: 0; max-width: 45ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.6; color: #bcbcb6; text-wrap: pretty; }
 @media (max-width: 899.98px) {
-  .plano-etapas__grade { grid-template-columns: minmax(0, 1fr); }
-  .plano-etapas__cabeca { position: static; }
+  .plano-etapas__grade { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .plano-etapas__cabeca { position: static; gap: 20px; }
+  .plano-etapa { padding-block: 24px; }
+  .plano-etapa__nome { font-size: clamp(26px, 6.8vw, 36px); }
 }
 
 /* ---------- Entregas (o extrato dos Resultados) ---------- */
@@ -140,21 +128,29 @@
 
 /* ---------- Tablet e celular ---------- */
 @media (max-width: 1099.98px) {
+  .plano-hero__sub { grid-column: 1 / 6; }
+  .plano-hero__acoes { grid-column: 7 / -1; margin-left: 0; }
   .plano-hero__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plano-hero__imagem { bottom: 260px; }
 }
 @media (max-width: 899.98px) {
   .plano-entregas__linha { grid-template-columns: 1fr; }
+  .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; gap: 28px; padding-top: 28px; }
+  .plano-hero__rotulo, .plano-hero__titulo, .plano-hero__sub, .plano-hero__acoes { grid-column: 1; }
+  .plano-hero__titulo { font-size: clamp(92px, 17vw, 150px); margin-block: 12px 24px; }
+  .plano-hero__linha--2 { padding-left: .7em; }
+  .plano-hero__sub { max-width: 42ch; margin: 0; }
+  .plano-hero__acoes { margin: 0 0 12px; }
+  .plano-hero__imagem { inset: 0 calc(-1 * var(--gutter)) auto 0; height: clamp(280px, calc(108px + 28.9vw), 370px); }
+  .plano-hero__arte { width: clamp(760px, 130vw, 1160px); left: 66%; top: calc(88px + 21.675vw); }
 }
-@media (max-width: 899.98px) {
-  /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
-  .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
-  .plano-hero__arte { width: 100%; aspect-ratio: 640 / 700; }
-  .plano-hero__arte:has(> .plano-retrato) { width: 100%; }
-  .plano-retrato { aspect-ratio: 4 / 3; }
-}
-@media (max-width: 699.98px) {
-  .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
-  .plano-hero__linha--2 { padding-left: .45em; }
+@media (max-width: 599.98px) {
+  .plano-hero__titulo { font-size: clamp(72px, 22vw, 124px); margin-block: 14px 24px; }
+  .plano-hero__imagem { height: clamp(240px, 69.25vw, 270px); }
+  .plano-hero__arte { width: clamp(510px, 158vw, 900px); left: 79%; top: calc(90px + clamp(91.8px, 28.05vw, 158px)); }
+  .plano-hero__ficha { gap: 28px 24px; }
+  .plano-hero__ficha dd { font-size: 15px; }
+  .plano-hero__ficha dt { font-size: 12px; }
 }
 
 /* ---------- Ajustes para os cinco planos (05/10/2026) ---------- */
@@ -183,6 +179,3 @@
 
 /* O título da chamada final no mesmo tamanho dos títulos das outras dobras. */
 .pagina-plano .int-cta__titulo:not(.int-cta__titulo--longo) { font-size: clamp(2rem, 3.6vw, 3.5rem); }
-@media (max-width: 599.98px) {
-  .plano-hero__ficha { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-}

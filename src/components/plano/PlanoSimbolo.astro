@@ -1,0 +1,39 @@
+---
+/** Símbolo oficial, sem moldura: duas metades que se encontram suavemente. */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { ExtrasPlano } from '../../data/planos';
+
+interface Props { plano: ExtrasPlano['slug'] }
+const { plano } = Astro.props;
+const fonte = readFileSync(join(__RAIZ__, 'public', 'icones', `plano-${plano}-dark.svg`), 'utf8');
+const lados: string[][] = [[], []];
+for (const forma of fonte.matchAll(/<(rect|path|polygon|circle|ellipse)\b([^>]*?)\/?>/g)) {
+  const [, tag, atributos] = forma;
+  const lado = /class="cls-2"/.test(atributos) ? 1 : 0;
+  lados[lado].push(`<${tag} ${atributos.replace(/\s*class="[^"]*"/, '').trim()}/>`);
+}
+---
+<div class="plano-simbolo" aria-hidden="true">
+  <svg viewBox="150 150 780 780" fill="none" focusable="false">
+    {lados.map((formas, i) => (
+      <g class:list={['plano-simbolo__metade', `plano-simbolo__metade--${i}`]}>
+        <g fill="#eeede6" set:html={formas.join('')} />
+      </g>
+    ))}
+  </svg>
+</div>
+
+<style>
+  .plano-simbolo { width: 100%; height: 100%; }
+  svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  @media (prefers-reduced-motion: no-preference) {
+    .plano-simbolo__metade { animation: simbolo-encontra 2.4s cubic-bezier(.16, 1, .3, 1) both; }
+    .plano-simbolo__metade--0 { --x: 65px; --y: -65px; }
+    .plano-simbolo__metade--1 { --x: -65px; --y: 65px; }
+  }
+  @keyframes simbolo-encontra {
+    from { transform: translate(var(--x), var(--y)); }
+    to { transform: translate(0, 0); }
+  }
+</style>

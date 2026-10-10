@@ -2,14 +2,13 @@
 /**
  * Página de plano Revena (05/10/2026): o desenho da Start, aprovado como
  * base, servindo aos cinco planos. Cada bloco da copy vira uma dobra:
- *   hero            → PlanoHero, com a imagem do plano (no Start, o
- *                     PlanoRetrato: foto do time e o símbolo do plano)
+ *   hero            → PlanoHero, com o símbolo oficial em composição aberta
  *   1ª lista        → PlanoIdeal (na cena, lista que se confere): "Ideal para clínicas que"
  *   demais listas   → PlanoRotina (linhas entre fios, na cena)
  *   blocos, numeros → PlanoFaz (cartões de vidro com ícone); no Start, a
  *                     primeira grade é o PlanoBento (peças ilustradas)
  *   texto           → PlanoFrase (frase de destaque)
- *   etapas          → PlanoEtapas (fio em pé; a etapa da vez cresce e acende)
+ *   etapas          → PlanoEtapas (lista sobre fundo sólido, sem zoom ou transparência)
  *   antesDepois     → PlanoEntregas (extrato)
  *   ctaFinal        → BlocoCtaFinal
  * Textos: src/data/paginas/revena-*.ts. Ficha, ícones e ilustração:
@@ -19,8 +18,7 @@ import Base2 from './Base2.astro';
 import FundoInterno from '../components/pagina/FundoInterno.astro';
 import BlocoCtaFinal from '../components/pagina/BlocoCtaFinal.astro';
 import PlanoHero from '../components/plano/PlanoHero.astro';
-import EcossistemaPlano from '../components/plano/EcossistemaPlano.astro';
-import PlanoRetrato from '../components/plano/PlanoRetrato.astro';
+import PlanoSimbolo from '../components/plano/PlanoSimbolo.astro';
 import PlanoIdeal from '../components/plano/PlanoIdeal.astro';
 import PlanoFaz from '../components/plano/PlanoFaz.astro';
 import PlanoBento from '../components/plano/PlanoBento.astro';
@@ -53,9 +51,7 @@ const proxima = entradas[1]?.secao?.id ?? 'secao-2';
       const [nome, resto] = bloco.titulo[0].split(' ') as [string, string];
       return (
         <PlanoHero linhas={[nome, resto]} sub={bloco.sub} cta={bloco.cta} rotaCta={`#${proxima}`} ficha={extras.ficha} secao={naCena(s, 'hero')}>
-          {plano === 'start'
-            ? <PlanoRetrato slot="arte" plano={plano} />
-            : <EcossistemaPlano slot="arte" plano={plano} arte={extras.arte} />}
+          <PlanoSimbolo slot="arte" plano={plano} />
         </PlanoHero>
       );
     }
