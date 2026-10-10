@@ -6,14 +6,14 @@
    lugar do chanfro ("muito reto, muito cortado, apertado"), margem larga, a
    arte em cima numa área de altura fixa e o texto embaixo. Com a altura da
    arte igual em toda a fileira, nenhuma peça estica as vizinhas. */
-.revena-bento--v2 { --peca-recuo: clamp(28px, 2.6vw, 40px); --arte-h: 300px; }
+.revena-bento--v2 { --peca-recuo: clamp(24px, 2.2vw, 34px); --arte-h: 280px; }
 .revena-bento--v2 .revena-peca {
   --base: var(--peca-recuo);
   clip-path: none; border-radius: clamp(22px, 2vw, 30px); padding: var(--peca-recuo);
   background: linear-gradient(160deg, #151514, #0c0c0c 72%); box-shadow: 0 0 0 1px rgb(242 242 238 / .06) inset;
 }
 .revena-bento--v2 .revena-peca h3 { color: inherit; }
-.revena-bento--v2 .revena-peca .feature-card__texto { order: 2; margin: 0; padding-top: clamp(28px, 2.6vw, 40px); }
+.revena-bento--v2 .revena-peca .feature-card__texto { order: 2; margin: 0; padding-top: clamp(22px, 2vw, 30px); }
 .revena-bento--v2 .revena-peca .feature-card__texto p { color: #a8a8a4; max-width: 46ch; }
 .revena-bento--v2 .revena-peca .revena-peca__arte {
   order: 1; flex: none; display: grid; align-content: center; position: relative;
@@ -27,19 +27,22 @@
 /* No celular a arte tem a altura do que mostra; só o quadro e a foto, que
    são recortes, mantêm altura própria. */
 @media (max-width: 599.98px) {
-  .revena-bento--v2 { --peca-recuo: 26px; --peca-vao: 12px; }
+  .revena-bento--v2 { --peca-recuo: 22px; --peca-vao: 12px; }
   .revena-bento--v2 .revena-peca .revena-peca__arte { height: auto; }
-  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao) .revena-peca__arte { height: 300px; }
+  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao) .revena-peca__arte { height: 280px; }
 }
 
 .p2 { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); --anel: rgb(242 242 238 / .22); --borda-rosto: #121212; color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }
 .p2 strong { display: block; font-weight: 500; font-size: 15px; letter-spacing: -.015em; }
 .p2 strong + span { display: block; margin-top: 2px; color: var(--suave); font-size: 13px; }
 .p2 ul { list-style: none; margin: 0; padding: 0; }
-/* Recorte claro sobre o cartão escuro: o contraste a nosso favor (10/10). */
-.p2-cartao, .p2-crm, .p2-tela, .p2-zap { --tinta: #161616; --suave: rgb(22 22 22 / .56); --fio: rgb(22 22 22 / .09); --anel: rgb(22 22 22 / .2); --borda-rosto: #fff; color: var(--tinta); }
+/* Recortes (10/10): claro só no quadro do CRM; as telas do processo e a
+   conversa são escuras, com detalhes em amarelo claro; o plano do mês é um
+   recorte em amarelo claro; as fotos da equipe vão em cor. "Todos com box
+   branca ficou horrível, tudo muito preto e branco." */
+.p2-cartao, .p2-crm { --tinta: #161616; --suave: rgb(22 22 22 / .56); --fio: rgb(22 22 22 / .09); --anel: rgb(22 22 22 / .2); --borda-rosto: #fff; color: var(--tinta); }
 .p2-cartao { background: linear-gradient(180deg, #FCFCFA, #F1F1ED); border-radius: 14px; box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset, 0 24px 44px -24px rgb(0 0 0 / .9); }
-.p2-rosto { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.04); box-shadow: 0 0 0 2px var(--borda-rosto); background: #2a2a29; }
+.p2-rosto { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--borda-rosto); background: #2a2a29; }
 .p2-rostos { display: flex; }
 .p2-rostos > * + * { margin-left: -12px; }
 .p2-rotulo, .p2-meta { color: var(--suave); font-size: 13px; }
@@ -56,19 +59,19 @@
 /* 1. Do marketing ao paciente em três telas. Uma janela clara ocupa a área
    da arte; as cenas se revezam nela, cada uma com a faixa de quem trabalha,
    a tela do que está sendo feito e o cursor com foto e nome. */
-.p2-tela { --laco: 18s; position: absolute; inset: 0; overflow: hidden; border-radius: 18px; background: linear-gradient(180deg, #F6F6F3, #ECECE7); box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset; }
+.p2-tela { --laco: 18s; --claro: #FFE27A; --borda-rosto: #1b1b1a; position: absolute; inset: 0; overflow: hidden; border-radius: 18px; background: linear-gradient(180deg, #1d1d1c, #151514); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; }
 .p2-cena { position: absolute; inset: 0; display: grid; grid-template-rows: 48px minmax(0, 1fr); opacity: 0; }
 .p2-cena--fim { opacity: 1; }
 .p2-cena__topo { display: flex; align-items: center; gap: 10px; padding-inline: 18px; border-bottom: 1px solid var(--fio); font-size: 14px; }
 .p2-cena__topo b { font-weight: 500; }
 .p2-cena__topo > span:last-child { margin-left: auto; color: var(--suave); font-size: 13px; }
-.p2-tela .p2-rosto { width: 28px; height: 28px; box-shadow: 0 0 0 2px #F4F4F1; }
+.p2-tela .p2-rosto { width: 28px; height: 28px; }
 .p2-tela .p2-rostos > * + * { margin-left: -8px; }
-.p2-cena__clinica { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #161616; }
-.p2-cena__clinica svg { width: 14px; height: 14px; fill: none; stroke: #F2F2EE; stroke-width: 1.6; stroke-linecap: round; }
+.p2-cena__clinica { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #F2F2EE; }
+.p2-cena__clinica svg { width: 14px; height: 14px; fill: none; stroke: #161616; stroke-width: 1.6; stroke-linecap: round; }
 .p2-cena__corpo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 14px; align-items: start; padding: 16px 18px; }
 .p2-cena__principal { position: relative; display: grid; gap: 12px; min-width: 0; }
-.p2-bloco { padding: 12px 14px 13px; border-radius: 14px; background: #fff; box-shadow: 0 1px 1px rgb(22 22 22 / .04), 0 10px 22px -14px rgb(22 22 22 / .24); }
+.p2-bloco { padding: 12px 14px 13px; border-radius: 14px; background: #262625; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset, 0 12px 24px -16px rgb(0 0 0 / .7); }
 .p2-legenda { display: block; margin-bottom: 4px; color: var(--suave); font-size: 12.5px; }
 .p2-linha { display: flex; align-items: center; justify-content: space-between; height: 34px; font-size: 14px; }
 .p2-linha + .p2-linha { border-top: 1px solid var(--fio); }
@@ -76,25 +79,26 @@
 .p2-linha--fina > span { color: var(--tinta); }
 .p2 .p2-linha > span { margin: 0; }
 /* Chave liga e desliga. */
-.p2-chave { position: relative; display: block; width: 30px; height: 18px; border-radius: 9px; background: #161616; }
-.p2-chave i { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transform: translateX(12px); }
+.p2-chave { position: relative; display: block; width: 30px; height: 18px; border-radius: 9px; background: var(--claro); }
+.p2-chave i { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #161616; transform: translateX(12px); }
 /* Botão que vira estado. */
-.p2-botao { display: grid; place-items: center; height: 40px; border-radius: 20px; background: #161616; color: #F2F2EE; font-size: 14px; font-weight: 500; }
+.p2-botao { display: grid; place-items: center; height: 40px; border-radius: 20px; background: #F2F2EE; color: #161616; font-size: 14px; font-weight: 500; }
 .p2-botao > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 8px; opacity: 0; }
 .p2-botao > .p2-botao__depois { opacity: 1; }
 .p2-botao i, .p2-aviso > i, .p2-fim > i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
+.p2-botao i, .p2-fim > i { box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
 /* Prévia do anúncio, com a foto da casa. */
 .p2-anuncio { padding: 8px 8px 12px; }
 .p2-anuncio img { display: block; width: 100%; height: 104px; margin-bottom: 10px; border-radius: 9px; background: #161616; object-fit: cover; object-position: 50% 30%; }
 .p2-anuncio strong, .p2-anuncio span { padding-inline: 6px; }
-.p2-aviso { position: absolute; z-index: 3; top: 10px; right: 12px; display: flex; align-items: center; gap: 10px; padding: 10px 16px 11px 12px; box-shadow: 0 1px 1px rgb(22 22 22 / .05), 0 18px 30px -14px rgb(22 22 22 / .42); }
+.p2-aviso { position: absolute; z-index: 3; top: 10px; right: 12px; display: flex; align-items: center; gap: 10px; padding: 10px 16px 11px 12px; background: #302f2e; box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset, 0 18px 30px -14px rgb(0 0 0 / .8); }
 /* Conversa e horários. */
 .p2-conversa2 { display: grid; gap: 7px; }
-.p2-fala { justify-self: start; max-width: 88%; padding: 8px 13px 9px; border-radius: 15px 15px 15px 4px; background: #E3E3DE; font-size: 14px; line-height: 1.3; }
-.p2-fala--nossa { justify-self: end; border-radius: 15px 15px 4px 15px; background: #161616; color: #F2F2EE; }
+.p2-fala { justify-self: start; max-width: 88%; padding: 8px 13px 9px; border-radius: 15px 15px 15px 4px; background: #2b2b2a; font-size: 14px; line-height: 1.3; }
+.p2-fala--nossa { justify-self: end; border-radius: 15px 15px 4px 15px; background: var(--claro); color: #161616; }
 .p2-vagas { position: relative; display: flex; gap: 8px; }
-.p2-vaga b { display: grid; place-items: center; height: 32px; padding-inline: 13px; border-radius: 16px; background: #fff; box-shadow: 0 1px 1px rgb(22 22 22 / .04), 0 8px 16px -10px rgb(22 22 22 / .22); font-size: 13px; font-weight: 400; white-space: nowrap; }
-.p2-vaga--escolhida b { background: #161616; color: #F2F2EE; }
+.p2-vaga b { display: grid; place-items: center; height: 32px; padding-inline: 13px; border-radius: 16px; background: #2b2b2a; box-shadow: 0 0 0 1px rgb(242 242 238 / .08) inset; font-size: 13px; font-weight: 400; white-space: nowrap; }
+.p2-vaga--escolhida b { background: var(--claro); color: #161616; }
 .p2-pilha { display: grid; }
 .p2-pilha b { grid-area: 1 / 1; justify-self: end; font-weight: 400; opacity: 0; }
 .p2-pilha .p2-pilha__depois { opacity: 1; }
@@ -102,15 +106,15 @@
 .p2-itens { margin-top: 8px !important; }
 .p2-item { display: flex; align-items: center; gap: 10px; height: 28px; font-size: 14px; }
 .p2-item > i { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
-.p2-item > i b { position: absolute; inset: -1px; border-radius: 50%; background: #161616; }
-.p2-item > i b::after { content: ''; position: absolute; left: 5.5px; top: 5.5px; width: 6px; height: 3.5px; border-left: 1.5px solid #F2F2EE; border-bottom: 1.5px solid #F2F2EE; transform: rotate(-45deg); }
-.p2-fim { justify-self: start; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 13px; border-radius: 18px; background: #161616; color: #F2F2EE; font-size: 14px; font-weight: 500; }
+.p2-item > i b { position: absolute; inset: -1px; border-radius: 50%; background: var(--claro); }
+.p2-item > i b::after { content: ''; position: absolute; left: 5.5px; top: 5.5px; width: 6px; height: 3.5px; border-left: 1.5px solid #161616; border-bottom: 1.5px solid #161616; transform: rotate(-45deg); }
+.p2-fim { justify-self: start; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 13px; border-radius: 18px; background: #F2F2EE; color: #161616; font-size: 14px; font-weight: 500; }
 .p2-quem { display: flex; align-items: center; gap: 10px; padding-block: 7px; font-size: 13px; line-height: 1.25; }
 .p2-quem + .p2-quem { border-top: 1px solid var(--fio); }
 /* Cursor de quem está trabalhando: seta e etiqueta com foto e nome. */
 .p2-mouse { display: none; position: absolute; z-index: 4; left: 50%; top: 50%; pointer-events: none; }
-.p2-mouse svg { display: block; width: 18px; height: 18px; fill: #161616; stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
-.p2-mouse__quem { display: flex; align-items: center; gap: 6px; margin: 0 0 0 14px; padding: 3px 11px 3px 3px; border-radius: 14px; background: #161616; color: #F2F2EE; font-size: 12.5px; font-weight: 500; white-space: nowrap; box-shadow: 0 12px 22px -10px rgb(22 22 22 / .5); }
+.p2-mouse svg { display: block; width: 18px; height: 18px; fill: #F2F2EE; stroke: #161616; stroke-width: 1.4; stroke-linejoin: round; }
+.p2-mouse__quem { display: flex; align-items: center; gap: 6px; margin: 0 0 0 14px; padding: 3px 11px 3px 3px; border-radius: 14px; background: #F2F2EE; color: #161616; font-size: 12.5px; font-weight: 500; white-space: nowrap; box-shadow: 0 12px 22px -10px rgb(0 0 0 / .7); }
 .p2-tela .p2-mouse__quem .p2-rosto { width: 22px; height: 22px; box-shadow: none; }
 @media (prefers-reduced-motion: no-preference) { .js .p2-mouse { display: block; } }
 
@@ -182,39 +186,39 @@
 
 /* 3. A automação como conversa de WhatsApp, numa janela clara: contato no
    alto, dia, balões com hora e vistos, "digitando" e o campo de mensagem. */
-.p2-zap { --laco: 12s; position: absolute; inset: 0; overflow: hidden; display: grid; grid-template-rows: 52px minmax(0, 1fr) 46px; border-radius: 18px; background: #ECECE7; box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset; }
-.p2-zap__topo { display: flex; align-items: center; gap: 10px; padding-inline: 14px; background: #F7F7F4; border-bottom: 1px solid var(--fio); }
+.p2-zap { --laco: 12s; position: absolute; inset: 0; overflow: hidden; display: grid; grid-template-rows: 52px minmax(0, 1fr) 46px; border-radius: 18px; background: #141413; box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; }
+.p2-zap__topo { display: flex; align-items: center; gap: 10px; padding-inline: 14px; background: #1e1e1d; border-bottom: 1px solid var(--fio); }
 .p2-zap__topo .p2-cena__clinica { width: 32px; height: 32px; }
 .p2-zap__topo strong { font-size: 14px; }
 .p2-zap__topo strong + span { margin-top: 0; font-size: 12px; }
-.p2-zap__icone { width: 18px; height: 18px; margin-left: auto; fill: none; stroke: rgb(22 22 22 / .5); stroke-width: 1.4; stroke-linejoin: round; }
+.p2-zap__icone { width: 18px; height: 18px; margin-left: auto; fill: none; stroke: rgb(242 242 238 / .5); stroke-width: 1.4; stroke-linejoin: round; }
 .p2-zap__corpo { display: grid; align-content: end; gap: 7px; padding: 10px 14px 12px; }
-.p2-zap__dia { justify-self: center; display: flex; align-items: center; gap: 7px; padding: 3px 10px 4px; border-radius: 9px; background: rgb(22 22 22 / .06); color: var(--suave); font-size: 11.5px; }
-.p2-zap__dia--sistema { background: #fff; color: var(--tinta); box-shadow: 0 1px 1px rgb(22 22 22 / .05); }
-.p2-zap__dia--sistema i { position: relative; width: 12px; height: 12px; border-radius: 50%; background: #161616; }
-.p2-zap__dia--sistema i::after { content: ''; position: absolute; left: 3.5px; top: 3.5px; width: 4px; height: 2.5px; border-left: 1.2px solid #F2F2EE; border-bottom: 1.2px solid #F2F2EE; transform: rotate(-45deg); }
-.p2-zap__balao { justify-self: start; max-width: 86%; padding: 7px 11px 6px; border-radius: 4px 14px 14px 14px; background: #fff; box-shadow: 0 1px 1px rgb(22 22 22 / .08); font-size: 13.5px; line-height: 1.35; }
-.p2-zap__balao--clinica { justify-self: end; border-radius: 14px 4px 14px 14px; background: #161616; color: #F2F2EE; }
+.p2-zap__dia { justify-self: center; display: flex; align-items: center; gap: 7px; padding: 3px 10px 4px; border-radius: 9px; background: rgb(242 242 238 / .08); color: var(--suave); font-size: 11.5px; }
+.p2-zap__dia--sistema { background: #262625; color: var(--tinta); }
+.p2-zap__dia--sistema i { position: relative; width: 12px; height: 12px; border-radius: 50%; background: #FFE27A; }
+.p2-zap__dia--sistema i::after { content: ''; position: absolute; left: 3.5px; top: 3.5px; width: 4px; height: 2.5px; border-left: 1.2px solid #161616; border-bottom: 1.2px solid #161616; transform: rotate(-45deg); }
+.p2-zap__balao { justify-self: start; max-width: 86%; padding: 7px 11px 6px; border-radius: 4px 14px 14px 14px; background: #262625; font-size: 13.5px; line-height: 1.35; }
+.p2-zap__balao--clinica { justify-self: end; border-radius: 14px 4px 14px 14px; background: #FFE27A; color: #161616; }
 .p2 .p2-zap__hora { display: inline-flex; align-items: center; gap: 4px; float: right; margin: 6px 0 0 12px; font-size: 10.5px; line-height: 1; opacity: .6; }
-.p2-zap__balao--clinica .p2-zap__hora { opacity: 1; color: rgb(242 242 238 / .6); }
-.p2-zap__hora svg { width: 15px; height: 10px; fill: none; stroke: #FFD103; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.p2-zap__balao--clinica .p2-zap__hora { opacity: 1; color: rgb(22 22 22 / .6); }
+.p2-zap__hora svg { width: 15px; height: 10px; fill: none; stroke: #161616; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .p2-zap__vez { display: grid; }
 .p2-zap__vez > * { grid-area: 1 / 1; }
 .p2-zap__digitando { display: flex; gap: 4px; align-items: center; height: 32px; padding-inline: 13px; opacity: 0; }
-.p2-zap__digitando i { width: 5px; height: 5px; border-radius: 50%; background: rgb(22 22 22 / .4); animation: p2-z-ponto 1.1s ease-in-out infinite; }
+.p2-zap__digitando i { width: 5px; height: 5px; border-radius: 50%; background: rgb(242 242 238 / .5); animation: p2-z-ponto 1.1s ease-in-out infinite; }
 .p2-zap__digitando i:nth-child(2) { animation-delay: .15s; }
 .p2-zap__digitando i:nth-child(3) { animation-delay: .3s; }
 @keyframes p2-z-ponto { 0%, 60%, 100% { transform: none; opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
 .p2-zap__campo { display: flex; align-items: center; gap: 8px; padding: 0 12px 10px; }
-.p2-zap__campo span { flex: 1; display: flex; align-items: center; height: 34px; padding-inline: 14px; border-radius: 17px; background: #fff; color: var(--suave); font-size: 13px; }
-.p2-zap__campo i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #161616; }
-.p2-zap__campo svg { width: 16px; height: 16px; fill: none; stroke: #F2F2EE; stroke-width: 1.5; stroke-linecap: round; }
+.p2-zap__campo span { flex: 1; display: flex; align-items: center; height: 34px; padding-inline: 14px; border-radius: 17px; background: #262625; color: var(--suave); font-size: 13px; }
+.p2-zap__campo i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #F2F2EE; }
+.p2-zap__campo svg { width: 16px; height: 16px; fill: none; stroke: #161616; stroke-width: 1.5; stroke-linecap: round; }
 @media (prefers-reduced-motion: reduce) { .p2-zap__digitando i { animation: none; } }
 
 /* 4. O plano do mês virando entrega: cada pendência tem a área e a pessoa
    do time que cuida dela; uma a uma entram em andamento (ponto amarelo),
    são concluídas (visto) e o mês fecha. Laço de 14 s. */
-.p2-plano { --laco: 14s; padding: 16px 18px 14px; }
+.p2-plano { --laco: 14s; --borda-rosto: #FBE89A; padding: 16px 18px 14px; background: linear-gradient(180deg, #FFEFA8, #FAE286); box-shadow: 0 24px 44px -24px rgb(0 0 0 / .9); }
 .p2-plano__topo { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--fio); }
 .p2-plano__topo .p2-rosto { box-shadow: none; }
 .p2-plano__lista { display: grid; gap: 10px; }
@@ -222,7 +226,7 @@
 .p2-tarefa__marca { position: relative; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
 .p2-tarefa__marca b { position: absolute; inset: 0; }
 .p2-tarefa__ponto { opacity: 0; }
-.p2-tarefa__ponto::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
+.p2-tarefa__ponto::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #161616; }
 .p2-tarefa__visto::after { content: ''; position: absolute; left: 5px; top: 4.5px; width: 6px; height: 3.5px; border-left: 1.4px solid var(--tinta); border-bottom: 1.4px solid var(--tinta); transform: rotate(-45deg); }
 .p2-tarefa__texto { min-width: 0; }
 .p2-tarefa__texto > span { display: block; color: var(--suave); font-size: 12.5px; }
@@ -232,8 +236,8 @@
 
 /* 5. O estudo de mercado, feito pelo time: a foto da sede e uma nota. */
 .p2-estudo { position: relative; height: 100%; }
-.p2-estudo__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; border-radius: 18px; filter: grayscale(1) contrast(1.02) brightness(.92); }
-.p2-estudo__nota { position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; }
+.p2-estudo__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; border-radius: 18px; }
+.p2-estudo__nota { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .6); --borda-rosto: #1e1e1d; background: rgb(24 24 23 / .86); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset; position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; }
 .p2-estudo__nota strong { white-space: nowrap; }
 
 /* Entrada: as partes de cada peça sobem devagar, uma depois da outra, uma vez. */

@@ -4,8 +4,8 @@
  * a primeira "muito tecnológica", com cara de quem vende sistema: a Renke
  * vende o processo, feito por gente. Aqui cada peça mostra o trabalho
  * (um lead acompanhado, uma conversa, o plano do mês, o estudo feito pelo
- * time), em recortes claros sobre o cartão escuro e com as fotos reais da
- * equipe, em preto e branco. O quadro do CRM segue o da primeira versão.
+ * time), com as fotos reais da equipe, em cor. Só o quadro do CRM é claro; as
+ * outras telas são escuras com detalhes em amarelo claro. O quadro do CRM segue o da primeira versão.
  * Sem métricas nem pacientes inventados; o amarelo fica num ponto por peça.
  */
 import { Image } from 'astro:assets';
@@ -44,14 +44,14 @@ const mouse = (n: string, k: number, pts: [number, string, string][]) => {
 [0, 1, 2].forEach(cena);
 // Tela 1, marketing: liga o Google, publica a campanha, chega o lead.
 mouse('p2-m1', 0, [[.16, '70%', '150px'], [.3, 'calc(100% - 30px)', '90px'], [.4, 'calc(100% - 30px)', '90px'], [.56, '56%', '152px'], [.7, '56%', '152px']]);
-q.push(`@keyframes p2-chave{0%,${g(0, .34)}%{background:#d4d4cf}${g(0, .38)}%,100%{background:#161616}}`,
+q.push(`@keyframes p2-chave{0%,${g(0, .34)}%{background:#3d3d3b}${g(0, .38)}%,100%{background:#FFE27A}}`,
   `@keyframes p2-chave-pino{0%,${g(0, .34)}%{transform:none}${g(0, .39)}%,100%{transform:translateX(12px)}}`);
 aperta('p2-publica', 0, .6); troca('p2-botao', 0, .62); entra('p2-aviso', 0, .74, 'translate(16px,-10px) scale(.96)');
 // Tela 2, comercial: conversa com o lead e marca a avaliação.
 entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
 mouse('p2-m2', 1, [[.56, '62%', '70px'], [.68, '44px', '22px'], [.84, '44px', '22px']]);
 aperta('p2-vaga', 1, .72);
-q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#fff;color:#161616}${g(1, .76)}%,100%{background:#161616;color:#F2F2EE}}`);
+q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#2b2b2a;color:#F2F2EE}${g(1, .76)}%,100%{background:#FFE27A;color:#161616}}`);
 troca('p2-estado-lead', 1, .76);
 // Tela 3, clínica: o paciente confirma, chega e fecha o tratamento.
 entra('p2-ok-1', 2, .16, 'scale(.4)'); entra('p2-ok-2', 2, .34, 'scale(.4)'); entra('p2-ok-3', 2, .52, 'scale(.4)');
@@ -63,7 +63,7 @@ const quadros = q.join('');
 const quadrosZap = [
   '@keyframes p2-z-corpo{0%{opacity:0}4%,93%{opacity:1}100%{opacity:0}}',
   '@keyframes p2-z-1{0%,6%{opacity:0;transform:translateY(10px) scale(.97)}11%,100%{opacity:1;transform:none}}',
-  '@keyframes p2-z-lido{0%,26%{stroke:rgb(242 242 238 / .5)}30%,100%{stroke:#FFD103}}',
+  '@keyframes p2-z-lido{0%,26%{stroke:rgb(22 22 22 / .32)}30%,100%{stroke:#161616}}',
   '@keyframes p2-z-dig{0%,34%{opacity:0;transform:translateY(8px)}38%,50%{opacity:1;transform:none}53%,100%{opacity:0;transform:none}}',
   '@keyframes p2-z-2{0%,52%{opacity:0;transform:translateY(8px) scale(.97)}57%,100%{opacity:1;transform:none}}',
   '@keyframes p2-z-3{0%,68%{opacity:0;transform:translateY(8px)}73%,100%{opacity:1;transform:none}}',
