@@ -400,3 +400,13 @@
   .p2-estudo__nota .p2-rostos > * + * { margin-left: -10px; }
   .p2-estudo__nota strong { font-size: 14px; }
 }
+
+/* TESTE (10/10, /laboratorio/home-clickup): o bento como uma grade só, em fio
+   fino, no molde do ClickUp e do pin "Design support with clear direction".
+   As peças deixam de ser cartões soltos: sem vão, sem fundo próprio e sem
+   canto; uma moldura única e um fio entre as células. A primeira célula fica
+   um tom acima, como destaque. As artes são as mesmas. */
+.revena-bento--v2.revena-bento--fio { --peca-vao: 0px; gap: 0; border-radius: clamp(22px, 2vw, 30px); overflow: hidden; background: linear-gradient(160deg, #131312, #0b0b0b 72%); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; }
+.revena-bento--v2.revena-bento--fio .revena-peca { border-radius: 0; background: none; box-shadow: 1px 0 0 rgb(242 242 238 / .09), 0 1px 0 rgb(242 242 238 / .09); }
+.revena-bento--v2.revena-bento--fio .revena-peca:first-child { background: rgb(242 242 238 / .035); }
+
