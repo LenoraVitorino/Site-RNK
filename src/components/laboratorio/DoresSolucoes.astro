@@ -14,6 +14,18 @@ import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
 
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
+/* Cada resposta ganha um recorte visual pequeno, para a dobra não ser texto
+   contra texto (10/10). São desenhos sem número inventado: só a forma do que
+   a clínica passa a enxergar. Os rótulos são rascunho e precisam de validação. */
+const vistas = [
+  { tipo: 'barras', titulo: 'Custo por paciente, por canal', itens: ['Google', 'Instagram', 'Indicação'] },
+  { tipo: 'funil', titulo: 'Do lead à cadeira', itens: ['Leads', 'Agendaram', 'Compareceram', 'Fecharam'] },
+  { tipo: 'lista', titulo: 'Processo documentado', itens: ['Roteiro de atendimento', 'Jornada do paciente', 'Follow-up'] },
+  { tipo: 'faixa', titulo: 'Verba do mês', itens: ['Google', 'Instagram', 'Outros'] },
+  { tipo: 'linha', titulo: 'Comparecimento', itens: ['Onde caiu'] },
+  { tipo: 'meses', titulo: 'O que funcionou, repetido', itens: ['Ago', 'Set', 'Out'] },
+  { tipo: 'brecha', titulo: 'O que cada um comunica', itens: ['Preço baixo', 'Antes e depois', 'Espaço aberto'] },
+] as const;
 ---
 <section class="dorsol" aria-labelledby="dorsol-titulo" data-dorsol>
   <div class="container">
@@ -32,9 +44,18 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
           </button>
           <div class="dorsol__r" id={`dorsol-r-${i}`}>
             <div class="dorsol__r-dentro">
-              <div class="dorsol__r-topo">
-                <span class="dorsol__pastilha" aria-hidden="true"><IconeRenke nome={icones[i]} size={24} /></span>
-                <p class="dorsol__eco" aria-hidden="true">{p.pergunta}</p>
+              <div class:list={['dorsol__viz', `dorsol__viz--${vistas[i].tipo}`]} aria-hidden="true">
+                <div class="dorsol__viz-topo"><span class="dorsol__pastilha"><IconeRenke nome={icones[i]} size={20} /></span>{vistas[i].titulo}</div>
+                {vistas[i].tipo === 'linha' ? (
+                  <div class="dorsol__viz-corpo">
+                    <svg viewBox="0 0 300 90" preserveAspectRatio="none" focusable="false"><path d="M0 34 C40 26 60 30 90 24 S140 18 165 52 S215 70 240 40 S280 22 300 18" /></svg>
+                    <b style="left:55%;top:56%"></b><em style="left:55%;top:56%">{vistas[i].itens[0]}</em>
+                  </div>
+                ) : (
+                  <ul class="dorsol__viz-corpo">
+                    {vistas[i].itens.map((t, k) => <li style={`--k:${k}`}><span>{t}</span><i></i></li>)}
+                  </ul>
+                )}
               </div>
               <div class="dorsol__r-texto">
                 <span class="dorsol__rotulo">Com a Renke</span>
@@ -81,19 +102,19 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
   .dorsol__lista { position: relative; display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
   .dorsol__q {
     display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; width: 100%;
-    padding: 15px 18px; border: 0; border-radius: 16px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+    padding: 12px 18px; border: 0; border-radius: 16px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
     transition: background-color .5s cubic-bezier(.22, 1, .36, 1), box-shadow .5s cubic-bezier(.22, 1, .36, 1);
   }
   .dorsol__q:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
   .dorsol__num { font-size: 12.5px; font-variant-numeric: tabular-nums; letter-spacing: .02em; opacity: .45; }
-  .dorsol__pergunta { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.3; letter-spacing: -.02em; opacity: .62; text-wrap: pretty; transition: opacity .5s cubic-bezier(.22, 1, .36, 1); }
+  .dorsol__pergunta { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.3vw, 20px); line-height: 1.3; letter-spacing: -.02em; opacity: .62; text-wrap: pretty; transition: opacity .5s cubic-bezier(.22, 1, .36, 1); }
   .dorsol__seta { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: translateX(-6px); transition: opacity .5s cubic-bezier(.22, 1, .36, 1), transform .5s cubic-bezier(.22, 1, .36, 1); }
   /* A pergunta ativa sobe um tom, com luz no topo e sombra suave, na linha do ClickUp. */
   .dorsol__item--ativo .dorsol__q { background: linear-gradient(180deg, #232322, #1b1b1a); box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 22px 34px -24px rgb(0 0 0 / .9); }
   .dorsol__item--ativo .dorsol__pergunta { opacity: 1; }
   .dorsol__item--ativo .dorsol__seta { opacity: .9; transform: none; }
 
-  .dorsol__pastilha { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; color: #f2f2ee; background: linear-gradient(180deg, #3a3a38, #262625); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 16px 24px -10px rgb(0 0 0 / .85); }
+  .dorsol__pastilha { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: #f2f2ee; background: linear-gradient(180deg, #3a3a38, #262625); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 16px 24px -10px rgb(0 0 0 / .85); }
   .dorsol__rotulo { display: block; font-size: 13px; letter-spacing: -.01em; color: rgb(242 242 238 / .6); }
   .dorsol__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; letter-spacing: -.03em; line-height: 1.1; }
   .dorsol__texto { margin: 0; line-height: 1.5; color: rgb(242 242 238 / .74); text-wrap: pretty; }
@@ -108,10 +129,10 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
       background: radial-gradient(120% 120% at 0% 0%, #2a2a29 0%, #1a1a19 60%);
       box-shadow: 0 1px 0 rgb(255 255 255 / .12) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 50px 70px -40px rgb(0 0 0 / .95);
     }
-    .dorsol__r-topo { display: flex; align-items: center; gap: 16px; }
-    .dorsol__eco { margin: 0; max-width: 34ch; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.4; color: rgb(242 242 238 / .56); text-wrap: pretty; }
     .dorsol__r-texto { display: grid; gap: 14px; }
-    .dorsol__nome { font-size: clamp(30px, 3vw, 46px); }
+    .dorsol__nome { font-size: clamp(26px, 2.3vw, 36px); }
+    .dorsol__r-dentro { gap: 24px; }
+    .dorsol__viz { flex: 1; }
     .dorsol__texto { max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); }
   }
   /* Celular e tablet: a resposta abre embaixo da pergunta tocada. */
@@ -123,11 +144,52 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
     .dorsol__item--ativo .dorsol__r { grid-template-rows: 1fr; }
     .dorsol__r-dentro { min-height: 0; overflow: hidden; display: flex; align-items: flex-start; gap: 14px; padding-inline: 14px; }
     .dorsol__item--ativo .dorsol__r-dentro { padding-block: 14px 18px; }
-    .dorsol__eco { display: none; }
-    .dorsol__pastilha { width: 42px; height: 42px; border-radius: 13px; }
+    .dorsol__viz { flex: 1; min-width: 0; }
+    .dorsol__r-dentro { flex-direction: column; }
     .dorsol__r-texto { display: grid; gap: 6px; }
     .dorsol__nome { font-size: 21px; font-weight: 500; }
     .dorsol__texto { font-size: 15px; }
   }
+  /* O recorte visual da resposta: uma peça flutuando no cartão, com sombra suave. */
+  .dorsol__viz { display: flex; flex-direction: column; gap: 14px; padding: 16px 18px 18px; border-radius: 18px; background: linear-gradient(180deg, #343432, #2a2a29); box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 26px 40px -24px rgb(0 0 0 / .9); }
+  .dorsol__viz-topo { display: flex; align-items: center; gap: 12px; font-size: 14px; letter-spacing: -.01em; }
+  .dorsol__viz-corpo { position: relative; flex: 1; display: grid; align-content: center; gap: 16px; margin: 0; padding: 0; list-style: none; min-height: 96px; font-size: 15px; }
+  .dorsol__viz-corpo li { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; gap: 12px; color: rgb(242 242 238 / .7); }
+  .dorsol__viz-corpo li i { display: block; height: 12px; border-radius: 6px; background: rgb(242 242 238 / .22); }
+  /* barras: custo por canal */
+  .dorsol__viz--barras li:nth-child(1) i { width: 46%; background: #f2f2ee; }
+  .dorsol__viz--barras li:nth-child(2) i { width: 72%; }
+  .dorsol__viz--barras li:nth-child(3) i { width: 28%; }
+  /* funil: cada etapa mais estreita, texto dentro */
+  .dorsol__viz--funil .dorsol__viz-corpo { gap: 8px; justify-items: center; }
+  .dorsol__viz--funil li { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; width: calc(100% - var(--k) * 20%); height: 34px; border-radius: 17px; background: rgb(242 242 238 / .1); color: #f2f2ee; }
+  .dorsol__viz--funil li i { display: none; }
+  .dorsol__viz--funil li:last-child { background: #f2f2ee; color: #161616; font-weight: 500; }
+  /* lista: passos com visto */
+  .dorsol__viz--lista li, .dorsol__viz--brecha li { grid-template-columns: 22px minmax(0, 1fr); color: #f2f2ee; font-size: 16px; }
+  .dorsol__viz--lista li span, .dorsol__viz--brecha li span { order: 2; }
+  .dorsol__viz--lista li i { position: relative; width: 22px; height: 22px; border-radius: 50%; background: #f2f2ee; }
+  .dorsol__viz--lista li i::after { content: ''; position: absolute; left: 7px; top: 6.5px; width: 7px; height: 4px; border-left: 1.6px solid #161616; border-bottom: 1.6px solid #161616; transform: rotate(-45deg); }
+  /* faixa: a verba repartida */
+  .dorsol__viz--faixa .dorsol__viz-corpo { grid-template-columns: 55fr 30fr 15fr; gap: 4px; align-content: center; }
+  .dorsol__viz--faixa li { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dorsol__viz--faixa li i { order: -1; height: 26px; border-radius: 9px; }
+  .dorsol__viz--faixa li:first-child i { background: #f2f2ee; }
+  /* linha: o mês em que caiu */
+  .dorsol__viz--linha svg { width: 100%; height: 130px; fill: none; stroke: rgb(242 242 238 / .7); stroke-width: 1.6; vector-effect: non-scaling-stroke; overflow: visible; }
+  .dorsol__viz--linha path { vector-effect: non-scaling-stroke; }
+  .dorsol__viz--linha b { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #f2f2ee; box-shadow: 0 0 0 4px rgb(242 242 238 / .16); }
+  .dorsol__viz--linha em { position: absolute; margin: 12px 0 0 12px; padding: 5px 10px; border-radius: 12px; background: #f2f2ee; color: #161616; font-style: normal; font-size: 12.5px; font-weight: 500; white-space: nowrap; }
+  /* meses: o mesmo resultado, repetido */
+  .dorsol__viz--meses .dorsol__viz-corpo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .dorsol__viz--meses li { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 22px; padding: 16px; border-radius: 16px; background: rgb(242 242 238 / .08); color: #f2f2ee; font-size: 16px; }
+  .dorsol__viz--meses li i { position: relative; width: 22px; height: 22px; border-radius: 50%; background: #f2f2ee; }
+  .dorsol__viz--meses li i::after { content: ''; position: absolute; left: 7px; top: 6.5px; width: 7px; height: 4px; border-left: 1.6px solid #161616; border-bottom: 1.6px solid #161616; transform: rotate(-45deg); }
+  /* brecha: o que os concorrentes ocupam e o espaço que sobra */
+  .dorsol__viz--brecha li { height: 38px; padding-inline: 14px; border-radius: 19px; background: rgb(242 242 238 / .08); grid-template-columns: 8px minmax(0, 1fr); }
+  .dorsol__viz--brecha li i { width: 8px; height: 8px; border-radius: 50%; }
+  .dorsol__viz--brecha li:last-child { background: #f2f2ee; color: #161616; font-weight: 500; }
+  .dorsol__viz--brecha li:last-child i { background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+
   @media (prefers-reduced-motion: reduce) { .dorsol * { transition: none !important; } }
 </style>
