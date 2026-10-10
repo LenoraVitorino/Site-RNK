@@ -308,7 +308,10 @@ const itensMenu = menu.flatMap((item) => {
   };
   const tomAbaixo = () => {
     const y = header.offsetHeight + 2;
-    let n: Element | null = document.elementFromPoint(Math.round(window.innerWidth / 2), y);
+    // Com o painel do menu aberto, o ponto de leitura cai em cima dele; sem
+    // pular o cabeçalho inteiro a subida ia do painel direto ao body (escuro)
+    // e o menu virava escuro sobre dobra clara (10/10/2026).
+    let n: Element | null = document.elementsFromPoint(Math.round(window.innerWidth / 2), y).find((e) => !header.contains(e)) ?? null;
     // Só os fundos de dobra contam: botões e links (mesmo os de largura
     // total no celular), cartões e fichas (mais estreitos que 60% da tela)
     // são pulados, senão o cabeçalho piscava de tom a cada ficha clara ou

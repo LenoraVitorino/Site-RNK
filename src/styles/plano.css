@@ -24,6 +24,8 @@
 /* À direita, a arte do plano (o infográfico do ecossistema, 640 × 560). */
 .plano-hero__imagem { position: relative; align-self: center; }
 .plano-hero__arte { position: relative; width: min(100%, 700px, calc((100svh - 300px) * 640 / 560)); aspect-ratio: 640 / 560; margin-inline: auto; }
+/* A arte em fluxo (a ficha do lead, no Start): a altura vem do conteúdo. */
+.plano-hero__arte:has(> .jor) { aspect-ratio: auto; width: min(100%, 680px, calc((100svh - 300px) * 640 / 540)); margin-right: 0; }
 .plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; }
 .plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .16); }
 .plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
@@ -58,13 +60,15 @@
 .plano-cabeca .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }
 
 /* ---------- Ideal para ---------- */
-.plano-ideal__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 112px); align-items: start; }
-.plano-ideal__titulo { margin: 0; font-weight: 300; position: sticky; top: calc(var(--altura-header) + 32px); }
-.plano-ideal__lista { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgb(37 37 35 / .16); }
-.plano-ideal__item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 20px; align-items: center; padding-block: clamp(18px, 2vw, 28px); border-top: 1px solid rgb(37 37 35 / .16); font-size: clamp(19px, 1.6vw, 25px); font-weight: 300; line-height: 1.3; letter-spacing: -.015em; text-wrap: pretty; }
-/* O número dentro de um losango de fio fino (a assinatura dos ícones Renke). */
-.plano-ideal__n { position: relative; display: grid; place-items: center; width: 36px; height: 36px; font-size: 12px; font-weight: 500; letter-spacing: 0; color: #50504e; }
-.plano-ideal__n::before { content: ''; position: absolute; inset: 5px; border: 1px solid rgb(37 37 35 / .4); transform: rotate(45deg); }
+.plano-ideal__titulo { margin: 0 0 clamp(40px, 5vw, 80px); font-weight: 300; }
+.plano-ideal__lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); }
+.plano-ideal__item { display: grid; align-content: start; gap: clamp(28px, 3.4vw, 56px); min-width: 0; padding-right: clamp(12px, 1.4vw, 24px); font-size: clamp(18px, 1.45vw, 22px); font-weight: 300; line-height: 1.3; letter-spacing: -.015em; text-wrap: pretty; }
+.plano-ideal__item + .plano-ideal__item { padding-left: clamp(16px, 1.8vw, 30px); border-left: 1px solid rgb(37 37 35 / .16); }
+.plano-ideal__item:last-child { padding-right: 0; }
+/* O ícone no quadrado amarelo, como nos números de "O que a Renke faz". */
+.plano-ideal__n { --icone-acento: currentColor; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; color: #252523;
+  background: linear-gradient(150deg, rgb(255 226 90 / .92), rgb(255 209 3 / .72)); border: 1px solid rgb(255 255 255 / .55);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 8px 18px -8px rgb(150 115 0 / .45), 0 2px 5px rgb(37 37 35 / .08); }
 
 /* ---------- O que o plano faz (cartões de vidro da home) ---------- */
 .plano-faz { padding-block: var(--esp-secao); }
@@ -112,10 +116,11 @@
 /* ---------- Tablet e celular ---------- */
 @media (max-width: 1099.98px) {
   .plano-hero__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Ideal para: os itens voltam a ser linhas entre fios, com o ícone ao lado. */
+  .plano-ideal__lista { grid-template-columns: 1fr; border-bottom: 1px solid rgb(37 37 35 / .16); }
+  .plano-ideal__item, .plano-ideal__item + .plano-ideal__item { grid-template-columns: 40px minmax(0, 1fr); align-items: center; gap: 20px; padding: clamp(16px, 2.4vw, 22px) 0; border-left: 0; border-top: 1px solid rgb(37 37 35 / .16); }
 }
 @media (max-width: 899.98px) {
-  .plano-ideal__grade { grid-template-columns: 1fr; }
-  .plano-ideal__titulo { position: static; }
   /* A régua fica em pé: o fio desce pela esquerda. */
   .plano-regua { flex-direction: column; gap: 32px; }
   .plano-regua__etapa { position: relative; padding: 0 0 0 36px; }
@@ -132,6 +137,7 @@
   /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
   .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
   .plano-hero__arte { width: 100%; aspect-ratio: 640 / 700; }
+  .plano-hero__arte:has(> .jor) { width: 100%; aspect-ratio: auto; }
 }
 @media (max-width: 699.98px) {
   .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }

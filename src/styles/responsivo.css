@@ -1,0 +1,50 @@
+/* Responsividade e toque (09/10/2026). Ajustes da revisão de celular, tablet
+   e desktops menores, feita com o site inteiro em 13 larguras (320 a 1920).
+   Fica por último no Base2. O prefixo :root:root vence os estilos com escopo
+   dos componentes sem precisar de !important. */
+
+/* ── Menu do celular: no telefone o painel ocupa a tela inteira (antes
+   sobrava uma faixa de 12% da página à esquerda); no tablet segue gaveta. */
+@media (max-width: 599.98px) {
+  :root:root .header .nav { width: 100vw; padding-inline: var(--gutter); }
+}
+/* Itens do menu com área de toque confortável. */
+@media (max-width: 1023.98px) {
+  :root:root .header .megamenu a { min-height: 44px; }
+}
+
+/* ── Cartões de ícone (O que muda, tese, valores): no telefone o respiro
+   entre o ícone e o texto era de cartão de desktop e alongava a página. */
+@media (max-width: 599.98px) {
+  :root:root .ganhos__cartao { min-height: 0; gap: 22px; padding: 20px; }
+  :root:root .ed-cartao { gap: 22px; padding: 20px; }
+  :root:root :is(.ganhos__anel, .ed-anel) { width: 40px; height: 40px; }
+  :root:root :is(.ganhos__texto, .ed-cartao__texto) { max-width: none; }
+}
+
+/* ── Sobre · Cultura: em duas colunas "Autorresponsabilidade" era cortada.
+   No telefone os valores viram linhas: ícone à esquerda, nome à direita. */
+@media (max-width: 599.98px) {
+  :root:root .sb-cultura__valores { grid-template-columns: 1fr; gap: 10px; }
+  :root:root .sb-cultura__valor { min-height: 0; flex-direction: row; align-items: center; justify-content: flex-start; gap: 16px; padding: 14px 18px; }
+  :root:root .sb-cultura__valor .ed-cartao__nome { font-size: 18px; }
+}
+@media (min-width: 600px) and (max-width: 899.98px) {
+  :root:root .sb-cultura__valor { min-height: 150px; }
+}
+
+/* ── Sobre · Quem somos e Faça parte · GPTW: no tablet o texto ficava
+   espremido num terço da largura, com o resto vazio. */
+@media (max-width: 899.98px) {
+  :root:root .sb-somos__texto, :root:root .fp-gptw__texto > p { max-width: 58ch; }
+}
+
+/* ── Rodapé: a marca com área de toque de 44px. */
+@media (max-width: 899.98px) {
+  :root:root .footer__col .footer__logo { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* ── Paisagem em telefone: seções de altura cheia não podem cortar conteúdo. */
+@media (max-height: 480px) and (orientation: landscape) {
+  :root:root .header .nav { padding-bottom: 24px; }
+}
