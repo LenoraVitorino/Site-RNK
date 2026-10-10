@@ -118,7 +118,11 @@ const quadrosPlano = tarefas.map((t, k) => [
   `@keyframes p2-tar-dono-${k}{0%,${t.em}%{opacity:0;transform:scale(.7)}${t.em + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
   `@keyframes p2-tar-ponto-${k}{0%,${t.em}%{opacity:0}${t.em + 3}%,${t.feito}%{opacity:1}${t.feito + 2}%,100%{opacity:0}}`,
   `@keyframes p2-tar-visto-${k}{0%,${t.feito}%{opacity:0;transform:scale(.5)}${t.feito + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
-].join('')).join('') + '@keyframes p2-plano-fim{0%,80%{opacity:0;transform:translateY(6px)}84%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}';
+].join('')).join('')
+  // A barra do plano avança um terço a cada entrega; no fim, o estado do topo vira "Entregue".
+  + `@keyframes p2-plano-barra{0%,${tarefas[0].feito}%{transform:scaleX(0)}${tarefas.map((t, k) => `${t.feito + 4}%${k < 2 ? `,${tarefas[k + 1].feito}%` : ',94%'}{transform:scaleX(${((k + 1) / 3).toFixed(4)})}`).join('')}100%{transform:scaleX(0)}}`
+  + '@keyframes p2-plano-est-a{0%,76%{opacity:1}78%,96%{opacity:0}100%{opacity:1}}'
+  + '@keyframes p2-plano-est-b{0%,78%{opacity:0;transform:scale(.92)}82%,94%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}';
 
 /* 5. O estudo de concorrentes como processo (10/10: "mostra como é olhar os
    concorrentes", sem foto da sede): quem analisa passa concorrente por
@@ -308,18 +312,25 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
     <style is:inline set:html={quadrosPlano}></style>
     <div class="p2-plano__topo">
       <Image src={maria} {...rosto} />
-      <div><strong>Plano de outubro</strong><span>Reunião mensal com a Renke</span></div>
+      <div><strong>Plano de outubro</strong><span>Reunião mensal</span></div>
+      <span class="p2-plano__estado">
+        <b class="p2-anim" style="--a:p2-plano-est-a">Em andamento</b>
+        <b class="p2-plano__entregue p2-anim" style="--a:p2-plano-est-b"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.5 8.4l3 3 6-6.6" /></svg>Entregue</b>
+      </span>
     </div>
+    <div class="p2-plano__barra"><i class="p2-anim" style="--a:p2-plano-barra"></i></div>
     <ul class="p2-plano__lista">
       {tarefas.map((t, k) => (
         <li class="p2-tarefa p2-anim" style={`--a:p2-tar-${k}`}>
-          <span class="p2-tarefa__marca"><b class="p2-tarefa__ponto p2-anim" style={`--a:p2-tar-ponto-${k}`}></b><b class="p2-tarefa__visto p2-anim" style={`--a:p2-tar-visto-${k}`}></b></span>
+          <span class="p2-tarefa__marca">
+            <b class="p2-tarefa__ponto p2-anim" style={`--a:p2-tar-ponto-${k}`}><svg viewBox="0 0 20 20" focusable="false"><path d="M10 3a7 7 0 0 1 7 7" /></svg></b>
+            <b class="p2-tarefa__visto p2-anim" style={`--a:p2-tar-visto-${k}`}><svg viewBox="0 0 20 20" focusable="false"><path d="M5.6 10.4l3 3 5.8-6.6" /></svg></b>
+          </span>
           <span class="p2-tarefa__texto">{t.titulo}<span>{t.area}</span></span>
           <Image src={t.dono} {...rosto} class="p2-rosto p2-anim" style={`--a:p2-tar-dono-${k}`} />
         </li>
       ))}
     </ul>
-    <div class="p2-plano__fim p2-anim" style="--a:p2-plano-fim"><i></i>Plano de outubro entregue</div>
   </div>
 )}
 
