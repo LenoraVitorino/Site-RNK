@@ -3,9 +3,10 @@
  * Página de teste (10/10/2026): a home inteira refeita em cima dos moldes do
  * ClickUp e dos pins novos (docs/04-design/referencia-clickup.md e
  * docs/04-design/curadoria/pins-265-324.md), para comparar com a home atual
- * sem tocar nela. Mudam cinco dobras: bento em fio fino, ecossistema de
- * RevOps (rascunho), palco com a dor como título, conversa em lista e painel
- * e resultados como faixa de números. Fora dos buscadores e do menu.
+ * sem tocar nela. Mudam três dobras: ecossistema de RevOps (rascunho),
+ * conversa em lista e painel e resultados como faixa de números. O bento em
+ * fio fino e o palco com o texto de lado foram reprovados em 10/10 e saíram:
+ * as duas dobras são as da home. Fora dos buscadores e do menu.
  */
 import Base2 from '../../layouts/Base2.astro';
 import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
@@ -27,10 +28,10 @@ import ResultadosCases from '../../components/laboratorio/ResultadosCases.astro'
   <FundoVivo slot="fundo" fundo="cena" />
   <Hero />
   <OQueFaz />
-  <Protocolos fio />
+  <Protocolos />
   <EcossistemaRevops />
   <Letreiro />
-  <PlanosPalco lay="lado" />
+  <PlanosPalco />
   <ConversaLista />
   <ResultadosCases />
   <CtaFinal />

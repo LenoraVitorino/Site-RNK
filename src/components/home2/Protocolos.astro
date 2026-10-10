@@ -10,9 +10,8 @@ import ArteProtocolo2 from './pilares2/ArteProtocolo2.astro';
 import Selo from '../ui/Selo.astro';
 /* arte: 'v2' é a segunda versão das peças (10/10/2026), clara e com as fotos
    do time; 'v1' fica para comparação em /laboratorio/protocolo-v1. */
-/* fio: teste (10/10) da grade em fio fino, no molde do ClickUp; só no laboratório. */
-interface Props { arte?: 'v1' | 'v2'; fio?: boolean }
-const { arte = 'v2', fio = false } = Astro.props;
+interface Props { arte?: 'v1' | 'v2' }
+const { arte = 'v2' } = Astro.props;
 const v2 = arte === 'v2';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 /* Bento de cinco peças chanfradas (01/10/2026), cada uma com a sua
@@ -28,7 +27,7 @@ const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'] as c
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
       {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
-    <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral, 'revena-bento--v2': v2, 'revena-bento--fio': fio }]}>
+    <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral, 'revena-bento--v2': v2 }]}>
       {cartas.map((p, i) => (
         <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>

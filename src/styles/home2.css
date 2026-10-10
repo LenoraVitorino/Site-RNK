@@ -671,20 +671,6 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos[data-animado] .palcoplanos__ver { display: flex; }
 .palcoplanos__ver--on { opacity: 1; }
 
-/* TESTE (10/10, /laboratorio/palco-planos). O conjunto do centro é exatamente
-   o da home (símbolo, a mão no meio dele e o nome do plano por cima, no mesmo
-   tamanho); só anda para a direita. À esquerda, a meia altura, um bloco só:
-   a dor da clínica como título, o que o plano resolve como subtítulo e o botão. */
-.palcoplanos[data-animado][data-lay="lado"] { --lado: 19vw; }
-.palcoplanos[data-animado][data-lay="lado"] :is(.plano-palco__icone, .plano-editorial) { translate: var(--lado) 0; }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__nome { left: calc(50% + var(--lado)); }   /* o script zera o translate do nome */
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__texto { top: 50%; transform: translateY(-50%); width: clamp(300px, 27vw, 430px); gap: 0; }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__conta { display: none; }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__fala { display: block; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(26px, 2.3vw, 38px); line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__frase { margin-top: clamp(16px, 1.5vw, 22px); font-size: clamp(16px, 1.2vw, 18px); line-height: 1.5; letter-spacing: -.015em; opacity: .72; }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__texto .botao { margin-top: clamp(24px, 2.2vw, 32px); }
-.palcoplanos[data-animado][data-lay="lado"] .plano-palco__link { inset: 14% 4% 14% 46%; }
-
 /* Símbolo e nome dentro de cada plano: imóveis durante a sobreposição. */
 .palcoplanos__icones { position: absolute; z-index: 8; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .palcoplanos__icones > * { grid-area: 1 / 1; }
