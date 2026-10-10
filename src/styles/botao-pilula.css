@@ -45,3 +45,16 @@ a.botao:hover .botao__icone--baixo { transform: translateY(2px); }
 .home-refinada #fale a.botao .botao__icone { background: #161616; color: var(--papel); }
 
 @media (prefers-reduced-motion: reduce) { a.botao .botao__icone { transition: none; } }
+
+/* "Saiba mais" dos planos na home (10/10/2026): era transparente, com um fio
+   que não se via no fundo escuro, e só parecia botão no hover. Agora é a
+   pílula de papel do site (a mesma de "Conhecer Renke Academy"), com a seta
+   no círculo escuro; no hover, o amarelo. */
+html:root:not([data-planos-tema="claro"]) .palcoplanos .plano-palco a.botao {
+  margin-left: 0; background: var(--papel); border-color: var(--papel); color: #161616;
+  transition: background-color .5s cubic-bezier(.22, 1, .36, 1), border-color .5s cubic-bezier(.22, 1, .36, 1);
+}
+html:root:not([data-planos-tema="claro"]) .palcoplanos .plano-palco a.botao:hover {
+  background: var(--amarelo-marca, #FFD103); border-color: var(--amarelo-marca, #FFD103); color: #161616;
+}
+html:root:not([data-planos-tema="claro"]) .palcoplanos .plano-palco a.botao .botao__icone { background: #161616; color: var(--papel); }

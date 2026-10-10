@@ -6,6 +6,9 @@
 .header .megamenu__plano--claro { display: none; }
 .header--claro .megamenu__plano--escuro, .header--amarelo .megamenu__plano--escuro { display: none; }
 .header--claro .megamenu__plano--claro, .header--amarelo .megamenu__plano--claro { display: block; }
+/* No cabeçalho claro o símbolo do plano fica todo em grafite (10/10): a metade
+   amarela não tinha contraste com o papel. */
+.header--claro .megamenu__plano--claro, .header--amarelo .megamenu__plano--claro { filter: brightness(0); opacity: .88; }
 .header .megamenu__list a { gap: 12px; }
 @media (min-width: 1024px) {
   .header .header__inner { display: grid; grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); gap: 16px; position: relative; }
