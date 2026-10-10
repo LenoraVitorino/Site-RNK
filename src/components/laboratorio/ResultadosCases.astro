@@ -3,8 +3,9 @@
  * TESTE (10/10/2026), fora da home: "Resultados por especialidade" como cases
  * de números grandes. Pedido da Lenora: a foto não é o foco ("é só uma
  * representação"), o número ficava longe do texto e a dobra tem de convencer
- * como case. Aqui cada case é um cartão: a especialidade, o número grande, o
- * que ele mede colado embaixo e o contexto. Sem foto. Os textos reorganizam
+ * como case. Segue o molde da faixa de números do ClickUp (10/10: "seguir à
+ * risca a referência"): colunas em fio fino, com a especialidade, o número
+ * grande, o que ele mede colado embaixo e o contexto. Sem foto. Os textos reorganizam
  * as frases de data/home.ts (números ainda provisórios, ver a nota de lá).
  */
 import Selo from '../ui/Selo.astro';
@@ -19,23 +20,21 @@ const cases = [
 ---
 <section class="secao resultados-editoriais" id="resultados" data-tom="claro" aria-labelledby="resultados-titulo">
   <div class="container">
-    <header class="resultados-editoriais__cabeca entra">
+    <header class="rc__cabeca">
       <Selo class="cabeca-dobra__selo">Resultados por especialidade</Selo>
-      <h2 class="titulo" id="resultados-titulo">O que muda quando a <span class="resultados-editoriais__enfase">operação tem estrutura</span>.</h2>
-      <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>
+      <h2 class="rc__titulo" id="resultados-titulo">O que muda quando a <strong>operação tem estrutura</strong>.</h2>
+      <p class="rc__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>
     </header>
 
     <ol class="rc" aria-label="Resultados por especialidade">
       {cases.map((c, i) => (
         <li class="rc__case" style={`--i:${i}`} data-rc>
-          <p class="rc__area"><i aria-hidden="true"></i>{c.area}</p>
-          <div class="rc__resultado">
-            <p class="rc__numero num">
-              <span class="visually-hidden">{c.antes}{c.valor}{c.depois}</span>
-              <span aria-hidden="true"><span data-rc-n={c.valor}>{c.valor}</span><span class="rc__unidade">{c.depois}</span></span>
-            </p>
-            <p class="rc__mede">{c.mede}</p>
-          </div>
+          <p class="rc__area">{c.area}</p>
+          <p class="rc__numero num">
+            <span class="visually-hidden">{c.antes}{c.valor}{c.depois}</span>
+            <span aria-hidden="true"><span data-rc-n={c.valor}>{c.valor}</span><span class="rc__unidade">{c.depois}</span></span>
+          </p>
+          <p class="rc__mede">{c.mede}</p>
           <p class="rc__contexto">{c.contexto}</p>
         </li>
       ))}
@@ -70,30 +69,30 @@ const cases = [
 </script>
 
 <style>
-  /* Dois cases em cima, três embaixo: cartões claros, sombra bem suave, fio fino. */
-  .rc { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(10px, 1vw, 16px); }
-  .rc__case {
-    display: grid; grid-template-rows: auto 1fr auto; gap: clamp(28px, 3.4vw, 56px); min-width: 0; padding: clamp(22px, 2vw, 32px); border-radius: clamp(18px, 1.6vw, 24px);
-    background: linear-gradient(180deg, #f7f7f4, #efefec); box-shadow: 0 0 0 1px rgb(37 37 35 / .07), 0 30px 50px -40px rgb(37 37 35 / .35);
-    color: #252523;
-  }
-  .rc__area { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 14px; letter-spacing: -.01em; color: #5f5f5d; }
-  .rc__area i { width: 7px; height: 7px; border-radius: 1px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(37 37 35 / .3); transform: rotate(45deg); }
-  /* O número e o que ele mede são um bloco só: nada de frase lá em cima e número lá embaixo. */
-  .rc__resultado { display: grid; gap: clamp(8px, .8vw, 12px); align-content: end; }
-  .rc__numero { margin: 0; font-family: var(--font-titulo); font-size: clamp(72px, 8.4vw, 148px); font-weight: 350; line-height: .82; letter-spacing: -.065em; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .rc__unidade { font-size: .5em; letter-spacing: -.04em; margin-left: .06em; }
-  .rc__mede { margin: 0; font-family: var(--font-titulo); font-size: clamp(19px, 1.7vw, 26px); font-weight: 500; line-height: 1.15; letter-spacing: -.03em; text-wrap: balance; }
-  .rc__contexto { margin: 0; max-width: 36ch; padding-top: clamp(14px, 1.3vw, 18px); border-top: 1px solid rgb(37 37 35 / .12); font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
+  /* Molde da faixa de números do ClickUp (docs/04-design/referencia-clickup.md):
+     cabeça à esquerda e, embaixo, colunas separadas por fio fino. Sem cartão,
+     sem sombra e sem foto. O número e o que ele mede ficam colados. */
+  .rc__cabeca { display: grid; justify-items: start; margin-bottom: clamp(36px, 4vw, 60px); }
+  .rc__titulo { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; color: #252523; }
+  .rc__titulo strong { font-weight: 500; }
+  .rc__apoio { margin: clamp(14px, 1.4vw, 20px) 0 0; max-width: 52ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; color: #50504e; }
+
+  .rc { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid rgb(37 37 35 / .14); }
+  .rc__case { display: grid; grid-template-rows: auto auto auto 1fr; min-width: 0; padding: clamp(20px, 1.8vw, 28px) 0 clamp(24px, 2.4vw, 36px); border-bottom: 1px solid rgb(37 37 35 / .14); color: #252523; }
+  .rc__area { margin: 0 0 clamp(14px, 1.4vw, 20px); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #6b6b68; }
+  .rc__numero { margin: 0; font-family: var(--font-titulo); font-size: clamp(56px, 5.6vw, 96px); font-weight: 350; line-height: .9; letter-spacing: -.06em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rc__unidade { font-size: .46em; letter-spacing: -.03em; margin-left: .08em; color: #6b6b68; }
+  .rc__mede { margin: clamp(10px, 1vw, 14px) 0 0; font-family: var(--font-titulo); font-size: clamp(17px, 1.35vw, 20px); font-weight: 500; line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
+  .rc__contexto { align-self: end; margin: clamp(40px, 5vw, 84px) 0 0; font-size: clamp(14px, 1.05vw, 15.5px); line-height: 1.5; color: #50504e; text-wrap: pretty; }
 
   @media (min-width: 900px) {
-    .rc { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    .rc__case { grid-column: span 2; }
-    .rc__case:nth-child(-n + 2) { grid-column: span 3; }
-    .rc__case:nth-child(n + 3) .rc__numero { font-size: clamp(64px, 6.6vw, 116px); }
+    .rc { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .rc__case { padding-inline: clamp(16px, 1.6vw, 26px); border-left: 1px solid rgb(37 37 35 / .14); }
+    .rc__case:first-child { padding-left: 0; border-left: 0; }
+    .rc__case:last-child { padding-right: 0; }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .rc__case { opacity: 0; transform: translateY(18px); transition: opacity .9s cubic-bezier(.22, 1, .36, 1), transform .9s cubic-bezier(.22, 1, .36, 1); transition-delay: calc((var(--i) % 3) * 90ms); }
-    .rc__case--visto { opacity: 1; transform: none; }
+    .rc__case > * { opacity: 0; transform: translateY(14px); transition: opacity .9s cubic-bezier(.22, 1, .36, 1), transform .9s cubic-bezier(.22, 1, .36, 1); transition-delay: calc(var(--i) * 90ms); }
+    .rc__case--visto > * { opacity: 1; transform: none; }
   }
 </style>
