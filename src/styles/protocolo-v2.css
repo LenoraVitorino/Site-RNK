@@ -37,8 +37,9 @@
 .p2 strong + span { display: block; margin-top: 2px; color: var(--suave); font-size: 13px; }
 .p2 ul { list-style: none; margin: 0; padding: 0; }
 /* Recortes (10/10): claro só no quadro do CRM; as telas do processo e a
-   conversa são escuras, com detalhes em amarelo claro; o plano do mês é um
-   recorte em amarelo claro; as fotos da equipe vão em cor. "Todos com box
+   conversa e o plano do mês são escuros; as fotos da equipe vão em cor. O
+   amarelo fica só em detalhes pequenos (um ponto, um visto, uma chave):
+   balão, botão ou cartão inteiro em amarelo foi reprovado. "Todos com box
    branca ficou horrível, tudo muito preto e branco." */
 .p2-cartao, .p2-crm { --tinta: #161616; --suave: rgb(22 22 22 / .56); --fio: rgb(22 22 22 / .09); --anel: rgb(22 22 22 / .2); --borda-rosto: #fff; color: var(--tinta); }
 .p2-cartao { background: linear-gradient(180deg, #FCFCFA, #F1F1ED); border-radius: 14px; box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset, 0 24px 44px -24px rgb(0 0 0 / .9); }
@@ -95,10 +96,10 @@
 /* Conversa e horários. */
 .p2-conversa2 { display: grid; gap: 7px; }
 .p2-fala { justify-self: start; max-width: 88%; padding: 8px 13px 9px; border-radius: 15px 15px 15px 4px; background: #2b2b2a; font-size: 14px; line-height: 1.3; }
-.p2-fala--nossa { justify-self: end; border-radius: 15px 15px 4px 15px; background: var(--claro); color: #161616; }
+.p2-fala--nossa { justify-self: end; border-radius: 15px 15px 4px 15px; background: #F2F2EE; color: #161616; }
 .p2-vagas { position: relative; display: flex; gap: 8px; }
 .p2-vaga b { display: grid; place-items: center; height: 32px; padding-inline: 13px; border-radius: 16px; background: #2b2b2a; box-shadow: 0 0 0 1px rgb(242 242 238 / .08) inset; font-size: 13px; font-weight: 400; white-space: nowrap; }
-.p2-vaga--escolhida b { background: var(--claro); color: #161616; }
+.p2-vaga--escolhida b { background: #F2F2EE; color: #161616; }
 .p2-pilha { display: grid; }
 .p2-pilha b { grid-area: 1 / 1; justify-self: end; font-weight: 400; opacity: 0; }
 .p2-pilha .p2-pilha__depois { opacity: 1; }
@@ -106,7 +107,7 @@
 .p2-itens { margin-top: 8px !important; }
 .p2-item { display: flex; align-items: center; gap: 10px; height: 28px; font-size: 14px; }
 .p2-item > i { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
-.p2-item > i b { position: absolute; inset: -1px; border-radius: 50%; background: var(--claro); }
+.p2-item > i b { position: absolute; inset: -1px; border-radius: 50%; background: #F2F2EE; }
 .p2-item > i b::after { content: ''; position: absolute; left: 5.5px; top: 5.5px; width: 6px; height: 3.5px; border-left: 1.5px solid #161616; border-bottom: 1.5px solid #161616; transform: rotate(-45deg); }
 .p2-fim { justify-self: start; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 16px 0 13px; border-radius: 18px; background: #F2F2EE; color: #161616; font-size: 14px; font-weight: 500; }
 .p2-quem { display: flex; align-items: center; gap: 10px; padding-block: 7px; font-size: 13px; line-height: 1.25; }
@@ -126,9 +127,11 @@
    cartão. Uma ficha solta é levada de "Em contato" para "Agendado" pelo
    cursor da recepção, que diz o que está fazendo. Laço de 12 s; parado, o
    quadro mostra a ficha já agendada. */
-.p2-crm { --laco: 12s; --col: 158px; --vao: 10px; --h: 68px; position: absolute; inset: 0; overflow: hidden; border-radius: 18px; background: linear-gradient(180deg, #F6F6F3, #ECECE7); box-shadow: 0 0 0 1px rgb(255 255 255 / .5) inset; }
-/* O quadro continua para baixo: as últimas fichas se apagam na base. */
-.p2-crm::after { content: ''; position: absolute; z-index: 3; inset: auto 0 0; height: 56px; background: linear-gradient(to top, #ECECE7 12%, rgb(236 236 231 / 0)); pointer-events: none; }
+.p2-crm { --laco: 12s; --col: 158px; --vao: 10px; --h: 68px; position: absolute; inset: 0 calc(-1 * var(--peca-recuo)) 0 0; }
+/* Sem caixa fechada (10/10, "me incomoda o limite da box"): o quadro vai até
+   a borda do cartão e se apaga à direita e embaixo, em vez de ser cortado. */
+.p2-crm__fundo { position: absolute; inset: 0; overflow: hidden; border-radius: 18px 0 0 0; background: linear-gradient(180deg, #F6F6F3, #ECECE7); mask-image: linear-gradient(to right, #000 75%, transparent 99%), linear-gradient(to bottom, #000 66%, transparent 98%); mask-composite: intersect; }
+.p2-crm__solto { position: absolute; inset: 50px 0 0; pointer-events: none; }
 .p2-crm__topo { display: flex; align-items: center; justify-content: space-between; height: 50px; padding: 0 var(--peca-recuo, 24px) 0 18px; border-bottom: 1px solid var(--fio); }
 .p2 .p2-crm__time { display: flex; margin: 0; }
 .p2-crm__time i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px var(--fio); font-style: normal; font-size: 11.5px; font-weight: 500; }
@@ -198,7 +201,7 @@
 .p2-zap__dia--sistema i { position: relative; width: 12px; height: 12px; border-radius: 50%; background: #FFE27A; }
 .p2-zap__dia--sistema i::after { content: ''; position: absolute; left: 3.5px; top: 3.5px; width: 4px; height: 2.5px; border-left: 1.2px solid #161616; border-bottom: 1.2px solid #161616; transform: rotate(-45deg); }
 .p2-zap__balao { justify-self: start; max-width: 86%; padding: 7px 11px 6px; border-radius: 4px 14px 14px 14px; background: #262625; font-size: 13.5px; line-height: 1.35; }
-.p2-zap__balao--clinica { justify-self: end; border-radius: 14px 4px 14px 14px; background: #FFE27A; color: #161616; }
+.p2-zap__balao--clinica { justify-self: end; border-radius: 14px 4px 14px 14px; background: #F2F2EE; color: #161616; }
 .p2 .p2-zap__hora { display: inline-flex; align-items: center; gap: 4px; float: right; margin: 6px 0 0 12px; font-size: 10.5px; line-height: 1; opacity: .6; }
 .p2-zap__balao--clinica .p2-zap__hora { opacity: 1; color: rgb(22 22 22 / .6); }
 .p2-zap__hora svg { width: 15px; height: 10px; fill: none; stroke: #161616; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -218,7 +221,7 @@
 /* 4. O plano do mês virando entrega: cada pendência tem a área e a pessoa
    do time que cuida dela; uma a uma entram em andamento (ponto amarelo),
    são concluídas (visto) e o mês fecha. Laço de 14 s. */
-.p2-plano { --laco: 14s; --borda-rosto: #FBE89A; padding: 16px 18px 14px; background: linear-gradient(180deg, #FFEFA8, #FAE286); box-shadow: 0 24px 44px -24px rgb(0 0 0 / .9); }
+.p2-plano { --laco: 14s; --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); --anel: rgb(242 242 238 / .24); --borda-rosto: #1e1e1d; padding: 16px 18px 14px; background: linear-gradient(180deg, #1f1f1e, #171716); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset, 0 24px 44px -24px rgb(0 0 0 / .9); }
 .p2-plano__topo { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--fio); }
 .p2-plano__topo .p2-rosto { box-shadow: none; }
 .p2-plano__lista { display: grid; gap: 10px; }
@@ -226,7 +229,7 @@
 .p2-tarefa__marca { position: relative; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--anel); }
 .p2-tarefa__marca b { position: absolute; inset: 0; }
 .p2-tarefa__ponto { opacity: 0; }
-.p2-tarefa__ponto::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #161616; }
+.p2-tarefa__ponto::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
 .p2-tarefa__visto::after { content: ''; position: absolute; left: 5px; top: 4.5px; width: 6px; height: 3.5px; border-left: 1.4px solid var(--tinta); border-bottom: 1.4px solid var(--tinta); transform: rotate(-45deg); }
 .p2-tarefa__texto { min-width: 0; }
 .p2-tarefa__texto > span { display: block; color: var(--suave); font-size: 12.5px; }

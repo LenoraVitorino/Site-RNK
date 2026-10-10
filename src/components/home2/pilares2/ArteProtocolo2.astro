@@ -51,7 +51,7 @@ aperta('p2-publica', 0, .6); troca('p2-botao', 0, .62); entra('p2-aviso', 0, .74
 entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
 mouse('p2-m2', 1, [[.56, '62%', '70px'], [.68, '44px', '22px'], [.84, '44px', '22px']]);
 aperta('p2-vaga', 1, .72);
-q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#2b2b2a;color:#F2F2EE}${g(1, .76)}%,100%{background:#FFE27A;color:#161616}}`);
+q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#2b2b2a;color:#F2F2EE}${g(1, .76)}%,100%{background:#F2F2EE;color:#161616}}`);
 troca('p2-estado-lead', 1, .76);
 // Tela 3, clínica: o paciente confirma, chega e fecha o tratamento.
 entra('p2-ok-1', 2, .16, 'scale(.4)'); entra('p2-ok-2', 2, .34, 'scale(.4)'); entra('p2-ok-3', 2, .52, 'scale(.4)');
@@ -173,6 +173,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
      "Pipeline Tracking" e "Progress Tracking"): a recepção da clínica pega um
      lead em contato, leva para "Agendado" e a ficha ganha dia e hora. */
   <div class="p2 p2-crm" aria-hidden="true" data-p2 style="--d:0">
+    <div class="p2-crm__fundo">
     <div class="p2-crm__topo">
       <strong>Pipeline</strong>
       <span class="p2-crm__time"><i>C</i><i>R</i></span>
@@ -196,6 +197,10 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
         <div class="p2-ficha"><strong>Peeling</strong><span><i></i>Google<em>seg</em></span></div>
         <div class="p2-ficha"><strong>Preenchimento</strong><span><i></i>Indicação<em>sex</em></span></div>
       </div>
+    </div>
+    </div>
+    {/* A ficha solta e o cursor ficam fora da camada que se apaga nas bordas. */}
+    <div class="p2-crm__solto">
       <div class="p2-crm__mover p2-anim" style="--a:p2-crm-mover">
         <div class="p2-ficha p2-ficha--solta p2-anim" style="--a:p2-crm-ergue">
           <strong>Harmonização</strong>
