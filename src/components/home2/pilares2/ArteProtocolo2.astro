@@ -50,14 +50,16 @@ troca('p2-passa-0', 0, .4); troca('p2-passa-1', 0, .66);
 q.push(...[.4, .66].map((t, i) => `@keyframes p2-passa-linha-${i}{0%,${g(0, t)}%{background:rgb(242 242 238 / 0)}${g(0, t + .03)}%,${g(0, t + .16)}%{background:rgb(242 242 238 / .07)}${g(0, t + .26)}%,100%{background:rgb(242 242 238 / 0)}}`));
 // Tela 2, comercial: conversa com o lead e marca a avaliação.
 entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
-mouse('p2-m2', 1, [[.56, '62%', '70px'], [.68, '44px', '22px'], [.84, '44px', '22px']]);
+mouse('p2-m2', 1, [[.56, '66%', '-64px'], [.68, '84px', '16px'], [.84, '84px', '16px']]);
 aperta('p2-vaga', 1, .72);
 q.push(`@keyframes p2-vaga-cor{0%,${g(1, .72)}%{background:#2b2b2a;color:#F2F2EE}${g(1, .76)}%,100%{background:#F2F2EE;color:#161616}}`);
 troca('p2-estado-lead', 1, .76);
-// Tela 3, clínica: o paciente confirma, chega e fecha o tratamento.
-entra('p2-ok-1', 2, .16, 'scale(.4)'); entra('p2-ok-2', 2, .34, 'scale(.4)'); entra('p2-ok-3', 2, .52, 'scale(.4)');
-q.push(...[.16, .34, .52].map((t, i) => `@keyframes p2-item-${i + 1}{0%,${g(2, t)}%{opacity:.36}${g(2, t + .06)}%,100%{opacity:1}}`));
-entra('p2-fim', 2, .68, 'translateY(8px) scale(.94)');
+// Tela 3, clínica: a agenda do dia; a Juliana chega e vira paciente.
+q.push(
+  `@keyframes p2-ag-a{0%,${g(2, .3)}%{opacity:1}${g(2, .32)}%,100%{opacity:0}}`,
+  `@keyframes p2-ag-b{0%,${g(2, .32)}%{opacity:0}${g(2, .34)}%,${g(2, .6)}%{opacity:1}${g(2, .62)}%,100%{opacity:0}}`,
+  `@keyframes p2-ag-c{0%,${g(2, .62)}%{opacity:0}${g(2, .64)}%,100%{opacity:1}}`,
+  `@keyframes p2-ag-linha{0%,${g(2, .6)}%{background:rgb(242 242 238 / 0)}${g(2, .66)}%,100%{background:rgb(242 242 238 / .07)}}`);
 const quadros = q.join('');
 
 /* 3. A conversa do lembrete, em % de um laço de 12 s. */
@@ -115,14 +117,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
       <div class="p2-cena__corpo p2-mkt">
         <ul class="p2-bloco p2-leads2">
           {[
-            { ini: 'JM', nome: 'Juliana M.', de: 'Harmonização · Google', quando: 'agora' },
-            { ini: 'MS', nome: 'Mariana S.', de: 'Fios de PDO · Instagram', quando: 'há 5 min' },
-            { ini: 'RL', nome: 'Renata L.', de: 'Botox · Instagram', quando: 'há 1 h' },
-            { ini: 'PV', nome: 'Paula V.', de: 'Peeling · Google', quando: 'há 2 h' },
+            { ini: 'JM', nome: 'Juliana M.', de: 'Harmonização', canal: 'Google', quando: 'agora' },
+            { ini: 'MS', nome: 'Mariana S.', de: 'Fios de PDO', canal: 'Instagram', quando: 'há 5 min' },
+            { ini: 'RL', nome: 'Renata L.', de: 'Botox', canal: 'Instagram', quando: 'há 1 h' },
+            { ini: 'PV', nome: 'Paula V.', de: 'Peeling', canal: 'Google', quando: 'há 2 h' },
           ].map((l, k) => (
             <li class:list={['p2-leads2__linha', k < 2 && 'p2-anim']} style={k < 2 ? `--a:p2-passa-linha-${k}` : undefined}>
               <i class="p2-ficha__foto">{l.ini}</i>
-              <div><strong>{l.nome}</strong><span>{l.de}</span></div>
+              <div><strong>{l.nome}</strong><span>{l.de}<u> · {l.canal}</u></span></div>
               <em>{l.quando}</em>
               {k < 2
                 ? <span class="p2-pilha p2-leads2__estado"><b class="p2-anim" style={`--a:p2-passa-${k}-a`}>Passar ao comercial</b><b class="p2-pilha__depois p2-leads2__feito p2-anim" style={`--a:p2-passa-${k}-b`}>Com o comercial</b></span>
@@ -161,6 +163,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
           <strong>Juliana M.</strong>
           <div class="p2-linha p2-linha--fina">Interesse<span>Harmonização</span></div>
           <div class="p2-linha p2-linha--fina">Origem<span>Google</span></div>
+          <div class="p2-linha p2-linha--fina">Campanha<span>Outubro</span></div>
           <div class="p2-linha p2-linha--fina">Situação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">Em contato</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Agendado</b></span></div>
           <div class="p2-linha p2-linha--fina">Avaliação<span class="p2-pilha"><b class="p2-anim" style="--a:p2-estado-lead-a">A marcar</b><b class="p2-pilha__depois p2-anim" style="--a:p2-estado-lead-b">Sex, 09:30</b></span></div>
         </div>
@@ -168,24 +171,26 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
     </section>
 
     <section class="p2-cena p2-cena--fim p2-anim" style="--a:p2-cena-2">
-      <header class="p2-cena__topo"><span class="p2-cena__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg></span><b>Clínica Âmbar</b><span>Sexta, 09:30</span></header>
-      <div class="p2-cena__corpo">
-        <div class="p2-cena__principal">
-          <div class="p2-bloco">
-            <strong>Avaliação de harmonização facial</strong>
-            <ul class="p2-itens">
-              {['Confirmou a presença', 'Chegou à clínica', 'Fechou o tratamento'].map((t, i) => (
-                <li class="p2-item p2-anim" style={`--a:p2-item-${i + 1}`}><i><b class="p2-anim" style={`--a:p2-ok-${i + 1}`}></b></i>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div class="p2-fim p2-anim" style="--a:p2-fim"><i></i>Lead virou paciente</div>
-        </div>
-        <div class="p2-bloco p2-cena__extra">
-          <span class="p2-legenda">Quem cuidou</span>
-          <div class="p2-quem"><span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span>Marketing trouxe o lead</div>
-          <div class="p2-quem"><span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span>Comercial agendou</div>
-        </div>
+      <header class="p2-cena__topo"><span class="p2-cena__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg></span><b>Clínica Âmbar</b><span>Agenda de sexta</span></header>
+      <div class="p2-cena__corpo p2-mkt">
+        <ul class="p2-bloco p2-leads2 p2-agenda">
+          <li class="p2-leads2__linha p2-anim" style="--a:p2-ag-linha">
+            <i class="p2-agenda__hora">09:30</i>
+            <div><strong>Juliana M.</strong><span>Harmonização<u> · veio do Google</u></span></div>
+            <span class="p2-pilha p2-leads2__estado"><b class="p2-anim" style="--a:p2-ag-a">Confirmada</b><b class="p2-agenda__meio p2-anim" style="--a:p2-ag-b">Chegou à clínica</b><b class="p2-pilha__depois p2-leads2__feito p2-anim" style="--a:p2-ag-c">Virou paciente</b></span>
+          </li>
+          {[
+            { hora: '11:00', nome: 'Carla A.', de: 'Retorno de botox' },
+            { hora: '14:00', nome: 'Helena R.', de: 'Peeling' },
+            { hora: '16:30', nome: 'Beatriz T.', de: 'Fios de PDO' },
+          ].map((l) => (
+            <li class="p2-leads2__linha">
+              <i class="p2-agenda__hora">{l.hora}</i>
+              <div><strong>{l.nome}</strong><span>{l.de}</span></div>
+              <span class="p2-leads2__estado"><b>Confirmada</b></span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   </div>
@@ -203,15 +208,15 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
     </div>
     <div class="p2-crm__quadro">
       <div class="p2-crm__coluna">
-        <div class="p2-crm__cabeca">Em contato<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">3</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">2</b></span></div>
-        <div class="p2-ficha"><i class="p2-ficha__foto">MS</i><div><strong>Mariana S.</strong><span>Fios de PDO · Instagram</span></div><em>há 5 h</em></div>
+        <div class="p2-crm__cabeca"><i></i>Em contato<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">3</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">2</b></span></div>
+        <div class="p2-ficha"><i class="p2-ficha__foto">MS</i><div><strong>Mariana S.</strong><span>Fios de PDO<u> · Instagram</u></span></div><em>há 5 h</em></div>
         <div class="p2-ficha p2-ficha--vaga"></div>
-        <div class="p2-ficha p2-crm__sobe p2-anim" style="--a:p2-crm-sobe"><i class="p2-ficha__foto">RL</i><div><strong>Renata L.</strong><span>Botox · Indicação</span></div><em>ontem</em></div>
+        <div class="p2-ficha p2-crm__sobe p2-anim" style="--a:p2-crm-sobe"><i class="p2-ficha__foto">RL</i><div><strong>Renata L.</strong><span>Botox<u> · Indicação</u></span></div><em>ontem</em></div>
       </div>
       <div class="p2-crm__coluna">
-        <div class="p2-crm__cabeca">Agendado<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">2</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">3</b></span></div>
-        <div class="p2-ficha"><i class="p2-ficha__foto">CA</i><div><strong>Carla A.</strong><span>Retorno · Site</span></div><em>sex, 09:30</em></div>
-        <div class="p2-ficha p2-crm__desce p2-anim" style="--a:p2-crm-desce"><i class="p2-ficha__foto">PV</i><div><strong>Paula V.</strong><span>Peeling · Google</span></div><em>seg, 16:00</em></div>
+        <div class="p2-crm__cabeca p2-crm__cabeca--feito"><i></i>Agendado<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">2</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">3</b></span></div>
+        <div class="p2-ficha"><i class="p2-ficha__foto">CA</i><div><strong>Carla A.</strong><span>Retorno<u> · Site</u></span></div><em>sex, 09:30</em></div>
+        <div class="p2-ficha p2-crm__desce p2-anim" style="--a:p2-crm-desce"><i class="p2-ficha__foto">PV</i><div><strong>Paula V.</strong><span>Peeling<u> · Google</u></span></div><em>seg, 16:00</em></div>
       </div>
     </div>
     </div>
@@ -220,7 +225,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
       <div class="p2-ficha p2-ficha--destino p2-anim" style="--a:p2-crm-destino"></div>
       <div class="p2-crm__mover p2-anim" style="--a:p2-crm-mover">
         <div class="p2-ficha p2-ficha--solta p2-anim" style="--a:p2-crm-ergue">
-          <i class="p2-ficha__foto">JM</i><div><strong>Juliana M.</strong><span>Harmonização · Google</span></div>
+          <i class="p2-ficha__foto">JM</i><div><strong>Juliana M.</strong><span>Harmonização<u> · Google</u></span></div>
           <em class="p2-crm__hora"><b class="p2-anim" style="--a:p2-crm-antes">há 2 h</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">qui, 14:00</b></em>
         </div>
         <div class="p2-crm__cursor p2-anim" style="--a:p2-crm-cursor">
