@@ -15,6 +15,12 @@ import IconeRenke from '../ui/IconeRenke.astro';
 import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
+import { doresRespostas } from '../../data/dores-respostas';
+
+/* dor: teste (10/10, /laboratorio/dores-solucoes) dos mesmos cartões com a
+   pergunta de dor e a resposta da Renke no lugar do ganho solto. */
+interface Props { dor?: boolean }
+const { dor = false } = Astro.props;
 
 /* Ícones Renke, um por ganho (versão em cor: traço claro, losango em amarelo). */
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
@@ -51,6 +57,11 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
           <div class="ganhos__corpo">
             {copyLiteral ? (
               <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
+            ) : dor ? (
+              <>
+                <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{doresRespostas[i].q}</span></h3>
+                <p class="ganhos__texto ganhos__texto--resposta"><span><strong>{doresRespostas[i].t}</strong> {doresRespostas[i].r}</span></p>
+              </>
             ) : (
               <>
                 <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
