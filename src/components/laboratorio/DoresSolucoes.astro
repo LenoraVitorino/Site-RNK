@@ -1,17 +1,15 @@
 ---
 /**
  * TESTE (10/10/2026), fora da home: a dobra "O que muda na sua clínica" como
- * par dor → solução, em cinco versões para escolher. As tentativas anteriores
- * foram reprovadas por excesso de texto (sete cartões grandes; lista de
- * perguntas à esquerda com cartão à direita; recortes ilustrados). Regra das
- * cinco: pouco texto por vez, em cartões, e fácil de entender no celular.
- *   A · um par por vez num cartão único, com os ícones como seletor
- *   B · sete cartões pequenos com a pergunta; ao passar o mouse ou tocar, viram a resposta
- *   C · conversa: a pergunta do dono de clínica e a resposta da Renke em balões
- *   D · sete cartões com tudo à vista: pergunta em cima, resposta em uma linha embaixo
- *   E · baralho: o cartão da frente traz pergunta e resposta; clicar passa para o próximo
- * A barra da página troca a versão (ou ?v=a…e). As perguntas vêm da copy
- * original (docs/03-copy/home.md, seção 3) e as respostas, dos ganhos da versão ajustada.
+ * conversa. Das cinco versões testadas, a Lenora aprovou esta ("cirúrgico"):
+ * o dono de clínica pergunta (a dor da copy original, docs/03-copy/home.md,
+ * seção 3) e a Renke responde (o ganho da versão ajustada). Pedidos dela para
+ * fechar: título à esquerda e conversa à direita, animação acabada e um jeito
+ * de a pessoa trocar a pergunta.
+ * A troca é feita por sugestões no pé da conversa, como as respostas rápidas
+ * de um aplicativo de mensagens: tocar numa sugestão envia aquela pergunta.
+ * A conversa também avança sozinha, devagar, até a pessoa interagir.
+ * Os rótulos curtos das sugestões são rascunho e precisam de validação.
  */
 import { Image } from 'astro:assets';
 import Selo from '../ui/Selo.astro';
@@ -19,262 +17,142 @@ import IconeRenke from '../ui/IconeRenke.astro';
 import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
 import lari from '../../assets/equipe/lari.jpg';
+import julio from '../../assets/equipe/julio-caldeira.jpg';
+import isa from '../../assets/equipe/isa.jpg';
 
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
-const n2 = (i: number) => String(i + 1).padStart(2, '0');
-const total = n2(perguntas.length - 1);
+const atalhos = ['Custo por paciente', 'Leads que viram consulta', 'Processo sem depender de uma pessoa', 'Melhor canal', 'Mês ruim', 'Mês bom', 'Concorrentes'];
+const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const };
 ---
-<section class="dorsol" aria-labelledby="dorsol-titulo" data-dorsol data-ver="a">
-  <div class="container">
-    <header class="dorsol__cabeca">
+<section class="dc" aria-labelledby="dc-titulo" data-dc>
+  <div class="container dc__grade">
+    <header class="dc__cabeca">
       <Selo>O que muda na sua clínica</Selo>
-      <h2 class="dorsol__titulo" id="dorsol-titulo">Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></h2>
+      <h2 class="dc__titulo" id="dc-titulo">Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></h2>
     </header>
 
-    {/* A · um par por vez */}
-    <div class="dv dv--a" data-v="a" data-grupo data-auto>
-      <div class="dv-a__cartao">
-        <div class="dv-a__seletor">
-          {perguntas.map((p, i) => (
-            <button class:list={['pastilha', i === 0 && 'ativo']} type="button" aria-label={p.titulo} data-aba={i}><IconeRenke nome={icones[i]} size={22} /></button>
-          ))}
-        </div>
-        <div class="pares">
-          {perguntas.map((p, i) => (
-            <div class:list={['par', i === 0 && 'ativo']} data-par={i}>
-              <p class="dv-a__pergunta">{p.pergunta}</p>
-              <p class="resposta"><span class="rotulo"><i></i>Com a Renke</span><strong>{p.titulo}</strong><span class="texto">{p.texto}</span></p>
-            </div>
-          ))}
-        </div>
-        <span class="conta"><b data-conta>01</b> / {total}</span>
+    <div class="dc__cartao">
+      <div class="dc__topo">
+        <span class="dc__rostos"><Image src={lari} {...rosto} /><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span>
+        <span class="dc__quem"><strong>Renke</strong><span>Responde o que a sua clínica precisa saber</span></span>
       </div>
-    </div>
 
-    {/* B · cartões que viram */}
-    <ol class="dv dv--b grade7" data-v="b">
-      {perguntas.map((p, i) => (
-        <li>
-          <button class="dv-b__cartao" type="button" data-vira>
-            <span class="dv-b__frente">
-              <span class="pastilha pastilha--fixa"><IconeRenke nome={icones[i]} size={22} /></span>
-              <span class="dv-b__pergunta">{p.pergunta}</span>
-            </span>
-            <span class="dv-b__verso">
-              <span class="rotulo rotulo--tinta"><i></i>Com a Renke</span>
-              <strong>{p.titulo}</strong>
-              <span class="dv-b__texto">{p.texto}</span>
-            </span>
-          </button>
-        </li>
-      ))}
-    </ol>
-
-    {/* C · conversa */}
-    <div class="dv dv--c" data-v="c" data-grupo data-auto>
-      <div class="dv-c__cartao">
-        <div class="pares">
-          {perguntas.map((p, i) => (
-            <div class:list={['par', 'dv-c__par', i === 0 && 'ativo']} data-par={i}>
-              <p class="dv-c__balao dv-c__balao--dono"><span class="dv-c__quem">Dono de clínica</span>{p.pergunta}</p>
-              <p class="dv-c__balao dv-c__balao--renke">
-                <Image src={lari} width={96} height={96} format="webp" quality={80} alt="" loading="lazy" class="dv-c__rosto" />
-                <span><span class="dv-c__quem">Renke</span><strong>{p.titulo}.</strong> {p.texto}</span>
-              </p>
-            </div>
-          ))}
-        </div>
-        <div class="dv-c__pontos">
-          {perguntas.map((p, i) => <button class:list={['ponto', i === 0 && 'ativo']} type="button" aria-label={`Pergunta ${i + 1}`} data-aba={i}></button>)}
-        </div>
-      </div>
-    </div>
-
-    {/* D · tudo à vista, enxuto */}
-    <ol class="dv dv--d grade7" data-v="d">
-      {perguntas.map((p, i) => (
-        <li class="dv-d__cartao">
-          <span class="pastilha pastilha--fixa"><IconeRenke nome={icones[i]} size={22} /></span>
-          <p class="dv-d__pergunta">{p.pergunta}</p>
-          <p class="dv-d__resposta"><i></i>{p.titulo}</p>
-        </li>
-      ))}
-    </ol>
-
-    {/* E · baralho */}
-    <div class="dv dv--e" data-v="e">
-      <div class="dv-e__baralho" data-baralho>
+      <div class="dc__conversa" aria-live="polite">
         {perguntas.map((p, i) => (
-          <article class="dv-e__carta" style={`--pos:${i}`} data-carta>
-            <header><span class="pastilha pastilha--fixa"><IconeRenke nome={icones[i]} size={22} /></span><span class="conta conta--solta"><b>{n2(i)}</b> / {total}</span></header>
-            <p class="dv-e__pergunta">{p.pergunta}</p>
-            <p class="resposta"><span class="rotulo"><i></i>Com a Renke</span><strong>{p.titulo}</strong><span class="texto">{p.texto}</span></p>
-          </article>
+          <div class:list={['dc__par', i === 0 && 'dc__par--ativo']} data-par={i}>
+            <p class="dc__balao dc__balao--dono">{p.pergunta}</p>
+            <div class="dc__vez">
+              <span class="dc__digitando" aria-hidden="true"><i></i><i></i><i></i></span>
+              <p class="dc__balao dc__balao--renke"><strong>{p.titulo}.</strong> {p.texto}</p>
+            </div>
+          </div>
         ))}
       </div>
-      <button class="dv-e__proxima" type="button" data-proxima>Próxima pergunta<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4" /></svg></button>
-    </div>
-  </div>
 
-  <div class="dorsol__barra" data-barra>
-    <span>Versão</span>
-    <button type="button" data-ir="a">A · Um por vez</button>
-    <button type="button" data-ir="b">B · Cartões que viram</button>
-    <button type="button" data-ir="c">C · Conversa</button>
-    <button type="button" data-ir="d">D · Tudo à vista</button>
-    <button type="button" data-ir="e">E · Baralho</button>
+      <div class="dc__pe">
+        <span class="dc__pe-rotulo">Outras perguntas</span>
+        <div class="dc__atalhos" role="tablist" aria-label="Perguntas">
+          {perguntas.map((p, i) => (
+            <button class:list={['dc__atalho', i === 0 && 'dc__atalho--ativo']} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} title={p.pergunta} data-atalho={i}>
+              <IconeRenke nome={icones[i]} size={18} />{atalhos[i]}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-  const raiz = document.querySelector<HTMLElement>('[data-dorsol]');
+  const raiz = document.querySelector<HTMLElement>('[data-dc]');
   if (raiz) {
-    // Barra de versões.
-    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-ir]')];
-    const versao = (v: string) => {
-      raiz.dataset.ver = v;
-      botoes.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ir === v)));
-      const url = new URL(location.href); url.searchParams.set('v', v); history.replaceState(null, '', url);
+    const atalhos = [...raiz.querySelectorAll<HTMLButtonElement>('[data-atalho]')];
+    const pares = [...raiz.querySelectorAll<HTMLElement>('[data-par]')];
+    let atual = 0, manual = false, relogio = 0;
+    const ir = (n: number, rolar = false) => {
+      atual = (n + pares.length) % pares.length;
+      pares.forEach((p, i) => p.classList.toggle('dc__par--ativo', i === atual));
+      atalhos.forEach((a, i) => { a.classList.toggle('dc__atalho--ativo', i === atual); a.setAttribute('aria-selected', String(i === atual)); });
+      // No celular as sugestões rolam de lado: centraliza a escolhida sem mexer na rolagem da página.
+      const trilho = atalhos[atual].parentElement!;
+      if (rolar && trilho.scrollWidth > trilho.clientWidth) trilho.scrollTo({ left: atalhos[atual].offsetLeft - (trilho.clientWidth - atalhos[atual].offsetWidth) / 2, behavior: 'smooth' });
     };
-    botoes.forEach((b) => b.addEventListener('click', () => versao(b.dataset.ir!)));
-    const pedida = new URLSearchParams(location.search).get('v');
-    versao(pedida && 'abcde'.includes(pedida) ? pedida : 'a');
-
-    // A e C: um par por vez; troca sozinha, devagar, até a pessoa mexer.
-    raiz.querySelectorAll<HTMLElement>('[data-grupo]').forEach((grupo) => {
-      const abas = [...grupo.querySelectorAll<HTMLElement>('[data-aba]')];
-      const pares = [...grupo.querySelectorAll<HTMLElement>('[data-par]')];
-      const conta = grupo.querySelector<HTMLElement>('[data-conta]');
-      let atual = 0, manual = false;
-      const ir = (n: number) => {
-        atual = (n + abas.length) % abas.length;
-        abas.forEach((a, i) => a.classList.toggle('ativo', i === atual));
-        pares.forEach((p, i) => p.classList.toggle('ativo', i === atual));
-        if (conta) conta.textContent = String(atual + 1).padStart(2, '0');
-      };
-      abas.forEach((a, i) => {
-        a.addEventListener('click', () => { manual = true; ir(i); });
-        a.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { manual = true; ir(i); } });
-      });
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        setInterval(() => { if (!manual && grupo.offsetParent && grupo.getBoundingClientRect().top < innerHeight * .8) ir(atual + 1); }, 5200);
-      }
-    });
-
-    // B: no toque, o cartão vira e desvira.
-    raiz.querySelectorAll<HTMLElement>('[data-vira]').forEach((c) => c.addEventListener('click', () => c.classList.toggle('virado')));
-
-    // E: clicar no baralho ou no botão passa o cartão da frente para trás.
-    const baralho = raiz.querySelector<HTMLElement>('[data-baralho]');
-    if (baralho) {
-      const cartas = [...baralho.querySelectorAll<HTMLElement>('[data-carta]')];
-      let frente = 0;
-      const passar = () => { frente = (frente + 1) % cartas.length; cartas.forEach((c, i) => c.style.setProperty('--pos', String((i - frente + cartas.length) % cartas.length))); };
-      baralho.addEventListener('click', passar);
-      raiz.querySelector('[data-proxima]')?.addEventListener('click', passar);
+    atalhos.forEach((a, i) => a.addEventListener('click', () => { manual = true; clearInterval(relogio); ir(i, true); }));
+    // Avança sozinha só com a dobra na tela e enquanto ninguém escolheu uma pergunta.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        clearInterval(relogio);
+        if (e.isIntersecting && !manual) relogio = window.setInterval(() => ir(atual + 1), 7000);
+      }, { threshold: .45 }).observe(raiz);
     }
   }
 </script>
 
 <style>
-  .dorsol { --s: cubic-bezier(.22, 1, .36, 1); position: relative; padding-block: clamp(80px, 8vw, 132px); background: #0c0c0c; color: #f2f2ee; }
-  .dorsol__cabeca { display: grid; justify-items: center; gap: 22px; margin-bottom: clamp(32px, 3.4vw, 52px); text-align: center; }
-  .dorsol__titulo { margin: 0; max-width: 30ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.12; letter-spacing: -.03em; text-wrap: balance; }
-  .dorsol__titulo strong { font-weight: 500; }
-  .dorsol__barra { position: fixed; z-index: 300; right: 14px; top: 92px; display: grid; gap: 2px; padding: 6px; border-radius: 18px; background: #f2f2ee; color: #161616; box-shadow: 0 18px 40px -16px rgb(0 0 0 / .7); font-size: 13px; }
-  .dorsol__barra span { padding: 6px 12px 4px; opacity: .6; }
-  .dorsol__barra button { height: 32px; padding: 0 12px; border: 0; border-radius: 999px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
-  .dorsol__barra button[aria-pressed="true"] { background: #161616; color: #f2f2ee; }
-  .dv { display: none; }
-  .dorsol[data-ver="a"] .dv--a, .dorsol[data-ver="c"] .dv--c, .dorsol[data-ver="e"] .dv--e { display: block; }
-  .dorsol[data-ver="b"] .dv--b, .dorsol[data-ver="d"] .dv--d { display: grid; }
+  .dc { --s: cubic-bezier(.22, 1, .36, 1); position: relative; padding-block: clamp(80px, 8vw, 132px); background: #0c0c0c; color: #f2f2ee; }
+  .dc__grade { display: grid; gap: clamp(32px, 4vw, 72px); align-items: center; }
+  .dc__cabeca { display: grid; justify-items: start; gap: 24px; }
+  .dc__titulo { margin: 0; max-width: 17ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(30px, 3.2vw, 50px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
+  .dc__titulo strong { font-weight: 500; }
 
-  /* Peças comuns: superfície de cartão, pastilha do ícone, rótulo e resposta. */
-  .dv-a__cartao, .dv-b__cartao, .dv-c__cartao, .dv-d__cartao, .dv-e__carta {
-    border-radius: clamp(22px, 2vw, 30px); background: radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
-    box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 50px 70px -44px rgb(0 0 0 / .95);
+  /* A conversa mora num cartão só: superfície escura com luz no canto e sombra longa. */
+  .dc__cartao {
+    display: grid; gap: clamp(18px, 1.8vw, 26px); min-width: 0; padding: clamp(18px, 2vw, 30px); border-radius: clamp(24px, 2.2vw, 34px);
+    background: radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
+    box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 60px 80px -50px rgb(0 0 0 / .95);
   }
-  .pastilha { flex: none; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 14px; cursor: pointer; color: #f2f2ee; background: linear-gradient(180deg, #303030, #1f1f1e); box-shadow: 0 1px 0 rgb(255 255 255 / .16) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 14px 22px -12px rgb(0 0 0 / .85); opacity: .6; transition: opacity .5s var(--s), transform .6s var(--s), box-shadow .5s var(--s); }
-  .pastilha--fixa { opacity: 1; cursor: inherit; }
-  .pastilha.ativo { opacity: 1; transform: translateY(-3px); box-shadow: 0 1px 0 rgb(255 255 255 / .22) inset, 0 0 0 1.5px rgb(242 242 238 / .8) inset, 0 16px 24px -12px rgb(0 0 0 / .9); }
-  .rotulo { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 400; letter-spacing: -.01em; text-transform: none; color: rgb(242 242 238 / .6); }
-  .rotulo i, .dv-d__resposta i { flex: none; width: 7px; height: 7px; border-radius: 1px; background: var(--amarelo-marca, #FFD103); transform: rotate(45deg); }
-  .rotulo--tinta { color: rgb(22 22 22 / .6); }
-  .rotulo--tinta i { box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
-  .resposta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin: 0; padding-top: clamp(16px, 1.6vw, 22px); border-top: 1px solid rgb(242 242 238 / .1); }
-  .resposta strong { font-family: var(--font-titulo); font-weight: 500; font-size: clamp(18px, 1.5vw, 22px); letter-spacing: -.02em; }
-  .texto { flex-basis: 100%; max-width: 60ch; font-size: clamp(14.5px, 1.1vw, 16px); line-height: 1.5; color: rgb(242 242 238 / .66); }
-  .conta { position: absolute; right: clamp(22px, 2.6vw, 40px); bottom: clamp(22px, 2.6vw, 40px); font-size: 13px; font-variant-numeric: tabular-nums; color: rgb(242 242 238 / .45); }
-  .conta b { font-weight: 400; color: #f2f2ee; }
-  .conta--solta { position: static; }
-  .pares { display: grid; }
-  .par { grid-area: 1 / 1; display: grid; align-content: space-between; gap: clamp(26px, 3vw, 46px); opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .5s var(--s), transform .8s var(--s), visibility 0s .5s; }
-  .par.ativo { opacity: 1; visibility: visible; transform: none; transition-delay: .12s, .12s, 0s; }
-  .grade7 { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(10px, 1vw, 16px); margin: 0; padding: 0; list-style: none; }
-  .grade7 > li { grid-column: span 3; }
-  .grade7 > li:nth-child(n + 5) { grid-column: span 4; }
+  .dc__topo { display: flex; align-items: center; gap: 14px; padding-bottom: clamp(14px, 1.4vw, 20px); border-bottom: 1px solid rgb(242 242 238 / .08); }
+  .dc__rostos { display: flex; flex: none; }
+  .dc__rostos :global(img) { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #1f1f1e; }
+  .dc__rostos :global(img + img) { margin-left: -10px; }
+  .dc__quem { display: grid; min-width: 0; line-height: 1.25; }
+  .dc__quem strong { font-size: 15px; font-weight: 500; }
+  .dc__quem span { font-size: 13px; color: rgb(242 242 238 / .6); }
 
-  /* A */
-  .dv-a__cartao { position: relative; display: grid; gap: clamp(34px, 3.8vw, 60px); max-width: 1040px; margin-inline: auto; padding: clamp(22px, 2.6vw, 40px); }
-  .dv-a__seletor { display: flex; gap: clamp(6px, .7vw, 10px); }
-  .dv-a__pergunta, .dv-e__pergunta { margin: 0; max-width: 24ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(27px, 3.3vw, 52px); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
-  .dv-a__cartao .resposta { padding-right: 70px; }
+  /* Todos os pares ocupam a mesma célula: a altura é a do maior e nada pula na troca. */
+  .dc__conversa { display: grid; }
+  .dc__par { grid-area: 1 / 1; display: grid; align-content: start; gap: 12px; visibility: hidden; }
+  .dc__par--ativo { visibility: visible; }
+  .dc__balao { margin: 0; max-width: min(86%, 520px); }
+  .dc__balao--dono { justify-self: start; padding: 15px 20px 17px; border-radius: 22px 22px 22px 6px; background: #2c2c2b; box-shadow: 0 1px 0 rgb(255 255 255 / .08) inset; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(18px, 1.55vw, 23px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; transform-origin: 0 100%; }
+  .dc__vez { display: grid; justify-items: end; }
+  .dc__vez > * { grid-area: 1 / 1; }
+  .dc__balao--renke { padding: 15px 20px 17px; border-radius: 22px 22px 6px 22px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; box-shadow: 0 24px 34px -22px rgb(0 0 0 / .8); font-size: clamp(15px, 1.15vw, 17px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; transform-origin: 100% 100%; }
+  .dc__balao--renke strong { font-weight: 600; }
+  .dc__digitando { align-self: start; display: flex; gap: 5px; padding: 15px 16px; border-radius: 18px 18px 6px 18px; background: #2c2c2b; opacity: 0; }
+  .dc__digitando i { width: 6px; height: 6px; border-radius: 50%; background: rgb(242 242 238 / .7); }
 
-  /* B */
-  .dv-b__cartao { position: relative; display: grid; width: 100%; height: 100%; min-height: clamp(210px, 17vw, 250px); padding: 0; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; overflow: hidden; }
-  .dv-b__frente, .dv-b__verso { grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: clamp(18px, 1.6vw, 24px); transition: opacity .5s var(--s), transform .7s var(--s); }
-  .dv-b__pergunta { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; }
-  .dv-b__verso { justify-content: flex-end; gap: 10px; border-radius: inherit; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; opacity: 0; transform: translateY(14px); }
-  .dv-b__verso strong { font-family: var(--font-titulo); font-weight: 500; font-size: clamp(20px, 1.6vw, 24px); line-height: 1.15; letter-spacing: -.025em; }
-  .dv-b__verso .rotulo { margin-bottom: auto; }
-  .dv-b__texto { font-size: 14.5px; line-height: 1.45; color: rgb(22 22 22 / .7); }
-  .dv-b__cartao.virado .dv-b__verso { opacity: 1; transform: none; }
-  @media (hover: hover) { .dv-b__cartao:hover .dv-b__verso, .dv-b__cartao:focus-visible .dv-b__verso { opacity: 1; transform: none; } }
+  /* A vez de cada um: a pergunta chega, a Renke digita, a resposta entra. */
+  @media (prefers-reduced-motion: no-preference) {
+    .dc__par--ativo .dc__balao--dono { animation: dc-entra .7s var(--s) both; }
+    .dc__par--ativo .dc__digitando { animation: dc-digita 1.5s var(--s) .45s both; }
+    .dc__par--ativo .dc__digitando i { animation: dc-ponto 1s ease-in-out infinite; }
+    .dc__par--ativo .dc__digitando i:nth-child(2) { animation-delay: .15s; }
+    .dc__par--ativo .dc__digitando i:nth-child(3) { animation-delay: .3s; }
+    .dc__par--ativo .dc__balao--renke { animation: dc-entra .8s var(--s) 1.75s both; }
+  }
+  @keyframes dc-entra { from { opacity: 0; transform: translateY(14px) scale(.96); } }
+  @keyframes dc-digita { 0% { opacity: 0; transform: translateY(8px); } 20%, 82% { opacity: 1; transform: none; } 100% { opacity: 0; transform: none; } }
+  @keyframes dc-ponto { 0%, 100% { transform: none; opacity: .5; } 40% { transform: translateY(-3px); opacity: 1; } }
 
-  /* C */
-  .dv-c__cartao { display: grid; gap: clamp(20px, 2vw, 30px); max-width: 880px; margin-inline: auto; padding: clamp(22px, 2.6vw, 40px); }
-  .dv-c__par { align-content: start; gap: 14px; }
-  .dv-c__balao { margin: 0; max-width: min(84%, 560px); padding: 16px 20px 18px; border-radius: 22px 22px 22px 6px; background: #2b2b2a; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(18px, 1.6vw, 24px); line-height: 1.25; letter-spacing: -.02em; }
-  .dv-c__quem { display: block; margin-bottom: 6px; font-family: var(--font-corpo, inherit); font-size: 12.5px; font-weight: 400; letter-spacing: 0; opacity: .6; }
-  .dv-c__balao--renke { justify-self: end; display: flex; gap: 14px; align-items: flex-start; border-radius: 22px 22px 6px 22px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; font-size: clamp(15px, 1.2vw, 17px); font-weight: 400; line-height: 1.45; letter-spacing: -.01em; font-family: inherit; }
-  .dv-c__balao--renke strong { font-weight: 600; }
-  .dv-c__rosto { flex: none; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-  .dv-c__pontos { display: flex; gap: 6px; justify-content: center; }
-  .ponto { width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; }
-  .ponto::before { content: ''; display: block; width: 6px; height: 6px; margin: auto; border-radius: 3px; background: rgb(242 242 238 / .3); transition: width .5s var(--s), background .5s var(--s); }
-  .ponto.ativo::before { width: 20px; background: #f2f2ee; }
+  /* Sugestões no pé: tocar numa envia aquela pergunta. */
+  .dc__pe { display: grid; gap: 10px; min-width: 0; padding-top: clamp(14px, 1.4vw, 20px); border-top: 1px solid rgb(242 242 238 / .08); }
+  .dc__pe-rotulo { font-size: 13px; color: rgb(242 242 238 / .56); }
+  .dc__atalhos { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+  .dc__atalho { flex: none; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 15px 0 11px; border: 0; border-radius: 19px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: rgb(242 242 238 / .82); font: inherit; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background-color .4s var(--s), color .4s var(--s), box-shadow .4s var(--s); }
+  .dc__atalho:hover { background: rgb(242 242 238 / .1); color: #f2f2ee; }
+  .dc__atalho:focus-visible { outline: 2px solid #f2f2ee; outline-offset: 2px; }
+  .dc__atalho--ativo, .dc__atalho--ativo:hover { background: #f2f2ee; color: #161616; box-shadow: none; }
 
-  /* D */
-  .dv-d__cartao { display: flex; flex-direction: column; gap: 18px; min-height: clamp(210px, 17vw, 250px); padding: clamp(18px, 1.6vw, 24px); }
-  .dv-d__pergunta { margin: auto 0 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; }
-  .dv-d__resposta { display: flex; align-items: center; gap: 10px; margin: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .1); font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
-
-  /* E */
-  .dv--e { max-width: 760px; margin-inline: auto; }
-  .dv-e__baralho { position: relative; display: grid; padding-top: 44px; cursor: pointer; }
-  .dv-e__carta { grid-area: 1 / 1; display: grid; align-content: space-between; gap: clamp(24px, 2.6vw, 40px); padding: clamp(22px, 2.4vw, 36px); transform-origin: 50% 0; z-index: calc(10 - var(--pos)); transform: translateY(calc(var(--pos) * -22px)) scale(calc(1 - var(--pos) * .06)); filter: brightness(calc(1 - var(--pos) * .3)); opacity: calc(3 - var(--pos)); transition: transform .8s var(--s), filter .8s var(--s), opacity .5s var(--s); }
-  .dv-e__carta header { display: flex; align-items: center; justify-content: space-between; }
-  .dv-e__pergunta { font-size: clamp(24px, 2.7vw, 40px); }
-  .dv-e__proxima { display: flex; align-items: center; gap: 10px; height: 46px; margin: 22px auto 0; padding: 0 18px 0 22px; border: 0; border-radius: 23px; background: #f2f2ee; color: #161616; font: inherit; font-size: 14.5px; font-weight: 500; cursor: pointer; }
-  .dv-e__proxima svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-
-  @media (max-width: 999.98px) {
-    .grade7 > li, .grade7 > li:nth-child(n + 5) { grid-column: span 6; }
-    .grade7 > li:last-child { grid-column: 1 / -1; }
+  @media (min-width: 1000px) {
+    .dc__grade { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   }
   @media (max-width: 699.98px) {
-    .dorsol__barra { left: 10px; right: 10px; top: auto; bottom: 74px; grid-auto-flow: column; overflow-x: auto; border-radius: 999px; }
-    .dorsol__barra span { display: none; }
-    .dorsol__barra button { white-space: nowrap; }
-    .grade7 > li, .grade7 > li:nth-child(n + 5) { grid-column: 1 / -1; }
-    .dv-a__seletor { justify-content: space-between; gap: 4px; }
-    .dv-a__seletor .pastilha { width: 40px; height: 40px; border-radius: 12px; }
-    .dv-a__cartao .resposta { padding-right: 0; }
-    .dv-a__cartao .conta { position: static; justify-self: end; margin-top: -18px; }
-    .dv-b__cartao, .dv-d__cartao { min-height: 0; }
-    .dv-b__frente { gap: 18px; }
-    .dv-c__balao { max-width: 94%; }
-    .dv-e__carta { transform: translateY(calc(var(--pos) * -14px)) scale(calc(1 - var(--pos) * .05)); }
+    .dc__titulo { max-width: none; font-size: 30px; }
+    .dc__balao { max-width: 94%; }
+    .dc__quem span { display: none; }
+    /* No celular as sugestões rolam de lado, numa linha só. */
+    .dc__atalhos { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * clamp(18px, 2vw, 30px)); padding-inline: clamp(18px, 2vw, 30px); scrollbar-width: none; }
+    .dc__atalhos::-webkit-scrollbar { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .dorsol * { transition: none !important; } }
 </style>
