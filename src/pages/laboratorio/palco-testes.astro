@@ -2,7 +2,7 @@
 /**
  * Página de teste (10/10/2026): variações de diagramação do palco dos planos,
  * com o centro (símbolo, nome e foto) intacto. A barra no canto troca a
- * variante; ?v=a|b|c abre direto em uma delas. Fora dos buscadores e do menu.
+ * variante; ?v=a…h abre direto em uma delas. Fora dos buscadores e do menu.
  */
 import Base2 from '../../layouts/Base2.astro';
 import PlanosPalco from '../../components/home2/PlanosPalco.astro';
@@ -11,11 +11,15 @@ import '../../styles/palco-testes.css';
 <Base2 titulo="Laboratório · Palco dos planos, testes de diagramação" descricao="Laboratório" noindex classe="home-refinada">
   <PlanosPalco />
   <div class="palco-teste__barra" data-barra>
-    <span>Diagramação</span>
-    <button type="button" data-v="">Atual</button>
-    <button type="button" data-v="a">A · Embaixo</button>
-    <button type="button" data-v="b">B · Centralizado</button>
-    <button type="button" data-v="c">C · Texto à esquerda</button>
+        <button type="button" data-v="">Atual</button>
+    <button type="button" data-v="a" title="Embaixo">A</button>
+    <button type="button" data-v="b" title="Centralizado">B</button>
+    <button type="button" data-v="c" title="Texto à esquerda">C</button>
+    <button type="button" data-v="d" title="Cartão embaixo">D</button>
+    <button type="button" data-v="e" title="Só uma frase">E</button>
+    <button type="button" data-v="f" title="Cartão à direita">F</button>
+    <button type="button" data-v="g" title="Só o plano, sem a dor">G</button>
+    <button type="button" data-v="h" title="Dor antes, plano depois">H</button>
   </div>
 </Base2>
 

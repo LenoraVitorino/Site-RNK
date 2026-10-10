@@ -2,9 +2,9 @@
    /laboratorio/palco-testes. O centro (símbolo, nome e foto) fica como está;
    muda só onde moram o texto e o botão. A variante é escolhida pela barra da
    página, que grava data-lay na seção. Nada aqui chega à home. */
-.palco-teste__barra { position: fixed; z-index: 300; right: 14px; top: 92px; display: grid; gap: 2px; padding: 6px; border-radius: 18px; background: #f2f2ee; color: #161616; box-shadow: 0 18px 40px -16px rgb(0 0 0 / .7); font-size: 13px; letter-spacing: -.01em; }
+.palco-teste__barra { position: fixed; z-index: 300; left: 14px; top: 50%; translate: 0 -50%; display: grid; justify-items: stretch; gap: 2px; padding: 6px; border-radius: 18px; background: #f2f2ee; color: #161616; box-shadow: 0 18px 40px -16px rgb(0 0 0 / .7); font-size: 13px; letter-spacing: -.01em; }
 .palco-teste__barra span { padding: 6px 12px 4px; opacity: .6; }
-.palco-teste__barra button { height: 32px; padding: 0 12px; text-align: left; border: 0; border-radius: 999px; background: none; color: inherit; font: inherit; cursor: pointer; }
+.palco-teste__barra button { height: 32px; min-width: 32px; padding: 0 10px; text-align: center; border: 0; border-radius: 999px; background: none; color: inherit; font: inherit; cursor: pointer; }
 .palco-teste__barra button[aria-pressed="true"] { background: #161616; color: #f2f2ee; }
 
 /* A. Embaixo: uma faixa na base, lida da esquerda para a direita (fala, o que o plano entrega, botão). */
@@ -30,3 +30,61 @@
 .palcoplanos[data-animado][data-lay="c"] .plano-palco__fala { font-size: clamp(26px, 2.5vw, 42px); line-height: 1.14; text-wrap: pretty; }
 .palcoplanos[data-animado][data-lay="c"] .plano-palco__frase { max-width: 32ch; }
 .palcoplanos[data-animado][data-lay="c"] .palcoplanos__ancoras { right: 2vw; }
+
+/* Segunda leva (10/10, "não gostei de nada"): o problema não era o lugar, eram
+   três textos soltos disputando com o nome gigante. Aqui o texto ganha um
+   recipiente só (cartão de vidro, na linha do ClickUp) ou é reduzido a uma frase. */
+.palcoplanos[data-animado]:is([data-lay="d"], [data-lay="f"]) .plano-palco__texto {
+  width: clamp(330px, 25vw, 410px); gap: 12px; padding: 22px 24px 24px; border-radius: 26px;
+  background: linear-gradient(180deg, rgb(48 48 46 / .78), rgb(30 30 29 / .78)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 40px 60px -30px rgb(0 0 0 / .9);
+}
+.palcoplanos[data-animado]:is([data-lay="d"], [data-lay="f"]) .plano-palco__fala { font-size: clamp(19px, 1.45vw, 24px); }
+.palcoplanos[data-animado]:is([data-lay="d"], [data-lay="f"]) .plano-palco__frase { font-size: clamp(14.5px, 1vw, 16px); }
+
+/* D. Cartão flutuante no canto inferior esquerdo. */
+.palcoplanos[data-animado][data-lay="d"] .plano-palco__texto { top: auto; bottom: 4.2vw; }
+
+/* E. Só o essencial: uma barra na base, com a fala e o botão. O texto de apoio sai. */
+.palcoplanos[data-animado][data-lay="e"] .plano-palco__texto {
+  top: auto; bottom: 4.2vw; left: 50%; translate: -50% 0; width: max-content; max-width: min(900px, 76vw);
+  display: flex; align-items: center; gap: clamp(20px, 2.4vw, 40px); padding: 12px 12px 12px 30px; border-radius: 999px;
+  background: linear-gradient(180deg, rgb(48 48 46 / .78), rgb(30 30 29 / .78)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 40px 60px -30px rgb(0 0 0 / .9);
+}
+.palcoplanos[data-animado][data-lay="e"] :is(.plano-palco__momento-rotulo, .plano-palco__frase) { display: none; }
+.palcoplanos[data-animado][data-lay="e"] .plano-palco__fala { max-width: 46ch; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.3; text-wrap: balance; }
+.palcoplanos[data-animado][data-lay="e"] .plano-palco__texto .botao { flex: none; margin: 0; }
+
+/* F. Cartão à direita, a meia altura; o conjunto do centro vai um pouco para a esquerda. */
+.palcoplanos[data-animado][data-lay="f"] { --desvio: -12vw; }
+.palcoplanos[data-animado][data-lay="f"] :is(.plano-palco__imagem .plano-editorial, .palcoplanos__icones, .palcoplanos__nomes, .plano-palco__link) { translate: var(--desvio) 0; }
+.palcoplanos[data-animado][data-lay="f"] .plano-palco__texto { left: auto; right: var(--grid-inset); top: 50%; translate: 0 -50%; }
+.palcoplanos[data-animado][data-lay="f"] .palcoplanos__ancoras { right: 2vw; }
+
+/* Terceira leva (10/10, insight dela): a fala é a DOR e o texto de apoio é O
+   QUE O PLANO É; juntos no mesmo bloco, um atrapalha o outro. */
+.palcoplanos[data-animado]:is([data-lay="g"], [data-lay="h"]) .plano-palco__texto {
+  top: auto; bottom: 4.2vw; left: 50%; translate: -50% 0; width: max-content; max-width: min(940px, 78vw);
+  display: flex; align-items: center; gap: clamp(20px, 2.4vw, 40px); padding: 12px 12px 12px 30px; border-radius: 999px;
+  background: linear-gradient(180deg, rgb(48 48 46 / .78), rgb(30 30 29 / .78)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 40px 60px -30px rgb(0 0 0 / .9);
+}
+.palcoplanos[data-animado]:is([data-lay="g"], [data-lay="h"]) .plano-palco__frase { margin: 0; max-width: 48ch; opacity: 1; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.3; text-wrap: balance; }
+.palcoplanos[data-animado]:is([data-lay="g"], [data-lay="h"]) .plano-palco__texto .botao { flex: none; margin: 0; }
+
+/* G. Só o plano: sai a dor; fica o que o plano é e o botão, numa barra. */
+.palcoplanos[data-animado][data-lay="g"] :is(.plano-palco__momento-rotulo, .plano-palco__fala) { display: none; }
+
+/* H. Dor antes, plano depois: a fala abre a tela, em cima, como pergunta do dono
+   de clínica; um instante depois entra a barra com o que o plano é e o botão.
+   (A fala é posicionada a partir da barra, que fica a 4,2vw da base de um palco de 100svh.) */
+.palcoplanos[data-animado][data-lay="h"] :is(.plano-palco__momento-rotulo, .plano-palco__fala) { position: absolute; left: 50%; translate: -50% 0; text-align: center; white-space: normal; }
+.palcoplanos[data-animado][data-lay="h"] .plano-palco__momento-rotulo { top: calc(-100svh + 8.4vw + 72px); width: max-content; }
+.palcoplanos[data-animado][data-lay="h"] .plano-palco__fala { top: calc(-100svh + 8.4vw + 102px); width: min(56vw, 900px); font-size: clamp(22px, 1.9vw, 34px); }
+@media (prefers-reduced-motion: no-preference) {
+  .palcoplanos[data-animado][data-lay="h"] .plano-palco--ativo :is(.plano-palco__momento-rotulo, .plano-palco__fala) { animation: palco-teste-dor 1s cubic-bezier(.22, 1, .36, 1) .2s both; }
+  .palcoplanos[data-animado][data-lay="h"] .plano-palco--ativo .plano-palco__texto { animation: palco-teste-plano 1s cubic-bezier(.22, 1, .36, 1) 1.5s both; }
+}
+@keyframes palco-teste-dor { from { opacity: 0; transform: translateY(14px); } }
+@keyframes palco-teste-plano { from { opacity: 0; transform: translateY(18px); } }
