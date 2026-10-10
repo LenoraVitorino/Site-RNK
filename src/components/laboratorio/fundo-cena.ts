@@ -50,7 +50,9 @@ const ARQUIVOS = {
   causticas: '/cena/causticas.mp4',
 };
 /** Velocidade das animações de morph dos modelos, como na cena de lá. */
-const VELOCIDADE = { donut: .08, minhoca: .04 };
+/* A minhoca (dobras dos ganhos em diante) andava a .04 e parecia parada
+   (Lenora, 10/10: "está estático, deveria estar andando"). */
+const VELOCIDADE = { donut: .08, minhoca: .16 };
 
 /* ------------------------------------------------------------------ */
 /* Folha de animação da referência (trecho 0–1 da página de lá)         */

@@ -23,3 +23,9 @@ A Renke fala com médicos e médicas donos de clínicas de alto padrão. O site 
 - Referências de direção visual: docs/04-design/referencias-alto-padrao.md.
 
 Regra definida pela usuária em 25/09/2026.
+
+# Referência principal: ClickUp
+
+A home tem de ter muita base e referência do ClickUp (clickup.com), seguida à risca na organização das dobras: faixa de números, pílulas com um painel que troca, grade do ecossistema e bento em fio fino. Antes de desenhar ou refazer uma dobra da home, conferir o molde dela em docs/04-design/referencia-clickup.md. As cores, a tipografia e o padrão "menos é mais" continuam os da Renke.
+
+Regra definida pela usuária em 10/10/2026.

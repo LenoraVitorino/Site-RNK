@@ -1,0 +1,16 @@
+---
+/**
+ * Página de teste (10/10/2026): os cartões de "O que muda na sua clínica" com
+ * a pergunta de dor e a resposta da Renke em cada um, no lugar do ganho solto
+ * ("acho meio vazio essa coisa de tu tem isso, tu tem aquilo"; "genial essa
+ * parada de ter a resposta"). A conversa foi descartada. Fora dos buscadores
+ * e do menu.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import Perguntas from '../../components/home2/Perguntas.astro';
+---
+<Base2 titulo="Laboratório · Dores e soluções" descricao="Laboratório" noindex classe="home-refinada">
+  <FundoVivo slot="fundo" fundo="cena" />
+  <Perguntas dor composicao="bento" />
+</Base2>
