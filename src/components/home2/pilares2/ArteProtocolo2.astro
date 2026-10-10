@@ -32,8 +32,8 @@ const q: string[] = [];
 const cena = (k: number) => q.push(`@keyframes p2-cena-${k}{0%,${g(k, 0)}%{opacity:0;transform:translateX(44px)}${g(k, .09)}%,${g(k, .93)}%{opacity:1;transform:none}${g(k, 1)}%,100%{opacity:0;transform:translateX(-44px)}}`);
 const entra = (n: string, k: number, t: number, de = 'translateY(10px)') => q.push(`@keyframes ${n}{0%,${g(k, t)}%{opacity:0;transform:${de}}${g(k, t + .07)}%,100%{opacity:1;transform:none}}`);
 const troca = (n: string, k: number, t: number) => q.push(
-  `@keyframes ${n}-a{0%,${g(k, t)}%{opacity:1}${g(k, t + .03)}%,100%{opacity:0}}`,
-  `@keyframes ${n}-b{0%,${g(k, t)}%{opacity:0}${g(k, t + .03)}%,100%{opacity:1}}`);
+  `@keyframes ${n}-a{0%,${g(k, t)}%{opacity:1}${g(k, t + .02)}%,100%{opacity:0}}`,
+  `@keyframes ${n}-b{0%,${g(k, t + .02)}%{opacity:0}${g(k, t + .04)}%,100%{opacity:1}}`);
 const aperta = (n: string, k: number, t: number) => q.push(`@keyframes ${n}{0%,${g(k, t - .02)}%{transform:none}${g(k, t)}%{transform:scale(.95)}${g(k, t + .04)}%,100%{transform:none}}`);
 /* Cursor: pontos [tempo, left, top]; some antes do primeiro e depois do último. */
 const mouse = (n: string, k: number, pts: [number, string, string][]) => {
@@ -41,11 +41,14 @@ const mouse = (n: string, k: number, pts: [number, string, string][]) => {
   q.push(`@keyframes ${n}{0%,${g(k, p0[0] - .08)}%{opacity:0;left:${p0[1]};top:${p0[2]}}${pts.map(([t, x, y]) => `${g(k, t)}%{opacity:1;left:${x};top:${y}}`).join('')}${g(k, pf[0] + .1)}%,100%{opacity:0;left:${pf[1]};top:${pf[2]}}}`);
 };
 [0, 1, 2].forEach(cena);
-// Tela 1, marketing: liga o Google, publica a campanha, chega o lead.
-mouse('p2-m1', 0, [[.16, '70%', '150px'], [.3, 'calc(100% - 30px)', '90px'], [.4, 'calc(100% - 30px)', '90px'], [.56, '56%', '152px'], [.7, '56%', '152px']]);
-q.push(`@keyframes p2-chave{0%,${g(0, .34)}%{background:#3d3d3b}${g(0, .38)}%,100%{background:#FFD103}}`,
-  `@keyframes p2-chave-pino{0%,${g(0, .34)}%{transform:none}${g(0, .39)}%,100%{transform:translateX(12px)}}`);
-aperta('p2-publica', 0, .6); troca('p2-botao', 0, .62); entra('p2-aviso', 0, .74, 'translate(16px,-10px) scale(.96)');
+// Tela 1, marketing: o criativo sobe, o Google é ligado, a campanha é publicada e o lead chega.
+q.push(`@keyframes p2-envio-barra{0%,${g(0, .07)}%{transform:scaleX(0)}${g(0, .27)}%,100%{transform:scaleX(1)}}`);
+troca('p2-envio', 0, .28); entra('p2-envio-ok', 0, .29, 'scale(.4)');
+mouse('p2-m1', 0, [[.36, '72%', '150px'], [.46, 'calc(100% - 30px)', '124px'], [.54, 'calc(100% - 30px)', '124px'], [.66, '56%', '178px'], [.78, '56%', '178px']]);
+q.push(`@keyframes p2-chave{0%,${g(0, .5)}%{background:#3d3d3b}${g(0, .54)}%,100%{background:#FFD103}}`,
+  `@keyframes p2-chave-pino{0%,${g(0, .5)}%{transform:none}${g(0, .55)}%,100%{transform:translateX(12px)}}`);
+aperta('p2-publica', 0, .7); troca('p2-botao', 0, .72);
+troca('p2-leads', 0, .82); entra('p2-aviso', 0, .83, 'translateY(10px) scale(.96)');
 // Tela 2, comercial: conversa com o lead e marca a avaliação.
 entra('p2-fala-1', 1, .1); entra('p2-fala-2', 1, .26); entra('p2-fala-3', 1, .42); entra('p2-vagas', 1, .5);
 mouse('p2-m2', 1, [[.56, '62%', '70px'], [.68, '44px', '22px'], [.84, '44px', '22px']]);
@@ -110,8 +113,16 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
       <header class="p2-cena__topo"><span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span><b>Marketing</b><span>Campanha de outubro</span></header>
       <div class="p2-cena__corpo">
         <div class="p2-cena__principal">
-          <div class="p2-bloco">
-            <span class="p2-legenda">Onde a campanha roda</span>
+          <div class="p2-bloco p2-envio">
+            <span class="p2-envio__icone"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg></span>
+            <div class="p2-envio__texto">
+              <strong>Criativo do anúncio</strong>
+              <span class="p2-pilha p2-pilha--esq"><b class="p2-anim" style="--a:p2-envio-a">Enviando a imagem…</b><b class="p2-pilha__depois p2-anim" style="--a:p2-envio-b">Imagem enviada</b></span>
+              <span class="p2-envio__barra"><i class="p2-anim" style="--a:p2-envio-barra"></i></span>
+            </div>
+            <span class="p2-envio__ok p2-anim" style="--a:p2-envio-ok"></span>
+          </div>
+          <div class="p2-bloco p2-canais">
             <div class="p2-linha">Instagram<span class="p2-chave p2-chave--ligada"><i></i></span></div>
             <div class="p2-linha">Google<span class="p2-chave p2-anim" style="--a:p2-chave"><i class="p2-anim" style="--a:p2-chave-pino"></i></span></div>
           </div>
@@ -124,11 +135,11 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
             <span class="p2-mouse__quem"><Image src={isa} {...rosto} /></span>
           </div>
         </div>
-        <div class="p2-bloco p2-anuncio p2-cena__extra">
-          <img src="/imagens/planos-editoriais/seringa.webp" alt="" loading="lazy" />
-          <strong>Harmonização facial</strong><span>Agende sua avaliação</span>
+        <div class="p2-bloco p2-leads p2-cena__extra">
+          <span class="p2-legenda">Leads da campanha</span>
+          <span class="p2-pilha p2-pilha--esq p2-leads__vazio"><b class="p2-anim" style="--a:p2-leads-a">Aguardando a publicação</b><b class="p2-pilha__depois p2-anim" style="--a:p2-leads-b">Chegou o primeiro</b></span>
+          <div class="p2-aviso p2-anim" style="--a:p2-aviso"><i></i><div><strong>Novo lead</strong><span>Harmonização facial, agora</span></div></div>
         </div>
-        <div class="p2-bloco p2-aviso p2-anim" style="--a:p2-aviso"><i></i><div><strong>Novo lead</strong><span>Harmonização facial, agora</span></div></div>
       </div>
     </section>
 
