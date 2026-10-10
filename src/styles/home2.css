@@ -636,15 +636,16 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__nome__b { justify-self: end; }
 
 /* Diagramação do palco (10/10): o centro (símbolo, nome e foto) não muda. Em
-   volta, uma moldura só: as âncoras no alto à direita e, na base, dois
-   blocos irmãos na mesma linha, com o mesmo fio, a mesma largura e a mesma
-   altura — o que o plano faz à esquerda, o momento da clínica à direita. */
-.plano-palco__texto, .plano-palco__momento { --bloco-l: clamp(280px, 23vw, 380px); --bloco-h: 136px; }
-.plano-palco__texto { position: absolute; left: var(--grid-inset); bottom: 5vw; width: var(--bloco-l); min-height: var(--bloco-h); padding-top: 18px; border-top: 1px solid var(--pp-fio); display: grid; gap: 18px; justify-items: start; align-content: start; z-index: 2; }
+   volta, uma faixa só, no alto, que é o que aparece primeiro quando a dobra
+   sobe: à esquerda o que o plano faz, ao lado o momento da clínica — dois
+   blocos irmãos, com o mesmo fio, largura e altura — e as âncoras à direita.
+   (Os dois blocos na base foram reprovados: "vai ver primeiro a parte de cima".) */
+.plano-palco__texto, .plano-palco__momento { --bloco-l: clamp(250px, 21vw, 340px); --bloco-h: 128px; }
+.plano-palco__texto { position: absolute; left: var(--grid-inset); top: 5vw; width: var(--bloco-l); min-height: var(--bloco-h); padding-top: 18px; border-top: 1px solid var(--pp-fio); display: grid; gap: 18px; justify-items: start; align-content: start; z-index: 2; }
 .plano-palco__frase { margin: 0; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.45; font-weight: var(--peso-corpo); letter-spacing: -.02em; }
 /* Momento da clínica: a fala de quem está naquele plano, no canto inferior
    direito, sob um fio fino com um traço amarelo (10/10). */
-.plano-palco__momento { position: absolute; right: var(--grid-inset); bottom: 5vw; width: var(--bloco-l); min-height: var(--bloco-h); padding-top: 18px; border-top: 1px solid var(--pp-fio); display: grid; gap: 10px; align-content: start; z-index: 2; }
+.plano-palco__momento { position: absolute; left: calc(var(--grid-inset) + var(--bloco-l) + clamp(24px, 3vw, 56px)); top: 5vw; width: var(--bloco-l); min-height: var(--bloco-h); padding-top: 18px; border-top: 1px solid var(--pp-fio); display: grid; gap: 10px; align-content: start; z-index: 2; }
 .plano-palco__momento::before { content: ''; position: absolute; left: 0; top: -1px; width: 28px; height: 1px; background: var(--destaque); }
 .plano-palco__momento-rotulo { margin: 0; font-size: 13px; line-height: 1.2; letter-spacing: -.01em; opacity: .56; }
 .plano-palco__fala { margin: 0; font-size: clamp(16px, 1.15vw, 19px); line-height: 1.45; font-weight: var(--peso-corpo); letter-spacing: -.02em; text-wrap: pretty; }
@@ -675,7 +676,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .palcoplanos:not([data-animado]) :is(.plano-palco__texto, .plano-palco__momento) { position: static; width: auto; min-height: 0; text-align: left; }
 .palcoplanos:not([data-animado]) .plano-palco__texto { padding-top: 0; border-top: 0; }
 .palcoplanos:not([data-animado]) .plano-palco__texto { gap: 14px; }
-.palcoplanos:not([data-animado]) .plano-palco__momento { position: relative; right: auto; bottom: auto; }
+.palcoplanos:not([data-animado]) .plano-palco__momento { position: relative; left: auto; top: auto; }
 .palcoplanos:not([data-animado]) :is(.plano-palco__frase, .plano-palco__fala, .plano-palco__texto .botao) { font-size: 15px; line-height: 1.5; }
 /* Na pilha do celular e do tablet, ícone e texto na margem esquerda da
    página, como a abertura (28/09/2026). */
@@ -688,7 +689,7 @@ html:not(.js) .esteira__trilho { transform: none; }
   .palcoplanos:not([data-animado]) .plano-palco__texto .botao { margin-left: -16px; }
 }
 @media (min-width: 900px) and (max-height: 700px) {
-  .palcoplanos[data-animado] :is(.plano-palco__texto, .plano-palco__momento) { bottom: 4vh; }
+  .palcoplanos[data-animado] :is(.plano-palco__texto, .plano-palco__momento) { top: 4vh; }
   .palcoplanos[data-animado] .plano-palco__nome { font-size: 8vw; width: 47vw; }
 }
 

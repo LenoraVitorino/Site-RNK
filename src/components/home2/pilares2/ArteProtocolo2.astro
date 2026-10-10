@@ -38,14 +38,17 @@ const aperta = (n: string, k: number, t: number) => q.push(`@keyframes ${n}{0%,$
 /* Cursor: pontos [tempo, left, top]; some antes do primeiro e depois do último. */
 const mouse = (n: string, k: number, pts: [number, string, string][]) => {
   const [p0, pf] = [pts[0], pts[pts.length - 1]];
-  q.push(`@keyframes ${n}{0%,${g(k, p0[0] - .08)}%{opacity:0;left:${p0[1]};top:${p0[2]}}${pts.map(([t, x, y]) => `${g(k, t)}%{opacity:1;left:${x};top:${y}}`).join('')}${g(k, pf[0] + .1)}%,100%{opacity:0;left:${pf[1]};top:${pf[2]}}}`);
+  // Só transform (sem left/top), para o cursor deslizar sem refazer o layout:
+  // as porcentagens viram cqw do bloco onde o cursor mora.
+  const tr = ([, x, y]: [number, string, string]) => `translate(${x.replace(/%/g, 'cqw')},${y})`;
+  q.push(`@keyframes ${n}{0%,${g(k, p0[0] - .08)}%{opacity:0;transform:${tr(p0)} translate(18px,16px)}${pts.map((p) => `${g(k, p[0])}%{opacity:1;transform:${tr(p)}}`).join('')}${g(k, pf[0] + .1)}%,100%{opacity:0;transform:${tr(pf)} translate(14px,14px)}}`);
 };
 [0, 1, 2].forEach(cena);
 // Tela 1, marketing: o criativo sobe, o Google é ligado, a campanha é publicada e o lead chega.
 q.push(`@keyframes p2-envio-barra{0%,${g(0, .07)}%{transform:scaleX(0)}${g(0, .27)}%,100%{transform:scaleX(1)}}`);
 troca('p2-envio', 0, .28); entra('p2-envio-ok', 0, .29, 'scale(.4)');
-mouse('p2-m1', 0, [[.36, '72%', '150px'], [.46, 'calc(100% - 30px)', '124px'], [.54, 'calc(100% - 30px)', '124px'], [.66, '56%', '178px'], [.78, '56%', '178px']]);
-q.push(`@keyframes p2-chave{0%,${g(0, .5)}%{background:#3d3d3b}${g(0, .54)}%,100%{background:#FFD103}}`,
+mouse('p2-m1', 0, [[.36, '60%', '150px'], [.46, 'calc(100% - 30px)', '120px'], [.54, 'calc(100% - 30px)', '120px'], [.66, 'calc(100% - 66px)', '198px'], [.78, 'calc(100% - 66px)', '198px']]);
+q.push(`@keyframes p2-chave{0%,${g(0, .5)}%{background:#3d3d3b}${g(0, .54)}%,100%{background:#F2F2EE}}`,
   `@keyframes p2-chave-pino{0%,${g(0, .5)}%{transform:none}${g(0, .55)}%,100%{transform:translateX(12px)}}`);
 aperta('p2-publica', 0, .7); troca('p2-botao', 0, .72);
 troca('p2-leads', 0, .82); entra('p2-aviso', 0, .83, 'translateY(10px) scale(.96)');
@@ -101,7 +104,7 @@ const quadrosEstudo = concorrentes.map((_, i) => {
     + [0, 1].map((j) => `@keyframes p2-e-nota-${i}-${j}{0%,${em + 4 + j * 5}%{opacity:0;transform:scale(.8)}${em + 7 + j * 5}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`).join('');
 }).join('')
   + '@keyframes p2-e-brecha{0%,64%{opacity:0;transform:translateY(12px) scale(.97)}70%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}'
-  + '@keyframes p2-e-mouse{0%,4%{opacity:0;left:84%;top:96px}9%,22%{opacity:1;left:58%;top:52px}27%,40%{opacity:1;left:58%;top:89px}45%,58%{opacity:1;left:58%;top:126px}67%,86%{opacity:1;left:76%;top:196px}93%,100%{opacity:0;left:82%;top:210px}}';
+  + '@keyframes p2-e-mouse{0%,4%{opacity:0;transform:translate(84cqw,96px)}9%,22%{opacity:1;transform:translate(58cqw,52px)}27%,40%{opacity:1;transform:translate(58cqw,89px)}45%,58%{opacity:1;transform:translate(58cqw,126px)}67%,86%{opacity:1;transform:translate(76cqw,196px)}93%,100%{opacity:0;transform:translate(82cqw,210px)}}';
 
 /* As artes contam um caso de uso com uma clínica fictícia, a Clínica Âmbar
    (10/10: "inventa um nome de uma clínica, como se fosse um caso de uso"). */
@@ -118,7 +121,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
           <div class="p2-bloco p2-envio">
             <span class="p2-envio__icone"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg></span>
             <div class="p2-envio__texto">
-              <strong>Criativo do anúncio</strong>
+              <strong>Criativo do anúncio</strong><em>harmonizacao-facial.jpg</em>
               <span class="p2-pilha p2-pilha--esq"><b class="p2-anim" style="--a:p2-envio-a">Enviando a imagem…</b><b class="p2-pilha__depois p2-anim" style="--a:p2-envio-b">Imagem enviada</b></span>
               <span class="p2-envio__barra"><i class="p2-anim" style="--a:p2-envio-barra"></i></span>
             </div>
@@ -127,6 +130,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
           <div class="p2-bloco p2-canais">
             <div class="p2-linha">Instagram<span class="p2-chave p2-chave--ligada"><i></i></span></div>
             <div class="p2-linha">Google<span class="p2-chave p2-anim" style="--a:p2-chave"><i class="p2-anim" style="--a:p2-chave-pino"></i></span></div>
+            <div class="p2-linha">Público<span class="p2-linha__valor">Mulheres, 30 a 55 anos</span></div>
           </div>
           <div class="p2-botao p2-anim" style="--a:p2-publica">
             <span class="p2-anim" style="--a:p2-botao-a">Publicar campanha</span>
@@ -138,9 +142,11 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
           </div>
         </div>
         <div class="p2-bloco p2-leads p2-cena__extra">
-          <span class="p2-legenda">Leads da campanha</span>
-          <span class="p2-pilha p2-pilha--esq p2-leads__vazio"><b class="p2-anim" style="--a:p2-leads-a">Aguardando a publicação</b><b class="p2-pilha__depois p2-anim" style="--a:p2-leads-b">Chegou o primeiro</b></span>
-          <div class="p2-aviso p2-anim" style="--a:p2-aviso"><i></i><div><strong>Novo lead</strong><span>Harmonização facial, agora</span></div></div>
+          <div class="p2-leads__topo"><span class="p2-legenda">Leads da campanha</span><span class="p2-pilha"><b class="p2-anim" style="--a:p2-leads-a">0</b><b class="p2-pilha__depois p2-anim" style="--a:p2-leads-b">1</b></span></div>
+          <div class="p2-leads__vaga">
+            <span class="p2-leads__espera p2-anim" style="--a:p2-leads-a">Aguardando a publicação</span>
+            <div class="p2-aviso p2-anim" style="--a:p2-aviso"><i class="p2-ficha__foto">JM</i><div><strong>Juliana M.</strong><span>Harmonização · Google</span></div><em>agora</em></div>
+          </div>
         </div>
       </div>
     </section>
