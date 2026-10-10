@@ -1,0 +1,35 @@
+---
+/**
+ * Página de teste (10/10/2026): variações de diagramação do palco dos planos,
+ * com o centro (símbolo, nome e foto) intacto. A barra no canto troca a
+ * variante; ?v=a|b|c abre direto em uma delas. Fora dos buscadores e do menu.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import '../../styles/palco-testes.css';
+---
+<Base2 titulo="Laboratório · Palco dos planos, testes de diagramação" descricao="Laboratório" noindex classe="home-refinada">
+  <PlanosPalco />
+  <div class="palco-teste__barra" data-barra>
+    <span>Diagramação</span>
+    <button type="button" data-v="">Atual</button>
+    <button type="button" data-v="a">A · Embaixo</button>
+    <button type="button" data-v="b">B · Centralizado</button>
+    <button type="button" data-v="c">C · Texto à esquerda</button>
+  </div>
+</Base2>
+
+<script>
+  const secao = document.querySelector<HTMLElement>('[data-palcoplanos]');
+  const botoes = [...document.querySelectorAll<HTMLButtonElement>('[data-barra] button')];
+  const aplicar = (v: string) => {
+    if (!secao) return;
+    if (v) secao.dataset.lay = v; else delete secao.dataset.lay;
+    botoes.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    const url = new URL(location.href);
+    if (v) url.searchParams.set('v', v); else url.searchParams.delete('v');
+    history.replaceState(null, '', url);
+  };
+  botoes.forEach((b) => b.addEventListener('click', () => aplicar(b.dataset.v ?? '')));
+  aplicar(new URLSearchParams(location.search).get('v') ?? '');
+</script>

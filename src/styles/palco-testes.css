@@ -1,0 +1,32 @@
+/* TESTES de diagramação do palco dos planos (10/10/2026), só na página
+   /laboratorio/palco-testes. O centro (símbolo, nome e foto) fica como está;
+   muda só onde moram o texto e o botão. A variante é escolhida pela barra da
+   página, que grava data-lay na seção. Nada aqui chega à home. */
+.palco-teste__barra { position: fixed; z-index: 300; right: 14px; top: 92px; display: grid; gap: 2px; padding: 6px; border-radius: 18px; background: #f2f2ee; color: #161616; box-shadow: 0 18px 40px -16px rgb(0 0 0 / .7); font-size: 13px; letter-spacing: -.01em; }
+.palco-teste__barra span { padding: 6px 12px 4px; opacity: .6; }
+.palco-teste__barra button { height: 32px; padding: 0 12px; text-align: left; border: 0; border-radius: 999px; background: none; color: inherit; font: inherit; cursor: pointer; }
+.palco-teste__barra button[aria-pressed="true"] { background: #161616; color: #f2f2ee; }
+
+/* A. Embaixo: uma faixa na base, lida da esquerda para a direita (fala, o que o plano entrega, botão). */
+.palcoplanos[data-animado][data-lay="a"] .plano-palco__texto { top: auto; bottom: 4.5vw; right: var(--grid-inset); width: auto; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) auto; gap: 10px clamp(28px, 4vw, 72px); align-items: end; }
+.palcoplanos[data-animado][data-lay="a"] .plano-palco__momento-rotulo { grid-column: 1 / -1; }
+.palcoplanos[data-animado][data-lay="a"] .plano-palco__fala { max-width: 32ch; }
+.palcoplanos[data-animado][data-lay="a"] .plano-palco__frase { margin: 0; max-width: 34ch; }
+.palcoplanos[data-animado][data-lay="a"] .plano-palco__texto .botao { margin: 0; }
+
+/* B. Centralizado: a fala como título em cima; embaixo, o que o plano entrega e o botão. */
+.palcoplanos[data-animado][data-lay="b"] .plano-palco__texto { display: contents; }
+.palcoplanos[data-animado][data-lay="b"] :is(.plano-palco__momento-rotulo, .plano-palco__fala, .plano-palco__frase, .plano-palco__texto .botao) { position: absolute; left: 50%; translate: -50% 0; z-index: 2; text-align: center; }
+.palcoplanos[data-animado][data-lay="b"] .plano-palco__momento-rotulo { top: 4.2vw; }
+.palcoplanos[data-animado][data-lay="b"] .plano-palco__fala { top: calc(4.2vw + 30px); width: min(56vw, 900px); font-size: clamp(22px, 1.9vw, 34px); }
+.palcoplanos[data-animado][data-lay="b"] .plano-palco__frase { bottom: calc(3.6vw + 68px); width: min(46vw, 640px); max-width: none; margin: 0; }
+.palcoplanos[data-animado][data-lay="b"] .plano-palco__texto .botao { bottom: 3.6vw; margin: 0; }
+
+/* C. Padrão em duas colunas: texto à esquerda, a meia altura e com a fala maior; o conjunto do centro vai para a direita. */
+.palcoplanos[data-animado][data-lay="c"] { --desvio: 15vw; }
+.palcoplanos[data-animado][data-lay="c"] :is(.plano-palco__imagem .plano-editorial, .palcoplanos__icones, .palcoplanos__nomes) { translate: var(--desvio) 0; }
+.palcoplanos[data-animado][data-lay="c"] .plano-palco__link { translate: var(--desvio) 0; }
+.palcoplanos[data-animado][data-lay="c"] .plano-palco__texto { top: 50%; translate: 0 -50%; width: clamp(320px, 26vw, 460px); gap: 16px; }
+.palcoplanos[data-animado][data-lay="c"] .plano-palco__fala { font-size: clamp(26px, 2.5vw, 42px); line-height: 1.14; text-wrap: pretty; }
+.palcoplanos[data-animado][data-lay="c"] .plano-palco__frase { max-width: 32ch; }
+.palcoplanos[data-animado][data-lay="c"] .palcoplanos__ancoras { right: 2vw; }

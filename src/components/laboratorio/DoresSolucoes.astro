@@ -1,12 +1,12 @@
 ---
 /**
  * TESTE (10/10/2026), fora da home: a dobra "O que muda na sua clínica" como
- * par dor → solução. À esquerda de cada cartão, a pergunta da copy original
- * (docs/03-copy/home.md, seção 3); à direita, o que a Renke entrega para
- * resolver (os ganhos da versão ajustada). Acabamento na linha do ClickUp e da
- * Apple: cartão escuro com brilho no topo, peça interna flutuando com sombra
- * suave, ícone em pastilha. Os itens de "entrega" são um rascunho tirado dos
- * textos do Protocolo Revena e precisam de validação.
+ * par dor → solução, em formato compacto. A primeira versão (um cartão
+ * grande por par) foi reprovada: "gigantesco, cansativo, muito texto".
+ * Agora as sete perguntas da copy original (docs/03-copy/home.md, seção 3)
+ * ficam numa coluna enxuta e só uma resposta aparece por vez: no desktop, num
+ * cartão ao lado, que troca ao passar o mouse ou clicar; no celular, abrindo
+ * embaixo da pergunta tocada. A dobra inteira cabe numa tela.
  */
 import Selo from '../ui/Selo.astro';
 import IconeRenke from '../ui/IconeRenke.astro';
@@ -14,37 +14,34 @@ import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
 
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
-const entregas = [
-  ['Custo por agendamento', 'Faturamento por canal'],
-  ['CRM implementado', 'Follow-up automático'],
-  ['Jornadas e scripts', 'Time treinado'],
-  ['Origem de cada paciente', 'Verba por canal'],
-  ['Painel de indicadores', 'Reunião mensal'],
-  ['Plano do mês', 'Processo documentado'],
-  ['Estudo de concorrentes', 'Posicionamento'],
-];
 ---
-<section class="dorsol" aria-labelledby="dorsol-titulo">
+<section class="dorsol" aria-labelledby="dorsol-titulo" data-dorsol>
   <div class="container">
     <header class="dorsol__cabeca">
       <Selo>O que muda na sua clínica</Selo>
       <h2 class="dorsol__titulo" id="dorsol-titulo">Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></h2>
     </header>
 
-    <ol class="dorsol__grade">
+    <ol class="dorsol__lista">
       {perguntas.map((p, i) => (
-        <li class:list={['dorsol__cartao', i === 0 && 'dorsol__cartao--destaque']}>
-          <div class="dorsol__dor">
-            <span class="dorsol__pastilha" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
-            <p class="dorsol__pergunta">{p.pergunta}</p>
-          </div>
-          <div class="dorsol__solucao">
-            <span class="dorsol__rotulo"><i aria-hidden="true"></i>Com a Renke</span>
-            <h3 class="dorsol__nome">{p.titulo}</h3>
-            <p class="dorsol__texto">{p.texto}</p>
-            <ul class="dorsol__entregas">
-              {entregas[i].map((e) => <li>{e}</li>)}
-            </ul>
+        <li class:list={['dorsol__item', i === 0 && 'dorsol__item--ativo']} data-item>
+          <button class="dorsol__q" type="button" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`dorsol-r-${i}`} data-q>
+            <span class="dorsol__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="dorsol__pergunta">{p.pergunta}</span>
+            <svg class="dorsol__seta" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+          </button>
+          <div class="dorsol__r" id={`dorsol-r-${i}`}>
+            <div class="dorsol__r-dentro">
+              <div class="dorsol__r-topo">
+                <span class="dorsol__pastilha" aria-hidden="true"><IconeRenke nome={icones[i]} size={24} /></span>
+                <p class="dorsol__eco" aria-hidden="true">{p.pergunta}</p>
+              </div>
+              <div class="dorsol__r-texto">
+                <span class="dorsol__rotulo">Com a Renke</span>
+                <h3 class="dorsol__nome">{p.titulo}</h3>
+                <p class="dorsol__texto">{p.texto}</p>
+              </div>
+            </div>
           </div>
         </li>
       ))}
@@ -52,54 +49,85 @@ const entregas = [
   </div>
 </section>
 
+<script>
+  const raiz = document.querySelector<HTMLElement>('[data-dorsol]');
+  if (raiz) {
+    const itens = [...raiz.querySelectorAll<HTMLElement>('[data-item]')];
+    const largo = matchMedia('(min-width: 1000px)');
+    const abrir = (alvo: HTMLElement, alternar = false) => {
+      const fechar = alternar && alvo.classList.contains('dorsol__item--ativo');
+      itens.forEach((item) => {
+        const ativo = item === alvo && !fechar;
+        item.classList.toggle('dorsol__item--ativo', ativo);
+        item.querySelector('[data-q]')!.setAttribute('aria-expanded', String(ativo));
+      });
+    };
+    itens.forEach((item) => {
+      const q = item.querySelector<HTMLElement>('[data-q]')!;
+      // No celular, tocar de novo fecha; no desktop, sempre há uma resposta aberta.
+      q.addEventListener('click', () => abrir(item, !largo.matches));
+      q.addEventListener('pointerenter', (e) => { if (largo.matches && e.pointerType === 'mouse') abrir(item); });
+      q.addEventListener('focus', () => { if (largo.matches) abrir(item); });
+    });
+  }
+</script>
+
 <style>
-  .dorsol { position: relative; padding-block: clamp(88px, 9vw, 150px); background: #0c0c0c; color: #f2f2ee; }
-  .dorsol__cabeca { display: grid; justify-items: center; gap: 22px; margin-bottom: clamp(44px, 4.6vw, 76px); text-align: center; }
-  .dorsol__titulo { margin: 0; max-width: 30ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(30px, 3.1vw, 48px); line-height: 1.1; letter-spacing: -.03em; text-wrap: balance; }
+  .dorsol { position: relative; padding-block: clamp(80px, 8vw, 132px); background: #0c0c0c; color: #f2f2ee; }
+  .dorsol__cabeca { display: grid; justify-items: center; gap: 22px; margin-bottom: clamp(36px, 3.8vw, 60px); text-align: center; }
+  .dorsol__titulo { margin: 0; max-width: 30ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(28px, 2.9vw, 44px); line-height: 1.1; letter-spacing: -.03em; text-wrap: balance; }
   .dorsol__titulo strong { font-weight: 500; }
 
-  .dorsol__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 18px); margin: 0; padding: 0; list-style: none; }
-  /* Cartão: superfície escura com luz no topo e sombra longa e suave, sem borda marcada. */
-  .dorsol__cartao {
-    position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(16px, 1.6vw, 26px); align-items: stretch;
-    padding: clamp(18px, 1.6vw, 26px); border-radius: clamp(22px, 2vw, 30px);
-    background: linear-gradient(180deg, #1b1b1a, #141414);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / .06) inset, 0 1px 0 rgb(255 255 255 / .09) inset, 0 40px 60px -40px rgb(0 0 0 / .9);
+  .dorsol__lista { position: relative; display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+  .dorsol__q {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; width: 100%;
+    padding: 15px 18px; border: 0; border-radius: 16px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+    transition: background-color .5s cubic-bezier(.22, 1, .36, 1), box-shadow .5s cubic-bezier(.22, 1, .36, 1);
   }
-  .dorsol__dor { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 6px 0 6px 6px; min-height: clamp(190px, 15vw, 230px); }
-  /* Ícone em pastilha, como nas referências: quadrado arredondado, brilho em cima, sombra embaixo. */
-  .dorsol__pastilha { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; color: #f2f2ee; background: linear-gradient(180deg, #303030, #1e1e1d); box-shadow: 0 1px 0 rgb(255 255 255 / .16) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 14px 22px -10px rgb(0 0 0 / .85); }
-  .dorsol__pergunta { margin: 0; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(19px, 1.5vw, 23px); line-height: 1.25; letter-spacing: -.025em; text-wrap: pretty; }
-  /* A solução flutua dentro do cartão: um tom acima, com sombra própria. */
-  .dorsol__solucao {
-    display: flex; flex-direction: column; gap: 10px; padding: clamp(18px, 1.5vw, 24px); border-radius: clamp(16px, 1.4vw, 20px);
-    background: linear-gradient(180deg, #2a2a29, #222221);
-    box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 26px 40px -24px rgb(0 0 0 / .9);
-    transition: transform .8s cubic-bezier(.22, 1, .36, 1), box-shadow .8s cubic-bezier(.22, 1, .36, 1);
-  }
-  .dorsol__rotulo { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: -.01em; color: rgb(242 242 238 / .62); }
-  .dorsol__rotulo i { width: 7px; height: 7px; background: var(--amarelo-marca, #FFD103); transform: rotate(45deg); border-radius: 1px; }
-  .dorsol__nome { margin: 2px 0 0; font-family: var(--font-titulo); font-weight: 500; font-size: clamp(19px, 1.45vw, 22px); line-height: 1.2; letter-spacing: -.025em; }
-  .dorsol__texto { margin: 0; font-size: clamp(14px, 1.02vw, 15.5px); line-height: 1.5; color: rgb(242 242 238 / .72); text-wrap: pretty; }
-  .dorsol__entregas { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 0; padding: 10px 0 0; list-style: none; }
-  .dorsol__entregas li { display: flex; align-items: center; height: 30px; padding-inline: 12px; border-radius: 15px; background: rgb(255 255 255 / .06); box-shadow: 0 0 0 1px rgb(255 255 255 / .07) inset; font-size: 12.5px; white-space: nowrap; }
+  .dorsol__q:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  .dorsol__num { font-size: 12.5px; font-variant-numeric: tabular-nums; letter-spacing: .02em; opacity: .45; }
+  .dorsol__pergunta { font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.3; letter-spacing: -.02em; opacity: .62; text-wrap: pretty; transition: opacity .5s cubic-bezier(.22, 1, .36, 1); }
+  .dorsol__seta { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform: translateX(-6px); transition: opacity .5s cubic-bezier(.22, 1, .36, 1), transform .5s cubic-bezier(.22, 1, .36, 1); }
+  /* A pergunta ativa sobe um tom, com luz no topo e sombra suave, na linha do ClickUp. */
+  .dorsol__item--ativo .dorsol__q { background: linear-gradient(180deg, #232322, #1b1b1a); box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 22px 34px -24px rgb(0 0 0 / .9); }
+  .dorsol__item--ativo .dorsol__pergunta { opacity: 1; }
+  .dorsol__item--ativo .dorsol__seta { opacity: .9; transform: none; }
 
-  /* O primeiro abre a dobra na largura toda: a pergunta que mais dói, em corpo maior. */
-  .dorsol__cartao--destaque { grid-column: 1 / -1; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); background: radial-gradient(120% 140% at 0% 0%, #262625 0%, #161616 55%); }
-  .dorsol__cartao--destaque .dorsol__pergunta { max-width: 22ch; font-size: clamp(26px, 2.5vw, 38px); line-height: 1.12; }
-  .dorsol__cartao--destaque .dorsol__nome { font-size: clamp(22px, 1.8vw, 27px); }
-  .dorsol__cartao--destaque .dorsol__texto { max-width: 36ch; font-size: clamp(16px, 1.2vw, 18px); }
-  .dorsol__cartao--destaque .dorsol__solucao { gap: 12px; }
+  .dorsol__pastilha { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; color: #f2f2ee; background: linear-gradient(180deg, #3a3a38, #262625); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 0 0 1px rgb(255 255 255 / .05) inset, 0 16px 24px -10px rgb(0 0 0 / .85); }
+  .dorsol__rotulo { display: block; font-size: 13px; letter-spacing: -.01em; color: rgb(242 242 238 / .6); }
+  .dorsol__nome { margin: 0; font-family: var(--font-titulo); font-weight: 400; letter-spacing: -.03em; line-height: 1.1; }
+  .dorsol__texto { margin: 0; line-height: 1.5; color: rgb(242 242 238 / .74); text-wrap: pretty; }
 
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .dorsol__cartao:hover .dorsol__solucao { transform: translateY(-4px); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 34px 46px -24px rgb(0 0 0 / .95); }
+  /* Desktop: perguntas à esquerda; à direita, um cartão só, que troca de resposta. */
+  @media (min-width: 1000px) {
+    .dorsol__lista { padding-right: 50%; }
+    .dorsol__r { position: absolute; right: 0; top: 0; bottom: 0; width: calc(50% - clamp(20px, 2.4vw, 40px)); opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .6s cubic-bezier(.22, 1, .36, 1), transform .8s cubic-bezier(.22, 1, .36, 1), visibility 0s .6s; }
+    .dorsol__item--ativo .dorsol__r { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+    .dorsol__r-dentro {
+      height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: clamp(24px, 2.2vw, 36px); border-radius: clamp(22px, 2vw, 30px);
+      background: radial-gradient(120% 120% at 0% 0%, #2a2a29 0%, #1a1a19 60%);
+      box-shadow: 0 1px 0 rgb(255 255 255 / .12) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 50px 70px -40px rgb(0 0 0 / .95);
+    }
+    .dorsol__r-topo { display: flex; align-items: center; gap: 16px; }
+    .dorsol__eco { margin: 0; max-width: 34ch; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.4; color: rgb(242 242 238 / .56); text-wrap: pretty; }
+    .dorsol__r-texto { display: grid; gap: 14px; }
+    .dorsol__nome { font-size: clamp(30px, 3vw, 46px); }
+    .dorsol__texto { max-width: 34ch; font-size: clamp(16px, 1.25vw, 19px); }
   }
-  @media (max-width: 1099.98px) {
-    .dorsol__grade { grid-template-columns: minmax(0, 1fr); }
+  /* Celular e tablet: a resposta abre embaixo da pergunta tocada. */
+  @media (max-width: 999.98px) {
+    .dorsol__q { padding: 14px; gap: 12px; }
+    .dorsol__seta { opacity: .5; transform: rotate(90deg); }
+    .dorsol__item--ativo .dorsol__seta { transform: rotate(-90deg); }
+    .dorsol__r { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s cubic-bezier(.22, 1, .36, 1); }
+    .dorsol__item--ativo .dorsol__r { grid-template-rows: 1fr; }
+    .dorsol__r-dentro { min-height: 0; overflow: hidden; display: flex; align-items: flex-start; gap: 14px; padding-inline: 14px; }
+    .dorsol__item--ativo .dorsol__r-dentro { padding-block: 14px 18px; }
+    .dorsol__eco { display: none; }
+    .dorsol__pastilha { width: 42px; height: 42px; border-radius: 13px; }
+    .dorsol__r-texto { display: grid; gap: 6px; }
+    .dorsol__nome { font-size: 21px; font-weight: 500; }
+    .dorsol__texto { font-size: 15px; }
   }
-  @media (max-width: 699.98px) {
-    .dorsol__cartao, .dorsol__cartao--destaque { grid-template-columns: minmax(0, 1fr); padding: 16px; }
-    .dorsol__dor { min-height: 0; gap: 22px; padding: 4px 2px 0; }
-    .dorsol__cartao--destaque .dorsol__pergunta { font-size: 24px; }
-  }
+  @media (prefers-reduced-motion: reduce) { .dorsol * { transition: none !important; } }
 </style>
