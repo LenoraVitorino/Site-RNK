@@ -121,9 +121,12 @@ import Selo from '../ui/Selo.astro';
             <div class="plano-palco__texto">
               <p class="plano-palco__momento-rotulo">Momento da clínica</p>
               <p class="plano-palco__fala">“{p.fala}”</p>
-              <p class="plano-palco__frase">{p.texto}</p>
-              {/* O convite vem logo depois do texto, na ordem da leitura, e diz para onde leva: a página do plano. */}
-              <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="md">Conhecer o Revena {p.nome}</Botao>
+              {/* O que o plano é e o convite andam juntos (display: contents: não muda o bloco; serve às variações de teste). */}
+              <div class="plano-palco__acao">
+                <p class="plano-palco__frase">{p.texto}</p>
+                {/* O convite vem logo depois do texto, na ordem da leitura, e diz para onde leva: a página do plano. */}
+                <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="md">Conhecer o Revena {p.nome}</Botao>
+              </div>
             </div>
             {/* O centro do palco também é clicável: ao passar o mouse, o cursor ganha a etiqueta "Ver o plano". */}
             <a class="plano-palco__link" href={existe(p.rota) ? p.rota : '#'} tabindex="-1" aria-hidden="true"></a>

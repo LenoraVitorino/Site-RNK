@@ -88,3 +88,43 @@
 }
 @keyframes palco-teste-dor { from { opacity: 0; transform: translateY(14px); } }
 @keyframes palco-teste-plano { from { opacity: 0; transform: translateY(18px); } }
+
+/* I. A dor em cena, o plano como resposta (10/10: "pensa numa solução", "tem que
+   impactar e passar o entendimento"). O problema das outras era de espaço: três
+   textos pequenos em volta de um nome gigante. Aqui a ordem é no tempo:
+   1) a fala do dono de clínica entra sozinha, grande, no centro, com a foto e o
+      símbolo apagados atrás; 2) ela sobe e vira legenda; o símbolo acende e o
+      nome do plano aparece como resposta; 3) entra uma barra só, com o que o
+      plano é e o botão. Em cada instante há um texto principal na tela. */
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__texto { display: contents; }
+.palcoplanos[data-animado][data-lay="i"] :is(.plano-palco__momento-rotulo, .plano-palco__fala) { position: absolute; z-index: 12; left: 50%; translate: -50% 0; text-align: center; }
+/* Sem movimento (ou depois da abertura): a fala é uma legenda pequena no alto. */
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__momento-rotulo { display: none; }
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__fala { top: 3vw; width: min(70vw, 980px); font-size: clamp(15px, 1.15vw, 18px); line-height: 1.35; opacity: .78; }
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__acao {
+  position: absolute; z-index: 12; left: 50%; bottom: 4.2vw; translate: -50% 0; width: max-content; max-width: min(940px, 78vw);
+  display: flex; align-items: center; gap: clamp(20px, 2.4vw, 40px); padding: 12px 12px 12px 30px; border-radius: 999px; pointer-events: auto;
+  background: linear-gradient(180deg, rgb(48 48 46 / .78), rgb(30 30 29 / .78)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 0 rgb(255 255 255 / .14) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 40px 60px -30px rgb(0 0 0 / .9);
+}
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__frase { margin: 0; max-width: 48ch; opacity: 1; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; text-wrap: balance; }
+.palcoplanos[data-animado][data-lay="i"] .plano-palco__acao .botao { flex: none; margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco__momento-rotulo { display: block; top: calc(50% - clamp(92px, 9vw, 150px)); opacity: 0; }
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco--ativo .plano-palco__momento-rotulo { animation: palco-i-rotulo 2.3s cubic-bezier(.22, 1, .36, 1) .15s both; }
+  /* A fala nasce grande no centro e termina como a legenda do alto (mesma caixa, só transform). */
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco__fala { top: 50%; width: min(64vw, 1000px); font-size: clamp(28px, 3.5vw, 58px); line-height: 1.1; opacity: 0; transform-origin: 50% 0; }
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco--ativo .plano-palco__fala { animation: palco-i-fala 3.2s cubic-bezier(.62, 0, .2, 1) .2s both; }
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco--ativo .plano-palco__acao { animation: palco-i-sobe 1s cubic-bezier(.22, 1, .36, 1) 3s both; }
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco--ativo :is(.plano-palco__imagem .plano-editorial, .palcoplanos__icones) { animation: palco-i-acende 1.2s cubic-bezier(.22, 1, .36, 1) 2.1s both; }
+  .palcoplanos[data-animado][data-lay="i"] .plano-palco--ativo .palcoplanos__nomes { animation: palco-i-nome 1.1s cubic-bezier(.22, 1, .36, 1) 2.5s both; }
+}
+@keyframes palco-i-rotulo { 0% { opacity: 0; } 14%, 76% { opacity: .6; } 100% { opacity: 0; } }
+@keyframes palco-i-fala {
+  0% { opacity: 0; transform: translateY(calc(-50% + 18px)); }
+  16%, 62% { opacity: 1; transform: translateY(-50%); }
+  100% { opacity: .78; transform: translateY(calc(-50svh + 3vw)) scale(.31); }
+}
+@keyframes palco-i-sobe { from { opacity: 0; transform: translateY(18px); } }
+@keyframes palco-i-acende { from { opacity: .16; } }
+@keyframes palco-i-nome { from { opacity: 0; transform: translateY(16px); } }

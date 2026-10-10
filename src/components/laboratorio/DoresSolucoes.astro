@@ -21,29 +21,43 @@ import julio from '../../assets/equipe/julio-caldeira.jpg';
 import isa from '../../assets/equipe/isa.jpg';
 
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
-const atalhos = ['Custo por paciente', 'Leads que viram consulta', 'Processo sem depender de uma pessoa', 'Melhor canal', 'Mês ruim', 'Mês bom', 'Concorrentes'];
+const atalhos = ['Custo por paciente', 'Conversão de leads', 'Processo', 'Melhor canal', 'Mês ruim', 'Mês bom', 'Concorrentes'];
+/* Textos encurtados só para este teste (10/10: "crie um bom senso de caracteres
+   para manter um padrão de espaçamento"): perguntas com até ~70 caracteres e
+   respostas com até ~90, para todo par ocupar a mesma altura e não sobrar vão.
+   São rascunho a partir da copy original e dos ganhos; precisam de validação. */
+const conversa = [
+  { q: 'Quanto custa, de verdade, um paciente novo pra sua clínica?', t: 'Aquisição sob controle.', r: 'Custo por paciente e retorno de cada canal, à vista.' },
+  { q: 'Dos leads que chegam, quantos sentam na cadeira do consultório?', t: 'Mais conversão.', r: 'Cada oportunidade acompanhada até o agendamento.' },
+  { q: 'Se sua secretária sai amanhã, o processo continua?', t: 'Processos que funcionam.', r: 'Uma operação comercial que não depende de uma só pessoa.' },
+  { q: 'Você sabe qual canal trouxe seus melhores pacientes este mês?', t: 'Investimento mais inteligente.', r: 'Verba nos canais que dão mais retorno.' },
+  { q: 'No mês ruim, você encontra o motivo nos dados, com facilidade?', t: 'Decisões baseadas em dados.', r: 'Indicadores que mostram onde a clínica perde.' },
+  { q: 'E no mês bom, você sabe o porquê para repetir o resultado?', t: 'Crescimento replicável.', r: 'O que funciona vira processo e se repete.' },
+  { q: 'Você sabe o que seus concorrentes comunicam e que espaço deixam aberto?', t: 'Oportunidades de mercado.', r: 'Inteligência sobre a concorrência e os espaços livres.' },
+];
 const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const };
 ---
 <section class="dc" aria-labelledby="dc-titulo" data-dc>
   <div class="container dc__grade">
     <header class="dc__cabeca">
       <Selo>O que muda na sua clínica</Selo>
-      <h2 class="dc__titulo" id="dc-titulo">Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></h2>
+      <h2 class="dc__titulo" id="dc-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
+      <p class="dc__apoio">Sete perguntas que todo dono de clínica já se fez. Escolha uma e veja o que muda com a Renke.</p>
     </header>
 
     <div class="dc__cartao">
       <div class="dc__topo">
         <span class="dc__rostos"><Image src={lari} {...rosto} /><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span>
-        <span class="dc__quem"><strong>Renke</strong><span>Responde o que a sua clínica precisa saber</span></span>
+        <span class="dc__quem"><strong>Renke<i aria-hidden="true"></i></strong><span>Responde o que a sua clínica precisa saber</span></span>
       </div>
 
       <div class="dc__conversa" aria-live="polite">
-        {perguntas.map((p, i) => (
+        {conversa.map((p, i) => (
           <div class:list={['dc__par', i === 0 && 'dc__par--ativo']} data-par={i}>
-            <p class="dc__balao dc__balao--dono">{p.pergunta}</p>
+            <p class="dc__balao dc__balao--dono">{p.q}</p>
             <div class="dc__vez">
               <span class="dc__digitando" aria-hidden="true"><i></i><i></i><i></i></span>
-              <p class="dc__balao dc__balao--renke"><strong>{p.titulo}.</strong> {p.texto}</p>
+              <p class="dc__balao dc__balao--renke"><strong><i aria-hidden="true"></i>{p.t}</strong> {p.r}</p>
             </div>
           </div>
         ))}
@@ -91,8 +105,9 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
 <style>
   .dc { --s: cubic-bezier(.22, 1, .36, 1); position: relative; padding-block: clamp(80px, 8vw, 132px); background: #0c0c0c; color: #f2f2ee; }
   .dc__grade { display: grid; gap: clamp(32px, 4vw, 72px); align-items: center; }
-  .dc__cabeca { display: grid; justify-items: start; gap: 24px; }
-  .dc__titulo { margin: 0; max-width: 17ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(30px, 3.2vw, 50px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
+  .dc__cabeca { display: grid; justify-items: start; gap: 20px; }
+  .dc__apoio { margin: 0; max-width: 38ch; font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .7); text-wrap: pretty; }
+  .dc__titulo { margin: 0; max-width: 16ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(28px, 2.7vw, 42px); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
   .dc__titulo strong { font-weight: 500; }
 
   /* A conversa mora num cartão só: superfície escura com luz no canto e sombra longa. */
@@ -106,12 +121,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__rostos :global(img) { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #1f1f1e; }
   .dc__rostos :global(img + img) { margin-left: -10px; }
   .dc__quem { display: grid; min-width: 0; line-height: 1.25; }
-  .dc__quem strong { font-size: 15px; font-weight: 500; }
+  .dc__quem strong { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+  /* Amarelo só no detalhe: o ponto de "no ar" e o losango que abre cada resposta. */
+  .dc__quem strong i { width: 7px; height: 7px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
   .dc__quem span { font-size: 13px; color: rgb(242 242 238 / .6); }
 
   /* Todos os pares ocupam a mesma célula: a altura é a do maior e nada pula na troca. */
   .dc__conversa { display: grid; }
-  .dc__par { grid-area: 1 / 1; display: grid; align-content: start; gap: 12px; visibility: hidden; }
+  .dc__par { grid-area: 1 / 1; display: grid; align-content: start; gap: clamp(18px, 1.8vw, 26px); padding-block: clamp(4px, .6vw, 10px); visibility: hidden; }
   .dc__par--ativo { visibility: visible; }
   .dc__balao { margin: 0; max-width: min(86%, 520px); }
   .dc__balao--dono { justify-self: start; padding: 15px 20px 17px; border-radius: 22px 22px 22px 6px; background: #2c2c2b; box-shadow: 0 1px 0 rgb(255 255 255 / .08) inset; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(18px, 1.55vw, 23px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; transform-origin: 0 100%; }
@@ -119,6 +136,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__vez > * { grid-area: 1 / 1; }
   .dc__balao--renke { padding: 15px 20px 17px; border-radius: 22px 22px 6px 22px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; box-shadow: 0 24px 34px -22px rgb(0 0 0 / .8); font-size: clamp(15px, 1.15vw, 17px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; transform-origin: 100% 100%; }
   .dc__balao--renke strong { font-weight: 600; }
+  .dc__balao--renke strong i { display: inline-block; width: 8px; height: 8px; margin-right: 9px; border-radius: 1px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .28); transform: rotate(45deg) translateY(-1px); }
   .dc__digitando { align-self: start; display: flex; gap: 5px; padding: 15px 16px; border-radius: 18px 18px 6px 18px; background: #2c2c2b; opacity: 0; }
   .dc__digitando i { width: 6px; height: 6px; border-radius: 50%; background: rgb(242 242 238 / .7); }
 
@@ -148,7 +166,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
     .dc__grade { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   }
   @media (max-width: 699.98px) {
-    .dc__titulo { max-width: none; font-size: 30px; }
+    .dc__titulo { max-width: none; font-size: 28px; }
     .dc__balao { max-width: 94%; }
     .dc__quem span { display: none; }
     /* No celular as sugestões rolam de lado, numa linha só. */

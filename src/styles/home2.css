@@ -654,6 +654,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__fala { margin: 0; font-size: clamp(20px, 1.55vw, 28px); line-height: 1.28; font-weight: var(--peso-corpo); letter-spacing: -.03em; text-wrap: balance; }
 .plano-palco__frase { margin: 2px 0 0; max-width: 38ch; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.5; font-weight: var(--peso-corpo); letter-spacing: -.015em; opacity: .8; text-wrap: pretty; }
 .plano-palco__texto .botao { pointer-events: auto; margin-top: 10px; font-weight: var(--peso-enfase); }
+.plano-palco__acao { display: contents; }
 .plano-palco__link { position: absolute; z-index: 1; inset: 30% 16% 4% 22%; pointer-events: auto; cursor: pointer; }
 /* Etiqueta que acompanha o cursor sobre o centro do palco. */
 .palcoplanos__ver { position: absolute; z-index: 30; left: 0; top: 0; display: none; align-items: center; gap: 8px; height: 36px; padding: 0 12px 0 15px; border-radius: 18px; background: #F2F2EE; color: #161616; font-size: 13px; font-weight: var(--peso-enfase); letter-spacing: -.01em; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .3s var(--easing-suave); will-change: transform; box-shadow: 0 14px 30px -14px rgb(0 0 0 / .6); }
