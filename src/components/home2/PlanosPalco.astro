@@ -63,9 +63,12 @@ const planos = ordem.map((label) => {
   };
 });
 import Selo from '../ui/Selo.astro';
+
+// Diagramação em teste (só nas páginas de laboratório); a home não passa nada.
+const { lay } = Astro.props as { lay?: string };
 ---
 <PlanosDirecao />
-<section class="palcoplanos" id="protocolo-revena" aria-labelledby="protocolo-revena-titulo" data-palcoplanos style={`--n:${planos.length}`}>
+<section class="palcoplanos" id="protocolo-revena" aria-labelledby="protocolo-revena-titulo" data-palcoplanos data-lay={lay} style={`--n:${planos.length}`}>
   <!-- Introdução da dobra, antes do palco, como o bloco de texto que antecede
        a "Financial solutions" da referência. -->
   <div class="palcoplanos__intro">

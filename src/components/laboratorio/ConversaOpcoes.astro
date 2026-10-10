@@ -1,0 +1,327 @@
+---
+/**
+ * TESTE (10/10/2026), fora da home: três saídas para a dobra da conversa, que
+ * na home ficou vazia ("não chama atenção"). Uma dobra por opção, na ordem:
+ * 1. a conversa que acumula; 2. as sete perguntas como coluna da esquerda;
+ * 3. cada resposta com um recorte. Os textos são os mesmos da home
+ * (PerguntasConversa.astro). Os números dos recortes são fictícios.
+ */
+import { Image } from 'astro:assets';
+import Selo from '../ui/Selo.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
+import lari from '../../assets/equipe/lari.jpg';
+import julio from '../../assets/equipe/julio-caldeira.jpg';
+import isa from '../../assets/equipe/isa.jpg';
+
+const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
+const atalhos = ['Custo por paciente', 'Conversão de leads', 'Processo', 'Melhor canal', 'Mês ruim', 'Mês bom', 'Concorrentes'];
+type Linha = { r: string; v: string; p?: number; d?: boolean };
+const conversa: { q: string; t: string; r: string; rec: { titulo: string; linhas: Linha[] } }[] = [
+  { q: 'Quanto custa, de verdade, um paciente novo pra sua clínica?', t: 'Você passa a saber.', r: 'A gente mostra o custo por paciente e o retorno de cada canal.',
+    rec: { titulo: 'Custo por paciente', linhas: [{ r: 'Instagram', v: 'R$ 184', p: 62, d: true }, { r: 'Google', v: 'R$ 236', p: 80 }, { r: 'Indicação', v: 'R$ 41', p: 14 }] } },
+  { q: 'Dos leads que chegam, quantos sentam na cadeira do consultório?', t: 'Dá pra saber um por um.', r: 'A gente acompanha cada lead até o agendamento.',
+    rec: { titulo: 'Do lead à consulta', linhas: [{ r: 'Leads', v: '120', p: 100 }, { r: 'Agendados', v: '46', p: 38 }, { r: 'Compareceram', v: '31', p: 26, d: true }] } },
+  { q: 'Se sua secretária sai amanhã, o processo continua?', t: 'Continua.', r: 'A gente estrutura o comercial para a clínica não depender de uma só pessoa.',
+    rec: { titulo: 'Rotina do comercial', linhas: [{ r: 'Primeiro contato', v: 'em 5 min', d: true }, { r: 'Retorno ao lead', v: 'automático' }, { r: 'Confirmação da consulta', v: 'automática' }] } },
+  { q: 'Você sabe qual canal trouxe seus melhores pacientes este mês?', t: 'Com a gente, sabe.', r: 'Você vê de onde veio cada paciente e põe a verba no canal certo.',
+    rec: { titulo: 'Receita por canal', linhas: [{ r: 'Indicação', v: '41%', p: 82, d: true }, { r: 'Instagram', v: '33%', p: 66 }, { r: 'Google', v: '26%', p: 52 }] } },
+  { q: 'No mês ruim, você encontra o motivo nos dados, com facilidade?', t: 'Encontra.', r: 'Os indicadores mostram em que ponto a clínica perdeu e onde agir.',
+    rec: { titulo: 'Onde o mês perdeu', linhas: [{ r: 'Leads', v: '+4%', p: 70 }, { r: 'Agendamentos', v: '−18%', p: 34, d: true }, { r: 'Comparecimento', v: '−2%', p: 62 }] } },
+  { q: 'E no mês bom, você sabe o porquê para repetir o resultado?', t: 'Sabe, e repete.', r: 'O que deu certo vira processo e o resultado deixa de ser sorte.',
+    rec: { titulo: 'O que deu certo', linhas: [{ r: 'Retorno no mesmo dia', v: 'virou regra', d: true }, { r: 'Lembrete na véspera', v: 'virou regra' }, { r: 'Reativação da base', v: 'em teste' }] } },
+  { q: 'Você sabe o que seus concorrentes comunicam e que espaço deixam aberto?', t: 'A gente mapeia pra você.', r: 'O que a concorrência comunica e os espaços que ela deixa livres.',
+    rec: { titulo: 'O que o mercado comunica', linhas: [{ r: 'Preço e promoção', v: '6 clínicas', p: 86 }, { r: 'Antes e depois', v: '4 clínicas', p: 58 }, { r: 'Acompanhamento', v: 'espaço livre', p: 8, d: true }] } },
+];
+const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const };
+const dados = JSON.stringify(conversa.map(({ q, t, r }) => ({ q, t, r })));
+---
+<!-- 1. A conversa que acumula -->
+<section class="co co--1" aria-labelledby="co1-titulo" data-co1>
+  <span class="co__opcao">Opção 1 · A conversa acumula</span>
+  <div class="container co__grade">
+    <header class="co__cabeca">
+      <Selo>O que muda na sua clínica</Selo>
+      <h2 class="co__titulo" id="co1-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
+      <p class="co__apoio">Sete perguntas que todo dono de clínica já se fez. Escolha uma e veja o que muda com a Renke.</p>
+    </header>
+    <div class="co__cartao co__cartao--alto">
+      <div class="co__topo">
+        <span class="co__rostos"><Image src={lari} {...rosto} /><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span>
+        <span class="co__quem"><strong>Renke<i aria-hidden="true"></i></strong><span>Responde o que a sua clínica precisa saber</span></span>
+      </div>
+      <div class="co__fio" aria-live="polite"><div class="co__fio-dentro" data-dentro></div></div>
+      <div class="co__pe">
+        <span class="co__pe-rotulo">Pergunte também</span>
+        <div class="co__atalhos">
+          {atalhos.map((a, i) => (
+            <button class="co__atalho" type="button" title={conversa[i].q} data-enviar={i}><IconeRenke nome={icones[i]} size={16} />{a}</button>
+          ))}
+        </div>
+      </div>
+      <script type="application/json" data-dados set:html={dados} />
+    </div>
+  </div>
+</section>
+
+<!-- 2. As sete perguntas como coluna da esquerda -->
+<section class="co co--2" aria-labelledby="co2-titulo" data-troca data-tempo="6500">
+  <span class="co__opcao">Opção 2 · As perguntas à esquerda</span>
+  <div class="container co__grade">
+    <div class="co__cabeca">
+      <Selo>O que muda na sua clínica</Selo>
+      <h2 class="co__titulo" id="co2-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
+      <ol class="co__lista" role="tablist" aria-label="Perguntas">
+        {conversa.map((p, i) => (
+          <li><button class:list={['co__pergunta', i === 0 && 'is-ativo']} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-aba={i}><i aria-hidden="true"></i><span>{p.q}</span></button></li>
+        ))}
+      </ol>
+    </div>
+    <div class="co__cartao co__cartao--resposta">
+      <div class="co__topo">
+        <span class="co__rostos"><Image src={lari} {...rosto} /><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span>
+        <span class="co__quem"><strong>Renke<i aria-hidden="true"></i></strong><span>Responde o que a sua clínica precisa saber</span></span>
+      </div>
+      <div class="co__pilha" aria-live="polite">
+        {conversa.map((p, i) => (
+          <div class:list={['co__resposta', i === 0 && 'is-ativo']} data-painel={i}>
+            <span class="co__resposta-icone" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} /></span>
+            <p class="co__resposta-t">{p.t}</p>
+            <p class="co__resposta-r">{p.r}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Cada resposta com um recorte -->
+<section class="co co--3" aria-labelledby="co3-titulo" data-troca data-tempo="8000">
+  <span class="co__opcao">Opção 3 · A resposta com um recorte</span>
+  <div class="container co__grade">
+    <header class="co__cabeca">
+      <Selo>O que muda na sua clínica</Selo>
+      <h2 class="co__titulo" id="co3-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
+      <p class="co__apoio">Sete perguntas que todo dono de clínica já se fez. Escolha uma e veja o que muda com a Renke.</p>
+    </header>
+    <div class="co__cartao co__cartao--largo">
+      <div class="co__topo">
+        <span class="co__rostos"><Image src={lari} {...rosto} /><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span>
+        <span class="co__quem"><strong>Renke<i aria-hidden="true"></i></strong><span>Responde o que a sua clínica precisa saber</span></span>
+      </div>
+      <div class="co__pilha" aria-live="polite">
+        {conversa.map((p, i) => (
+          <div class:list={['co__par', i === 0 && 'is-ativo']} data-painel={i}>
+            <p class="co__balao co__balao--dono">{p.q}</p>
+            <p class="co__balao co__balao--renke"><strong><i aria-hidden="true"></i>{p.t}</strong> {p.r}</p>
+            <div class="co__recorte" aria-hidden="true">
+              <span class="co__recorte-titulo">{p.rec.titulo}</span>
+              {p.rec.linhas.map((l) => (
+                <span class:list={['co__linha', l.d && 'co__linha--d']}>
+                  <span class="co__linha-r">{l.r}</span>
+                  {l.p !== undefined && <span class="co__barra"><i style={`--p:${l.p}%`}></i></span>}
+                  <span class="co__linha-v">{l.v}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="co__pe">
+        <span class="co__pe-rotulo">Outras perguntas</span>
+        <div class="co__atalhos" role="tablist" aria-label="Perguntas">
+          {atalhos.map((a, i) => (
+            <button class:list={['co__atalho', i === 0 && 'is-ativo']} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} title={conversa[i].q} data-aba={i}><IconeRenke nome={icones[i]} size={16} />{a}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Opções 2 e 3: uma pergunta por vez; anda sozinha até alguém escolher.
+  document.querySelectorAll<HTMLElement>('[data-troca]').forEach((raiz) => {
+    const abas = [...raiz.querySelectorAll<HTMLButtonElement>('[data-aba]')];
+    const paineis = [...raiz.querySelectorAll<HTMLElement>('[data-painel]')];
+    let atual = 0, manual = false, relogio = 0;
+    const ir = (n: number) => {
+      atual = (n + paineis.length) % paineis.length;
+      paineis.forEach((p, i) => p.classList.toggle('is-ativo', i === atual));
+      abas.forEach((a, i) => { a.classList.toggle('is-ativo', i === atual); a.setAttribute('aria-selected', String(i === atual)); });
+    };
+    abas.forEach((a, i) => a.addEventListener('click', () => { manual = true; clearInterval(relogio); ir(i); }));
+    if (!semMovimento) new IntersectionObserver(([e]) => {
+      clearInterval(relogio);
+      if (e.isIntersecting && !manual) relogio = window.setInterval(() => ir(atual + 1), Number(raiz.dataset.tempo) || 7000);
+    }, { threshold: .45 }).observe(raiz);
+  });
+
+  // Opção 1: a conversa cresce de baixo para cima, como num aplicativo de mensagens.
+  const raiz = document.querySelector<HTMLElement>('[data-co1]');
+  if (raiz) {
+    const dentro = raiz.querySelector<HTMLElement>('[data-dentro]')!;
+    const dados: { q: string; t: string; r: string }[] = JSON.parse(raiz.querySelector('[data-dados]')!.textContent!);
+    const botoes = [...raiz.querySelectorAll<HTMLButtonElement>('[data-enviar]')];
+    let proximo = 0, naTela = false, pular: (() => void) | null = null, acordar: (() => void) | null = null;
+    const espera = (ms: number, cortavel = false) => new Promise<void>((ok) => {
+      const t = window.setTimeout(() => { pular = null; ok(); }, semMovimento ? 0 : ms);
+      if (cortavel) pular = () => { clearTimeout(t); pular = null; ok(); };
+    });
+    // Sobe o fio pela altura do que entrou, sem pulo (o fio é preso pela base).
+    const subir = (antes: number) => {
+      const d = dentro.offsetHeight - antes;
+      if (semMovimento || !d) return;
+      dentro.style.transition = 'none'; dentro.style.transform = `translateY(${d}px)`;
+      void dentro.offsetHeight;
+      dentro.style.transition = ''; dentro.style.transform = '';
+    };
+    const por = (classe: string, html: string) => {
+      const antes = dentro.offsetHeight;
+      const el = document.createElement('div');
+      el.className = classe; el.innerHTML = html;
+      dentro.append(el);
+      while (dentro.children.length > 9) dentro.firstElementChild!.remove();
+      subir(Math.min(antes, dentro.offsetHeight));
+      return el;
+    };
+    const marcar = (i: number) => botoes.forEach((b, k) => b.classList.toggle('is-ativo', k === i));
+    const troca = async (i: number) => {
+      marcar(i);
+      por('co__balao co__balao--dono co__entra', dados[i].q);
+      await espera(900);
+      const digitando = por('co__digitando co__entra', '<i></i><i></i><i></i>');
+      await espera(1300);
+      const antes = dentro.offsetHeight;
+      digitando.className = 'co__balao co__balao--renke co__entra';
+      digitando.innerHTML = `<strong><i aria-hidden="true"></i>${dados[i].t}</strong> ${dados[i].r}`;
+      subir(antes);
+    };
+    const andar = async () => {
+      for (;;) {
+        if (!naTela) await new Promise<void>((ok) => { acordar = ok; });
+        const i = proximo; proximo = (i + 1) % dados.length;
+        await troca(i);
+        await espera(3600, true);
+      }
+    };
+    botoes.forEach((b, i) => b.addEventListener('click', () => { proximo = i; if (semMovimento) troca(i); else pular?.(); }));
+    if (semMovimento) { troca(0).then(() => troca(1)); proximo = 2; }
+    else {
+      new IntersectionObserver(([e]) => { naTela = e.isIntersecting; if (naTela) { acordar?.(); acordar = null; } }, { threshold: .35 }).observe(raiz);
+      andar();
+    }
+  }
+</script>
+
+<style is:global>
+  .co { --s: cubic-bezier(.22, 1, .36, 1); --am: var(--amarelo-marca, #FFD103); position: relative; min-height: 100svh; display: grid; align-items: center; padding-block: clamp(96px, 9vw, 140px); color: #f2f2ee; border-top: 1px solid rgb(242 242 238 / .08); }
+  .co__opcao { position: absolute; left: var(--grid-inset, 24px); top: 92px; font-size: 13px; letter-spacing: -.01em; color: rgb(242 242 238 / .5); }
+  .co__grade { display: grid; gap: clamp(32px, 4vw, 72px); align-items: center; }
+  .co__cabeca { display: grid; justify-items: start; gap: 20px; min-width: 0; }
+  .co__titulo { margin: 0; max-width: 20ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
+  .co__titulo strong { display: block; font-weight: 500; }
+  .co__apoio { margin: 0; max-width: 40ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; color: #aaa; text-wrap: pretty; }
+
+  .co__cartao {
+    display: grid; gap: clamp(14px, 1.3vw, 18px); min-width: 0; width: 100%; max-width: 560px; justify-self: end; padding: clamp(16px, 1.5vw, 22px); border-radius: clamp(22px, 1.9vw, 28px);
+    background: radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
+    box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 60px 80px -50px rgb(0 0 0 / .95);
+  }
+  .co__topo { display: flex; align-items: center; gap: 14px; padding-bottom: clamp(12px, 1.1vw, 16px); border-bottom: 1px solid rgb(242 242 238 / .08); }
+  .co__rostos { display: flex; flex: none; }
+  .co__rostos img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #1f1f1e; }
+  .co__rostos img + img { margin-left: -10px; }
+  .co__quem { display: grid; min-width: 0; line-height: 1.25; }
+  .co__quem strong { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+  .co__quem strong i { width: 7px; height: 7px; border-radius: 50%; background: var(--am); }
+  .co__quem span { font-size: 13px; color: rgb(242 242 238 / .6); }
+
+  .co__balao { margin: 0; max-width: 86%; }
+  .co__balao--dono { align-self: flex-start; justify-self: start; padding: 12px 16px 14px; border-radius: 18px 18px 18px 6px; background: #2c2c2b; box-shadow: 0 1px 0 rgb(255 255 255 / .08) inset; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; transform-origin: 0 100%; }
+  .co__balao--renke { align-self: flex-end; justify-self: end; padding: 12px 16px 14px; border-radius: 18px 18px 6px 18px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; font-size: clamp(14.5px, 1.05vw, 15.5px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; transform-origin: 100% 100%; }
+  .co__balao--renke strong { font-weight: 600; }
+  .co__balao--renke strong i { display: inline-block; width: 8px; height: 8px; margin-right: 9px; border-radius: 1px; background: var(--am); box-shadow: 0 0 0 1px rgb(22 22 22 / .28); transform: rotate(45deg) translateY(-1px); }
+  .co__digitando { align-self: flex-end; display: flex; gap: 5px; padding: 13px 14px; border-radius: 16px 16px 6px 16px; background: #2c2c2b; }
+  .co__digitando i { width: 6px; height: 6px; border-radius: 50%; background: var(--am); }
+  @keyframes co-entra { from { opacity: 0; transform: translateY(14px) scale(.96); } }
+  @keyframes co-ponto { 0%, 100% { transform: none; opacity: .5; } 40% { transform: translateY(-3px); opacity: 1; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .co__entra { animation: co-entra .7s var(--s) both; }
+    .co__digitando i { animation: co-ponto 1s ease-in-out infinite; }
+    .co__digitando i:nth-child(2) { animation-delay: .15s; }
+    .co__digitando i:nth-child(3) { animation-delay: .3s; }
+  }
+
+  .co__pe { display: grid; gap: 10px; min-width: 0; padding-top: clamp(12px, 1.1vw, 16px); border-top: 1px solid rgb(242 242 238 / .08); }
+  .co__pe-rotulo { font-size: 13px; color: rgb(242 242 238 / .56); }
+  .co__atalhos { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+  .co__atalho { flex: none; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px 0 10px; border: 0; border-radius: 17px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: rgb(242 242 238 / .82); font: inherit; font-size: 13px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background-color .4s var(--s), color .4s var(--s), box-shadow .4s var(--s); }
+  .co__atalho:hover { background: rgb(242 242 238 / .1); color: #f2f2ee; }
+  .co__atalho:focus-visible, .co__pergunta:focus-visible { outline: 2px solid #f2f2ee; outline-offset: 2px; }
+  .co__atalho.is-ativo, .co__atalho.is-ativo:hover { background: rgb(255 209 3 / .09); color: #f2f2ee; box-shadow: 0 0 0 1px rgb(255 209 3 / .6) inset; }
+
+  /* 1. O fio da conversa: preso pela base, o que é antigo sobe e apaga no alto. */
+  .co__cartao--alto { grid-template-rows: auto minmax(0, 1fr) auto; height: clamp(520px, 70svh, 680px); }
+  .co__fio { position: relative; min-height: 0; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 96px); mask-image: linear-gradient(to bottom, transparent 0, #000 96px); }
+  .co__fio-dentro { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 12px; padding-block: 4px; transition: transform .8s var(--s); }
+  .co__fio-dentro .co__balao--dono:not(:first-child) { margin-top: 14px; }
+
+  /* 2. As perguntas são a coluna; o cartão guarda só a resposta, grande. */
+  .co__lista { list-style: none; margin: clamp(8px, 1vw, 16px) 0 0; padding: 0; display: grid; width: 100%; max-width: 560px; }
+  .co__lista li + li { border-top: 1px solid rgb(242 242 238 / .08); }
+  .co__pergunta { display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 13px 0; border: 0; background: none; color: rgb(242 242 238 / .42); font: inherit; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.3; letter-spacing: -.02em; text-align: left; cursor: pointer; transition: color .5s var(--s); }
+  .co__pergunta i { flex: none; width: 7px; height: 7px; border-radius: 1px; background: var(--am); transform: rotate(45deg) translateY(-2px) scale(0); transition: transform .5s var(--s); }
+  .co__pergunta:hover { color: rgb(242 242 238 / .78); }
+  .co__pergunta.is-ativo { color: #f2f2ee; }
+  .co__pergunta.is-ativo i { transform: rotate(45deg) translateY(-2px) scale(1); }
+  .co__pilha { display: grid; }
+  .co__pilha > * { grid-area: 1 / 1; visibility: hidden; }
+  .co__pilha > .is-ativo { visibility: visible; }
+  .co__cartao--resposta { align-self: center; }
+  .co__resposta { display: grid; align-content: end; gap: 14px; min-height: clamp(260px, 24vw, 340px); padding-block: 8px 6px; }
+  .co__resposta-icone { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: auto; border-radius: 12px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: #f2f2ee; }
+  .co__resposta-t { margin: 0; font-family: var(--font-titulo); font-weight: 400; font-size: clamp(30px, 2.9vw, 44px); line-height: 1.05; letter-spacing: -.04em; text-wrap: balance; }
+  .co__resposta-r { margin: 0; max-width: 30ch; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.5; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+  @media (prefers-reduced-motion: no-preference) {
+    .co__resposta.is-ativo > * { animation: co-entra .8s var(--s) both; }
+    .co__resposta.is-ativo > :nth-child(2) { animation-delay: .12s; }
+    .co__resposta.is-ativo > :nth-child(3) { animation-delay: .24s; }
+  }
+
+  /* 3. A resposta vem com um recorte claro, no idioma das artes do Protocolo. */
+  .co__cartao--largo { max-width: 600px; }
+  .co__par { display: grid; align-content: start; gap: 14px; padding-block: 4px; }
+  .co__recorte { justify-self: end; display: grid; gap: 10px; width: min(86%, 380px); padding: 14px 16px 16px; border-radius: 16px 16px 6px 16px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; box-shadow: 0 24px 34px -22px rgb(0 0 0 / .8); }
+  .co__recorte-titulo { font-size: 12px; letter-spacing: -.005em; color: rgb(22 22 22 / .56); }
+  .co__linha { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; align-items: center; gap: 12px; font-size: 13.5px; letter-spacing: -.01em; color: rgb(22 22 22 / .72); }
+  .co__linha:not(:has(.co__barra)) { grid-template-columns: minmax(0, 1fr) auto; }
+  .co__linha-v { font-variant-numeric: tabular-nums; font-weight: 500; color: #161616; }
+  .co__barra { height: 6px; border-radius: 3px; background: rgb(22 22 22 / .08); overflow: hidden; }
+  .co__barra i { display: block; height: 100%; width: var(--p); border-radius: 3px; background: rgb(22 22 22 / .34); transform-origin: 0 50%; }
+  .co__linha--d { color: #161616; }
+  .co__linha--d .co__barra i { background: #161616; }
+  .co__linha--d .co__linha-v::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 1px; background: var(--am); box-shadow: 0 0 0 1px rgb(22 22 22 / .28); transform: rotate(45deg) translateY(-1px); }
+  @keyframes co-barra { from { transform: scaleX(0); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .co__par.is-ativo .co__balao--dono { animation: co-entra .7s var(--s) both; }
+    .co__par.is-ativo .co__balao--renke { animation: co-entra .8s var(--s) 1s both; }
+    .co__par.is-ativo .co__recorte { animation: co-entra .8s var(--s) 1.5s both; }
+    .co__par.is-ativo .co__barra i { animation: co-barra 1.1s var(--s) 1.9s both; }
+  }
+
+  @media (min-width: 1000px) {
+    .co__grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+  @media (max-width: 699.98px) {
+    .co { min-height: 0; }
+    .co__titulo { max-width: none; font-size: clamp(1.9rem, 7.5vw, 2.8rem); }
+    .co__cartao { max-width: none; }
+    .co__balao { max-width: 94%; }
+    .co__quem span { display: none; }
+    .co__atalhos { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .co__recorte { width: 94%; }
+  }
+</style>
