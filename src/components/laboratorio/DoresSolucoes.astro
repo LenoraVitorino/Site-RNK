@@ -91,12 +91,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
       const trilho = atalhos[atual].parentElement!;
       if (rolar && trilho.scrollWidth > trilho.clientWidth) trilho.scrollTo({ left: atalhos[atual].offsetLeft - (trilho.clientWidth - atalhos[atual].offsetWidth) / 2, behavior: 'smooth' });
     };
-    atalhos.forEach((a, i) => a.addEventListener('click', () => { manual = true; clearInterval(relogio); ir(i, true); }));
+    atalhos.forEach((a, i) => a.addEventListener('click', () => { manual = true; clearInterval(relogio); raiz.classList.remove('dc--auto'); ir(i, true); }));
     // Avança sozinha só com a dobra na tela e enquanto ninguém escolheu uma pergunta.
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
       new IntersectionObserver(([e]) => {
         clearInterval(relogio);
-        if (e.isIntersecting && !manual) relogio = window.setInterval(() => ir(atual + 1), 7000);
+        const anda = e.isIntersecting && !manual;
+        raiz.classList.toggle('dc--auto', anda);
+        if (anda) { ir(atual); relogio = window.setInterval(() => ir(atual + 1), 7000); }
       }, { threshold: .45 }).observe(raiz);
     }
   }
@@ -107,13 +109,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__grade { display: grid; gap: clamp(32px, 4vw, 72px); align-items: center; }
   .dc__cabeca { display: grid; justify-items: start; gap: 20px; }
   .dc__apoio { margin: 0; max-width: 38ch; font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .7); text-wrap: pretty; }
-  .dc__titulo { margin: 0; max-width: 16ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(28px, 2.7vw, 42px); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
-  .dc__titulo strong { font-weight: 500; }
+  .dc__titulo { margin: 0; max-width: 20ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(25px, 2.25vw, 34px); line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
+  .dc__titulo strong { display: block; font-weight: 500; }
 
   /* A conversa mora num cartão só: superfície escura com luz no canto e sombra longa. */
   .dc__cartao {
     display: grid; gap: clamp(18px, 1.8vw, 26px); min-width: 0; padding: clamp(18px, 2vw, 30px); border-radius: clamp(24px, 2.2vw, 34px);
-    background: radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
+    /* Um sopro de amarelo no canto, bem baixo, para o cartão não ficar só cinza. */
+    background: radial-gradient(70% 60% at 100% 0%, rgb(255 209 3 / .075), transparent 70%), radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
     box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 60px 80px -50px rgb(0 0 0 / .95);
   }
   .dc__topo { display: flex; align-items: center; gap: 14px; padding-bottom: clamp(14px, 1.4vw, 20px); border-bottom: 1px solid rgb(242 242 238 / .08); }
@@ -138,7 +141,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__balao--renke strong { font-weight: 600; }
   .dc__balao--renke strong i { display: inline-block; width: 8px; height: 8px; margin-right: 9px; border-radius: 1px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .28); transform: rotate(45deg) translateY(-1px); }
   .dc__digitando { align-self: start; display: flex; gap: 5px; padding: 15px 16px; border-radius: 18px 18px 6px 18px; background: #2c2c2b; opacity: 0; }
-  .dc__digitando i { width: 6px; height: 6px; border-radius: 50%; background: rgb(242 242 238 / .7); }
+  .dc__digitando i { width: 6px; height: 6px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
 
   /* A vez de cada um: a pergunta chega, a Renke digita, a resposta entra. */
   @media (prefers-reduced-motion: no-preference) {
@@ -160,13 +163,18 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__atalho { flex: none; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 15px 0 11px; border: 0; border-radius: 19px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: rgb(242 242 238 / .82); font: inherit; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background-color .4s var(--s), color .4s var(--s), box-shadow .4s var(--s); }
   .dc__atalho:hover { background: rgb(242 242 238 / .1); color: #f2f2ee; }
   .dc__atalho:focus-visible { outline: 2px solid #f2f2ee; outline-offset: 2px; }
-  .dc__atalho--ativo, .dc__atalho--ativo:hover { background: #f2f2ee; color: #161616; box-shadow: none; }
+  /* A sugestão ativa não é mais branca: fio amarelo, fundo levemente tingido e, enquanto a conversa anda sozinha, um traço que enche até a próxima pergunta. */
+  .dc__atalho { position: relative; overflow: hidden; }
+  .dc__atalho--ativo, .dc__atalho--ativo:hover { background: rgb(255 209 3 / .09); color: #f2f2ee; box-shadow: 0 0 0 1px rgb(255 209 3 / .6) inset; }
+  .dc__atalho--ativo::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--amarelo-marca, #FFD103); transform: scaleX(0); transform-origin: 0 50%; }
+  .dc--auto .dc__atalho--ativo::after { animation: dc-tempo 7s linear both; }
+  @keyframes dc-tempo { to { transform: scaleX(1); } }
 
   @media (min-width: 1000px) {
     .dc__grade { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   }
   @media (max-width: 699.98px) {
-    .dc__titulo { max-width: none; font-size: 28px; }
+    .dc__titulo { max-width: none; font-size: 25px; }
     .dc__balao { max-width: 94%; }
     .dc__quem span { display: none; }
     /* No celular as sugestões rolam de lado, numa linha só. */
