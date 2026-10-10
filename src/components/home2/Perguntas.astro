@@ -42,21 +42,21 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
       )}
     </header>
 
-    {/* Painéis que se abrem (10/10): os sete cartões lado a lado numa faixa
-        só; o da vez fica largo, com título e texto, e os outros ficam
-        estreitos, só com o ícone e o nome em pé. Passa sozinho, e o ponteiro,
-        o foco ou o toque escolhem. Nem grade, nem carrossel, nem pilha. O
-        conteúdo é o de cada versão: os ganhos no estúdio, as perguntas na
-        copy original (sem misturar as duas). */}
-    <ol class:list={['paineis', { 'paineis--copy': copyLiteral }]} aria-label="O que muda na sua clínica" data-paineis>
+    <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
       {perguntas.map((p, i) => (
-        <li class:list={['painel', { 'painel--ativo': i === 0 }]} data-painel={i} tabindex="0">
-          <span class="ganhos__anel" aria-hidden="true"><IconeRenke nome={icones[i]} size={22} class="painel__icone" /></span>
-          {!copyLiteral && <span class="painel__em-pe" aria-hidden="true">{p.titulo}</span>}
-          <div class="painel__corpo">
-            {copyLiteral
-              ? <h3 class="painel__nome painel__nome--pergunta">{p.pergunta}</h3>
-              : <><h3 class="painel__nome">{p.titulo}</h3><p class="painel__texto">{p.texto}</p></>}
+        <li class:list={['ganhos__cartao', `ganhos__cartao--${i + 1}`, { 'ganhos__cartao--pergunta': copyLiteral }]} style={`--i:${i}`}>
+          <span class="ganhos__anel" aria-hidden="true">
+            <IconeRenke nome={icones[i]} size={22} class="ganhos__icone" />
+          </span>
+          <div class="ganhos__corpo">
+            {copyLiteral ? (
+              <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
+            ) : (
+              <>
+                <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
+                <p class="ganhos__texto"><span>{p.texto}</span></p>
+              </>
+            )}
           </div>
         </li>
       ))}
@@ -65,23 +65,16 @@ const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dad
 </section>
 
 <script>
-  /* O painel da vez: troca sozinho a cada 4,5 s enquanto a faixa está na
-     tela e ninguém está escolhendo; ponteiro, foco e toque escolhem. */
-  const faixa = document.querySelector<HTMLElement>('[data-paineis]');
-  if (faixa) {
-    const paineis = [...faixa.querySelectorAll<HTMLElement>('[data-painel]')];
-    let atual = 0, naTela = false, escolhendo = false;
-    const ativar = (i: number) => { atual = i; paineis.forEach((el, k) => el.classList.toggle('painel--ativo', k === i)); };
-    paineis.forEach((el, i) => {
-      el.addEventListener('pointerenter', () => ativar(i));
-      el.addEventListener('focus', () => ativar(i));
-      el.addEventListener('click', () => ativar(i));
-    });
-    faixa.addEventListener('pointerenter', () => { escolhendo = true; });
-    faixa.addEventListener('pointerleave', () => { escolhendo = false; });
-    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { naTela = e.isIntersecting; }, { threshold: .3 }).observe(faixa);
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 900px)').matches) {
-      setInterval(() => { if (naTela && !escolhendo && !document.hidden) ativar((atual + 1) % paineis.length); }, 4500);
+  /* A grade se constrói uma vez, quando um quarto dela entra na tela. */
+  const grade = document.querySelector<HTMLElement>('[data-ganhos-grade]');
+  if (grade) {
+    const construir = () => grade.classList.add('ganhos__grade--construida');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) construir();
+    else {
+      const obs = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) { construir(); obs.disconnect(); }
+      }, { threshold: .25 });
+      obs.observe(grade);
     }
   }
 </script>
