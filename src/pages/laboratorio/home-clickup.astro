@@ -3,10 +3,10 @@
  * Página de teste (10/10/2026): a home inteira refeita em cima dos moldes do
  * ClickUp e dos pins novos (docs/04-design/referencia-clickup.md e
  * docs/04-design/curadoria/pins-265-324.md), para comparar com a home atual
- * sem tocar nela. Mudam duas dobras: ecossistema de RevOps (rascunho) e
- * resultados como faixa de números. O bento em fio fino, o palco com o texto
- * de lado e a conversa em lista e painel foram reprovados em 10/10 e saíram:
- * essas dobras são as da home. Fora dos buscadores e do menu.
+ * sem tocar nela. Só sobrou uma dobra nova: o ecossistema de RevOps
+ * (rascunho). O bento em fio fino, o palco com o texto de lado, a conversa em
+ * lista e painel e os resultados em faixa de números foram reprovados em
+ * 10/10 e saíram: essas dobras são as da home. Fora dos buscadores e do menu.
  */
 import Base2 from '../../layouts/Base2.astro';
 import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
@@ -22,7 +22,7 @@ import AcademyTools from '../../components/home2/AcademyTools.astro';
 import Formulario from '../../components/home2/Formulario.astro';
 import EcossistemaRevops from '../../components/laboratorio/EcossistemaRevops.astro';
 import Perguntas from '../../components/home2/PerguntasConversa.astro';
-import ResultadosCases from '../../components/laboratorio/ResultadosCases.astro';
+import Resultados from '../../components/home2/Resultados.astro';
 ---
 <Base2 titulo={`Laboratório · ${seo.titulo}`} descricao="Laboratório" noindex classe="home-refinada">
   <FundoVivo slot="fundo" fundo="cena" />
@@ -33,7 +33,7 @@ import ResultadosCases from '../../components/laboratorio/ResultadosCases.astro'
   <Letreiro />
   <PlanosPalco />
   <Perguntas />
-  <ResultadosCases />
+  <Resultados />
   <CtaFinal />
   <AcademyTools />
   <Formulario />
