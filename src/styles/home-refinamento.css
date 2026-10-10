@@ -388,6 +388,30 @@ section[id] { scroll-margin-top: 110px; }
   .revena-peca--posicionamento { grid-column: span 7; }
   .revena-peca--crm .revena-peca__arte { min-height: 250px; }
 }
+/* O que muda na sua clínica, no desktop (10/10): sai o diagrama de quatro
+   colunas, que deixava um cartão sozinho no meio e buracos em volta. O
+   título fica preso à esquerda, com o fundo vivo livre embaixo dele, e os
+   sete cartões passam à direita, cada um parando um pouco abaixo do
+   anterior e cobrindo-o, até formar uma pilha. Nem grade nem carrossel. */
+@media (min-width: 1100px) {
+  #perguntas .container { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(48px, 7vw, 128px); align-items: start; }
+  #perguntas .ganhos__cabeca { position: sticky; top: clamp(120px, 24vh, 240px); justify-items: start; text-align: left; margin-bottom: 0; }
+  #perguntas.ganhos .ganhos__cabeca :is(.operacao__titulo, .cabeca-dobra__apoio) { margin-inline: 0; text-align: left; }
+  #perguntas .ganhos__cabeca .ancora { max-width: none; text-wrap: balance; }
+  /* Na coluna estreita as duas linhas do título quebram onde couber. */
+  #perguntas .ganhos__cabeca .ancora__linha { display: inline; white-space: normal; }
+  #perguntas .ganhos__cabeca .ancora--revela { font-size: clamp(32px, 3vw, 46px); }
+  #perguntas .ganhos__grade { display: block; }
+  #perguntas .ganhos__cartao {
+    position: sticky; top: calc(clamp(104px, 16vh, 168px) + var(--i) * 18px);
+    grid-area: auto; aspect-ratio: auto; min-height: clamp(210px, 17vw, 250px); margin-bottom: 22px; gap: 28px;
+    background: linear-gradient(160deg, #1d1d1c, #131312);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: 0 -22px 44px -30px rgb(0 0 0 / .9);
+  }
+  #perguntas .ganhos__cartao:last-child { margin-bottom: 0; }
+  #perguntas .ganhos__texto { max-width: 46ch; }
+}
 @media (max-width: 599.98px) {
   .revena-bento { --peca-recuo: 24px; }
   .revena-peca { --base: 28px; padding: 28px 24px; }

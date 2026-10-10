@@ -133,11 +133,11 @@
    cartão. Uma ficha solta é levada de "Em contato" para "Agendado" pelo
    cursor da recepção, que diz o que está fazendo. Laço de 12 s; parado, o
    quadro mostra a ficha já agendada. */
-.p2-crm { --laco: 12s; --vao: 10px; --h: 68px; --col: calc((100% - var(--vao)) / 2); position: absolute; inset: 0; }
+.p2-crm { --laco: 12s; --vao: 10px; --h: 58px; --col: calc((100% - var(--vao)) / 2); position: absolute; inset: 0; }
 /* Fichas em vidro escuro, soltas no cartão; só a ficha em movimento é clara. */
 .p2-crm__fundo { position: absolute; inset: 0; }
-.p2-crm__solto { position: absolute; inset: 50px 0 0; pointer-events: none; }
-.p2-crm__topo { display: flex; align-items: center; justify-content: space-between; height: 50px; padding-inline: 2px; }
+.p2-crm__solto { position: absolute; inset: 44px 0 0; pointer-events: none; }
+.p2-crm__topo { display: flex; align-items: center; justify-content: space-between; height: 44px; padding-inline: 2px; }
 .p2 .p2-crm__time { display: flex; margin: 0; }
 .p2-crm__time i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #2b2b2a; box-shadow: 0 0 0 2px #121212; font-style: normal; font-size: 11.5px; font-weight: 500; }
 .p2-crm__time i + i { margin-left: -6px; background: #F2F2EE; color: #161616; }
@@ -149,19 +149,21 @@
 .p2-crm__hora { display: grid; }
 .p2-crm__depois { opacity: 1; }
 .p2-crm__conta b:first-child:not(:only-child), .p2-crm__hora b:first-child { opacity: 0; }
-.p2-ficha { height: var(--h); padding: 12px 14px; border-radius: 13px; background: #20201f; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset; }
-.p2-ficha strong { font-size: 15px; }
-.p2 .p2-ficha > span { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: var(--suave); font-size: 12px; white-space: nowrap; }
-.p2-ficha > span > i { flex: none; width: 5px; height: 5px; border-radius: 50%; background: rgb(242 242 238 / .3); }
-.p2-ficha em { margin-left: auto; font-style: normal; }
+.p2-ficha { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; gap: 0 10px; height: var(--h); padding: 0 12px 0 10px; border-radius: 13px; background: #20201f; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset; }
+/* "Foto" do paciente simulada com as iniciais. */
+.p2-ficha__foto { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #343432; font-style: normal; font-size: 11px; font-weight: 500; letter-spacing: 0; }
+.p2-ficha--solta .p2-ficha__foto { background: #161616; color: #F2F2EE; box-shadow: 0 0 0 2px var(--amarelo-marca, #FFD103); }
+.p2 .p2-ficha strong + span { margin-top: 1px; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p2-ficha strong { font-size: 13.5px; white-space: nowrap; }
+.p2-ficha em { position: absolute; right: 12px; top: 11px; color: var(--suave); font-style: normal; font-size: 11.5px; white-space: nowrap; }
 .p2-ficha--vaga { background: none; box-shadow: none; }
 .p2-ficha--destino { background: none; box-shadow: none; border: 1px dashed rgb(242 242 238 / .2); opacity: 0; }
 .p2-crm__sobe { transform: translateY(calc(-1 * (var(--h) + 8px))); }
 /* A ficha solta nasce sobre a vaga da primeira coluna (cabeça 22 + 8, uma ficha + 8). */
 .p2-crm__mover { position: absolute; z-index: 4; left: 0; top: calc(8px + 30px + var(--h) + 8px); width: var(--col); transform: translateX(calc(100% + var(--vao))); }
 .p2-ficha--solta { --tinta: #161616; --suave: rgb(22 22 22 / .58); background: #F2F2EE; color: #161616; box-shadow: 0 18px 30px -16px rgb(0 0 0 / .8); }
-.p2-ficha--solta > span > i { background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .16); }
-.p2-crm__cursor { display: none; position: absolute; left: 44%; top: 78%; }
+/* A seta fica no canto esquerdo da ficha: a etiqueta cabe embaixo dela, dentro da coluna, e não é cortada pela lateral do cartão. */
+.p2-crm__cursor { display: none; position: absolute; left: 12%; top: 74%; }
 .p2-crm__cursor svg { display: block; width: 18px; height: 18px; fill: #161616; stroke: #F2F2EE; stroke-width: 1.4; stroke-linejoin: round; }
 .p2-crm__etiqueta { display: grid; margin: 1px 0 0 14px; padding: 7px 13px 8px 12px; border-radius: 12px; background: #2b2b2a; color: #F2F2EE; white-space: nowrap; box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset, 0 14px 26px -12px rgb(0 0 0 / .8); }
 .p2-crm__etiqueta b { font-size: 13px; font-weight: 600; line-height: 1.2; }
@@ -278,9 +280,10 @@
   .p2-aviso { top: auto; bottom: 0; right: 0; }
   .p2-vagas { gap: 6px; }
   .p2-vaga b { padding-inline: 10px; font-size: 12.5px; }
-  .p2-crm { --vao: 8px; --h: 64px; }
-  .p2-ficha strong { font-size: 14px; }
-  .p2-ficha { padding: 11px 12px; }
+  .p2-crm { --vao: 8px; }
+  .p2-ficha { grid-template-columns: 26px minmax(0, 1fr); padding-inline: 8px; }
+  .p2-ficha__foto { width: 26px; height: 26px; }
+  .p2-ficha em { display: none; }
   .p2-estudo { height: 230px; }
   .p2-estudo__nota { gap: 10px; padding: 8px 14px 8px 8px; }
   .p2-estudo__nota .p2-rosto { width: 32px; height: 32px; }
