@@ -108,20 +108,19 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc { --s: cubic-bezier(.22, 1, .36, 1); position: relative; padding-block: clamp(80px, 8vw, 132px); background: #0c0c0c; color: #f2f2ee; }
   .dc__grade { display: grid; gap: clamp(32px, 4vw, 72px); align-items: center; }
   .dc__cabeca { display: grid; justify-items: start; gap: 20px; }
-  .dc__apoio { margin: 0; max-width: 38ch; font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.5; color: rgb(242 242 238 / .7); text-wrap: pretty; }
-  .dc__titulo { margin: 0; max-width: 20ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(25px, 2.25vw, 34px); line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
+  .dc__apoio { margin: 0; max-width: 40ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; color: #aaa; text-wrap: pretty; }
+  .dc__titulo { margin: 0; max-width: 20ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
   .dc__titulo strong { display: block; font-weight: 500; }
 
   /* A conversa mora num cartão só: superfície escura com luz no canto e sombra longa. */
   .dc__cartao {
-    display: grid; gap: clamp(18px, 1.8vw, 26px); min-width: 0; padding: clamp(18px, 2vw, 30px); border-radius: clamp(24px, 2.2vw, 34px);
-    /* Um sopro de amarelo no canto, bem baixo, para o cartão não ficar só cinza. */
-    background: radial-gradient(70% 60% at 100% 0%, rgb(255 209 3 / .075), transparent 70%), radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
+    display: grid; gap: clamp(14px, 1.3vw, 18px); min-width: 0; width: 100%; max-width: 520px; justify-self: end; padding: clamp(16px, 1.5vw, 22px); border-radius: clamp(22px, 1.9vw, 28px);
+    background: radial-gradient(120% 130% at 0% 0%, #262625 0%, #171716 60%);
     box-shadow: 0 1px 0 rgb(255 255 255 / .1) inset, 0 0 0 1px rgb(255 255 255 / .06) inset, 0 60px 80px -50px rgb(0 0 0 / .95);
   }
-  .dc__topo { display: flex; align-items: center; gap: 14px; padding-bottom: clamp(14px, 1.4vw, 20px); border-bottom: 1px solid rgb(242 242 238 / .08); }
+  .dc__topo { display: flex; align-items: center; gap: 14px; padding-bottom: clamp(12px, 1.1vw, 16px); border-bottom: 1px solid rgb(242 242 238 / .08); }
   .dc__rostos { display: flex; flex: none; }
-  .dc__rostos :global(img) { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #1f1f1e; }
+  .dc__rostos :global(img) { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px #1f1f1e; }
   .dc__rostos :global(img + img) { margin-left: -10px; }
   .dc__quem { display: grid; min-width: 0; line-height: 1.25; }
   .dc__quem strong { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
@@ -131,16 +130,16 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
 
   /* Todos os pares ocupam a mesma célula: a altura é a do maior e nada pula na troca. */
   .dc__conversa { display: grid; }
-  .dc__par { grid-area: 1 / 1; display: grid; align-content: start; gap: clamp(18px, 1.8vw, 26px); padding-block: clamp(4px, .6vw, 10px); visibility: hidden; }
+  .dc__par { grid-area: 1 / 1; display: grid; align-content: start; gap: 16px; padding-block: 4px; visibility: hidden; }
   .dc__par--ativo { visibility: visible; }
   .dc__balao { margin: 0; max-width: min(86%, 520px); }
-  .dc__balao--dono { justify-self: start; padding: 15px 20px 17px; border-radius: 22px 22px 22px 6px; background: #2c2c2b; box-shadow: 0 1px 0 rgb(255 255 255 / .08) inset; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(18px, 1.55vw, 23px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; transform-origin: 0 100%; }
+  .dc__balao--dono { justify-self: start; padding: 12px 16px 14px; border-radius: 18px 18px 18px 6px; background: #2c2c2b; box-shadow: 0 1px 0 rgb(255 255 255 / .08) inset; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.25; letter-spacing: -.02em; text-wrap: pretty; transform-origin: 0 100%; }
   .dc__vez { display: grid; justify-items: end; }
   .dc__vez > * { grid-area: 1 / 1; }
-  .dc__balao--renke { padding: 15px 20px 17px; border-radius: 22px 22px 6px 22px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; box-shadow: 0 24px 34px -22px rgb(0 0 0 / .8); font-size: clamp(15px, 1.15vw, 17px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; transform-origin: 100% 100%; }
+  .dc__balao--renke { padding: 12px 16px 14px; border-radius: 18px 18px 6px 18px; background: linear-gradient(180deg, #fbfbf8, #ecece7); color: #161616; box-shadow: 0 24px 34px -22px rgb(0 0 0 / .8); font-size: clamp(14.5px, 1.05vw, 15.5px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; transform-origin: 100% 100%; }
   .dc__balao--renke strong { font-weight: 600; }
   .dc__balao--renke strong i { display: inline-block; width: 8px; height: 8px; margin-right: 9px; border-radius: 1px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .28); transform: rotate(45deg) translateY(-1px); }
-  .dc__digitando { align-self: start; display: flex; gap: 5px; padding: 15px 16px; border-radius: 18px 18px 6px 18px; background: #2c2c2b; opacity: 0; }
+  .dc__digitando { align-self: start; display: flex; gap: 5px; padding: 13px 14px; border-radius: 16px 16px 6px 16px; background: #2c2c2b; opacity: 0; }
   .dc__digitando i { width: 6px; height: 6px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
 
   /* A vez de cada um: a pergunta chega, a Renke digita, a resposta entra. */
@@ -157,10 +156,10 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   @keyframes dc-ponto { 0%, 100% { transform: none; opacity: .5; } 40% { transform: translateY(-3px); opacity: 1; } }
 
   /* Sugestões no pé: tocar numa envia aquela pergunta. */
-  .dc__pe { display: grid; gap: 10px; min-width: 0; padding-top: clamp(14px, 1.4vw, 20px); border-top: 1px solid rgb(242 242 238 / .08); }
+  .dc__pe { display: grid; gap: 10px; min-width: 0; padding-top: clamp(12px, 1.1vw, 16px); border-top: 1px solid rgb(242 242 238 / .08); }
   .dc__pe-rotulo { font-size: 13px; color: rgb(242 242 238 / .56); }
-  .dc__atalhos { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
-  .dc__atalho { flex: none; display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 15px 0 11px; border: 0; border-radius: 19px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: rgb(242 242 238 / .82); font: inherit; font-size: 14px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background-color .4s var(--s), color .4s var(--s), box-shadow .4s var(--s); }
+  .dc__atalhos { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+  .dc__atalho { flex: none; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px 0 10px; border: 0; border-radius: 17px; background: rgb(242 242 238 / .06); box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; color: rgb(242 242 238 / .82); font: inherit; font-size: 13px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background-color .4s var(--s), color .4s var(--s), box-shadow .4s var(--s); }
   .dc__atalho:hover { background: rgb(242 242 238 / .1); color: #f2f2ee; }
   .dc__atalho:focus-visible { outline: 2px solid #f2f2ee; outline-offset: 2px; }
   /* A sugestão ativa não é mais branca: fio amarelo, fundo levemente tingido e, enquanto a conversa anda sozinha, um traço que enche até a próxima pergunta. */
@@ -171,14 +170,15 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   @keyframes dc-tempo { to { transform: scaleX(1); } }
 
   @media (min-width: 1000px) {
-    .dc__grade { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    .dc__grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   }
   @media (max-width: 699.98px) {
-    .dc__titulo { max-width: none; font-size: 25px; }
+    .dc__titulo { max-width: none; font-size: clamp(1.9rem, 7.5vw, 2.8rem); }
     .dc__balao { max-width: 94%; }
+    .dc__cartao { max-width: none; }
     .dc__quem span { display: none; }
     /* No celular as sugestões rolam de lado, numa linha só. */
-    .dc__atalhos { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * clamp(18px, 2vw, 30px)); padding-inline: clamp(18px, 2vw, 30px); scrollbar-width: none; }
+    .dc__atalhos { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * clamp(16px, 1.5vw, 22px)); padding-inline: clamp(16px, 1.5vw, 22px); scrollbar-width: none; }
     .dc__atalhos::-webkit-scrollbar { display: none; }
   }
 </style>
