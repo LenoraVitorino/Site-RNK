@@ -74,7 +74,8 @@
 .p2-tela .p2-rosto { width: 28px; height: 28px; }
 .p2-tela .p2-rostos > * + * { margin-left: -8px; }
 .p2-cena__clinica { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #F2F2EE; }
-.p2-cena__clinica svg { width: 14px; height: 14px; fill: none; stroke: #161616; stroke-width: 1.6; stroke-linecap: round; }
+.p2-cena__clinica svg { width: 62%; height: 62%; fill: none; stroke: #161616; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.p2-cena__clinica-ponto { fill: #161616; stroke: none; }
 .p2-cena__corpo { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 14px; align-items: start; padding: 8px 0 0; }
 .p2-cena__principal { position: relative; display: grid; gap: 10px; min-width: 0; }
 .p2-bloco { padding: 12px 14px 13px; border-radius: 14px; background: #262625; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset, 0 12px 24px -16px rgb(0 0 0 / .7); }
