@@ -1,0 +1,90 @@
+/* Protocolo Revena, segunda versão das peças (10/10/2026): cartões claros,
+   recortes brancos e fotos da equipe em preto e branco. O cartão do CRM
+   continua escuro, como na primeira versão. Ver pilares2/ArteProtocolo2. */
+
+.revena-bento--v2 .revena-peca:not(.revena-peca--crm) { background: linear-gradient(180deg, #F4F4F1, #E8E8E3); color: #161616; }
+.revena-bento--v2 .revena-peca:not(.revena-peca--crm) h3 { color: #161616; }
+.revena-bento--v2 .revena-peca:not(.revena-peca--crm) .feature-card__texto p { color: rgb(22 22 22 / .64); }
+.revena-bento--v2 .revena-peca__arte { aspect-ratio: auto; padding-top: 32px; margin: auto 0 0; }
+.revena-bento--v2 .revena-peca--conexoes .revena-peca__arte { margin-block: auto; }
+.revena-bento--v2 .revena-peca--automacao .feature-card__texto { margin-bottom: 0; }
+/* O CRM mantém a arte da primeira versão, com as regras dela. */
+.revena-bento--v2 .revena-peca--crm .revena-peca__arte { padding-top: 0; margin: 28px calc(-1 * var(--peca-recuo)) calc(-1 * var(--base)) 0; }
+@media (min-width: 1280px) {
+  .revena-bento--v2 :is(.revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento) { grid-column: span 4; }
+}
+
+.p2 { --tinta: #161616; --suave: rgb(22 22 22 / .56); --fio: rgb(22 22 22 / .08); color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }
+.p2 strong { display: block; font-weight: 500; font-size: 15px; letter-spacing: -.015em; }
+.p2 strong + span { display: block; margin-top: 2px; color: var(--suave); font-size: 13px; }
+.p2 ul { list-style: none; margin: 0; padding: 0; }
+.p2-cartao { background: #fff; border: 1px solid var(--fio); border-radius: 14px; box-shadow: 0 1px 2px rgb(22 22 22 / .04), 0 16px 32px -20px rgb(22 22 22 / .24); }
+.p2-rosto { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.04); box-shadow: 0 0 0 2px #fff; background: #d9d9d5; }
+.p2-rostos { display: flex; }
+.p2-rostos > * + * { margin-left: -12px; }
+.p2-rotulo, .p2-meta { color: var(--suave); font-size: 13px; }
+
+/* Lista de passos: feito (visto fino) e o passo da vez (ponto amarelo). */
+.p2-passos { display: grid; gap: 10px; }
+.p2-passo { display: flex; align-items: center; gap: 10px; }
+.p2-passo > span { margin-left: auto; padding-left: 12px; color: var(--suave); font-size: 13px; white-space: nowrap; }
+.p2-passo i, .p2-estado i { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgb(22 22 22 / .16); }
+.p2-passo--feito i::after, .p2-estado i::after { content: ''; position: absolute; left: 5px; top: 4.5px; width: 6px; height: 3.5px; border-left: 1.4px solid var(--tinta); border-bottom: 1.4px solid var(--tinta); transform: rotate(-45deg); }
+.p2-passo--agora i { border-color: transparent; background: rgb(255 209 3 / .28); }
+.p2-passo--agora i::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); }
+
+/* 1. Do marketing ao comercial: a ficha de um lead no meio do caminho. */
+.p2-lead { position: relative; display: flex; align-items: center; justify-content: space-between; gap: clamp(16px, 3vw, 44px); padding-block: 30px; }
+.p2-lead::before { content: ''; position: absolute; left: 36px; right: 36px; top: 50%; height: 6px; margin-top: -3px; border-radius: 3px; background: rgb(22 22 22 / .07); }
+.p2-lead__lado { position: relative; flex: none; }
+.p2-lead .p2-rosto { width: 56px; height: 56px; }
+.p2-lead .p2-rostos > * + * { margin-left: -14px; }
+.p2-lead { font-size: 15px; }
+.p2-lead strong { font-size: 17px; }
+.p2-lead .p2-passos { gap: 12px; }
+.p2-lead__lado .p2-rotulo { position: absolute; left: 0; bottom: calc(100% + 12px); }
+.p2-lead__lado:last-child .p2-rotulo { left: auto; right: 0; }
+.p2-lead__ficha { position: relative; flex: 0 1 390px; min-width: 0; padding: 22px 24px 24px; }
+.p2-lead__topo { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--fio); }
+.p2-lead__dia { color: var(--suave); font-size: 13px; }
+
+/* 3. A conversa que a automação conduz. */
+.p2-conversa { display: grid; gap: 12px; }
+.p2-conversa__linha { display: grid; gap: 6px; justify-items: start; }
+.p2-conversa__linha--resposta { justify-items: end; }
+.p2-balao { max-width: 88%; padding: 12px 16px; border-radius: 16px 16px 16px 4px; font-size: 14.5px; line-height: 1.4; }
+.p2-balao--escuro { background: #161616; color: #F2F2EE; border-radius: 16px 16px 4px 16px; }
+.p2-estado { display: flex; align-items: center; gap: 8px; color: var(--suave); font-size: 13px; }
+
+/* 4. O plano do mês, combinado em reunião. */
+.p2-plano { padding: 18px 20px 20px; }
+.p2-plano__topo { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--fio); }
+.p2-plano__topo .p2-rosto { box-shadow: none; }
+
+/* 5. O estudo de mercado, feito pelo time: a foto da sede e uma nota. */
+.p2-estudo { position: relative; height: clamp(190px, 16vw, 230px); }
+.p2-estudo__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; border-radius: 14px; filter: grayscale(1) contrast(1.02) brightness(1.08); }
+.p2-estudo__nota { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; }
+.p2-estudo__nota strong { white-space: nowrap; }
+
+/* Entrada: as partes de cada peça sobem devagar, uma depois da outra, uma vez. */
+[data-p2] { transition: opacity .9s var(--easing-suave, ease), transform .9s var(--easing-suave, ease); transition-delay: calc(var(--d, 0) * 1ms + 250ms); }
+.js .revena-peca:not(.visivel) [data-p2] { opacity: 0; transform: translateY(10px); }
+@media (prefers-reduced-motion: reduce) { [data-p2] { transition: none; } }
+
+@media (max-width: 599.98px) {
+  .p2-rosto, .p2-lead .p2-rosto { width: 38px; height: 38px; }
+  .p2-lead .p2-rostos > * + * { margin-left: -12px; }
+  .p2-lead { font-size: 14px; }
+  .p2-lead strong { font-size: 15px; }
+  .p2-lead { flex-direction: column; align-items: stretch; gap: 14px; padding-block: 0; }
+  .p2-lead::before { left: 19px; right: auto; top: 20px; bottom: 20px; width: 6px; height: auto; margin: 0; }
+  .p2-lead__lado { display: flex; align-items: center; gap: 12px; }
+  .p2-lead__lado .p2-rotulo, .p2-lead__lado:last-child .p2-rotulo { position: static; order: 2; }
+  .p2-estudo { height: 230px; }
+  .p2-estudo__nota { gap: 10px; padding: 8px 14px 8px 8px; }
+  .p2-estudo__nota .p2-rosto { width: 32px; height: 32px; }
+  .p2-estudo__nota .p2-rostos > * + * { margin-left: -10px; }
+  .p2-estudo__nota strong { font-size: 14px; }
+  .p2-lead__ficha { flex: none; margin-left: 44px; padding: 18px 20px 20px; }
+}

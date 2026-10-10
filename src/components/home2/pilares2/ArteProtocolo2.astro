@@ -1,0 +1,84 @@
+---
+/**
+ * Segunda versão das artes do Protocolo Revena (10/10/2026). A Lenora achou
+ * a primeira "muito tecnológica", com cara de quem vende sistema: a Renke
+ * vende o processo, feito por gente. Aqui cada peça mostra o trabalho
+ * (um lead acompanhado, uma conversa, o plano do mês, o estudo feito pelo
+ * time), em recortes claros e com as fotos reais da equipe, em preto e
+ * branco. O quadro do CRM segue o da primeira versão.
+ * Sem métricas nem pacientes inventados; o amarelo fica num ponto por peça.
+ */
+import { Image } from 'astro:assets';
+import '../../../styles/protocolo-v2.css';
+import isa from '../../../assets/equipe/isa.jpg';
+import lari from '../../../assets/equipe/lari.jpg';
+import julio from '../../../assets/equipe/julio-caldeira.jpg';
+import maria from '../../../assets/equipe/maria.jpg';
+import pedro from '../../../assets/equipe/pedro-packness.jpg';
+import milena from '../../../assets/equipe/milena.jpg';
+import sede from '../../../assets/sede/operacao.jpg';
+
+interface Props { peca: 'conexoes' | 'automacao' | 'decisao' | 'posicionamento' }
+const { peca } = Astro.props;
+const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const, class: 'p2-rosto' };
+---
+{peca === 'conexoes' && (
+  <div class="p2 p2-lead" aria-hidden="true">
+    <div class="p2-lead__lado" data-p2 style="--d:0">
+      <span class="p2-rotulo">Marketing</span>
+      <span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span>
+    </div>
+    <div class="p2-cartao p2-lead__ficha" data-p2 style="--d:180">
+      <div class="p2-lead__topo">
+        <div><strong>Harmonização facial</strong><span>Chegou pelo Instagram</span></div>
+        <span class="p2-lead__dia">hoje</span>
+      </div>
+      <ul class="p2-passos">
+        <li class="p2-passo p2-passo--feito"><i></i>Primeiro contato<span>10:12</span></li>
+        <li class="p2-passo p2-passo--feito"><i></i>Avaliação agendada<span>sex, 09:30</span></li>
+        <li class="p2-passo p2-passo--agora"><i></i>Paciente da clínica</li>
+      </ul>
+    </div>
+    <div class="p2-lead__lado" data-p2 style="--d:360">
+      <span class="p2-rotulo">Comercial</span>
+      <span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span>
+    </div>
+  </div>
+)}
+
+{peca === 'automacao' && (
+  <div class="p2 p2-conversa" aria-hidden="true">
+    <div class="p2-conversa__linha" data-p2 style="--d:0">
+      <span class="p2-cartao p2-balao">Sua avaliação é amanhã, às 14:00. Podemos confirmar a sua presença?</span>
+      <span class="p2-meta">Lembrete enviado pelo WhatsApp</span>
+    </div>
+    <div class="p2-conversa__linha p2-conversa__linha--resposta" data-p2 style="--d:500">
+      <span class="p2-balao p2-balao--escuro">Confirmado, obrigada!</span>
+    </div>
+    <div class="p2-estado" data-p2 style="--d:900"><i></i>Presença confirmada na agenda</div>
+  </div>
+)}
+
+{peca === 'decisao' && (
+  <div class="p2 p2-cartao p2-plano" aria-hidden="true" data-p2 style="--d:0">
+    <div class="p2-plano__topo">
+      <Image src={maria} {...rosto} />
+      <div><strong>Plano de outubro</strong><span>Reunião mensal com a Renke</span></div>
+    </div>
+    <ul class="p2-passos">
+      <li class="p2-passo p2-passo--feito"><i></i>Mais verba no Google</li>
+      <li class="p2-passo p2-passo--feito"><i></i>Novo roteiro para a recepção</li>
+      <li class="p2-passo p2-passo--agora"><i></i>Reativar pacientes antigos</li>
+    </ul>
+  </div>
+)}
+
+{peca === 'posicionamento' && (
+  <div class="p2 p2-estudo" aria-hidden="true">
+    <Image src={sede} alt="" class="p2-estudo__foto" format="webp" quality={76} widths={[480, 800, 1100]} sizes="(min-width: 1100px) 30vw, 100vw" loading="lazy" />
+    <div class="p2-cartao p2-estudo__nota" data-p2 style="--d:200">
+      <span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={julio} {...rosto} /></span>
+      <div><strong>Estudo de concorrentes</strong><span>Feito pelo nosso time</span></div>
+    </div>
+  </div>
+)}

@@ -6,13 +6,19 @@ import ArtePilar from './ArtePilar.astro';
 import PilarConexoes from './PilarConexoes.astro';
 import PilarDecisao from './PilarDecisao.astro';
 import PilarPosicionamento from './PilarPosicionamento.astro';
+import ArteProtocolo2 from './pilares2/ArteProtocolo2.astro';
 import Selo from '../ui/Selo.astro';
+/* arte: 'v2' é a segunda versão das peças (10/10/2026), clara e com as fotos
+   do time; 'v1' fica para comparação em /laboratorio/protocolo-v1. */
+interface Props { arte?: 'v1' | 'v2' }
+const { arte = 'v2' } = Astro.props;
+const v2 = arte === 'v2';
 const cartas = pilares.map((p, i) => ({ ...p, ...(!copyLiteral ? pilaresEstudio[i] : {}) }));
 /* Bento de cinco peças chanfradas (01/10/2026), cada uma com a sua
    imagem: diagrama (conexões), quadro em movimento (CRM), mensagem
    (automação), colunas em grafite com um cursor na peça amarela (decisão) e o
    domo do mercado (posicionamento). */
-const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
+const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'] as const;
 ---
 <section class="secao pilares pilares-features" id={copyLiteral ? 'protocolo-revena' : 'pilares-revena'} aria-labelledby="pilares-revena-titulo" data-pilares>
   <div class="container">
@@ -21,14 +27,16 @@ const pecas = ['conexoes', 'crm', 'automacao', 'decisao', 'posicionamento'];
       <h2 class="titulo" id="pilares-revena-titulo">Protocolo Revena</h2>
       {!copyLiteral && <p>Cinco frentes. Uma operação conectada.</p>}
     </header>
-    <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral }]}>
+    <div class:list={['revena-bento', { 'revena-bento--copy': copyLiteral, 'revena-bento--v2': v2 }]}>
       {cartas.map((p, i) => (
         <article class:list={['feature-card', 'revena-peca', `revena-peca--${pecas[i]}`, 'entra']} style={`--i:${i}`}>
           <div class="feature-card__texto"><h3>{p.titulo}</h3><p>{p.texto}</p></div>
-          {i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
-          {(i === 1 || i === 2) && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
-          {i === 3 && <div class="revena-peca__arte"><PilarDecisao /></div>}
-          {i === 4 && <div class="revena-peca__arte"><PilarPosicionamento /></div>}
+          {v2 && i !== 1 && <div class="revena-peca__arte"><ArteProtocolo2 peca={pecas[i] as 'conexoes'} /></div>}
+          {i === 1 && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
+          {!v2 && i === 0 && <div class="revena-peca__arte"><PilarConexoes /></div>}
+          {!v2 && i === 2 && <div class="revena-peca__arte"><ArtePilar tipo={i} /></div>}
+          {!v2 && i === 3 && <div class="revena-peca__arte"><PilarDecisao /></div>}
+          {!v2 && i === 4 && <div class="revena-peca__arte"><PilarPosicionamento /></div>}
         </article>
       ))}
     </div>
