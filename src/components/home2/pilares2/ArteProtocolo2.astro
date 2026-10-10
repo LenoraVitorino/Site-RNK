@@ -5,8 +5,7 @@
  * vende o processo, feito por gente. Aqui cada peça mostra o trabalho
  * (um lead acompanhado, uma conversa, o plano do mês, o estudo feito pelo
  * time), em recortes de vidro escuro e com as fotos reais da equipe, em
- * preto e branco. Na ficha do lead, um cursor com nome e estado conduz os
- * passos, como na tela inicial do ClickUp (vídeo de referência de 10/10). O quadro do CRM segue o da primeira versão.
+ * preto e branco. O quadro do CRM segue o da primeira versão.
  * Sem métricas nem pacientes inventados; o amarelo fica num ponto por peça.
  */
 import { Image } from 'astro:assets';
@@ -21,33 +20,73 @@ import sede from '../../../assets/sede/operacao.jpg';
 
 interface Props { peca: 'conexoes' | 'automacao' | 'decisao' | 'posicionamento' }
 const { peca } = Astro.props;
+
+/* 1. A história do processo (10/10, "contar um processo, não uma tela
+   estática"): o marketing faz a parte dele, o lead passa para o comercial, o
+   comercial conduz e o lead vira paciente. Três estações que acendem em
+   ordem, com o que cada time faz aparecendo embaixo, e um marcador que
+   percorre o caminho. Os tempos estão em % de um laço de 16 s. */
+const estacoes = [
+  { nome: 'Marketing', de: 3, ate: 30, rostos: [isa, julio], passos: [
+    { em: 6, titulo: 'Campanha no ar', detalhe: 'Instagram e Google' },
+    { em: 17, titulo: 'Chegou um lead', detalhe: 'Harmonização facial' },
+  ] },
+  { nome: 'Comercial', de: 36, ate: 62, rostos: [lari, pedro], passos: [
+    { em: 40, titulo: 'Primeiro contato', detalhe: 'Pelo WhatsApp' },
+    { em: 51, titulo: 'Avaliação agendada', detalhe: 'Sexta, 09:30' },
+  ] },
+  { nome: 'Clínica', de: 68, ate: 94, rostos: [], passos: [
+    { em: 72, titulo: 'Veio à avaliação', detalhe: 'Presença confirmada' },
+    { em: 82, titulo: 'Virou paciente', detalhe: 'Tratamento iniciado' },
+  ] },
+];
+const quadros = [
+  ...estacoes.map((e, i) => `@keyframes p2-est-${i}{0%,${e.de}%{opacity:.34}${e.de + 3}%,${e.ate}%{opacity:1}${Math.min(e.ate + 4, 97)}%,94%{opacity:${i === 2 ? 1 : .6}}100%{opacity:.34}}`),
+  ...estacoes.flatMap((e, i) => e.passos.map((p, k) => `@keyframes p2-passo-${i}-${k}{0%,${p.em}%{opacity:0;transform:translateY(10px)}${p.em + 4}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`)),
+].join('');
+
+/* 4. O plano do mês virando entrega (10/10, "fez isso, isso, isso e
+   finalizou"): cada pendência tem a área e a pessoa do time que cuida dela.
+   `em` é quando entra em andamento e `feito` quando conclui, em % de 14 s. */
+const tarefas = [
+  { titulo: 'Mais verba no Google', area: 'Mídia paga', dono: julio, em: 10, feito: 24 },
+  { titulo: 'Novo roteiro para a recepção', area: 'Comercial', dono: lari, em: 34, feito: 48 },
+  { titulo: 'Reativar pacientes antigos', area: 'CRM e automação', dono: milena, em: 58, feito: 72 },
+];
+const quadrosPlano = tarefas.map((t, k) => [
+  `@keyframes p2-tar-${k}{0%,${t.em}%{opacity:.34}${t.em + 3}%,94%{opacity:1}100%{opacity:.34}}`,
+  `@keyframes p2-tar-dono-${k}{0%,${t.em}%{opacity:0;transform:scale(.7)}${t.em + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
+  `@keyframes p2-tar-ponto-${k}{0%,${t.em}%{opacity:0}${t.em + 3}%,${t.feito}%{opacity:1}${t.feito + 2}%,100%{opacity:0}}`,
+  `@keyframes p2-tar-visto-${k}{0%,${t.feito}%{opacity:0;transform:scale(.5)}${t.feito + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
+].join('')).join('') + '@keyframes p2-plano-fim{0%,80%{opacity:0;transform:translateY(6px)}84%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}';
+
 const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const, class: 'p2-rosto' };
 ---
 {peca === 'conexoes' && (
-  <div class="p2 p2-lead" aria-hidden="true">
-    <div class="p2-lead__lado" data-p2 style="--d:0">
-      <span class="p2-rotulo">Marketing</span>
-      <span class="p2-rostos"><Image src={isa} {...rosto} /><Image src={julio} {...rosto} /></span>
+  <div class="p2 p2-fluxo" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadros}></style>
+    <div class="p2-fluxo__trilho">
+      {estacoes.map((_, i) => <i style={`left:${i * 50}%`}></i>)}
+      <span class="p2-fluxo__marca p2-anim" style="--a:p2-marca">
+        <span class="p2-fluxo__rotulo p2-anim" style="--a:p2-rotulo-lead"><b></b>Lead</span>
+        <span class="p2-fluxo__rotulo p2-fluxo__rotulo--paciente p2-anim" style="--a:p2-rotulo-paciente"><b></b>Paciente</span>
+      </span>
     </div>
-    <div class="p2-cartao p2-lead__ficha" data-p2 style="--d:180">
-      <div class="p2-lead__topo">
-        <div><strong>Harmonização facial</strong><span>Chegou pelo Instagram</span></div>
-        <span class="p2-lead__dia">hoje</span>
+    {estacoes.map((e, i) => (
+      <div class="p2-fluxo__estacao">
+        <div class="p2-fluxo__quem p2-anim" style={`--a:p2-est-${i}`}>
+          <span class="p2-rotulo">{e.nome}</span>
+          {e.rostos.length
+            ? <span class="p2-rostos">{e.rostos.map((r) => <Image src={r} {...rosto} />)}</span>
+            : <span class="p2-fluxo__clinica"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 6.5v11M6.5 12h11" /></svg></span>}
+        </div>
+        <ul class="p2-fluxo__passos">
+          {e.passos.map((p, k) => (
+            <li class="p2-cartao p2-fluxo__passo p2-anim" style={`--a:p2-passo-${i}-${k}`}><strong>{p.titulo}</strong><span>{p.detalhe}</span></li>
+          ))}
+        </ul>
       </div>
-      <ul class="p2-passos">
-        <li class="p2-passo p2-passo--feito"><i></i>Primeiro contato<span>10:12</span></li>
-        <li class="p2-passo p2-passo--feito"><i></i>Avaliação agendada<span>sex, 09:30</span></li>
-        <li class="p2-passo p2-passo--agora"><i></i>Paciente da clínica</li>
-        <li class="p2-cursor">
-          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
-          <span class="p2-cursor__etiqueta"><b>Renke</b><span class="p2-cursor__estado"><i>Fazendo o primeiro contato…</i><i>Agendando a avaliação…</i><i>Lead virou paciente</i></span></span>
-        </li>
-      </ul>
-    </div>
-    <div class="p2-lead__lado" data-p2 style="--d:360">
-      <span class="p2-rotulo">Comercial</span>
-      <span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span>
-    </div>
+    ))}
   </div>
 )}
 
@@ -66,15 +105,21 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
 
 {peca === 'decisao' && (
   <div class="p2 p2-cartao p2-plano" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadrosPlano}></style>
     <div class="p2-plano__topo">
       <Image src={maria} {...rosto} />
       <div><strong>Plano de outubro</strong><span>Reunião mensal com a Renke</span></div>
     </div>
-    <ul class="p2-passos">
-      <li class="p2-passo p2-passo--feito"><i></i>Mais verba no Google</li>
-      <li class="p2-passo p2-passo--feito"><i></i>Novo roteiro para a recepção</li>
-      <li class="p2-passo p2-passo--agora"><i></i>Reativar pacientes antigos</li>
+    <ul class="p2-plano__lista">
+      {tarefas.map((t, k) => (
+        <li class="p2-tarefa p2-anim" style={`--a:p2-tar-${k}`}>
+          <span class="p2-tarefa__marca"><b class="p2-tarefa__ponto p2-anim" style={`--a:p2-tar-ponto-${k}`}></b><b class="p2-tarefa__visto p2-anim" style={`--a:p2-tar-visto-${k}`}></b></span>
+          <span class="p2-tarefa__texto">{t.titulo}<span>{t.area}</span></span>
+          <Image src={t.dono} {...rosto} class="p2-rosto p2-anim" style={`--a:p2-tar-dono-${k}`} />
+        </li>
+      ))}
     </ul>
+    <div class="p2-plano__fim p2-anim" style="--a:p2-plano-fim"><i></i>Outubro entregue. Próxima reunião em novembro.</div>
   </div>
 )}
 
