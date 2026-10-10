@@ -93,10 +93,20 @@
 .p2-chave--ligada { background: #F2F2EE; }
 .p2-chave i { position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #161616; transform: translateX(12px); }
 /* Botão que vira estado. */
-/* Tela do marketing: grade de 2 × 2. Em cima, o criativo e os canais, da
-   mesma altura; embaixo, na mesma linha, o lead que chega e o botão. */
-.p2-mkt { container-type: size; grid-template-rows: minmax(0, 1fr) 46px; }
-.p2-mkt > .p2-botao { align-self: center; }
+/* Tela do marketing: a lista dos leads que a campanha trouxe, cheia desde o
+   início (sem vaga esperando nada). O marketing passa os primeiros ao
+   comercial: a linha acende e o estado dela muda. */
+.p2-mkt { grid-template-columns: minmax(0, 1fr); }
+.p2-leads2 { container-type: inline-size; position: relative; display: grid; grid-auto-rows: minmax(0, 1fr); padding: 4px 6px; }
+.p2-leads2__linha { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto auto; align-items: center; gap: 0 12px; padding-inline: 8px; border-radius: 10px; }
+.p2-leads2__linha + .p2-leads2__linha { box-shadow: 0 -1px 0 rgb(242 242 238 / .07); }
+.p2-leads2__linha strong { font-size: 14px; }
+.p2 .p2-leads2__linha strong + span { margin-top: 1px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p2-leads2__linha em { color: var(--suave); font-style: normal; font-size: 12px; white-space: nowrap; }
+.p2 .p2-leads2__estado { display: grid; margin: 0; min-width: 132px; justify-items: end; }
+.p2-leads2__estado b { display: grid; place-items: center; height: 28px; padding-inline: 12px; border-radius: 14px; box-shadow: 0 0 0 1px rgb(242 242 238 / .16) inset; color: var(--tinta); font-size: 12px; font-weight: 400; white-space: nowrap; opacity: 1; }
+.p2-leads2__estado.p2-pilha b:first-child { opacity: 0; }
+.p2-leads2__estado .p2-leads2__feito { background: #F2F2EE; color: #161616; box-shadow: none; font-weight: 500; }
 /* O botão da campanha é o da casa em miniatura: pílula amarela, à direita. */
 .p2-botao { justify-self: end; display: grid; place-items: center; height: 34px; padding-inline: 16px; border-radius: 17px; background: var(--amarelo-marca, #FFD103); color: #161616; font-size: 13px; font-weight: 500; white-space: nowrap; }
 .p2-botao > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 8px; opacity: 0; }
@@ -313,10 +323,12 @@
   .p2-cena__corpo { grid-template-columns: minmax(0, 1fr); }
   .p2-cena__extra { display: none; }
   .p2-cena__topo > span:last-child, .p2-vaga:nth-child(3) { display: none; }
-  .p2-mkt { container-type: normal; grid-template-rows: none; }
-  .p2-mkt .p2-mouse, .p2-mkt .p2-chegada__espera { display: none; }
-  .p2-envio { gap: 10px; padding: 12px; }
-  .p2-canais .p2-linha { height: 30px; }
+  .p2-leads2__linha { grid-template-columns: 28px minmax(0, 1fr) auto; gap: 0 8px; padding-inline: 4px; }
+  .p2-leads2__linha em { display: none; }
+  .p2 .p2-leads2__estado { min-width: 0; }
+  .p2-leads2__estado b { padding-inline: 9px; font-size: 11px; }
+  .p2-leads2__estado b:not(.p2-leads2__feito) { visibility: hidden; }
+  .p2-leads2 .p2-mouse { display: none; }
   .p2-vagas { gap: 6px; }
   .p2-vaga b { padding-inline: 10px; font-size: 12.5px; }
   .p2-crm { --vao: 8px; }
