@@ -119,6 +119,8 @@ import Selo from '../ui/Selo.astro';
 
             {/* Um bloco só, com hierarquia: a fala do momento da clínica em destaque e, abaixo, o que o plano entrega. */}
             <div class="plano-palco__texto">
+              {/* No desktop o bloco é só: qual plano é, o que ele é e o botão (o nome gigante já é o título). A fala do momento da clínica fica para a pilha do celular. */}
+              <p class="plano-palco__conta" aria-hidden="true">Plano {String(i + 1).padStart(2, '0')} de {String(planos.length).padStart(2, '0')}</p>
               <p class="plano-palco__momento-rotulo">Momento da clínica</p>
               <p class="plano-palco__fala">“{p.fala}”</p>
               {/* O que o plano é e o convite andam juntos (display: contents: não muda o bloco; serve às variações de teste). */}

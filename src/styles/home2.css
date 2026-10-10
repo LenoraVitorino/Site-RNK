@@ -655,6 +655,15 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__frase { margin: 2px 0 0; max-width: 38ch; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.5; font-weight: var(--peso-corpo); letter-spacing: -.015em; opacity: .8; text-wrap: pretty; }
 .plano-palco__texto .botao { pointer-events: auto; margin-top: 10px; font-weight: var(--peso-enfase); }
 .plano-palco__acao { display: contents; }
+/* Desktop (10/10, noite): "é muita coisa, muita informação". O palco animado
+   fica com um bloco de três linhas, como antes das mudanças do dia: qual
+   plano é, o que ele é e o botão. A fala e os traços de posição saem daqui. */
+.plano-palco__conta { margin: 0; font-size: 13px; line-height: 1.2; letter-spacing: -.01em; opacity: .6; font-variant-numeric: tabular-nums; }
+.palcoplanos:not([data-animado]) .plano-palco__conta { display: none; }
+.palcoplanos[data-animado] :is(.plano-palco__momento-rotulo, .plano-palco__fala) { display: none; }
+.palcoplanos[data-animado] .plano-palco__texto { width: clamp(300px, 25vw, 420px); gap: 14px; }
+.palcoplanos[data-animado] .plano-palco__frase { margin: 0; max-width: none; opacity: 1; font-size: clamp(19px, 1.5vw, 26px); line-height: 1.3; letter-spacing: -.025em; }
+.palcoplanos[data-animado] .palcoplanos__ancoras { width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .plano-palco__link { position: absolute; z-index: 1; inset: 30% 16% 4% 22%; pointer-events: auto; cursor: pointer; }
 /* Etiqueta que acompanha o cursor sobre o centro do palco. */
 .palcoplanos__ver { position: absolute; z-index: 30; left: 0; top: 0; display: none; align-items: center; gap: 8px; height: 36px; padding: 0 12px 0 15px; border-radius: 18px; background: #F2F2EE; color: #161616; font-size: 13px; font-weight: var(--peso-enfase); letter-spacing: -.01em; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .3s var(--easing-suave); will-change: transform; box-shadow: 0 14px 30px -14px rgb(0 0 0 / .6); }
