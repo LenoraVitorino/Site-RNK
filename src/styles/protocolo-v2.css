@@ -29,7 +29,7 @@
 @media (max-width: 599.98px) {
   .revena-bento--v2 { --peca-recuo: 22px; --peca-vao: 12px; }
   .revena-bento--v2 .revena-peca .revena-peca__arte { height: auto; }
-  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao) .revena-peca__arte { height: 280px; }
+  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao, .revena-peca--posicionamento) .revena-peca__arte { height: 280px; }
 }
 
 .p2 { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); --anel: rgb(242 242 238 / .22); --borda-rosto: #121212; color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }
@@ -115,8 +115,8 @@
 /* Cursor de quem está trabalhando: seta e etiqueta com foto e nome. */
 .p2-mouse { display: none; position: absolute; z-index: 4; left: 50%; top: 50%; pointer-events: none; }
 .p2-mouse svg { display: block; width: 18px; height: 18px; fill: #F2F2EE; stroke: #161616; stroke-width: 1.4; stroke-linejoin: round; }
-.p2-mouse__quem { display: flex; align-items: center; gap: 6px; margin: 0 0 0 14px; padding: 3px 11px 3px 3px; border-radius: 14px; background: #F2F2EE; color: #161616; font-size: 12.5px; font-weight: 500; white-space: nowrap; box-shadow: 0 12px 22px -10px rgb(0 0 0 / .7); }
-.p2-tela .p2-mouse__quem .p2-rosto { width: 22px; height: 22px; box-shadow: none; }
+.p2-mouse__quem { display: flex; align-items: center; gap: 6px; margin: 0 0 0 14px; padding: 2px; border-radius: 50%; background: #F2F2EE; color: #161616; font-size: 12.5px; font-weight: 500; white-space: nowrap; box-shadow: 0 12px 22px -10px rgb(0 0 0 / .7); }
+.p2-tela .p2-mouse__quem .p2-rosto { width: 26px; height: 26px; box-shadow: none; }
 @media (prefers-reduced-motion: no-preference) { .js .p2-mouse { display: block; } }
 
 /* As partes animadas das histórias recebem o nome dos quadros em --a. */
@@ -127,18 +127,18 @@
    cartão. Uma ficha solta é levada de "Em contato" para "Agendado" pelo
    cursor da recepção, que diz o que está fazendo. Laço de 12 s; parado, o
    quadro mostra a ficha já agendada. */
-.p2-crm { --laco: 12s; --col: 158px; --vao: 10px; --h: 68px; position: absolute; inset: 0 calc(-1 * var(--peca-recuo)) 0 0; }
-/* Sem caixa fechada (10/10, "me incomoda o limite da box"): o quadro vai até
-   a borda do cartão e se apaga à direita e embaixo, em vez de ser cortado. */
-.p2-crm__fundo { position: absolute; inset: 0; overflow: hidden; border-radius: 18px 0 0 0; background: linear-gradient(180deg, #F6F6F3, #ECECE7); mask-image: linear-gradient(to right, #000 75%, transparent 99%), linear-gradient(to bottom, #000 66%, transparent 98%); mask-composite: intersect; }
+.p2-crm { --laco: 12s; --vao: 10px; --h: 68px; --col: calc((100% - 28px - var(--vao)) / 2); position: absolute; inset: 0; }
+/* Caixa inteira, sem corte e sem esmaecido (o degradê em tela branca foi
+   reprovado): o quadro tem só o que cabe, duas colunas, e o cursor pode
+   passar da borda porque fica numa camada por cima. */
+.p2-crm__fundo { position: absolute; inset: 0; overflow: hidden; border-radius: 18px; background: linear-gradient(180deg, #F6F6F3, #ECECE7); }
 .p2-crm__solto { position: absolute; inset: 50px 0 0; pointer-events: none; }
 .p2-crm__topo { display: flex; align-items: center; justify-content: space-between; height: 50px; padding: 0 var(--peca-recuo, 24px) 0 18px; border-bottom: 1px solid var(--fio); }
 .p2 .p2-crm__time { display: flex; margin: 0; }
 .p2-crm__time i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px var(--fio); font-style: normal; font-size: 11.5px; font-weight: 500; }
 .p2-crm__time i + i { margin-left: -6px; background: #161616; color: #F2F2EE; }
-.p2-crm__quadro { position: relative; display: grid; grid-template-columns: repeat(3, var(--col)); gap: var(--vao); padding: 14px; }
+.p2-crm__quadro { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--vao); padding: 14px; }
 .p2-crm__coluna { display: grid; gap: 8px; align-content: start; }
-.p2-crm__coluna:last-child { opacity: .5; }
 .p2-crm__cabeca { display: flex; justify-content: space-between; height: 22px; padding-inline: 4px; color: var(--suave); font-size: 13px; }
 .p2-crm__conta { display: grid; }
 .p2-crm__conta b, .p2-crm__hora b { grid-area: 1 / 1; font-weight: 400; text-align: right; }
@@ -154,7 +154,7 @@
 .p2-ficha--destino { background: none; box-shadow: none; border: 1px dashed rgb(22 22 22 / .22); opacity: 0; }
 .p2-crm__sobe { transform: translateY(calc(-1 * (var(--h) + 8px))); }
 /* A ficha solta nasce sobre a vaga da primeira coluna (cabeça 22 + 8, uma ficha + 8). */
-.p2-crm__mover { position: absolute; z-index: 4; left: 14px; top: calc(14px + 30px + var(--h) + 8px); width: var(--col); transform: translateX(calc(var(--col) + var(--vao))); }
+.p2-crm__mover { position: absolute; z-index: 4; left: 14px; top: calc(14px + 30px + var(--h) + 8px); width: var(--col); transform: translateX(calc(100% + var(--vao))); }
 .p2-ficha--solta > span > i { background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .16); }
 .p2-crm__cursor { display: none; position: absolute; left: 44%; top: 78%; }
 .p2-crm__cursor svg { display: block; width: 18px; height: 18px; fill: #161616; stroke: #fff; stroke-width: 1.4; stroke-linejoin: round; }
@@ -166,8 +166,8 @@
 @keyframes p2-crm-mover {
   0% { opacity: 0; transform: none; }
   4%, 18% { opacity: 1; transform: none; }
-  40%, 92% { opacity: 1; transform: translateX(calc(var(--col) + var(--vao))); }
-  96% { opacity: 0; transform: translateX(calc(var(--col) + var(--vao))); }
+  40%, 92% { opacity: 1; transform: translateX(calc(100% + var(--vao))); }
+  96% { opacity: 0; transform: translateX(calc(100% + var(--vao))); }
   100% { opacity: 0; transform: none; }
 }
 @keyframes p2-crm-ergue {
@@ -237,7 +237,23 @@
 .p2-plano__fim { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--fio); color: var(--suave); font-size: 12.5px; }
 .p2-plano__fim i { position: relative; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--tinta); }
 
-/* 5. O estudo de mercado, feito pelo time: a foto da sede e uma nota. */
+/* 5. O estudo de concorrentes como processo: uma tabela que se preenche
+   concorrente por concorrente e termina na brecha. Só a foto no cursor. */
+.p2-estudo2 { --laco: 14s; }
+.p2-estudo2__corpo { position: relative; display: grid; align-content: start; padding: 12px 14px; }
+.p2-estudo2__cabeca, .p2-estudo2__linha { display: grid; grid-template-columns: 86px minmax(0, 1.2fr) minmax(0, 1fr); gap: 8px; align-items: center; }
+.p2-estudo2__cabeca { height: 20px; color: var(--suave); font-size: 11.5px; white-space: nowrap; }
+.p2-estudo2__linha { height: 37px; border-top: 1px solid var(--fio); font-size: 13px; }
+.p2 .p2-estudo2__linha > span { margin: 0; min-width: 0; }
+.p2-estudo2__quem { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.p2-estudo2__quem i { display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%; background: #2e2e2d; font-style: normal; font-size: 11px; font-weight: 500; }
+.p2-estudo2__linha b { display: inline-block; max-width: 100%; padding: 4px 9px 5px; border-radius: 9px; background: #2b2b2a; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset; font-size: 12px; font-weight: 400; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+.p2-estudo2__brecha { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 14px 11px 12px; border-radius: 13px; background: #F2F2EE; color: #161616; box-shadow: 0 16px 28px -16px rgb(0 0 0 / .8); }
+.p2-estudo2__brecha > i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+.p2-estudo2__brecha strong { font-size: 13px; line-height: 1.25; }
+.p2 .p2-estudo2__brecha strong + span { color: rgb(22 22 22 / .6); font-size: 12px; }
+
+/* (anterior) foto da sede com nota: O estudo de mercado, feito pelo time: a foto da sede e uma nota. */
 .p2-estudo { position: relative; height: 100%; }
 .p2-estudo__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; border-radius: 18px; }
 .p2-estudo__nota { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .6); --borda-rosto: #1e1e1d; background: rgb(24 24 23 / .86); backdrop-filter: blur(10px); box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset; position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; }
@@ -258,7 +274,7 @@
   .p2-aviso { top: auto; bottom: 12px; right: 14px; }
   .p2-vagas { gap: 6px; }
   .p2-vaga b { padding-inline: 10px; font-size: 12.5px; }
-  .p2-crm { --col: 136px; --vao: 8px; --h: 64px; }
+  .p2-crm { --vao: 8px; --h: 64px; }
   .p2-ficha strong { font-size: 14px; }
   .p2-ficha { padding: 11px 12px; }
   .p2-estudo { height: 230px; }

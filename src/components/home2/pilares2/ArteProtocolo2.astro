@@ -16,7 +16,6 @@ import julio from '../../../assets/equipe/julio-caldeira.jpg';
 import maria from '../../../assets/equipe/maria.jpg';
 import pedro from '../../../assets/equipe/pedro-packness.jpg';
 import milena from '../../../assets/equipe/milena.jpg';
-import sede from '../../../assets/sede/operacao.jpg';
 
 interface Props { peca: 'conexoes' | 'crm' | 'automacao' | 'decisao' | 'posicionamento' }
 const { peca } = Astro.props;
@@ -84,6 +83,23 @@ const quadrosPlano = tarefas.map((t, k) => [
   `@keyframes p2-tar-visto-${k}{0%,${t.feito}%{opacity:0;transform:scale(.5)}${t.feito + 3}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`,
 ].join('')).join('') + '@keyframes p2-plano-fim{0%,80%{opacity:0;transform:translateY(6px)}84%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}';
 
+/* 5. O estudo de concorrentes como processo (10/10: "mostra como é olhar os
+   concorrentes", sem foto da sede): quem analisa passa concorrente por
+   concorrente, anota o que cada um comunica e onde investe, e no fim aparece
+   a brecha que vira o posicionamento. Tempos em % de um laço de 14 s. */
+const concorrentes = [
+  { letra: 'A', comunica: 'Preço baixo', investe: 'Google' },
+  { letra: 'B', comunica: 'Antes e depois', investe: 'Instagram' },
+  { letra: 'C', comunica: 'Promoções', investe: 'Instagram' },
+];
+const quadrosEstudo = concorrentes.map((_, i) => {
+  const em = 8 + i * 18;
+  return `@keyframes p2-e-linha-${i}{0%,${em}%{opacity:.32}${em + 3}%,94%{opacity:1}100%{opacity:.32}}`
+    + [0, 1].map((j) => `@keyframes p2-e-nota-${i}-${j}{0%,${em + 4 + j * 5}%{opacity:0;transform:scale(.8)}${em + 7 + j * 5}%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}`).join('');
+}).join('')
+  + '@keyframes p2-e-brecha{0%,64%{opacity:0;transform:translateY(12px) scale(.97)}70%,94%{opacity:1;transform:none}100%{opacity:0;transform:none}}'
+  + '@keyframes p2-e-mouse{0%,4%{opacity:0;left:84%;top:96px}9%,22%{opacity:1;left:58%;top:52px}27%,40%{opacity:1;left:58%;top:89px}45%,58%{opacity:1;left:58%;top:126px}67%,86%{opacity:1;left:76%;top:196px}93%,100%{opacity:0;left:82%;top:210px}}';
+
 const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const, class: 'p2-rosto' };
 ---
 {peca === 'conexoes' && (
@@ -105,7 +121,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
           </div>
           <div class="p2-mouse p2-anim" style="--a:p2-m1">
             <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
-            <span class="p2-mouse__quem"><Image src={isa} {...rosto} />Isa</span>
+            <span class="p2-mouse__quem"><Image src={isa} {...rosto} /></span>
           </div>
         </div>
         <div class="p2-bloco p2-anuncio p2-cena__extra">
@@ -131,7 +147,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
             <span class="p2-vaga"><b>Sex, 15:30</b></span>
             <div class="p2-mouse p2-anim" style="--a:p2-m2">
               <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
-              <span class="p2-mouse__quem"><Image src={lari} {...rosto} />Lari</span>
+              <span class="p2-mouse__quem"><Image src={lari} {...rosto} /></span>
             </div>
           </div>
         </div>
@@ -180,22 +196,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
     </div>
     <div class="p2-crm__quadro">
       <div class="p2-crm__coluna">
-        <div class="p2-crm__cabeca">Em contato<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">3</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">2</b></span></div>
+        <div class="p2-crm__cabeca">Em contato<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">2</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">1</b></span></div>
         <div class="p2-ficha"><strong>Fios de PDO</strong><span><i></i>Instagram<em>há 5 h</em></span></div>
         <div class="p2-ficha p2-ficha--vaga"></div>
-        <div class="p2-ficha p2-crm__sobe p2-anim" style="--a:p2-crm-sobe"><strong>Consulta</strong><span><i></i>Indicação<em>ontem</em></span></div>
-        <div class="p2-ficha p2-crm__sobe p2-anim" style="--a:p2-crm-sobe"><strong>Botox</strong><span><i></i>Instagram<em>seg</em></span></div>
       </div>
       <div class="p2-crm__coluna">
         <div class="p2-crm__cabeca">Agendado<span class="p2-crm__conta"><b class="p2-anim" style="--a:p2-crm-antes">1</b><b class="p2-crm__depois p2-anim" style="--a:p2-crm-depois">2</b></span></div>
         <div class="p2-ficha"><strong>Retorno</strong><span><i></i>Site<em>sex, 09:30</em></span></div>
         <div class="p2-ficha p2-ficha--destino p2-anim" style="--a:p2-crm-destino"></div>
-      </div>
-      <div class="p2-crm__coluna">
-        <div class="p2-crm__cabeca">Atendido<span class="p2-crm__conta"><b>2</b></span></div>
-        <div class="p2-ficha"><strong>Laser</strong><span><i></i>Site<em>ter</em></span></div>
-        <div class="p2-ficha"><strong>Peeling</strong><span><i></i>Google<em>seg</em></span></div>
-        <div class="p2-ficha"><strong>Preenchimento</strong><span><i></i>Indicação<em>sex</em></span></div>
       </div>
     </div>
     </div>
@@ -264,11 +272,27 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
 )}
 
 {peca === 'posicionamento' && (
-  <div class="p2 p2-estudo" aria-hidden="true">
-    <Image src={sede} alt="" class="p2-estudo__foto" format="webp" quality={76} widths={[480, 800, 1100]} sizes="(min-width: 1100px) 30vw, 100vw" loading="lazy" />
-    <div class="p2-cartao p2-estudo__nota" data-p2 style="--d:200">
-      <span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={julio} {...rosto} /></span>
-      <div><strong>Estudo de concorrentes</strong><span>Feito pelo nosso time</span></div>
-    </div>
+  <div class="p2 p2-tela p2-estudo2" aria-hidden="true" data-p2 style="--d:0">
+    <style is:inline set:html={quadrosEstudo}></style>
+    <section class="p2-cena p2-cena--fim">
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={julio} {...rosto} /></span><b>Estudo de concorrentes</b></header>
+      <div class="p2-estudo2__corpo">
+        <div class="p2-estudo2__cabeca"><span>Concorrente</span><span>O que comunica</span><span>Onde investe</span></div>
+        {concorrentes.map((c, k) => (
+          <div class="p2-estudo2__linha p2-anim" style={`--a:p2-e-linha-${k}`}>
+            <span class="p2-estudo2__quem"><i>{c.letra}</i>Clínica {c.letra}</span>
+            <span><b class="p2-anim" style={`--a:p2-e-nota-${k}-0`}>{c.comunica}</b></span>
+            <span><b class="p2-anim" style={`--a:p2-e-nota-${k}-1`}>{c.investe}</b></span>
+          </div>
+        ))}
+        <div class="p2-estudo2__brecha p2-anim" style="--a:p2-e-brecha">
+          <i></i><div><strong>Brecha encontrada</strong><span>Ninguém fala do pós-procedimento</span></div>
+        </div>
+        <div class="p2-mouse p2-anim" style="--a:p2-e-mouse">
+          <svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>
+          <span class="p2-mouse__quem"><Image src={milena} {...rosto} /></span>
+        </div>
+      </div>
+    </section>
   </div>
 )}
