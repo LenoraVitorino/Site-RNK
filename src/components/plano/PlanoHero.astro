@@ -7,9 +7,12 @@
  * e o botão; à direita, grande, a arte do plano (slot "arte"): o símbolo
  * oficial como janela para o sistema funcionando (JanelaStart no Start; a
  * mão com a seringa da home saiu: "não gostei de repetir o que tem na
- * home"). Na base, a ficha do plano em colunas, como na referência.
+ * home"). Na base, a ficha do plano, como na referência: aberta, sem
+ * caixa, um fio por item com o losango amarelo na ponta e o ícone solto.
  */
 import Icone from '../ui/Icone.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import type { NomeIconeRenke } from '../../data/icones-renke';
 import Selo from '../ui/Selo.astro';
 import { semSeta, type ContextoSecao } from '../pagina/contexto';
 
@@ -23,6 +26,10 @@ interface Props {
 }
 const { linhas, sub, cta, rotaCta = '#secao-2', ficha, secao } = Astro.props;
 const naPagina = rotaCta.startsWith('#');
+/* O ícone de cada item da ficha, pelo rótulo (10/10: a barra ganhou acabamento). */
+const ICONES_FICHA: Record<string, NomeIconeRenke> = {
+  'Duração': 'agenda', 'Ritmo': 'agenda', 'Etapas': 'fluxo', 'Pré-requisito': 'verificado', 'Para clínicas': 'pessoas', 'Entrega': 'camadas',
+};
 
 ---
 <section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
@@ -47,7 +54,13 @@ const naPagina = rotaCta.startsWith('#');
       <div class="plano-hero__arte"><slot name="arte" /></div>
     </div>
     <dl class="plano-hero__ficha">
-      {ficha.map((f) => <div><dt>{f.rotulo}</dt><dd>{f.valor}</dd></div>)}
+      {ficha.map((f, i) => (
+        <div class="plano-hero__item" style={`--i:${i}`}>
+          <span class="plano-hero__icone" aria-hidden="true"><IconeRenke nome={ICONES_FICHA[f.rotulo] ?? 'verificado'} size={18} /></span>
+          <dt>{f.rotulo}</dt>
+          <dd>{f.valor}</dd>
+        </div>
+      ))}
     </dl>
   </div>
 </section>

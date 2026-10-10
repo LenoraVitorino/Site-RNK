@@ -24,12 +24,24 @@
 /* À direita, a arte do plano (o infográfico do ecossistema, 640 × 560). */
 .plano-hero__imagem { position: relative; align-self: center; }
 .plano-hero__arte { position: relative; width: min(100%, 700px, calc((100svh - 300px) * 640 / 560)); aspect-ratio: 640 / 560; margin-inline: auto; }
-/* A arte em fluxo (a ficha do lead, no Start): a altura vem do conteúdo. */
-.plano-hero__arte:has(> .jor) { aspect-ratio: auto; width: min(100%, 680px, calc((100svh - 300px) * 640 / 540)); margin-right: 0; }
-.plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px clamp(20px, 3vw, 48px); margin: 0; }
-.plano-hero__ficha div { min-width: 0; padding-top: 14px; border-top: 1px solid rgb(242 242 238 / .16); }
-.plano-hero__ficha dt { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgb(242 242 238 / .55); }
-.plano-hero__ficha dd { margin: 6px 0 0; font-size: 15px; line-height: 1.4; max-width: 30ch; color: #f2f2ee; text-wrap: pretty; }
+/* A foto do time (no Start): quadro em pé, arredondado como os cartões da
+   home, sem cor; o símbolo do plano, num vidro escuro, é o único amarelo. */
+.plano-hero__arte:has(> .plano-retrato) { aspect-ratio: auto; width: min(100%, 560px, calc((100svh - 410px) * 4 / 5)); margin-right: 0; }
+.plano-retrato { position: relative; margin: 0; aspect-ratio: 4 / 5; overflow: hidden; border-radius: clamp(22px, 2vw, 30px); background: #151514; }
+.plano-retrato__foto { display: block; width: 100%; height: 100%; object-fit: cover; scale: 1.32; transform-origin: 30% 58%; filter: grayscale(1) contrast(1.04) brightness(.95); }
+.plano-retrato::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, transparent 55%, rgb(16 16 17 / .55)); box-shadow: 0 0 0 1px rgb(242 242 238 / .08) inset; pointer-events: none; }
+.plano-retrato__simbolo { position: absolute; z-index: 1; left: clamp(16px, 1.6vw, 24px); bottom: clamp(16px, 1.6vw, 24px); display: grid; place-items: center; width: 60px; height: 60px; border-radius: 16px; background: rgb(16 16 17 / .62); border: 1px solid rgb(242 242 238 / .12); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.plano-retrato__simbolo img { display: block; width: 40px; height: 40px; }
+/* A ficha, aberta, sem caixa (10/10: "bloco em cima do bloco" reprovado): um
+   fio por item, que se desenha na entrada com o losango amarelo na ponta, o
+   ícone solto ao lado do rótulo e o valor na letra dos títulos. */
+.plano-hero__ficha { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px clamp(20px, 3vw, 48px); margin: 0; }
+.plano-hero__item { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px 10px; align-content: start; min-width: 0; padding-top: 20px; }
+.plano-hero__item::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgb(242 242 238 / .2); transform-origin: 0 50%; }
+.plano-hero__item::after { content: ''; position: absolute; left: 0; top: -3.5px; width: 7px; height: 7px; background: var(--destaque, #FFD103); transform: rotate(45deg); }
+.plano-hero__icone { display: grid; place-items: center; color: rgb(242 242 238 / .7); }
+.plano-hero__ficha dt { font-size: 14px; color: rgb(242 242 238 / .6); }
+.plano-hero__ficha dd { grid-column: 1 / -1; margin: 0; max-width: 26ch; font-family: var(--font-titulo); font-size: clamp(17px, 1.4vw, 21px); font-weight: 300; line-height: 1.3; letter-spacing: -.02em; color: #f2f2ee; text-wrap: pretty; }
 
 /* Entrada: o nome sobe linha por linha; depois a imagem, o apoio e a ficha. */
 @media (prefers-reduced-motion: no-preference) {
@@ -37,8 +49,13 @@
   .js .plano-hero__linha--2 { animation-delay: .14s; }
   .js :is(.plano-hero__texto .selo-revena, .plano-hero__sub, .plano-hero__acoes) { animation: plano-aparece 1s var(--easing) .45s both; }
   .js .plano-hero__ficha { animation: plano-aparece 1s var(--easing) .7s both; }
+  .js .plano-hero__item::before { animation: plano-risca 1.4s var(--easing) calc(.8s + var(--i, 0) * .12s) both; }
+  .js .plano-retrato { animation: plano-aparece 1.4s var(--easing) .3s both; }
+  .js .plano-retrato__foto { animation: plano-assenta 2.6s var(--easing) .3s both; }
 }
 @keyframes plano-sobe { from { opacity: 0; transform: translate3d(0, .18em, 0); } }
+@keyframes plano-assenta { from { transform: scale(1.06); } }
+@keyframes plano-risca { from { transform: scaleX(0); } }
 @keyframes plano-aparece { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
 
 /* ---------- Painel claro com chanfro (o do método e dos Resultados) ---------- */
@@ -59,16 +76,26 @@
 .plano-cabeca .titulo { margin: 0; font-weight: 300; }
 .plano-cabeca .cabeca-dobra__selo { margin: 0 0 clamp(24px, 2.6vw, 36px); }
 
-/* ---------- Ideal para ---------- */
-.plano-ideal__titulo { margin: 0 0 clamp(40px, 5vw, 80px); font-weight: 300; }
-.plano-ideal__lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); }
-.plano-ideal__item { display: grid; align-content: start; gap: clamp(28px, 3.4vw, 56px); min-width: 0; padding-right: clamp(12px, 1.4vw, 24px); font-size: clamp(18px, 1.45vw, 22px); font-weight: 300; line-height: 1.3; letter-spacing: -.015em; text-wrap: pretty; }
-.plano-ideal__item + .plano-ideal__item { padding-left: clamp(16px, 1.8vw, 30px); border-left: 1px solid rgb(37 37 35 / .16); }
-.plano-ideal__item:last-child { padding-right: 0; }
-/* O ícone no quadrado amarelo, como nos números de "O que a Renke faz". */
-.plano-ideal__n { --icone-acento: currentColor; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; color: #252523;
-  background: linear-gradient(150deg, rgb(255 226 90 / .92), rgb(255 209 3 / .72)); border: 1px solid rgb(255 255 255 / .55);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 8px 18px -8px rgb(150 115 0 / .45), 0 2px 5px rgb(37 37 35 / .08); }
+/* ---------- Ideal para (10/10: na cena escura, lista que se confere) ---------- */
+.plano-ideal { padding-block: var(--esp-secao); color: var(--papel); }
+.plano-ideal__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 112px); align-items: start; }
+.plano-ideal__titulo { position: sticky; top: calc(var(--altura-header) + 48px); margin: 0; max-width: 9em; font-weight: 300; text-wrap: balance; }
+.plano-ideal__lista { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgb(242 242 238 / .12); }
+.plano-ideal__item { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: clamp(16px, 1.8vw, 28px); padding-block: clamp(20px, 2.2vw, 32px); border-top: 1px solid rgb(242 242 238 / .12); font-family: var(--font-titulo); font-size: clamp(21px, 2.2vw, 32px); font-weight: 300; line-height: 1.2; letter-spacing: -.03em; text-wrap: balance; }
+.plano-ideal__marca { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #262625, #171716); box-shadow: 0 0 0 1px rgb(242 242 238 / .14) inset; }
+.plano-ideal__marca svg { width: 20px; height: 20px; fill: none; stroke: var(--destaque, #FFD103); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  /* A lista aparece inteira; o que entra em sequência é a conferência de cada linha. */
+  .js .plano-ideal__lista.entra { opacity: 1; transform: none; }
+  .js .plano-ideal__item { color: rgb(242 242 238 / .34); transition: color 1s var(--easing) calc(.3s + var(--i) * .42s); }
+  .js .plano-ideal__marca svg { stroke-dashoffset: 1; transition: stroke-dashoffset .8s var(--easing) calc(.45s + var(--i) * .42s); }
+  .js .plano-ideal__lista.visivel .plano-ideal__item { color: #f2f2ee; }
+  .js .plano-ideal__lista.visivel .plano-ideal__marca svg { stroke-dashoffset: 0; }
+}
+@media (max-width: 899.98px) {
+  .plano-ideal__grade { grid-template-columns: minmax(0, 1fr); }
+  .plano-ideal__titulo { position: static; max-width: none; }
+}
 
 /* ---------- O que o plano faz (cartões de vidro da home) ---------- */
 .plano-faz { padding-block: var(--esp-secao); }
@@ -78,30 +105,28 @@
 .plano-faz .ganhos__nome { font-size: clamp(21px, 1.6vw, 25px); text-wrap: pretty; }
 .plano-faz .ganhos__corpo > * { min-width: 0; }
 
-/* ---------- Etapas: régua do tempo ---------- */
-.plano-regua { display: flex; margin: 0; padding: 0; list-style: none; }
-.plano-regua__etapa { flex: var(--peso) 1 0; min-width: 0; display: grid; align-content: start; gap: 8px; padding-right: clamp(14px, 1.8vw, 32px); }
-.plano-regua__etapa:last-child { padding-right: 0; }
-.plano-regua__trilho { position: relative; display: block; height: 1px; margin: 0 calc(-1 * clamp(14px, 1.8vw, 32px)) 22px 0; background: rgb(37 37 35 / .16); }
-.plano-regua__etapa:last-child .plano-regua__trilho { margin-right: 0; }
-.plano-regua__etapa--opcional .plano-regua__trilho { background: repeating-linear-gradient(90deg, rgb(37 37 35 / .3) 0 5px, transparent 5px 11px); }
-.plano-regua__fio { position: absolute; inset: 0; background: #252523; transform-origin: left; transform: scaleX(0); }
-.plano-regua__etapa--opcional .plano-regua__fio { background: repeating-linear-gradient(90deg, #252523 0 5px, transparent 5px 11px); }
-/* O marco de cada etapa: um losango que fica amarelo quando o fio chega. */
-.plano-regua__trilho::before { content: ''; position: absolute; z-index: 1; left: 0; top: 50%; width: 11px; height: 11px; margin-top: -5.5px; background: #ececea; border: 1px solid rgb(37 37 35 / .5); transform: rotate(45deg); }
-.plano-regua__n { font-size: 12.5px; font-weight: 500; color: #6a6a67; }
-.plano-regua__nome { margin: 0; font-size: clamp(19px, 1.5vw, 23px); font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
-.plano-regua__duracao { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: #6a6a67; }
-.plano-regua__texto { margin: 6px 0 0; font-size: 14.5px; line-height: 1.5; color: #50504e; max-width: 30ch; text-wrap: pretty; }
-.plano-etapas__fechamento { margin: clamp(40px, 4.4vw, 64px) 0 0; max-width: 62ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.55; color: #50504e; text-wrap: pretty; }
-@media (prefers-reduced-motion: no-preference) {
-  .js .plano-regua__etapa { opacity: .3; transition: opacity .9s var(--easing) var(--atraso); }
-  .js .plano-regua__fio { transition: transform var(--dur) linear var(--atraso); }
-  .js .plano-regua__trilho::before { transition: background-color .6s var(--easing) var(--atraso), border-color .6s var(--easing) var(--atraso); }
+/* ---------- Etapas: fio em pé, sem caixa (10/10) ---------- */
+.plano-etapas { padding-block: var(--esp-secao); color: var(--papel); }
+.plano-etapas__grade { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start; }
+.plano-etapas__cabeca { position: sticky; top: calc(var(--altura-header) + 48px); display: grid; gap: clamp(20px, 2.4vw, 32px); }
+.plano-etapas__cabeca .titulo { margin: 0; font-weight: 300; }
+.plano-etapas__fechamento { margin: 0; max-width: 38ch; font-size: clamp(16px, 1.2vw, 18px); line-height: 1.55; color: rgb(242 242 238 / .66); text-wrap: pretty; }
+.plano-etapas__lista { position: relative; list-style: none; margin: 0; padding: 0; }
+.plano-etapas__fio { position: absolute; left: 5px; top: 0; bottom: 0; width: 1px; background: rgb(242 242 238 / .14); }
+.plano-etapas__fio b { display: block; height: 100%; background: #f2f2ee; transform-origin: 50% 0; }
+[data-vivo] .plano-etapas__fio b { transform: scaleY(0); will-change: transform; }
+.plano-etapa { position: relative; display: grid; grid-template-columns: 11px minmax(0, 1fr); align-items: center; gap: clamp(24px, 3vw, 48px); padding-block: clamp(26px, 6svh, 60px); }
+.plano-etapa__marco { position: relative; z-index: 1; width: 11px; height: 11px; background: #f2f2ee; border: 1px solid #f2f2ee; transform: rotate(45deg); transition: background-color .5s var(--easing), border-color .5s var(--easing); }
+[data-vivo] .plano-etapa:not([data-feito]) .plano-etapa__marco { background: #0d0d0d; border-color: rgb(242 242 238 / .4); }
+[data-vivo] .plano-etapa[data-atual] .plano-etapa__marco { background: var(--destaque, #FFD103); border-color: var(--destaque, #FFD103); }
+.plano-etapa__texto { display: grid; gap: clamp(8px, 1vw, 14px); justify-items: start; transform-origin: 0 50%; will-change: transform, opacity; }
+.plano-etapa__duracao { margin: 0; font-size: 15px; color: rgb(242 242 238 / .6); }
+.plano-etapa__nome { margin: 0; font-family: var(--font-titulo); font-size: clamp(34px, 5vw, 76px); font-weight: 300; line-height: 1; letter-spacing: -.05em; }
+.plano-etapa__descricao { margin: 0; max-width: 32ch; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; color: rgb(242 242 238 / .72); text-wrap: pretty; }
+@media (max-width: 899.98px) {
+  .plano-etapas__grade { grid-template-columns: minmax(0, 1fr); }
+  .plano-etapas__cabeca { position: static; }
 }
-.plano-regua--viva .plano-regua__etapa, html:not(.js) .plano-regua__etapa { opacity: 1; }
-.plano-regua--viva .plano-regua__fio, html:not(.js) .plano-regua__fio { transform: scaleX(1); }
-.plano-regua--viva .plano-regua__trilho::before { background: var(--destaque, #FFD103); border-color: #252523; }
 
 /* ---------- Entregas (o extrato dos Resultados) ---------- */
 .plano-entregas { padding-block: var(--esp-secao); }
@@ -116,28 +141,16 @@
 /* ---------- Tablet e celular ---------- */
 @media (max-width: 1099.98px) {
   .plano-hero__ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Ideal para: os itens voltam a ser linhas entre fios, com o ícone ao lado. */
-  .plano-ideal__lista { grid-template-columns: 1fr; border-bottom: 1px solid rgb(37 37 35 / .16); }
-  .plano-ideal__item, .plano-ideal__item + .plano-ideal__item { grid-template-columns: 40px minmax(0, 1fr); align-items: center; gap: 20px; padding: clamp(16px, 2.4vw, 22px) 0; border-left: 0; border-top: 1px solid rgb(37 37 35 / .16); }
 }
 @media (max-width: 899.98px) {
-  /* A régua fica em pé: o fio desce pela esquerda. */
-  .plano-regua { flex-direction: column; gap: 32px; }
-  .plano-regua__etapa { position: relative; padding: 0 0 0 36px; }
-  .plano-regua__trilho { position: absolute; left: 5px; top: 4px; bottom: -36px; width: 1px; height: auto; margin: 0; }
-  .plano-regua__etapa:last-child .plano-regua__trilho { bottom: 0; }
-  .plano-regua__etapa--opcional .plano-regua__trilho { background: repeating-linear-gradient(180deg, rgb(37 37 35 / .3) 0 5px, transparent 5px 11px); }
-  .plano-regua__fio { transform-origin: top; transform: scaleY(0); }
-  .plano-regua__etapa--opcional .plano-regua__fio { background: repeating-linear-gradient(180deg, #252523 0 5px, transparent 5px 11px); }
-  .plano-regua--viva .plano-regua__fio, html:not(.js) .plano-regua__fio { transform: scaleY(1); }
-  .plano-regua__trilho::before { left: -5px; top: 0; margin-top: 0; }
   .plano-entregas__linha { grid-template-columns: 1fr; }
 }
 @media (max-width: 899.98px) {
   /* Em pé: texto, depois o símbolo com a foto, depois a ficha. */
   .plano-hero__grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; min-height: 0; }
   .plano-hero__arte { width: 100%; aspect-ratio: 640 / 700; }
-  .plano-hero__arte:has(> .jor) { width: 100%; aspect-ratio: auto; }
+  .plano-hero__arte:has(> .plano-retrato) { width: 100%; }
+  .plano-retrato { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 699.98px) {
   .plano-hero__titulo { font-size: clamp(60px, 19vw, 110px); }
@@ -167,3 +180,9 @@
 .plano-rotina .plano-entregas__linha { grid-template-columns: minmax(0, 1fr); }
 .plano-rotina .plano-entregas__area { align-items: baseline; font-size: clamp(20px, 1.9vw, 30px); line-height: 1.25; text-wrap: balance; }
 .plano-rotina .plano-entregas__area::before { transform: rotate(45deg) translateY(-4px); }
+
+/* O título da chamada final no mesmo tamanho dos títulos das outras dobras. */
+.pagina-plano .int-cta__titulo:not(.int-cta__titulo--longo) { font-size: clamp(2rem, 3.6vw, 3.5rem); }
+@media (max-width: 599.98px) {
+  .plano-hero__ficha { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+}

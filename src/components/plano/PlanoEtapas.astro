@@ -1,58 +1,74 @@
 ---
 /**
- * Etapas do plano (04/10/2026): uma régua do tempo no painel claro com
- * chanfro. Cada etapa ocupa a largura proporcional aos dias dela; a opcional
- * entra tracejada no fim. Quando a régua aparece, um fio grafite corre da
- * esquerda para a direita, devagar, e cada etapa acende quando ele passa
- * (o losango amarelo é a ponta do fio). No celular, a régua fica em pé.
+ * Etapas do plano. A régua horizontal no painel claro saiu em 10/10/2026
+ * ("muito mais dinâmico do que horizontal"); o palco preso à tela com o
+ * número em contorno foi reprovado no mesmo dia ("o número em traço não faz
+ * nem sentido"), e cartão está fora ("bloco em cima do bloco"). Ficou um
+ * fio em pé, sem caixa nenhuma: o título e a frase presos à esquerda e, à
+ * direita, as etapas ao longo do fio. Com a rolagem o fio se enche e a
+ * etapa que passa pelo meio da tela cresce e acende, enquanto as outras
+ * recuam (o zoom vem daí). O losango amarelo marca a etapa da vez.
+ * Sem movimento ou sem JS, todas ficam acesas, em lista.
  */
 import type { ContextoSecao } from '../pagina/contexto';
 
 interface Etapa { n: string; duracao?: string; nome: string; descricao?: string }
 interface Props { h2: string; etapas: Etapa[]; fechamento?: string; secao: ContextoSecao }
 const { h2, etapas, fechamento, secao } = Astro.props;
-/* "12 meses" conta em dias (× 30). */
-const dias = (e: Etapa) => Number(e.duracao?.match(/\d+/)?.[0] ?? 0) * (/m[eê]s/i.test(e.duracao ?? '') ? 30 : 1);
-const fixas = etapas.filter((e) => dias(e) > 0);
-const total = fixas.reduce((s, e) => s + dias(e), 0);
-/* A opcional ganha o peso de uma etapa média, para caber o texto. */
-const pesoOpcional = Math.min(48, Math.round(total / Math.max(1, fixas.length)));
-/* O fio anda sempre na mesma velocidade: cada trecho dura o seu peso e
-   começa quando o anterior termina. */
-const MS_POR_DIA = 26;
-/* Peso entre 24 e 48 na largura: a etapa curta cabe o texto e a longa (180
-   dias, 12 meses, nos planos Scale e Core) não espreme as outras. */
-const pesos = etapas.map((e) => Math.min(48, Math.max(24, dias(e) || pesoOpcional)));
-const atrasos = pesos.map((_, i) => pesos.slice(0, i).reduce((s, p) => s + p, 0) * MS_POR_DIA);
 ---
-<section class="plano-painel plano-etapas" id={secao.id} data-tom="claro" aria-labelledby={secao.tituloId}>
-  <div class="container">
-    <header class="plano-cabeca entra">
+<section class="plano-etapas" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container plano-etapas__grade">
+    <header class="plano-etapas__cabeca entra">
       <h2 id={secao.tituloId} class="titulo">{h2}</h2>
+      {fechamento && <p class="plano-etapas__fechamento">{fechamento}</p>}
     </header>
-    <ol class="plano-regua" data-plano-regua >
-      {etapas.map((e, i) => {
-        const opcional = dias(e) === 0;
-        return (
-          <li class:list={['plano-regua__etapa', { 'plano-regua__etapa--opcional': opcional }]} style={`--peso:${pesos[i]};--atraso:${atrasos[i] + 300}ms;--dur:${pesos[i] * MS_POR_DIA}ms`}>
-            <span class="plano-regua__trilho" aria-hidden="true"><span class="plano-regua__fio"></span></span>
-            <h3 class="plano-regua__nome">{e.nome}</h3>
-            {e.duracao && <p class="plano-regua__duracao">{e.duracao}</p>}
-            {e.descricao && <p class="plano-regua__texto">{e.descricao}</p>}
-          </li>
-        );
-      })}
+    <ol class="plano-etapas__lista" data-plano-etapas>
+      <li class="plano-etapas__fio" aria-hidden="true"><b data-fio></b></li>
+      {etapas.map((e) => (
+        <li class="plano-etapa" data-etapa>
+          <i class="plano-etapa__marco" aria-hidden="true"></i>
+          <div class="plano-etapa__texto" data-foco>
+            {e.duracao && <p class="plano-etapa__duracao">{e.duracao}</p>}
+            <h3 class="plano-etapa__nome">{e.nome}</h3>
+            {e.descricao && <p class="plano-etapa__descricao">{e.descricao}</p>}
+          </div>
+        </li>
+      ))}
     </ol>
-    {fechamento && <p class="plano-etapas__fechamento entra">{fechamento}</p>}
   </div>
 </section>
 
 <script>
-  /* O fio corre etapa por etapa; cada uma acende quando ele chega. */
-  document.querySelectorAll<HTMLElement>('[data-plano-regua]').forEach((regua) => {
-    const acender = () => regua.classList.add('plano-regua--viva');
-    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { acender(); return; }
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { acender(); obs.disconnect(); } }, { threshold: .4 });
-    obs.observe(regua);
+  /* A etapa mais perto do meio da tela cresce e acende; o fio enche até ela. */
+  document.querySelectorAll<HTMLElement>('[data-plano-etapas]').forEach((lista) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const etapas = [...lista.querySelectorAll<HTMLElement>('[data-etapa]')];
+    const fio = lista.querySelector<HTMLElement>('[data-fio]');
+    let pedido = 0;
+    const desenhar = () => {
+      pedido = 0;
+      const meio = innerHeight * .5, alcance = innerHeight * .42;
+      const r = lista.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > innerHeight + 200) return;
+      let atual = -1, maior = 0;
+      etapas.forEach((el, i) => {
+        const marco = el.querySelector<HTMLElement>('.plano-etapa__marco')!.getBoundingClientRect();
+        const centro = el.getBoundingClientRect();
+        const f = Math.max(0, 1 - Math.abs(centro.top + centro.height / 2 - meio) / alcance);
+        const foco = f * f * (3 - 2 * f);
+        const texto = el.querySelector<HTMLElement>('[data-foco]')!;
+        texto.style.transform = `scale(${.7 + .3 * foco})`;
+        texto.style.opacity = String(.26 + .74 * foco);
+        el.toggleAttribute('data-feito', marco.top <= meio);
+        if (foco > maior) { maior = foco; atual = i; }
+      });
+      etapas.forEach((el, i) => el.toggleAttribute('data-atual', i === atual && maior > .35));
+      if (fio) fio.style.transform = `scaleY(${Math.min(1, Math.max(0, (meio - r.top) / r.height))})`;
+    };
+    const pedir = () => { if (!pedido) pedido = requestAnimationFrame(desenhar); };
+    lista.setAttribute('data-vivo', '');
+    addEventListener('scroll', pedir, { passive: true });
+    addEventListener('resize', pedir);
+    desenhar();
   });
 </script>

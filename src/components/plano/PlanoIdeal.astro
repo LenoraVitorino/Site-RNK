@@ -1,25 +1,24 @@
 ---
 /**
- * "Ideal para clínicas que:" nos planos (04/10/2026). A dobra vira o painel
- * claro translúcido com chanfro da home (método e Resultados). Desde
- * 06/10, no desenho dos números de "O que a Renke faz": o título no alto e
- * os itens lado a lado, em colunas separadas por fios, cada um com o ícone
- * no quadrado amarelo (sem número: a Lenora não gosta de numeração, 04/10).
- * A coluna do título presa deixava meia dobra vazia.
+ * "Ideal para clínicas que:" nos planos. Em 10/10/2026 saiu o painel claro
+ * com os cinco ícones amarelos ("pobrinho", "essa box branca nada a ver"):
+ * a dobra fica na cena escura, com o título preso à esquerda e os critérios
+ * em linhas grandes à direita, que se conferem uma a uma quando a dobra
+ * entra na tela (o visto se desenha em amarelo e a linha acende). Sem
+ * número: a Lenora não gosta de numeração (04/10).
  */
-import IconeRenke from '../ui/IconeRenke.astro';
 import type { ContextoSecao } from '../pagina/contexto';
 
 interface Props { h2: string; itens: string[]; secao: ContextoSecao }   // serve a qualquer lista do plano
 const { h2, itens, secao } = Astro.props;
 ---
-<section class="plano-painel plano-ideal" id={secao.id} data-tom="claro" aria-labelledby={secao.tituloId}>
-  <div class="container">
+<section class="plano-ideal" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+  <div class="container plano-ideal__grade">
     <h2 id={secao.tituloId} class="titulo plano-ideal__titulo entra">{h2}</h2>
-    <ol class="plano-ideal__lista" style={`--cols:${itens.length}`}>
+    <ol class="plano-ideal__lista entra">
       {itens.map((item, i) => (
-        <li class="plano-ideal__item entra" style={`--i:${i}`}>
-          <span class="plano-ideal__n" aria-hidden="true"><IconeRenke nome="verificado" size={20} /></span>
+        <li class="plano-ideal__item" style={`--i:${i}`}>
+          <span class="plano-ideal__marca" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M6.5 12.6l3.6 3.6 7.4-8.2" /></svg></span>
           <span>{item}</span>
         </li>
       ))}
