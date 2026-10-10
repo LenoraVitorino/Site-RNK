@@ -1,7 +1,8 @@
 ---
 /**
- * TESTE (10/10/2026), fora da home: a dobra "O que muda na sua clínica" como
- * conversa. Das cinco versões testadas, a Lenora aprovou esta ("cirúrgico"):
+ * A dobra "O que muda na sua clínica" como conversa (10/10/2026). Testada em
+ * /laboratorio/dores-solucoes e levada à home no lugar dos cartões de
+ * Perguntas.astro. Das cinco versões testadas, a Lenora aprovou esta ("cirúrgico"):
  * o dono de clínica pergunta (a dor da copy original, docs/03-copy/home.md,
  * seção 3) e a Renke responde (o ganho da versão ajustada). Pedidos dela para
  * fechar: título à esquerda e conversa à direita, animação acabada e um jeito
@@ -10,12 +11,15 @@
  * de um aplicativo de mensagens: tocar numa sugestão envia aquela pergunta.
  * A conversa também avança sozinha, devagar, até a pessoa interagir.
  * Os rótulos curtos das sugestões são rascunho e precisam de validação.
+ * Na copy original (VERSAO=copy) o título e as perguntas são os do briefing,
+ * sem selo nem apoio; o desenho é o mesmo nas duas versões.
  */
 import { Image } from 'astro:assets';
 import Selo from '../ui/Selo.astro';
 import IconeRenke from '../ui/IconeRenke.astro';
 import type { NomeIconeRenke } from '../../data/icones-renke';
 import { perguntas } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
 import lari from '../../assets/equipe/lari.jpg';
 import julio from '../../assets/equipe/julio-caldeira.jpg';
 import isa from '../../assets/equipe/isa.jpg';
@@ -29,7 +33,7 @@ const atalhos = ['Custo por paciente', 'Conversão de leads', 'Processo', 'Melho
    uma resposta"): abre com a resposta direta, em negrito, e fecha com o que a
    Renke faz. Não repetir o título do cartão antigo. São rascunho; precisam de
    validação. */
-const conversa = [
+const curta = [
   { q: 'Quanto custa, de verdade, um paciente novo pra sua clínica?', t: 'Você passa a saber.', r: 'A gente mostra o custo por paciente e o retorno de cada canal.' },
   { q: 'Dos leads que chegam, quantos sentam na cadeira do consultório?', t: 'Dá pra saber um por um.', r: 'A gente acompanha cada lead até o agendamento.' },
   { q: 'Se sua secretária sai amanhã, o processo continua?', t: 'Continua.', r: 'A gente estrutura o comercial para a clínica não depender de uma só pessoa.' },
@@ -38,14 +42,21 @@ const conversa = [
   { q: 'E no mês bom, você sabe o porquê para repetir o resultado?', t: 'Sabe, e repete.', r: 'O que deu certo vira processo e o resultado deixa de ser sorte.' },
   { q: 'Você sabe o que seus concorrentes comunicam e que espaço deixam aberto?', t: 'A gente mapeia pra você.', r: 'O que a concorrência comunica e os espaços que ela deixa livres.' },
 ];
+const conversa = curta.map((c, i) => ({ ...c, q: copyLiteral ? perguntas[i].pergunta : c.q }));
 const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const };
 ---
-<section class="dc" aria-labelledby="dc-titulo" data-dc>
+<section class="dc" id="perguntas" aria-labelledby="perguntas-titulo" data-dc>
   <div class="container dc__grade">
     <header class="dc__cabeca">
-      <Selo>O que muda na sua clínica</Selo>
-      <h2 class="dc__titulo" id="dc-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
-      <p class="dc__apoio">Sete perguntas que todo dono de clínica já se fez. Escolha uma e veja o que muda com a Renke.</p>
+      {copyLiteral ? (
+        <h2 class="dc__titulo dc__titulo--copy" id="perguntas-titulo">Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></h2>
+      ) : (
+        <>
+          <Selo>O que muda na sua clínica</Selo>
+          <h2 class="dc__titulo" id="perguntas-titulo">Do seu paciente, você sabe tudo. <strong>E do seu negócio?</strong></h2>
+          <p class="dc__apoio">Sete perguntas que todo dono de clínica já se fez. Escolha uma e veja o que muda com a Renke.</p>
+        </>
+      )}
     </header>
 
     <div class="dc__cartao">
@@ -114,6 +125,7 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
   .dc__apoio { margin: 0; max-width: 40ch; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; color: #aaa; text-wrap: pretty; }
   .dc__titulo { margin: 0; max-width: 20ch; font-family: var(--font-titulo); font-weight: 300; font-size: clamp(34px, 3.4vw, 52px); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
   .dc__titulo strong { display: block; font-weight: 500; }
+  .dc__titulo--copy { max-width: 24ch; }
 
   /* A conversa mora num cartão só: superfície escura com luz no canto e sombra longa. */
   .dc__cartao {
