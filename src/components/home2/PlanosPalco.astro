@@ -44,12 +44,20 @@ const textoEstudio: Record<string, string> = {
   'REVENA SCALE': 'Comercial e marketing medidos de perto, com conteúdo orgânico e reativação da base de pacientes.',
 };
 
+// O momento da clínica, no canto inferior direito do palco (voltou em 10/10).
+// O Start usa a fala da copy original (docs/03-copy/home.md): em data/home.ts
+// o campo dele deixou de ser uma fala.
+const falaEstudio: Record<string, string> = {
+  'REVENA START': 'Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados.',
+};
+
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   return {
     id: chave(label),
     nome: nome(label),
     texto: textoEstudio[label] ?? p.texto,
+    fala: falaEstudio[label] ?? p.fala,
     rota: p.rota,
     pecas: pecas(label),
   };
@@ -64,9 +72,15 @@ import Selo from '../ui/Selo.astro';
     <div class="container palcoplanos__cabeca">
       <Selo tag="h2" class="palcoplanos__titulo" id="protocolo-revena-titulo" tom="claro" marca="revena">Protocolo Revena</Selo>
       <p class="palcoplanos__manifesto" data-revena-revela>
-        {'Estruturamos sua operação do zero e operamos juntos no longo prazo. Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
+        {'Estruturamos sua operação do zero e operamos juntos no longo prazo.'.split(' ').map((palavra) => (
           <><span data-palavra>{palavra}</span>{' '}</>
         ))}
+        <!-- A pergunta em peso médio: a frase de destaque do título (10/10). -->
+        <b>
+          {'Qual é o momento da sua clínica?'.split(' ').map((palavra) => (
+            <><span data-palavra>{palavra}</span>{' '}</>
+          ))}
+        </b>
       </p>
     </div>
   </div>
@@ -104,6 +118,11 @@ import Selo from '../ui/Selo.astro';
             <div class="plano-palco__texto">
               <p class="plano-palco__frase">{p.texto}</p>
               <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="sm">Saiba mais</Botao>
+            </div>
+
+            <div class="plano-palco__momento">
+              <p class="plano-palco__momento-rotulo">Momento da clínica</p>
+              <p class="plano-palco__fala">“{p.fala}”</p>
             </div>
 
           </div>
