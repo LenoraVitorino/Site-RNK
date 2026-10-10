@@ -1,95 +1,64 @@
 ---
-/**
- * O que muda na sua clínica (02/10/2026). Cartões de vidro desfocado sobre
- * o fundo animado (aprovado: "manter essa estética ficou foda"), numa
- * composição da referência "Business Goals": título em cima, em duas linhas,
- * e quatro colunas de cartões quase quadrados em diagrama, uns tocando os
- * outros pelas quinas (X X · X / · · X · / X X · X; "deixa alguns um na
- * ponta do outro"). O cartão de destaque com o número saiu. Ícone fino em anel, título e texto
- * embaixo. A grade se constrói ao entrar (referência Tiwis, 0:15–0:16).
- * Na copy original cada cartão traz a pergunta de dor do briefing (uma
- * frase só) no lugar do ganho; as duas listas casam na mesma ordem.
- */
-import Selo from '../ui/Selo.astro';
-import IconeRenke from '../ui/IconeRenke.astro';
-import type { NomeIconeRenke } from '../../data/icones-renke';
+/** Coluna de abertura fixa no desktop e sete cards em fluxo normal.
+ * Movimento: Solutions do Keen. Escala, ritmo e sombra: cards da seção
+ * AI solutions for every team do ClickUp oficial (10/10/2026).
+ * No celular, toda a seção segue a rolagem da página, sem conteúdo oculto. */
 import { perguntas } from '../../data/home';
 import { copyLiteral } from '../../data/versao';
 import { doresRespostas } from '../../data/dores-respostas';
 
-/* dor: teste (10/10, /laboratorio/dores-solucoes) dos mesmos cartões com a
-   pergunta de dor e a resposta da Renke no lugar do ganho solto. */
-/* composicao: teste (10/10) de outra composição dos cartões, em bento de
-   larguras variadas e sem buracos, no lugar do losango ("meio xadrez",
-   "achatado", "compacto"). Referências: pins 10133167906261798 ("What We Do
-   Best") e 718535315593728369. */
-interface Props { dor?: boolean; composicao?: 'losango' | 'bento' }
-const { dor = false, composicao = 'losango' } = Astro.props;
-
-/* Ícones Renke, um por ganho (versão em cor: traço claro, losango em amarelo). */
-const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
+interface Props { respostas?: boolean }
+const { respostas = false } = Astro.props;
 ---
-<section class:list={['secao', 'ganhos', composicao === 'bento' && 'ganhos--bento']} id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
-  <div class="container">
-    <header class="ganhos__cabeca">
-      {copyLiteral ? (
-        <h2 class="ancora operacao__titulo" id="perguntas-titulo">
-          Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
-          <strong>Mas e com o seu negócio?</strong>
-        </h2>
-      ) : (
-        <>
-          <Selo class="cabeca-dobra__selo">O que muda na sua clínica</Selo>
-          <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
-            {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
-              <span class="ancora__linha">
-                {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
-              </span>
-            ))}
-          </h2>
-          <p class="cabeca-dobra__apoio">Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.</p>
-        </>
-      )}
+<section class="secao perguntas-cartoes" id="perguntas" aria-labelledby="perguntas-titulo">
+  <div class="container perguntas-cartoes__layout">
+    <header class="perguntas-cartoes__abertura">
+      <h2 id="perguntas-titulo">
+        {copyLiteral ? <>Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. <strong>Mas e com o seu negócio?</strong></> : <>O que muda na sua clínica</>}
+      </h2>
+      {!copyLiteral && <p>Uma operação estruturada muda a forma como sua clínica cresce.</p>}
     </header>
 
-    <ol class="ganhos__grade" aria-label="O que muda na sua clínica" data-ganhos-grade>
+    <ol class="perguntas-cartoes__lista" aria-label="Sete perguntas sobre sua clínica">
       {perguntas.map((p, i) => (
-        <li class:list={['ganhos__cartao', `ganhos__cartao--${i + 1}`, { 'ganhos__cartao--pergunta': copyLiteral }]} style={`--i:${i}`}>
-          <span class="ganhos__anel" aria-hidden="true">
-            <IconeRenke nome={icones[i]} size={22} class="ganhos__icone" />
-          </span>
-          <div class="ganhos__corpo">
-            {copyLiteral ? (
-              <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{p.pergunta}</span></h3>
-            ) : dor ? (
-              <>
-                <h3 class="ganhos__nome ganhos__nome--pergunta"><span>{doresRespostas[i].q}</span></h3>
-                <p class="ganhos__texto ganhos__texto--resposta"><span><strong>{doresRespostas[i].t}</strong> {doresRespostas[i].r}</span></p>
-              </>
-            ) : (
-              <>
-                <h3 class="ganhos__nome"><span>{p.titulo}</span></h3>
-                <p class="ganhos__texto"><span>{p.texto}</span></p>
-              </>
-            )}
-          </div>
+        <li class="perguntas-cartoes__cartao">
+          <h3>{p.pergunta}</h3>
+          {!copyLiteral && respostas && <p>{doresRespostas[i].r}</p>}
         </li>
       ))}
     </ol>
   </div>
 </section>
 
-<script>
-  /* A grade se constrói uma vez, quando um quarto dela entra na tela. */
-  const grade = document.querySelector<HTMLElement>('[data-ganhos-grade]');
-  if (grade) {
-    const construir = () => grade.classList.add('ganhos__grade--construida');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) construir();
-    else {
-      const obs = new IntersectionObserver((entradas) => {
-        if (entradas.some((e) => e.isIntersecting)) { construir(); obs.disconnect(); }
-      }, { threshold: .25 });
-      obs.observe(grade);
-    }
+<style>
+  .perguntas-cartoes { scroll-margin-top: 88px; }
+  .perguntas-cartoes__layout { display: grid; grid-template-columns: .78fr 1.22fr; align-items: start; gap: clamp(48px, 6vw, 88px); }
+  .perguntas-cartoes__abertura { position: sticky; top: 140px; padding-top: 6px; }
+  .perguntas-cartoes__abertura h2 { max-width: 17ch; margin: 0; font-size: clamp(30px, 2.4vw, 36px); font-weight: 400; line-height: 1.2; letter-spacing: -.035em; text-wrap: pretty; }
+  .perguntas-cartoes__abertura h2 strong { font-weight: inherit; color: var(--amarelo, #ffd103); }
+  .perguntas-cartoes__abertura > p { max-width: 33ch; margin: 18px 0 0; color: #aeada6; font-size: 16px; line-height: 1.55; text-wrap: pretty; }
+  .perguntas-cartoes__lista { display: grid; gap: 12px; min-width: 0; padding: 0; margin: 0; list-style: none; }
+  /* O ClickUp usa raio e intervalo de 12px, com sombra curta em duas
+     camadas. A opacidade é ajustada aqui para a superfície escura da Renke. */
+  .perguntas-cartoes__cartao { display: flex; flex-direction: column; justify-content: center; gap: 14px; min-height: 104px; padding: 24px 28px; border: 1px solid rgb(255 255 255 / .065); border-radius: 12px; background: rgb(29 29 28 / .96); box-shadow: 0 1px 3px rgb(0 0 0 / .24), 0 2px 6px -2px rgb(0 0 0 / .2); }
+  .perguntas-cartoes__cartao h3 { margin: 0; color: #e7e7e1; font-size: 21px; font-weight: 400; line-height: 1.4; letter-spacing: -.015em; text-wrap: pretty; }
+  .perguntas-cartoes__cartao p { margin: 0; color: #aeada6; font-size: 16px; line-height: 1.5; text-wrap: pretty; }
+  @media (max-width: 1023.98px) {
+    .perguntas-cartoes__layout { grid-template-columns: 1fr; gap: 28px; }
+    .perguntas-cartoes__abertura { position: static; padding: 0; }
+    .perguntas-cartoes__abertura h2 { max-width: 26ch; font-size: 32px; }
+    .perguntas-cartoes__abertura > p { max-width: 42ch; margin-top: 16px; }
+    .perguntas-cartoes__cartao { min-height: 0; }
+    .perguntas-cartoes__cartao h3 { font-size: 20px; }
   }
-</script>
+  @media (max-width: 599.98px) {
+    .perguntas-cartoes__layout { gap: 24px; }
+    .perguntas-cartoes__abertura h2 { max-width: 18ch; font-size: 28px; }
+    .perguntas-cartoes__abertura > p { font-size: 15px; }
+    .perguntas-cartoes__lista { gap: 12px; }
+    .perguntas-cartoes__cartao { padding: 20px 22px; }
+    .perguntas-cartoes__cartao h3 { font-size: 18px; line-height: 1.45; }
+    .perguntas-cartoes__cartao p { font-size: 15px; }
+  }
+  @media (max-height: 599.98px) { .perguntas-cartoes__abertura { position: static; } }
+</style>
