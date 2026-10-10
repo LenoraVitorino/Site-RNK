@@ -19,13 +19,17 @@ import { doresRespostas } from '../../data/dores-respostas';
 
 /* dor: teste (10/10, /laboratorio/dores-solucoes) dos mesmos cartões com a
    pergunta de dor e a resposta da Renke no lugar do ganho solto. */
-interface Props { dor?: boolean }
-const { dor = false } = Astro.props;
+/* composicao: teste (10/10) de outra composição dos cartões, em bento de
+   larguras variadas e sem buracos, no lugar do losango ("meio xadrez",
+   "achatado", "compacto"). Referências: pins 10133167906261798 ("What We Do
+   Best") e 718535315593728369. */
+interface Props { dor?: boolean; composicao?: 'losango' | 'bento' }
+const { dor = false, composicao = 'losango' } = Astro.props;
 
 /* Ícones Renke, um por ganho (versão em cor: traço claro, losango em amarelo). */
 const icones: NomeIconeRenke[] = ['mira', 'funil', 'fluxo', 'investimento', 'dados', 'camadas', 'bussola'];
 ---
-<section class="secao ganhos" id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
+<section class:list={['secao', 'ganhos', composicao === 'bento' && 'ganhos--bento']} id="perguntas" aria-labelledby="perguntas-titulo" data-ganhos>
   <div class="container">
     <header class="ganhos__cabeca">
       {copyLiteral ? (

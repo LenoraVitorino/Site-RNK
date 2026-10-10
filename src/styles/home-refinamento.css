@@ -767,6 +767,21 @@ section[id] { scroll-margin-top: 110px; }
   #perguntas .ganhos__cartao--7 { grid-area: 3 / 4; }
 }
 
+/* TESTE (10/10, /laboratorio/dores-solucoes): bento no lugar do losango.
+   Grade inteira, sem buracos: dois cartões em cima (largo e estreito), três
+   no meio e dois embaixo (estreito e largo). Cartões mais altos, com mais
+   respiro e letra maior; ícone em cima, a pergunta e a resposta embaixo. */
+@media (min-width: 1100px) {
+  #perguntas.ganhos--bento .ganhos__grade { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 18px); }
+  #perguntas.ganhos--bento .ganhos__cartao { grid-area: auto; grid-column: span 4; aspect-ratio: auto; min-height: clamp(280px, 23vw, 350px); padding: clamp(26px, 2.4vw, 38px); gap: 48px; border-radius: clamp(20px, 1.7vw, 26px); }
+  #perguntas.ganhos--bento :is(.ganhos__cartao--1, .ganhos__cartao--7) { grid-column: span 7; }
+  #perguntas.ganhos--bento :is(.ganhos__cartao--2, .ganhos__cartao--6) { grid-column: span 5; }
+  #perguntas.ganhos--bento .ganhos__cartao .ganhos__anel { width: 48px; height: 48px; }
+  #perguntas.ganhos--bento .ganhos__corpo { gap: 14px; }
+  #perguntas.ganhos--bento .ganhos__cartao :is(.ganhos__nome, .ganhos__nome--pergunta) { max-width: 24ch; font-size: clamp(22px, 1.9vw, 29px); line-height: 1.16; text-wrap: balance; }
+  #perguntas.ganhos--bento .ganhos__cartao .ganhos__texto { max-width: 46ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.55; }
+}
+
 /* Construção (só com JS e movimento liberado). */
 @media (prefers-reduced-motion: no-preference) {
   .js .ganhos__cartao { --d: calc(var(--i) * 70ms); opacity: 0; transition: opacity .9s var(--easing) var(--d); }
