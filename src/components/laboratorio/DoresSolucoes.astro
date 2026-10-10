@@ -25,15 +25,18 @@ const atalhos = ['Custo por paciente', 'Conversão de leads', 'Processo', 'Melho
 /* Textos encurtados só para este teste (10/10: "crie um bom senso de caracteres
    para manter um padrão de espaçamento"): perguntas com até ~70 caracteres e
    respostas com até ~90, para todo par ocupar a mesma altura e não sobrar vão.
-   São rascunho a partir da copy original e dos ganhos; precisam de validação. */
+   A resposta tem de responder à pergunta (10/10: "do jeito que está ali, não é
+   uma resposta"): abre com a resposta direta, em negrito, e fecha com o que a
+   Renke faz. Não repetir o título do cartão antigo. São rascunho; precisam de
+   validação. */
 const conversa = [
-  { q: 'Quanto custa, de verdade, um paciente novo pra sua clínica?', t: 'Aquisição sob controle.', r: 'Custo por paciente e retorno de cada canal, à vista.' },
-  { q: 'Dos leads que chegam, quantos sentam na cadeira do consultório?', t: 'Mais conversão.', r: 'Cada oportunidade acompanhada até o agendamento.' },
-  { q: 'Se sua secretária sai amanhã, o processo continua?', t: 'Processos que funcionam.', r: 'Uma operação comercial que não depende de uma só pessoa.' },
-  { q: 'Você sabe qual canal trouxe seus melhores pacientes este mês?', t: 'Investimento mais inteligente.', r: 'Verba nos canais que dão mais retorno.' },
-  { q: 'No mês ruim, você encontra o motivo nos dados, com facilidade?', t: 'Decisões baseadas em dados.', r: 'Indicadores que mostram onde a clínica perde.' },
-  { q: 'E no mês bom, você sabe o porquê para repetir o resultado?', t: 'Crescimento replicável.', r: 'O que funciona vira processo e se repete.' },
-  { q: 'Você sabe o que seus concorrentes comunicam e que espaço deixam aberto?', t: 'Oportunidades de mercado.', r: 'Inteligência sobre a concorrência e os espaços livres.' },
+  { q: 'Quanto custa, de verdade, um paciente novo pra sua clínica?', t: 'Você passa a saber.', r: 'A gente mostra o custo por paciente e o retorno de cada canal.' },
+  { q: 'Dos leads que chegam, quantos sentam na cadeira do consultório?', t: 'Dá pra saber um por um.', r: 'A gente acompanha cada lead até o agendamento.' },
+  { q: 'Se sua secretária sai amanhã, o processo continua?', t: 'Continua.', r: 'A gente estrutura o comercial para a clínica não depender de uma só pessoa.' },
+  { q: 'Você sabe qual canal trouxe seus melhores pacientes este mês?', t: 'Com a gente, sabe.', r: 'Você vê de onde veio cada paciente e põe a verba no canal certo.' },
+  { q: 'No mês ruim, você encontra o motivo nos dados, com facilidade?', t: 'Encontra.', r: 'Os indicadores mostram em que ponto a clínica perdeu e onde agir.' },
+  { q: 'E no mês bom, você sabe o porquê para repetir o resultado?', t: 'Sabe, e repete.', r: 'O que deu certo vira processo e o resultado deixa de ser sorte.' },
+  { q: 'Você sabe o que seus concorrentes comunicam e que espaço deixam aberto?', t: 'A gente mapeia pra você.', r: 'O que a concorrência comunica e os espaços que ela deixa livres.' },
 ];
 const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const };
 ---
