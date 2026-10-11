@@ -330,12 +330,13 @@ const itensMenu = menu.flatMap((item) => {
     }
     return tomDeCor(getComputedStyle(document.body).backgroundColor) ?? 'header--claro';
   };
-  /* A caixa do cabeçalho só aparece quando a primeira dobra (a hero, ou o
-     que estiver no topo) já passou por baixo dele. */
+  /* Nos planos, o símbolo claro exige a caixa desde o início da rolagem.
+     Nas demais páginas, ela aparece quando a primeira dobra já passou. */
   const primeira = document.querySelector<HTMLElement>('main > :first-child');
+  const heroComSimbolo = document.body.classList.contains('pagina-plano');
   const aplicaCaixa = () => {
     const fim = primeira ? primeira.getBoundingClientRect().bottom : Infinity;
-    header.classList.toggle('header--caixa', primeira ? fim <= header.offsetHeight : window.scrollY > 8);
+    header.classList.toggle('header--caixa', heroComSimbolo || !primeira ? window.scrollY > 8 : fim <= header.offsetHeight);
   };
   const aplicaTom = () => {
     if (nav.classList.contains('is-open')) return;   // com o drawer aberto, o tom congela
