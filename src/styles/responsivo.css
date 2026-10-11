@@ -124,3 +124,15 @@
   :root:root .hero--editorial:has(.hero__mensagem) .hero__palco { min-height: min(100svh - 212px, 660px); align-content: space-between; gap: 40px; padding-bottom: 0; }
   :root:root .hero--editorial:has(.hero__mensagem) .hero__apoio { gap: 32px; }
 }
+
+/* Títulos das dobras no celular (12/10/2026, Lenora: "achei muito pequeno no
+   mobile"). Os H2 estavam entre 30 e 35px a 375px; passam a 39px (10,4vw),
+   iguais em todas as páginas. Subtítulos, apoios e H3 não mudam. */
+@media (max-width: 599.98px) {
+  :root:root h2:is(.titulo, .ancora, .ed-titulo, .oqf__titulo) { font-size: clamp(33px, 10.4vw, 44px); line-height: 1.06; }
+  :root:root .palcoplanos__manifesto { font-size: clamp(28px, 8.6vw, 36px); }
+  /* :not(#_) dá peso de id: estes dois têm regra própria com id na frente. */
+  :root:root h2.ancora:not(#_) { font-size: clamp(33px, 10.4vw, 44px); line-height: 1.06; }
+  :root:root h1.titulo:not(#_) { font-size: clamp(42px, 12.6vw, 54px); }
+  :root:root .chamada__miolo .titulo { max-width: none; }
+}
