@@ -386,4 +386,11 @@ const partes = (q: string, d: string) => { const k = q.indexOf(d); return k < 0 
   @media (prefers-reduced-motion: reduce) {
     .trilho__traco, .trilho__seta { transition: none; }
   }
+  /* No celular e no tablet o painel vem antes da pergunta (Lenora,
+     12/10/2026): depois do título e do apoio da dobra vinha mais um bloco
+     de texto, e o painel quebra essa sequência. */
+  @media (max-width: 899.98px) {
+    .trilho--lista.trilho .trilho__faixa .trilho__cartao :global(.revena-peca__arte) { order: 0; }
+    .trilho--lista.trilho .trilho__faixa .trilho__cartao :global(.feature-card__texto) { order: 1; padding: 26px 4px 0; }
+  }
 </style>

@@ -59,17 +59,26 @@
   :root:root .palcoplanos:not([data-animado]) .plano-palco {
     position: sticky; top: var(--pilha-topo, 0px);
     display: grid; align-content: center; justify-items: center;
-    min-height: 100svh; padding-block: calc(var(--altura-header, 72px) + 28px) 48px;
+    min-height: 100svh; padding-block: calc(var(--altura-header, 72px) + 12px) 40px;
     border-top: 0; text-align: center;
     box-shadow: 0 -28px 56px -20px rgb(0 0 0 / .7);
   }
   :root:root .palcoplanos:not([data-animado]) .plano-palco__imagem { width: 100%; }
-  :root:root .palcoplanos:not([data-animado]) .plano-palco__icone-mob { width: min(58vw, 280px); margin: 0 auto 20px; }
-  :root:root:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial { left: 50%; transform: translateX(-50%); width: min(58vw, 280px); height: min(58vw, 280px); }
+  /* O símbolo grande e o nome do plano por cima dele, em diagonal, como no
+     palco do desktop: "Revena" à esquerda e o nome do plano começando onde
+     "Revena" termina. O nome sobe até o meio do símbolo com margem negativa
+     e devolve o espaço embaixo, para o texto seguir normal depois da imagem. */
+  :root:root .palcoplanos:not([data-animado]) .plano-palco { --simbolo: min(88vw, 400px); }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__icone-mob { width: var(--simbolo); margin: 0 auto 20px; }
+  :root:root:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial { left: 50%; transform: translateX(-50%); width: var(--simbolo); height: var(--simbolo); }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome--pilha {
+    justify-items: start; width: fit-content; max-width: none;
+    margin: calc(var(--simbolo) * -.5 - .92em - 20px) auto calc(var(--simbolo) * .5 - .92em + 20px - 22px);
+    font-size: min(16vw, 76px); line-height: .92; text-align: left; white-space: nowrap;
+  }
   :root:root .palcoplanos:not([data-animado]) .plano-palco__info { justify-items: center; margin-inline: auto; text-align: center; }
-  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome--pilha { justify-items: center; }
-  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__a { justify-self: center; margin-right: .6em; }
-  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: center; margin-left: .6em; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__a { justify-self: start; margin: 0; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin: 0 0 0 2.6em; }
   :root:root .palcoplanos:not([data-animado]) .plano-palco__texto { justify-items: center; text-align: center; }
   :root:root .palcoplanos:not([data-animado]) :is(.plano-palco__fala, .plano-palco__frase) { max-width: 34ch; margin-inline: auto; }
 }
