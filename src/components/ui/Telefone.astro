@@ -23,6 +23,12 @@ const video = slot.video!;
       >
         {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
       </video>
+      <!-- Convite para ouvir (12/10/2026): o navegador só libera o som depois
+           de um toque ou clique de verdade. Enquanto o vídeo roda mudo, ele
+           inteiro é um botão: um toque liga o som e volta ao começo da fala. -->
+      <button class="tel__ouvir" type="button" data-tel-ouvir hidden>
+        <span class="tel__ouvir-pilula"><Icone nome="Volume2" class="tel__icone" size={18} />Ouvir com som</span>
+      </button>
       <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
       <div class="tel__controles">
         <button class="tel__botao" type="button" data-tel-som aria-pressed="false" aria-label="Ativar som">
@@ -44,7 +50,10 @@ const video = slot.video!;
     const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
     const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
     const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
+    const ouvir = raiz.querySelector<HTMLButtonElement>('[data-tel-ouvir]');
     let pausadoPeloUsuario = false;
+    // Se a pessoa desligou o som no botão, ele não volta sozinho.
+    let somDesligadoPeloUsuario = false;
 
     const marcar = () => {
       toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
@@ -60,13 +69,13 @@ const video = slot.video!;
       som.setAttribute('aria-pressed', String(!video.muted));
       som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
       raiz.classList.toggle('tel--com-som', !video.muted);
+      // O convite aparece enquanto o vídeo está mudo sem a pessoa ter escolhido isso.
+      if (ouvir) ouvir.hidden = !video.muted || somDesligadoPeloUsuario || reduzido.matches;
     };
     toque.addEventListener('click', () => {
       if (video.paused) { pausadoPeloUsuario = false; tocar(); }
       else { pausadoPeloUsuario = true; video.pause(); }
     });
-    // Se a pessoa desligou o som no botão, ele não volta sozinho.
-    let somDesligadoPeloUsuario = false;
     som.addEventListener('click', () => {
       video.muted = !video.muted;
       somDesligadoPeloUsuario = video.muted;
@@ -74,7 +83,13 @@ const video = slot.video!;
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
     });
 
+    ouvir?.addEventListener('click', () => {
+      pausadoPeloUsuario = false; somDesligadoPeloUsuario = false;
+      video.currentTime = 0; video.muted = false; refletirSom(); tocar();
+    });
+
     if (reduzido.matches) return;
+    refletirSom();
     /* Som ligado enquanto o vídeo está na tela e desligado quando sai dela
        (Lenora, 12/10/2026). O navegador só deixa um vídeo tocar com som
        depois que a pessoa tocou ou clicou em algum ponto da página; rolar não
