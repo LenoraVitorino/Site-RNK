@@ -268,5 +268,11 @@ Valem para as duas versões de texto. Amostras vivas em `/design-system`, seçã
 - **Fundo animado**: formas próprias da Renke, que andam com a rolagem em toda a página; o fundo
   já aparece na abertura, nunca começa em preto.
 
+- **Entradas** (em teste, 11/10): títulos das dobras entram palavra por palavra, saindo do
+  desfoque; subtítulo e botão vêm logo depois; cartões chegam um pouco menores e assentam, em
+  sequência; na lista, texto e painel chegam de lados opostos conforme a rolagem. Nas cenas, as
+  peças entram com um pulo curto e o resultado recebe um brilho. Tudo desliga com movimento
+  reduzido. Regras em `src/styles/movimento.css`.
+
 > As seções acima deste bloco são do guia inicial e estão defasadas em relação à home (fonte,
 > cantos e variantes de botão). Falta uma revisão geral.

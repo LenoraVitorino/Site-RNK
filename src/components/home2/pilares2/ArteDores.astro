@@ -9,7 +9,7 @@
  * 0 custo por paciente · 1 cada lead acompanhado · 2 o processo continua
  * quando a pessoa muda · 3 de onde veio cada paciente · 4 onde o mês caiu ·
  * 5 o que deu certo vira padrão · 6 o espaço que os concorrentes deixam.
- * Parada, cada arte mostra a pose final; os tempos são % de um laço de 12 s.
+ * Parada, cada arte mostra a pose final; os tempos são % de um laço de 8,5 s.
  */
 import { Image } from 'astro:assets';
 import '../../../styles/protocolo-v2.css';
@@ -30,10 +30,14 @@ const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt
    sai do apagado; `enche` cresce da esquerda; `mouse` leva o cursor por
    pontos [tempo, x em cqw, y em px]. */
 const q: string[] = [];
-const surge = (n: string, t: number, de = 'translateY(8px)') => q.push(`@keyframes ${n}{0%,${t}%{opacity:0;transform:${de}}${t + 4}%,95%{opacity:1;transform:none}100%{opacity:0;transform:none}}`);
+/* Entradas com um pulo curto além da pose final (11/10: "muito parado, só vai
+   botando as coisas"): o que sobe passa um pouco do ponto, o que cresce
+   estufa e assenta. */
+const pulo = (de: string) => (de.includes('translate') ? 'translateY(-4px) scale(1.015)' : 'scale(1.12)');
+const surge = (n: string, t: number, de = 'translateY(10px)') => q.push(`@keyframes ${n}{0%,${t}%{opacity:0;transform:${de}}${t + 3}%{opacity:1;transform:${pulo(de)}}${t + 6}%,95%{opacity:1;transform:none}100%{opacity:0;transform:none}}`);
 const entre = (n: string, a: number, b: number) => q.push(`@keyframes ${n}{0%,${a}%{opacity:0}${a + 2}%,${b}%{opacity:1}${b + 2}%,100%{opacity:0}}`);
 const ate = (n: string, b: number) => q.push(`@keyframes ${n}{0%,${b}%{opacity:1}${b + 2}%,97%{opacity:0}100%{opacity:1}}`);
-const acende = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{opacity:.62}${t + 3}%,95%{opacity:1}100%{opacity:.62}}`);
+const acende = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{opacity:.62;transform:none}${t + 2}%{opacity:1;transform:scale(1.02)}${t + 5}%,95%{opacity:1;transform:none}100%{opacity:.62;transform:none}}`);
 const enche = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{transform:scaleX(0)}${t + 9}%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}`);
 const mouse = (n: string, pts: [number, number, number][]) => {
   const tr = ([, x, y]: [number, number, number]) => `translate(${x}cqw,${y}px)`;
@@ -84,7 +88,8 @@ const mercado = [
 if (peca === 0) {
   surge('dt0-canal-0', 8, 'scale(.8)'); surge('dt0-canal-1', 14, 'scale(.8)');
   novos.forEach((_, i) => surge(`dt0-novo-${i}`, 26 + i * 7, 'scale(.4)'));
-  surge('dt0-conta', 62, 'translateY(12px) scale(.97)');
+  surge('dt0-conta', 62, 'translateY(18px) scale(.95)');
+  mouse('dt0-mouse', [[6, 62, 37], [10, 62, 37], [15, 78, 37], [22, 78, 37], [27, 70, 83], [50, 86, 83], [60, 56, 150], [78, 56, 150]]);
 }
 if (peca === 1) {
   leads.forEach((l, i) => {
@@ -100,12 +105,12 @@ if (peca === 2) {
 }
 if (peca === 3) {
   origens.forEach((o, i) => { acende(`dt3-linha-${i}`, o.t); surge(`dt3-canal-${i}`, o.t + 3, 'scale(.8)'); });
-  surge('dt3-nota', 56, 'translateY(12px) scale(.97)');
+  surge('dt3-nota', 56, 'translateY(18px) scale(.95)');
   mouse('dt3-mouse', [[9, 70, 30], [18, 70, 30], [23, 70, 82], [32, 70, 82], [37, 70, 134], [48, 70, 134], [58, 60, 196], [78, 60, 196]]);
 }
 if (peca === 4) {
   etapas.forEach((e, i) => { acende(`dt4-linha-${i}`, e.t); surge(`dt4-marca-${i}`, e.t + 3, 'scale(.5)'); surge(`dt4-nota-${i}`, e.t + 4, 'translateX(6px)'); });
-  surge('dt4-motivo', 62, 'translateY(12px) scale(.97)');
+  surge('dt4-motivo', 62, 'translateY(18px) scale(.95)');
   mouse('dt4-mouse', [[7, 52, 22], [14, 52, 22], [19, 52, 56], [26, 52, 56], [31, 52, 90], [40, 52, 90], [45, 52, 124], [58, 52, 124], [66, 64, 186], [82, 64, 186]]);
 }
 if (peca === 5) {
@@ -137,6 +142,7 @@ const visto = '<svg viewBox="0 0 20 20" focusable="false"><path d="M5.6 10.4l3 3
           <div class="p2-linha">Pacientes novos<span class="p2-com__fila">{novos.map((n, i) => <i class="p2-anim" style={`--a:dt0-novo-${i}`}>{n}</i>)}</span></div>
         </div>
         <div class="p2-estudo2__brecha p2-anim" style="--a:dt0-conta"><i></i><div><strong>Custo por paciente</strong><span>Calculado por canal, todo mês</span></div></div>
+        <div class="p2-mouse p2-anim" style="--a:dt0-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={julio} {...rosto} /></span></div>
       </div>
     </>)}
 

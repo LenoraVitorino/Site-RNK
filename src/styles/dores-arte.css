@@ -3,7 +3,7 @@
    sete cenas; o resto vem das classes .p2-*. Ver pilares2/ArteDores. */
 /* Textos de apoio e itens que ainda vão acender mais claros (11/10: "muito
    fraco"): o apagado continua apagado, mas dá para ler. */
-.dt { --laco: 12s; --suave: rgb(242 242 238 / .74); --anel: rgb(242 242 238 / .42); }
+.dt { --laco: 8.5s; --suave: rgb(242 242 238 / .74); --anel: rgb(242 242 238 / .42); }
 .dt .p2-cena__topo > .p2-rosto { width: 28px; height: 28px; }
 .dt-corpo { container-type: inline-size; position: relative; display: grid; align-content: start; gap: 8px; padding: 8px 0 0; }
 .dt-corpo--junto { gap: 0; }
@@ -68,6 +68,17 @@
 .dt-espaco__seu { display: grid; align-content: space-between; padding: 11px 12px 12px; background: #F2F2EE; color: #161616; box-shadow: 0 16px 28px -16px rgb(0 0 0 / .8); }
 .dt-espaco__seu .p2-estudo2__quem { color: rgb(22 22 22 / .62); }
 .dt-espaco__seu .p2-estudo2__quem i { width: 8px; height: 8px; margin-inline: 2px 3px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+
+/* Vida contínua (11/10: "meio que um estático"): o ponto amarelo do que está
+   em ação pulsa, e o resultado da cena recebe um brilho que atravessa a
+   peça logo depois de ela assentar. Só com a cena à vista. */
+.dt .p2-estudo2__brecha { position: relative; overflow: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .revena-peca.visivel .dt :is(.p2-estudo2__brecha > i, .dt-estado__claro i, .dt-espaco__seu .p2-estudo2__quem i) { animation: dt-pulso 1.7s ease-out infinite; }
+  .js .revena-peca.visivel .dt .p2-estudo2__brecha::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / .85) 50%, transparent 65%); translate: -110% 0; animation: dt-brilho var(--laco) linear .9s infinite; pointer-events: none; }
+}
+@keyframes dt-pulso { 0% { box-shadow: 0 0 0 1px rgb(22 22 22 / .3), 0 0 0 0 rgb(255 209 3 / .55); } 70%, 100% { box-shadow: 0 0 0 1px rgb(22 22 22 / .3), 0 0 0 7px rgb(255 209 3 / 0); } }
+@keyframes dt-brilho { 0%, 68% { translate: -110% 0; } 80%, 100% { translate: 110% 0; } }
 
 @media (max-width: 599.98px) {
   .dt .p2-rosto { width: 28px; height: 28px; }

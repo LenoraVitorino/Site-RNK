@@ -35,6 +35,25 @@
 :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > :nth-child(3) { transition-delay: .26s; }
 :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra.visivel > :nth-child(n + 4) { transition-delay: .39s; }
 
+/* 2b. Títulos palavra por palavra (11/10/2026; referência da Lenora, em
+   versão contida): o título fica no lugar e cada palavra sai do desfoque e
+   sobe um pouco, uma depois da outra. O script da Base2 cria os spans. */
+.js .entra h2[data-palavras] { opacity: 1 !important; transform: none !important; }
+.palavra { display: inline-block; }
+.js .entra h2[data-palavras] .palavra { opacity: 0; filter: blur(8px); transform: translate3d(0, .32em, 0); }
+.entra.visivel h2[data-palavras] .palavra {
+  opacity: 1; filter: none; transform: none;
+  transition: opacity .9s var(--freio), filter .9s var(--freio), transform 1.1s var(--freio);
+  transition-delay: calc(var(--p, 0) * 60ms);
+}
+/* O que vem depois do título espera as palavras começarem. */
+.js .entra.visivel h2[data-palavras] ~ * { transition-delay: .42s; }
+.js .entra.visivel h2[data-palavras] ~ * ~ * { transition-delay: .56s; }
+
+/* 2c. Cartões: chegam um pouco menores e assentam, em sequência. */
+.js :is(.feature-card, .case, .eco-painel, .oqf__numero, .oqf__midia).entra { transform: translate3d(0, 36px, 0) scale(.965); }
+:is(.feature-card, .case, .eco-painel, .oqf__numero, .oqf__midia).entra.visivel { transform: none; }
+
 /* 5. Cartões: levantam um pouco com o mouse. `translate` não disputa com
    as animações que já usam `transform`. */
 @media (hover: hover) and (pointer: fine) {
@@ -60,6 +79,21 @@
     }
     @keyframes mov-acomoda { from { transform: scale(1.1); } to { transform: none; } }
 
+    /* 3b. Lista "O que muda": texto e painel chegam de lados opostos e se
+       encontram, conforme a fileira entra na tela (no celular, só sobem). */
+    .trilho--lista .trilho__cartao :is(.feature-card__texto, .revena-peca__arte) {
+      animation: mov-sobe linear both; animation-timeline: view(); animation-range: entry 0% entry 75%;
+    }
+    @keyframes mov-sobe { from { translate: 0 34px; scale: .97; } to { translate: none; scale: 1; } }
+    @media (min-width: 900px) {
+      .trilho--lista .trilho__cartao .feature-card__texto { animation-name: mov-da-esquerda; }
+      .trilho--lista .trilho__cartao .revena-peca__arte { animation-name: mov-da-direita; }
+      .trilho--lista .trilho__cartao:nth-child(even) .feature-card__texto { animation-name: mov-da-direita; }
+      .trilho--lista .trilho__cartao:nth-child(even) .revena-peca__arte { animation-name: mov-da-esquerda; }
+    }
+    @keyframes mov-da-esquerda { from { translate: -44px 18px; scale: .97; } to { translate: none; scale: 1; } }
+    @keyframes mov-da-direita { from { translate: 44px 18px; scale: .97; } to { translate: none; scale: 1; } }
+
     /* 6. Rodapé: o RENKE sobe devagar. */
     .footer__fundo {
       animation: mov-renke linear both; animation-timeline: view(); animation-range: entry 0% entry 100%;
@@ -73,4 +107,5 @@
   .js :is(.ed-cabeca, .pilares__cabeca, .resultados-editoriais__cabeca, .chamada__miolo, .form-block__text, .ecossistema__cabeca).entra > * {
     opacity: 1; transform: none; transition: none;
   }
+  .js .entra h2[data-palavras] .palavra { opacity: 1; filter: none; transform: none; transition: none; }
 }

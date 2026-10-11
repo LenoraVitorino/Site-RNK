@@ -41,11 +41,13 @@ import { roteiroInterno, TEXTOS_INTERNAS } from './fundo-internas';
 /** 'home' (padrão) ou 'interna': as páginas internas usam o roteiro genérico de fundo-internas.ts. */
 export type Roteiro = 'home' | 'interna';
 
-/** 11/10/2026: a cena roda, por padrão, só com o que foi feito aqui em código
- *  (anel, fita, env maps e cáusticas); nenhum arquivo extraído da PeachWeb é
- *  baixado. ?cena=original liga de volta os arquivos de public/cena e a
- *  sequência antiga, só para comparar. */
-const SO_PROPRIO = new URLSearchParams(location.search).get('cena') !== 'original';
+/** 11/10/2026 (noite): a Lenora reprovou as formas feitas aqui ("tá horrível
+ *  esse motion do fundo") e pediu a cena da PeachWeb de volta, como estava: os
+ *  modelos, env maps e cáusticas de public/cena e a folha de animação de lá
+ *  (conferida com https://happy-qq33pg9ab.peachweb.site/: as chaves são as
+ *  mesmas de TRILHAS). Nosso é só o encaixe nas dobras que o site de lá não
+ *  tem. ?cena=propria liga as formas em código, só para comparar. */
+const SO_PROPRIO = new URLSearchParams(location.search).get('cena') === 'propria';
 /** Os arquivos extraídos da página (public/cena/LEIA-ME.md). */
 const ARQUIVOS = {
   donut: '/cena/donut.glb',
@@ -154,7 +156,7 @@ const PROPRIA: Record<string, Quadro> = {
   sobre:       { ...Q_COMPACTO, ...pose(Q_CONVITE, POSE_FITA), ms: .01 },
   formulario:  amostra(.560, { ms: 8, mx: .4, my: .2, ...pose(Q_COMPACTO, POSE_ANEL), ...SEM_ANEL }),   // fecha numa fita fina em diagonal
 };
-// A sequência antiga, feita para os modelos de lá (só com ?cena=original).
+// A sequência da referência, encaixada nas nossas dobras (padrão).
 const ORIGINAL: Record<string, Quadro> = {
   hero:        amostra(0),
   metodologia: amostra(.105, { dz: DZ }),
