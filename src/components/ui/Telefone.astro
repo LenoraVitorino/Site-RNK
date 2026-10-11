@@ -55,23 +55,50 @@ const video = slot.video!;
     marcar();
 
     const tocar = () => video.play().catch(() => {});
+    // O botão de som sempre mostra o estado real do vídeo.
+    const refletirSom = () => {
+      som.setAttribute('aria-pressed', String(!video.muted));
+      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
+      raiz.classList.toggle('tel--com-som', !video.muted);
+    };
     toque.addEventListener('click', () => {
       if (video.paused) { pausadoPeloUsuario = false; tocar(); }
       else { pausadoPeloUsuario = true; video.pause(); }
     });
+    // Se a pessoa desligou o som no botão, ele não volta sozinho.
+    let somDesligadoPeloUsuario = false;
     som.addEventListener('click', () => {
       video.muted = !video.muted;
-      som.setAttribute('aria-pressed', String(!video.muted));
-      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
-      raiz.classList.toggle('tel--com-som', !video.muted);
+      somDesligadoPeloUsuario = video.muted;
+      refletirSom();
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
     });
 
     if (reduzido.matches) return;
+    /* Som ligado enquanto o vídeo está na tela e desligado quando sai dela
+       (Lenora, 12/10/2026). O navegador só deixa um vídeo tocar com som
+       depois que a pessoa tocou ou clicou em algum ponto da página; rolar não
+       conta. Por isso: tenta com som; se o navegador recusar, toca mudo e
+       liga o som no primeiro toque ou clique, se o vídeo ainda estiver na
+       tela. */
+    let naTela = false;
+    const comSom = () => {
+      if (somDesligadoPeloUsuario || pausadoPeloUsuario) return tocar();
+      video.muted = false;
+      return video.play().then(refletirSom).catch(() => { video.muted = true; refletirSom(); return tocar(); });
+    };
+    const primeiroGesto = () => {
+      if (naTela && video.muted && !somDesligadoPeloUsuario && !pausadoPeloUsuario) comSom();
+    };
+    for (const evento of ['pointerup', 'keydown', 'touchend']) addEventListener(evento, primeiroGesto, { passive: true });
     new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) { if (!pausadoPeloUsuario) tocar(); }
-        else if (!video.paused) video.pause();
+        naTela = e.isIntersecting;
+        if (naTela) { if (!pausadoPeloUsuario) comSom(); }
+        else {
+          if (!video.paused) video.pause();
+          if (!video.muted) { video.muted = true; refletirSom(); }
+        }
       },
       { threshold: 0.55 },
     ).observe(video);
