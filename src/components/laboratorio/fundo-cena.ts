@@ -172,7 +172,9 @@ const ORIGINAL: Record<string, Quadro> = {
   formulario:  amostra(0),
 };
 const DESKTOP = SO_PROPRIO ? PROPRIA : ORIGINAL;
-const QUADROS = { desktop: DESKTOP, celular: DESKTOP };
+// No celular o texto das perguntas ocupa a largura toda, por cima da fita:
+// a máscara de leitura dessa dobra é mais forte (12/10/2026).
+const QUADROS = { desktop: DESKTOP, celular: { ...DESKTOP, perguntas: { ...DESKTOP.perguntas, leitura: .85 } } };
 /**
  * Internas: os mesmos quadros, com a máscara de leitura mais forte no
  * 'pilares'. Na home ele só passa atrás de cartões opacos; nas internas o

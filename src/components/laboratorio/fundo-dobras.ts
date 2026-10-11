@@ -24,6 +24,8 @@ export const TRANSPARENTES = '.hero, #o-que-fazemos, #pilares-revena, #protocolo
 
 export const TEXTOS_DOBRAS = [
   TEXTOS, '#protocolo-revena.pilares .titulo', '.pilares__cabeca', '.operacao__titulo', '#fale .titulo', '#fale p', '.ecossistema__cabeca',
+  // 12/10/2026: o apoio da dobra e as perguntas da lista também são lidos sobre o fundo; a fita clara passava por trás deles.
+  '#perguntas .cabeca-dobra__apoio', '#perguntas .trilho--lista .feature-card__texto', '#perguntas.trilho--lista .feature-card__texto',
 ].join(', ');
 
 /** Caixas com fundo próprio: atrás delas o fundo perde brilho (e, no véu, o foco).
