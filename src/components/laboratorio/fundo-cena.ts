@@ -41,11 +41,11 @@ import { roteiroInterno, TEXTOS_INTERNAS } from './fundo-internas';
 /** 'home' (padrão) ou 'interna': as páginas internas usam o roteiro genérico de fundo-internas.ts. */
 export type Roteiro = 'home' | 'interna';
 
-/** Teste de 10/10/2026: com ?cena=propria na URL, nenhum arquivo extraído da
- *  PeachWeb é baixado; a cena roda só com o que foi refeito aqui em código
- *  (toro com estrias, tubo ondulado, env maps por shader e cáusticas
- *  procedurais). Serve para a Lenora ver como fica sem os assets de lá. */
-const SO_PROPRIO = new URLSearchParams(location.search).get('cena') === 'propria';
+/** 11/10/2026: a cena roda, por padrão, só com o que foi feito aqui em código
+ *  (anel, fita, env maps e cáusticas); nenhum arquivo extraído da PeachWeb é
+ *  baixado. ?cena=original liga de volta os arquivos de public/cena e a
+ *  sequência antiga, só para comparar. */
+const SO_PROPRIO = new URLSearchParams(location.search).get('cena') !== 'original';
 /** Os arquivos extraídos da página (public/cena/LEIA-ME.md). */
 const ARQUIVOS = {
   donut: '/cena/donut.glb',
@@ -127,18 +127,39 @@ const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
  */
 /* Com as formas próprias o anel entra no quadro um pouco mais longe. */
 const DZ = SO_PROPRIO ? 1.7 : 2.3;
-const DESKTOP: Record<string, Quadro> = {
+/* Sequência refeita em 11/10 para seguir, no olho, a ordem do fundo de
+   https://happy-qq33pg9ab.peachweb.site/ ao longo da página (os tempos de lá
+   não vêm no arquivo de cena): abre com o tecido de perto, em arco largo;
+   vira coluna à direita e se afasta; escurece; volta de perto e desfocado;
+   some de novo; fecha num anel compacto e, por fim, numa fita fina em diagonal. */
+// Quem não está em cena fica parado e invisível no lugar do vizinho, para não
+// atravessar a tela na passagem (11/10: o anel voava de perto da câmera até o
+// fundo entre a fita e o anel compacto).
+const POSE_ANEL = ['cx', 'cy', 'cz', 'cry', 'dx', 'dy', 'dz', 'drx', 'dry', 'drz'];
+const POSE_FITA = ['mx', 'my', 'mz', 'mrx', 'mry', 'mrz'];
+const pose = (de: Quadro, campos: string[]) => Object.fromEntries(campos.map((c) => [c, de[c]]));
+const SEM_ANEL = { dsx: .02, dsy: .02, dsz: .02 };
+const Q_LETREIRO = amostra(.145, { dz: DZ, cry: 1.15, drx: 4.62, drz: 1.76, leitura: .4 });
+const Q_COMPACTO = amostra(0, { dsx: .22, dsy: .26, dsz: .22, drx: 2.3, drz: .9, dx: 1.2 });
+const Q_CONVITE = amostra(.497, { ms: 15, borrao: .24, l5i: 5, leitura: .55, ...pose(Q_COMPACTO, POSE_ANEL), ...SEM_ANEL });
+const PROPRIA: Record<string, Quadro> = {
+  hero:        amostra(0, { dz: -6 }),                       // o anel de perto: um arco largo que toma a tela
+  metodologia: amostra(0, { dz: -3 }),                       // mais perto ainda: lençóis cruzando
+  pilares:     amostra(.105, { dz: DZ }),                    // a coluna de tecido, à direita
+  letreiro:    Q_LETREIRO,                                   // se afasta
+  planos:      { ...Q_LETREIRO, ...SEM_ANEL },               // escuro
+  perguntas:   amostra(.497, { ms: 26, borrao: .3, l5i: 16, leitura: .6, ...pose(Q_LETREIRO, POSE_ANEL), ...SEM_ANEL }),   // a fita de perto, grande e desfocada
+  convite:     Q_CONVITE,                                    // recua e apaga
+  academy:     { ...Q_COMPACTO, ...pose(Q_CONVITE, POSE_FITA), ms: .01 },   // um anel compacto, ao centro
+  sobre:       { ...Q_COMPACTO, ...pose(Q_CONVITE, POSE_FITA), ms: .01 },
+  formulario:  amostra(.560, { ms: 8, mx: .4, my: .2, ...pose(Q_COMPACTO, POSE_ANEL), ...SEM_ANEL }),   // fecha numa fita fina em diagonal
+};
+// A sequência antiga, feita para os modelos de lá (só com ?cena=original).
+const ORIGINAL: Record<string, Quadro> = {
   hero:        amostra(0),
-  // O toro de lá tem outra forma; puxado para dentro da tela para a hero ver o rebordo (17.webp).
   metodologia: amostra(.105, { dz: DZ }),
-  // Continua o mesmo objeto iluminado na passagem metodologia → pilares.
-  // .250/.300 pertencem ao intervalo escuro da referência: o donut já
-  // encolheu e perdeu a luz, enquanto o segundo modelo ainda está fora da tela.
   pilares:     amostra(.125, { dz: DZ, cry: 1.38, drx: 4.38, drz: 1.48 }),
   letreiro:    amostra(.145, { dz: DZ, cry: 1.15, drx: 4.62, drz: 1.76, leitura: .4 }),
-  // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
-  // O palco dos planos tem quadro próprio (11/10): junto com 'perguntas' a
-  // cena ficava parada do palco até o meio da lista de perguntas.
   planos:      amostra(.415, { leitura: .45 }),
   perguntas:   amostra(.455, { leitura: .45 }),
   convite:     amostra(.497, { leitura: .55 }),
@@ -146,6 +167,7 @@ const DESKTOP: Record<string, Quadro> = {
   sobre:       amostra(.620),
   formulario:  amostra(0),
 };
+const DESKTOP = SO_PROPRIO ? PROPRIA : ORIGINAL;
 const QUADROS = { desktop: DESKTOP, celular: DESKTOP };
 /**
  * Internas: os mesmos quadros, com a máscara de leitura mais forte no
@@ -583,7 +605,8 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const composer = new EffectComposer(renderer, { frameBufferType: HalfFloatType });
   composer.addPass(new RenderPass(cena, camera));
   composer.addPass(new EffectPass(camera, new SMAAEffect({ preset: celular ? SMAAPreset.MEDIUM : SMAAPreset.HIGH, edgeDetectionMode: EdgeDetectionMode.COLOR })));
-  composer.addPass(new EffectPass(camera, new Desfoque(celular ? 12 : 24)));
+  const desfoque = new Desfoque(celular ? 12 : 24);
+  composer.addPass(new EffectPass(camera, desfoque));
   const vinheta = new VignetteEffect({ offset: .2048, darkness: 1, blendFunction: BlendFunction.NORMAL });
   vinheta.blendMode.opacity.value = .5;
   const brilho = new BrightnessContrastEffect({ brightness: .03, contrast: 0, blendFunction: BlendFunction.ALPHA });
@@ -600,8 +623,6 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   let dtQuadro = 0;
   let rolagemAntes = 0;
 
-  const t0 = performance.now();
-  const abriuNoTopo = scrollY < 40;
   const GRAU = Math.PI / 180;
 
   return {
@@ -619,7 +640,9 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
         // ponto de passagem no meio da dobra, e a cena anda o tempo todo com a rolagem.
         continuas: ['hero', 'metodologia', 'pilares', 'letreiro', 'planos', 'perguntas', 'convite', 'academy', 'sobre', 'formulario'],
         tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
-        esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
+        // 11/10 (Lenora: "péssimo a hero começar com o fundo totalmente preto"):
+        // o fundo entra junto com a página, sem esperar a frase da hero terminar.
+        esperarEntrada: () => true,
       },
     pintar({ q, tempo, dt, parado, ponteiro, rolagem }) {
       dtQuadro = dt;
@@ -635,12 +658,12 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
       donutObj.position.set(q.dx, q.dy, q.dz);
       donutObj.rotation.set(q.drx, q.dry, q.drz + (parado ? 0 : Math.sin(rolagem * .6) * .22));   // o anel balança com a rolagem (sem acumular giro até o fim da página)
       donutObj.scale.set(q.dsx, q.dsy, q.dsz);
-      donutObj.visible = q.dsx > .03;
+      donutObj.visible = q.dsx > .03;   // abaixo disso está estacionado, fora de cena
 
       minhoca.position.set(q.mx, q.my, q.mz);
       minhoca.rotation.set(q.mrx + (parado ? 0 : Math.sin(rolagem * .5) * .12), q.mry, q.mrz + (parado ? 0 : Math.sin(rolagem * .35 + 1) * .1));   // a fita balança com a rolagem
       minhoca.scale.setScalar(q.ms);
-      minhoca.visible = q.my > -9;
+      minhoca.visible = q.my > -9 && q.ms > .5;
 
       plano.position.z = q.pz;
       plano.visible = q.pz > -40;
@@ -653,6 +676,8 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
       // materiais e travava a rolagem. Apagado, ele só fica sem intensidade.
       spot.intensity = q.si > .01 ? q.si : 0;
 
+      // Quanto a cena desfoca longe do centro; os quadros 'de perto' pedem mais.
+      (desfoque.uniforms.get('uBlurStrength') as { value: number }).value = q.borrao ?? .1;
       camera.position.y = q.cay;
       // Só um leve tilt pelo ponteiro (±1°), como a câmera de lá; sem foco seguindo o mouse.
       camera.rotation.set(-ponteiro.y * GRAU, -ponteiro.x * GRAU, 0);

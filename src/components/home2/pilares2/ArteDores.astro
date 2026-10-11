@@ -33,7 +33,7 @@ const q: string[] = [];
 const surge = (n: string, t: number, de = 'translateY(8px)') => q.push(`@keyframes ${n}{0%,${t}%{opacity:0;transform:${de}}${t + 4}%,95%{opacity:1;transform:none}100%{opacity:0;transform:none}}`);
 const entre = (n: string, a: number, b: number) => q.push(`@keyframes ${n}{0%,${a}%{opacity:0}${a + 2}%,${b}%{opacity:1}${b + 2}%,100%{opacity:0}}`);
 const ate = (n: string, b: number) => q.push(`@keyframes ${n}{0%,${b}%{opacity:1}${b + 2}%,97%{opacity:0}100%{opacity:1}}`);
-const acende = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{opacity:.36}${t + 3}%,95%{opacity:1}100%{opacity:.36}}`);
+const acende = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{opacity:.62}${t + 3}%,95%{opacity:1}100%{opacity:.62}}`);
 const enche = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{transform:scaleX(0)}${t + 9}%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}`);
 const mouse = (n: string, pts: [number, number, number][]) => {
   const tr = ([, x, y]: [number, number, number]) => `translate(${x}cqw,${y}px)`;

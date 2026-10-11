@@ -1,7 +1,9 @@
 /* Artes de "O que muda na sua clínica" (10/10/2026): mesmas peças e regras
    do Protocolo Revena (protocolo-v2.css). Aqui só o que é próprio destas
    sete cenas; o resto vem das classes .p2-*. Ver pilares2/ArteDores. */
-.dt { --laco: 12s; }
+/* Textos de apoio e itens que ainda vão acender mais claros (11/10: "muito
+   fraco"): o apagado continua apagado, mas dá para ler. */
+.dt { --laco: 12s; --suave: rgb(242 242 238 / .74); --anel: rgb(242 242 238 / .42); }
 .dt .p2-cena__topo > .p2-rosto { width: 28px; height: 28px; }
 .dt-corpo { container-type: inline-size; position: relative; display: grid; align-content: start; gap: 8px; padding: 8px 0 0; }
 .dt-corpo--junto { gap: 0; }

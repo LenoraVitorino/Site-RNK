@@ -822,6 +822,9 @@ section[id] { scroll-margin-top: 110px; }
   --eco-raio: clamp(26px, 2.4vw, 34px);
   border: 0; border-radius: var(--eco-raio); background: linear-gradient(160deg, #1d1d1c, #111 58%);
 }
+/* Lugar da foto (11/10: "deixa ícone e legenda, que ainda vai ter foto"). */
+.eco-arte .eco-arte__vaga { position: absolute; inset: 0; z-index: 3; display: grid; place-content: center; justify-items: center; gap: 12px; color: rgb(242 242 238 / .6); font-size: 14px; letter-spacing: -.01em; }
+.eco-arte .eco-arte__desenho[hidden] { display: none; }
 .eco-painel .eco-arte.eco-arte { border-radius: calc(var(--eco-raio) - clamp(12px, 1.1vw, 16px)); }   /* classe dobrada: vence o raio do próprio componente */
 .eco-painel--invertido { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
 .eco-painel--invertido .eco-painel__corpo { order: 2; }

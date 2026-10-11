@@ -223,7 +223,9 @@ const rotulos = ['Agendamento', 'Leads recuperados', 'Receita', 'Reativação', 
      trilhos hachurados com a barra cheia dentro; as duas primeiras em
      grafite, a última em amarelo com o balão do valor. Sem legenda nem
      rótulos: a frase do cartão já diz o que é. */
-  .case__barras { align-self: flex-end; display: flex; align-items: stretch; gap: 8px; height: 132px; }
+  /* No celular o gráfico fica no fluxo: a folga em cima é para o balão do
+     número não cobrir a etiqueta do topo do cartão. */
+  .case__barras { align-self: flex-end; display: flex; align-items: stretch; gap: 8px; height: 120px; margin-top: 34px; }
   .case__barras span { position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 34px; border-radius: 10px; background: repeating-linear-gradient(135deg, rgb(37 37 35 / .1) 0 1px, transparent 1px 7px), rgb(37 37 35 / .045); }
   .case__barras i { display: block; height: var(--h); border-radius: 10px; background: #252523; box-shadow: 0 8px 14px -8px rgb(22 22 22 / .5); transform-origin: 50% 100%; transition: transform 1.2s var(--easing) calc(.25s + var(--k) * 110ms); }
   .case__barras .case__barra-fim i { background: linear-gradient(180deg, #FFE27A, #FFD103); box-shadow: 0 8px 14px -8px rgb(150 116 0 / .7); }
@@ -277,7 +279,7 @@ const rotulos = ['Agendamento', 'Leads recuperados', 'Receita', 'Reativação', 
     .case--destaque { order: 0; }
     .case--destaque .case__grafico { margin-block: clamp(14px, 2.4vw, 34px) 8px; }
     .case--barras { gap: 30px; }
-    .case__barras { position: absolute; right: var(--pad); top: calc(var(--pad) + 86px); bottom: calc(var(--pad) + 56px); height: auto; align-self: stretch; }
+    .case__barras { position: absolute; right: var(--pad); top: calc(var(--pad) + 86px); bottom: calc(var(--pad) + 56px); height: auto; margin-top: 0; align-self: stretch; }
     .case--destaque .case__numero { font-size: clamp(84px, 7vw, 108px); }
     .case--destaque .case__texto { font-size: clamp(16px, 1.2vw, 18px); }
   }
