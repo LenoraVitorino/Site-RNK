@@ -55,6 +55,8 @@ const ARQUIVOS = {
   envArcos: '/cena/env-arcos.webp',
   envFaixas: '/cena/env-faixas.webp',
   causticas: '/cena/causticas.mp4',
+  // O mesmo vídeo a 640×360 (12/10/2026): no celular ele só desenha a luz do spot, e o original pesa 2 MB.
+  causticasCelular: '/cena/causticas-celular.mp4',
 };
 /** Velocidade das animações de morph dos modelos, como na cena de lá. */
 /* A minhoca (dobras dos ganhos em diante) andava a .04 e parecia parada
@@ -552,10 +554,16 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
     if (a.status === 'fulfilled') literalDonut.envMap = a.value;
     if (f.status === 'fulfilled') literalMinhoca.envMap = f.value;
     pmrem.dispose();
-    carregarModelo(ARQUIVOS.donut, donutObj, pivo, literalDonut, VELOCIDADE.donut).catch(() => {});
-    // Nas internas a minhoca não é baixada: ela só entra depois de t = .356, fora dos quadros usados.
-    if (!interna) carregarModelo(ARQUIVOS.minhoca, minhoca, minhocaReserva, literalMinhoca, VELOCIDADE.minhoca).catch(() => {});
+    // Um arquivo por vez, na ordem em que a página precisa (12/10/2026): o
+    // anel é a hero, a fita só aparece dobras abaixo e o vídeo é um detalhe
+    // da luz. Baixando os três juntos, numa rede de celular o anel só
+    // chegava depois de 12 s.
+    carregarModelo(ARQUIVOS.donut, donutObj, pivo, literalDonut, VELOCIDADE.donut).catch(() => {})
+      // Nas internas a minhoca não é baixada: ela só entra depois de t = .356, fora dos quadros usados.
+      .then(() => (interna ? undefined : carregarModelo(ARQUIVOS.minhoca, minhoca, minhocaReserva, literalMinhoca, VELOCIDADE.minhoca).catch(() => {})))
+      .then(() => pedirVideo());
   });
+  let pedirVideo = () => {};
 
   // Plano de fundo.
   const plano = new Mesh(new PlaneGeometry(1, 1), new MeshStandardMaterial({ color: 0x464646, roughness: .479, metalness: .628 }));
@@ -600,7 +608,9 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
     videoAtivo = true;
     video.play().catch(() => {});
   }, { once: true });
-  if (!SO_PROPRIO) video.src = ARQUIVOS.causticas;
+  // Pedido só depois dos modelos (ver acima); até lá valem as cáusticas procedurais.
+  // Com economia de dados ligada o vídeo não é baixado.
+  pedirVideo = () => { if (!SO_PROPRIO && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) video.src = celular ? ARQUIVOS.causticasCelular : ARQUIVOS.causticas; };
 
   // Pós-processamento. O desfoque vem antes da vinheta e do grão, para o
   // grão ficar fino e visível na tela inteira, como na referência.

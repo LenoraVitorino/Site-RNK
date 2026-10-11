@@ -657,8 +657,12 @@ section[id] { scroll-margin-top: 110px; }
    reservada de três linhas, e "Isso é RevOps." fica centrado nessa altura,
    como na regra de base: o mesmo respiro para o selo e para o texto. */
 @media (max-width: 599.98px) {
-  .hero--editorial .hero__h1:has(.hero__mensagem) { font-size: clamp(36px, 11vw, 48px); min-height: 3.25em; }
+  /* 12/10/2026 (Lenora: "hero título grande e legível"): "Isso é RevOps."
+     sobe de 41px para 56px a 375px. A frase riscada, que tem "para clínicas."
+     inteiro numa linha, fica a 78% disso para continuar cabendo na largura. */
+  .hero--editorial .hero__h1:has(.hero__mensagem) { font-size: clamp(44px, 15vw, 64px); min-height: 2.55em; }
   .hero--editorial .hero__h1 .hero__mensagem { align-content: center; }
+  .hero--editorial .hero__h1 .hero__mensagem--antes { font-size: .78em; }
   .hero--editorial .hero__h1 .hero__mensagem > span { white-space: normal; }
 }
 
