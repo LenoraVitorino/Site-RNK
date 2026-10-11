@@ -48,3 +48,31 @@
 @media (max-height: 480px) and (orientation: landscape) {
   :root:root .header .nav { padding-bottom: 24px; }
 }
+
+/* Planos no celular e no tablet (12/10/2026, Lenora): como no palco do
+   desktop, a mão com o símbolo e o nome do plano ficam no meio da tela, e as
+   dobras se empilham — cada plano fica preso e o seguinte sobe por cima dele.
+   O `top` de cada dobra vem do script do palco (dobra mais alta que a tela
+   rola até o fim antes de prender). */
+@media (max-width: 899.98px) {
+  :root:root .palcoplanos:not([data-animado]) .palcoplanos__fixo { overflow: visible; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco {
+    position: sticky; top: var(--pilha-topo, 0px);
+    display: grid; align-content: center; justify-items: center;
+    min-height: 100svh; padding-block: calc(var(--altura-header, 72px) + 28px) 48px;
+    border-top: 0; text-align: center;
+    box-shadow: 0 -28px 56px -20px rgb(0 0 0 / .7);
+  }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__imagem { width: 100%; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__icone-mob { width: min(58vw, 280px); margin: 0 auto 20px; }
+  :root:root:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial { left: 50%; transform: translateX(-50%); width: min(58vw, 280px); height: min(58vw, 280px); }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__info { justify-items: center; margin-inline: auto; text-align: center; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome--pilha { justify-items: center; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__a { justify-self: center; margin-right: .6em; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: center; margin-left: .6em; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__texto { justify-items: center; text-align: center; }
+  :root:root .palcoplanos:not([data-animado]) :is(.plano-palco__fala, .plano-palco__frase) { max-width: 34ch; margin-inline: auto; }
+}
+@media (max-width: 899.98px) and (prefers-reduced-motion: reduce) {
+  :root:root .palcoplanos:not([data-animado]) .plano-palco { position: relative; top: auto; min-height: 0; box-shadow: none; }
+}

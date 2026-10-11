@@ -316,6 +316,10 @@ import Selo from '../ui/Selo.astro';
       } else {
         header?.classList.remove('header--oculto');
         layers.forEach(layer => { layer.inert = false; layer.removeAttribute('aria-hidden'); layer.removeAttribute('style'); });
+        // Pilha do celular (12/10/2026): cada plano é sticky (responsivo.css). Um
+        // plano mais alto que a tela precisa de `top` negativo para rolar até o
+        // fim antes de prender; o CSS não enxerga a altura do próprio elemento.
+        layers.forEach(layer => layer.style.setProperty('--pilha-topo', `${Math.min(0, innerHeight - layer.offsetHeight)}px`));
       }
     }
     addEventListener('scroll', () => {
