@@ -95,15 +95,15 @@
    diagramação: o símbolo grande e o nome no alto do meio, e a fala, o texto
    e o botão centrados embaixo. A pilha acima fica para movimento reduzido. */
 @media (max-width: 899.98px) {
-  :root:root .palcoplanos[data-animado] { --palco-simbolo: min(132vw, 66svh); --palco-centro: 39svh; }
+  :root:root .palcoplanos[data-animado] { --palco-simbolo: min(132vw, 66svh); --palco-centro: 34svh; }   /* 34% da altura: o símbolo sobe e sobra respiro entre a mão e o texto */
   /* Centrado por margem, não por transform: o script do palco escreve o transform do símbolo. */
   :root:root .palcoplanos[data-animado] .palcoplanos__icones { display: block; }
   :root:root .palcoplanos[data-animado] .plano-palco__icone { position: absolute; left: 50%; top: var(--palco-centro); width: var(--palco-simbolo); height: var(--palco-simbolo); margin: calc(var(--palco-simbolo) / -2) 0 0 calc(var(--palco-simbolo) / -2); }
   :root:root:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial { top: var(--palco-centro); width: var(--palco-simbolo); height: var(--palco-simbolo); }
   :root:root .palcoplanos[data-animado] .plano-palco__nome { top: var(--palco-centro); width: 80vw; font-size: 18vw; }
   :root:root .palcoplanos[data-animado] .plano-palco__texto {
-    left: var(--gutter); right: var(--gutter); top: auto; bottom: max(28px, env(safe-area-inset-bottom) + 20px); width: auto;
-    grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 12px; justify-items: center; align-content: end; text-align: center;
+    left: var(--gutter); right: var(--gutter); top: auto; bottom: max(36px, env(safe-area-inset-bottom) + 24px); width: auto;
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 14px; justify-items: center; align-content: end; text-align: center;
   }
   :root:root .palcoplanos[data-animado] .plano-palco__texto > * { grid-row: auto; grid-column: 1; }
   :root:root .palcoplanos[data-animado] :is(.plano-palco__legenda, .plano-palco__tracos) { display: none; }
