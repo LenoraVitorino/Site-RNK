@@ -172,7 +172,9 @@ import Selo from '../ui/Selo.astro';
   const secao = document.querySelector<HTMLElement>('[data-palcoplanos]');
   const trilho = secao?.querySelector<HTMLElement>('[data-trilho]');
   if (secao && trilho) {
-    const media = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+    // O palco animado vale em qualquer largura (12/10/2026, Lenora: no celular
+    // "tem que ter o mesmo impacto do desktop"); só o movimento reduzido cai na pilha.
+    const media = matchMedia('(prefers-reduced-motion: no-preference)');
     const layers = [...trilho.querySelectorAll<HTMLElement>('[data-plano]')];
     const icons = [...trilho.querySelectorAll<SVGSVGElement>('[data-icone]')];
     const pieces = icons.map(icon => [...icon.querySelectorAll<SVGGElement>('[data-peca]')]);
@@ -316,6 +318,10 @@ import Selo from '../ui/Selo.astro';
       } else {
         header?.classList.remove('header--oculto');
         layers.forEach(layer => { layer.inert = false; layer.removeAttribute('aria-hidden'); layer.removeAttribute('style'); });
+        // Pilha do celular (12/10/2026): cada plano é sticky (responsivo.css). Um
+        // plano mais alto que a tela precisa de `top` negativo para rolar até o
+        // fim antes de prender; o CSS não enxerga a altura do próprio elemento.
+        layers.forEach(layer => layer.style.setProperty('--pilha-topo', `${Math.min(0, innerHeight - layer.offsetHeight)}px`));
       }
     }
     addEventListener('scroll', () => {

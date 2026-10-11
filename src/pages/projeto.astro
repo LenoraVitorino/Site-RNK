@@ -42,7 +42,11 @@ const nomesPr: Record<number, [string, string, string]> = {
   12: ['Páginas dos planos: Start, Run, Full e demais', 'Planos Revena', '2026-10-07T01:08:55Z'],
   13: ['Páginas dos planos: refinamento', 'Planos Revena', '2026-10-10T19:43:33Z'],
   15: ['Home: dobra “O que muda na sua clínica”', 'Home', '2026-10-10T23:16:23Z'],
+  31: ['Página de acompanhamento do projeto', 'Geral', '2026-10-11T05:20:09Z'],
+  33: ['Home no celular: hero, planos animados, títulos e vídeo com som', 'Home', '2026-10-11T05:30:00Z'],
 };
+/* PRs de bastidor (ferramentas da equipe): não são entrega para o cliente. */
+const prsOcultos = [32];
 
 /* Sem login o GitHub só responde 60 vezes por hora, e o build não pode sair
    com a lista vazia: busca pelo `gh` (logado), depois sem login e, se nada
@@ -59,7 +63,7 @@ const [issuesAgora, prsAgora] = await Promise.all([buscar(ISSUES.replace('https:
 if (issuesAgora) foto.issues = issuesAgora.filter((i) => !i.pull_request).map((i) => ({
   number: i.number, title: i.title, state: i.state, body: i.body ?? '', labels: i.labels.map((l: any) => ({ name: l.name })),
 }));
-if (prsAgora) foto.prs = prsAgora.filter((p) => p.merged_at).map((p) => ({ number: p.number, title: nomesPr[p.number]?.[0] ?? p.title, merged_at: p.merged_at }));
+if (prsAgora) foto.prs = prsAgora.filter((p) => p.merged_at && !prsOcultos.includes(p.number)).map((p) => ({ number: p.number, title: nomesPr[p.number]?.[0] ?? p.title, merged_at: p.merged_at }));
 const texto = JSON.stringify(foto, null, 2) + '\n';
 if (issuesAgora || prsAgora) try { if (readFileSync(guardado, 'utf8') !== texto) writeFileSync(guardado, texto); } catch { try { writeFileSync(guardado, texto); } catch { /* só leitura */ } }
 const entregas = foto.issues;
@@ -236,7 +240,7 @@ const conta = (t: string) => registro.filter((r) => r[0] === t).length;
     <h2>Evolução</h2>
     <p class="ds__intro">O que já foi entregue e o que falta, desde o início do projeto, em 15 de agosto.</p>
     <div class="ds-evo" data-entregas data-fonte={ISSUES} data-fonte-prs={PRS}>
-      <script type="application/json" set:html={JSON.stringify({ issues: entregas, prs: feitos, nomes: nomesPr }).replace(/</g, '\\u003c')}></script>
+      <script type="application/json" set:html={JSON.stringify({ issues: entregas, prs: feitos, nomes: nomesPr, ocultos: prsOcultos }).replace(/</g, '\\u003c')}></script>
       <div class="ds-evo__resumo">
         <p><strong data-feitas>0</strong><span>de <b data-total>0</b> entregas</span></p>
         <div class="ds-evo__barra" role="progressbar" aria-label="Entregas concluídas" aria-valuemin="0" aria-valuenow="0"><i></i></div>
@@ -432,7 +436,7 @@ const conta = (t: string) => registro.filter((r) => r[0] === t).length;
     function texto(tag, t, classe) { var el = document.createElement(tag); el.textContent = t; if (classe) el.className = classe; return el; }
     /* Lista no molde do ClickUp: grupos por área que abrem e fecham (a home
        primeiro, é a entrega principal), colunas fixas e filtro por estado. */
-    var dados = { issues: [], prs: [], nomes: {} };
+    var dados = { issues: [], prs: [], nomes: {}, ocultos: [] };
     /* 'refino' (Fazendo): a issue tem a etiqueta `em desenvolvimento` ou já
        tem etapa marcada. 'cliente': espera material da Renke (etiqueta
        `conteúdo`). 'fazer': ainda não começou. */
@@ -445,7 +449,7 @@ const conta = (t: string) => registro.filter((r) => r[0] === t).length;
     function dia(d) { return new Date(d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', timeZone: 'America/Sao_Paulo' }).replace(' de ', ' ').replace('.', ''); }
     function desenhar() {
       var linhas = [];
-      dados.prs.filter(function (p) { return p.merged_at; }).sort(function (a, b) { return a.merged_at < b.merged_at ? -1 : 1; }).forEach(function (p) {
+      dados.prs.filter(function (p) { return p.merged_at && (dados.ocultos || []).indexOf(p.number) < 0; }).sort(function (a, b) { return a.merged_at < b.merged_at ? -1 : 1; }).forEach(function (p) {
         var nome = dados.nomes[p.number] || [p.title, 'Geral'];
         var fim = dia(p.merged_at), comeco = nome[2] ? dia(nome[2]) : fim;
         linhas.push({ estado: 'entregue', titulo: nome[0], area: nome[1], nota: '', periodo: comeco === fim ? fim : comeco + ' – ' + fim });

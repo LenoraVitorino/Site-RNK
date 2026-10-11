@@ -34,7 +34,7 @@
 @media (max-width: 599.98px) {
   .revena-bento--v2 { --peca-recuo: 22px; --peca-vao: 12px; }
   .revena-bento--v2 .revena-peca .revena-peca__arte { height: auto; }
-  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao, .revena-peca--posicionamento) .revena-peca__arte { height: 280px; }
+  .revena-bento--v2 :is(.revena-peca--crm, .revena-peca--conexoes, .revena-peca--automacao, .revena-peca--decisao, .revena-peca--posicionamento) .revena-peca__arte { height: 280px; }
 }
 
 .p2 { --tinta: #F2F2EE; --suave: rgb(242 242 238 / .56); --fio: rgb(242 242 238 / .1); --anel: rgb(242 242 238 / .22); --borda-rosto: #121212; color: var(--tinta); font-size: 14px; line-height: 1.35; letter-spacing: -.01em; }

@@ -25,6 +25,15 @@ const lead = copyLiteral ? hero.lead :
           <span>Isso <Risco texto="não é marketing" destaque="marketing" /></span>
           <span><Risco texto="para clínicas." segundo forte /></span>
         </span>
+        {/* No celular a frase riscada tem o mesmo corpo de "Isso é RevOps." e
+            quebra em quatro linhas, uma por traço, descendo sobre o espaço
+            onde o subtítulo entra depois (Lenora, 12/10/2026). */}
+        <span class="hero__mensagem hero__mensagem--antes hero__mensagem--celular" aria-hidden="true">
+          <span>Isso <Risco texto="não é" /></span>
+          <span><Risco texto="marketing" destaque="marketing" /></span>
+          <span><Risco texto="para" forte /></span>
+          <span><Risco texto="clínicas." forte /></span>
+        </span>
         <span class="hero__mensagem hero__mensagem--depois" aria-hidden="true">
           <span>Isso é</span>
           <span class="hero__revops">RevOps.</span>

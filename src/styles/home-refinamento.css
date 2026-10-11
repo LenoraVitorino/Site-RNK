@@ -651,14 +651,23 @@ section[id] { scroll-margin-top: 110px; }
 @media (max-width: 899.98px) {
   .hero--editorial:has(.hero__mensagem) { min-height: 0; }
 }
-/* O H1 era menor que os H2 no celular (28–32px contra 34–35px), porque a
-   frase "Isso não é marketing" tinha de caber numa linha só. Ela passa a
-   quebrar ("Isso / não é marketing / para clínicas.") numa altura
-   reservada de três linhas, e "Isso é RevOps." fica centrado nessa altura,
-   como na regra de base: o mesmo respiro para o selo e para o texto. */
+/* Título da hero no celular. */
+.hero .hero__mensagem--celular { display: none; }
 @media (max-width: 599.98px) {
-  .hero--editorial .hero__h1:has(.hero__mensagem) { font-size: clamp(36px, 11vw, 48px); min-height: 3.25em; }
-  .hero--editorial .hero__h1 .hero__mensagem { align-content: center; }
+  /* 12/10/2026 (Lenora): título grande e legível no celular. A frase
+     riscada tem o mesmo corpo de "Isso é RevOps." e vem em quatro linhas
+     (hero__mensagem--celular), descendo sobre o espaço onde o subtítulo
+     entra depois; o título reserva só as duas linhas de "Isso é RevOps.",
+     e o subtítulo fica logo abaixo, sem vão. */
+  .hero--editorial .hero__h1:has(.hero__mensagem) { font-size: clamp(46px, 16vw, 58px); min-height: 2.12em; }
+  /* O subtítulo guarda quatro linhas: a frase riscada desce sobre esse espaço e não pode chegar ao botão. */
+  .hero--editorial .hero__h1:has(.hero__mensagem--celular) ~ .hero__apoio .hero__lead { min-height: 6em; }
+  .hero--editorial .hero__h1 .hero__mensagem { align-content: start; padding-top: 0; }
+  .hero--editorial .hero__h1 .hero__mensagem--antes:not(.hero__mensagem--celular) { display: none; }
+  .hero--editorial .hero__h1 .hero__mensagem--celular { display: grid; inset: 0 0 auto; }
+  .js .hero--editorial .hero__mensagem--celular > span:nth-child(2) .hero__risco::after { animation-delay: 1.25s; }
+  .js .hero--editorial .hero__mensagem--celular > span:nth-child(3) .hero__risco::after { animation-delay: 1.5s; }
+  .js .hero--editorial .hero__mensagem--celular > span:nth-child(4) .hero__risco::after { animation-delay: 1.75s; }
   .hero--editorial .hero__h1 .hero__mensagem > span { white-space: normal; }
 }
 
