@@ -3,7 +3,7 @@
 Base para trabalhar o layout. Não é extração do site atual: dele vieram só **cor, logo e a
 confirmação da fonte**. Forma, ritmo e componentes são novos.
 
-**Página viva:** https://claude.ai/code/artifact/cc282afc-78f7-46d7-a9c4-a91b1fae4843
+**Página viva:** `/design-system` (abre com o registro "O que mudou": adicionado, alterado, sugestões e o que falta)
 **No repositório:** `/design-system` (`npm run dev` → http://localhost:4321/design-system)
 
 | Onde | O quê |
