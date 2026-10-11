@@ -7,25 +7,28 @@
  * volta quando houver fotos e depoimentos); os logos vivem na barra do pé
  * da hero.
  */
-import Base2 from '../layouts/Base2.astro';
-import FundoVivo from '../components/laboratorio/FundoVivo.astro';
-import { seo } from '../data/home';
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import { seo } from '../../data/home';
 
-import Hero from '../components/home2/Hero.astro';
-import OQueFaz from '../components/home2/OQueFaz.astro';
-import Protocolos from '../components/home2/Protocolos.astro';
-import Letreiro from '../components/home2/Letreiro.astro';
-import PlanosPalco from '../components/home2/PlanosPalco.astro';
-import Planos from '../components/home2/Planos.astro';
-import PerguntasTrilho from '../components/home2/PerguntasTrilho.astro';
-import ResultadosCases from '../components/home2/ResultadosCases.astro';
-import CtaFinal from '../components/home2/CtaFinal.astro';
-import AcademyTools from '../components/home2/AcademyTools.astro';
-import Formulario from '../components/home2/Formulario.astro';
-import { copyLiteral } from '../data/versao';
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import PerguntasTrilho from '../../components/home2/PerguntasTrilho.astro';
+import ResultadosCases from '../../components/home2/ResultadosCases.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+
+import { copyLiteral } from '../../data/versao';
 ---
-<Base2 titulo={seo.titulo} descricao={seo.descricao} classe="home-refinada">
-  <FundoVivo slot="fundo" fundo="cena" />
+{/* TESTE do fundo próprio "seda" (11/10): a home inteira, igual, só com o fundo novo. */}
+<Base2 titulo={seo.titulo} descricao={seo.descricao} classe="home-refinada" noindex>
+
+  <FundoVivo slot="fundo" fundo="seda" />
   <Hero />
   <OQueFaz />
   {/* O que a Renke entrega na prática, logo depois da metodologia (Lenora,

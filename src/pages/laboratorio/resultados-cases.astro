@@ -1,0 +1,14 @@
+---
+/**
+ * Página de teste (10/10/2026): "Resultados por especialidade" como cases de
+ * números grandes, sem foto, em cartões com um case em destaque. Fora dos
+ * buscadores e do menu.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import ResultadosCases from '../../components/home2/ResultadosCases.astro';
+---
+<Base2 titulo="Laboratório · Resultados em cases" descricao="Laboratório" noindex classe="home-refinada">
+  <FundoVivo slot="fundo" fundo="cena" />
+  <ResultadosCases />
+</Base2>

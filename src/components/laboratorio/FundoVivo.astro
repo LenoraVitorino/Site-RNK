@@ -9,7 +9,7 @@
  * A prop `roteiro` (só a cena) escolhe o roteiro das páginas internas
  * (fundo-internas.ts); sem ela, o atributo não sai e vale o da home.
  */
-interface Props { fundo?: 'cena' | 'prata' | 'veu' | 'particulas' | 'superficie'; roteiro?: 'home' | 'interna' }
+interface Props { fundo?: 'cena' | 'seda' | 'prata' | 'veu' | 'particulas' | 'superficie'; roteiro?: 'home' | 'interna' }
 const { fundo, roteiro } = Astro.props;
 ---
 <canvas class="fundo-vivo" data-fundo-vivo data-fundo={fundo} data-roteiro={roteiro} aria-hidden="true"></canvas>
@@ -25,10 +25,11 @@ const { fundo, roteiro } = Astro.props;
   const pedido = new URLSearchParams(location.search).get('fundo');
   const fundo = canvas?.dataset.fundo || (pedido === 'superficie' ? 'superficie' : 'particulas');
   // O véu e a prata não nascem com movimento reduzido: a página fica no preto.
-  const semVeu = (fundo === 'veu' || fundo === 'prata' || fundo === 'cena') && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const semVeu = (fundo === 'veu' || fundo === 'prata' || fundo === 'cena' || fundo === 'seda') && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (canvas && temWebGL && !semVeu) {
     const carregar = () =>
       fundo === 'cena' ? import('./fundo-cena')
+      : fundo === 'seda' ? import('./fundo-seda')
       : fundo === 'prata' ? import('./fundo-prata')
       : fundo === 'veu' ? import('./fundo-veu')
       : fundo === 'superficie' ? import('./fundo-superficie')

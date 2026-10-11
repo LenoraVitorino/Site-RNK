@@ -64,6 +64,9 @@ section[id] { scroll-margin-top: 110px; }
 .res-etapa__foto { margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #050505; transition: opacity .6s ease; }
 .res-etapa__foto img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 45%; }
 .res-etapa__img--espelho { scale: -1 1; }
+/* Sem foto por enquanto: ícone de imagem e legenda no centro do quadro. */
+.res-etapa__foto--vaga { display: grid; place-content: center; justify-items: center; gap: 12px; background: #121211; color: rgb(242 242 238 / .5); }
+.res-etapa__foto--vaga figcaption { font-size: 14px; letter-spacing: .01em; color: rgb(242 242 238 / .62); }
 /* Respiro no fim, para a última linha subir até a pilha. */
 .res-pilha::after { content: ''; display: block; height: clamp(24px, 3vw, 48px); }
 
@@ -146,63 +149,65 @@ section[id] { scroll-margin-top: 110px; }
    deixar mais moderno"). Vidro escuro com o chanfro da casa, campos só com
    o fio de baixo, letras maiores e o botão no amarelo da marca, o único
    amarelo do cartão (o foco do campo acende o fio no mesmo amarelo). */
+/* 10/10: "a legibilidade tá uma bosta, o acabamento também; faz igual aos
+   cards". Saiu o chanfro: cartão arredondado no mesmo vidro dos painéis de
+   "O que muda", campos preenchidos (em vez de só o fio de baixo), rótulos e
+   exemplos mais claros e o botão em pílula, como as outras CTAs. */
 .home-refinada .form-card {
-  --form-corte: clamp(12px, 1.2vw, 20px);
-  color-scheme: dark; color: var(--papel); border: 0; border-radius: 0; box-shadow: none;
-  gap: clamp(22px, 2vw, 28px); padding: clamp(28px, 3.2vw, 52px);
-  background: linear-gradient(160deg, rgb(38 38 36 / .58), rgb(10 10 10 / .5));
+  color-scheme: dark; color: var(--papel); border: 0; border-radius: clamp(26px, 2.4vw, 34px);
+  gap: clamp(20px, 1.8vw, 26px); padding: clamp(24px, 3vw, 48px);
+  background: linear-gradient(160deg, rgb(255 255 255 / .14), rgb(255 255 255 / .05) 58%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / .1) inset, 0 1px 0 rgb(255 255 255 / .16) inset, 0 40px 70px -40px rgb(0 0 0 / .8);
   -webkit-backdrop-filter: blur(28px) saturate(1.1); backdrop-filter: blur(28px) saturate(1.1);
-  clip-path: polygon(
-    var(--form-corte) 0, calc(100% - var(--form-corte)) 0, 100% var(--form-corte),
-    100% calc(100% - var(--form-corte)), calc(100% - var(--form-corte)) 100%,
-    var(--form-corte) 100%, 0 calc(100% - var(--form-corte)), 0 var(--form-corte));
 }
-.home-refinada .form-card__duo { column-gap: clamp(20px, 2vw, 32px); row-gap: inherit; }
-.home-refinada .form-card .field__label { margin-bottom: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: rgb(242 242 238 / .56); }
+.home-refinada .form-card__duo { column-gap: clamp(10px, 1vw, 14px); row-gap: inherit; }
+/* Abaixo de 1360px os dois campos não cabem lado a lado sem cortar o exemplo. */
+@media (max-width: 1359.98px) { .home-refinada .form-card__duo { grid-template-columns: 1fr; } }
+.home-refinada .form-card .field__label { margin-bottom: 9px; font-size: 14px; font-weight: 500; letter-spacing: 0; color: rgb(242 242 238 / .88); }
 .home-refinada .form-card .field :is(input, select, textarea) {
-  min-height: 48px; padding: 8px 0 12px; border: 0; border-radius: 0; background: transparent;
-  font-size: clamp(16px, 1.2vw, 18px); color: var(--papel);
-  box-shadow: inset 0 -1px 0 rgb(242 242 238 / .2);
+  min-height: 54px; padding: 0 16px; border: 0; border-radius: 16px; background: rgb(0 0 0 / .28);
+  font-size: clamp(16px, 1.15vw, 17px); color: var(--papel);
+  box-shadow: inset 0 0 0 1px rgb(242 242 238 / .14);
   transition: box-shadow .45s cubic-bezier(.22, 1, .36, 1);
 }
-.home-refinada .form-card .field textarea { min-height: 120px; padding: 10px 0 12px; resize: vertical; line-height: 1.5; }
+.home-refinada .form-card .field textarea { min-height: 120px; padding: 14px 18px; resize: vertical; line-height: 1.5; }
 .home-refinada .form-card .field select {
-  appearance: none; -webkit-appearance: none; padding-right: 28px; cursor: pointer;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23f2f2ee' stroke-opacity='.6' stroke-width='1.3'/%3E%3C/svg%3E") right 4px center / 12px 8px no-repeat;
+  appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23f2f2ee' stroke-opacity='.6' stroke-width='1.3'/%3E%3C/svg%3E") right 18px center / 12px 8px no-repeat;
 }
 .home-refinada .form-card .field select:is(:invalid, :has(option[value=""]:checked)) { color: rgb(242 242 238 / .34); }
 .home-refinada .form-card .field select option { color: var(--papel); background: #161616; }
-.home-refinada .form-card .field :is(input, textarea)::placeholder { color: rgb(242 242 238 / .3); }
-.home-refinada .form-card .field :is(input, select, textarea):hover { box-shadow: inset 0 -1px 0 rgb(242 242 238 / .42); }
+.home-refinada .form-card .field :is(input, textarea)::placeholder { color: rgb(242 242 238 / .5); }
+.home-refinada .form-card .field :is(input, select, textarea):hover { box-shadow: inset 0 0 0 1px rgb(242 242 238 / .32); }
 .home-refinada .form-card .field :is(input, select, textarea):focus,
 .home-refinada .form-card .field :is(input, select, textarea):focus-visible {
-  outline: none; box-shadow: inset 0 -2px 0 var(--amarelo-marca, #FFD103);
+  outline: none; box-shadow: inset 0 0 0 1.5px var(--amarelo-marca, #FFD103);
 }
-.home-refinada .form-card .field--invalido :is(input, select, textarea) { box-shadow: inset 0 -1px 0 var(--erro); }
+.home-refinada .form-card .field--invalido :is(input, select, textarea) { box-shadow: inset 0 0 0 1.5px var(--erro); }
 .home-refinada .form-card :is(.field__erro) { color: var(--erro); }
 /* Faturamento em opções que se marcam com um clique, no lugar do select. */
 .form-card__opcoes { margin: 0; padding: 0; border: 0; min-width: 0; }
 .form-card__opcoes legend { padding: 0; }
-.form-card__escolhas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.form-card__escolhas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0; }
 .form-card__escolha { position: relative; }
 .form-card__escolha input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .form-card__escolha span {
-  display: inline-flex; align-items: center; min-height: 40px; padding: 8px 16px; border-radius: 999px;
-  font-size: 14.5px; color: rgb(242 242 238 / .78); background: rgb(242 242 238 / .06);
+  display: inline-flex; align-items: center; min-height: 44px; padding: 8px 18px; border-radius: 999px;
+  font-size: 15px; color: rgb(242 242 238 / .9); background: rgb(0 0 0 / .28); box-shadow: inset 0 0 0 1px rgb(242 242 238 / .14);
   transition: background-color .4s ease, color .4s ease;
 }
 .form-card__escolha:hover span { background: rgb(242 242 238 / .12); color: var(--papel); }
-.form-card__escolha input:checked + span { background: var(--papel); color: var(--grafite); }
+.form-card__escolha input:checked + span { background: var(--papel); color: var(--grafite); box-shadow: none; font-weight: 500; }
 .form-card__escolha input:focus-visible + span { outline: 2px solid var(--amarelo-marca, #FFD103); outline-offset: 2px; }
 .home-refinada .form-card .botao {
-  min-height: 54px; margin-top: 6px; border-radius: 12px;
+  min-height: 56px; margin-top: 6px; border-radius: 999px;
   background: var(--amarelo-marca, #FFD103); color: var(--grafite); border-color: var(--amarelo-marca, #FFD103);
   font-weight: 500;
 }
 .home-refinada .form-card .botao:hover { background: #ffdc3a; border-color: #ffdc3a; }
 .home-refinada .form-card .botao:focus-visible { outline: 2px solid var(--papel); outline-offset: 3px; }
-.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a) { color: rgb(242 242 238 / .5); }
-.home-refinada .form-card .form-card__aviso a { color: rgb(242 242 238 / .72); }
+.home-refinada .form-card :is(.form-card__aviso, .form-card__aviso a) { color: rgb(242 242 238 / .68); }
+.home-refinada .form-card .form-card__aviso a { color: var(--papel); }
 /* Depois do envio: status e 'Copiar mensagem' nos tons do vidro escuro. */
 .home-refinada .form-card .form-card__status { background: rgb(242 242 238 / .06); border-color: transparent; color: rgb(242 242 238 / .86); }
 .home-refinada .form-card .form-card__copiar { color: var(--papel); }
@@ -265,7 +270,9 @@ section[id] { scroll-margin-top: 110px; }
 .hero--editorial .hero__apoio { display: contents; }
 .hero--editorial .hero__lead { grid-column: 1 / -1; grid-row: 4; justify-self: start; width: min(100%, 760px); margin: clamp(24px, 3.5svh, 40px) 0 0; max-width: none; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; text-wrap: balance; }
 .hero--editorial .hero__lead strong { font-weight: 600; color: var(--papel); }   /* palavras em destaque, em branco pleno */
-.hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0; }
+/* A CTA encosta na mesma margem direita do botão do menu (10/10): 17px é o
+   recuo interno da caixa do cabeçalho (16 de respiro + 1 do fio). */
+.hero--editorial .hero__acoes { grid-column: 2; grid-row: 6; margin: 0 17px 0 0; justify-self: end; }
 .hero--editorial .hero__acoes .botao { max-width: 100%; white-space: normal; }
 .hero--editorial .hero__base { grid-column: 1; grid-row: 6; justify-content: flex-start; }
 @media (prefers-reduced-motion: no-preference) {
@@ -282,7 +289,7 @@ section[id] { scroll-margin-top: 110px; }
   .hero--editorial .hero__palco .hero__selo, .hero--editorial .hero__h1, .hero--editorial .hero__base { grid-row: auto; }
   .hero--editorial .hero__palco .hero__selo { margin: 0; }
   .hero--editorial .hero__lead { grid-column: auto; grid-row: auto; width: 100%; max-width: none; margin: 0; font-size: 16px; }
-  .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; }
+  .hero--editorial .hero__acoes { grid-column: auto; grid-row: auto; margin: 0; justify-self: auto; }
 }
 
 
@@ -810,8 +817,12 @@ section[id] { scroll-margin-top: 110px; }
 .eco-painel {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: clamp(16px, 2vw, 32px);
   min-height: clamp(460px, 40vw, 620px); padding: clamp(12px, 1.1vw, 16px);
-  border: 1px solid rgb(255 255 255 / .06); border-radius: 18px; background: #101010;   /* opaco: na pilha, o de baixo não pode vazar */
+  /* 10/10: mesmo acabamento dos cartões novos do site (cantos largos e o fio
+     de luz do vidro), mas opaco: na pilha, o de baixo não pode vazar. */
+  --eco-raio: clamp(26px, 2.4vw, 34px);
+  border: 0; border-radius: var(--eco-raio); background: linear-gradient(160deg, #1d1d1c, #111 58%);
 }
+.eco-painel .eco-arte.eco-arte { border-radius: calc(var(--eco-raio) - clamp(12px, 1.1vw, 16px)); }   /* classe dobrada: vence o raio do próprio componente */
 .eco-painel--invertido { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); }
 .eco-painel--invertido .eco-painel__corpo { order: 2; }
 .eco-painel__corpo { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(24px, 4vw, 64px); }
@@ -823,7 +834,7 @@ section[id] { scroll-margin-top: 110px; }
 .eco-painel .eco-arte { min-height: 100%; }
 /* Empilhar (02/10, "faz empilhar"): cada painel fica preso logo abaixo do
    menu e o seguinte sobe por cima dele, com uma sombra suave na borda. */
-.eco-painel { position: sticky; top: calc(var(--altura-header) + 12px); box-shadow: 0 -24px 48px -12px rgb(0 0 0 / .65); }
+.eco-painel { position: sticky; top: calc(var(--altura-header) + 12px); box-shadow: 0 0 0 1px rgb(255 255 255 / .09) inset, 0 1px 0 rgb(255 255 255 / .14) inset, 0 -24px 48px -12px rgb(0 0 0 / .65); }
 .eco-painel + .eco-painel { margin-top: clamp(32px, 6svh, 72px); }
 .eco-painel + .eco-painel { top: calc(var(--altura-header) + 28px); }   /* a borda do de baixo continua à vista */
 @media (max-width: 899.98px) {

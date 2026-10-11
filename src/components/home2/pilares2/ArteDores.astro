@@ -1,0 +1,251 @@
+---
+/**
+ * Artes dos sete cartões de "O que muda na sua clínica" (10/10/2026), no
+ * mesmo estilo e com as mesmas regras das peças do Protocolo Revena
+ * (ArteProtocolo2): o trabalho feito por gente, contado como processo, com
+ * as fotos do time, a clínica fictícia (Clínica Âmbar), recortes em vidro
+ * escuro soltos no cartão, o elemento em ação claro e o amarelo num detalhe.
+ * Sem métricas inventadas. Cada arte responde à pergunta do cartão:
+ * 0 custo por paciente · 1 cada lead acompanhado · 2 o processo continua
+ * quando a pessoa muda · 3 de onde veio cada paciente · 4 onde o mês caiu ·
+ * 5 o que deu certo vira padrão · 6 o espaço que os concorrentes deixam.
+ * Parada, cada arte mostra a pose final; os tempos são % de um laço de 12 s.
+ */
+import { Image } from 'astro:assets';
+import '../../../styles/protocolo-v2.css';
+import '../../../styles/dores-arte.css';
+import isa from '../../../assets/equipe/isa.jpg';
+import lari from '../../../assets/equipe/lari.jpg';
+import julio from '../../../assets/equipe/julio-caldeira.jpg';
+import maria from '../../../assets/equipe/maria.jpg';
+import pedro from '../../../assets/equipe/pedro-packness.jpg';
+import milena from '../../../assets/equipe/milena.jpg';
+
+interface Props { peca: number }
+const { peca } = Astro.props;
+
+const rosto = { width: 96, height: 96, format: 'webp' as const, quality: 80, alt: '', loading: 'lazy' as const, class: 'p2-rosto' };
+
+/* Quadros: `surge` entra e fica; `entre` só existe num intervalo; `acende`
+   sai do apagado; `enche` cresce da esquerda; `mouse` leva o cursor por
+   pontos [tempo, x em cqw, y em px]. */
+const q: string[] = [];
+const surge = (n: string, t: number, de = 'translateY(8px)') => q.push(`@keyframes ${n}{0%,${t}%{opacity:0;transform:${de}}${t + 4}%,95%{opacity:1;transform:none}100%{opacity:0;transform:none}}`);
+const entre = (n: string, a: number, b: number) => q.push(`@keyframes ${n}{0%,${a}%{opacity:0}${a + 2}%,${b}%{opacity:1}${b + 2}%,100%{opacity:0}}`);
+const ate = (n: string, b: number) => q.push(`@keyframes ${n}{0%,${b}%{opacity:1}${b + 2}%,97%{opacity:0}100%{opacity:1}}`);
+const acende = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{opacity:.36}${t + 3}%,95%{opacity:1}100%{opacity:.36}}`);
+const enche = (n: string, t: number) => q.push(`@keyframes ${n}{0%,${t}%{transform:scaleX(0)}${t + 9}%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}`);
+const mouse = (n: string, pts: [number, number, number][]) => {
+  const tr = ([, x, y]: [number, number, number]) => `translate(${x}cqw,${y}px)`;
+  const [p0, pf] = [pts[0], pts[pts.length - 1]];
+  q.push(`@keyframes ${n}{0%,${p0[0] - 5}%{opacity:0;transform:${tr(p0)} translate(16px,14px)}${pts.map((p) => `${p[0]}%{opacity:1;transform:${tr(p)}}`).join('')}${pf[0] + 6}%,100%{opacity:0;transform:${tr(pf)} translate(12px,12px)}}`);
+};
+
+/* 0. A conta do custo por paciente: o que foi investido, quem virou paciente e o resultado. */
+const novos = ['JM', 'CA', 'PV', 'HR'];
+/* 1. Cada lead com o estado em que está; os estados andam um a um. */
+const leads = [
+  { ini: 'JM', nome: 'Juliana M.', de: 'Harmonização', estados: ['Em contato', 'Agendada', 'Compareceu'], t: [14, 34] },
+  { ini: 'MS', nome: 'Mariana S.', de: 'Fios de PDO', estados: ['Novo lead', 'Em contato', 'Agendada'], t: [24, 50] },
+  { ini: 'RL', nome: 'Renata L.', de: 'Botox', estados: ['Novo lead', 'Em contato'], t: [62] },
+];
+/* 2. O roteiro da recepção segue sendo cumprido quando a pessoa muda. */
+const roteiro = [
+  { passo: 'Responder em até 5 minutos', t: 10 },
+  { passo: 'Oferecer dois horários', t: 24 },
+  { passo: 'Confirmar na véspera', t: 62 },
+];
+/* 3. De onde veio cada paciente novo do mês. */
+const origens = [
+  { ini: 'JM', nome: 'Juliana M.', de: 'Harmonização', canal: 'Google', t: 10 },
+  { ini: 'CA', nome: 'Carla A.', de: 'Retorno', canal: 'Indicação', t: 24 },
+  { ini: 'PV', nome: 'Paula V.', de: 'Peeling', canal: 'Google', t: 38 },
+];
+/* 4. A reunião do mês ruim: etapa por etapa, até achar onde caiu. */
+const etapas = [
+  { nome: 'Leads chegando', t: 8 },
+  { nome: 'Primeiro contato', t: 20 },
+  { nome: 'Agendamento', t: 32 },
+  { nome: 'Comparecimento', t: 46, caiu: true },
+];
+/* 5. O que deu certo no mês bom vira padrão da clínica. */
+const acertos = [
+  { nome: 'Lembrete na véspera', t: 14 },
+  { nome: 'Retorno em 5 minutos', t: 36 },
+  { nome: 'Reativar pacientes antigos', t: 58 },
+];
+/* 6. O que cada concorrente comunica, e o espaço que sobra. */
+const mercado = [
+  { letra: 'A', fala: 'Preço baixo', t: 8 },
+  { letra: 'B', fala: 'Antes e depois', t: 20 },
+  { letra: 'C', fala: 'Promoções', t: 32 },
+];
+
+if (peca === 0) {
+  surge('dt0-canal-0', 8, 'scale(.8)'); surge('dt0-canal-1', 14, 'scale(.8)');
+  novos.forEach((_, i) => surge(`dt0-novo-${i}`, 26 + i * 7, 'scale(.4)'));
+  surge('dt0-conta', 62, 'translateY(12px) scale(.97)');
+}
+if (peca === 1) {
+  leads.forEach((l, i) => {
+    ate(`dt1-e-${i}-0`, l.t[0]);
+    if (l.t[1] !== undefined) entre(`dt1-e-${i}-1`, l.t[0], l.t[1]);
+    surge(`dt1-e-${i}-${l.estados.length - 1}`, l.t[l.t.length - 1] + 2, 'scale(.92)');
+  });
+  mouse('dt1-mouse', [[10, 62, 34], [16, 62, 34], [22, 62, 92], [28, 62, 92], [32, 62, 34], [44, 62, 34], [49, 62, 92], [56, 62, 92], [61, 62, 150], [70, 62, 150]]);
+}
+if (peca === 2) {
+  roteiro.forEach((r, i) => { acende(`dt2-passo-${i}`, r.t); surge(`dt2-visto-${i}`, r.t + 2, 'scale(.5)'); });
+  ate('dt2-antes', 40); surge('dt2-depois', 42, 'translateY(6px)');
+}
+if (peca === 3) {
+  origens.forEach((o, i) => { acende(`dt3-linha-${i}`, o.t); surge(`dt3-canal-${i}`, o.t + 3, 'scale(.8)'); });
+  surge('dt3-nota', 56, 'translateY(12px) scale(.97)');
+  mouse('dt3-mouse', [[9, 70, 30], [18, 70, 30], [23, 70, 82], [32, 70, 82], [37, 70, 134], [48, 70, 134], [58, 60, 196], [78, 60, 196]]);
+}
+if (peca === 4) {
+  etapas.forEach((e, i) => { acende(`dt4-linha-${i}`, e.t); surge(`dt4-marca-${i}`, e.t + 3, 'scale(.5)'); surge(`dt4-nota-${i}`, e.t + 4, 'translateX(6px)'); });
+  surge('dt4-motivo', 62, 'translateY(12px) scale(.97)');
+  mouse('dt4-mouse', [[7, 52, 22], [14, 52, 22], [19, 52, 56], [26, 52, 56], [31, 52, 90], [40, 52, 90], [45, 52, 124], [58, 52, 124], [66, 64, 186], [82, 64, 186]]);
+}
+if (peca === 5) {
+  acertos.forEach((a, i) => {
+    q.push(`@keyframes dt5-chave-${i}{0%,${a.t}%{background:#3a3a38}${a.t + 4}%,95%{background:#F2F2EE}100%{background:#3a3a38}}`);
+    q.push(`@keyframes dt5-pino-${i}{0%,${a.t}%{transform:none;background:#8a8a86}${a.t + 4}%,95%{transform:translateX(12px);background:#161616}100%{transform:none;background:#8a8a86}}`);
+    acende(`dt5-linha-${i}`, a.t); surge(`dt5-padrao-${i}`, a.t + 5, 'translateY(4px)');
+  });
+  mouse('dt5-mouse', [[8, 80, 36], [18, 80, 36], [28, 80, 96], [40, 80, 96], [50, 80, 156], [64, 80, 156]]);
+}
+if (peca === 6) {
+  mercado.forEach((m, i) => { acende(`dt6-bloco-${i}`, m.t); surge(`dt6-fala-${i}`, m.t + 3, 'translateY(4px)'); });
+  ate('dt6-vazio', 54); surge('dt6-seu', 56, 'scale(.94)');
+  mouse('dt6-mouse', [[6, 18, 50], [14, 18, 50], [19, 68, 50], [26, 68, 50], [31, 18, 138], [40, 18, 138], [50, 70, 144], [72, 70, 144]]);
+}
+const quadros = q.join('');
+const clinica = '<svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 17.5 12 6l5.5 11.5" /><circle class="p2-cena__clinica-ponto" cx="12" cy="15.2" r="1.3" /></svg>';
+const seta = '<svg viewBox="0 0 16 16" focusable="false"><path d="M1.5 1.5l12 4.6-5.2 2.2-2.2 5.2z" /></svg>';
+const visto = '<svg viewBox="0 0 20 20" focusable="false"><path d="M5.6 10.4l3 3 5.8-6.6" /></svg>';
+---
+<div class="p2 p2-tela dt" aria-hidden="true" data-p2 style="--d:0">
+  <style is:inline set:html={quadros}></style>
+  <section class="p2-cena p2-cena--fim">
+    {peca === 0 && (<>
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={julio} {...rosto} /><Image src={isa} {...rosto} /></span><b>Custo por paciente</b><span>Outubro</span></header>
+      <div class="dt-corpo">
+        <div class="p2-bloco dt-conta">
+          <div class="p2-linha">Mídia paga<span class="dt-chips"><b class="p2-anim" style="--a:dt0-canal-0">Google</b><b class="p2-anim" style="--a:dt0-canal-1">Instagram</b></span></div>
+          <div class="p2-linha">Pacientes novos<span class="p2-com__fila">{novos.map((n, i) => <i class="p2-anim" style={`--a:dt0-novo-${i}`}>{n}</i>)}</span></div>
+        </div>
+        <div class="p2-estudo2__brecha p2-anim" style="--a:dt0-conta"><i></i><div><strong>Custo por paciente</strong><span>Calculado por canal, todo mês</span></div></div>
+      </div>
+    </>)}
+
+    {peca === 1 && (<>
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={lari} {...rosto} /><Image src={pedro} {...rosto} /></span><b>Comercial</b><span>Leads da semana</span></header>
+      <div class="dt-corpo">
+        {leads.map((l, i) => (
+          <div class="dt-item">
+            <i class="p2-ficha__foto">{l.ini}</i>
+            <div><strong>{l.nome}</strong><span>{l.de}</span></div>
+            <span class="dt-estado">
+              {l.estados.map((e, j) => (
+                <b class:list={['p2-anim', j === l.estados.length - 1 ? 'dt-estado__fim' : 'dt-some', i === 0 && j === 2 && 'dt-estado__claro']} style={`--a:dt1-e-${i}-${j}`}>{i === 0 && j === 2 && <i></i>}{e}</b>
+              ))}
+            </span>
+          </div>
+        ))}
+        <div class="p2-mouse p2-anim" style="--a:dt1-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={lari} {...rosto} /></span></div>
+      </div>
+    </>)}
+
+    {peca === 2 && (<>
+      <header class="p2-cena__topo"><span class="p2-cena__clinica" set:html={clinica}></span><b>Clínica Âmbar</b><span>Recepção</span></header>
+      <div class="dt-corpo">
+        <div class="dt-item dt-quem">
+          <span class="dt-troca">
+            <i class="p2-ficha__foto p2-anim dt-some" style="--a:dt2-antes">CA</i>
+            <i class="p2-ficha__foto dt-quem__nova p2-anim" style="--a:dt2-depois">HR</i>
+          </span>
+          <span class="dt-troca dt-troca--texto">
+            <div class="p2-anim dt-some" style="--a:dt2-antes"><strong>Carla A.</strong><span>Na recepção</span></div>
+            <div class="p2-anim" style="--a:dt2-depois"><strong>Helena R.</strong><span>Entrou esta semana</span></div>
+          </span>
+          <span class="dt-estado"><b class="dt-estado__fim dt-estado__claro p2-anim" style="--a:dt2-depois"><i></i>Mesmo roteiro</b></span>
+        </div>
+        <ul class="dt-lista">
+          {roteiro.map((r, i) => (
+            <li class="p2-tarefa p2-anim" style={`--a:dt2-passo-${i}`}>
+              <span class="p2-tarefa__marca"><b class="p2-tarefa__visto p2-anim" style={`--a:dt2-visto-${i}`} set:html={visto}></b></span>
+              <span class="p2-tarefa__texto">{r.passo}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>)}
+
+    {peca === 3 && (<>
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={julio} {...rosto} /><Image src={maria} {...rosto} /></span><b>Origem dos pacientes</b><span>Outubro</span></header>
+      <div class="dt-corpo">
+        {origens.map((o, i) => (
+          <div class="dt-item dt-item--baixo p2-anim" style={`--a:dt3-linha-${i}`}>
+            <i class="p2-ficha__foto">{o.ini}</i>
+            <div><strong>{o.nome}</strong><span>{o.de}</span></div>
+            <span class="dt-chips"><b class="p2-anim" style={`--a:dt3-canal-${i}`}>{o.canal}</b></span>
+          </div>
+        ))}
+        <div class="p2-estudo2__brecha p2-anim" style="--a:dt3-nota"><i></i><div><strong>Mais verba no Google</strong><span>É de onde vêm os melhores pacientes</span></div></div>
+        <div class="p2-mouse p2-anim" style="--a:dt3-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={julio} {...rosto} /></span></div>
+      </div>
+    </>)}
+
+    {peca === 4 && (<>
+      <header class="p2-cena__topo"><Image src={maria} {...rosto} /><b>Reunião mensal</b><span>O que houve em setembro</span></header>
+      <div class="dt-corpo dt-corpo--junto">
+        {etapas.map((e, i) => (
+          <div class="dt-etapa p2-anim" style={`--a:dt4-linha-${i}`}>
+            <span class:list={['p2-tarefa__marca', e.caiu && 'dt-etapa__caiu']}>{e.caiu
+              ? <b class="p2-anim" style={`--a:dt4-marca-${i}`}></b>
+              : <b class="p2-tarefa__visto p2-anim" style={`--a:dt4-marca-${i}`} set:html={visto}></b>}</span>
+            {e.nome}
+            <span class="p2-anim" style={`--a:dt4-nota-${i}`}>{e.caiu ? 'Caiu aqui' : 'No ritmo'}</span>
+          </div>
+        ))}
+        <div class="p2-estudo2__brecha p2-anim" style="--a:dt4-motivo"><i></i><div><strong>Motivo encontrado</strong><span>Faltou o lembrete na véspera</span></div></div>
+        <div class="p2-mouse p2-anim" style="--a:dt4-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={maria} {...rosto} /></span></div>
+      </div>
+    </>)}
+
+    {peca === 5 && (<>
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={maria} {...rosto} /></span><b>O que deu certo</b><span>Outubro</span></header>
+      <div class="dt-corpo">
+        {acertos.map((a, i) => (
+          <div class="dt-item p2-anim" style={`--a:dt5-linha-${i}`}>
+            <div><strong>{a.nome}</strong><span class="p2-anim" style={`--a:dt5-padrao-${i}`}>Virou padrão da clínica</span></div>
+            <span class="p2-chave p2-anim" style={`--a:dt5-chave-${i}`}><i class="p2-anim" style={`--a:dt5-pino-${i}`}></i></span>
+          </div>
+        ))}
+        <div class="p2-mouse p2-anim" style="--a:dt5-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={milena} {...rosto} /></span></div>
+      </div>
+    </>)}
+
+    {peca === 6 && (<>
+      <header class="p2-cena__topo"><span class="p2-rostos"><Image src={milena} {...rosto} /><Image src={julio} {...rosto} /></span><b>Mapa do mercado</b><span>Sua região</span></header>
+      <div class="dt-corpo dt-mapa">
+        {mercado.map((m, i) => (
+          <div class="dt-espaco p2-anim" style={`--a:dt6-bloco-${i}`}>
+            <span class="p2-estudo2__quem"><i>{m.letra}</i>Clínica {m.letra}</span>
+            <strong class="p2-anim" style={`--a:dt6-fala-${i}`}>{m.fala}</strong>
+          </div>
+        ))}
+        <div class="dt-espaco dt-espaco--livre">
+          <div class="dt-espaco__vazio p2-anim dt-some" style="--a:dt6-vazio">Ninguém fala disso</div>
+          <div class="dt-espaco__seu p2-anim" style="--a:dt6-seu">
+            <span class="p2-estudo2__quem"><i></i>Sua clínica</span>
+            <strong>Pós-procedimento</strong>
+          </div>
+        </div>
+        <div class="p2-mouse p2-anim" style="--a:dt6-mouse"><Fragment set:html={seta} /><span class="p2-mouse__quem"><Image src={milena} {...rosto} /></span></div>
+      </div>
+    </>)}
+  </section>
+</div>
