@@ -1,0 +1,15 @@
+---
+/**
+ * Página de teste (10/10/2026): "O que muda na sua clínica" em fileiras
+ * largas empilhadas, com a do meio da tela acesa (mecanismo do pin
+ * 963559282801122042). Comparar com /laboratorio/dores-solucoes (trilho) e
+ * /laboratorio/dores-palco. Fora dos buscadores e do menu.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import PerguntasTrilho from '../../components/home2/PerguntasTrilho.astro';
+---
+<Base2 titulo="Laboratório · Dores e soluções, lista" descricao="Laboratório" noindex classe="home-refinada">
+  <FundoVivo slot="fundo" fundo="cena" />
+  <PerguntasTrilho modo="lista" />
+</Base2>

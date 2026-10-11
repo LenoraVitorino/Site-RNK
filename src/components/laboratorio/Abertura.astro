@@ -1,0 +1,44 @@
+---
+/**
+ * Abertura da home (TESTE, 10/10/2026): a Lenora sentiu a entrada da página
+ * rápida demais ("aparece o título e já sai"). Uma cortina escura com o R
+ * da Renke segura a tela por pouco mais de um segundo e só então a hero
+ * começa a se animar. Enquanto a cortina está de pé, as animações da hero
+ * ficam pausadas (classe abertura-ativa no <html>), para ninguém perder o
+ * começo delas. Sem JS ou com movimento reduzido, a cortina não aparece.
+ * Ver /laboratorio/abertura. Não está na home.
+ */
+---
+<div class="abertura" data-abertura aria-hidden="true">
+  <img class="abertura__marca" src="/marca/renke-monograma.png" alt="" width="270" height="270" />
+</div>
+<script is:inline>
+  (function () {
+    var raiz = document.documentElement;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    raiz.classList.add('abertura-ativa');
+    // 1,15s de cortina; a saída leva mais 0,6s, já com a hero andando por baixo.
+    setTimeout(function () {
+      raiz.classList.remove('abertura-ativa');
+      raiz.classList.add('abertura-sai');
+      setTimeout(function () {
+        var el = document.querySelector('[data-abertura]');
+        if (el) el.remove();
+        raiz.classList.remove('abertura-sai');
+      }, 700);
+    }, 1150);
+  })();
+</script>
+<style is:global>
+  .abertura { display: none; }
+  .abertura-ativa .abertura, .abertura-sai .abertura {
+    position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; background: #070909;
+  }
+  .abertura__marca { width: clamp(64px, 6vw, 88px); height: auto; animation: abertura-marca .7s cubic-bezier(.22, 1, .36, 1) both; }
+  .abertura-sai .abertura { pointer-events: none; opacity: 0; transition: opacity .6s cubic-bezier(.4, 0, .2, 1); }
+  .abertura-sai .abertura__marca { scale: 1.08; transition: scale .6s cubic-bezier(.4, 0, .2, 1); }
+  @keyframes abertura-marca { from { opacity: 0; transform: translateY(10px) scale(.94); } to { opacity: 1; transform: none; } }
+  /* A hero espera a cortina: animações (e os atrasos delas) ficam paradas. */
+  .abertura-ativa :is(.hero, .hero *, .hero *::before, .hero *::after, .header) { animation-play-state: paused !important; }
+  .abertura-ativa body { overflow: hidden; }
+</style>

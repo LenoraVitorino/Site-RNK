@@ -51,13 +51,27 @@ const falaEstudio: Record<string, string> = {
   'REVENA START': 'Faturo legal, mas tô no escuro. Meu comercial não tem estrutura nem dados.',
 };
 
+// Palavras-chave em peso médio, na fala e no que o plano é (Lenora, 10/10).
+// Vale para as duas versões de copy: o trecho que não existir no texto da
+// versão simplesmente não é marcado.
+const chaves: Record<string, string[]> = {
+  'REVENA START': ['tô no escuro', 'estruturada em 90 dias'],
+  'REVENA RUN': ['gerir meu time e meus números', 'acompanhada e otimizada'],
+  'REVENA SCALE': ['crescer e extrair mais do digital', 'conteúdo orgânico', 'reativação da base'],
+  'REVENA CORE': ['time estratégico', 'acompanhados de perto'],
+  'REVENA FULL': ['jornada completa', 'jornada estruturada'],
+};
+const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const marcar = (t: string, label: string) =>
+  (chaves[label] ?? []).reduce((h, c) => h.replace(esc(c), `<strong>${esc(c)}</strong>`), esc(t));
+
 const planos = ordem.map((label) => {
   const p = protocolos.find((x) => x.label === label)!;
   return {
     id: chave(label),
     nome: nome(label),
-    texto: textoEstudio[label] ?? p.texto,
-    fala: falaEstudio[label] ?? p.fala,
+    texto: marcar(textoEstudio[label] ?? p.texto, label),
+    fala: marcar(falaEstudio[label] ?? p.fala, label),
     rota: p.rota,
     pecas: pecas(label),
   };
@@ -119,13 +133,15 @@ import Selo from '../ui/Selo.astro';
 
             {/* Um bloco só, com hierarquia: a fala do momento da clínica em destaque e, abaixo, o que o plano entrega. */}
             <div class="plano-palco__texto">
-              {/* No desktop o bloco é só: qual plano é, o que ele é e o botão (o nome gigante já é o título). A fala do momento da clínica fica para a pilha do celular. */}
-              <p class="plano-palco__conta" aria-hidden="true">Plano {String(i + 1).padStart(2, '0')} de {String(planos.length).padStart(2, '0')}</p>
+              {/* No desktop o bloco é: qual plano é, a fala da clínica (a dor, da copy original), o que o plano é e o botão. O nome gigante já é o título; o rótulo "Momento da clínica" só aparece na pilha do celular. */}
+              {/* Dois detalhes para equilibrar os cantos vazios do palco (10/10), só no desktop: no alto à direita, os cinco planos, com o da tela em contraste (legenda "Protocolo Revena 02 / 05" reprovada); embaixo à esquerda, os traços de posição, um em cima do outro, com o atual mais longo e aceso. */}
+              <p class="plano-palco__legenda" aria-hidden="true">{planos.map((q, j) => <span class:list={[j === i && 'plano-palco__legenda--atual']}>{q.nome}</span>)}</p>
+              <div class="plano-palco__tracos" aria-hidden="true">{planos.map((_, j) => <i class:list={[j === i && 'plano-palco__traco--atual']}></i>)}</div>
               <p class="plano-palco__momento-rotulo">Momento da clínica</p>
-              <p class="plano-palco__fala">“{p.fala}”</p>
+              <p class="plano-palco__fala" set:html={`“${p.fala}”`} />
               {/* O que o plano é e o convite andam juntos (display: contents: não muda o bloco; serve às variações de teste). */}
               <div class="plano-palco__acao">
-                <p class="plano-palco__frase">{p.texto}</p>
+                <p class="plano-palco__frase" set:html={p.texto} />
                 {/* O convite vem logo depois do texto, na ordem da leitura, e diz para onde leva: a página do plano. */}
                 <Botao href={existe(p.rota) ? p.rota : '#'} tamanho="md">Conhecer o Revena {p.nome}</Botao>
               </div>

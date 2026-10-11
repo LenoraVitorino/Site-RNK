@@ -1,0 +1,15 @@
+---
+/**
+ * Página de teste (10/10/2026): "O que muda na sua clínica" com um cartão
+ * grande que troca conforme a rolagem (desktop); no celular segue o trilho
+ * de arrastar. Comparar com /laboratorio/dores-solucoes. Fora dos
+ * buscadores e do menu.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import PerguntasTrilho from '../../components/home2/PerguntasTrilho.astro';
+---
+<Base2 titulo="Laboratório · Dores e soluções, palco" descricao="Laboratório" noindex classe="home-refinada">
+  <FundoVivo slot="fundo" fundo="cena" />
+  <PerguntasTrilho modo="palco" />
+</Base2>

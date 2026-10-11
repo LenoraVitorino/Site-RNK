@@ -11,7 +11,8 @@
     seguinte a cobre.
     A dobra segue como o painel claro chanfrado, agora opaco, para cada
     linha cobrir a de baixo sem emenda. Valores, textos e fotos vêm da
-    fonte compartilhada; as fotos são provisórias (ver data/home.ts). */
+    fonte compartilhada. As fotos saíram por enquanto (10/10): no lugar,
+    o quadro com um ícone de imagem e a legenda da especialidade. */
 import { resultados } from '../../data/home';
 import Selo from '../ui/Selo.astro';
 import { copyLiteral } from '../../data/versao';
@@ -46,12 +47,11 @@ const partes = (numero: string) => {
                   <span class="res-etapa__contagem" aria-hidden="true" data-contador data-alvo={valor} data-antes={antes} data-depois={depois}>{r.numero}</span>
                 </p>
               </div>
-              <figure class="res-etapa__foto">
-                <img
-                  class:list={{ 'res-etapa__img--espelho': r.espelhar }}
-                  src={`/imagens/planos-editoriais/${r.foto}.webp`}
-                  alt="" width="1254" height="1254" loading="lazy" decoding="async"
-                />
+              {/* Sem foto por enquanto (Lenora, 10/10): ícone de imagem e legenda
+                  no mesmo quadro, até chegarem as fotos de cada especialidade. */}
+              <figure class="res-etapa__foto res-etapa__foto--vaga" aria-label={`Espaço para foto: ${r.especialidade}`}>
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5" /><circle cx="8.6" cy="9.8" r="1.6" /><path d="M3.6 17.2l4.9-4.6 3.6 3.2 2.7-2.4 5.6 4.6" /></svg>
+                <figcaption>Foto de {r.especialidade.toLowerCase()}</figcaption>
               </figure>
             </div>
           </li>

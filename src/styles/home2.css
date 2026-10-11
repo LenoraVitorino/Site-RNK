@@ -281,8 +281,8 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 /* A ação do cabeçalho é um botão branco na caixa escura; nas caixas clara
    e amarela ele inverte para grafite. */
 .header__acao .botao {
-  background: #fff; color: var(--grafite); border: 1px solid #fff; border-radius: 12px;
-  padding: 9px 12px; min-height: 0; width: auto; font-size: 13px; white-space: nowrap; font-weight: var(--peso-enfase);
+  background: #fff; color: var(--grafite); border: 1px solid #fff; border-radius: 999px;
+  padding: 9px 16px; min-height: 0; width: auto; font-size: 13px; white-space: nowrap; font-weight: var(--peso-enfase);
   text-decoration: none; transition: background-color .25s var(--easing-suave), color .25s var(--easing-suave), border-color .25s var(--easing-suave);
 }
 .header__acao .botao:hover { background: var(--amarelo-claro); border-color: var(--amarelo-claro); color: var(--grafite); }
@@ -655,14 +655,33 @@ html:not(.js) .esteira__trilho { transform: none; }
 .plano-palco__frase { margin: 2px 0 0; max-width: 38ch; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.5; font-weight: var(--peso-corpo); letter-spacing: -.015em; opacity: .8; text-wrap: pretty; }
 .plano-palco__texto .botao { pointer-events: auto; margin-top: 10px; font-weight: var(--peso-enfase); }
 .plano-palco__acao { display: contents; }
-/* Desktop (10/10, noite): "é muita coisa, muita informação". O palco animado
-   fica com um bloco de três linhas, como antes das mudanças do dia: qual
-   plano é, o que ele é e o botão. A fala e os traços de posição saem daqui. */
-.plano-palco__conta { margin: 0; font-size: 13px; line-height: 1.2; letter-spacing: -.01em; opacity: .6; font-variant-numeric: tabular-nums; }
-.palcoplanos:not([data-animado]) .plano-palco__conta { display: none; }
-.palcoplanos[data-animado] :is(.plano-palco__momento-rotulo, .plano-palco__fala) { display: none; }
-.palcoplanos[data-animado] .plano-palco__texto { width: clamp(300px, 25vw, 420px); gap: 14px; }
-.palcoplanos[data-animado] .plano-palco__frase { margin: 0; max-width: none; opacity: 1; font-size: clamp(19px, 1.5vw, 26px); line-height: 1.3; letter-spacing: -.025em; }
+/* Desktop: o palco animado leva só os textos, no alto, em dois cantos
+   (10/10: "deixa só os textos"; a contagem "Plano 0X de 05" foi reprovada).
+   Em diagonal, a pedido dela: no alto à esquerda, a fala da clínica (a dor,
+   da copy original); embaixo à direita, o que o plano é e o botão. O rótulo "Momento da clínica" e os traços de posição
+   seguem fora; o centro do palco não muda. */
+.plano-palco__legenda, .plano-palco__tracos { display: none; }
+/* Cantos que sobravam vazios na diagonal: legenda do plano no alto à direita
+   e traços de posição embaixo à esquerda, na linha de base do botão. */
+.palcoplanos[data-animado] .plano-palco__texto > * { grid-row: 1; }
+.palcoplanos[data-animado] .plano-palco__legenda { display: flex; flex-direction: column; align-items: flex-end; gap: 9px; grid-column: 3; align-self: start; justify-self: end; margin: 6px 0 0; font-size: 12px; line-height: 1.2; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+.plano-palco__legenda span { opacity: .34; }
+.plano-palco__legenda .plano-palco__legenda--atual { opacity: 1; font-weight: 500; }
+.palcoplanos[data-animado] .plano-palco__tracos { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; grid-column: 1; align-self: end; padding-bottom: 4px; }
+.plano-palco__tracos i { width: 14px; height: 1px; background: var(--papel); opacity: .26; }
+/* O atual é mais comprido e aceso (10/10: "a que tiver em destaque maior"). */
+.plano-palco__tracos .plano-palco__traco--atual { width: 24px; opacity: 1; }
+.palcoplanos[data-animado] .plano-palco__momento-rotulo { display: none; }
+.palcoplanos[data-animado] .plano-palco__texto { right: var(--grid-inset); bottom: 5vw; width: auto; pointer-events: none; align-content: stretch; grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, clamp(360px, 33vw, 540px)) minmax(0, 1fr) minmax(0, clamp(280px, 23vw, 380px)); gap: 0; }
+.palcoplanos[data-animado] .plano-palco__fala { grid-column: 1; align-self: start; font-size: clamp(22px, 1.8vw, 31px); line-height: 1.3; letter-spacing: -.025em; text-wrap: pretty; }
+.palcoplanos[data-animado] .plano-palco__acao { grid-column: 3; align-self: end; display: grid; gap: 18px; justify-items: start; align-content: start; }
+.palcoplanos[data-animado] .plano-palco__frase { margin: 0; max-width: none; opacity: 1; color: rgb(242 242 238 / .72); font-size: clamp(15px, 1.1vw, 18px); line-height: 1.5; letter-spacing: -.01em; }
+.palcoplanos[data-animado] .plano-palco__texto .botao { margin-top: 0; }
+/* Palavras-chave em peso médio; no subtítulo elas também sobem para a cor cheia. */
+.plano-palco__fala strong, .plano-palco__frase strong { font-weight: 500; }
+.plano-palco__frase strong { color: var(--papel); }
+/* O destaque não quebra no meio: vai inteiro para a linha de baixo. */
+.palcoplanos[data-animado] .plano-palco__texto strong { white-space: nowrap; }
 .palcoplanos[data-animado] .palcoplanos__ancoras { width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .plano-palco__link { position: absolute; z-index: 1; inset: 30% 16% 4% 22%; pointer-events: auto; cursor: pointer; }
 /* Etiqueta que acompanha o cursor sobre o centro do palco. */
@@ -710,7 +729,7 @@ html:not(.js) .esteira__trilho { transform: none; }
 }
 @media (min-width: 900px) and (max-height: 700px) {
   .palcoplanos[data-animado] .plano-palco__texto { top: 4vh; }
-  .palcoplanos[data-animado] .plano-palco__fala { font-size: clamp(18px, 1.4vw, 22px); }
+  .palcoplanos[data-animado] .plano-palco__fala { font-size: clamp(19px, 1.5vw, 24px); }
   .palcoplanos[data-animado] .plano-palco__nome { font-size: 8vw; width: 47vw; }
 }
 
@@ -875,7 +894,8 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 
 .form-block { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
 .form-block__text { display: grid; gap: 32px; }
-.form-block__text .titulo { font-size: clamp(1.8rem, 3vw, 3rem); }
+/* Mesmo tamanho dos títulos das outras dobras (10/10: estava em 3vw, menor que o padrão de 3.6vw). */
+.form-block__text .titulo { font-size: clamp(2rem, 3.6vw, 3.5rem); }
 .form-block__text p:not(.rotulo) { color: var(--cinza); max-width: 48ch; line-height: 1.6; }
 .form-card { display: grid; gap: 18px; padding: clamp(24px, 3vw, 36px); border: 1px solid var(--fio); background: var(--superficie); border-radius: var(--raio-caixa); }
 .field { display: block; }
@@ -945,7 +965,34 @@ html:not(.js) .cortina > * { position: static; min-height: 0; transform: none; }
 .footer__renke-caixa { position: relative; display: block; width: 100%; aspect-ratio: 2269 / 451; }
 .footer__renke, .footer__renke-barra {
   position: absolute; inset: 0;
-  background: linear-gradient(112deg, #1f1f1e 0%, #2b2b29 38%, #3a3a37 50%, #2a2a28 62%, #1d1d1c 100%);
+  /* 10/10: "um pouco mais glass" (a primeira tentativa, só translúcida,
+     "não mudou nada": sobre preto, vidro sem nada atrás vira cinza). Agora
+     tem três coisas: luz atrás das letras, para o vidro ter o que desfocar;
+     o corpo translúcido; e um fio de luz na quina de cima de cada letra. */
+  background: linear-gradient(165deg, rgb(255 255 255 / .085), rgb(255 255 255 / .025) 55%, rgb(255 255 255 / .045));
+  -webkit-backdrop-filter: blur(22px) saturate(1.25); backdrop-filter: blur(22px) saturate(1.25);
+}
+.footer__fundo { position: relative; }
+.footer__fundo::before {
+  content: ''; position: absolute; inset: -6% 4% 8%; filter: blur(46px);
+  background:
+    radial-gradient(34% 62% at 24% 34%, rgb(255 255 255 / .08), transparent 70%),
+    radial-gradient(30% 60% at 80% 40%, rgb(255 255 255 / .05), transparent 70%);
+}
+.footer__renke-caixa::before, .footer__renke-caixa::after {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(100deg, rgb(255 255 255 / .3), rgb(255 255 255 / .1) 45%, rgb(255 255 255 / .22));
+  -webkit-mask-composite: source-out; mask-composite: subtract;
+}
+.footer__renke-caixa::before {
+  -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat, url('/marca/renke-rodape.png') 0 1px / contain no-repeat;
+  mask: url('/marca/renke-rodape.png') center / contain no-repeat, url('/marca/renke-rodape.png') 0 1px / contain no-repeat;
+  -webkit-mask-composite: source-out; mask-composite: subtract;
+}
+.footer__renke-caixa::after {
+  -webkit-mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat, url('/marca/renke-rodape-barra.png') 0 1px / contain no-repeat;
+  mask: url('/marca/renke-rodape-barra.png') center / contain no-repeat, url('/marca/renke-rodape-barra.png') 0 1px / contain no-repeat;
+  -webkit-mask-composite: source-out; mask-composite: subtract;
 }
 .footer__renke {
   -webkit-mask: url('/marca/renke-rodape.png') center / contain no-repeat;

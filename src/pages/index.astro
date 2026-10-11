@@ -17,8 +17,8 @@ import Protocolos from '../components/home2/Protocolos.astro';
 import Letreiro from '../components/home2/Letreiro.astro';
 import PlanosPalco from '../components/home2/PlanosPalco.astro';
 import Planos from '../components/home2/Planos.astro';
-import Perguntas from '../components/home2/Perguntas.astro';
-import Resultados from '../components/home2/Resultados.astro';
+import PerguntasTrilho from '../components/home2/PerguntasTrilho.astro';
+import ResultadosCases from '../components/home2/ResultadosCases.astro';
 import CtaFinal from '../components/home2/CtaFinal.astro';
 import AcademyTools from '../components/home2/AcademyTools.astro';
 import Formulario from '../components/home2/Formulario.astro';
@@ -34,8 +34,12 @@ import { copyLiteral } from '../data/versao';
   <Letreiro />
   {!copyLiteral && <PlanosPalco />}
   {copyLiteral && <Planos />}
-  <Perguntas />
-  <Resultados />
+  {/* 10/10/2026: as duas dobras na versão testada no laboratório, para ver
+      aplicadas na home: "O que muda na sua clínica" em lista (fileiras que
+      acendem com a rolagem) e os resultados como cases de números grandes.
+      Perguntas.astro e Resultados.astro ficam até a aprovação. */}
+  <PerguntasTrilho modo="lista" />
+  <ResultadosCases />
   <CtaFinal />
   <AcademyTools />
   {/* Conheça a Renke saiu da página (Lenora, 26/09: "tira, depois vemos o que fazer"). */}
