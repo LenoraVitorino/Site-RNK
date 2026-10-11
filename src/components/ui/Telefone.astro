@@ -83,10 +83,40 @@ const video = slot.video!;
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
     });
 
-    ouvir?.addEventListener('click', () => {
+    const ligarSom = () => {
       pausadoPeloUsuario = false; somDesligadoPeloUsuario = false;
       video.currentTime = 0; video.muted = false; refletirSom(); tocar();
-    });
+    };
+    ouvir?.addEventListener('click', ligarSom);
+
+    /* No desktop o convite acompanha o cursor pela dobra inteira, como o "Ver
+       o plano" do palco dos planos (Lenora, 12/10/2026): um clique em qualquer
+       ponto da dobra liga o som. A pílula fixa do vídeo fica para o toque. */
+    const dobra = raiz.closest<HTMLElement>('section');
+    let dobraClicavel = false;
+    if (dobra && !reduzido.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      dobraClicavel = true;
+      const etiqueta = document.createElement('span');
+      etiqueta.className = 'tel-cursor';
+      etiqueta.setAttribute('aria-hidden', 'true');
+      etiqueta.innerHTML = '<svg viewBox="0 0 24 24" focusable="false"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>Ouvir com som';
+      document.body.appendChild(etiqueta);
+      const convida = () => video.muted && !somDesligadoPeloUsuario;
+      const fora = (alvo: EventTarget | null) => !!(alvo as HTMLElement | null)?.closest?.('.tel__controles, a, input, textarea, select, button:not([data-tel-ouvir])');
+      const esconder = () => { etiqueta.classList.remove('tel-cursor--on'); dobra.classList.remove('tel-dobra--convite'); raiz.classList.remove('tel--cursor'); };
+      dobra.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse' || !convida() || fora(e.target)) return esconder();
+        etiqueta.style.transform = `translate(${e.clientX + 18}px, ${e.clientY + 18}px)`;
+        etiqueta.classList.add('tel-cursor--on'); dobra.classList.add('tel-dobra--convite'); raiz.classList.add('tel--cursor');
+      });
+      dobra.addEventListener('pointerleave', esconder);
+      addEventListener('scroll', esconder, { passive: true });
+      dobra.addEventListener('click', (e) => {
+        if (!convida() || fora(e.target) || (e.target as HTMLElement).closest('[data-tel-ouvir]')) return;
+        ligarSom(); esconder();
+      });
+      video.addEventListener('volumechange', () => { if (!convida()) esconder(); });
+    }
 
     if (reduzido.matches) return;
     refletirSom();
@@ -102,7 +132,9 @@ const video = slot.video!;
       video.muted = false;
       return video.play().then(refletirSom).catch(() => { video.muted = true; refletirSom(); return tocar(); });
     };
-    const primeiroGesto = () => {
+    const primeiroGesto = (e: Event) => {
+      // Dentro da dobra o clique é do convite (liga o som e volta ao começo).
+      if (dobraClicavel && dobra!.contains(e.target as Node)) return;
       if (naTela && video.muted && !somDesligadoPeloUsuario && !pausadoPeloUsuario) comSom();
     };
     for (const evento of ['pointerup', 'keydown', 'touchend']) addEventListener(evento, primeiroGesto, { passive: true });

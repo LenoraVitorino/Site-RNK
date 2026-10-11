@@ -472,6 +472,12 @@ a.link-arrow { padding-block: 10px; margin-block: -10px; }
 @media (hover: hover) { .tel__ouvir:hover .tel__ouvir-pilula { background: rgb(12 12 11 / .8); transform: translateY(-2px); } }
 .tel__ouvir:focus-visible { outline: 2px solid #F2F2EE; outline-offset: -6px; }
 @media (prefers-reduced-motion: reduce) { .tel__ouvir-pilula { transition: none; } }
+/* Convite no cursor (desktop): mesma etiqueta do "Ver o plano" do palco, em grafite porque esta dobra é clara. Com ela à vista, a pílula do vídeo sai. */
+.tel-cursor { position: fixed; z-index: 60; left: 0; top: 0; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 15px 0 12px; border-radius: 18px; background: #161616; color: #F2F2EE; font-size: 13px; font-weight: var(--peso-enfase, 500); letter-spacing: -.01em; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .3s var(--easing-suave, ease); will-change: transform; box-shadow: 0 14px 30px -14px rgb(0 0 0 / .6); }
+.tel-cursor svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.tel-cursor--on { opacity: 1; }
+.tel-dobra--convite { cursor: pointer; }
+.tel--cursor .tel__ouvir-pilula { opacity: 0; }
 .tel__controles { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 3; }
 .tel__botao {
   display: grid; place-items: center; width: 40px; height: 40px; padding: 0;
