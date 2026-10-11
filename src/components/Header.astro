@@ -335,7 +335,11 @@ const itensMenu = menu.flatMap((item) => {
   const primeira = document.querySelector<HTMLElement>('main > :first-child');
   const aplicaCaixa = () => {
     const fim = primeira ? primeira.getBoundingClientRect().bottom : Infinity;
-    header.classList.toggle('header--caixa', primeira ? fim <= header.offsetHeight : window.scrollY > 8);
+    // No celular e no tablet a hero é mais alta que a tela e o texto dela
+    // rola por baixo do menu: sem a caixa, o logo ficava por cima do título
+    // (12/10/2026). Ali a caixa entra logo que a página começa a rolar.
+    const estreito = window.innerWidth < 900;
+    header.classList.toggle('header--caixa', primeira && !estreito ? fim <= header.offsetHeight : window.scrollY > 8);
   };
   const aplicaTom = () => {
     if (nav.classList.contains('is-open')) return;   // com o drawer aberto, o tom congela
