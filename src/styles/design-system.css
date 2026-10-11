@@ -363,3 +363,76 @@ html { scroll-behavior: smooth; scroll-padding-top: 32px; }
   .ds-linhas li { grid-template-columns: 104px minmax(0, 1fr); }
   .ds-linhas li > span:last-child { grid-column: 2; margin-top: -10px; font-size: 14px; }
 }
+
+/* Página do projeto (12/10/2026): evolução das entregas, copy ajustada e o
+   design system como tópico secundário. */
+.ds-evo { margin-top: 28px; }
+.ds-evo__resumo { display: grid; gap: 18px; }
+.ds-evo__resumo p { display: flex; align-items: baseline; gap: 14px; margin: 0; color: rgb(242 242 238 / .66); font-size: 16px; }
+.ds-evo__resumo strong { font-size: clamp(56px, 7vw, 88px); font-weight: 300; letter-spacing: -.04em; line-height: .9; }
+.ds-evo__resumo b { color: #F2F2EE; font-weight: 500; }
+.ds-evo__barra { height: 2px; background: rgb(242 242 238 / .14); }
+.ds-evo__barra i { display: block; width: 0; height: 100%; background: #FFD103; transition: width 1.2s cubic-bezier(.22, 1, .36, 1); }
+.ds-linhas--entregas li { grid-template-columns: 124px minmax(0, 2fr) minmax(0, 1fr); }
+.ds-linhas--entregas strong { font-weight: 400; }
+.ds-copy { margin: 14px 0 0; padding: 0; list-style: none; }
+.ds-copy li { display: grid; grid-template-columns: 124px minmax(0, 1fr) minmax(0, 1fr); gap: 16px 28px; padding: 16px 0; border-top: 1px solid rgb(242 242 238 / .1); }
+.ds-copy small, .ds-copy__cabeca span { color: rgb(242 242 238 / .56); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.ds-copy small { padding-top: 3px; }
+.ds-copy li.ds-copy__cabeca { padding-block: 10px; border-top: 0; }
+.ds-copy p { margin: 0; font-size: 15.5px; line-height: 1.5; }
+.ds-copy p:first-of-type { color: rgb(242 242 238 / .56); }
+.ds-copy p:last-of-type { color: #F2F2EE; }
+.ds__secao--abre { padding-bottom: 0; }
+.ds__secao--abre .ds-olho { margin-bottom: 10px; }
+.ds__secao--abre + .ds__secao { border-top: 0; padding-top: 40px; }
+@media (max-width: 699.98px) {
+  .ds-linhas--entregas li { grid-template-columns: 96px minmax(0, 1fr); }
+  .ds-copy li { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .ds-copy li.ds-copy__cabeca { display: none; }
+  .ds-copy p::before { content: attr(data-rotulo); display: block; margin-bottom: 2px; color: rgb(242 242 238 / .5); font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+}
+
+/* Evolução em lista, no molde do ClickUp (12/10/2026): grupos por área
+   que abrem e fecham, cada um com o seu fio de progresso; colunas fixas,
+   linhas baixas e filtro por estado. */
+.ds-evo .ds-filtro { margin-top: 36px; }
+.ds-lista { --colunas: minmax(0, 1fr) 150px 140px; margin-top: 20px; }
+.ds-lista__colunas, .ds-lista li { display: grid; grid-template-columns: var(--colunas); align-items: center; gap: 16px; }
+.ds-lista__colunas { padding: 0 14px 10px; color: rgb(242 242 238 / .5); font-size: 11.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.ds-lista__grupo { margin-top: 10px; border-radius: 18px; box-shadow: 0 0 0 1px rgb(242 242 238 / .1) inset; overflow: hidden; }
+.ds-lista__grupo summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; list-style: none; background: rgb(255 255 255 / .03); }
+.ds-lista__grupo summary::-webkit-details-marker { display: none; }
+.ds-lista__grupo summary::before { content: ''; width: 7px; height: 7px; border-right: 1.5px solid rgb(242 242 238 / .6); border-bottom: 1.5px solid rgb(242 242 238 / .6); transform: rotate(-45deg); transition: transform .4s cubic-bezier(.22, 1, .36, 1); }
+.ds-lista__grupo[open] summary::before { transform: rotate(45deg) translate(-2px, -2px); }
+.ds-lista__grupo summary small { color: rgb(242 242 238 / .5); font-size: 13px; }
+.ds-lista__area { color: #F2F2EE; font-size: 16px; font-weight: 500; }
+.ds-lista__fio { flex: none; width: 96px; height: 2px; margin-left: auto; background: linear-gradient(90deg, #FFD103 calc(var(--feito) * 100%), rgb(255 209 3 / .38) 0 calc(var(--refino, 0) * 100%), rgb(242 242 238 / .16) 0); }
+.ds-lista ul { margin: 0; padding: 0; list-style: none; }
+.ds-lista li { min-height: 46px; padding: 8px 14px; border-top: 1px solid rgb(242 242 238 / .08); font-size: 15px; line-height: 1.35; }
+.ds-lista li:hover { background: rgb(255 255 255 / .03); }
+.ds-lista li strong { display: flex; align-items: center; gap: 12px; color: #F2F2EE; font-weight: 400; }
+.ds-lista li strong i { flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgb(242 242 238 / .4) inset; }
+.ds-lista__linha--entregue strong i { background: #F2F2EE; box-shadow: none; -webkit-mask: radial-gradient(circle, #000 0 100%); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M4 7.2l2 2 4-4.4' fill='none' stroke='%23161616' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.ds-lista__linha--refino strong i { background: linear-gradient(90deg, rgb(242 242 238 / .9) 50%, transparent 0); box-shadow: 0 0 0 1.5px rgb(242 242 238 / .9) inset; }
+.ds-lista li > span { color: rgb(242 242 238 / .6); font-size: 13.5px; }
+@media (max-width: 699.98px) {
+  .ds-lista { --colunas: minmax(0, 1fr); }
+  .ds-lista__colunas { display: none; }
+  .ds-lista li { gap: 2px 12px; padding-block: 12px; }
+  .ds-lista li > span { padding-left: 26px; }
+  .ds-lista li > span:empty { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ds-lista__grupo summary::before { transition: none; } }
+.ds-lista .ds-lista__linha--entregue > span:nth-child(2) { color: #F2F2EE; }
+.ds-lista .ds-lista__linha--refino > span:nth-child(2) { color: rgb(242 242 238 / .86); }
+.ds-lista__linha--cliente strong i { box-shadow: none; border: 1.5px dashed rgb(242 242 238 / .55); }
+.ds-lista .ds-lista__linha--cliente > span:nth-child(2) { color: #F2F2EE; }
+
+/* O fio geral em dois tons: entregue e em refino final (página já feita). */
+.ds-evo__barra { background: linear-gradient(90deg, #FFD103 calc(var(--feito, 0) * 100%), rgb(255 209 3 / .38) 0 calc(var(--refino, 0) * 100%), rgb(242 242 238 / .14) 0); }
+.ds-evo__barra i { display: none; }
+.ds-evo__resumo .ds-evo__resto { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: -4px; color: rgb(242 242 238 / .7); font-size: 14.5px; }
+.ds-evo__legenda { display: inline-flex; align-items: center; gap: 8px; color: rgb(242 242 238 / .56); font-size: 12.5px; }
+.ds-evo__legenda i { width: 14px; height: 2px; background: #FFD103; }
+.ds-evo__legenda i + i, .ds-evo__legenda i:nth-of-type(2) { margin-left: 10px; background: rgb(255 209 3 / .38); }

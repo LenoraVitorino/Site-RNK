@@ -45,13 +45,13 @@ const rotaDe = (arquivo) =>
 
 const paginas = listar(dist)
   .map((arquivo) => ({ arquivo, rota: rotaDe(arquivo), html: readFileSync(arquivo, 'utf8') }))
-  // O design system é outro artifact: não é página do site.
-  .filter((p) => p.rota !== '/design-system')
+  // A página do projeto (com o design system) é outro artifact: não é página do site.
+  .filter((p) => p.rota !== '/design-system' && p.rota !== '/projeto')
   .sort((a, b) => (a.rota === '/' ? -1 : b.rota === '/' ? 1 : a.rota.localeCompare(b.rota)));
 
 const casca =
   modo === 'design-system'
-    ? { arquivo: join(dist, 'design-system.html'), rota: '/design-system', html: readFileSync(join(dist, 'design-system.html'), 'utf8') }
+    ? { arquivo: join(dist, 'projeto.html'), rota: '/projeto', html: readFileSync(join(dist, 'projeto.html'), 'utf8') }
     : paginas.find((p) => p.rota === '/');
 
 if (!casca) {
