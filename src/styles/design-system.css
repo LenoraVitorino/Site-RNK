@@ -177,3 +177,37 @@
 /* Publicada como página hospedada, a .ds vira um wrapper em vez do body.
    Precisa cobrir a viewport, senão sobra o fundo do host embaixo. */
 .ds[data-corpo] { min-height: 100vh; }
+
+/* Padrões da home (11/10/2026): amostras com os mesmos valores da home. */
+.dsh-painel { position: relative; width: min(100%, 460px); padding: 34px 30px; border-radius: 28px; background: linear-gradient(160deg, rgb(255 255 255 / .07), rgb(255 255 255 / .02) 58%), rgb(12 12 11 / .92); box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset, 0 1px 0 rgb(255 255 255 / .22) inset, 0 30px 60px -34px rgb(0 0 0 / .8); -webkit-backdrop-filter: blur(34px); backdrop-filter: blur(34px); color: #F2F2EE; font-size: 14px; }
+.dsh-cena { display: grid; gap: 10px; }
+.dsh-bloco { padding: 6px 14px; border-radius: 14px; background: #2d2d2b; box-shadow: 0 0 0 1px rgb(242 242 238 / .14) inset, 0 1px 0 rgb(255 255 255 / .1) inset, 0 16px 28px -18px rgb(0 0 0 / .9); }
+.dsh-linha { display: flex; align-items: center; justify-content: space-between; height: 46px; }
+.dsh-linha + .dsh-linha { border-top: 1px solid rgb(242 242 238 / .14); }
+.dsh-chips { display: flex; gap: 6px; }
+.dsh-chips b { padding: 4px 9px 5px; border-radius: 9px; background: #414140; box-shadow: 0 0 0 1px rgb(242 242 238 / .16) inset; font-size: 12px; font-weight: 400; }
+.dsh-resultado { display: flex; align-items: center; gap: 10px; padding: 10px 14px 11px 12px; border-radius: 13px; background: #F2F2EE; color: #161616; }
+.dsh-resultado > i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #FFD103; box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+.dsh-resultado strong { display: block; color: #161616; font-size: 13px; }
+.dsh-resultado span { color: rgb(22 22 22 / .62); font-size: 12px; }
+.dsh-fala { display: grid; gap: 12px; max-width: 46ch; color: #F2F2EE; }
+.dsh-pergunta { margin: 0 0 18px; font-size: clamp(26px, 2.9vw, 40px); font-weight: 300; line-height: 1.1; letter-spacing: -.02em; }
+.dsh-pergunta strong { font-weight: 500; }
+.dsh-marca { display: flex; align-items: center; gap: 12px; }
+.dsh-marca b { color: #FFD103; font-size: 17px; font-weight: 500; }
+.dsh-selo { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(160deg, rgb(255 255 255 / .16), rgb(255 255 255 / .05)); box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset, 0 1px 0 rgb(255 255 255 / .2) inset; }
+.dsh-selo svg { width: 18px; height: 18px; fill: none; stroke: rgb(242 242 238 / .92); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.dsh-resposta { margin: 0; color: rgb(242 242 238 / .78); }
+.dsh-resposta strong { color: #F2F2EE; font-weight: 500; }
+.dsh-campo { display: grid; gap: 9px; width: min(100%, 360px); }
+.dsh-campo span { color: rgb(242 242 238 / .88); font-size: 14px; font-weight: 500; }
+.dsh-campo input { height: 52px; padding: 0 18px; border: 0; border-radius: 16px; background: rgb(255 255 255 / .06); box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset; color: #F2F2EE; font: inherit; outline: 0; }
+.dsh-campo input::placeholder { color: rgb(242 242 238 / .5); }
+.dsh-campo input:focus { box-shadow: 0 0 0 1px #FFD103 inset, 0 0 0 4px rgb(255 209 3 / .14); }
+.dsh-cantos { justify-content: space-between; align-items: flex-start; }
+.dsh-legenda { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; color: #F2F2EE; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; }
+.dsh-legenda li { opacity: .34; }
+.dsh-legenda .dsh-atual { opacity: 1; }
+.dsh-tracos { display: grid; gap: 14px; }
+.dsh-tracos i { width: 14px; height: 1px; background: rgb(242 242 238 / .4); }
+.dsh-tracos .dsh-atual { width: 24px; background: #F2F2EE; }

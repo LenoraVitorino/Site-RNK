@@ -238,3 +238,35 @@ mega-menu é de navegação, não de vitrine de produto — as descrições vive
 ## Ícones de interface
 
 Usar o componente `src/components/ui/Icone.astro`, baseado no pacote oficial `@lucide/astro`, com traço de 1,5 px, cor herdada e tamanho padrão de 24 px. Ícones decorativos ficam ocultos de leitores de tela; botões mantêm nomes acessíveis. Os símbolos próprios dos planos e pilares do Protocolo Revena permanecem nos assets da marca. Logos e ilustrações de dados não são ícones de interface.
+
+
+## Padrões da home (refinamento de outubro de 2026)
+
+Valem para as duas versões de texto. Amostras vivas em `/design-system`, seção "Padrões da home".
+
+- **Painel de vidro**: superfície dos cartões, do formulário e dos painéis de cena. Base escura
+  quase opaca por baixo do vidro (o fundo animado não pode atrapalhar a leitura), fio de 1px e
+  brilho no alto. Cantos de 26 a 34px. Nunca caixa dentro de caixa.
+- **Contraste das cenas**: o painel é o tom mais escuro; as peças de dentro, um tom mais claras
+  (`#2d2d2b`, fio a 14%); as etiquetas, mais um tom (`#414140`); o resultado da cena em claro
+  (`#F2F2EE`) com ponto amarelo. Texto de apoio nunca abaixo de 74% de opacidade.
+- **Pergunta e resposta** ("O que muda na sua clínica"): rótulo "Com a Renke" em amarelo, peso
+  médio, com o ícone do assunto num selo de vidro de 38px na mesma linha do rótulo; parágrafo
+  logo abaixo, sem caixa, fio ou seta. Pergunta e resposta próximas (26 a 36px). Fileiras em
+  zigue-zague no computador; no celular, texto em cima e painel embaixo.
+- **Formulário**: cartão em vidro arredondado, campos preenchidos com cantos de 16px e anel
+  interno, foco com anel amarelo, rótulo a 88% e exemplo a 50%. Título do mesmo tamanho dos
+  títulos das outras dobras.
+- **Botões**: todos em pílula, inclusive o "Contato" do menu. O botão amarelo da hero alinha
+  pela direita com o do menu.
+- **Palco dos planos**: fala no alto à esquerda, subtítulo e botão embaixo à direita;
+  palavras-chave em peso médio, sem quebra no meio do destaque. Nos cantos: lista dos planos
+  na vertical, em caixa alta, com o atual em contraste; traços empilhados, o atual com 24px e os
+  outros com 14px. Sem legenda do tipo "Plano 02/05".
+- **Rodapé**: o RENKE grande em vidro leve, de corpo escuro (pouco cinza), com brilho só na
+  borda.
+- **Fundo animado**: formas próprias da Renke, que andam com a rolagem em toda a página; o fundo
+  já aparece na abertura, nunca começa em preto.
+
+> As seções acima deste bloco são do guia inicial e estão defasadas em relação à home (fonte,
+> cantos e variantes de botão). Falta uma revisão geral.

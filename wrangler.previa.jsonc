@@ -1,0 +1,12 @@
+{
+  // Prévia pública só da home (PREVIA=home npx astro build --outDir dist-previa).
+  // Nome separado para nunca encostar no site de verdade (wrangler.jsonc).
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "site-renke-previa",
+  "compatibility_date": "2026-09-06",
+  "assets": {
+    "directory": "./dist-previa",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
