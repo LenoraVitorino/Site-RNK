@@ -1,0 +1,383 @@
+---
+/**
+ * O que muda na sua clínica em trilho de cartões (teste de 10/10/2026, em
+ * /laboratorio/dores-solucoes). Molde: "What We Do" da Ocamba (referência da
+ * Lenora): título em cima, cartões lado a lado que saem pela direita, setas à
+ * esquerda e traços de posição à direita.
+ * Os cartões são os do bento do Protocolo Revena, sem tirar nem pôr (pedido
+ * dela: "faz exatamente o layout daqueles ali, o design deles"): mesmas
+ * classes (.feature-card .revena-peca dentro de .revena-bento--v2), arte em
+ * cima numa área de altura fixa, título e texto embaixo. As artes seguem o
+ * mesmo estilo e as mesmas regras (pilares2/ArteDores).
+ * Pensado primeiro para o celular: o trilho rola com o dedo e prende cartão a
+ * cartão; nada fica escondido atrás de hover. No desktop entram as setas.
+ * O título do cartão é a pergunta de dor e o texto, a resposta. A copy
+ * original leva só a pergunta do briefing.
+ *
+ * modo="palco" (teste em /laboratorio/dores-palco; a Lenora achou os
+ * cartões do trilho "muito juntos" e pediu "cards maiores" em que "conforme
+ * dá scroll, aparece o próximo tópico; em vez de empilhar, ele muda"): no
+ * desktop a dobra prende na tela com um cartão grande só, e a rolagem troca
+ * o tópico; a arte recomeça a cada troca. No celular, sem JS ou com
+ * movimento reduzido, continua o trilho de arrastar.
+ *
+ * modo="lista" (teste em /laboratorio/dores-lista; referência que ela
+ * chamou de "o melhor exemplo possível", pin 963559282801122042, e pediu
+ * "exatamente a mesma estrutura"). Como é o vídeo, quadro a quadro: não há
+ * cartão em volta. Cada tópico é uma fileira com o texto solto sobre o
+ * fundo da página, à esquerda (título no alto, descrição no pé), e UM
+ * painel arredondado à direita com a arte. A rolagem é a normal. A fileira
+ * que chega ao meio da tela vai ganhando contraste aos poucos (texto e
+ * painel saem do apagado), ganha um fio muito fino em volta e a arte começa
+ * a se mover; ao sair, apaga de novo. A primeira versão errou ao pôr a
+ * fileira numa caixa e a arte em outra caixa dentro ("nada a ver").
+ * No celular, texto em cima e painel embaixo, com o mesmo mecanismo.
+ * Segunda rodada (10/10): sai o fio em volta da fileira ("linha simulando
+ * box"), o painel cinza vira vidro, duas fileiras ganham um fundo amarelo
+ * com a arte numa caixa de vidro escuro por cima, e o espaço entre as
+ * fileiras cresce bastante ("mal termina um, já começa outro").
+ */
+import Selo from '../ui/Selo.astro';
+import ArteDores from './pilares2/ArteDores.astro';
+import IconeRenke from '../ui/IconeRenke.astro';
+import { perguntas } from '../../data/home';
+import { copyLiteral } from '../../data/versao';
+import { doresRespostas } from '../../data/dores-respostas';
+
+interface Props { modo?: 'trilho' | 'palco' | 'lista' }
+const { modo = 'trilho' } = Astro.props;
+/* Na lista, as fileiras cujo painel leva o fundo amarelo (10/10: "o site
+   inteiro tá muito preto e cinza"; "um ou outro, só pra gente ver"). */
+const amarelos = [1, 4];
+// Ícone da casa que abre cada resposta na lista, ligado ao assunto da linha.
+const iconesResposta = ['investimento', 'funil', 'fluxo', 'mira', 'dados', 'verificado', 'bussola'] as const;
+/* Na lista, um trecho de cada pergunta vai em peso médio. */
+const partes = (q: string, d: string) => { const k = q.indexOf(d); return k < 0 ? [q, '', ''] : [q.slice(0, k), d, q.slice(k + d.length)]; };
+
+---
+<section class:list={['secao', 'ganhos', 'trilho', copyLiteral && 'trilho--copy', modo === 'lista' && 'trilho--lista']} id="perguntas" aria-labelledby="perguntas-titulo" data-trilho={modo}>
+  <div class="container">
+    <header class="ganhos__cabeca">
+      {copyLiteral ? (
+        <h2 class="ancora operacao__titulo" id="perguntas-titulo">
+          Clinicamente, você sabe exatamente o que está acontecendo com seu paciente.
+          <strong>Mas e com o seu negócio?</strong>
+        </h2>
+      ) : (
+        <>
+          <Selo class="cabeca-dobra__selo">O que muda na sua clínica</Selo>
+          <h2 class="ancora ancora--revela operacao__titulo" id="perguntas-titulo" data-revena-revela>
+            {['Uma operação estruturada muda', 'a forma como sua clínica cresce.'].map((linha) => (
+              <span class="ancora__linha">
+                {linha.split(' ').map((palavra) => <><span data-palavra>{palavra}</span>{' '}</>)}
+              </span>
+            ))}
+          </h2>
+          <p class="cabeca-dobra__apoio">Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.</p>
+        </>
+      )}
+    </header>
+  </div>
+
+  <div class="trilho__trilha" style={`--n:${perguntas.length}`} data-trilho-trilha>
+  <div class="trilho__fixo" data-trilho-fixo>
+  <div class="trilho__faixa revena-bento--v2" role="list" aria-label="O que muda na sua clínica" tabindex="0" data-trilho-faixa>
+    {perguntas.map((p, i) => (
+      <article class:list={['feature-card', 'revena-peca', 'trilho__cartao', modo === 'lista' && amarelos.includes(i) && 'trilho__cartao--amarelo']} role="listitem" data-trilho-cartao>
+        <div class="feature-card__texto">
+          <h3>{copyLiteral ? p.pergunta : modo === 'lista' ? (() => { const [a, d, z] = partes(doresRespostas[i].q, doresRespostas[i].d); return <>{a}<strong>{d}</strong>{z}</>; })() : doresRespostas[i].q}</h3>
+          {modo === 'lista' && !copyLiteral && <span class="trilho__desce" aria-hidden="true"><IconeRenke nome="seta-diagonal" size={34} traco={1.1} /></span>}
+          {!copyLiteral && (
+            <div class="trilho__resposta">
+              <div class="trilho__fala">
+                {modo === 'lista' && <span class="trilho__marca" aria-hidden="true"><i class="trilho__icone"><IconeRenke nome={iconesResposta[i] ?? 'verificado'} size={18} /></i><b>Com a Renke</b></span>}
+                <p><strong>{doresRespostas[i].t}</strong> {doresRespostas[i].r}</p>
+              </div>
+            </div>
+          )}
+        </div>
+        <div class="revena-peca__arte">
+          {modo === 'lista' && amarelos.includes(i) && (
+            /* Fundo do painel amarelo: manchas largas de luz e de âmbar, bem
+               desfocadas, como um tecido fluido; sem linha nenhuma (o fio de
+               luz na borda da dobra foi reprovado). */
+            <svg class="trilho__dobra" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id={`dobra-base-${i}`} x1="0" y1="1" x2="1" y2="0"><stop stop-color="#FFEE9C" /><stop offset=".5" stop-color="#FFD103" /><stop offset="1" stop-color="#F5AE00" /></linearGradient>
+                <filter id={`dobra-b40-${i}`} filterUnits="userSpaceOnUse" x="-150" y="-150" width="900" height="700"><feGaussianBlur stdDeviation="40" /></filter>
+              </defs>
+              <rect width="600" height="400" fill={`url(#dobra-base-${i})`} />
+              <ellipse cx="150" cy="40" rx="260" ry="130" fill="#EC9C00" opacity=".7" filter={`url(#dobra-b40-${i})`} />
+              <ellipse cx="80" cy="370" rx="300" ry="170" fill="#FFFBE2" opacity=".95" filter={`url(#dobra-b40-${i})`} />
+              <ellipse cx="560" cy="330" rx="230" ry="190" fill="#E38F00" opacity=".8" filter={`url(#dobra-b40-${i})`} />
+              <ellipse cx="470" cy="60" rx="170" ry="110" fill="#FFE98A" opacity=".85" filter={`url(#dobra-b40-${i})`} />
+              <path d="M330 -40C400 120 250 250 330 440" stroke="#F0A200" stroke-width="110" opacity=".45" fill="none" filter={`url(#dobra-b40-${i})`} />
+            </svg>
+          )}
+          <ArteDores peca={i} />
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="container trilho__pe">
+    <div class="trilho__setas">
+      <button type="button" class="trilho__seta" aria-label="Cartão anterior" data-trilho-seta="-1" disabled>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+      </button>
+      <button type="button" class="trilho__seta" aria-label="Próximo cartão" data-trilho-seta="1">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </button>
+    </div>
+    <div class="trilho__tracos" aria-hidden="true">
+      {perguntas.map((_, i) => <span class:list={['trilho__traco', i === 0 && 'trilho__traco--ativo']} data-trilho-traco></span>)}
+    </div>
+  </div>
+  </div>
+  </div>
+</section>
+
+<script>
+  /* Dois modos. Trilho: a rolagem é a nativa, na horizontal; setas e traços
+     a acompanham. Palco (só desktop): a dobra prende e a rolagem da página
+     escolhe o cartão; as setas levam a página até o tópico vizinho. Em
+     ambos, a arte só se move no cartão que tem a classe "visivel". */
+  document.querySelectorAll<HTMLElement>('[data-trilho]').forEach((secao) => {
+    const faixa = secao.querySelector<HTMLElement>('[data-trilho-faixa]');
+    const trilha = secao.querySelector<HTMLElement>('[data-trilho-trilha]');
+    const fixo = secao.querySelector<HTMLElement>('[data-trilho-fixo]');
+    if (!faixa || !trilha || !fixo) return;
+    const cartoes = [...secao.querySelectorAll<HTMLElement>('[data-trilho-cartao]')];
+    const tracos = [...secao.querySelectorAll<HTMLElement>('[data-trilho-traco]')];
+    const setas = [...secao.querySelectorAll<HTMLButtonElement>('[data-trilho-seta]')];
+    const n = cartoes.length;
+    const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const largo = matchMedia('(min-width: 1024px)');
+    const palco = () => secao.dataset.trilho === 'palco' && largo.matches && !calmo;
+    const lista = secao.dataset.trilho === 'lista';
+    const passo = () => (n > 1 ? cartoes[1].offsetLeft - cartoes[0].offsetLeft : faixa.clientWidth);
+    /* No palco, quanto a página rola entre um tópico e o seguinte. */
+    const curso = () => (trilha.offsetHeight - fixo.offsetHeight) / n;
+    const topoFixo = () => parseFloat(getComputedStyle(fixo).top) || 0;
+
+    let ativo = -1, quadro = 0, ligado = false;
+    /* No trilho, as artes começam a se mover quando ele entra na tela. */
+    const ligar = () => {
+      if (ligado || lista || palco()) return;
+      const r = faixa.getBoundingClientRect();
+      if (r.top > innerHeight * .9 || r.bottom < 0) return;
+      ligado = true;
+      cartoes.forEach((c) => c.classList.add('visivel'));
+    };
+    const marcar = (i: number, inicio: boolean, fim: boolean) => {
+      tracos.forEach((t, k) => t.classList.toggle('trilho__traco--ativo', k === i));
+      setas.forEach((s) => { s.disabled = s.dataset.trilhoSeta === '-1' ? inicio : fim; });
+      if (!(lista || palco()) || i === ativo) return;
+      ativo = i;
+      cartoes.forEach((c, k) => { c.classList.toggle('trilho__cartao--ativo', k === i); c.classList.toggle('visivel', k === i); });
+    };
+    const acertar = () => {
+      quadro = 0;
+      if (lista) {
+        /* O foco de cada fileira vai de 0 a 1 conforme o meio dela se
+           aproxima do meio da tela; a mais próxima é a ativa. */
+        const meio = innerHeight / 2;
+        let perto = 0, maior = -1;
+        cartoes.forEach((c, k) => {
+          const r = c.getBoundingClientRect();
+          const x = Math.max(0, Math.min(1, 1.18 - Math.abs(r.top + r.height / 2 - meio) / (r.height * .86)));
+          const foco = x * x * (3 - 2 * x);
+          c.style.setProperty('--foco', foco.toFixed(3));
+          if (foco > maior) { maior = foco; perto = k; }
+        });
+        marcar(maior > .55 ? perto : -2, perto === 0, perto === n - 1);
+      } else if (palco()) {
+        const andou = topoFixo() - trilha.getBoundingClientRect().top;
+        const i = Math.max(0, Math.min(n - 1, Math.floor(andou / curso())));
+        marcar(i, i === 0, i === n - 1);
+      } else {
+        const fim = faixa.scrollWidth - faixa.clientWidth;
+        const noFim = faixa.scrollLeft >= fim - 2;
+        marcar(noFim ? n - 1 : Math.min(n - 1, Math.round(faixa.scrollLeft / passo())), faixa.scrollLeft <= 2, noFim);
+        ligar();
+      }
+    };
+    const pedir = () => { quadro ||= requestAnimationFrame(acertar); };
+    const modo = () => {
+      secao.classList.toggle('trilho--palco', palco());
+      ativo = -1; ligado = false;
+      if (!lista && !palco()) cartoes.forEach((c) => c.classList.remove('trilho__cartao--ativo'));
+      acertar();
+    };
+    faixa.addEventListener('scroll', pedir, { passive: true });
+    addEventListener('scroll', () => { ligar(); if (lista) acertar(); else pedir(); }, { passive: true });
+    addEventListener('resize', () => (secao.classList.contains('trilho--palco') !== palco() ? modo() : pedir()));
+    largo.addEventListener('change', modo);
+    setas.forEach((s) => s.addEventListener('click', () => {
+      const d = Number(s.dataset.trilhoSeta), behavior = calmo ? 'auto' : 'smooth';
+      if (!palco()) return faixa.scrollBy({ left: d * passo(), behavior });
+      const alvo = trilha.getBoundingClientRect().top + scrollY - topoFixo() + (ativo + d + .5) * curso();
+      scrollTo({ top: alvo, behavior });
+    }));
+    modo();
+    if ('IntersectionObserver' in window) new IntersectionObserver(() => ligar(), { threshold: [0, .15] }).observe(faixa);
+
+  });
+</script>
+
+<style>
+  /* A margem do trilho acompanha a do container: o primeiro cartão alinha
+     com o título e os outros saem pela direita da tela. */
+  .trilho { --trilho-margem: max(var(--gutter), calc((100vw - var(--largura)) / 2 + var(--gutter))); overflow-x: clip; }
+  .trilho__faixa {
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(86vw, 350px); gap: 12px;
+    padding: 4px var(--trilho-margem) 6px;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--trilho-margem);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .trilho__faixa::-webkit-scrollbar { display: none; }
+  .trilho__faixa:focus-visible { outline: 1px solid rgb(255 255 255 / .4); outline-offset: 4px; }
+  /* O cartão é o do bento; aqui só o que o trilho pede dele. */
+  .trilho__cartao { scroll-snap-align: start; grid-column: auto; }
+  .trilho__cartao h3 { min-height: 3lh; }
+  .trilho__cartao p strong { font-weight: 500; color: var(--papel); }
+  .trilho--copy .trilho__cartao h3 { min-height: 0; text-wrap: pretty; }
+  /* As artes do trilho têm todas a mesma altura, também no celular (no bento, só os recortes). */
+  .trilho .trilho__faixa .trilho__cartao :global(.revena-peca__arte) { height: 272px; }
+
+  .trilho__pe { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: clamp(22px, 2.2vw, 34px); }
+  .trilho__setas { display: none; gap: 10px; }
+  .trilho__seta { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 1px solid rgb(255 255 255 / .16); border-radius: 50%; background: none; color: var(--papel); cursor: pointer; transition: border-color .6s ease, opacity .6s ease; }
+  .trilho__seta:hover { border-color: rgb(255 255 255 / .42); }
+  .trilho__seta:disabled { opacity: .32; cursor: default; border-color: rgb(255 255 255 / .16); }
+  .trilho__tracos { display: flex; align-items: center; gap: 8px; margin-inline: auto; }
+  .trilho__traco { width: 16px; height: 1px; background: rgb(255 255 255 / .22); transition: width .8s var(--easing), background-color .8s ease; }
+  .trilho__traco--ativo { width: 40px; background: var(--papel); }
+
+  @media (min-width: 768px) {
+    .trilho__faixa { grid-auto-columns: clamp(360px, 28vw, 420px); gap: 16px; scroll-snap-type: x proximity; }
+  }
+  /* Palco (desktop, classe posta pelo script): a trilha é alta, o conjunto
+     prende abaixo do menu e os cartões ocupam o mesmo lugar; só o ativo
+     aparece. Um cartão grande, centrado, com a arte ampliada. */
+  .trilho--palco .trilho__trilha { height: calc(var(--n) * 64vh + 640px); }
+  .trilho--palco .trilho__fixo { position: sticky; top: clamp(84px, 11vh, 120px); }
+  .trilho--palco .trilho__faixa { grid-auto-flow: row; grid-template-columns: minmax(0, 860px); grid-auto-columns: auto; justify-content: center; overflow: visible; scroll-snap-type: none; }
+  .trilho--palco .trilho__cartao { grid-area: 1 / 1; text-align: center; opacity: 0; visibility: hidden; translate: 0 20px; transition: opacity .7s var(--easing), translate 1s var(--easing), visibility 0s .7s; }
+  .trilho--palco .trilho__cartao--ativo { opacity: 1; visibility: visible; translate: none; transition-delay: .18s, .18s, 0s; }
+  .trilho--palco .trilho__cartao h3 { min-height: 0; margin-inline: auto; max-width: 26ch; font-size: clamp(30px, 2.5vw, 38px); }
+  .trilho--palco .trilho__cartao p { margin-inline: auto; }
+  .trilho--palco.trilho .trilho__faixa .trilho__cartao :global(.revena-peca__arte) { height: 320px; }
+  .trilho--palco :global(.dt) { inset: 0 auto 0 50%; width: 470px; translate: -50% 0; zoom: 1.22; text-align: left; }
+  .trilho--palco .trilho__pe { max-width: calc(860px + 2 * var(--gutter)); }
+
+  /* Lista: fileiras soltas sobre o fundo, sem cartão nem fio em volta, bem
+     afastadas umas das outras; à direita, um painel de vidro. O contraste
+     de cada fileira segue --foco (0 a 1), posto pelo script conforme ela se
+     aproxima do meio da tela. */
+  .trilho--lista .trilho__faixa { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); grid-auto-columns: auto; gap: 64px; overflow: visible; scroll-snap-type: none; }
+  .trilho--lista .trilho__pe { display: none; }
+  .trilho--lista.trilho .trilho__faixa .trilho__cartao { --foco: 1; --raio: 26px; padding: 0; overflow: visible; border-radius: 0; background: none; box-shadow: none; translate: none; }
+  .trilho--lista .trilho__cartao :global(.feature-card__texto) { order: 0; padding: 0 4px 26px; opacity: calc(.26 + .74 * var(--foco)); }
+  .trilho--lista .trilho__cartao h3 { min-height: 0; }
+  /* Seta fina da casa entre a pergunta e a resposta, em diagonal para
+     baixo: leva o olho de uma à outra (10/10; sem elipse em volta). */
+  /* A seta vai solta, sem caixa, em amarelo (a caixinha atrás dela repetia
+     a da marca na resposta: "ficou demais de box"). */
+  /* O desenho ocupa o miolo do quadro de 24; a margem negativa alinha a
+     ponta de cima com a margem do texto. */
+  .trilho__desce { display: block; width: 50px; height: 50px; margin: 10px 0 6px -13px; color: var(--amarelo-marca, #FFD103); }
+  .trilho__desce :global(svg) { display: block; width: 100%; height: 100%; rotate: 90deg; }
+  /* A resposta abre com a marca da Renke numa caixinha de vidro escuro: é
+     a Renke respondendo. No trilho e no palco a resposta segue só texto. */
+  .trilho__resposta { display: contents; }
+  /* Na lista a seta já é a marca da resposta: a caixinha com o ícone saiu
+     (10/10: seta e ícone, um embaixo do outro, repetiam). */
+  /* Na lista a resposta ganha voz sem caixa nenhuma (10/10: seta reprovada;
+     cartão de vidro reprovado, "não quero box sobre box"): um fio amarelo
+     curto à esquerda, como citação, e uma linha pequena com a marca dizendo
+     de quem é a resposta. */
+  .trilho--lista .trilho__desce { display: none; }
+  /* Resposta (10/10; reprovados: fio, caixa em volta, seta, R solto, frase
+     em linha própria, só texto e a caixinha com ícone ao lado, que ficava
+     "entre o Com a Renke e o subtítulo: ou é em um ou é em outro"). O ícone
+     agora é do rótulo: sem caixa, pequeno, na mesma linha de "Com a Renke",
+     os dois em amarelo; o parágrafo vem logo abaixo, sozinho. */
+  .trilho__fala { display: contents; }
+  .trilho--lista .trilho__resposta { display: block; padding: 0; border: 0; }
+  .trilho--lista .trilho__fala { display: grid; gap: 14px; }
+  /* O ícone do rótulo vai numa caixinha de vidro, como os selos do site. */
+  .trilho__icone { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: rgb(242 242 238 / .92); --icone-acento: var(--amarelo-marca, #FFD103); background: linear-gradient(160deg, rgb(255 255 255 / .16), rgb(255 255 255 / .05)); box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset, 0 1px 0 rgb(255 255 255 / .2) inset, 0 12px 20px -12px rgb(0 0 0 / .8); }
+  .trilho--lista .trilho__resposta p { color: rgb(242 242 238 / .78); }
+  .trilho--lista .trilho__marca { display: flex; align-items: center; gap: 12px; width: auto; height: auto; margin: 0; border-radius: 0; background: none; box-shadow: none; color: var(--amarelo-marca, #FFD103); }
+  /* "Com a Renke" em amarelo e peso médio (10/10: "tem que ter mais destaque"). */
+  .trilho--lista .trilho__marca b { color: var(--amarelo-marca, #FFD103); font-size: clamp(16px, 1.2vw, 18px); font-weight: 500; line-height: 1.2; letter-spacing: -.01em; }
+  .trilho__marca { display: grid; place-items: center; width: 36px; height: 36px; margin-top: 2px; border-radius: 11px; color: rgb(242 242 238 / .9); --icone-acento: var(--amarelo-marca, #FFD103); background: linear-gradient(160deg, rgb(255 255 255 / .13), rgb(255 255 255 / .05)); box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset, 0 1px 0 rgb(255 255 255 / .18) inset; }
+  .trilho--lista .trilho__cartao h3 strong { font-weight: 500; }
+  .trilho--lista .trilho__resposta p { margin-top: 0; }
+  /* Painel de vidro: claro e translúcido sobre o fundo vivo da página, com
+     fio fino, brilho no alto e sombra suave. */
+  .trilho--lista.trilho .trilho__faixa .trilho__cartao :global(.revena-peca__arte) {
+    order: 1; height: 316px; overflow: hidden; border-radius: var(--raio);
+    /* A base escura por baixo do vidro segura a luz do fundo vivo (10/10:
+       quando o clarão passava atrás, o texto da cena não dava para ler). */
+    background: linear-gradient(160deg, rgb(255 255 255 / .14), rgb(255 255 255 / .05) 58%), rgb(15 15 14 / .84);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / .12) inset, 0 1px 0 rgb(255 255 255 / .22) inset, 0 30px 60px -34px rgb(0 0 0 / .8);
+    -webkit-backdrop-filter: blur(34px) saturate(1.1); backdrop-filter: blur(34px) saturate(1.1);
+    opacity: calc(.3 + .7 * var(--foco));
+  }
+  .trilho--lista :global(.dt) { inset: 16px 18px; isolation: isolate; }
+  /* Fundo amarelo em algumas fileiras: as manchas de luz (svg .trilho__dobra)
+     ocupam o painel e derivam bem devagar; a arte vai numa caixa de vidro
+     escuro por cima. */
+  .trilho--lista.trilho .trilho__faixa .trilho__cartao--amarelo :global(.revena-peca__arte) {
+    background: #F2B600;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / .3) inset, 0 30px 60px -34px rgb(0 0 0 / .8);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .trilho__dobra { position: absolute; inset: -6%; width: 112%; height: 112%; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .trilho__cartao--ativo .trilho__dobra { animation: trilho-dobra 16s ease-in-out infinite alternate; will-change: transform; }
+  }
+  @keyframes trilho-dobra { from { transform: translate3d(-2.5%, 1.5%, 0) scale(1); } to { transform: translate3d(2.5%, -1.5%, 0) scale(1.05); } }
+  .trilho--lista .trilho__cartao--amarelo :global(.revena-peca__arte)::before { content: none; }
+  .trilho--lista .trilho__cartao--amarelo :global(.dt)::before {
+    content: ''; position: absolute; z-index: -1; inset: -10px -12px; border-radius: 20px;
+    background: linear-gradient(160deg, rgb(26 26 25 / .93), rgb(14 14 14 / .93));
+    box-shadow: 0 0 0 1px rgb(255 255 255 / .1) inset, 0 26px 44px -22px rgb(60 40 0 / .7);
+    -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  }
+  .trilho--lista .trilho__cartao--amarelo :global(.dt) { inset: 26px 28px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .trilho--lista .trilho__cartao :global(.feature-card__texto), .trilho--lista .trilho__cartao :global(.revena-peca__arte) { transition: opacity .35s ease; }
+  }
+  @media (min-width: 900px) {
+    .trilho--lista .trilho__faixa { gap: clamp(96px, 10vw, 168px); }
+    .trilho--lista.trilho .trilho__faixa .trilho__cartao { --raio: clamp(26px, 2.4vw, 34px); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 72px); }
+    .trilho--lista .trilho__cartao :global(.feature-card__texto) { display: flex; flex-direction: column; justify-content: center; gap: 0; padding: 0; }
+    /* Pergunta no alto; a seta desce colada na resposta, na base do painel
+       (10/10: a seta sozinha no meio deixava a coluna vazia; o bloco todo
+       junto e centrado também foi reprovado). */
+    /* Pergunta e resposta centradas na altura do painel, com um respiro
+       fixo entre as duas (10/10: de ponta a ponta "o espaço tá demais"). */
+    .trilho--lista .trilho__resposta { max-width: 46ch; margin-top: clamp(40px, 4vw, 60px); }
+    /* Zigue-zague (10/10, teste): nas linhas pares o painel vem à esquerda
+       e o texto à direita, para a lista não ficar toda no mesmo sentido. */
+    .trilho--lista.trilho .trilho__faixa .trilho__cartao:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); }
+    .trilho--lista .trilho__cartao:nth-child(even) :global(.feature-card__texto) { order: 2; padding-left: clamp(0px, 2vw, 32px); }
+    .trilho--lista .trilho__cartao h3 { max-width: 18ch; font-size: clamp(32px, 2.9vw, 46px); line-height: 1.1; }
+    .trilho--lista .trilho__cartao p { margin-top: 0; max-width: 38ch; }
+    .trilho--lista.trilho .trilho__faixa .trilho__cartao :global(.revena-peca__arte) { height: clamp(360px, 29vw, 430px); }
+    .trilho--lista :global(.dt) { inset: 50% auto auto 50%; width: min(100% - 72px, 450px); height: 284px; translate: -50% -50%; }
+    .trilho--lista .trilho__cartao--amarelo :global(.dt) { inset: 50% auto auto 50%; width: min(100% - 112px, 430px); }
+    .trilho--lista .trilho__cartao--amarelo :global(.dt)::before { inset: -22px -26px; border-radius: 24px; }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .trilho__setas { display: flex; }
+    .trilho__tracos { margin-inline: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trilho__traco, .trilho__seta { transition: none; }
+  }
+</style>

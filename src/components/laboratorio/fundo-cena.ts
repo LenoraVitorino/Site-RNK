@@ -41,6 +41,11 @@ import { roteiroInterno, TEXTOS_INTERNAS } from './fundo-internas';
 /** 'home' (padrão) ou 'interna': as páginas internas usam o roteiro genérico de fundo-internas.ts. */
 export type Roteiro = 'home' | 'interna';
 
+/** Teste de 10/10/2026: com ?cena=propria na URL, nenhum arquivo extraído da
+ *  PeachWeb é baixado; a cena roda só com o que foi refeito aqui em código
+ *  (toro com estrias, tubo ondulado, env maps por shader e cáusticas
+ *  procedurais). Serve para a Lenora ver como fica sem os assets de lá. */
+const SO_PROPRIO = new URLSearchParams(location.search).get('cena') === 'propria';
 /** Os arquivos extraídos da página (public/cena/LEIA-ME.md). */
 const ARQUIVOS = {
   donut: '/cena/donut.glb',
@@ -120,16 +125,21 @@ const amostra = (t: number, extra: Partial<Quadro> = {}): Quadro => {
  * convite, Pricing → academy). O formulário retoma a cena da abertura,
  * com o mesmo enquadramento e iluminação para o background permanecer visível.
  */
+/* Com as formas próprias o anel entra no quadro um pouco mais longe. */
+const DZ = SO_PROPRIO ? 1.7 : 2.3;
 const DESKTOP: Record<string, Quadro> = {
   hero:        amostra(0),
   // O toro de lá tem outra forma; puxado para dentro da tela para a hero ver o rebordo (17.webp).
-  metodologia: amostra(.105, { dz: 2.3 }),
+  metodologia: amostra(.105, { dz: DZ }),
   // Continua o mesmo objeto iluminado na passagem metodologia → pilares.
   // .250/.300 pertencem ao intervalo escuro da referência: o donut já
   // encolheu e perdeu a luz, enquanto o segundo modelo ainda está fora da tela.
-  pilares:     amostra(.125, { dz: 2.3, cry: 1.38, drx: 4.38, drz: 1.48 }),
-  letreiro:    amostra(.145, { dz: 2.3, cry: 1.15, drx: 4.62, drz: 1.76, leitura: .4 }),
+  pilares:     amostra(.125, { dz: DZ, cry: 1.38, drx: 4.38, drz: 1.48 }),
+  letreiro:    amostra(.145, { dz: DZ, cry: 1.15, drx: 4.62, drz: 1.76, leitura: .4 }),
   // A forma já está em cena: .400 ainda a deixava quase toda abaixo da tela.
+  // O palco dos planos tem quadro próprio (11/10): junto com 'perguntas' a
+  // cena ficava parada do palco até o meio da lista de perguntas.
+  planos:      amostra(.415, { leitura: .45 }),
   perguntas:   amostra(.455, { leitura: .45 }),
   convite:     amostra(.497, { leitura: .55 }),
   academy:     amostra(.560),
@@ -150,9 +160,9 @@ const QUADROS_INTERNAS = { desktop: INTERNAS, celular: INTERNAS };
 /* Geometria própria: shaders do donut e da minhoca                     */
 /* ------------------------------------------------------------------ */
 
-const FIOS = 44;    // estrias em volta do tubo (inteiro: fecha sem costura)
+const FIOS = 26;    // estrias em volta do tubo (inteiro: fecha sem costura)
 const TORCAO = 3;   // voltas das estrias ao longo do anel (inteiro)
-const R_ANEL = 6.3, R_TUBO = 1.8, ACHATA = .62;   // toro achatado, como a fita da referência
+const R_ANEL = 5.65, R_TUBO = 2.03, ACHATA = 1.;   // anel redondo, no tamanho em que o enquadramento bate com o da cena (medido em 11/10)
 
 const DONUT_VERT_CABECA = /* glsl */ `
 uniform float uTempo;
@@ -161,7 +171,7 @@ varying float vFase;
 const float PI2 = 6.2831853;
 vec3 toro(float u, float v, float t) {
   float R = ${R_ANEL.toFixed(2)} * (1. + .035 * sin(2. * u + t * .8));
-  float r = ${R_TUBO.toFixed(2)} * (1. + .12 * sin(2. * u - t) + .06 * sin(3. * u + t * .6 + 1.));
+  float r = ${R_TUBO.toFixed(2)} * (1. + .16 * sin(2. * u - t) + .08 * sin(3. * u + t * .6 + 1.) + .07 * sin(3. * v + 2. * u + t * .5));
   float z = ${R_ANEL.toFixed(2)} * (.10 * sin(2. * u + t * .5 + 2.) + .05 * sin(3. * u - t * .7));
   float c = R + r * cos(v);
   return vec3(c * cos(u), c * sin(u), r * ${ACHATA.toFixed(2)} * sin(v) + z);
@@ -173,7 +183,7 @@ vec3 pC = toro(u, v, t);
 vec3 dU = toro(u + .002, v, t) - pC, dV = toro(u, v + .002, t) - pC;
 vec3 objectNormal = normalize(cross(dU, dV));
 vTubo = normalize(normalMatrix * normalize(dV));
-vFase = uv.y * PI2 * ${FIOS}. + uv.x * PI2 * ${TORCAO}. + uTempo * .35;
+vFase = uv.y * PI2 * ${FIOS}. + uv.x * PI2 * ${TORCAO}. + uTempo * .35 + 2.6 * sin(v * 5. + u * 2.) + 1.7 * sin(v * 11. - u * 3. + 1.3);
 `;
 const DONUT_VERT_POS = /* glsl */ `vec3 transformed = pC;`;
 const DONUT_FRAG_CABECA = /* glsl */ `
@@ -201,9 +211,14 @@ const DONUT_FRAG_SULCO = /* glsl */ `
 `;
 
 const MINHOCA_VERT_CABECA = /* glsl */ `uniform float uTempo;
+varying vec3 vTubo;
+varying float vFase;
 `;
 const MINHOCA_VERT_POS = /* glsl */ `
-vec3 transformed = position + vec3(0., .05 * sin(uv.x * 18.85 - uTempo * .5), .035 * cos(uv.x * 12.57 + uTempo * .4));
+vec3 transformed = position + vec3(0., .03 * sin(uv.x * 9.4 - uTempo * .5), .02 * cos(uv.x * 7.5 + uTempo * .4));
+// Fios ao longo da fita, como no anel.
+vTubo = normalize(normalMatrix * cross(normal, vec3(1., 0., 0.)));
+vFase = uv.y * 6.2831853 * 14. + uv.x * 22. + 2.2 * sin(uv.y * 31. + uv.x * 9.) + uTempo * .3;
 `;
 
 /* ------------------------------------------------------------------ */
@@ -436,6 +451,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const donutReserva = new Mesh(new TorusGeometry(R_ANEL, R_TUBO, celular ? 96 : 144, celular ? 320 : 480), donutMaterial);
   const pivo = new Group();
   pivo.rotation.x = Math.PI / 2;
+  pivo.position.y = .4;   // o anel fica um pouco acima do centro do grupo
   pivo.add(donutReserva);
   const donutObj = new Group();
   donutObj.add(pivo);
@@ -447,10 +463,15 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const pontos: Vector3[] = [];
   for (let i = 0; i <= 64; i++) {
     const s = i / 64;
+    // Caminho suave: quase reto, com uma descida larga no meio (11/10; as
+    // três ondas de antes dobravam a fita em "U" na tela).
+    const x = -1 + 2 * s;
+    const desce = Math.min(1, Math.max(0, (x + .45) / .6));
+    const k = desce * desce * (3 - 2 * desce);
     pontos.push(new Vector3(
-      -1 + 2 * s,
-      .16 * Math.sin(Math.PI * 2 * 3 * s) + .05 * Math.sin(Math.PI * 2 * 5.3 * s + 1),
-      .12 * Math.cos(Math.PI * 2 * 2.4 * s + .5) + .05 * Math.sin(Math.PI * 2 * 4.1 * s),
+      x,
+      .03 - .18 * k + .025 * Math.sin(Math.PI * 2 * 1.3 * s + .4),
+      .05 + .17 * k + .02 * Math.cos(Math.PI * 2 * 1.1 * s),
     ));
   }
   const PARAMS_MINHOCA = {
@@ -461,10 +482,15 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   const minhocaMaterial = new MeshPhysicalMaterial(PARAMS_MINHOCA);
   minhocaMaterial.onBeforeCompile = (shader) => {
     shader.uniforms.uTempo = uTempo;
+    shader.uniforms.uFio = { value: .5 };
+    shader.uniforms.uVinco = { value: .75 };
     shader.vertexShader = MINHOCA_VERT_CABECA + shader.vertexShader.replace('#include <begin_vertex>', MINHOCA_VERT_POS);
+    shader.fragmentShader = DONUT_FRAG_CABECA + shader.fragmentShader
+      .replace('#include <normal_fragment_begin>', DONUT_FRAG_NORMAL)
+      .replace('#include <opaque_fragment>', DONUT_FRAG_SULCO);
   };
   minhocaMaterial.customProgramCacheKey = () => 'cena-minhoca';
-  const minhocaReserva = new Mesh(new TubeGeometry(new CatmullRomCurve3(pontos), celular ? 240 : 400, .085, celular ? 16 : 24, false), minhocaMaterial);
+  const minhocaReserva = new Mesh(new TubeGeometry(new CatmullRomCurve3(pontos), celular ? 240 : 400, .072, celular ? 16 : 24, false), minhocaMaterial);
   const minhoca = new Group();
   minhoca.add(minhocaReserva);
   minhoca.visible = false;
@@ -495,7 +521,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
       mixers.push(mixer);
     }
   };
-  Promise.allSettled([carregarEnvMap(pmrem, ARQUIVOS.envArcos), carregarEnvMap(pmrem, ARQUIVOS.envFaixas)]).then(([a, f]) => {
+  if (!SO_PROPRIO) Promise.allSettled([carregarEnvMap(pmrem, ARQUIVOS.envArcos), carregarEnvMap(pmrem, ARQUIVOS.envFaixas)]).then(([a, f]) => {
     // Só os materiais dos modelos recebem os env maps: trocar o da reserva
     // recompilava o shader dela de forma síncrona, segundos antes de o modelo
     // ocupar o lugar dela.
@@ -550,7 +576,7 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
     videoAtivo = true;
     video.play().catch(() => {});
   }, { once: true });
-  video.src = ARQUIVOS.causticas;
+  if (!SO_PROPRIO) video.src = ARQUIVOS.causticas;
 
   // Pós-processamento. O desfoque vem antes da vinheta e do grão, para o
   // grão ficar fino e visível na tela inteira, como na referência.
@@ -566,9 +592,13 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
   grao.blendMode.opacity.value = .3;
   composer.addPass(new EffectPass(camera, vinheta, new ToneMappingEffect({ mode: ToneMappingMode.ACES_FILMIC }), brilho, grao, new Leitura(ctx)));
 
+  // Só no servidor de desenvolvimento: os objetos da cena, para medir e comparar.
+  if (import.meta.env.DEV) Object.assign(window, { __cena: { donutObj, pivo, minhoca, minhocaReserva, controller, camera } });
+
   const tamanho = new Vector2();
   const tamanhoComposer = new Vector2(-1, -1);
   let dtQuadro = 0;
+  let rolagemAntes = 0;
 
   const t0 = performance.now();
   const abriuNoTopo = scrollY < 40;
@@ -583,25 +613,32 @@ function criar(ctx: Contexto, roteiro: Roteiro = 'home'): Elemento {
         continuas: [], tau: .45, curva: maisSuave, saltoMax: 1, pena: 90, esperarEntrada: () => true,
       }
       : {
-        roteiro: ROTEIRO, transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
-        continuas: ['metodologia', 'pilares', 'letreiro'],
+        roteiro: ROTEIRO.map(([seletor, nome]) => (seletor.includes('data-palcoplanos') ? [seletor, 'planos'] : [seletor, nome]) as [string, string]), transparentes: TRANSPARENTES, textos: TEXTOS_DOBRAS, cartoes: CARTOES, caixas: CAIXAS,
+        // 11/10 (Lenora: "no deles, conforme dá scroll o fundo vai evoluindo"):
+        // nenhuma dobra segura mais a pose enquanto é lida. Cada quadro é só um
+        // ponto de passagem no meio da dobra, e a cena anda o tempo todo com a rolagem.
+        continuas: ['hero', 'metodologia', 'pilares', 'letreiro', 'planos', 'perguntas', 'convite', 'academy', 'sobre', 'formulario'],
         tau: .45, curva: maisSuave, saltoMax: 1, pena: 90,
         esperarEntrada: () => !abriuNoTopo || scrollY > 10 || performance.now() - t0 > 3400,
       },
-    pintar({ q, tempo, dt, parado, ponteiro }) {
+    pintar({ q, tempo, dt, parado, ponteiro, rolagem }) {
       dtQuadro = dt;
-      uTempo.value = parado ? 0 : tempo;
-      if (!parado) for (const m of mixers) m.update(dt);
+      // A rolagem também empurra o tempo das formas: a cada tela rolada o
+      // tecido se deforma e os fios correm, mesmo entre um quadro e outro.
+      const andou = parado ? 0 : Math.abs(rolagem - rolagemAntes);
+      rolagemAntes = rolagem;
+      uTempo.value = parado ? 0 : tempo + rolagem * 1.4;
+      if (!parado) for (const m of mixers) m.update(dt + andou * 6);
 
       controller.position.set(q.cx, q.cy, q.cz);
       controller.rotation.y = q.cry;
       donutObj.position.set(q.dx, q.dy, q.dz);
-      donutObj.rotation.set(q.drx, q.dry, q.drz);
+      donutObj.rotation.set(q.drx, q.dry, q.drz + (parado ? 0 : Math.sin(rolagem * .6) * .22));   // o anel balança com a rolagem (sem acumular giro até o fim da página)
       donutObj.scale.set(q.dsx, q.dsy, q.dsz);
       donutObj.visible = q.dsx > .03;
 
       minhoca.position.set(q.mx, q.my, q.mz);
-      minhoca.rotation.set(q.mrx, q.mry, q.mrz);
+      minhoca.rotation.set(q.mrx + (parado ? 0 : Math.sin(rolagem * .5) * .12), q.mry, q.mrz + (parado ? 0 : Math.sin(rolagem * .35 + 1) * .1));   // a fita balança com a rolagem
       minhoca.scale.setScalar(q.ms);
       minhoca.visible = q.my > -9;
 

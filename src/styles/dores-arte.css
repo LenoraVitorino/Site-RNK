@@ -1,0 +1,74 @@
+/* Artes de "O que muda na sua clínica" (10/10/2026): mesmas peças e regras
+   do Protocolo Revena (protocolo-v2.css). Aqui só o que é próprio destas
+   sete cenas; o resto vem das classes .p2-*. Ver pilares2/ArteDores. */
+.dt { --laco: 12s; }
+.dt .p2-cena__topo > .p2-rosto { width: 28px; height: 28px; }
+.dt-corpo { container-type: inline-size; position: relative; display: grid; align-content: start; gap: 8px; padding: 8px 0 0; }
+.dt-corpo--junto { gap: 0; }
+/* O que só existe no meio da história fica apagado na pose parada. */
+.dt-some { opacity: 0; }
+
+/* Linha em vidro escuro: foto, nome com apoio e o que muda à direita. */
+.dt-item { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 0 10px; height: 52px; padding: 0 12px 0 10px; border-radius: 13px; background: #20201f; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset; }
+.dt-item:not(:has(> .p2-ficha__foto, > .dt-troca)) { grid-template-columns: minmax(0, 1fr) auto; padding-left: 14px; }
+.dt-item--baixo { height: 44px; }
+.dt-item strong { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p2 .dt-item strong + span { margin-top: 1px; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p2 .dt-item > span { margin: 0; }
+
+/* Estado que anda: os anteriores em contorno, o último claro com o ponto amarelo. */
+.dt-estado { display: grid; justify-items: end; }
+.dt-estado b { grid-area: 1 / 1; display: flex; align-items: center; gap: 7px; height: 28px; padding-inline: 11px; border-radius: 14px; box-shadow: 0 0 0 1px rgb(242 242 238 / .22) inset; font-size: 12px; font-weight: 400; white-space: nowrap; }
+.dt-estado .dt-estado__claro { background: #F2F2EE; color: #161616; box-shadow: none; font-weight: 500; }
+.dt-estado__claro i { width: 7px; height: 7px; border-radius: 50%; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+
+/* Etiquetas pequenas (canais). */
+.dt-chips { display: flex; gap: 6px; }
+.dt-chips b { padding: 4px 9px 5px; border-radius: 9px; background: #343432; box-shadow: 0 0 0 1px rgb(242 242 238 / .09) inset; font-size: 12px; font-weight: 400; line-height: 1.2; white-space: nowrap; }
+.dt-item .dt-chips b { background: #2e2e2d; }
+
+/* 0. A conta: duas linhas e o resultado em claro. */
+.dt-conta { padding-block: 6px; }
+.dt-conta .p2-linha { height: 46px; }
+.dt .p2-estudo2__brecha { margin-top: 4px; }
+
+/* 2. Quem está na recepção troca; o roteiro continua. */
+.dt-troca { display: grid; }
+.dt-troca > * { grid-area: 1 / 1; }
+.dt-troca--texto { min-width: 0; }
+.dt-quem__nova { background: #F2F2EE; color: #161616; }
+.dt-lista { display: grid; gap: 14px; margin: 0; padding: 10px 4px 0; list-style: none; }
+.dt-lista .p2-tarefa { grid-template-columns: 22px minmax(0, 1fr); }
+
+/* 4. Etapas do mês, uma por linha, com o que a reunião encontrou em cada uma. */
+.dt-etapa { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 0 12px; height: 34px; padding-inline: 2px; font-size: 13.5px; }
+.dt-etapa + .dt-etapa { border-top: 1px solid var(--fio); }
+.p2 .dt-etapa > span:last-child { margin: 0; color: var(--suave); font-size: 12px; white-space: nowrap; }
+.dt-etapa .p2-tarefa__marca { width: 20px; height: 20px; }
+.dt-etapa__caiu { box-shadow: none; background: rgb(255 209 3 / .26); }
+.dt-etapa__caiu b { inset: 6px; background: var(--amarelo-marca, #FFD103); }
+.p2 .dt-etapa:has(.dt-etapa__caiu) > span:last-child { color: var(--tinta); }
+.dt-corpo--junto .p2-estudo2__brecha { margin-top: 12px; }
+
+/* 5. As chaves ligam uma a uma. */
+.dt .p2-chave { flex: none; }
+.dt .p2-chave i { transition: none; }
+
+/* 6. O mapa: três espaços ocupados e o que sobra, que vira o da clínica. */
+.dt-mapa { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dt-espaco { display: grid; align-content: space-between; height: 84px; padding: 11px 12px 12px; border-radius: 13px; background: #20201f; box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset; }
+.dt-espaco .p2-estudo2__quem { color: var(--suave); font-size: 12px; }
+.p2 .dt-espaco > span { margin: 0; }
+.dt-espaco strong { font-size: 14px; }
+.dt-espaco--livre { padding: 0; background: none; box-shadow: none; }
+.dt-espaco--livre > * { grid-area: 1 / 1; height: 84px; border-radius: 13px; }
+.dt-espaco__vazio { display: grid; place-items: center; border: 1px dashed rgb(242 242 238 / .24); color: var(--suave); font-size: 12px; }
+.dt-espaco__seu { display: grid; align-content: space-between; padding: 11px 12px 12px; background: #F2F2EE; color: #161616; box-shadow: 0 16px 28px -16px rgb(0 0 0 / .8); }
+.dt-espaco__seu .p2-estudo2__quem { color: rgb(22 22 22 / .62); }
+.dt-espaco__seu .p2-estudo2__quem i { width: 8px; height: 8px; margin-inline: 2px 3px; background: var(--amarelo-marca, #FFD103); box-shadow: 0 0 0 1px rgb(22 22 22 / .3); }
+
+@media (max-width: 599.98px) {
+  .dt .p2-rosto { width: 28px; height: 28px; }
+  .dt-item { padding-right: 10px; }
+  .dt-estado b { padding-inline: 9px; font-size: 11.5px; }
+}

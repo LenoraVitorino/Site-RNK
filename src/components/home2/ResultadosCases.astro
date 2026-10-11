@@ -1,0 +1,284 @@
+---
+/** Resultados por especialidade como cases de números grandes (teste de
+    10/10/2026, em /laboratorio/resultados-cases). A Lenora não gostou da
+    linha com título, frase, número e foto ("foto vai ficar muito genérico")
+    e pediu "case e big numbers". Referências dela: o bento "Design to
+    convert" (cartões claros de número com um cartão escuro em destaque) e
+    os cartões "Lösungen" (rótulo em cima, número grande embaixo).
+    Cada especialidade é um cartão: a área em cima; embaixo, o número grande
+    com a frase colada nele. Um case vai em destaque, escuro, com uma curva
+    fina no fundo no lugar da foto. Mesmo painel claro, cabeça e dados da
+    dobra atual; no celular, uma coluna.
+Mescla (10/10, mais tarde: "falta essa mesclagem"; referências do
+    painel financeiro em preto e amarelo e dos cartões clínicos com pílula
+    de estado e escala de pontos): os cartões deixam de ser todos iguais e
+    cada um ganha uma peça tirada dessas referências. Todos levam a
+    caixinha de vidro amarelo com o ícone da área e uma pílula com o
+    indicador. Dermatologia: três barras sobre trilhos hachurados,
+    a última em amarelo com o balão do valor (discos, barra, colunas com
+    rótulos, ficha de paciente e gráfico com legenda foram reprovados). Otorrino: o medidor de dez traços ao lado do número.
+    Cirurgia plástica (destaque escuro): gráfico de colunas finas, mês a
+    mês, com o mês atual em amarelo; ela aprovou o gráfico e pediu só para
+    as letras soltas ficarem claras (meses por extenso e legenda). Nutrologia: gradiente amarelo,
+    pedido por ela para quebrar. Tricologia: só o número e a frase (os
+    canais em pílulas foram reprovados). O número fica sempre em cima da
+    frase. O cartão com imagem saiu por ora; volta quando as imagens de
+    clínica forem geradas. */
+import { resultados } from '../../data/home';
+import Selo from '../ui/Selo.astro';
+import { copyLiteral } from '../../data/versao';
+
+const partes = (numero: string) => {
+  const [, antes, valor, depois] = numero.match(/^(.*?)(\d+)(.*)$/) ?? ['', '', numero, ''];
+  return { antes, valor, depois: depois.trim() };
+};
+/* O tratamento de cada case, na ordem dos dados; o destaque é o digital
+   como parte da receita da clínica. */
+const tipos = ['barras', 'medidor', 'destaque', 'amarelo', 'simples'] as const;
+/* O gráfico de colunas do destaque (referência do painel em preto e
+   amarelo, que ela aprovou: "o gráfico tava do caralho"; só as letras soltas
+   não se entendiam). Fios finos com um ponto no alto e, no pé, o mês por
+   extenso; o mês atual é a coluna amarela. As alturas só desenham a subida;
+   não há valor por mês. A legenda vai em cima do gráfico. */
+const grafico = { legenda: 'Receita vinda do digital, mês a mês', etiqueta: 'Digital', colunas: [['mai', 16], ['jun', 24], ['jul', 22], ['ago', 38], ['set', 54], ['out', 100]] } as const;
+/* Dermatologia: três barras (os três meses do case) sobre trilhos
+   hachurados; a última, amarela, leva o balão com o valor. */
+const barras = [34, 62, 100];
+/* Um ícone por área, na caixinha de vidro amarelo (como na segunda dobra da
+   home). Desenhos provisórios, em traço fino: gota (pele), ouvido, bisturi,
+   folha e fios de cabelo. */
+const icones = [
+  'M12 3.6c3.2 3.9 5.4 6.8 5.4 9.9a5.4 5.4 0 0 1-10.8 0c0-3.1 2.2-6 5.4-9.9z',
+  'M7 10a5 5 0 0 1 10 0c0 2.6-2 3.4-2.8 5-.7 1.4-.6 4-3.2 4a3 3 0 0 1-3-3M10 10.6a2 2 0 0 1 4 0c0 1.2-1.5 1.5-1.5 3',
+  'M4 20l6.2-6.2M10.2 13.8l7.3-7.3a2.3 2.3 0 0 1 3.3 3.2l-7.4 7.4H10.2z',
+  'M5 19c0-8 5-13 14-14 0 9-5 14-13 14M5 19l7.5-7.5',
+  'M8 4c2 3-2 5 0 8s-2 5 0 8M12 4c2 3-2 5 0 8s-2 5 0 8M16 4c2 3-2 5 0 8s-2 5 0 8',
+];
+/* O indicador de cada case, na pílula do alto. */
+const rotulos = ['Agendamento', 'Leads recuperados', 'Receita', 'Reativação', 'Rastreamento'];
+---
+<section class="secao resultados-editoriais" id="resultados" data-tom="claro" aria-labelledby="resultados-titulo">
+  <div class="container">
+    <header class="resultados-editoriais__cabeca entra">
+      {!copyLiteral && <Selo class="cabeca-dobra__selo">Resultados por especialidade</Selo>}
+      <h2 class="titulo" id="resultados-titulo">O que muda quando a <span class="resultados-editoriais__enfase">operação tem estrutura</span>.</h2>
+      {!copyLiteral && <p class="cabeca-dobra__apoio">Clínicas de especialidades diferentes, com a operação estruturada pela Renke.</p>}
+    </header>
+
+    <ol class="cases" aria-label="Resultados por especialidade">
+      {resultados.map((r, i) => {
+        const { antes, valor, depois } = partes(r.numero);
+        return (
+          <li class:list={['case', 'entra', `case--${tipos[i]}`, `case--${i + 1}`]} style={`--i:${i}`}>
+            <div class="case__topo">
+              <span class="case__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d={icones[i]} /></svg>
+              </span>
+              <h3 class="case__area">{r.especialidade}</h3>
+              <span class="case__pilula">{rotulos[i]}</span>
+            </div>
+            {tipos[i] === 'destaque' && (
+              <figure class="case__grafico" aria-hidden="true">
+                <div class="case__colunas">
+                  {grafico.colunas.map(([rotulo, h], k) => (
+                    <span class:list={{ 'case__coluna-fim': k === grafico.colunas.length - 1 }} style={`--h:${h}%;--k:${k}`}>
+                      {k === grafico.colunas.length - 1 && <em>{grafico.etiqueta}</em>}
+                      <i></i><b>{rotulo}</b>
+                    </span>
+                  ))}
+                  {/* A legenda sai da coluna amarela, num cursor parado. */}
+                  <div class="case__cursor">
+                    <small>{grafico.legenda}</small>
+                    <svg viewBox="0 0 16 16" focusable="false"><path d="M14.5 1.5l-12 4.6 5.2 2.2 2.2 5.2z" /></svg>
+                  </div>
+                </div>
+              </figure>
+            )}
+            {tipos[i] === 'barras' && (
+              <div class="case__barras" aria-hidden="true">
+                {barras.map((h, k) => (
+                  <span class:list={{ 'case__barra-fim': k === barras.length - 1 }} style={`--h:${h}%;--k:${k}`}>
+                    {k === barras.length - 1 && <em>{r.numero}</em>}
+                    <i></i>
+                  </span>
+                ))}
+              </div>
+            )}
+            <div class="case__dados">
+              <div class="case__linha">
+                <p class="case__numero num">
+                  <span class="visually-hidden">{r.numero}</span>
+                  <span aria-hidden="true">{antes}<span data-case-contador data-alvo={valor}>{valor}</span><span class:list={['case__sufixo', depois.length > 1 && 'case__sufixo--palavra']}>{depois}</span></span>
+                </p>
+                {tipos[i] === 'medidor' && (
+                  <span class="case__medidor" aria-hidden="true">
+                    <span class="case__medidor-escala"><b>0</b><b>50</b><b>100</b></span>
+                    <span class="case__medidor-tracos">{Array.from({ length: 20 }, (_, k) => {
+                      const cheios = Math.round(Number(valor) / 5);
+                      return <i class:list={{ 'case__medidor--cheio': k < cheios, 'case__medidor--agora': k === cheios }}></i>;
+                    })}</span>
+                  </span>
+                )}
+              </div>
+              <p class="case__texto">{r.texto}</p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<script>
+  /* Cada número conta de zero até o valor quando o cartão entra na tela. */
+  const numeros = document.querySelectorAll<HTMLElement>('[data-case-contador]');
+  const parado = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (numeros.length && !parado && 'IntersectionObserver' in window) {
+    numeros.forEach((el) => { el.textContent = '0'; });
+    const contar = (el: HTMLElement) => {
+      const alvo = Number(el.dataset.alvo), t0 = performance.now(), dur = 1600;
+      const passo = (agora: number) => {
+        const t = Math.min(1, (agora - t0) / dur);
+        el.textContent = String(Math.round(alvo * (1 - Math.pow(1 - t, 4))));
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+    const obs = new IntersectionObserver((entradas) => {
+      for (const e of entradas) {
+        if (!e.isIntersecting) continue;
+        contar(e.target as HTMLElement);
+        obs.unobserve(e.target);
+      }
+    }, { threshold: .6 });
+    numeros.forEach((el) => obs.observe(el));
+  }
+</script>
+
+<style>
+  .cases { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .case {
+    --pad: 24px;
+    position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 36px;
+    min-height: 240px; padding: var(--pad);
+    border-radius: 22px; background: linear-gradient(180deg, #fbfbf9, #f1f1ee);
+    /* Profundidade à maneira do ClickUp (10/10: "leve sombra em alguns
+       elementos, coisa mais SaaS"): fio fino, brilho no alto e duas sombras
+       suaves, uma curta e uma longa. Nada de sombra pesada. */
+    box-shadow: 0 0 0 1px rgb(37 37 35 / .06) inset, 0 1px 0 rgb(255 255 255 / .9) inset, 0 1px 2px rgb(22 22 22 / .05), 0 14px 30px -18px rgb(22 22 22 / .22);
+  }
+  .case__topo { position: relative; display: flex; align-items: center; gap: 12px; }
+  .case__topo .case__pilula { margin-left: auto; }
+  /* Caixinha do ícone da área, em vidro amarelo, como a da segunda dobra. */
+  .case__icone { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(160deg, rgb(255 236 158 / .95), rgb(255 214 40 / .88)); box-shadow: 0 0 0 1px rgb(255 255 255 / .55) inset, 0 1px 2px rgb(120 92 0 / .12), 0 10px 18px -10px rgb(150 116 0 / .6); color: #161616; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .case--amarelo .case__icone { background: linear-gradient(160deg, rgb(255 255 255 / .72), rgb(255 255 255 / .38)); box-shadow: 0 0 0 1px rgb(255 255 255 / .7) inset, 0 10px 18px -10px rgb(120 92 0 / .5); }
+  .case__area { margin: 0; font-size: 19px; font-weight: 400; line-height: 1.2; letter-spacing: -.02em; color: #252523; }
+  /* Pílula do indicador: preta nos cartões claros; no escuro, em vidro
+     claro, para não brigar com a etiqueta amarela do gráfico. */
+  .case__pilula { flex: none; padding: 5px 11px 6px; border-radius: 99px; background: #161616; box-shadow: 0 1px 2px rgb(22 22 22 / .2), 0 8px 14px -8px rgb(22 22 22 / .45); color: #F2F2EE; font-size: 12.5px; font-weight: 500; line-height: 1.2; letter-spacing: -.005em; white-space: nowrap; }
+  .case__dados { position: relative; display: grid; gap: 14px; }
+  .case__linha { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .case__numero { margin: 0; font-size: 58px; font-weight: 350; line-height: .85; letter-spacing: -.075em; color: #252523; white-space: nowrap; }
+  /* O sufixo cola no número e tem o mesmo tamanho dele ("o dias é menor
+     que o sessenta, eu odeio isso"); só a cor é mais leve. */
+  .case__sufixo { margin-left: -.01em; color: rgb(37 37 35 / .42); }
+  .case__sufixo--palavra { margin-left: .16em; letter-spacing: -.06em; }
+  .case__texto { margin: 0; max-width: 36ch; font-size: 16px; line-height: 1.5; color: #50504e; text-wrap: pretty; }
+
+  /* Medidor (referência do cartão "+67k"): vinte traços arredondados com a
+     escala 0, 50, 100 em cima; os cheios são o próprio número e o traço
+     seguinte, mais alto, marca onde ele parou. */
+  .case__medidor { display: grid; gap: 7px; padding-bottom: 3px; }
+  .case__medidor-escala { display: flex; justify-content: space-between; font-size: 11.5px; line-height: 1; color: rgb(37 37 35 / .56); font-variant-numeric: tabular-nums; }
+  .case__medidor-escala b { font-weight: 400; }
+  .case__medidor-tracos { display: flex; align-items: center; gap: 3px; height: 30px; }
+  .case__medidor-tracos i { width: 4px; height: 24px; border-radius: 2px; background: rgb(37 37 35 / .14); }
+  .case__medidor-tracos .case__medidor--cheio { background: #161616; }
+  .case__medidor-tracos .case__medidor--agora { height: 30px; background: rgb(37 37 35 / .34); }
+
+  /* O destaque: escuro, sobre o painel claro. */
+  .case--destaque { background: linear-gradient(160deg, #1d1d1c, #0f0f0f 72%); box-shadow: 0 0 0 1px rgb(242 242 238 / .07) inset, 0 1px 0 rgb(242 242 238 / .1) inset, 0 2px 4px rgb(0 0 0 / .18), 0 30px 50px -24px rgb(0 0 0 / .5); }
+  .case--destaque .case__area { color: #F2F2EE; }
+  .case--destaque .case__pilula { background: rgb(242 242 238 / .12); box-shadow: 0 0 0 1px rgb(242 242 238 / .16) inset; color: #F2F2EE; }
+  .case--destaque .case__texto { color: rgb(242 242 238 / .7); }
+  /* Gráfico de colunas: fios finos com um ponto no alto e o rótulo no pé;
+     a última coluna é a amarela, com o disco escuro no pé (e a etiqueta em
+     cima, quando há). A legenda embaixo diz o que o gráfico mostra. As
+     colunas sobem em sequência quando o cartão entra na tela. */
+  .case__grafico { --fio: rgb(37 37 35 / .3); --ponto: #252523; --rotulo: rgb(37 37 35 / .62); margin: 0; display: grid; gap: 10px; }
+  .case__colunas { display: flex; align-items: stretch; justify-content: space-between; min-height: 0; }
+  .case__colunas span { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; width: 34px; }
+  .case__colunas i { position: relative; flex: none; width: 1px; height: calc(var(--h) * .74); background: var(--fio); transform-origin: 50% 100%; transition: transform 1.2s var(--easing) calc(.2s + var(--k) * 90ms); }
+  .case__colunas i::before { content: ''; position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--ponto); }
+  .case__colunas b { display: grid; place-items: center; width: 34px; height: 30px; font-size: 12.5px; font-weight: 400; color: var(--rotulo); font-variant-numeric: tabular-nums; }
+  .case__colunas .case__coluna-fim i { flex: 1; width: 30px; height: auto; margin-bottom: -38px; border-radius: 15px; background: linear-gradient(180deg, rgb(255 209 3 / .1), #FFD103 82%); }
+  .case__colunas .case__coluna-fim i::before { content: none; }
+  .case__colunas .case__coluna-fim b { position: relative; width: 30px; border-radius: 50%; background: #161616; box-shadow: 0 0 0 1px rgb(22 22 22 / .4), 0 8px 14px -6px rgb(0 0 0 / .5); color: #F2F2EE; font-size: 11.5px; font-weight: 500; }
+  .case__colunas em { flex: none; padding: 5px 11px 6px; border-radius: 99px; background: #FFD103; box-shadow: 0 10px 18px -8px rgb(0 0 0 / .6); color: #161616; font-style: normal; font-size: 12.5px; font-weight: 500; line-height: 1.2; white-space: nowrap; transition: opacity .6s ease 1.2s, translate .8s var(--easing) 1.2s; }
+  :global(.js) .case:not(.visivel) .case__colunas i { transform: scaleY(0); }
+  :global(.js) .case:not(.visivel) .case__colunas em { opacity: 0; translate: 0 6px; }
+  /* No destaque o gráfico ocupa o meio do cartão, em tinta clara. */
+  .case--destaque .case__grafico { --fio: rgb(242 242 238 / .26); --ponto: #F2F2EE; --rotulo: rgb(242 242 238 / .6); flex: 1; grid-template-rows: minmax(0, 1fr); min-height: 230px; }
+  /* Barras de Dermatologia (referências "Real-Time Alerts" e "Overview"):
+     trilhos hachurados com a barra cheia dentro; as duas primeiras em
+     grafite, a última em amarelo com o balão do valor. Sem legenda nem
+     rótulos: a frase do cartão já diz o que é. */
+  .case__barras { align-self: flex-end; display: flex; align-items: stretch; gap: 8px; height: 132px; }
+  .case__barras span { position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 34px; border-radius: 10px; background: repeating-linear-gradient(135deg, rgb(37 37 35 / .1) 0 1px, transparent 1px 7px), rgb(37 37 35 / .045); }
+  .case__barras i { display: block; height: var(--h); border-radius: 10px; background: #252523; box-shadow: 0 8px 14px -8px rgb(22 22 22 / .5); transform-origin: 50% 100%; transition: transform 1.2s var(--easing) calc(.25s + var(--k) * 110ms); }
+  .case__barras .case__barra-fim i { background: linear-gradient(180deg, #FFE27A, #FFD103); box-shadow: 0 8px 14px -8px rgb(150 116 0 / .7); }
+  .case__barras em { position: absolute; left: 50%; bottom: calc(100% + 8px); translate: -50% 0; padding: 5px 10px 6px; border-radius: 9px; background: #161616; box-shadow: 0 10px 16px -8px rgb(22 22 22 / .5); color: #F2F2EE; font-style: normal; font-size: 12.5px; font-weight: 500; line-height: 1.2; white-space: nowrap; transition: opacity .6s ease 1.3s; }
+  .case__barras em::after { content: ''; position: absolute; left: 50%; top: 100%; width: 8px; height: 8px; margin: -5px 0 0 -4px; rotate: 45deg; border-radius: 1.5px; background: #161616; }
+  :global(.js) .case:not(.visivel) .case__barras i { transform: scaleY(0); }
+  :global(.js) .case:not(.visivel) .case__barras em { opacity: 0; }
+  .case--barras { gap: 12px; }
+  /* O cursor parado que nomeia a coluna amarela do destaque. */
+  /* Fica acima dos fios dos outros meses, para o balão não cobrir nenhum. */
+  .case__cursor { position: absolute; right: 40px; top: 15%; display: flex; align-items: flex-start; gap: 2px; }
+  .case__cursor small { margin-top: 12px; padding: 6px 11px 7px; border-radius: 12px; background: #F2F2EE; box-shadow: 0 14px 26px -12px rgb(0 0 0 / .8); color: #161616; font-size: 12.5px; line-height: 1.3; white-space: nowrap; text-align: right; }
+  .case__cursor svg { flex: none; width: 18px; height: 18px; fill: #FFD103; stroke: #161616; stroke-width: 1.3; stroke-linejoin: round; }
+  .case__colunas { position: relative; }
+  .case--destaque .case__numero { font-size: 84px; color: #F2F2EE; }
+  .case--destaque .case__sufixo { color: rgb(242 242 238 / .5); }
+
+  /* Gradiente amarelo, para quebrar o conjunto: tinta grafite por cima. */
+  .case--amarelo { background: radial-gradient(110% 80% at 0% 0%, rgb(255 250 228 / .95), transparent 62%), linear-gradient(160deg, #FFE99A, #FFD103); box-shadow: 0 1px 0 rgb(255 255 255 / .6) inset, 0 1px 2px rgb(120 92 0 / .1), 0 18px 32px -20px rgb(150 116 0 / .5); }
+  .case--amarelo :is(.case__area, .case__numero) { color: #161616; }
+  .case--amarelo .case__sufixo { color: rgb(22 22 22 / .46); }
+  .case--amarelo .case__texto { color: rgb(22 22 22 / .76); }
+
+  /* Celular: ícone, nome e pílula cabem na mesma linha. */
+  @media (max-width: 639.98px) {
+    .case__topo { gap: 10px; }
+    .case__icone { width: 34px; height: 34px; border-radius: 11px; }
+    .case__icone svg { width: 18px; height: 18px; }
+    .case__area { font-size: 18px; }
+    .case__pilula { padding: 4px 9px 5px; font-size: 11.5px; }
+  }
+  @media (min-width: 640px) {
+    .cases { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .case--destaque { grid-column: 1 / -1; order: -1; }
+  }
+  /* Desktop: duas fileiras de larguras trocadas (5 + 4 em cima, 4 + 5
+     embaixo) e o destaque na direita, com a altura das duas. */
+  @media (min-width: 1024px) {
+    .cases { grid-template-columns: repeat(13, minmax(0, 1fr)); gap: clamp(12px, 1.1vw, 16px); }
+    .case { --pad: clamp(24px, 2.2vw, 34px); min-height: clamp(264px, 20.5vw, 304px); gap: 30px; border-radius: clamp(22px, 2vw, 30px); }
+    .case__area { font-size: clamp(19px, 1.5vw, 22px); }
+    /* Números: os quatro cartões claros no mesmo tamanho (10/10, depois de
+       testar tamanhos misturados: "padroniza"); só o do destaque é maior. */
+    .case__numero { font-size: clamp(58px, 4.7vw, 70px); }
+    .case__texto { max-width: none; font-size: clamp(15px, 1.1vw, 16px); }
+    .case--1 { grid-area: 1 / 1 / auto / span 5; }
+    .case--2 { grid-area: 1 / 6 / auto / span 4; }
+    .case--3 { grid-area: 1 / 10 / span 2 / span 4; }
+    .case--4 { grid-area: 2 / 1 / auto / span 4; }
+    .case--5 { grid-area: 2 / 5 / auto / span 5; }
+    .case--destaque { order: 0; }
+    .case--destaque .case__grafico { margin-block: clamp(14px, 2.4vw, 34px) 8px; }
+    .case--barras { gap: 30px; }
+    .case__barras { position: absolute; right: var(--pad); top: calc(var(--pad) + 86px); bottom: calc(var(--pad) + 56px); height: auto; align-self: stretch; }
+    .case--destaque .case__numero { font-size: clamp(84px, 7vw, 108px); }
+    .case--destaque .case__texto { font-size: clamp(16px, 1.2vw, 18px); }
+  }
+</style>
