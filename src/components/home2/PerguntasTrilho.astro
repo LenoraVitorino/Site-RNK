@@ -174,8 +174,16 @@ const partes = (q: string, d: string) => { const k = q.indexOf(d); return k < 0 
       setas.forEach((s) => { s.disabled = s.dataset.trilhoSeta === '-1' ? inicio : fim; });
       if (!(lista || palco()) || i === ativo) return;
       ativo = i;
-      cartoes.forEach((c, k) => { c.classList.toggle('trilho__cartao--ativo', k === i); c.classList.toggle('visivel', k === i); });
+      // Na lista do celular quem liga a cena de cada fileira é a entrada dela na tela (acertar).
+      const cenaPelaEntrada = lista && estreito();
+      cartoes.forEach((c, k) => { c.classList.toggle('trilho__cartao--ativo', k === i); if (!cenaPelaEntrada) c.classList.toggle('visivel', k === i); });
     };
+    /* Celular e tablet: o painel vem antes da pergunta (12/10/2026) e a
+       fileira fica mais alta que meia tela. Medido pelo meio da fileira, o
+       foco só chegava quando o painel já estava no alto, e ele entrava vazio
+       e apagado. Aqui o foco sobe assim que a fileira entra por baixo e cai
+       quando ela sai por cima, e a cena do painel liga junto. */
+    const estreito = () => innerWidth < 900;
     const acertar = () => {
       quadro = 0;
       if (lista) {
@@ -183,11 +191,15 @@ const partes = (q: string, d: string) => { const k = q.indexOf(d); return k < 0 
            aproxima do meio da tela; a mais próxima é a ativa. */
         const meio = innerHeight / 2;
         let perto = 0, maior = -1;
+        const fino = estreito(), rampa = innerHeight * .24;
         cartoes.forEach((c, k) => {
           const r = c.getBoundingClientRect();
-          const x = Math.max(0, Math.min(1, 1.18 - Math.abs(r.top + r.height / 2 - meio) / (r.height * .86)));
+          const x = fino
+            ? Math.max(0, Math.min(1, (innerHeight * .96 - r.top) / rampa, (r.bottom - innerHeight * .06) / rampa))
+            : Math.max(0, Math.min(1, 1.18 - Math.abs(r.top + r.height / 2 - meio) / (r.height * .86)));
           const foco = x * x * (3 - 2 * x);
           c.style.setProperty('--foco', foco.toFixed(3));
+          if (fino) c.classList.toggle('visivel', foco > .25);
           if (foco > maior) { maior = foco; perto = k; }
         });
         marcar(maior > .55 ? perto : -2, perto === 0, perto === n - 1);
