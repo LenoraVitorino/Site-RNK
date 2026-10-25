@@ -1,8 +1,8 @@
 ---
 /**
- * "O que você passa a ter" (04/10/2026): o extrato da dobra Resultados da
- * home, sobre a cena. Uma linha por entrega, entre fios: a área grande à
- * esquerda, com o losango amarelo, e o resultado à direita.
+ * "O que você passa a ter" (10/10/2026): grade em fio fino, três por
+ * fileira, no lugar do extrato em linhas (que repetia o desenho das
+ * etapas). Cada célula traz o losango amarelo, a área e o resultado.
  */
 import type { ContextoSecao } from '../pagina/contexto';
 
@@ -11,13 +11,14 @@ const { h2, rotulos, linhas, secao } = Astro.props;
 ---
 <section class="plano-entregas" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
   <div class="container">
-    <header class="plano-cabeca plano-cabeca--linha entra">
+    <header class="plano-cabeca plano-cabeca--centro entra">
+      {/* Sem o rótulo "Operação → Resultado" em caixa alta acima do título (25/10/2026):
+          rótulo solto com espaçamento largo já foi reprovado. `rotulos` fica nos dados. */}
       <h2 id={secao.tituloId} class="titulo">{h2}</h2>
-      {rotulos && <p class="plano-entregas__rotulos" aria-hidden="true">{rotulos[0]} <span>→</span> {rotulos[1]}</p>}
     </header>
-    <ol class="plano-entregas__lista">
+    <ol class="plano-entregas__grade">
       {linhas.map(([area, texto], i) => (
-        <li class="plano-entregas__linha entra" style={`--i:${i % 3}`}>
+        <li class="plano-entregas__celula entra" style={`--i:${i % 3}`}>
           <h3 class="plano-entregas__area">{area}</h3>
           <p class="plano-entregas__texto">{texto}</p>
         </li>

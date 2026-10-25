@@ -1,5 +1,10 @@
 ---
-/** Etapas em lista editorial: contraste constante, sem zoom ou opacidade por rolagem. */
+/**
+ * Etapas do plano em largura inteira (10/10/2026), como a tabela em fio fino
+ * da Tres Mares: cabeça centralizada e uma linha por etapa, com a duração, o
+ * nome grande e a descrição em três colunas alinhadas. O fio de cada linha
+ * se desenha quando ela entra na tela. Contraste constante, sem número.
+ */
 import type { ContextoSecao } from '../pagina/contexto';
 
 interface Etapa { n: string; duracao?: string; nome: string; descricao?: string }
@@ -7,19 +12,17 @@ interface Props { h2: string; etapas: Etapa[]; fechamento?: string; secao: Conte
 const { h2, etapas, fechamento, secao } = Astro.props;
 ---
 <section class="plano-etapas" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
-  <div class="container plano-etapas__grade">
-    <header class="plano-etapas__cabeca">
+  <div class="container">
+    <header class="plano-cabeca plano-cabeca--centro entra">
       <h2 id={secao.tituloId} class="titulo">{h2}</h2>
-      {fechamento && <p class="plano-etapas__fechamento">{fechamento}</p>}
+      {fechamento && <p class="plano-cabeca__apoio">{fechamento}</p>}
     </header>
     <ol class="plano-etapas__lista">
       {etapas.map((e) => (
-        <li class="plano-etapa">
-          <div class="plano-etapa__texto">
-            {e.duracao && <p class="plano-etapa__duracao">{e.duracao}</p>}
-            <h3 class="plano-etapa__nome">{e.nome}</h3>
-            {e.descricao && <p class="plano-etapa__descricao">{e.descricao}</p>}
-          </div>
+        <li class="plano-etapa entra">
+          <p class="plano-etapa__duracao">{e.duracao}</p>
+          <h3 class="plano-etapa__nome">{e.nome}</h3>
+          {e.descricao && <p class="plano-etapa__descricao">{e.descricao}</p>}
         </li>
       ))}
     </ol>

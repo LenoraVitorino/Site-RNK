@@ -1,5 +1,12 @@
 ---
-/** Hero editorial compartilhada pelos planos e pelas duas versões de copy. */
+/**
+ * Hero dos planos no desenho da Tres Mares (Private Equity), 10/10/2026: o
+ * símbolo do plano gigante, nas cores da marca, vazando pela direita e
+ * descendo até a caixa da dobra seguinte; à esquerda, alinhados entre si, o
+ * nome enorme em duas linhas, a frase com o botão e a ficha em células
+ * iguais entre fios. Sem rótulo solto, sem ícone, sem texto sobre o símbolo.
+ * Compartilhada pelos planos e pelas duas versões de copy.
+ */
 import Icone from '../ui/Icone.astro';
 import { semSeta, type ContextoSecao } from '../pagina/contexto';
 
@@ -13,16 +20,14 @@ interface Props {
 }
 const { linhas, sub, cta, rotaCta = '#secao-2', ficha, secao } = Astro.props;
 const naPagina = rotaCta.startsWith('#');
-
 ---
-<section class="plano-hero" id={secao.id} data-cena={secao.cena} aria-labelledby={secao.tituloId}>
+<section class="plano-hero" id={secao.id} data-cena={secao.cena} data-plano-hero aria-labelledby={secao.tituloId}>
   <div class="container plano-hero__grade">
-    <div class="plano-hero__texto">
-      <p class="plano-hero__rotulo">Protocolo Revena</p>
-      <h1 id={secao.tituloId} class="plano-hero__titulo">
-        <span class="plano-hero__linha">{linhas[0]}</span>
-        <span class="plano-hero__linha plano-hero__linha--2">{linhas[1]}</span>
-      </h1>
+    <h1 id={secao.tituloId} class="plano-hero__titulo">
+      <span class="plano-hero__linha">{linhas[0]}</span>
+      <span class="plano-hero__linha plano-hero__linha--2">{linhas[1]}</span>
+    </h1>
+    <div class="plano-hero__apoio">
       {sub && <p class="plano-hero__sub">{sub}</p>}
       {cta && (
         <p class="plano-hero__acoes">
@@ -33,18 +38,29 @@ const naPagina = rotaCta.startsWith('#');
         </p>
       )}
     </div>
-    <div class="plano-hero__imagem">
-      <div class="plano-hero__arte"><slot name="arte" /></div>
-    </div>
-    <dl class="plano-hero__ficha">
+    <div class="plano-hero__imagem"><div class="plano-hero__arte"><slot name="arte" /></div></div>
+    <dl class="plano-hero__ficha" style={`--itens:${ficha.length}`}>
       {ficha.map((f) => (
-        <div class:list={["plano-hero__item", { "plano-hero__item--duracao": f.rotulo === "Duração" }]}>
+        <div class="plano-hero__item">
           <dt>{f.rotulo}</dt>
-          <dd>{f.rotulo === 'Duração' && /^\d+ dias$/.test(f.valor)
-            ? <><span class="plano-hero__numero">{f.valor.split(' ')[0]}</span>{' '}<span class="plano-hero__unidade">dias</span></>
-            : f.valor}</dd>
+          <dd>{f.valor}</dd>
         </div>
       ))}
     </dl>
   </div>
 </section>
+
+<script>
+  /* O símbolo se abre e sobe devagar conforme a hero sai da tela: só transform. */
+  const hero = document.querySelector<HTMLElement>('[data-plano-hero]');
+  if (hero && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let pedido = 0;
+    const medir = () => {
+      pedido = 0;
+      const rol = Math.min(1, Math.max(0, scrollY / Math.max(1, hero.offsetHeight)));
+      hero.style.setProperty('--rol', rol.toFixed(4));
+    };
+    addEventListener('scroll', () => { pedido ||= requestAnimationFrame(medir); }, { passive: true });
+    medir();
+  }
+</script>
