@@ -29,8 +29,8 @@ export const rotasProntas: ReadonlySet<string> = new Set(
       const rel = '/' + relative(pastaPaginas, arquivo).replace(/\\/g, '/').replace(/\.astro$/, '');
       return rel.replace(/\/index$/, '') || '/';
     })
-    // 404 e design-system não são destino de navegação
-    .filter((rota) => rota !== '/404' && rota !== '/design-system'),
+    // 404, projeto e design-system (que redireciona para projeto) não são destino de navegação
+    .filter((rota) => rota !== '/404' && rota !== '/design-system' && rota !== '/projeto'),
 );
 
 export const existe = (rota: string) => rotasProntas.has(rota);

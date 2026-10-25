@@ -1,0 +1,546 @@
+---
+import '@fontsource-variable/inter/wght.css';
+import '../styles/tokens.css';
+import '../styles/design-system.css';
+import { execFileSync } from 'node:child_process';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { hero, pilares as pilaresCopy, perguntas } from '../data/home';
+import { pilaresEstudio } from '../data/pilares-estudio';
+import { doresRespostas } from '../data/dores-respostas';
+
+/* Página do projeto (12/10/2026, Lenora): deixou de se chamar design system.
+   Na ordem: o conceito, a evolução (as entregas vêm das issues do marco
+   "Entrega do site" e se atualizam sozinhas; depois, o que já foi feito), a
+   copy ajustada ao layout (sugestão, depende da revisão da copy) e, por
+   último, o design system, que virou secundário. /design-system redireciona
+   para cá. */
+const atualizado = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+/* Entregas: issues do marco 1 e PRs mesclados do repositório (público). A
+   foto é tirada no build; no navegador a página busca de novo e troca se
+   conseguir. */
+const REPO = 'repos/LenoraVitorino/Site-RNK';
+const ISSUES = `https://api.github.com/${REPO}/issues?milestone=1&state=all&per_page=100`;
+const PRS = `https://api.github.com/${REPO}/pulls?state=closed&per_page=100`;
+
+/* O que já foi entregue vem dos PRs mesclados. O título do PR é de trabalho;
+   aqui ficam o nome de cada entrega para quem lê de fora, a área dela e o
+   dia em que o trabalho começou (primeiro commit do PR; o projeto começou em
+   15/08/2026). PR novo sem nome nesta lista aparece com o próprio título, em
+   "Geral", só com a data em que foi mesclado. */
+const nomesPr: Record<number, [string, string, string]> = {
+  1: ['Estrutura do site, wireframe e design da home', 'Home', '2026-08-15T17:17:22Z'],
+  2: ['Copy da home: hero, resultados, perguntas e ecossistema', 'Home', '2026-09-18T22:12:33Z'],
+  4: ['Home, hero e transição entre os planos', 'Home', '2026-09-18T22:12:33Z'],
+  5: ['Páginas dos planos Revena: copy e layout', 'Planos Revena', '2026-09-18T22:12:33Z'],
+  6: ['Home: fundo animado, cartões ilustrados e resultados', 'Home', '2026-09-19T15:23:28Z'],
+  7: ['Menu, páginas internas no padrão da home e página Sobre', 'Páginas internas', '2026-09-28T00:37:20Z'],
+  8: ['Academy e cursos: copy nova e cartões', 'Páginas internas', '2026-09-28T22:49:17Z'],
+  9: ['Refinamento geral do layout', 'Geral', '2026-09-28T23:05:36Z'],
+  10: ['Sobre, Contato, Faça parte e rodapé', 'Páginas internas', '2026-09-28T22:49:17Z'],
+  11: ['Home: bento mais leve e logos no convite', 'Home', '2026-10-01T13:40:53Z'],
+  12: ['Páginas dos planos: Start, Run, Full e demais', 'Planos Revena', '2026-10-07T01:08:55Z'],
+  13: ['Páginas dos planos: refinamento', 'Planos Revena', '2026-10-10T19:43:33Z'],
+  15: ['Home: dobra “O que muda na sua clínica”', 'Home', '2026-10-10T23:16:23Z'],
+  31: ['Página de acompanhamento do projeto', 'Geral', '2026-10-11T05:20:09Z'],
+  33: ['Home no celular: hero, planos animados, títulos e vídeo com som', 'Home', '2026-10-11T05:30:00Z'],
+  34: ['Home no celular: painéis de “O que muda” e leitura sobre o fundo', 'Home', '2026-10-11T16:30:00Z'],
+  35: ['Celular: selo dos doutores em duas linhas e menu com fundo ao rolar', 'Home', '2026-10-11T16:44:00Z'],
+};
+/* PRs de bastidor (ferramentas da equipe): não são entrega para o cliente. */
+const prsOcultos = [32];
+
+/* Sem login o GitHub só responde 60 vezes por hora, e o build não pode sair
+   com a lista vazia: busca pelo `gh` (logado), depois sem login e, se nada
+   responder, usa a última foto guardada em src/data/entregas.json. */
+const guardado = new URL('../data/entregas.json', import.meta.url);
+const buscar = async (caminho: string, url: string): Promise<any[] | null> => {
+  try { return JSON.parse(execFileSync('gh', ['api', caminho], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 32 * 1024 * 1024 })); } catch { /* sem gh */ }
+  try { const r = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } }); if (r.ok) return await r.json(); } catch { /* sem rede */ }
+  return null;
+};
+let foto: { issues: unknown[]; prs: unknown[] } = { issues: [], prs: [] };
+try { foto = JSON.parse(readFileSync(guardado, 'utf8')); } catch { /* primeira vez */ }
+const [issuesAgora, prsAgora] = await Promise.all([buscar(ISSUES.replace('https://api.github.com/', ''), ISSUES), buscar(PRS.replace('https://api.github.com/', ''), PRS)]);
+if (issuesAgora) foto.issues = issuesAgora.filter((i) => !i.pull_request).map((i) => ({
+  number: i.number, title: i.title, state: i.state, body: i.body ?? '', labels: i.labels.map((l: any) => ({ name: l.name })),
+}));
+if (prsAgora) foto.prs = prsAgora.filter((p) => p.merged_at && !prsOcultos.includes(p.number)).map((p) => ({ number: p.number, title: nomesPr[p.number]?.[0] ?? p.title, merged_at: p.merged_at }));
+const texto = JSON.stringify(foto, null, 2) + '\n';
+if (issuesAgora || prsAgora) try { if (readFileSync(guardado, 'utf8') !== texto) writeFileSync(guardado, texto); } catch { try { writeFileSync(guardado, texto); } catch { /* só leitura */ } }
+const entregas = foto.issues;
+const feitos = foto.prs;
+
+/* Copy: [dobra, trecho, original, ajustada]. Os textos longos vêm dos dados,
+   para a comparação não envelhecer. */
+const semTags = (t: string) => t.replace(/<[^>]+>/g, '');
+const copy: [string, string, string, string][] = [
+  ['Hero', 'Selo', 'Revenue Operations estratégico para transformar clínicas médicas em negócios de alta performance.', hero.legenda],
+  ['Hero', 'Texto', hero.lead, 'Uma operação integrada de CRM, marketing e vendas para clínicas de alto padrão que exigem mais controle, eficiência e resultado.'],
+  ['Hero', 'Botão', 'Descubra se faz sentido para sua clínica', 'Conhecer solução'],
+  ['O que a Renke faz', 'Título', 'Nossa metodologia', 'O que a Renke faz'],
+  ['O que a Renke faz', 'Números', '~30 clínicas · 4 anos · R$42M', '+30 clínicas · +4 anos · +42M'],
+  ['Protocolo Revena', 'Apoio', '(não existia)', 'Cinco frentes. Uma operação conectada.'],
+  ...pilaresCopy.flatMap((p, i): [string, string, string, string][] => {
+    const e = pilaresEstudio[i];
+    return p.titulo === e.titulo && p.texto === e.texto ? [] : [['Protocolo Revena', `Cartão ${i + 1}`, `${p.titulo}. ${p.texto}`, `${e.titulo}. ${e.texto}`]];
+  }),
+  ['Faixa de palavras', 'Palavras', 'Controle · Automação · Processo · Experiência', 'Custo por agendamento · Taxa de comparecimento · Faturamento por canal · Retorno do paciente'],
+  ['O que muda na sua clínica', 'Título', 'Clinicamente, você sabe exatamente o que está acontecendo com seu paciente. Mas e com o seu negócio?', 'Uma operação estruturada muda a forma como sua clínica cresce.'],
+  ['O que muda na sua clínica', 'Apoio', '(não existia)', 'Dados, CRM e marketing conectados para cada etapa da jornada do paciente ser medida e melhorada.'],
+  ...perguntas.map((p, i): [string, string, string, string] => ['O que muda na sua clínica', `Pergunta ${i + 1}`, p.pergunta, `${doresRespostas[i].q} — ${doresRespostas[i].t} ${doresRespostas[i].r}`]),
+  ['Resultados', 'Apoio', '(não existia)', 'Clínicas de especialidades diferentes, com a operação estruturada pela Renke.'],
+  ['Ecossistema', 'Título', '(sem título à vista)', 'O mesmo método, em outras frentes.'],
+  ['Ecossistema', 'Rótulo do Tools', 'Tecnologia', 'Tecnologia para sua clínica'],
+].map(([a, b, c, d]) => [a, b, semTags(c), semTags(d)] as [string, string, string, string]);
+const dobrasCopy = [...new Set(copy.map((c) => c[0]))];
+
+const pilares = [
+  ['Fundo em movimento', 'Traz dinâmica e modernidade ao site e tira o peso do preto sólido.'],
+  ['Operação à vista', 'As telas mostram o trabalho da Renke como ele é, com gente real e sem número inventado.'],
+  ['Menos é mais', 'Poucos elementos por dobra, fio fino e bastante espaço vazio.'],
+  ['Amarelo só no detalhe', 'Aparece em um ícone, um rótulo ou um botão. Nunca em uma dobra inteira.'],
+  ['Animação suave', 'As entradas são lentas e em sequência, e o fundo acompanha a rolagem.'],
+];
+
+const nunca = ['Cor viva em bloco', 'Neon', 'Caixa dentro de caixa', 'Sombra pesada', 'Ilustração com cara de IA', 'Métrica inventada', 'Cara de agência'];
+
+const cores = [
+  { nome: 'Preto', hex: '#000000', papel: 'Fundo' },
+  { nome: 'Painel', hex: '#0B0B0B', papel: 'Segundo plano' },
+  { nome: 'Superfície', hex: '#111111', papel: 'Cartões' },
+  { nome: 'Grafite', hex: '#161616', papel: 'Texto sobre claro' },
+  { nome: 'Papel', hex: '#F2F2EE', papel: 'Texto' },
+  { nome: 'Cinza', hex: '#A3A39B', papel: 'Texto de apoio' },
+  { nome: 'Amarelo Renke', hex: '#FFD103', papel: 'Só detalhe' },
+  { nome: 'Amarelo', hex: '#FFE27A', papel: 'Painéis' },
+  { nome: 'Amarelo claro', hex: '#FFEBA3', papel: 'Hover' },
+];
+
+const escala = [
+  { nome: 'Título de dobra', uso: '32–56px · 300', estilo: 'font-size:clamp(2rem,3.6vw,3.5rem);font-weight:300;letter-spacing:-.035em;line-height:1.04' },
+  { nome: 'Pergunta', uso: '32–46px · 300', estilo: 'font-size:clamp(1.6rem,2.9vw,2.875rem);font-weight:300;letter-spacing:-.02em;line-height:1.1' },
+  { nome: 'Tópico', uso: '24–32px · 300', estilo: 'font-size:clamp(24px,2.1vw,32px);font-weight:300;line-height:1.1' },
+  { nome: 'Corpo', uso: '16–18px · 400', estilo: 'font-size:clamp(16px,1.25vw,18px);font-weight:400' },
+  { nome: 'Botão e rótulo', uso: '15px · 500', estilo: 'font-size:15px;font-weight:500' },
+  { nome: 'Legenda', uso: '12px · caixa alta', estilo: 'font-size:12px;letter-spacing:.09em;text-transform:uppercase' },
+];
+
+const raios = [
+  { nome: 'Botões', valor: '999px' },
+  { nome: 'Painéis', valor: '26–34px', raio: '30px' },
+  { nome: 'Campos', valor: '16px' },
+  { nome: 'Peças de cena', valor: '14px' },
+  { nome: 'Selo de ícone', valor: '12px' },
+];
+
+const medidas = [
+  ['Largura do conteúdo', '1560px'],
+  ['Laterais', '24–136px'],
+  ['Entre dobras', '72–128px'],
+  ['Entre fileiras da lista', '96–168px'],
+  ['Pergunta e resposta', '26–36px'],
+];
+
+const movimento = [
+  ['Títulos', 'Palavra por palavra · 60 ms'],
+  ['Cartões', 'Em sequência · 110 ms'],
+  ['Lista', 'Dos lados, com a rolagem'],
+  ['Cenas', 'Ciclo de 8,5 s · pulo curto'],
+  ['Fundo', 'Desde a abertura, anda com a rolagem'],
+];
+
+/* Registro: [tipo, item, nota curta]. */
+const previa = process.env.PREVIA === 'home';
+const registroCompleto = [
+  ['novo', 'Lista “O que muda na sua clínica”', 'Fileiras em zigue-zague, no lugar do trilho'],
+  ['novo', 'Resposta “Com a Renke”', 'Rótulo amarelo com selo de ícone'],
+  ['novo', 'Resultados em cases', 'Número grande e gráfico'],
+  ['novo', 'Cantos do palco dos planos', 'Lista vertical e traços'],
+  ['novo', 'Entradas das dobras', 'Títulos palavra por palavra'],
+  ['novo', 'Prévia pública da home', 'Só a home, menu travado'],
+  ['alterado', 'Tipografia', 'Inter em 300, 400 e 500'],
+  ['alterado', 'Botões', 'Todos em pílula'],
+  ['alterado', 'Formulário', 'Vidro arredondado, campos preenchidos'],
+  ['alterado', 'Contraste das cenas', 'Painel mais escuro, peças mais claras'],
+  ['alterado', 'Palco dos planos', 'Textos em diagonal'],
+  ['alterado', 'Ecossistema', 'Acabamento novo, sem números'],
+  ['alterado', 'Rodapé', 'RENKE em vidro leve'],
+  ['alterado', 'Fundo animado', 'Cena original, desde a abertura'],
+  ['alterado', 'Cenas dos painéis', 'Mais rápidas e vivas'],
+  ['sugestao', 'Licenciar os arquivos do fundo', 'Antes de publicar'],
+  ['sugestao', 'Formulário com envio próprio', 'Hoje abre e-mail ou WhatsApp'],
+  ['sugestao', 'Apagar páginas de teste', 'Laboratório e componentes antigos'],
+  ['sugestao', 'Tirar os botões antigos', 'Ainda vivem nas subpáginas'],
+  ['pendente', 'Fotos dos doutores', 'Hoje são da equipe'],
+  ['pendente', 'Fotos do ecossistema', 'Academy e Tools'],
+  ['pendente', 'Logos de clientes', 'O convite repete o da Renke'],
+  ['pendente', 'Números e textos', 'Validar cases e respostas'],
+  ['pendente', 'Subpáginas', 'Planos, Sobre e Faça parte'],
+  ['pendente', 'Logo em SVG', 'Três versões'],
+];
+const registro = previa ? registroCompleto.filter((r) => r[0] === 'novo' || r[0] === 'alterado') : registroCompleto;
+const nomesTodos: Record<string, string> = { novo: 'Adicionado', alterado: 'Alterado', sugestao: 'Sugestão', pendente: 'Falta' };
+const nomes = Object.fromEntries(Object.entries(nomesTodos).filter(([t]) => registro.some((r) => r[0] === t)));
+const conta = (t: string) => registro.filter((r) => r[0] === t).length;
+/* Na prévia pública o registro mostra só o que foi feito: o que falta está
+   nas entregas. Na versão local ficam também as sugestões e pendências. */
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Projeto do site — Renke</title>
+  <meta name="description" content="Projeto do site da Renke: conceito, evolução das entregas, copy ajustada ao layout e design system." />
+</head>
+<body class="ds">
+
+<header class="ds__topo">
+  <img src="/marca/renke-monograma.png" alt="Monograma Renke" width="44" height="44" />
+  <div>
+    <h1>Projeto do site</h1>
+    <p>Renke · atualizado em {atualizado}</p>
+  </div>
+</header>
+
+<div class="ds__grade">
+<nav class="ds__lateral" aria-label="Tópicos">
+  <p>Projeto</p>
+  <a href="#conceito">Conceito</a>
+  <a href="#evolucao">Evolução</a>
+  <a href="#mudou">O que foi feito</a>
+  <a href="#copy">Copy ajustada</a>
+  <p>Design system</p>
+  <a href="#cor">Cor</a>
+  <a href="#tipografia">Tipografia</a>
+  <a href="#forma">Forma e espaço</a>
+  <a href="#botoes">Botões</a>
+  <a href="#painel">Painel de vidro</a>
+  <a href="#resposta">Pergunta e resposta</a>
+  <a href="#campo">Formulário</a>
+  <a href="#cantos">Detalhes de canto</a>
+  <a href="#movimento">Movimento</a>
+</nav>
+
+<main class="ds__corpo">
+
+  <section class="ds__secao" id="conceito">
+    <small class="ds-olho">Conceito</small>
+    <p class="ds-conceito">O site de uma clínica de alto padrão: <strong>base preta, fundo em movimento</strong> e só o essencial em cada dobra.</p>
+    <div class="ds-pilares">
+      {pilares.map(([titulo, texto], i) => (
+        <article><small>{String(i + 1).padStart(2, '0')}</small><h3>{titulo}</h3><p>{texto}</p></article>
+      ))}
+    </div>
+    <h3>Nunca entra</h3>
+    <ul class="ds-chips">{nunca.map((n) => <li>{n}</li>)}</ul>
+  </section>
+
+  <section class="ds__secao" id="evolucao">
+    <h2>Evolução</h2>
+    <p class="ds__intro">O que já foi entregue e o que falta, desde o início do projeto, em 15 de agosto.</p>
+    <div class="ds-evo" data-entregas data-fonte={ISSUES} data-fonte-prs={PRS}>
+      <script type="application/json" set:html={JSON.stringify({ issues: entregas, prs: feitos, nomes: nomesPr, ocultos: prsOcultos }).replace(/</g, '\\u003c')}></script>
+      <div class="ds-evo__resumo">
+        <p><strong data-feitas>0</strong><span>de <b data-total>0</b> entregas</span></p>
+        <div class="ds-evo__barra" role="progressbar" aria-label="Entregas concluídas" aria-valuemin="0" aria-valuenow="0"><i></i></div>
+        <p class="ds-evo__resto"><span data-resumo></span><span class="ds-evo__legenda" aria-hidden="true"><i></i>Entregue<i></i>Fazendo</span></p>
+      </div>
+      <div class="ds-filtro" role="group" aria-label="Filtrar as entregas" data-filtro-entregas></div>
+      <div class="ds-lista" data-grupos></div>
+    </div>
+  </section>
+
+  <section class="ds__secao" id="mudou">
+    <h2>O que foi feito</h2>
+    <div class="ds-filtro" role="group" aria-label="Filtrar o registro">
+      <button type="button" data-filtro="" aria-pressed="true">Tudo <small>{registro.length}</small></button>
+      {Object.keys(nomes).map((t) => <button type="button" data-filtro={t} aria-pressed="false">{nomes[t]} <small>{conta(t)}</small></button>)}
+    </div>
+    <ul class="ds-linhas">
+      {registro.map(([tipo, item, nota]) => (
+        <li data-tipo={tipo}><span class={`ds-tag ds-tag--${tipo}`}>{nomes[tipo]}</span><strong>{item}</strong><span>{nota}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="ds__secao" id="copy">
+    <h2>Copy ajustada <span class="ds-tag ds-tag--sugestao">Sugestão</span></h2>
+    <p class="ds__intro">Onde o texto foi adaptado para caber no layout. Nada aqui é definitivo: depende da revisão da copy.</p>
+    {dobrasCopy.map((dobra) => (
+      <>
+        <h3>{dobra}</h3>
+        <ul class="ds-copy">
+          <li class="ds-copy__cabeca" aria-hidden="true"><span></span><span>Copy original</span><span>Ajustada ao layout</span></li>
+          {copy.filter((c) => c[0] === dobra).map(([, trecho, original, ajustada]) => (
+            <li><small>{trecho}</small><p data-rotulo="Copy original">{original}</p><p data-rotulo="Ajustada ao layout">{ajustada}</p></li>
+          ))}
+        </ul>
+      </>
+    ))}
+  </section>
+
+  <section class="ds__secao ds__secao--abre" id="design-system">
+    <small class="ds-olho">Design system</small>
+    <p class="ds__intro">Os fundamentos e as peças que sustentam o conceito.</p>
+  </section>
+
+  <section class="ds__secao" id="cor">
+    <h2>Cor</h2>
+    <p class="ds__intro">Base neutra. O amarelo é só detalhe.</p>
+    <div class="ds__cores">
+      {cores.map((c) => (
+        <div class="ds__cor">
+          <div class="ds__amostra" style={`background:${c.hex}`}></div>
+          <strong>{c.nome}</strong>
+          <code>{c.hex}</code>
+          <p>{c.papel}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ds__secao" id="tipografia">
+    <h2>Tipografia</h2>
+    <p class="ds__intro">Inter. Títulos em 300, corpo em 400, destaque em 500.</p>
+    <div class="ds-tipos">
+      {escala.map((e) => (
+        <div><span style={e.estilo}>Uma operação <b style="font-weight:500">estruturada</b></span><small>{e.nome} · {e.uso}</small></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="ds__secao" id="forma">
+    <h2>Forma e espaço</h2>
+    <div class="ds__formas">
+      {raios.map((r) => (
+        <div class="ds__forma" style={`border-radius:${r.raio ?? r.valor}`}><code>{r.valor}</code><small>{r.nome}</small></div>
+      ))}
+    </div>
+    <dl class="ds-ficha">{medidas.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+  </section>
+
+  <section class="ds__secao" id="botoes">
+    <h2>Botões</h2>
+    <p class="ds__intro">Todos em pílula. O amarelo aparece uma vez por tela.</p>
+    <div class="ds__demo ds__demo--escura">
+      <a class="dsh-botao dsh-botao--amarelo" href="#botoes">Conhecer solução<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></i></a>
+      <a class="dsh-botao" href="#botoes">Contato<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg></a>
+      <a class="dsh-botao dsh-botao--claro" href="#botoes">Enviar</a>
+    </div>
+    <dl class="ds-ficha">
+      <div><dt>Amarelo com seta</dt><dd>Ação principal</dd></div>
+      <div><dt>Contorno</dt><dd>Secundária e menu</dd></div>
+      <div><dt>Claro</dt><dd>Envio de formulário</dd></div>
+    </dl>
+  </section>
+
+  <section class="ds__secao" id="painel">
+    <h2>Painel de vidro</h2>
+    <p class="ds__intro">Cartões, formulário e cenas. Nunca caixa dentro de caixa.</p>
+    <div class="ds__demo ds__demo--textura">
+      <div class="dsh-painel">
+        <div class="dsh-cena">
+          <div class="dsh-bloco">
+            <div class="dsh-linha">Mídia paga<span class="dsh-chips"><b>Google</b><b>Instagram</b></span></div>
+            <div class="dsh-linha">Pacientes novos<span class="dsh-chips"><b>3</b></span></div>
+          </div>
+          <div class="dsh-resultado"><i></i><div><strong>Custo por paciente</strong><span>Calculado por canal, todo mês</span></div></div>
+        </div>
+      </div>
+    </div>
+    <dl class="ds-ficha">
+      <div><dt>Painel</dt><dd>Base escura a 92% · fio de 1px</dd></div>
+      <div><dt>Peças</dt><dd><code>#2d2d2b</code> · fio a 14%</dd></div>
+      <div><dt>Etiquetas</dt><dd><code>#414140</code></dd></div>
+      <div><dt>Resultado</dt><dd><code>#F2F2EE</code> com ponto amarelo</dd></div>
+    </dl>
+  </section>
+
+  <section class="ds__secao" id="resposta">
+    <h2>Pergunta e resposta</h2>
+    <div class="ds__demo ds__demo--escura">
+      <div class="dsh-fala">
+        <p class="dsh-pergunta">Quanto custa, de verdade, um <strong>paciente novo</strong> pra sua clínica?</p>
+        <span class="dsh-marca"><i class="dsh-selo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9h9" /><path d="M20.5 15.5A9 9 0 1 1 8.5 3.5" /></svg></i><b>Com a Renke</b></span>
+        <p class="dsh-resposta"><strong>Você passa a saber.</strong> A gente mostra o custo por paciente e o retorno de cada canal.</p>
+      </div>
+    </div>
+    <dl class="ds-ficha">
+      <div><dt>Rótulo</dt><dd>Amarelo · 500 · ícone na mesma linha</dd></div>
+      <div><dt>Selo</dt><dd>38px · vidro</dd></div>
+      <div><dt>Computador</dt><dd>Fileiras em zigue-zague</dd></div>
+      <div><dt>Celular</dt><dd>Texto em cima, painel embaixo</dd></div>
+    </dl>
+  </section>
+
+  <section class="ds__secao" id="campo">
+    <h2>Formulário</h2>
+    <div class="ds__demo ds__demo--escura">
+      <label class="dsh-campo"><span>Nome</span><input type="text" placeholder="Como podemos te chamar?" /></label>
+    </div>
+    <dl class="ds-ficha">
+      <div><dt>Campo</dt><dd>Preenchido · 16px de canto</dd></div>
+      <div><dt>Foco</dt><dd>Anel amarelo</dd></div>
+      <div><dt>Cartão</dt><dd>Painel de vidro</dd></div>
+    </dl>
+  </section>
+
+  <section class="ds__secao" id="cantos">
+    <h2>Detalhes de canto</h2>
+    <p class="ds__intro">No palco dos planos.</p>
+    <div class="ds__demo ds__demo--escura dsh-cantos">
+      <ul class="dsh-legenda"><li>Start</li><li class="dsh-atual">Full</li><li>Growth</li><li>Scale</li><li>Prime</li></ul>
+      <span class="dsh-tracos"><i></i><i class="dsh-atual"></i><i></i><i></i><i></i></span>
+    </div>
+    <dl class="ds-ficha">
+      <div><dt>Lista</dt><dd>Vertical · caixa alta · atual em contraste</dd></div>
+      <div><dt>Traços</dt><dd>14px · atual com 24px</dd></div>
+    </dl>
+  </section>
+
+  <section class="ds__secao" id="movimento">
+    <h2>Movimento</h2>
+    <p class="ds__intro">Lento e amortecido. Desliga com movimento reduzido.</p>
+    <div class="ds__demo ds__demo--escura">
+      <p class="dsh-palavras" aria-label="O que muda quando a operação tem estrutura.">
+        {'O que muda quando a operação tem estrutura.'.split(' ').map((w, i) => <span style={`--p:${i}`}>{w}&nbsp;</span>)}
+      </p>
+    </div>
+    <dl class="ds-ficha">{movimento.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+  </section>
+
+
+</main>
+</div>
+
+<footer class="ds__rodape">
+  <p>Renke · projeto do site · {atualizado}</p>
+</footer>
+
+<script is:inline>
+  (function () {
+    /* Marca na barra lateral o tópico que está na tela. */
+    var links = document.querySelectorAll('.ds__lateral a');
+    var alvos = [].map.call(links, function (a) { return document.querySelector(a.getAttribute('href')); });
+    function marcar() {
+      var atual = 0;
+      alvos.forEach(function (el, i) { if (el && el.getBoundingClientRect().top < innerHeight * .35) atual = i; });
+      links.forEach(function (a, i) { a.toggleAttribute('aria-current', i === atual); });
+    }
+    addEventListener('scroll', marcar, { passive: true }); marcar();
+
+    /* Entregas: desenha a foto do build e tenta buscar a versão de agora. */
+    var caixa = document.querySelector('[data-entregas]');
+    var areas = [['home', 'Home'], ['planos', 'Planos Revena'], ['páginas internas', 'Páginas internas']];
+    function texto(tag, t, classe) { var el = document.createElement(tag); el.textContent = t; if (classe) el.className = classe; return el; }
+    /* Lista no molde do ClickUp: grupos por área que abrem e fecham (a home
+       primeiro, é a entrega principal), colunas fixas e filtro por estado. */
+    var dados = { issues: [], prs: [], nomes: {}, ocultos: [] };
+    /* 'refino' (Fazendo): a issue tem a etiqueta `em desenvolvimento` ou já
+       tem etapa marcada. 'cliente': espera material da Renke (etiqueta
+       `conteúdo`). 'fazer': ainda não começou. */
+    var estados = [['entregue', 'Entregue'], ['refino', 'Fazendo'], ['fazer', 'A fazer'], ['cliente', 'Depende da Renke']];
+    var filtro = '';
+    function areaDe(i) {
+      for (var k = 0; k < areas.length; k++) if (i.labels.some(function (l) { return l.name === areas[k][0]; })) return areas[k][1];
+      return 'Geral';
+    }
+    function dia(d) { return new Date(d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', timeZone: 'America/Sao_Paulo' }).replace(' de ', ' ').replace('.', ''); }
+    function desenhar() {
+      var linhas = [];
+      dados.prs.filter(function (p) { return p.merged_at && (dados.ocultos || []).indexOf(p.number) < 0; }).sort(function (a, b) { return a.merged_at < b.merged_at ? -1 : 1; }).forEach(function (p) {
+        var nome = dados.nomes[p.number] || [p.title, 'Geral'];
+        var fim = dia(p.merged_at), comeco = nome[2] ? dia(nome[2]) : fim;
+        linhas.push({ estado: 'entregue', titulo: nome[0], area: nome[1], nota: '', periodo: comeco === fim ? fim : comeco + ' – ' + fim });
+      });
+      dados.issues.filter(function (i) { return !i.pull_request; }).sort(function (a, b) { return a.number - b.number; }).forEach(function (i) {
+        var marcados = (i.body.match(/^\s*[-*] \[[xX]\]/gm) || []).length;
+        var passos = marcados + (i.body.match(/^\s*[-*] \[ \]/gm) || []).length;
+        var andando = marcados > 0 || i.labels.some(function (l) { return l.name === 'em desenvolvimento'; });
+        linhas.push({
+          estado: i.state === 'closed' ? 'entregue' : i.labels.some(function (l) { return l.name === 'conteúdo'; }) ? 'cliente' : andando ? 'refino' : 'fazer', titulo: i.title, area: areaDe(i),
+          nota: i.state === 'closed' ? '' : marcados ? marcados + ' de ' + passos + ' etapas' : '',
+        });
+      });
+      if (!linhas.length) return;
+      var conta = function (e) { return linhas.filter(function (l) { return l.estado === e; }).length; };
+      var feitas = conta('entregue');
+      caixa.querySelector('[data-feitas]').textContent = feitas;
+      caixa.querySelector('[data-total]').textContent = linhas.length;
+      var barra = caixa.querySelector('.ds-evo__barra');
+      barra.setAttribute('aria-valuemax', linhas.length); barra.setAttribute('aria-valuenow', feitas);
+      barra.style.setProperty('--feito', feitas / linhas.length);
+      barra.style.setProperty('--refino', (feitas + conta('refino')) / linhas.length);
+      var partes = [];
+      estados.slice(1).forEach(function (e) {
+        var n = conta(e[0]); if (!n) return;
+        partes.push(n + ' ' + (e[0] === 'refino' ? 'fazendo agora' : e[0] === 'fazer' ? 'a fazer' : n === 1 ? 'depende da Renke' : 'dependem da Renke'));
+      });
+      caixa.querySelector('[data-resumo]').textContent = partes.join(' · ');
+
+      var barraFiltro = caixa.querySelector('[data-filtro-entregas]'); barraFiltro.textContent = '';
+      [['', 'Tudo', linhas.length]].concat(estados.map(function (e) { return [e[0], e[1], conta(e[0])]; })).forEach(function (f) {
+        if (!f[2]) return;
+        var b = texto('button', f[1] + ' '); b.type = 'button'; b.appendChild(texto('small', f[2]));
+        b.setAttribute('aria-pressed', String(filtro === f[0]));
+        b.addEventListener('click', function () { filtro = f[0]; desenhar(); });
+        barraFiltro.appendChild(b);
+      });
+
+      var grupos = caixa.querySelector('[data-grupos]'); grupos.textContent = '';
+      var cabeca = document.createElement('div'); cabeca.className = 'ds-lista__colunas'; cabeca.setAttribute('aria-hidden', 'true');
+      ['Entrega', 'Estado', 'Período'].forEach(function (c) { cabeca.appendChild(texto('span', c)); });
+      grupos.appendChild(cabeca);
+      var nomeEstado = {}; estados.forEach(function (e) { nomeEstado[e[0]] = e[1]; });
+      ['Home', 'Planos Revena', 'Páginas internas', 'Geral'].forEach(function (area) {
+        var daArea = linhas.filter(function (l) { return l.area === area; });
+        var itens = daArea.filter(function (l) { return !filtro || l.estado === filtro; });
+        if (!itens.length) return;
+        var prontas = daArea.filter(function (l) { return l.estado === 'entregue'; }).length;
+        var refino = daArea.filter(function (l) { return l.estado === 'refino'; }).length;
+        var det = document.createElement('details'); det.open = true; det.className = 'ds-lista__grupo';
+        var sum = document.createElement('summary');
+        sum.appendChild(texto('span', area, 'ds-lista__area'));
+        sum.appendChild(texto('small', prontas + (prontas === 1 ? ' entregue' : ' entregues') + (refino ? ' · ' + refino + ' fazendo' : '')));
+        var fio = document.createElement('i'); fio.className = 'ds-lista__fio';
+        fio.style.setProperty('--feito', prontas / daArea.length); fio.style.setProperty('--refino', (prontas + refino) / daArea.length);
+        sum.appendChild(fio);
+        det.appendChild(sum);
+        var ul = document.createElement('ul');
+        itens.forEach(function (l) {
+          var li = document.createElement('li'); li.className = 'ds-lista__linha--' + l.estado;
+          var nome = texto('strong', l.titulo); nome.insertBefore(document.createElement('i'), nome.firstChild);
+          li.appendChild(nome); li.appendChild(texto('span', nomeEstado[l.estado] + (l.nota ? ' · ' + l.nota : ''))); li.appendChild(texto('span', l.periodo || ''));
+          ul.appendChild(li);
+        });
+        det.appendChild(ul); grupos.appendChild(det);
+      });
+    }
+    function buscar(url, chave) {
+      return fetch(url, { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { if (j) { dados[chave] = j; desenhar(); } }).catch(function () {});
+    }
+    if (caixa) {
+      try { dados = JSON.parse(caixa.querySelector('script').textContent); desenhar(); } catch (e) {}
+      buscar(caixa.dataset.fonte, 'issues'); buscar(caixa.dataset.fontePrs, 'prs');
+    }
+
+    /* Filtro do registro. */
+    var botoes = document.querySelectorAll('#mudou .ds-filtro button');
+    var linhas = document.querySelectorAll('#mudou .ds-linhas li');
+    botoes.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = b.dataset.filtro;
+        botoes.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        linhas.forEach(function (l) { l.hidden = !!f && l.dataset.tipo !== f; });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

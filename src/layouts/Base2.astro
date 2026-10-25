@@ -29,15 +29,57 @@ interface Props {
   classe?: string;
 }
 const { titulo, descricao, noindex = false, classe } = Astro.props;
+/**
+ * Prévia só da home (11/10/2026): com `PREVIA=home` no build, o visitante vê
+ * o site inteiro da home — menu abrindo, âncoras, formulário — mas os links
+ * que levam a outras páginas ficam travados, com o aviso "Em breve".
+ *   PREVIA=home npm run build
+ */
+const previaHome = process.env.PREVIA === 'home';
+const cssPrevia = `
+[data-previa] a[data-travado] { cursor: not-allowed; }
+.previa-aviso { position: fixed; z-index: 2000; left: 50%; bottom: 28px; translate: -50% 12px; padding: 10px 16px; border-radius: 999px; background: #F2F2EE; color: #161616; font: 500 14px/1.2 Inter, system-ui, sans-serif; white-space: nowrap; box-shadow: 0 16px 32px -12px rgb(0 0 0 / .6); opacity: 0; pointer-events: none; transition: opacity .3s ease, translate .3s ease; }
+.previa-aviso[data-on] { opacity: 1; translate: -50% 0; }
+`;
+/* Trava os links para outras páginas. Âncoras da própria home, e-mail,
+   telefone e sites de fora continuam funcionando; "Contato" leva ao
+   formulário da home. */
+const jsPrevia = `(function () {
+  var caminho = function (a) { return (a.getAttribute('href') || '').split('#')[0].replace(/[/]$/, ''); };
+  var externa = function (a) { var h = a.getAttribute('href') || ''; return !h || h[0] === '#' || /^(mailto:|tel:|https?:|[/][/])/i.test(h); };
+  var contato = function (a) { return !externa(a) && caminho(a) === '/contato'; };
+  var interna = function (a) { return !externa(a) && caminho(a) !== '' && !contato(a); };
+  var aviso, relogio;
+  var avisar = function () {
+    if (!aviso) { aviso = document.createElement('div'); aviso.className = 'previa-aviso'; aviso.setAttribute('role', 'status'); aviso.textContent = 'Esta página fica disponível em breve.'; document.body.appendChild(aviso); }
+    aviso.setAttribute('data-on', '');
+    clearTimeout(relogio);
+    relogio = setTimeout(function () { aviso.removeAttribute('data-on'); }, 2200);
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      if (interna(a)) { a.setAttribute('data-travado', ''); a.setAttribute('aria-disabled', 'true'); a.setAttribute('title', 'Em breve'); }
+    });
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (interna(a)) { e.preventDefault(); e.stopImmediatePropagation(); avisar(); return; }
+    var id = contato(a) ? 'formulario' : (h.indexOf('/#') === 0 ? h.slice(2) : '');
+    var alvo = id && document.getElementById(id);
+    if (alvo) { e.preventDefault(); e.stopImmediatePropagation(); alvo.scrollIntoView({ behavior: 'smooth' }); }
+  }, true);
+})();`;
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-previa={previaHome ? 'home' : undefined}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{titulo}</title>
   <meta name="description" content={descricao} />
-  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  {(noindex || previaHome) && <meta name="robots" content="noindex, nofollow" />}
   <link rel="preload" href={interLatina} as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="/marca/renke-monograma.png" type="image/png" />
   <script is:inline>
@@ -45,6 +87,8 @@ const { titulo, descricao, noindex = false, classe } = Astro.props;
        esconde o que vai entrar animado. Sem JS, tudo nasce visível. */
     document.documentElement.classList.add('js');
   </script>
+  {previaHome && <style is:inline set:html={cssPrevia} />}
+  {previaHome && <script is:inline set:html={jsPrevia} />}
 </head>
 <body class={classe}>
   <slot name="fundo" />
@@ -55,6 +99,33 @@ const { titulo, descricao, noindex = false, classe } = Astro.props;
   <Footer />
 
   <script>
+    /* Títulos das dobras da home entram palavra por palavra (11/10/2026,
+       referência enviada pela Lenora, em versão contida): cada palavra vira
+       um span com a sua ordem em --p; o CSS (movimento.css) faz o resto. O
+       texto lido por leitor de tela não muda. */
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll<HTMLElement>('.home-refinada .entra h2').forEach((titulo) => {
+        let ordem = 0;
+        const textos: Text[] = [];
+        const caminha = document.createTreeWalker(titulo, NodeFilter.SHOW_TEXT);
+        while (caminha.nextNode()) textos.push(caminha.currentNode as Text);
+        for (const texto of textos) {
+          if (!texto.data.trim()) continue;
+          const pedaco = document.createDocumentFragment();
+          for (const parte of texto.data.split(/(\s+)/)) {
+            if (!parte.trim()) { pedaco.append(parte); continue; }
+            const palavra = document.createElement('span');
+            palavra.className = 'palavra';
+            palavra.style.setProperty('--p', String(ordem++));
+            palavra.textContent = parte;
+            pedaco.append(palavra);
+          }
+          texto.replaceWith(pedaco);
+        }
+        titulo.dataset.palavras = String(ordem);
+      });
+    }
+
     /* Revela os blocos conforme entram na viewport. */
     const alvos = document.querySelectorAll('.entra');
     if (alvos.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {

@@ -9,3 +9,6 @@ dist-artifact/
 dist-copy/
 dist-publico/
 dist-unico/
+
+# Build da prévia só da home (PREVIA=home)
+dist-previa/

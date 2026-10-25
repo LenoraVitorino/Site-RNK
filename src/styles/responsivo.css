@@ -48,3 +48,107 @@
 @media (max-height: 480px) and (orientation: landscape) {
   :root:root .header .nav { padding-bottom: 24px; }
 }
+
+/* Planos no celular e no tablet (12/10/2026, Lenora): como no palco do
+   desktop, a mão com o símbolo e o nome do plano ficam no meio da tela, e as
+   dobras se empilham — cada plano fica preso e o seguinte sobe por cima dele.
+   O `top` de cada dobra vem do script do palco (dobra mais alta que a tela
+   rola até o fim antes de prender). */
+@media (max-width: 899.98px) {
+  :root:root .palcoplanos:not([data-animado]) .palcoplanos__fixo { overflow: visible; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco {
+    position: sticky; top: var(--pilha-topo, 0px);
+    display: grid; align-content: center; justify-items: center;
+    min-height: 100svh; padding-block: calc(var(--altura-header, 72px) + 24px) 40px;
+    border-top: 0; text-align: center;
+    box-shadow: 0 -28px 56px -20px rgb(0 0 0 / .7);
+  }
+  /* O quadro da foto tem sobra vazia em cima (a agulha começa a ~18% da
+     altura) e um pouco embaixo: as margens negativas tiram essa sobra, para
+     o respiro acima do símbolo e entre ele e o texto ser o que se vê. */
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__imagem { width: 100%; margin-block: calc(var(--simbolo) * -.14) calc(var(--simbolo) * -.04); }
+  /* O símbolo grande e o nome do plano por cima dele, em diagonal, como no
+     palco do desktop: "Revena" à esquerda e o nome do plano começando onde
+     "Revena" termina. O nome sobe até o meio do símbolo com margem negativa
+     e devolve o espaço embaixo, para o texto seguir normal depois da imagem. */
+  :root:root .palcoplanos:not([data-animado]) .plano-palco { --simbolo: min(88vw, 400px); }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__icone-mob { width: var(--simbolo); margin: 0 auto 20px; }
+  :root:root:not([data-planos-tema="claro"]) .palcoplanos:not([data-animado]) .plano-editorial { left: 50%; transform: translateX(-50%); width: var(--simbolo); height: var(--simbolo); }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome--pilha {
+    justify-items: start; width: fit-content; max-width: none;
+    margin: calc(var(--simbolo) * -.46 - .92em - 20px) auto calc(var(--simbolo) * .46 - .92em - 2px);
+    font-size: min(16vw, 76px); line-height: .92; text-align: left; white-space: nowrap;
+  }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__info { justify-items: center; margin-inline: auto; text-align: center; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__a { justify-self: start; margin: 0; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__nome__b { justify-self: start; margin: 0 0 0 2.6em; }
+  :root:root .palcoplanos:not([data-animado]) .plano-palco__texto { justify-items: center; text-align: center; }
+  :root:root .palcoplanos:not([data-animado]) :is(.plano-palco__fala, .plano-palco__frase) { max-width: 34ch; margin-inline: auto; }
+}
+@media (max-width: 899.98px) and (prefers-reduced-motion: reduce) {
+  :root:root .palcoplanos:not([data-animado]) .plano-palco { position: relative; top: auto; min-height: 0; box-shadow: none; }
+}
+
+/* Palco animado dos planos no celular e no tablet (12/10/2026, Lenora: "pega
+   exatamente o que está no desktop"). O mesmo palco preso, com o símbolo se
+   montando a cada plano e a dobra seguinte subindo por cima; muda só a
+   diagramação: o símbolo grande e o nome no alto do meio, e a fala, o texto
+   e o botão centrados embaixo. A pilha acima fica para movimento reduzido. */
+@media (max-width: 899.98px) {
+  :root:root .palcoplanos[data-animado] { --palco-simbolo: min(132vw, 66svh); --palco-centro: 31svh; }   /* 31% da altura: o símbolo sobe e sobra respiro entre a mão e o texto */
+  /* Centrado por margem, não por transform: o script do palco escreve o transform do símbolo. */
+  :root:root .palcoplanos[data-animado] .palcoplanos__icones { display: block; }
+  :root:root .palcoplanos[data-animado] .plano-palco__icone { position: absolute; left: 50%; top: var(--palco-centro); width: var(--palco-simbolo); height: var(--palco-simbolo); margin: calc(var(--palco-simbolo) / -2) 0 0 calc(var(--palco-simbolo) / -2); }
+  :root:root:not([data-planos-tema="claro"]) .palcoplanos[data-animado] .plano-editorial { top: var(--palco-centro); width: var(--palco-simbolo); height: var(--palco-simbolo); }
+  :root:root .palcoplanos[data-animado] .plano-palco__nome { top: var(--palco-centro); width: 80vw; font-size: 18vw; }
+  :root:root .palcoplanos[data-animado] .plano-palco__texto {
+    left: var(--gutter); right: var(--gutter); top: auto; bottom: max(68px, env(safe-area-inset-bottom) + 44px); width: auto;   /* o botão longe da borda: a barra do navegador do celular cobre o pé da tela */
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 14px; justify-items: center; align-content: end; text-align: center;
+  }
+  :root:root .palcoplanos[data-animado] .plano-palco__texto > * { grid-row: auto; grid-column: 1; }
+  :root:root .palcoplanos[data-animado] :is(.plano-palco__legenda, .plano-palco__tracos) { display: none; }
+  :root:root .palcoplanos[data-animado] .plano-palco__momento-rotulo { display: block; }
+  :root:root .palcoplanos[data-animado] .plano-palco__fala { align-self: auto; max-width: 30ch; font-size: clamp(18px, 5vw, 22px); line-height: 1.28; }
+  :root:root .palcoplanos[data-animado] .plano-palco__acao { grid-column: 1; align-self: auto; justify-items: center; gap: 16px; }
+  :root:root .palcoplanos[data-animado] .plano-palco__frase { max-width: 36ch; font-size: 15px; }
+  :root:root .palcoplanos[data-animado] .plano-palco__texto strong { white-space: normal; }
+  :root:root .palcoplanos[data-animado] .plano-palco__link { inset: 12% 8% 46% 8%; }
+}
+
+/* Hero no celular (12/10/2026, Lenora: "tá tudo muito junto"; os doutores
+   mais perto da caixa seguinte). A hero ocupa a tela até a caixa de baixo
+   começar a aparecer, e a sobra se reparte entre selo, título, subtítulo com
+   botão e doutores; antes ela ficava toda abaixo dos doutores. */
+@media (max-width: 599.98px) {
+  :root:root .hero--editorial:has(.hero__mensagem) .hero__grade { padding-bottom: 0; }
+  :root:root .hero--editorial:has(.hero__mensagem) .hero__palco { min-height: min(100svh - 212px, 660px); align-content: space-between; gap: 40px; padding-bottom: 0; }
+  :root:root .hero--editorial:has(.hero__mensagem) .hero__apoio { gap: 32px; }
+}
+
+/* Títulos das dobras no celular (12/10/2026, Lenora: "achei muito pequeno no
+   mobile"). Os H2 estavam entre 30 e 35px a 375px; passam a 39px (10,4vw),
+   iguais em todas as páginas. Subtítulos, apoios e H3 não mudam. */
+@media (max-width: 599.98px) {
+  :root:root h2:is(.titulo, .ancora, .ed-titulo, .oqf__titulo) { font-size: clamp(33px, 10.4vw, 44px); line-height: 1.06; }
+  :root:root .palcoplanos__manifesto { font-size: clamp(28px, 8.6vw, 36px); }
+  /* :not(#_) dá peso de id: estes dois têm regra própria com id na frente. */
+  :root:root h2.ancora:not(#_) { font-size: clamp(33px, 10.4vw, 44px); line-height: 1.06; }
+  :root:root h1.titulo:not(#_) { font-size: clamp(42px, 12.6vw, 54px); }
+  :root:root .chamada__miolo .titulo { max-width: none; }
+}
+/* Tela baixa: o símbolo um pouco menor, para a mão não entrar no texto que subiu. */
+@media (max-width: 899.98px) and (max-height: 700px) {
+  :root:root .palcoplanos[data-animado] { --palco-simbolo: min(132vw, 58svh); }
+}
+
+/* Selo dos doutores no celular (12/10/2026): "confiam na gente" quebrava em
+   duas linhas e a legenda ficava com três. A frase não quebra mais, e o
+   bloco não desce para baixo dos retratos: em tela estreita o vão e os
+   retratos cedem um pouco. */
+@media (max-width: 599.98px) {
+  :root:root .hero-prova { flex-wrap: nowrap; gap: clamp(10px, 3.6vw, 20px); }
+  :root:root .hero-prova__retratos { flex: 0 1 auto; min-width: 0; }
+  :root:root .hero-prova__legenda { flex: none; }
+  :root:root .hero-prova__legenda span strong { white-space: nowrap; }
+}
+@media (max-width: 359.98px) { :root:root .hero-prova__retratos { zoom: .78; } }

@@ -11,7 +11,7 @@
  */
 
 .botao { border-radius: 999px; }
-.header .header__acao .botao { border-radius: 12px; }
+.header .header__acao .botao { border-radius: 999px; }
 
 /* A seta num círculo. */
 a.botao:has(.botao__icone):not(.header__acao *) { padding: 7px 7px 7px 26px; gap: 0; }

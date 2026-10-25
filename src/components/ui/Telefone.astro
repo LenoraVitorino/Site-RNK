@@ -23,6 +23,12 @@ const video = slot.video!;
       >
         {video.arquivos.map((a) => <source src={a.src} type={a.tipo} />)}
       </video>
+      <!-- Convite para ouvir (12/10/2026): o navegador só libera o som depois
+           de um toque ou clique de verdade. Enquanto o vídeo roda mudo, ele
+           inteiro é um botão: um toque liga o som e volta ao começo da fala. -->
+      <button class="tel__ouvir" type="button" data-tel-ouvir hidden>
+        <span class="tel__ouvir-pilula"><Icone nome="Volume2" class="tel__icone" size={18} />Ouvir com som</span>
+      </button>
       <!-- Controles só com ícone, no topo do vídeo. O texto vive no aria-label. -->
       <div class="tel__controles">
         <button class="tel__botao" type="button" data-tel-som aria-pressed="false" aria-label="Ativar som">
@@ -44,7 +50,10 @@ const video = slot.video!;
     const video = raiz.querySelector<HTMLVideoElement>('[data-tel-video]')!;
     const toque = raiz.querySelector<HTMLButtonElement>('[data-tel-toque]')!;
     const som = raiz.querySelector<HTMLButtonElement>('[data-tel-som]')!;
+    const ouvir = raiz.querySelector<HTMLButtonElement>('[data-tel-ouvir]');
     let pausadoPeloUsuario = false;
+    // Se a pessoa desligou o som no botão, ele não volta sozinho.
+    let somDesligadoPeloUsuario = false;
 
     const marcar = () => {
       toque.setAttribute('aria-label', video.paused ? 'Tocar vídeo' : 'Pausar vídeo');
@@ -55,23 +64,88 @@ const video = slot.video!;
     marcar();
 
     const tocar = () => video.play().catch(() => {});
+    // O botão de som sempre mostra o estado real do vídeo.
+    const refletirSom = () => {
+      som.setAttribute('aria-pressed', String(!video.muted));
+      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
+      raiz.classList.toggle('tel--com-som', !video.muted);
+      // O convite aparece enquanto o vídeo está mudo sem a pessoa ter escolhido isso.
+      if (ouvir) ouvir.hidden = !video.muted || somDesligadoPeloUsuario || reduzido.matches;
+    };
     toque.addEventListener('click', () => {
       if (video.paused) { pausadoPeloUsuario = false; tocar(); }
       else { pausadoPeloUsuario = true; video.pause(); }
     });
     som.addEventListener('click', () => {
       video.muted = !video.muted;
-      som.setAttribute('aria-pressed', String(!video.muted));
-      som.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desligar som');
-      raiz.classList.toggle('tel--com-som', !video.muted);
+      somDesligadoPeloUsuario = video.muted;
+      refletirSom();
       if (!video.muted && video.paused) { pausadoPeloUsuario = false; tocar(); }
     });
 
+    const ligarSom = () => {
+      pausadoPeloUsuario = false; somDesligadoPeloUsuario = false;
+      video.currentTime = 0; video.muted = false; refletirSom(); tocar();
+    };
+    ouvir?.addEventListener('click', ligarSom);
+
+    /* No desktop o convite acompanha o cursor pela dobra inteira, como o "Ver
+       o plano" do palco dos planos (Lenora, 12/10/2026): um clique em qualquer
+       ponto da dobra liga o som. A pílula fixa do vídeo fica para o toque. */
+    const dobra = raiz.closest<HTMLElement>('section');
+    let dobraClicavel = false;
+    if (dobra && !reduzido.matches && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      dobraClicavel = true;
+      const etiqueta = document.createElement('span');
+      etiqueta.className = 'tel-cursor';
+      etiqueta.setAttribute('aria-hidden', 'true');
+      etiqueta.innerHTML = '<svg viewBox="0 0 24 24" focusable="false"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>Ouvir com som';
+      document.body.appendChild(etiqueta);
+      const convida = () => video.muted && !somDesligadoPeloUsuario;
+      const fora = (alvo: EventTarget | null) => !!(alvo as HTMLElement | null)?.closest?.('.tel__controles, a, input, textarea, select, button:not([data-tel-ouvir])');
+      const esconder = () => { etiqueta.classList.remove('tel-cursor--on'); dobra.classList.remove('tel-dobra--convite'); raiz.classList.remove('tel--cursor'); };
+      dobra.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse' || !convida() || fora(e.target)) return esconder();
+        etiqueta.style.transform = `translate(${e.clientX + 18}px, ${e.clientY + 18}px)`;
+        etiqueta.classList.add('tel-cursor--on'); dobra.classList.add('tel-dobra--convite'); raiz.classList.add('tel--cursor');
+      });
+      dobra.addEventListener('pointerleave', esconder);
+      addEventListener('scroll', esconder, { passive: true });
+      dobra.addEventListener('click', (e) => {
+        if (!convida() || fora(e.target) || (e.target as HTMLElement).closest('[data-tel-ouvir]')) return;
+        ligarSom(); esconder();
+      });
+      video.addEventListener('volumechange', () => { if (!convida()) esconder(); });
+    }
+
     if (reduzido.matches) return;
+    refletirSom();
+    /* Som ligado enquanto o vídeo está na tela e desligado quando sai dela
+       (Lenora, 12/10/2026). O navegador só deixa um vídeo tocar com som
+       depois que a pessoa tocou ou clicou em algum ponto da página; rolar não
+       conta. Por isso: tenta com som; se o navegador recusar, toca mudo e
+       liga o som no primeiro toque ou clique, se o vídeo ainda estiver na
+       tela. */
+    let naTela = false;
+    const comSom = () => {
+      if (somDesligadoPeloUsuario || pausadoPeloUsuario) return tocar();
+      video.muted = false;
+      return video.play().then(refletirSom).catch(() => { video.muted = true; refletirSom(); return tocar(); });
+    };
+    const primeiroGesto = (e: Event) => {
+      // Dentro da dobra o clique é do convite (liga o som e volta ao começo).
+      if (dobraClicavel && dobra!.contains(e.target as Node)) return;
+      if (naTela && video.muted && !somDesligadoPeloUsuario && !pausadoPeloUsuario) comSom();
+    };
+    for (const evento of ['pointerup', 'keydown', 'touchend']) addEventListener(evento, primeiroGesto, { passive: true });
     new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) { if (!pausadoPeloUsuario) tocar(); }
-        else if (!video.paused) video.pause();
+        naTela = e.isIntersecting;
+        if (naTela) { if (!pausadoPeloUsuario) comSom(); }
+        else {
+          if (!video.paused) video.pause();
+          if (!video.muted) { video.muted = true; refletirSom(); }
+        }
       },
       { threshold: 0.55 },
     ).observe(video);

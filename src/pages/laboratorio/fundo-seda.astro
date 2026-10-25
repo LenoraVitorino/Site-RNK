@@ -1,0 +1,50 @@
+---
+/**
+ * Home v2 — direção visual aprovada em 11/09/2026, estrutura de dobras
+ * extraída das referências. Ver docs/04-design/home-v2-estrutura.md.
+ * Os componentes antigos (src/components/home/) ficam até a v2 ser aprovada.
+ * Faixa.astro e Esteira.astro estão fora da página por ora (a esteira
+ * volta quando houver fotos e depoimentos); os logos vivem na barra do pé
+ * da hero.
+ */
+import Base2 from '../../layouts/Base2.astro';
+import FundoVivo from '../../components/laboratorio/FundoVivo.astro';
+import { seo } from '../../data/home';
+
+import Hero from '../../components/home2/Hero.astro';
+import OQueFaz from '../../components/home2/OQueFaz.astro';
+import Protocolos from '../../components/home2/Protocolos.astro';
+import Letreiro from '../../components/home2/Letreiro.astro';
+import PlanosPalco from '../../components/home2/PlanosPalco.astro';
+import Planos from '../../components/home2/Planos.astro';
+import PerguntasTrilho from '../../components/home2/PerguntasTrilho.astro';
+import ResultadosCases from '../../components/home2/ResultadosCases.astro';
+import CtaFinal from '../../components/home2/CtaFinal.astro';
+import AcademyTools from '../../components/home2/AcademyTools.astro';
+import Formulario from '../../components/home2/Formulario.astro';
+
+import { copyLiteral } from '../../data/versao';
+---
+{/* TESTE do fundo próprio "seda" (11/10): a home inteira, igual, só com o fundo novo. */}
+<Base2 titulo={seo.titulo} descricao={seo.descricao} classe="home-refinada" noindex>
+
+  <FundoVivo slot="fundo" fundo="seda" />
+  <Hero />
+  <OQueFaz />
+  {/* O que a Renke entrega na prática, logo depois da metodologia (Lenora,
+      21/09): os cinco pilares da copy, em cartões percorridos pelo scroll. */}
+  <Protocolos />
+  <Letreiro />
+  {!copyLiteral && <PlanosPalco />}
+  {copyLiteral && <Planos />}
+  {/* 10/10/2026: as duas dobras na versão testada no laboratório, para ver
+      aplicadas na home: "O que muda na sua clínica" em lista (fileiras que
+      acendem com a rolagem) e os resultados como cases de números grandes.
+      Perguntas.astro e Resultados.astro ficam até a aprovação. */}
+  <PerguntasTrilho modo="lista" />
+  <ResultadosCases />
+  <CtaFinal />
+  <AcademyTools />
+  {/* Conheça a Renke saiu da página (Lenora, 26/09: "tira, depois vemos o que fazer"). */}
+  <Formulario />
+</Base2>

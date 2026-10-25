@@ -1,16 +1,27 @@
 ---
+import { Image } from 'astro:assets';
 import { doutores, totalDoutores } from '../../data/doutores';
+import isa from '../../assets/equipe/isa.jpg';
+import lari from '../../assets/equipe/lari.jpg';
+import julio from '../../assets/equipe/julio-caldeira.jpg';
+import maria from '../../assets/equipe/maria.jpg';
+import pedro from '../../assets/equipe/pedro-packness.jpg';
+import milena from '../../assets/equipe/milena.jpg';
+// PROVISÓRIO (Lenora, 10/10): enquanto não há fotos dos doutores, os lugares
+// vazios levam fotos da equipe, só para preencher. Trocar antes de publicar.
+const provisorias = [isa, julio, lari, pedro, maria, milena];
 const retratos = Array.from({ length: 6 }, (_, i) => doutores[i] ?? null);
 const numero = totalDoutores?.toLocaleString('pt-BR');
 ---
 <div class="hero-prova">
   <ul class="hero-prova__retratos" aria-label="Retratos dos doutores">
-    {retratos.map((doutor) => (
-      <li class:list={['hero-prova__retrato', !doutor?.foto && 'hero-prova__retrato--vazio']} tabindex={doutor ? '0' : undefined} aria-label={doutor ? `${doutor.nome}, ${doutor.especialidade}` : undefined} aria-hidden={!doutor ? 'true' : undefined}>
+    {retratos.map((doutor, i) => (
+      <li class:list={['hero-prova__retrato', !doutor?.foto && !provisorias[i] && 'hero-prova__retrato--vazio']} tabindex={doutor ? '0' : undefined} aria-label={doutor ? `${doutor.nome}, ${doutor.especialidade}` : undefined} aria-hidden={!doutor ? 'true' : undefined}>
         {doutor && <>
           {doutor.foto && <img src={doutor.foto} alt="" width="56" height="56" />}
           <span class="hero-prova__tooltip" aria-hidden="true"><strong>{doutor.nome}</strong><span>{doutor.especialidade}</span></span>
         </>}
+        {!doutor?.foto && provisorias[i] && <Image src={provisorias[i]} alt="" width={112} height={112} format="webp" quality={80} />}
       </li>
     ))}
   </ul>

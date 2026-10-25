@@ -1,0 +1,351 @@
+{
+  "issues": [
+    {
+      "number": 30,
+      "title": "Corrigir os bugs da versão para celular",
+      "state": "open",
+      "body": "**O que é:** corrigir os problemas de layout e de comportamento que aparecem no celular.\n\n**Onde aparece:** em todo o site, a começar pela home.\n\n**O que conta como pronto:**\n- [ ] Home conferida e corrigida no celular\n- [ ] Páginas dos planos conferidas e corrigidas no celular\n- [ ] Demais páginas conferidas e corrigidas no celular\n- [ ] As duas versões de copy com o mesmo resultado\n\n**De quem depende:** da equipe do site.\n\n**Em aberto:** a lista dos bugs encontrados ainda não foi registrada aqui.",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "bloqueia entrega"
+        },
+        {
+          "name": "celular"
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "title": "Solicitar os logos dos principais clientes e cases",
+      "state": "open",
+      "body": "## O que é\nPedir os logos dos principais clientes e cases da Renke. **É um pedido de material a terceiros, não uma tarefa de código.** A troca no site só acontece depois que o material chegar.\n\n## Onde aparece no site\nNa home, na dobra final de chamada (\"Limitado a 1 nova clínica por mês\"), numa grade de oito logos.\n\n## Estado hoje\nOs oito espaços da grade mostram o logo da própria Renke, só para marcar lugar. Nenhum cliente aparece com nome no site. Os cases da dobra \"Resultados\" da home são identificados só pela especialidade:\n- Dermatologia\n- Otorrino\n- Cirurgia plástica\n- Nutrologia\n- Tricologia\n\n## O que conta como pronto\n- [ ] Lista dos clientes que entram definida\n- [ ] Logos recebidos em vetor (SVG) ou PNG com fundo transparente\n- [ ] Autorização de uso da marca de cada cliente\n- [ ] Logos reais no lugar dos provisórios na grade\n\n## Em aberto\n- A definir com a Lenora: quais clientes entram e quantos (a grade hoje tem oito espaços).\n\n## Atenção\nRepositório público: não listar aqui o nome dos clientes antes da autorização de cada um. A lista circula fora do GitHub.\n\n## De quem depende\nLenora e time da Renke, para pedir o material aos clientes.\n",
+      "labels": [
+        {
+          "name": "home"
+        },
+        {
+          "name": "conteúdo"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "title": "Solicitar as fotos dos doutores para a hero da home",
+      "state": "open",
+      "body": "## O que é\nPedir as fotos reais dos doutores que aparecem na home. **É um pedido de material a terceiros, não uma tarefa de código.** A troca das fotos no site só acontece depois que o material chegar.\n\n## Onde aparece no site\nNa primeira dobra da home (hero), no selo \"Doutores que confiam na gente\": uma fileira de retratos redondos que mostram nome e especialidade ao passar o mouse, ao lado do número de doutores.\n\n## Estado hoje\nO selo tem seis lugares, preenchidos com fotos provisórias da equipe da Renke. Os nomes e as especialidades são de exemplo, e o número de doutores (\"+ de ...\") não está definido. Nada disso pode ir ao ar assim.\n\n## O que conta como pronto\n- [ ] Fotos dos doutores recebidas, em boa resolução\n- [ ] Nome e especialidade de cada doutor\n- [ ] Autorização de uso de imagem de cada um\n- [ ] Número oficial de doutores definido\n- [ ] Fotos provisórias da equipe trocadas pelas reais no selo\n\n## Em aberto\n- A definir com a Lenora: quantas fotos entram (hoje o selo tem seis lugares).\n- A definir com a Lenora: o número oficial para o \"+ de ...\".\n\n## Atenção\nRepositório público: não colocar aqui nome, foto ou contato de ninguém. O material circula fora do GitHub.\n\n## De quem depende\nLenora e time da Renke, para pedir o material aos doutores.\n",
+      "labels": [
+        {
+          "name": "home"
+        },
+        {
+          "name": "conteúdo"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "title": "Refinar as fotos da página Sobre",
+      "state": "open",
+      "body": "## O que é\nRefinar as fotos da página Sobre.\n\n## Onde aparece no site\nPágina `/sobre`, em todas as dobras com foto.\n\n## Estado hoje\nA página usa seis fotos, todas da sede: o salão com o time (capa), a parede amarela com o neon, a sala de reunião de vidro, o salão com a faixa amarela, a área do café e o nicho do sofá. Não há retratos de pessoas nesta página.\n\n## O que conta como pronto\n- [ ] Definido o que muda nas fotos (ver \"Em aberto\")\n- [ ] Fotos ajustadas ou trocadas em todas as dobras\n- [ ] Conferida no computador e no celular\n- [ ] Aprovada pela Lenora\n\n## Em aberto\n- A definir com a Lenora: o que é \"refinar\" aqui. Trocar por fotos novas, ajustar recorte e tratamento das atuais, ou incluir fotos de pessoas.\n- A definir com a Lenora: se as pendências de foto da página Faça parte entram nesta issue ou em outra.\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nLenora (decisão, escolha das fotos e aprovação).\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "title": "Criar a galeria de materiais das páginas da Academy",
+      "state": "open",
+      "body": "## O que é\nCriar uma galeria para mostrar os materiais dos cursos da Academy (telas das aulas, apostilas, modelos e afins). Hoje as páginas dos cursos não mostram nada do material, e isso faz falta.\n\n## Onde aparece no site\nNas cinco páginas de curso da Academy: Protocolo Renke, Formação Performa, Treinamento de CRM, Rastreamento Avançado e Cultura Pro.\n\n## Estado hoje\nA galeria não existe em nenhuma página do site. As cinco páginas da Academy usam o mesmo molde e não têm nenhuma imagem.\n\n## O que conta como pronto\n- [ ] Desenho da galeria aprovado pela Lenora\n- [ ] Galeria disponível para as cinco páginas de curso\n- [ ] Funciona igual nas duas versões de copy (`VERSAO=copy` e `estudio`)\n- [ ] Conferida no celular\n\nPreencher a galeria com o material de cada curso é item da issue de cada página.\n\n## Em aberto\n- A definir com a Lenora: se a página de visão geral da Academy (`/academy`) também recebe a galeria.\n\n## Regras que valem aqui\n- Padrão visual \"alto padrão, menos é mais\".\n- Mudança de layout vale para as duas versões de copy.\n\n## De quem depende\nAprovação da Lenora para o desenho; materiais dos cursos com quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "title": "Fechar a página do Cultura Pro: hero, dobras, depoimentos e galeria",
+      "state": "open",
+      "body": "## O que é\nDeixar a página **Cultura Pro** (Renke Academy, para agências) pronta para publicar: hero, dobras, depoimentos e galeria dos materiais.\n\n## Onde aparece no site\nPágina do curso, em `/academy/cultura-pro` (menu \"Para Agências\").\n\n## Estado hoje\nHero só com texto (nome, frase e botão \"Fale com a equipe\"), sem imagem. Dobras: \"Para quem busca\", \"O que você aprende\", \"Conteúdo para aplicar na operação\", \"O que muda quando a cultura é estruturada\", uma faixa de números e \"Um método construído na prática\". Nenhuma imagem, galeria ou depoimento na página.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste curso no ar\n- [ ] Galeria preenchida com os materiais deste curso (a peça da galeria é a issue \"Criar a galeria de materiais das páginas da Academy\")\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n- As cinco páginas da Academy usam o mesmo molde: o que mudar no desenho de uma muda nas outras.\n\n## De quem depende\nAprovação da Lenora. Depoimentos e materiais do curso dependem de quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "title": "Fechar a página do Rastreamento Avançado: hero, dobras, depoimentos e galeria",
+      "state": "open",
+      "body": "## O que é\nDeixar a página **Rastreamento Avançado** (Renke Academy, para agências) pronta para publicar: hero, dobras, depoimentos e galeria dos materiais.\n\n## Onde aparece no site\nPágina do curso, em `/academy/rastreamento-avancado` (menu \"Para Agências\").\n\n## Estado hoje\nHero só com texto (nome, frase e botão \"Fale com a equipe\"), sem imagem. Dobras: \"Para agências que buscam\", \"O que você recebe\", \"Três passos até a entrega\", \"O que muda quando a origem passa a ser rastreável\" e \"Desenvolvido na prática\". Nenhuma imagem, galeria ou depoimento na página.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste curso no ar\n- [ ] Galeria preenchida com os materiais deste curso (a peça da galeria é a issue \"Criar a galeria de materiais das páginas da Academy\")\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n- As cinco páginas da Academy usam o mesmo molde: o que mudar no desenho de uma muda nas outras.\n\n## De quem depende\nAprovação da Lenora. Depoimentos e materiais do curso dependem de quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "title": "Fechar a página do Treinamento de CRM: hero, dobras, depoimentos e galeria",
+      "state": "open",
+      "body": "## O que é\nDeixar a página **Treinamento de CRM** (Renke Academy, para agências) pronta para publicar: hero, dobras, depoimentos e galeria dos materiais.\n\n## Onde aparece no site\nPágina do curso, em `/academy/treinamento-crm` (menu \"Para Agências\").\n\n## Estado hoje\nHero só com texto (nome, frase e botão \"Fale com a equipe\"), sem imagem. Dobras: \"Para agências que buscam\", \"O que você recebe\", \"Do diagnóstico à entrega\", uma faixa de números e \"Mais de 200 projetos como base\". Nenhuma imagem, galeria ou depoimento na página.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste curso no ar\n- [ ] Galeria preenchida com os materiais deste curso (a peça da galeria é a issue \"Criar a galeria de materiais das páginas da Academy\")\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n- As cinco páginas da Academy usam o mesmo molde: o que mudar no desenho de uma muda nas outras.\n\n## De quem depende\nAprovação da Lenora. Depoimentos e materiais do curso dependem de quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "title": "Fechar a página da Formação Performa: hero, dobras, depoimentos e galeria",
+      "state": "open",
+      "body": "## O que é\nDeixar a página **Formação Performa** (Renke Academy, para agências) pronta para publicar: hero, dobras, depoimentos e galeria dos materiais.\n\n## Onde aparece no site\nPágina do curso, em `/academy/formacao-performa` (menu \"Para Agências\").\n\n## Estado hoje\nHero só com texto (nome, frase e botão \"Fale com a equipe\"), sem imagem. Dobras: \"Para gestores de tráfego que buscam\", \"O que você recebe\" e \"Quem está por trás da Formação\". Nenhuma imagem, galeria ou depoimento na página.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste curso no ar\n- [ ] Galeria preenchida com os materiais deste curso (a peça da galeria é a issue \"Criar a galeria de materiais das páginas da Academy\")\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n- As cinco páginas da Academy usam o mesmo molde: o que mudar no desenho de uma muda nas outras.\n\n## De quem depende\nAprovação da Lenora. Depoimentos e materiais do curso dependem de quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "title": "Fechar a página do Protocolo Renke: hero, dobras, depoimentos e galeria",
+      "state": "open",
+      "body": "## O que é\nDeixar a página **Protocolo Renke** (Renke Academy, para agências) pronta para publicar: hero, dobras, depoimentos e galeria dos materiais.\n\n## Onde aparece no site\nPágina do curso, em `/academy/protocolo-renke` (menu \"Para Agências\").\n\n## Estado hoje\nHero só com texto (nome, frase e botão \"Fale com a equipe\"), sem imagem. Dobras: \"Para donos de agência que buscam\" e \"O que você recebe\" (é a página mais curta das cinco). Os depoimentos de agências ainda não foram coletados. Nenhuma imagem, galeria ou depoimento na página.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste curso no ar\n- [ ] Galeria preenchida com os materiais deste curso (a peça da galeria é a issue \"Criar a galeria de materiais das páginas da Academy\")\n\n## Regras que valem aqui\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n- As cinco páginas da Academy usam o mesmo molde: o que mudar no desenho de uma muda nas outras.\n\n## De quem depende\nAprovação da Lenora. Depoimentos e materiais do curso dependem de quem cuida da Academy na Renke.\n",
+      "labels": [
+        {
+          "name": "páginas internas"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "title": "Fechar a página do Revena Run: hero, dobras e depoimentos",
+      "state": "open",
+      "body": "## O que é\nDeixar a página do plano **Revena Run** pronta para publicar: hero, dobras e depoimentos.\n\n## Onde aparece no site\nPágina do plano, em `/studio/revena-run` (menu \"Para Clínicas\").\n\n## Estado hoje\nHero com a ilustração genérica de ecossistema (anterior ao molde novo da Start). Dobras: \"Ideal para clínicas que\", \"O que o Run faz\" (cartões com ícone), uma frase de destaque, \"O que acontece toda semana e todo mês na sua clínica\" e uma frase de fecho. Não tem dobra de etapas. Nenhum depoimento.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste plano no ar\n\n## Em aberto\n- A definir com a Lenora: os depoimentos são próprios de cada plano (um conjunto por página) ou um bloco único repetido em todas as páginas de plano.\n\n## Regras que valem aqui\n- A Revena Start é o molde: esta página só replica a estrutura depois de a Start ser aprovada.\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nAprovação da Lenora. Os depoimentos dependem de material e autorização dos clientes.\n",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "planos"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "title": "Fechar a página do Revena Scale: hero, dobras e depoimentos",
+      "state": "open",
+      "body": "## O que é\nDeixar a página do plano **Revena Scale** pronta para publicar: hero, dobras e depoimentos.\n\n## Onde aparece no site\nPágina do plano, em `/studio/revena-scale` (menu \"Para Clínicas\").\n\n## Estado hoje\nHero com a ilustração genérica de ecossistema (anterior ao molde novo da Start). Dobras: \"Ideal para clínicas que\", \"O que o Scale faz\" (cartões com ícone), uma frase de destaque, \"Etapas do Scale\" e \"O que acontece toda semana e todo mês na sua clínica\". Nenhum depoimento nem dobra de resultados (texto ainda não escrito).\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste plano no ar\n\n## Em aberto\n- A definir com a Lenora: os depoimentos são próprios de cada plano (um conjunto por página) ou um bloco único repetido em todas as páginas de plano.\n\n## Regras que valem aqui\n- A Revena Start é o molde: esta página só replica a estrutura depois de a Start ser aprovada.\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nAprovação da Lenora. Os depoimentos dependem de material e autorização dos clientes.\n",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "planos"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "title": "Fechar a página do Revena Core: hero, dobras e depoimentos",
+      "state": "open",
+      "body": "## O que é\nDeixar a página do plano **Revena Core** pronta para publicar: hero, dobras e depoimentos.\n\n## Onde aparece no site\nPágina do plano, em `/studio/revena-core` (menu \"Para Clínicas\").\n\n## Estado hoje\nHero com a ilustração genérica de ecossistema (anterior ao molde novo da Start). Dobras: \"Ideal para clínicas que\", \"O que o Core faz\" (cartões com ícone), \"Etapas do Core\", \"O que acontece toda semana na sua clínica\" e uma frase de fecho. Nenhum depoimento nem dobra de resultados (texto ainda não escrito).\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste plano no ar\n\n## Em aberto\n- A definir com a Lenora: os depoimentos são próprios de cada plano (um conjunto por página) ou um bloco único repetido em todas as páginas de plano.\n\n## Regras que valem aqui\n- A Revena Start é o molde: esta página só replica a estrutura depois de a Start ser aprovada.\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nAprovação da Lenora. Os depoimentos dependem de material e autorização dos clientes.\n",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "planos"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "title": "Fechar a página do Revena Full: hero, dobras e depoimentos",
+      "state": "open",
+      "body": "## O que é\nDeixar a página do plano **Revena Full** pronta para publicar: hero, dobras e depoimentos.\n\n## Onde aparece no site\nPágina do plano, em `/studio/revena-full` (menu \"Para Clínicas\").\n\n## Estado hoje\nHero com a ilustração genérica de ecossistema (anterior ao molde novo da Start). Dobras: \"Ideal para clínicas que\", \"O que o Full faz\" (cartões com ícone), \"Etapas do Full\", \"O Full integra os 4 pilares da operação\" e \"O impacto de uma operação completa\". Nenhum depoimento; o texto da parte de resultados ainda não foi escrito.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste plano no ar\n\n## Em aberto\n- A definir com a Lenora: os depoimentos são próprios de cada plano (um conjunto por página) ou um bloco único repetido em todas as páginas de plano.\n\n## Regras que valem aqui\n- A Revena Start é o molde: esta página só replica a estrutura depois de a Start ser aprovada.\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nAprovação da Lenora. Os depoimentos dependem de material e autorização dos clientes.\n",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "planos"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "title": "Fechar a página do Revena Start: hero, dobras e depoimentos",
+      "state": "open",
+      "body": "## O que é\nDeixar a página do plano **Revena Start** pronta para publicar: hero, dobras e depoimentos.\n\n## Onde aparece no site\nPágina do plano, em `/studio/revena-start` (menu \"Para Clínicas\").\n\n## Estado hoje\nHero com nome, frase, botão, ficha do plano e a ilustração da jornada do lead. Dobras: \"Ideal para clínicas que\", \"O que o Start faz\" (bento ilustrado), \"Etapas do Start\" e \"O que você passa a ter em 90 dias\". Nenhum depoimento. A hero nova, com o símbolo grande do plano, está no PR #14, ainda em rascunho.\n\n## O que conta como pronto\n- [ ] Hero definida\n- [ ] Dobras definidas\n- [ ] Depoimentos e casos de uso importantes deste plano no ar\n\n## Em aberto\n- A definir com a Lenora: os depoimentos são próprios de cada plano (um conjunto por página) ou um bloco único repetido em todas as páginas de plano.\n\n## Regras que valem aqui\n- Esta página é o molde das outras quatro (Full, Core, Scale e Run): elas só replicam depois de esta ser aprovada.\n- Existem duas versões de copy (`VERSAO=copy` e `estudio`): mudança de layout vale para as duas.\n- Padrão visual \"alto padrão, menos é mais\".\n\n## De quem depende\nAprovação da Lenora. Os depoimentos dependem de material e autorização dos clientes.\n",
+      "labels": [
+        {
+          "name": "em desenvolvimento"
+        },
+        {
+          "name": "planos"
+        },
+        {
+          "name": "depende da Lenora"
+        },
+        {
+          "name": "bloqueia entrega"
+        }
+      ]
+    }
+  ],
+  "prs": [
+    {
+      "number": 32,
+      "title": "Agente entrega-site no repositório, com o papel de assistente",
+      "merged_at": "2026-10-11T05:23:31Z"
+    },
+    {
+      "number": 31,
+      "title": "Página do projeto: conceito, evolução das entregas e copy ajustada",
+      "merged_at": "2026-10-11T05:22:28Z"
+    },
+    {
+      "number": 15,
+      "title": "Home: dobra “O que muda na sua clínica”",
+      "merged_at": "2026-10-11T04:28:47Z"
+    },
+    {
+      "number": 13,
+      "title": "Páginas dos planos: refinamento",
+      "merged_at": "2026-10-10T23:19:41Z"
+    },
+    {
+      "number": 12,
+      "title": "Páginas dos planos: Start, Run, Full e demais",
+      "merged_at": "2026-10-10T19:42:19Z"
+    },
+    {
+      "number": 11,
+      "title": "Home: bento mais leve e logos no convite",
+      "merged_at": "2026-10-07T00:54:38Z"
+    },
+    {
+      "number": 10,
+      "title": "Sobre, Contato, Faça parte e rodapé",
+      "merged_at": "2026-10-01T13:26:41Z"
+    },
+    {
+      "number": 9,
+      "title": "Refinamento geral do layout",
+      "merged_at": "2026-10-01T13:26:20Z"
+    },
+    {
+      "number": 8,
+      "title": "Academy e cursos: copy nova e cartões",
+      "merged_at": "2026-09-29T17:12:58Z"
+    },
+    {
+      "number": 7,
+      "title": "Menu, páginas internas no padrão da home e página Sobre",
+      "merged_at": "2026-09-28T22:50:00Z"
+    },
+    {
+      "number": 6,
+      "title": "Home: fundo animado, cartões ilustrados e resultados",
+      "merged_at": "2026-09-28T22:49:55Z"
+    },
+    {
+      "number": 5,
+      "title": "Páginas dos planos Revena: copy e layout",
+      "merged_at": "2026-09-28T22:49:57Z"
+    },
+    {
+      "number": 4,
+      "title": "Home, hero e transição entre os planos",
+      "merged_at": "2026-09-28T22:49:49Z"
+    },
+    {
+      "number": 2,
+      "title": "Copy da home: hero, resultados, perguntas e ecossistema",
+      "merged_at": "2026-09-28T22:49:51Z"
+    },
+    {
+      "number": 1,
+      "title": "Estrutura do site, wireframe e design da home",
+      "merged_at": "2026-09-18T21:56:53Z"
+    }
+  ]
+}

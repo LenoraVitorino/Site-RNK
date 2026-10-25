@@ -22,3 +22,5 @@ terceiros dentro do projeto), então ela é feita à mão.
 ⚠️ Licença: são assets do template da PeachWeb. O donut tem crédito para
 sketchfab.com/tamminen e os env maps são previews de banco de imagens
 (Shutterstock). Antes de publicar o site com eles, licenciar ou trocar.
+
+`causticas-celular.mp4` é o mesmo vídeo de cáusticas, reduzido a 480×270 para o celular (gerado com ffmpeg em 12/10/2026).
